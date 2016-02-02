@@ -16,6 +16,7 @@ List of features:
 - Kits
 - Warps
 - Over 30 commands
+- Intuitive and easy module system
 
 List of commands:
 
@@ -59,3 +60,5 @@ shutdown|Shutdown server|s|\<reason\>
 unfreeze|Unfreeze an player/all|None|\[player/*\]
 spawnitem|Spawn an item at given position|dropitem|\[id\] \<amount\> \<x\> \<y\> \<z\>
 spawnvehicle|Spawn an vehicle at given player/position|spawnveh|\[id\] \[player\] or \[x\] \[y\] \[z\]
+
+If you have any suggestions send it to us [here](../../issues/).
