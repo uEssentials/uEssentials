@@ -176,10 +176,13 @@ namespace Essentials.Core
             ModuleManager.LoadAll( ModulesFolder );
             Logger.LogInfo( $"Loaded {ModuleManager.RunningModules.Count} modules" );
 
-            // Dev purpose
-            //SDG.Unturned.CommandWindow.ConsoleOutput.title = "Unturned Server";
+            #if DEV
+            SDG.Unturned.CommandWindow.ConsoleOutput.title = "Unturned Server";
+            #endif
 
+            #if !DEV
             Metrics.Init();
+            #endif
         }
 
 
