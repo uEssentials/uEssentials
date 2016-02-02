@@ -6,10 +6,8 @@ uEssentials have an easy and intuitive module system that allow to create new co
 
 ---
 
-Wiki: https://github.com/uEssentials/uEssentials/wiki
-
-Releases: https://github.com/uEssentials/uEssentials/releases
-
+**Wiki**: https://github.com/uEssentials/uEssentials/wiki
+**Releases**: https://github.com/uEssentials/uEssentials/releases
 ---
 
 List of features:
