@@ -43,3 +43,4 @@ kickall|Kick all players|None|\<reason\>
 shutdown|Shutdown server|s|\<reason\>
 unfreeze|Unfreeze an player/all|None|\[player/*\]
 spawnitem|Spawn an item at given position|dropitem|\[id\] \<amount\> \<x\> \<y\> \<z\>
+spawnvehicle|Spawn an vehicle at given player/position|spawnveh|\[id\] \[player\] or \[x\] \[y\] \[z\]
