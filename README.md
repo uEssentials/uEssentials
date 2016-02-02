@@ -1,8 +1,22 @@
 # uEssentials ( Under development )
 
-Wiki: https://github.com/uEssentials/uEssentials/wiki
+uEssentials is a modular plugin with a lot of command, and systems that help server administration and fun of players.
+
+uEssentials have an easy and intuitive module system that allow to create new commands, new systems and etc.
 
 ---
+
+Wiki: https://github.com/uEssentials/uEssentials/wiki
+Releases: https://github.com/uEssentials/uEssentials/releases
+
+---
+
+List of features:
+- Kits
+- Warps
+- Over 30 commands
+
+List of commands:
 
 | Command | Description | Aliases | Arguments
 | ------- | ------- | ------- | ------- |
