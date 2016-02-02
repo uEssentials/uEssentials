@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{40D2F6FC-D1CA-4D1E-9446-3775C7CCA1CF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Essentials</RootNamespace>
+    <AssemblyName>uEssentials</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>lib\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>lib\Assembly-CSharp-firstpass.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rocket.API">
+      <HintPath>lib\Rocket.API.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rocket.Core">
+      <HintPath>lib\Rocket.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rocket.Unturned">
+      <HintPath>lib\Rocket.Unturned.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>lib\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Api\Command\ICommandManager.cs" />
+    <Compile Include="src\Api\Command\Source\CommandSourceExtension.cs" />
+    <Compile Include="src\Api\Configuration\JsonConfig.cs" />
+    <Compile Include="src\Api\Event\IEventManager.cs" />
+    <Compile Include="src\Api\Configuration\IConfig.cs" />
+    <Compile Include="src\Api\Task\Tasks.cs" />
+    <Compile Include="src\Commands\CommandSpawnVehicle.cs" />
+    <Compile Include="src\Commands\CommandBoom.cs" />
+    <Compile Include="src\Core\Command\MethodCommand.cs" />
+    <Compile Include="src\Core\Event\EventManager.cs" />
+    <Compile Include="src\Commands\CommandRespawnZombies.cs" />
+    <Compile Include="src\Commands\CommandRespawnAnimals.cs" />
+    <Compile Include="src\Commands\CommandReply.cs" />
+    <Compile Include="src\Commands\CommandClearInventory.cs" />
+    <Compile Include="src\Commands\CommandSpy.cs" />
+    <Compile Include="src\Commands\CommandVote.cs" />
+    <Compile Include="src\Commands\CommandRepairVehicle.cs" />
+    <Compile Include="src\Commands\CommandRefuelVehicle.cs" />
+    <Compile Include="src\Commands\CommandExperience.cs" />
+    <Compile Include="src\Commands\CommandKits.cs" />
+    <Compile Include="src\Commands\CommandKit.cs" />
+    <Compile Include="src\Commands\CommandMaxSkills.cs" />
+    <Compile Include="src\Commands\CommandId.cs" />
+    <Compile Include="src\Commands\CommandRepair.cs" />
+    <Compile Include="src\Commands\CommandSudo.cs" />
+    <Compile Include="src\Commands\CommandBack.cs" />
+    <Compile Include="src\Commands\CommandEssentials.cs" />
+    <Compile Include="src\Commands\CommandKillZombies.cs" />
+    <Compile Include="src\Commands\CommandTell.cs" />
+    <Compile Include="src\Commands\CommandPosition.cs" />
+    <Compile Include="src\Commands\CommandResetPlayer.cs" />
+    <Compile Include="src\Commands\CommandSetWarp.cs" />
+    <Compile Include="src\Commands\CommandPing.cs" />
+    <Compile Include="src\Commands\CommandPoll.cs" />
+    <Compile Include="src\Commands\CommandKill.cs" />
+    <Compile Include="src\Commands\CommandDelWarp.cs" />
+    <Compile Include="src\Commands\CommandFreeze.cs" />
+    <Compile Include="src\Commands\CommandWarp.cs" />
+    <Compile Include="src\Commands\CommandWarps.cs" />
+    <Compile Include="src\Commands\CommandTest.cs" />
+    <Compile Include="src\Commands\CommandTpAll.cs" />
+    <Compile Include="src\Commands\CommandOnline.cs" />
+    <Compile Include="src\Commands\CommandKickAll.cs" />
+    <Compile Include="src\Commands\CommandShutdown.cs" />
+    <Compile Include="src\Commands\CommandUnfreeze.cs" />
+    <Compile Include="src\Commands\CommandSpawnItem.cs" />
+    <Compile Include="src\Common\Reflect\AbstractAccessor.cs" />
+    <Compile Include="src\Common\Reflect\AcessorFactory.cs" />
+    <Compile Include="src\Common\Reflect\FieldAccessor.cs" />
+    <Compile Include="src\Common\Reflect\MethodAccessor.cs" />
+    <Compile Include="src\Common\Extensions.cs" />
+    <Compile Include="src\Common\Reflect\MethodReference.cs" />
+    <Compile Include="src\Common\Util\ReflectionUtil.cs" />
+    <Compile Include="src\Configuration\EssConfig.cs" />
+    <Compile Include="src\Api\Command\ICommand.cs" />
+    <Compile Include="src\Api\Command\ICommandArgs.cs" />
+    <Compile Include="src\Core\Command\CommandArgs.cs" />
+    <Compile Include="src\Core\Command\ConsoleSource.cs" />
+    <Compile Include="src\Common\Util\ColorUtil.cs" />
+    <Compile Include="src\Common\Util\JsonUtil.cs" />
+    <Compile Include="src\Common\Preconditions.cs" />
+    <Compile Include="src\Api\Event\SubscribeEventAttr.cs" />
+    <Compile Include="src\Analytics\Metrics.cs" />
+    <Compile Include="src\Api\Module\EssModule.cs" />
+    <Compile Include="src\Api\Module\ModuleManager.cs" />
+    <Compile Include="src\Api\Module\ModuleInfo.cs" />
+    <Compile Include="src\Api\Permission\IPermissible.cs" />
+    <Compile Include="src\Api\Unturned\USkill.cs" />
+    <Compile Include="src\Api\Unturned\UServer.cs" />
+    <Compile Include="src\Api\Unturned\UWorld.cs" />
+    <Compile Include="src\Core\EssCore.cs" />
+    <Compile Include="src\Api\EssProvider.cs" />
+    <Compile Include="src\Event\Handling\EssentialsEventHandler.cs" />
+    <Compile Include="src\Kits\KitItemWeapon.cs" />
+    <Compile Include="src\Core\Storage\IData.cs" />
+    <Compile Include="src\Kits\JsonKitData.cs" />
+    <Compile Include="src\Kits\KitManager.cs" />
+    <Compile Include="src\Misc\AutoAnnouncer.cs" />
+    <Compile Include="src\I18n\EssLang.cs" />
+    <Compile Include="src\Api\Logging\EssLogger.cs" />
+    <Compile Include="src\Kits\KitItem.cs" />
+    <Compile Include="src\Kits\Kit.cs" />
+    <Compile Include="src\Warps\WarpManager.cs" />
+    <Compile Include="src\Warps\Warp.cs" />
+    <Compile Include="src\Warps\JsonWarpData.cs" />
+    <Compile Include="src\Api\Command\CommandInfoAttr.cs" />
+    <Compile Include="src\Core\Command\CommandManager.cs" />
+    <Compile Include="src\Api\Command\Source\ICommandSource.cs" />
+    <Compile Include="src\Api\Command\Source\AllowedSource.cs" />
+    <Compile Include="src\Api\Command\EssCommand.cs" />
+    <Compile Include="src\Core\Command\CommandAdapter.cs" />
+    <Compile Include="src\Api\Unturned\UPlayer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="default\lang_en.json" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y  "$(TargetDir)uEssentials.dll" "C:\Users\Leonardo\Documents\Unturned\Rocket\All\Servers\-FIXED_CTRL_C\Rocket\Plugins\*.*"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>for /f "tokens=2 delims=," %25%25F in ('tasklist /nh /fi "WINDOWTITLE eq Unturned Server" /fo csv') do taskkill /PID %25%25~F /F
+EXIT 0</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
