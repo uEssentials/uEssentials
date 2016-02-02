@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -38,8 +39,6 @@ namespace Essentials.Commands
      )]
     public class CommandRefuelVehicle : EssCommand
     {
-        public const ushort VEHICLE_MAX_FUEL = 2000;
-
         public override void OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.IsEmpty )
@@ -54,7 +53,7 @@ namespace Essentials.Commands
 
                 if ( currentVeh != null )
                 {
-                    VehicleManager.sendVehicleFuel( currentVeh, VEHICLE_MAX_FUEL );
+                    VehicleManager.sendVehicleFuel( currentVeh, currentVeh.asset.fuel );
 
                     EssLang.VEHICLE_REFUELED.SendTo( source );
                 }
@@ -74,7 +73,7 @@ namespace Essentials.Commands
                     .ToList()
                     .ForEach( vehicle =>
                     {
-                        VehicleManager.sendVehicleFuel( vehicle, VEHICLE_MAX_FUEL );
+                        VehicleManager.sendVehicleFuel( vehicle, vehicle.asset.fuel );
                     });
 
                     EssLang.VEHICLE_REFUELED_ALL.SendTo( source );

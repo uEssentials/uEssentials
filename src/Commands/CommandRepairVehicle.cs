@@ -39,8 +39,6 @@ namespace Essentials.Commands
         )]
     public class CommandRepairVehicle : EssCommand
     {
-        public const ushort VEHICLE_MAX_HEALTH = 500;
-
         public override void OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.IsEmpty )
@@ -55,7 +53,7 @@ namespace Essentials.Commands
 
                 if ( currentVeh != null )
                 {
-                    VehicleManager.sendVehicleHealth( currentVeh, VEHICLE_MAX_HEALTH );
+                    VehicleManager.sendVehicleHealth( currentVeh, currentVeh.asset.health );
 
                     EssLang.VEHICLE_REPAIRED.SendTo( source );
                 }
@@ -73,7 +71,9 @@ namespace Essentials.Commands
                     allVehicles
                         .Where( veh => !veh.isExploded && !veh.isUnderwater )
                         .ToList()
-                        .ForEach( vehicle => { VehicleManager.sendVehicleHealth( vehicle, VEHICLE_MAX_HEALTH ); } );
+                        .ForEach( vehicle => {
+                            VehicleManager.sendVehicleHealth( vehicle, vehicle.asset.health );
+                        } );
 
                     EssLang.VEHICLE_REPAIRED_ALL.SendTo( source );
                 }
