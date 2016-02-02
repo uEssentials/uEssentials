@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Essentials.Analytics;
 using Essentials.Api.Event;
 using Essentials.Api.Logging;
 using Essentials.Api.Module;
@@ -181,7 +180,7 @@ namespace Essentials.Core
             #endif
 
             #if !DEV
-            Metrics.Init();
+            Essentials.Analytics.Metrics.Init();
             #endif
         }
 
