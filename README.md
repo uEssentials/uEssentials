@@ -6,6 +6,14 @@ uEssentials have an easy and intuitive module system that allow to create new co
 
 ---
 
+**How install**
+
+- Download latest [release](https://github.com/uEssentials/uEssentials/releases)
+- Extract contents to rocket folder (that contains Plugins folder), do not forget the Libraries folder.
+- Have fun
+
+---
+
 **Wiki**: https://github.com/uEssentials/uEssentials/wiki
 
 **Releases**: https://github.com/uEssentials/uEssentials/releases
