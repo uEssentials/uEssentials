@@ -62,3 +62,7 @@ spawnitem|Spawn an item at given position|dropitem|\[id\] \<amount\> \<x\> \<y\>
 spawnvehicle|Spawn an vehicle at given player/position|spawnveh|\[id\] \[player\] or \[x\] \[y\] \[z\]
 
 If you have any suggestions send it to us [here](../../issues/).
+
+
+Tags:
+rocket essentials, unturned essentials
