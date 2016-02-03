@@ -26,6 +26,7 @@ using Essentials.Api.Event;
 using Essentials.Api.Unturned;
 using UnityEngine;
 using Essentials.I18n;
+using Rocket.API;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
@@ -65,7 +66,7 @@ namespace Essentials.Commands
         internal void OnPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, 
                                      CSteamID murderer )
         {
-            if ( !UPlayer.From( player ).HasPermission( "essentials.command.back" ) )
+            if ( !player.HasPermission( "essentials.command.back" ) )
                 return;
 
             var displayName = player.DisplayName;
