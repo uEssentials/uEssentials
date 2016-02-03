@@ -105,9 +105,4 @@ namespace Essentials.Kits
             EssLang.KIT_GIVEN_RECEIVER.SendTo( player, Name );
         }
     }
-
-    public class KitException : Exception
-    {
-        public KitException( string msg ) : base(msg) {}
-    }
 }
