@@ -29,7 +29,8 @@ namespace Essentials.Commands
     [CommandInfo(
         Name = "vote",
         Description = "Vote in current poll",
-        Usage = "[yes/no] [poll_name]"
+        Usage = "[yes/no] [poll_name]",
+        AllowedSource = AllowedSource.PLAYER
     )]
     public class CommandVote : EssCommand
     {
