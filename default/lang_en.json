@@ -36,7 +36,6 @@
 
     "UNKNOWN_COMMAND": "<white>This command does not exist.",
     "INVALID_NUMBER": "<red>Invalid number '{0}'",
-    "CHAT_LIMITATION": "<red>By unturned chat limitations you have to use this command in console",
     "SECOND": "second",
     "DAY": "day",
     "MINUTE": "minute",
