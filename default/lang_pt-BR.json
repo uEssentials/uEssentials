@@ -1,0 +1,142 @@
+{
+    /*
+    	Colors:
+    		Use: <nome da cor OU valor em hexadecimal>
+    		HEX:
+    			<hex_value>, Exemplo: <#FFFFFF>
+
+    		Cores:
+    			<black>
+    			<blue>
+    			<clear>
+    			<cyan>
+    			<gray>
+    			<green>
+    			<grey>
+    			<magenta>
+    			<red>
+    			<white>
+    			<yellow>
+
+    	O Chat do unturned suporta apenas uma cor, então não faz
+		direrença a parte da mensagem que você vai colocar a cor.
+
+    	Por exemplo:
+    		"<red>player joined the game"
+    		"player <red>joined the game"
+    		"player join<red>ed the game"
+
+		Todos esses vão resultar na mesma mensagem.
+
+    	A cor padrão é Verde.
+    */
+
+    "UNKNOWN_COMMAND": "<white>Este comando não existe.",
+    "INVALID_NUMBER": "<red>Número inválido '{0}'",
+    "SECOND": "segundo",
+    "DAY": "dia",
+    "MINUTE": "minuto",
+    "HOUR": "hora",
+    "DAYS": "dias",
+    "SECONDS": "segundos",
+    "MINUTES": "minutos",
+    "HOURS": "horas",
+    "PLAYER_JOINED": "<yellow>{0} entrou no servidor.",
+    "PLAYER_EXITED": "<yellow>{0} saiu do servidor.",
+    "PLAYER_CANNOT_EXECUTE": "<red>Esse comando não pode ser executad no jogo.",
+    "CONSOLE_CANNOT_EXECUTE": "<red>Esse comando não pode ser executado no console.",
+    "COMMAND_ERROR_OCURRED": "<red>Ocorreu um erro ao tentar executar esse comando, por favor contate um administrador.",
+    "COMMAND_NO_PERMISSION": "<red>Você não tem acesso a este comando.",
+    "ONLY_NUMBERS": "Use apenas números.",
+    "ONLINE_PLAYERS": "Há {0} de {1} jogadores online agora.",
+    "WARP_LIST": "Warps disponíveis: {0}",
+    "WARP_SET": "Warp '{0}'' definida com sucesso.",
+    "WARP_REMOVED": "Warp '{0}' removida com sucesso.",
+    "WARP_NOT_EXIST": "Warp '{0}' não existe.",
+    "WARP_TELEPORTED": "Você foi teleportado para warap '{0}'",
+    "WARP_NONE": "Não há nenhuma warp disponível.",
+    "WARP_COOLDOWN": "Você será teleportado em {0} segundos",
+    "WARP_NO_PERMISSION": "Você não tem acesso a esta warp.",
+    "PING": "Seu ping: {0}",
+    "PING_OTHER": "Ping de {0}: {1}",
+    "INVALID_STEAMID": "SteamID '{0}' inválida.",
+    "PLAYER_NOT_FOUND": "Jogador '{0}' não encontrado.",
+    "KICK_NO_SPECIFIED_REASON": "Não especificada.",
+    "PLAYER_RESET_KICK": "Seus dados foram resetados.",
+    "PLAYER_RESET": "Jogador resetado com sucesso.",
+    "KILL_PLAYER": "Você matou '{0}'",
+    "POSITION": "Sua posição atual (x: {0:0.00}, y: {1:0.00}, z: {2:0.00})",
+    "POSITION_OTHER": "Posição de '{0}':  (x: {1:0.00}, y: {2:0.00}, z: {3:0.00})",
+    "NOT_FROZEN": "Este jogador não esta congelado.",
+    "ALREADY_FROZEN": "Este jogador já esta congelado.",
+    "FROZEN_SENDER": "Jogador '{0}' congelado.",
+    "UNFROZEN_SENDER": "Jogador '{0}' descongelado.",
+    "YOU_ARE_FROZEN": "Você está congelado.",
+    "FROZEN_PLAYER": "Você foi congelado por '{0}'",
+    "UNFROZEN_PLAYER": "Você foi descongelado por '{0}'",
+    "FROZEN_ALL": "Você congelou todos os jogadores.",
+    "UNFROZEN_ALL": "Você descongelou todos os jogadores.",
+    "NONE_FOR_REPLY": "Não há ninguém para responder.",
+    "NOT_DIED_YET": "Você ainda não morreu.",
+    "RETURNED": "Você voltou para posição da sua morte.",
+    "SUDO_EXECUTED": "'{0}' executou o comando '{1}'",
+    "ALL_REPAIRED": "Todos seus items foram reparados.",
+    "HAND_REPAIRED": "Os items da sua mão foram reparados.",
+    "MAX_SKILLS": "Todas suas skills foram atualizadas para o nível máximo.",
+    "MAX_SKILLS_TARGET": "Todas as skills de '{0}' foram atualizadas para o nível máximo.",
+    "EXPERIENCE_GIVEN": "Você deu '{0}' níveis de experiência para '{1}'",
+    "EXPERIENCE_RECEIVED": "Você recebeu '{0}' níveis de experiência.",
+    "EXPERIENCE_TAKE": "Você removeu '{0}' níveis de experiência de '{1}'",
+    "EXPERIENCE_LOST": "Você perdeu '{0}' níveis de experiência.",
+    "NEGATIVE_OR_LARGE": "O valor informado é negativo ou muito grande.",
+    "KILLED_ZOMBIES": "Você matou '{0}' zumbis.",
+    "TELEPORTED_ALL_COORDS": "Todos os jogadores foram teleportados para (x: {0:0.00}, y: {1:0.00}, z: {2:0.00})",
+    "TELEPORTED_ALL_YOU": "Todos os jogadores foram teleportados você.",
+    "TELEPORTED_ALL_PLAYER": "Todos os jogadores foram teleportados para '{0}'",
+    "NO_PLAYERS_FOR_TELEPORT": "Não há nenhum jogador para ser teleportado.",
+    "NO_PLAYERS_FOR_KICK": "Não há nenhum jogador para kickar.",
+    "KICKED_ALL": "Você kickou '{0}' jogadores.",
+    "INVALID_COORDS": "<red>Coordenadas inválidas ({0}, {1}, {2})",
+    "KIT_NOT_EXIST": "<yellow>O kit '{0}' não existe, Use /kits para ver os kits disponíveis.",
+    "KIT_GIVEN_SENDER": "Você deu o kit '{0}' para '{1}'",
+    "KIT_GIVEN_RECEIVER": "Você recebeu o kit '{0}'",
+    "KIT_LIST": "Kits disponíveis: {0}",
+    "KIT_NO_PERMISSION": "Você não tem acesso a este kit.",
+    "KIT_NONE": "<yellow>Não há nenhum kit disponível.",
+    "KIT_INVENTORY_FULL": "<yellow>Seu inventário está cheio. Dropando os items no chão.",
+    "KIT_COOLDOWN": "Você precisa esperar {0} para usar este kit novamente.",
+    "NOT_IN_VEHICLE": "<red>Você não está em um veículo.",
+    "VEHICLE_REFUELED": "Seu veículo foi reabastecido.",
+    "VEHICLE_REFUELED_ALL": "Todos os veículos foram reabastecidos.",
+    "VEHICLE_REPAIRED": "Seu veículo foi reparadod",
+    "VEHICLE_REPAIRED_ALL": "Todos os veículos foram reparados.",
+    /* {0} é o nome da votação, {1} é a descrição. */
+    "POLL_STARTED": "<yellow>Uma votação para '{1}' foi iniciada. Use /vote yes|no para votar.",
+    /* {0} é o nome da votação, {1} é a descrição. {2} é o numero de votos 'sim' e {3} é 'não' */
+    "POLL_STOPPED": "<yellow>The poll '{0}' was ended, votes yes: {2}, votes no: {3}",
+    /* Você pode desabilitar ou alterar o invervalo dessa mensagem na configuração.  */
+    "POLL_RUNNING": "<yellow>A votação '{0}' está em andamento. Use /vote yes|no para votar.",
+    "POLL_NAME_IN_USE": "<red>Já existe uma votação com este nome.",
+    "POLL_LIST": "<cyan>Votações em andamento: ",
+    "POLL_INFO": "<cyan>Informações sobre a votação '{0}':' ",
+    "POLL_LIST_ENTRY": "<cyan>  Nome: {0}, Votos 'sim': {2}, Votos 'não': {3}",
+    "POLL_NOT_EXIST": "<red>Não existe uma votação com este nome.",
+    "POLL_VOTED_YES": "Você votou 'sim' na votação '{0}'",
+    "POLL_VOTED_NO": "Você votou 'não' na votação '{0}'",
+    "POLL_ALREADY_VOTED": "<red>Você já votou.",
+    "POLL_NONE": "<red>Não há nenhuma votaçâo em andamento.",
+    "SPAWNED_ITEM": "Você spawnou {0}x {1}",
+    "SPAWNED_ITEM_AT": "Você spawnou {0}x {1} em (x: {2:0.00}, y: {3:0.00}, z: {4:0.00})",
+    "INVALID_ITEM_ID": "<red>'{0}' não é um id de item válido.",
+    "CHAT_ANTI_SPAM": "<yellow>Espere para falar novamente.",
+    "ANYONE_TO_REPLY": "<yello>ninguém para responder.",
+    "NO_LONGER_ONLINE": "Este jogador não está mais online.",
+    "SPY_MODE_OFF": "<yellow>Modo espião desligado.",
+    "SPY_MODE_ON": "<yellow>Modo espião ligado.",
+    "RESPAWNED_ZOMBIES": "Você respawnou '{0}' zumbis;",
+    "RESPAWNED_ANIMALS": "Você respawnou '{0}' animais.",
+	"INVENTORY_CLEAN": "Seu inventário foi limpo.",
+	"SPAWNED_VEHICLE_AT_POSITION": "Você spawnou um veículo em (x: {2:0.00}, y: {3:0.00}, z: {4:0.00})",
+	"SPAWNED_VEHICLE_AT_PLAYER": "Você spawnou um veículo na posição de '{0}'",
+	"INVALID_VEHICLE_ID" : "<red>'{0}' não é um id de veículo válido."
+}
