@@ -53,7 +53,7 @@ namespace Essentials.Event.Handling
         internal static readonly Dictionary<string, DateTime>    LastChatted     = new Dictionary<string, DateTime>();
         internal static readonly SkillCache                      CachedSkills      = new SkillCache();
 
-        [SubscribeEvent( EventType.ROCKET_PERMISSION_REQUESTED )]
+    /*    [SubscribeEvent( EventType.ROCKET_PERMISSION_REQUESTED )]
         internal void OnPermissionRequested( UnturnedPlayer player, string permission, 
                                              ref bool granted )
         {
@@ -85,7 +85,7 @@ namespace Essentials.Event.Handling
 
             if ( !granted )
                 EssLang.COMMAND_NO_PERMISSION.SendTo( uplayer );
-        }
+        }*/
 
         [SubscribeEvent( EventType.ROCKET_PLAYER_CHATTED )]
         internal void OnPlayerChatted( UnturnedPlayer player,ref Color color, string message,

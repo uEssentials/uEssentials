@@ -22,9 +22,10 @@
 using System;
 using Rocket.Unturned;
 using Rocket.Unturned.Events;
-using Rocket.Unturned.Permissions;
 
 // ReSharper disable InconsistentNaming
+
+//TODO: Fix PERMISION_REQUESTED, fr34ky broke it in Rocket 4.9.0.0
 
 namespace Essentials.Api.Event
 {
@@ -95,8 +96,8 @@ namespace Essentials.Api.Event
                     case EventType.ROCKET_SERVER_SHUTDOWN:
                         return "OnShutdown";
 
-                    case EventType.ROCKET_PERMISSION_REQUESTED:
-                        return "OnPermissionRequested";
+//                    case EventType.ROCKET_PERMISSION_REQUESTED:
+//                        return "OnPermissionRequested";
 
                     default:
                         return "Unknown";
@@ -150,9 +151,9 @@ namespace Essentials.Api.Event
                     TargetType = U.Events;
                     break;
                 
-                case EventType.ROCKET_PERMISSION_REQUESTED:
-                    TargetType = typeof (UnturnedPermissions);
-                    break;
+//                case EventType.ROCKET_PERMISSION_REQUESTED:
+//                    TargetType = typeof (UnturnedPermissions);
+//                    break;
 
                 default:
                     throw new ArgumentOutOfRangeException( nameof( eventType ), 
@@ -283,9 +284,9 @@ namespace Essentials.Api.Event
         /// </summary>
         ROCKET_SERVER_SHUTDOWN,
 
-        /// <summary>
+ /*       /// <summary>
         /// Signature: (UnturnedPlayer player, string permission, ref bool granted)
         /// </summary>
-        ROCKET_PERMISSION_REQUESTED,
+        ROCKET_PERMISSION_REQUESTED, */
     }
 }
