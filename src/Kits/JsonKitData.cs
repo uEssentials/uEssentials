@@ -98,8 +98,8 @@ namespace Essentials.Kits
                     kitItem = new KitItem( kitItemId, kitItemDurability, kitItemAmount )
                     {
                         Type = itemAsset.UseableType == EUseableType.CLOTHING
-                               ? KitItemType.CLOTHING
-                               : KitItemType.NORMAL
+                               ? KitItem.ItemType.CLOTHING
+                               : KitItem.ItemType.NORMAL
                     };
                     goto add;     
 

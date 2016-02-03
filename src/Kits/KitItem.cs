@@ -39,7 +39,7 @@ namespace Essentials.Kits
         /// Type of item
         /// </summary>
         [JsonIgnore]
-        public KitItemType Type { get; set; }
+        public ItemType Type { get; set; }
 
         /// <summary>
         /// Id of item
@@ -94,12 +94,12 @@ namespace Essentials.Kits
         {
             return $"Type: {Type}, Id: {Id}, Durability: {Durability}, Amount: {Amount}";
         }
-    }
 
-    public enum KitItemType
-    {
-        CLOTHING,
-        WEAPON,
-        NORMAL
+        public enum ItemType
+        {
+            CLOTHING,
+            WEAPON,
+            NORMAL
+        }
     }
 }
