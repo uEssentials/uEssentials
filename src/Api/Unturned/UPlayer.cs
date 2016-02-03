@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
@@ -55,7 +56,7 @@ namespace Essentials.Api.Unturned
         public bool                 IsFreezing      => RocketPlayer.Freezing;
         public uint                 Ping            => (uint) (RocketPlayer.Player.SteamChannel.SteamPlayer.ping*1000);
         public SteamChannel         Channel         => UnturnedPlayer.SteamChannel;
-        public List<string>         Permissions     => R.Permissions.GetPermissions( RocketPlayer );
+        public List<string>         Permissions     => R.Permissions.GetPermissions( RocketPlayer ).Select( p => p.Name ).ToList();
         public Player               UnturnedPlayer  => RocketPlayer.Player;
         public SteamPlayer          SteamPlayer     => RocketPlayer.Player.SteamChannel.SteamPlayer;
         public Vector3              Position        => RocketPlayer.Position;
