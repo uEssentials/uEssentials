@@ -90,8 +90,6 @@ namespace Essentials.Core
             Logger = new EssLogger( "[uEssentials] " );
             ConnectedPlayers = new HashSet<UPlayer>();
 
-            TryAddComponent<Tasks>();
-
             U.Events.OnPlayerConnected += player =>
             {
                 ConnectedPlayers.Add( new UPlayer( player ) );
@@ -131,15 +129,6 @@ namespace Essentials.Core
 
             EventManager = new EventManager();
             EventManager.RegisterAll( GetType().Assembly );
-
-            Tasks.New( t => {
-                WarpManager.Save();
-            }).Delay( 60 * 1000 ).Interval( 60 * 1000 ).Go();
-
-            Tasks.New( t => {
-                File.Delete( $"{Folder}uEssentials.en.translation.xml" );
-                File.Delete( $"{Folder}uEssentials.configuration.xml" );
-            } ).Delay( 100 ).Go();
 
             Logger.Log( "Loaded uEssentials", ConsoleColor.Green );
 
@@ -182,6 +171,17 @@ namespace Essentials.Core
             #if !DEV
             Essentials.Analytics.Metrics.Init();
             #endif
+
+            TryAddComponent<Tasks>();
+
+            Tasks.New( t => {
+                WarpManager.Save();
+            }).Delay( 60 * 1000 ).Interval( 60 * 1000 ).Go();
+
+            Tasks.New( t => {
+                File.Delete( $"{Folder}uEssentials.en.translation.xml" );
+                File.Delete( $"{Folder}uEssentials.configuration.xml" );
+            } ).Delay( 100 ).Go();
         }
 
 
