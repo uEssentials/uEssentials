@@ -312,6 +312,26 @@ namespace Essentials.Api.Unturned
             return RocketPlayer.GetHashCode();
         }
 
+        public T AddComponent<T>() where T : Component
+        {
+            return UnturnedPlayer.gameObject.AddComponent<T>();
+        }
+
+        public Component AddComponent( Type componentType )
+        {
+            return UnturnedPlayer.gameObject.AddComponent( componentType );
+        }
+
+        public T GetComponent<T>() where T : Component
+        {
+            return UnturnedPlayer.gameObject.GetComponent<T>();
+        }
+
+        public Component GetComponent( Type componentType )
+        {
+            return UnturnedPlayer.gameObject.GetComponent( componentType );
+        }
+
         public static UPlayer From( UnturnedPlayer player )
         {
             return player == null
