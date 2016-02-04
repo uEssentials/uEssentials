@@ -26,6 +26,7 @@ using System.Reflection;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
+using Essentials.Common.Util;
 using Rocket.API;
 using Rocket.Core;
 using SDG.Unturned;
@@ -210,8 +211,13 @@ namespace Essentials.Core.Command
 
         private void RegisterAllWhere( Assembly asm, Predicate<Type> filter )
         {
-            Predicate<Type> defaultPredicate = type =>
-                typeof (ICommand).IsAssignableFrom( type ) && !type.IsAbstract && type != typeof (MethodCommand);
+            Predicate<Type> defaultPredicate = type => {
+                return (typeof (ICommand).IsAssignableFrom( type ) && !type.IsAbstract && type != typeof (MethodCommand));
+            };
+
+            /*
+                Register classes
+            */
 
             ( 
                 from type in asm.GetTypes()
@@ -219,6 +225,57 @@ namespace Essentials.Core.Command
                 where filter(type)
                 select (ICommand) Activator.CreateInstance( type )
             ).ForEach( Register );
+
+            /*
+                Register methods
+            */
+            Func<Type, object> createInstance = type => {
+                if ( !type.IsClass || type.IsAbstract ) 
+                {
+                    throw new Exception($"{type} isn't an class or is abstract.");
+                }
+                  
+                return Activator.CreateInstance( type );
+            };
+
+            Func<Type, object, MethodInfo, Delegate> createDelegate = (type, obj, method) => {
+                return obj == null
+                        ? Delegate.CreateDelegate( type, method )
+                        : Delegate.CreateDelegate( type, obj, method.Name );
+            };
+
+
+            foreach ( var type in asm.GetTypes() )
+            {
+                foreach ( var method in type.GetMethods() )
+                {
+                    if ( ReflectionUtil.GetAttributeFrom<CommandInfo>( method ) == null )
+                        continue;
+
+                    var inst = method.IsStatic ? null : createInstance( type );
+                    var paramz = method.GetParameters();
+
+                    if ( paramz.Length == 2 &&
+                         paramz[0].ParameterType == typeof (ICommandSource) &&
+                         paramz[1].ParameterType == typeof (ICommandArgs) )
+                    {
+                        Register( (Action<ICommandSource, ICommandArgs>) createDelegate(
+                            typeof (Action<ICommandSource, ICommandArgs>), inst, method ) );
+                    }
+                    else if ( paramz.Length == 3 &&
+                              paramz[0].ParameterType == typeof (ICommandSource) &&
+                              paramz[1].ParameterType == typeof (ICommandArgs) &&
+                              paramz[2].ParameterType == typeof (ICommand) )
+                    {
+                        Register( (Action<ICommandSource, ICommandArgs, ICommand>) createDelegate(
+                            typeof (Action<ICommandSource, ICommandArgs, ICommand>), inst, method ) );
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException( $"Invalid method signature {method}");
+                    }
+                }
+            }
         }
 
         private static ICommand GetWhere( Func<CommandAdapter, bool> predicate )
