@@ -30,8 +30,8 @@ List of commands:
 
 | Command | Description | Aliases | Arguments
 | ------- | ------- | ------- | ------- |
-autorepair|Auto repair weapon when quality is less than 90|None|[on|off]
-autoreload|Auto reload weapon when ammo is less than 5|None|[on|off]
+autorepair|Auto repair weapon when quality is less than 90|None|\[on\|off\]
+autoreload|Auto reload weapon when ammo is less than 5|None|\[on\|off\]
 boom|Create an explosion an given position/player|explode|\[player\|x, y, z\]
 respawnzombies|Respawn all zombies|None|None
 respawnanimals|Respawn all animals|None|None
