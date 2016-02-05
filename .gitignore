@@ -1,3 +1,4 @@
 obj/
 bin/
 build-msbuild.bat
+src/Commands/CommandTest.cs
