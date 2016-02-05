@@ -82,25 +82,25 @@ namespace Essentials.Commands
                 };
 
                 // Unequip & remove from inventory
-                player.UnturnedPlayer.clothing.askWearBackpack( 0, 0, new byte[0] );
+                player.UnturnedPlayer.clothing.askWearBackpack( 0, 0, new byte[0], true );
                 removeUnequipped();
 
-                player.UnturnedPlayer.clothing.askWearGlasses( 0, 0, new byte[0] );
+                player.UnturnedPlayer.clothing.askWearGlasses( 0, 0, new byte[0], true  );
                 removeUnequipped();
 
-                player.UnturnedPlayer.clothing.askWearHat( 0, 0, new byte[0] );
+                player.UnturnedPlayer.clothing.askWearHat( 0, 0, new byte[0], true  );
                 removeUnequipped();
 
-                player.UnturnedPlayer.clothing.askWearPants( 0, 0, new byte[0] );
+                player.UnturnedPlayer.clothing.askWearPants( 0, 0, new byte[0], true  );
                 removeUnequipped();
 
-                player.UnturnedPlayer.clothing.askWearMask( 0, 0, new byte[0] );
+                player.UnturnedPlayer.clothing.askWearMask( 0, 0, new byte[0], true  );
                 removeUnequipped();
 
-                player.UnturnedPlayer.clothing.askWearShirt( 0, 0, new byte[0] );
+                player.UnturnedPlayer.clothing.askWearShirt( 0, 0, new byte[0], true  );
                 removeUnequipped();
 
-                player.UnturnedPlayer.clothing.askWearVest( 0, 0, new byte[0] );
+                player.UnturnedPlayer.clothing.askWearVest( 0, 0, new byte[0], true  );
                 removeUnequipped();
 
                 EssLang.INVENTORY_CLEAN.SendTo( player );   
