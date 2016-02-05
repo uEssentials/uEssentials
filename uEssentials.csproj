@@ -185,9 +185,6 @@
   <ItemGroup>
     <EmbeddedResource Include="default\lang_en.json" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="default\lang_pt-BR.json" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
