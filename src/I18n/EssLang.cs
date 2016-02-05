@@ -231,5 +231,7 @@ namespace Essentials.I18n
         public static EssLang AUTO_RELOAD_DISABLED { get; private set; }
         public static EssLang AUTO_REPAIR_ENABLED { get; private set; }
         public static EssLang AUTO_REPAIR_DISABLED { get; private set; }
+        public static EssLang JUMP_NO_POSITION { get; private set; }
+        public static EssLang JUMPED { get; private set; }
     }
 }

@@ -91,6 +91,7 @@
     <Compile Include="src\Api\Event\IEventManager.cs" />
     <Compile Include="src\Api\Configuration\IConfig.cs" />
     <Compile Include="src\Api\Task\Tasks.cs" />
+    <Compile Include="src\Commands\CommandJump.cs" />
     <Compile Include="src\Commands\CommandSpawnVehicle.cs" />
     <Compile Include="src\Commands\CommandBoom.cs" />
     <Compile Include="src\Commands\CommandItemFeatures.cs" />

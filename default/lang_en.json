@@ -145,5 +145,7 @@
 	"AUTO_RELOAD_ENABLED": "Auto-Reload enabled!",
 	"AUTO_RELOAD_DISABLED": "Auto-Reload disabled!",
 	"AUTO_REPAIR_ENABLED": "Auto-Repair enabled!",
-	"AUTO_REPAIR_DISABLED": "Auto-Repair disabled!"
+	"AUTO_REPAIR_DISABLED": "Auto-Repair disabled!",
+	"JUMP_NO_POSITION": "No position found, try to increase distance using /jump <distance>",
+	"JUMPED": "You jumped to (x: {0:0.00}, y: {1:0.00}, z: {2:0.00})"
 }
