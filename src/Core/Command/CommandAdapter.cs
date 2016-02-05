@@ -45,10 +45,6 @@ namespace Essentials.Core.Command
         {
             try
             {
-                var parameters = parameter.Length == 0 
-                                 ? new string[0] 
-                                 : parameter.TrimEnd().TrimStart().Split( ' ' );
-
                 var commandSource = executorId == CSteamID.Nil
                                     ? EssProvider.ConsoleSource
                                     : UPlayer.From( executorId );
@@ -63,7 +59,7 @@ namespace Essentials.Core.Command
                 }
                 else 
                 {
-                    Command.OnExecute( commandSource , new CommandArgs( parameters ) );  
+                    Command.OnExecute( commandSource , new CommandArgs( parameter ) );  
                 }
             }
             catch ( Exception e )
