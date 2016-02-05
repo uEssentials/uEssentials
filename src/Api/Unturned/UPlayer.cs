@@ -63,6 +63,10 @@ namespace Essentials.Api.Unturned
         public PlayerInventory      Inventory       => RocketPlayer.Inventory;
         public InteractableVehicle  CurrentVehicle  => UnturnedPlayer.movement.getVehicle();
         public CSteamID             CSteamId        => RocketPlayer.CSteamID;
+        public PlayerMovement       Movement        => UnturnedPlayer.movement;
+        public PlayerLook           Look            => UnturnedPlayer.look;
+        public PlayerClothing       Clothing        => UnturnedPlayer.clothing;
+        public PlayerLife           Life            => UnturnedPlayer.life;
 
         internal UPlayer( UnturnedPlayer player )
         {
