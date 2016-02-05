@@ -197,11 +197,11 @@ namespace Essentials.Core
             Tasks.CancelAll();
         }
 
-        /*private static void UnregisterRocketCommand<T>() where T : IRocketCommand
+        private static void UnregisterRocketCommand<T>() where T : IRocketCommand
         {
-            var rocketComamnds = AcessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" );
+            var rocketCommands = AccessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" );
 
-            rocketComamnds.Value.RemoveAll( cmd => cmd is T );
-        }*/
+            rocketCommands.Value.RemoveAll( cmd => cmd is T );
+        }
     }
 }
