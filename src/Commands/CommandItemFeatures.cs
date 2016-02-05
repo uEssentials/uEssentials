@@ -46,14 +46,14 @@ namespace Essentials.Commands
                 case "on":
                 case "1":
                     var wFeature = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
-                    wFeature.NeverReload = true;
+                    wFeature.AutoReload = true;
                     EssLang.AUTO_RELOAD_ENABLED.SendTo( src );
                     return;
 
                 case "off":
                 case "0":
                     wFeature = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
-                    wFeature.NeverReload = false;
+                    wFeature.AutoReload = false;
                     EssLang.AUTO_RELOAD_DISABLED.SendTo( src );
                     return;
 
@@ -83,14 +83,14 @@ namespace Essentials.Commands
                 case "on":
                 case "1":
                     var wFeature = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
-                    wFeature.NeverRepair = true;
+                    wFeature.AutoRepair = true;
                     EssLang.AUTO_REPAIR_ENABLED.SendTo( src );
                     return;
 
                 case "off":
                 case "0":
                     wFeature = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
-                    wFeature.NeverRepair = false;
+                    wFeature.AutoRepair = false;
                     EssLang.AUTO_REPAIR_DISABLED.SendTo( src );
                     return;
 
