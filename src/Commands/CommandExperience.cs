@@ -21,73 +21,86 @@
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Unturned;
 using Essentials.I18n;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
         Name = "experience",
-        Aliases = new[] { "exp", "xp" },
+        Aliases = new[] { "exp" },
         Description = "Give experience to you/player",
-        Usage = "[give/take] [amount] <target>"
+        Usage = "[give|take] [amount] <target>"
     )]
     public class CommandExperience : EssCommand
     {
-        public override void OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override void OnExecute ( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.IsEmpty || ( source.IsConsole && parameters.Length < 3 ) )
-            {
-                ShowUsage( source );
-                return;
-            }
+            if ( (!src.IsConsole && args.Length < 2) || (src.IsConsole && args.Length < 3) )
+                goto usage;
 
-            var target = (parameters.Length == 3 || source.IsConsole)
-                ? parameters[2].ToPlayer
-                : source.ToPlayer();
-            
-            if ( target == null )
+            UPlayer target;
+
+            if ( args.Length == 3 )
             {
-                EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[2] );
+                target = args[2].ToPlayer;
             }
-            else if ( !parameters[1].IsInt )
+            else if ( src.IsConsole )
             {
-                EssLang.ONLY_NUMBERS.SendTo( source );
-            }
-            else if ( parameters[1].ToInt < 0 )
-            {
-                EssLang.NEGATIVE_OR_LARGE.SendTo( source );
+                goto usage;
             }
             else
             {
-                var amount = (uint) parameters[1].ToInt;
+                target = src.ToPlayer();
+            }
+            
+            if ( target == null )
+            {
+                EssLang.PLAYER_NOT_FOUND.SendTo( src, args[2] );
+            }
+            else if ( !args[1].IsInt )
+            {
+                EssLang.INVALID_NUMBER.SendTo( src, args[1] );
+            }
+            else if ( args[1].ToInt < 0 )
+            {
+                EssLang.NEGATIVE_OR_LARGE.SendTo( src );
+            }
+            else
+            {
+                var amount = (uint) args[1].ToInt;
                 var playerExp = target.UnturnedPlayer.skills.Experience;
 
-                switch (parameters[0].ToLowerString)
+                switch (args[0].ToLowerString)
                 {
                     case "take":
                         playerExp -= playerExp < amount ? playerExp : amount;
 
-                        if ( target != source )
-                            EssLang.EXPERIENCE_TAKE.SendTo( source, amount, target.DisplayName );
+                        if ( target != src )
+                            EssLang.EXPERIENCE_TAKE.SendTo( src, amount, target.DisplayName );
                         EssLang.EXPERIENCE_LOST.SendTo( target, amount );
                         break;
 
                     case "give":
                         playerExp += amount;
 
-                        if ( target != source )
-                            EssLang.EXPERIENCE_GIVEN.SendTo( source, amount, target.DisplayName );
+                        if ( target != src )
+                            EssLang.EXPERIENCE_GIVEN.SendTo( src, amount, target.DisplayName );
                         EssLang.EXPERIENCE_RECEIVED.SendTo( target, amount );
                         break;
 
                     default:
-                        ShowUsage( source );
+                        ShowUsage( src );
                         return;
                 }
 
                 target.UnturnedPlayer.skills.Experience = playerExp;
                 target.UnturnedPlayer.skills.askSkills( target.CSteamId );
             }
+
+            return;
+            usage:
+            ShowUsage( src );
         }
     }
 }
