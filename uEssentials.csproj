@@ -93,7 +93,10 @@
     <Compile Include="src\Api\Task\Tasks.cs" />
     <Compile Include="src\Commands\CommandSpawnVehicle.cs" />
     <Compile Include="src\Commands\CommandBoom.cs" />
+    <Compile Include="src\Commands\CommandItemFeatures.cs" />
+    <Compile Include="src\Common\MathParser.cs" />
     <Compile Include="src\Core\Command\MethodCommand.cs" />
+    <Compile Include="src\Core\Components\ItemFeatures.cs" />
     <Compile Include="src\Core\Event\EventManager.cs" />
     <Compile Include="src\Commands\CommandRespawnZombies.cs" />
     <Compile Include="src\Commands\CommandRespawnAnimals.cs" />
@@ -180,6 +183,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="default\lang_en.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="default\lang_pt-BR.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
