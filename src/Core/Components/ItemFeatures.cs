@@ -38,7 +38,7 @@ namespace Essentials.Core.Components
             if ( _equip.HoldingItemID == 0 ) return;
 
             /*
-                Weapon feature (Never reload)
+                Weapon feature (Auto reload)
             */
             if ( AutoReload && _equip.state.Length >= 10 && _equip.state[0xA] < 5 )
             {
@@ -54,7 +54,7 @@ namespace Essentials.Core.Components
             }
             
             /*
-                Item feature (Never repair)
+                Item feature (Auto repair)
             */
             if ( AutoRepair && _equip.quality < 90 )
             {
