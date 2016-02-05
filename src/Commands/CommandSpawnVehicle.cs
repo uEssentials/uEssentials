@@ -102,7 +102,7 @@ namespace Essentials.Commands
                     }
                     catch ( FormatException )
                     {
-                        EssLang.INVALID_COORDS.SendTo( src, args[2], args[3], args[4] );
+                        EssLang.INVALID_COORDS.SendTo( src, args[1], args[2], args[3] );
                     }
                     break;
 

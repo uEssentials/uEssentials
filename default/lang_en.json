@@ -139,7 +139,7 @@
     "RESPAWNED_ZOMBIES": "Successfully respawned {0} zombies",
     "RESPAWNED_ANIMALS": "Successfully respawned {0} animals",
 	"INVENTORY_CLEAN": "Your inventory was clean.",
-	"SPAWNED_VEHICLE_AT_POSITION": "You spawned an vehicle at (x: {2:0.00}, y: {3:0.00}, z: {4:0.00})",
+	"SPAWNED_VEHICLE_AT_POSITION": "You spawned an vehicle at (x: {0:0.00}, y: {1:0.00}, z: {2:0.00})",
 	"SPAWNED_VEHICLE_AT_PLAYER": "You spawned an vehicle at {0}'s position.",
 	"INVALID_VEHICLE_ID" : "<red>Invalid vehicle id {0}",
 	"AUTO_RELOAD_ENABLED": "Auto-Reload enabled!",
