@@ -135,7 +135,7 @@
     <Compile Include="src\Commands\CommandUnfreeze.cs" />
     <Compile Include="src\Commands\CommandSpawnItem.cs" />
     <Compile Include="src\Common\Reflect\AbstractAccessor.cs" />
-    <Compile Include="src\Common\Reflect\AcessorFactory.cs" />
+    <Compile Include="src\Common\Reflect\AccessorFactory.cs" />
     <Compile Include="src\Common\Reflect\FieldAccessor.cs" />
     <Compile Include="src\Common\Reflect\MethodAccessor.cs" />
     <Compile Include="src\Common\Extensions.cs" />

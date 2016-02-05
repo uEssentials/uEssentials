@@ -24,7 +24,7 @@ using System.Reflection;
 
 namespace Essentials.Common.Reflect
 {
-    public static class AcessorFactory
+    public static class AccessorFactory
     {
         public static FieldAccessor<TFieldType> AccessField<TFieldType>( 
             object obj, string fieldName )
