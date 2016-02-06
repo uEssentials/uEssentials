@@ -163,7 +163,7 @@ namespace Essentials.Commands
                     placeOrPlayerName = p.CharacterName;
                 } );
 
-                if ( found == false )
+                if ( !found )
                 {
                     LocationNode node;
                     found = TryFindPlace( arg, out node );
