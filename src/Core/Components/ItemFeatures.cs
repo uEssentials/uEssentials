@@ -23,6 +23,8 @@ using System;
 using SDG.Unturned;
 using UnityEngine;
 
+// ReSharper disable UnusedMember.Local
+
 namespace Essentials.Core.Components
 {
     internal class ItemFeatures : MonoBehaviour

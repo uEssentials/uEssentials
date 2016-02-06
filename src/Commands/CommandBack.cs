@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Event;
-using Essentials.Api.Unturned;
 using UnityEngine;
 using Essentials.I18n;
 using Rocket.API;

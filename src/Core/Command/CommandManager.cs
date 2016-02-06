@@ -31,6 +31,8 @@ using Rocket.API;
 using Rocket.Core;
 using SDG.Unturned;
 
+// ReSharper disable ConvertToLambdaExpression
+
 namespace Essentials.Core.Command
 {
     internal class CommandManager : ICommandManager
