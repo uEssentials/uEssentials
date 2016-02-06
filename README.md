@@ -30,6 +30,7 @@ List of commands:
 
 | Command | Description | Aliases | Arguments
 | ------- | ------- | ------- | ------- |
+tp|Teleportation command|None|\[player\|place\|x y z\] or \[player\] \[player\|place\|x y z\]
 jump|Jump to position that you are looking|None|\<max_distance\>
 autorepair|Auto repair weapon when quality is less than 90|None|\[on\|off\]
 autoreload|Auto reload weapon when ammo is less than 5|None|\[on\|off\]
