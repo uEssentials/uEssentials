@@ -30,6 +30,7 @@ List of commands:
 
 | Command | Description | Aliases | Arguments
 | ------- | ------- | ------- | ------- |
+jump|Jump to position that you are looking|None|\<max_distance\>
 autorepair|Auto repair weapon when quality is less than 90|None|\[on\|off\]
 autoreload|Auto reload weapon when ammo is less than 5|None|\[on\|off\]
 boom|Create an explosion an given position/player|explode|\[player\|x, y, z\]
