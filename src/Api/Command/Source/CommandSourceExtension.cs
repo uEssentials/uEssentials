@@ -28,7 +28,7 @@ namespace Essentials.Api.Command.Source
     {
         public static UPlayer ToPlayer( this ICommandSource src )
         {
-            Preconditions.IsTrue( src.IsConsole, "Cannot convert Console to Player" );
+            Preconditions.CheckState( !src.IsConsole, "Cannot convert Console to Player" );
 
             return src as UPlayer;
         }
