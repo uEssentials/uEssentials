@@ -34,9 +34,13 @@ using Essentials.Core.Event;
 using Essentials.I18n;
 using Essentials.Kits;
 using Essentials.Warps;
+using Rocket.API;
+using Rocket.Core;
 using Rocket.Core.Plugins;
 using Rocket.Unturned;
+using Rocket.Unturned.Commands;
 using Environment = Rocket.Core.Environment;
+using Essentials.Common.Reflect;
 
 // ReSharper disable InconsistentNaming
 
@@ -146,6 +150,8 @@ namespace Essentials.Core
 
             Logger.Log( "Wiki: ", ConsoleColor.Green, suffix: "" );
             Logger.Log( "uessentials.github.io", ConsoleColor.White, "" );
+
+            UnregisterRocketCommand<CommandTp>();
 
             CommandManager = new CommandManager();
             CommandManager.RegisterAll( GetType().Assembly );

@@ -233,5 +233,8 @@ namespace Essentials.I18n
         public static EssLang AUTO_REPAIR_DISABLED { get; private set; }
         public static EssLang JUMP_NO_POSITION { get; private set; }
         public static EssLang JUMPED { get; private set; }
+        public static EssLang TELEPORTED { get; private set; }
+        public static EssLang TELEPORTED_SENDER { get; private set; }
+        public static EssLang FAILED_FIND_PLACE_OR_PLAYER { get; private set; }
     }
 }
