@@ -64,7 +64,6 @@ delwarp|Delete an existing warp|deletewarp|\[warp_name\]
 freeze|Freeze an player/all|None|\[player/all\]
 warp|Teleport you to given warp.|None|\[warp_name\]
 warps|View available warps|None|None
-test|None|None|None
 tpall|Teleport all players to an player/position|None|\[player/position\]
 online|View the number of online players|None|None
 kickall|Kick all players|None|\<reason\>
