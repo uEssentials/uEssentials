@@ -56,13 +56,13 @@ namespace Essentials.Commands
                     var rawY = args[1];
                     var rawZ = args[2];
 
-                    if ( !rawX.IsInt || !rawY.IsInt || !rawZ.IsInt )
+                    if ( !rawX.IsFloat || !rawY.IsFloat || !rawZ.IsFloat )
                     {
                         EssLang.INVALID_COORDS.SendTo( src, rawX, rawY, rawZ );
                     }
                     else
                     {
-                        Explode( new Vector3( rawX.ToInt, rawY.ToInt, rawZ.ToInt ) );
+                        Explode( new Vector3( rawX.ToFloat, rawY.ToFloat, rawZ.ToFloat ) );
                     }
                     break;
 

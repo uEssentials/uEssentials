@@ -231,6 +231,9 @@ namespace Essentials.Api.Unturned
         {
             if ( string.IsNullOrEmpty( command ) ) return;
 
+            if ( command.StartsWith( "/" ) )
+                command = command.Substring( 1 );
+
             Commander.execute( CSteamId, command );
         }
 
