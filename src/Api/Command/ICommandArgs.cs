@@ -64,10 +64,19 @@ namespace Essentials.Api.Command
         /// <summary>
         /// Join all arguments starting in <paramref name="initialIndex"/>
         /// </summary>
-        /// <param name="initialIndex"> Initial join index </param>
+        /// <param name="initialIndex">Initial join index</param>
         /// <returns>String containing the 'joined arguments'</returns>
-        string GetJoinedArguments( int initialIndex );
-        
+        string Join( int initialIndex );
+
+        /// <summary>
+        /// Join all arguments between <paramref name="startIndex"/> and <paramref name="endIndex"/>
+        /// </summary>
+        /// <param name="startIndex">Start index</param>
+        /// <param name="endIndex">End index</param>
+        /// <param name="separator">Argument separator</param>
+        /// <returns>String containing the 'joined arguments'</returns>
+        string Join( int startIndex, int endIndex, string separator );
+
         /// <summary>
         /// Try get an vector3 from 3 arguments, starting in <paramref name="initialIndex"/>
         /// </summary>

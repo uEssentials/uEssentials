@@ -85,7 +85,7 @@ namespace Essentials.Commands
                                 }
                             }
 
-                            var pollDescription = parameters.GetJoinedArguments( 2 );
+                            var pollDescription = parameters.Join( 2 );
 
                             if ( parameters[2].IsInt )
                             {

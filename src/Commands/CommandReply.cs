@@ -58,7 +58,7 @@ namespace Essentials.Commands
                     return;
                 }
 
-                source.DispatchCommand( $"tell {target.DisplayName} {parameters.GetJoinedArguments( 0 )}" );
+                source.DispatchCommand( $"tell {target.DisplayName} {parameters.Join( 0 )}" );
             }
         }
     }

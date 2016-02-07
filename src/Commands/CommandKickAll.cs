@@ -50,7 +50,7 @@ namespace Essentials.Commands
                 {
                     player.Kick( parameters.IsEmpty
                         ? noReasonMessage
-                        : parameters.GetJoinedArguments( 0 ) );
+                        : parameters.Join( 0 ) );
                 } );
 
                 EssLang.KICKED_ALL.SendTo( source, players.Count );

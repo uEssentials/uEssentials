@@ -116,9 +116,14 @@ namespace Essentials.Core.Command
             }   
         }
 
-        public string GetJoinedArguments( int initialIndex )
+        public string Join( int initialIndex )
         {
             return string.Join( " ", RawArguments.Skip( initialIndex ).ToArray() );
+        }
+        
+        public string Join( int startIndex, int endIndex, string separator )
+        {
+            return string.Join( separator, RawArguments.Skip( startIndex ).Take( endIndex + 1 ).ToArray() );
         }
 
         public Vector3? GetVector3( int initialIndex )

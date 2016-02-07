@@ -57,7 +57,7 @@ namespace Essentials.Commands
                     var message = string.Format(
                         EssProvider.Config.PrivateMessageFormat,
                         source.DisplayName,
-                        parameters.GetJoinedArguments( 1 )
+                        parameters.Join( 1 )
                     );
 
                     target.SendMessage( message );

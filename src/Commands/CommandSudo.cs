@@ -46,7 +46,7 @@ namespace Essentials.Commands
                 
                 if ( parameters[0].Is( name = "*console*" ) )
                 {
-                    CommandWindow.ConsoleInput.onInputText( parameters.GetJoinedArguments( 1 ) );
+                    CommandWindow.ConsoleInput.onInputText( parameters.Join( 1 ) );
                 }
                 else
                 {
@@ -58,11 +58,11 @@ namespace Essentials.Commands
 
                     var targetPlayer = parameters[0].ToPlayer;
 
-                    Commander.execute( targetPlayer.CSteamId, parameters.GetJoinedArguments( 1 ) );
+                    Commander.execute( targetPlayer.CSteamId, parameters.Join( 1 ) );
                     name = targetPlayer.CharacterName;
                 }
 
-                EssLang.SUDO_EXECUTED.SendTo( source, name, parameters.GetJoinedArguments( 1 ) );
+                EssLang.SUDO_EXECUTED.SendTo( source, name, parameters.Join( 1 ) );
             }
         }
     }

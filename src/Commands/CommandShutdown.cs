@@ -37,7 +37,7 @@ namespace Essentials.Commands
         public override void OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             if ( !parameters.IsEmpty )
-                Commander.execute( CSteamID.Nil, "kickall " + parameters.GetJoinedArguments(0) );
+                Commander.execute( CSteamID.Nil, "kickall " + parameters.Join(0) );
             Provider.shutdown();
         }
     }
