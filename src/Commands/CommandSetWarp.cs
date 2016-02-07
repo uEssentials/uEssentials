@@ -19,11 +19,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using UnityEngine;
 using Essentials.I18n;
 using Essentials.Warps;
 
@@ -54,21 +52,17 @@ namespace Essentials.Commands
                     break;
 
                 case 4:
-                    try
-                    {
-                        var position = new Vector3( 
-                            float.Parse( parameters[1].ToString() ), 
-                            float.Parse( parameters[2].ToString() ), 
-                            float.Parse( parameters[3].ToString() )
-                        );
+                    var pos = parameters.GetVector3( 1 );
 
-                        warp = new Warp( parameters[0].ToString(), position, 0.0F );
+                    if ( pos.HasValue )
+                    {
+                        warp = new Warp( parameters[0].ToString(), pos.Value, 0.0F );
 
                         EssProvider.WarpManager.Add( warp );
 
                         EssLang.WARP_SET.SendTo( source, parameters[0] );
                     }
-                    catch ( FormatException )
+                    else
                     {
                         EssLang.INVALID_COORDS.SendTo( source, parameters[1], parameters[2], parameters[3] );
                     }

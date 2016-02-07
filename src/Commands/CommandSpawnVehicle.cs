@@ -19,7 +19,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
@@ -39,57 +38,54 @@ namespace Essentials.Commands
     {
         public override void OnExecute( ICommandSource src, ICommandArgs args )
         {
-            switch ( args.Length )
+            if ( args.Length == 2 )
             {
-                case 2:
-                    var found = UPlayer.TryGet( args[1], player =>
+                var found = UPlayer.TryGet( args[1], player => {
+                    var vehId = args[0];
+
+                    if ( !vehId.IsUshort || !IsValidVehicleId( vehId.ToUshort ) )
                     {
-                        var vehId = args[0];
-
-                        if ( !vehId.IsUshort || !IsValidVehicleId( vehId.ToUshort ) )
-                        {
-                            EssLang.INVALID_VEHICLE_ID.SendTo( src, vehId );
-                        }
-                        else
-                        {
-                            VehicleTool.giveVehicle( player.UnturnedPlayer, vehId.ToUshort );
-                            EssLang.SPAWNED_VEHICLE_AT_PLAYER.SendTo( src, args[1] );
-                        }
-                    });
-
-                    if (!found)
-                        EssLang.PLAYER_NOT_FOUND.SendTo( src, args[1] );
-                    break;
-
-                case 4:
-                    try
-                    {
-                        var x = (float) args[1].ToDouble;
-                        var y = (float) args[2].ToDouble;
-                        var z = (float) args[3].ToDouble;
-
-                        var pos = new Vector3( x, y, z );
-                        var vehId = args[0];
-
-                        if ( !vehId.IsUshort || !IsValidVehicleId( vehId.ToUshort ) )
-                        {
-                            EssLang.INVALID_VEHICLE_ID.SendTo( src, vehId );
-                        }
-                        else
-                        {
-                            SpawnVehicle( pos, vehId.ToUshort );
-                            EssLang.SPAWNED_VEHICLE_AT_POSITION.SendTo( src, x, y, z );
-                        }
+                        EssLang.INVALID_VEHICLE_ID.SendTo( src, vehId );
                     }
-                    catch ( FormatException )
+                    else
                     {
-                        EssLang.INVALID_COORDS.SendTo( src, args[1], args[2], args[3] );
+                        VehicleTool.giveVehicle( player.UnturnedPlayer, vehId.ToUshort );
+                        EssLang.SPAWNED_VEHICLE_AT_PLAYER.SendTo( src, args[1] );
                     }
-                    break;
+                });
 
-                default:
-                    ShowUsage( src );
-                    break;
+                if ( !found )
+                {
+                    EssLang.PLAYER_NOT_FOUND.SendTo( src, args[1] );
+                }
+            }
+            else if ( args.Length == 4 )
+            {
+                var pos = args.GetVector3( 1 );
+                var vehId = args[0];
+
+                if ( pos.HasValue )
+                {
+                    var pVal = pos.Value;
+
+                    if ( !vehId.IsUshort || !IsValidVehicleId( vehId.ToUshort ) )
+                    {
+                        EssLang.INVALID_VEHICLE_ID.SendTo( src, vehId );
+                    }
+                    else
+                    {
+                        SpawnVehicle( pVal, vehId.ToUshort );
+                        EssLang.SPAWNED_VEHICLE_AT_POSITION.SendTo( src, pVal.x, pVal.y, pVal.z );
+                    }
+                }
+                else
+                {
+                    EssLang.INVALID_COORDS.SendTo( src, args[1], args[2], args[3] );
+                }
+            }
+            else
+            {
+                ShowUsage( src );
             }
         }
         

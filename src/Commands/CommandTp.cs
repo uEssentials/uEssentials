@@ -100,7 +100,7 @@ namespace Essentials.Commands
                     /tp x y z          -> sender to x,y,z
                 */
                 case 3:
-                    var location = TryParseLocation( args.RawArguments, 0 );
+                    var location = args.GetVector3( 0 );
 
                     if ( location.HasValue )
                     {
@@ -119,7 +119,7 @@ namespace Essentials.Commands
                 case 4:
                     found = UPlayer.TryGet( args[0], p =>
                     {
-                        location = TryParseLocation( args.RawArguments, 1 );
+                        location = args.GetVector3( 1 );
 
                         if ( location.HasValue )
                         {
@@ -147,7 +147,7 @@ namespace Essentials.Commands
             ShowUsage( src );
         }
 
-/*
+        /*
             0 - found
             1 - location
             2 - place/player name
@@ -176,22 +176,6 @@ namespace Essentials.Commands
                 }
 
                 return new object[] {found, position, placeOrPlayerName};
-        }
-
-        private static Vector3? TryParseLocation( IList<string> args, int startIndex )
-        {
-            try
-            {
-                var x = float.Parse( args[startIndex] );
-                var y = float.Parse( args[startIndex + 1] );
-                var z = float.Parse( args[startIndex + 2] );
-
-                return new Vector3( x, y, z );
-            }
-            catch (FormatException)
-            {
-                return null;
-            }
         }
 
         private static bool TryFindPlace( string name, out LocationNode outNode  )

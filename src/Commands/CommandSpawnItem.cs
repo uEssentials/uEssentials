@@ -50,18 +50,15 @@ namespace Essentials.Commands
 
                 if ( parameters.Length == 5 )
                 {
-                    try
-                    {
-                        var x = (float) parameters[2].ToDouble;
-                        var y = (float) parameters[3].ToDouble;
-                        var z = (float) parameters[4].ToDouble;
-                        pos = new Vector3( x, y, z );
-                    }
-                    catch ( FormatException )
+                    var argPos = parameters.GetVector3( 2 );
+
+                    if ( !argPos.HasValue )
                     {
                         EssLang.INVALID_COORDS.SendTo( source, parameters[2], parameters[3], parameters[4] );
                         return;
                     }
+
+                    pos = argPos.Value;
                 }
 
                 ushort id;

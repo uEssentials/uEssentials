@@ -52,17 +52,15 @@ namespace Essentials.Commands
                     break;
 
                 case 3:
-                    var rawX = args[0];
-                    var rawY = args[1];
-                    var rawZ = args[2];
+                    var pos = args.GetVector3( 0 );
 
-                    if ( !rawX.IsFloat || !rawY.IsFloat || !rawZ.IsFloat )
+                    if ( pos.HasValue )
                     {
-                        EssLang.INVALID_COORDS.SendTo( src, rawX, rawY, rawZ );
+                        Explode( pos.Value );
                     }
                     else
                     {
-                        Explode( new Vector3( rawX.ToFloat, rawY.ToFloat, rawZ.ToFloat ) );
+                        EssLang.INVALID_COORDS.SendTo( src, args[0], args[1], args[2] );
                     }
                     break;
 
