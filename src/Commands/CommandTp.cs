@@ -188,7 +188,7 @@ namespace Essentials.Commands
 
                 return new Vector3( x, y, z );
             }
-            catch (Exception)
+            catch (FormatException)
             {
                 return null;
             }
