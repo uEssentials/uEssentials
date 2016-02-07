@@ -123,6 +123,9 @@ namespace Essentials.Core.Command
 
         public Vector3? GetVector3( int initialIndex )
         {
+            if ( initialIndex + 3 > Length )
+                return null;
+
             var x = Arguments[initialIndex + 0];
             var y = Arguments[initialIndex + 1];
             var z = Arguments[initialIndex + 2];
