@@ -37,25 +37,6 @@ namespace Essentials.Commands
     )]
     public class CommandSpawnVehicle : EssCommand
     {
-        private static void SpawnVehicle( Vector3 pos, ushort id )
-        {
-            RaycastHit raycastHit;
-            Physics.Raycast( pos + Vector3.up*16f, Vector3.down, out raycastHit, 32f, RayMasks.BLOCK_VEHICLE );
-
-            if ( raycastHit.collider != null )
-            {
-                pos.y = raycastHit.point.y + 16f;
-            }
-
-            VehicleManager.spawnVehicle( id, pos, Quaternion.identity );
-        }
-
-        private static bool IsValidVehicleId( ushort id )
-        {
-            return Assets.find( EAssetType.VEHICLE, id ) is VehicleAsset;
-        }
-
-
         public override void OnExecute( ICommandSource src, ICommandArgs args )
         {
             switch ( args.Length )
@@ -110,6 +91,24 @@ namespace Essentials.Commands
                     ShowUsage( src );
                     break;
             }
+        }
+        
+        private static void SpawnVehicle( Vector3 pos, ushort id )
+        {
+            RaycastHit raycastHit;
+            Physics.Raycast( pos + Vector3.up*16f, Vector3.down, out raycastHit, 32f, RayMasks.BLOCK_VEHICLE );
+
+            if ( raycastHit.collider != null )
+            {
+                pos.y = raycastHit.point.y + 16f;
+            }
+
+            VehicleManager.spawnVehicle( id, pos, Quaternion.identity );
+        }
+
+        private static bool IsValidVehicleId( ushort id )
+        {
+            return Assets.find( EAssetType.VEHICLE, id ) is VehicleAsset;
         }
     }
 }

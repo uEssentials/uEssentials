@@ -23,13 +23,15 @@ uEssentials have an easy and intuitive module system that allow to create new co
 List of features:
 - Kits
 - Warps
-- Over 30 commands
+- Over 40 commands
 - Intuitive and easy module system
 
 List of commands:
 
 | Command | Description | Aliases | Arguments
 | ------- | ------- | ------- | ------- |
+tp|Teleportation command|None|\[player\|place\|x y z\] or \[player\] \[player\|place\|x y z\]
+jump|Jump to position that you are looking|None|\<max_distance\>
 autorepair|Auto repair weapon when quality is less than 90|None|\[on\|off\]
 autoreload|Auto reload weapon when ammo is less than 5|None|\[on\|off\]
 boom|Create an explosion an given position/player|explode|\[player\|x, y, z\]
@@ -62,7 +64,6 @@ delwarp|Delete an existing warp|deletewarp|\[warp_name\]
 freeze|Freeze an player/all|None|\[player/all\]
 warp|Teleport you to given warp.|None|\[warp_name\]
 warps|View available warps|None|None
-test|None|None|None
 tpall|Teleport all players to an player/position|None|\[player/position\]
 online|View the number of online players|None|None
 kickall|Kick all players|None|\<reason\>
