@@ -20,11 +20,10 @@
 */
 
 using Essentials.Api.Unturned;
+using UnityEngine;
 
 namespace Essentials.Api.Command
 {
-    //TODO Vector3? GetVector3(startIndex)
-
     /// <summary>
     /// <para>The purpose of this is to facilitate 
     /// the handling of the command arguments</para>
@@ -63,11 +62,18 @@ namespace Essentials.Api.Command
         bool IsEmpty { get; }
 
         /// <summary>
-        /// 
+        /// Join all arguments starting in <paramref name="initialIndex"/>
         /// </summary>
         /// <param name="initialIndex"> Initial join index </param>
-        /// <returns> </returns>
+        /// <returns>String containing the 'joined arguments'</returns>
         string GetJoinedArguments( int initialIndex );
+        
+        /// <summary>
+        /// Try get an vector3 from 3 arguments, starting in <paramref name="initialIndex"/>
+        /// </summary>
+        /// <param name="initialIndex"> Initial index </param>
+        /// <returns>New vector3 with given positions.</returns>
+        Vector3? GetVector3( int initialIndex );
     }
 
     /// <summary>

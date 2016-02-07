@@ -25,6 +25,8 @@ using System.Linq;
 using System.Text;
 using Essentials.Api.Command;
 using Essentials.Api.Unturned;
+using UnityEngine;
+
 // ReSharper disable ConvertPropertyToExpressionBody
 
 namespace Essentials.Core.Command
@@ -106,11 +108,31 @@ namespace Essentials.Core.Command
         }
 
 
-        public ICommandArgument this[ int argumentIndex ] => Arguments[argumentIndex];
+        public ICommandArgument this[ int argumentIndex ]
+        {
+            get
+            {
+                return Arguments[argumentIndex];
+            }   
+        }
 
         public string GetJoinedArguments( int initialIndex )
         {
             return string.Join( " ", RawArguments.Skip( initialIndex ).ToArray() );
+        }
+
+        public Vector3? GetVector3( int initialIndex )
+        {
+            var x = Arguments[initialIndex + 0];
+            var y = Arguments[initialIndex + 1];
+            var z = Arguments[initialIndex + 2];
+
+            if ( x.IsFloat && y.IsFloat && z.IsFloat )
+            {
+                return new Vector3( x.ToFloat, y.ToFloat, z.ToFloat );
+            }
+
+            return null;
         }
     }
 
@@ -157,7 +179,7 @@ namespace Essentials.Core.Command
         {
             get
             {
-                return !IsBool && !IsDouble && !IsInt;
+                return !IsBool && !IsDouble && !IsInt && !IsFloat;
             }
         }
 
