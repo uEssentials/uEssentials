@@ -23,6 +23,8 @@ using Essentials.Api.Unturned;
 
 namespace Essentials.Api.Command
 {
+    //TODO Vector3? GetVector3(startIndex)
+
     /// <summary>
     /// <para>The purpose of this is to facilitate 
     /// the handling of the command arguments</para>
@@ -129,6 +131,12 @@ namespace Essentials.Api.Command
         /// <summary>
         /// 
         /// </summary>
+        /// <returns> Return is argument is double </returns>
+        bool IsFloat { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         int ToInt { get; }
 
         /// <summary>
@@ -165,6 +173,11 @@ namespace Essentials.Api.Command
         /// 
         /// </summary>
         double ToDouble { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        float ToFloat { get; }
 
         /// <summary>
         /// 

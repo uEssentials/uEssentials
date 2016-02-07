@@ -130,6 +130,8 @@ namespace Essentials.Core.Command
 
         public double ToDouble => double.Parse( RawValue );
 
+        public float ToFloat => float.Parse( RawValue );
+
         public UPlayer ToPlayer => UPlayer.From( RawValue );
 
         public string ToLowerString => ToString().ToLower();
@@ -182,6 +184,15 @@ namespace Essentials.Core.Command
             {
                 double unused;
                 return double.TryParse( RawValue, out unused );
+            }
+        }
+
+        public bool IsFloat
+        {
+            get
+            {
+                float unused;
+                return float.TryParse( RawValue, out unused );
             }
         }
 
