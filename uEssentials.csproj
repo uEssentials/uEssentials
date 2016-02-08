@@ -113,7 +113,6 @@
     <Compile Include="src\Commands\CommandKits.cs" />
     <Compile Include="src\Commands\CommandKit.cs" />
     <Compile Include="src\Commands\CommandMaxSkills.cs" />
-    <Compile Include="src\Commands\CommandId.cs" />
     <Compile Include="src\Commands\CommandRepair.cs" />
     <Compile Include="src\Commands\CommandSudo.cs" />
     <Compile Include="src\Commands\CommandBack.cs" />
