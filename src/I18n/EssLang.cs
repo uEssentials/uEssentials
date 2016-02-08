@@ -236,5 +236,6 @@ namespace Essentials.I18n
         public static EssLang TELEPORTED { get; private set; }
         public static EssLang TELEPORTED_SENDER { get; private set; }
         public static EssLang FAILED_FIND_PLACE_OR_PLAYER { get; private set; }
+        public static EssLang EMPTY_HANDS { get; private set; }
     }
 }

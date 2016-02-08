@@ -150,5 +150,6 @@
 	"JUMPED": "You jumped to (x: {0:0.00}, y: {1:0.00}, z: {2:0.00})",
 	"TELEPORTED": "You was teleported to {0}",
 	"TELEPORTED_SENDER": "Teleported {0} to {1}",
-    "FAILED_FIND_PLACE_OR_PLAYER": "Could not find place or player named {0}"
+    "FAILED_FIND_PLACE_OR_PLAYER": "Could not find place or player named {0}",
+	"EMPTY_HANDS": "You are not holding an item."
 }
