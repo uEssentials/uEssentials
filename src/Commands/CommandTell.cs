@@ -23,11 +23,12 @@ using System.Collections.Generic;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Unturned;
 using Essentials.I18n;
+using UnityEngine;
 
 namespace Essentials.Commands
 {
-    //TODO: spy
     [CommandInfo(
         Name = "tell",
         Aliases = new[] {"msg", "pm"},
@@ -61,6 +62,14 @@ namespace Essentials.Commands
                     );
 
                     target.SendMessage( message );
+
+                    CommandSpy.Spies.ForEach( p =>
+                    {
+                        UPlayer.From( p ).SendMessage( 
+                            $"Spy: ({source.DisplayName} -> {target.CharacterName}): {parameters.Join( 1 )}",
+                            Color.gray 
+                        );
+                    } );
 
                     if ( Conversations.ContainsKey( source.DisplayName ) )
                     {
