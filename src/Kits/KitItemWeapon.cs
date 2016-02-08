@@ -19,7 +19,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-﻿using Newtonsoft.Json;
+using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
@@ -36,13 +37,13 @@ namespace Essentials.Kits
         /// </summary>
         [JsonProperty]
         [JsonConverter(typeof(StringEnumConverter))]
-        public EFiremode FireMode { get; set; }
+        public EFiremode? FireMode { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         [JsonProperty]
-        public byte Ammo { get; set; }
+        public byte? Ammo { get; set; }
 
         /// <summary>
         /// 
@@ -79,18 +80,49 @@ namespace Essentials.Kits
         /// </summary>
         /// <returns> Instance of SDG.Unturned.Item of this item </returns>>
         [JsonIgnore]
-        public override Item UnturnedItem => UnturnedItems.AssembleItem(
-            Id,
-            Ammo,
-            Sight,
-            Tatical,
-            Grip,
-            Barrel,
-            Magazine,
-            FireMode,
-            Amount,
-            Durability
-        );
+        public override Item UnturnedItem
+        {
+            get
+            {
+                var item = base.UnturnedItem;
+
+                if ( item.Metadata.Length != 18 )
+                    return item;
+
+                var metadata = item.Metadata;
+
+                Action<int[], Attachment> assembleAttach = ( indexes, attach ) =>
+                {
+                    if ( attach == null || attach.AttachmentId == 0 ) return;
+
+                    var attachIdBytes = BitConverter.GetBytes( attach.AttachmentId );
+
+                    metadata[indexes[0]] = attachIdBytes[0];
+                    metadata[indexes[1]] = attachIdBytes[1];
+                    metadata[indexes[2]] = Sight.Durability;
+                };
+
+                assembleAttach( new[] { 0x0, 0x1, 0xD }, Sight );
+                assembleAttach( new[] { 0x2, 0x3, 0xE }, Tatical );
+                assembleAttach( new[] { 0x4, 0x5, 0xF }, Grip );
+                assembleAttach( new[] { 0x6, 0x7, 0x10 }, Barrel );
+                assembleAttach( new[] { 0x8, 0x9, 0x11 }, Magazine );
+
+                if ( Ammo.HasValue )
+                {
+                    metadata[0xA] = Ammo.Value;
+                }
+
+                if ( FireMode.HasValue )
+                {
+                    metadata[0xB] = (byte) FireMode;
+                }
+
+                metadata[0xC] = 1;
+
+                return item;
+            }
+        }
 
         /// <summary>
         /// 
@@ -100,8 +132,8 @@ namespace Essentials.Kits
         /// <param name="amount"></param>
         /// <param name="ammo"></param>
         /// <param name="fireMode"></param>
-        public KitItemWeapon( ushort id, byte durability,  byte amount, byte ammo, 
-                              EFiremode fireMode = EFiremode.AUTO )  : base( id, durability, amount )
+        public KitItemWeapon( ushort id, byte durability,  byte amount, byte? ammo, 
+                              EFiremode? fireMode = EFiremode.AUTO )  : base( id, durability, amount )
         {
             FireMode = fireMode;
             Ammo = ammo;

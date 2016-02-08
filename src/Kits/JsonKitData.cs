@@ -114,8 +114,8 @@ namespace Essentials.Kits
                         var tokTatical     = itemObj.GetValue( "Tatical", strCmp );
                         var tokAmmo        = itemObj.GetValue( "Ammo", strCmp );
 
-                        var fireMode = EFiremode.SAFETY;
-                        var ammo     = tokAmmo?.Value<byte>() ?? 0;
+                        EFiremode? fireMode = null;
+                        var ammo            = tokAmmo?.Value<byte>() ?? null;
 
                         if ( tokFireMode != null )
                         {
