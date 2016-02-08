@@ -47,7 +47,7 @@ experience|Give experience to you/player|exp, xp|\[give/take\] \[amount\] \<targ
 kits|View available kits|None|None
 kit|Get an kit|None|\[kit_name\] \<player\>
 maxskills|Set to max level all of your/player skills|None|\<overpower\[true\|false\]\> \<player\>
-id|Show id of current item in hand|None|None
+iteminfo|View informations of an given item|ii|\<item_id\>
 repair|Repair all/in hand items|fix|\[all/hand\]
 sudo|Make player or console execute an command|None|\[player/*console*\]
 back|Return to position of your death.|ret|None
