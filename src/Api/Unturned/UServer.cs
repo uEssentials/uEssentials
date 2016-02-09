@@ -21,6 +21,7 @@
 
 using System.Collections.Generic;
 using Essentials.Core;
+using Essentials.Core.Command;
 using Rocket.Unturned.Chat;
 using SDG.Unturned;
 using UnityEngine;
@@ -51,6 +52,11 @@ namespace Essentials.Api.Unturned
         public static void Broadcast( object message, Color color )
         {
             UnturnedChat.Say( message?.ToString() ?? "null", color );
+        }
+
+        public static void DispatchCommand( string command )
+        {
+            ConsoleSource.Instance.DispatchCommand( command );
         }
     }
 }

@@ -74,6 +74,11 @@ namespace Essentials.Core.Command
 
         public void DispatchCommand( string command )
         {
+            if ( command.StartsWith( "/" ) )
+            {
+                command = command.Remove( 0 );
+            }
+
             CommandWindow.ConsoleInput.onInputText?.Invoke( command );
         }
 
