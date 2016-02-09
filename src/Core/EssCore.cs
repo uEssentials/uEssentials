@@ -23,11 +23,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Essentials.Api.Event;
 using Essentials.Api.Logging;
 using Essentials.Api.Module;
 using Essentials.Api.Task;
 using Essentials.Api.Unturned;
+using Essentials.Common;
 using Essentials.Configuration;
 using Essentials.Core.Command;
 using Essentials.Core.Event;
@@ -41,6 +43,8 @@ using Rocket.Unturned;
 using Rocket.Unturned.Commands;
 using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
+using Essentials.Updater;
+using Newtonsoft.Json.Linq;
 
 // ReSharper disable InconsistentNaming
 
@@ -76,6 +80,7 @@ namespace Essentials.Core
         internal ModuleManager                        ModuleManager               { get; private set; }
         internal CommandManager                       CommandManager              { get; private set; }
         internal IEventManager                        EventManager                { get; private set; }
+        internal IUpdater                             Updater                     { get; private set; }
 
         internal EssConfig                            Config                      { get; private set; }
         internal EssLogger                            Logger                      { get; private set; }
@@ -174,7 +179,51 @@ namespace Essentials.Core
             SDG.Unturned.CommandWindow.ConsoleOutput.title = "Unturned Server";
             #endif
 
+            Updater = new GithubUpdater();
+
             #if !DEV
+            if ( Config.Updater.CheckUpdates )
+            {
+                new Thread( () =>
+                {
+                    Logger.LogInfo( "Checking updates." );
+
+                    var isUpdated = Updater.IsUpdated();
+                    var lastResult = Updater.LastResult;
+
+                    if ( !isUpdated )
+                    {
+                        Logger.LogInfo( $"New version avalaible: {lastResult.LatestVersion}" );
+
+                        if ( !lastResult.AdditionalData.IsNullOrEmpty() )
+                        {
+                            JToken changesStr;
+                            if ( JObject.Parse( lastResult.AdditionalData ).TryGetValue( "changes", out changesStr ) )
+                            {
+                                Logger.LogInfo( " ========================= [ Changes ] =========================" );
+
+                                changesStr.ToString().Split( '\n' ).ForEach( msg =>
+                                {
+                                    Logger.Log( "", ConsoleColor.Green, suffix: "" );
+                                    Logger.Log( "  " + msg, ConsoleColor.White, "" );
+                                } );
+
+                                Logger.LogInfo( " ===============================================================" );
+                            }
+                        }
+
+                        if ( Config.Updater.DownloadLatest )
+                        {
+                            Updater.DownloadLatestRelease( $"{Folder}/updates/" );
+                        }
+                    }
+                    else
+                    {
+                        Logger.LogInfo( "Plugin is up-to-date!" );
+                    }
+                } ).Start();
+            }
+
             Essentials.Analytics.Metrics.Init();
             #endif
 

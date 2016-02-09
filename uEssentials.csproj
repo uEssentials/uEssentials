@@ -173,6 +173,9 @@
     <Compile Include="src\Api\Logging\EssLogger.cs" />
     <Compile Include="src\Kits\KitItem.cs" />
     <Compile Include="src\Kits\Kit.cs" />
+    <Compile Include="src\Updater\GithubUpdater.cs" />
+    <Compile Include="src\Updater\IUpdater.cs" />
+    <Compile Include="src\Updater\UpdateResult.cs" />
     <Compile Include="src\Warps\WarpManager.cs" />
     <Compile Include="src\Warps\Warp.cs" />
     <Compile Include="src\Warps\JsonWarpData.cs" />

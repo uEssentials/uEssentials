@@ -44,6 +44,7 @@ namespace Essentials.Configuration
         public int              PollRunningMessageCooldown;
 
         public AntiSpam         AntiSpam;
+        public Updater          Updater;
 
         public AutoAnnouncer    AutoAnnouncer;
 
@@ -73,6 +74,8 @@ namespace Essentials.Configuration
             AntiSpam                    = new AntiSpam { Enabled = true,
                                                          Interval = 3 };
 
+            Updater                     = new Updater { CheckUpdates = true,
+                                                        DownloadLatest = true };
         }
     }
 
@@ -81,5 +84,12 @@ namespace Essentials.Configuration
     {
         public bool Enabled;
         public int Interval;
+    }
+
+    [JsonObject]
+    public struct Updater
+    {
+        public bool CheckUpdates;
+        public bool DownloadLatest;
     }
 }
