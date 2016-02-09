@@ -41,7 +41,6 @@ using Rocket.API;
 using Rocket.Core;
 using Rocket.Core.Plugins;
 using Rocket.Unturned;
-using CommandTp = Rocket.Unturned.Commands.CommandTp;
 using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
 using Essentials.Updater;
@@ -169,7 +168,7 @@ namespace Essentials.Core
             EssLang.Load();
 
             EventManager.RegisterAll( GetType().Assembly );
-            UnregisterRocketCommand<CommandTp>();
+            UnregisterRocketCommand<Rocket.Unturned.Commands.CommandTp>();
             CommandManager.RegisterAll( GetType().Assembly );
             WarpManager.Load();
             KitManager.Load();
