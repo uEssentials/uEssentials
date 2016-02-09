@@ -185,7 +185,7 @@ namespace Essentials.Commands
             }
         }
 
-        [SubscribeEvent( EventType.ROCKET_PLAYER_DEATH )]
+        [SubscribeEvent( EventType.PLAYER_DEATH )]
         internal void OnPlayerDeath( UnturnedPlayer player,EDeathCause cause, ELimb limb,
                                      CSteamID murderer )
         {

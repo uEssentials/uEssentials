@@ -53,7 +53,7 @@ namespace Essentials.Event.Handling
         internal static readonly Dictionary<string, DateTime>    LastChatted     = new Dictionary<string, DateTime>();
         internal static readonly SkillCache                      CachedSkills      = new SkillCache();
 
-    /*    [SubscribeEvent( EventType.ROCKET_PERMISSION_REQUESTED )]
+    /*    [SubscribeEvent( EventType.PERMISSION_REQUESTED )]
         internal void OnPermissionRequested( UnturnedPlayer player, string permission, 
                                              ref bool granted )
         {
@@ -87,7 +87,7 @@ namespace Essentials.Event.Handling
                 EssLang.COMMAND_NO_PERMISSION.SendTo( uplayer );
         }*/
 
-        [SubscribeEvent( EventType.ROCKET_PLAYER_CHATTED )]
+        [SubscribeEvent( EventType.PLAYER_CHATTED )]
         internal void OnPlayerChatted( UnturnedPlayer player,ref Color color, string message,
                                        EChatMode mode, ref bool cancel )
         {
@@ -129,7 +129,7 @@ namespace Essentials.Event.Handling
             LastChatted[playerName] = DateTime.Now;
         }
 
-        [SubscribeEvent( EventType.ROCKET_PLAYER_DEATH )]
+        [SubscribeEvent( EventType.PLAYER_DEATH )]
         internal void OnPlayerDeath( UnturnedPlayer player, EDeathCause cause,
                                      ELimb limb, CSteamID murderer )
         {
@@ -179,7 +179,7 @@ namespace Essentials.Event.Handling
                 CachedSkills.Add( displayName, skillValues ); 
         }
 
-        [SubscribeEvent( EventType.ROCKET_PLAYER_REVIVE )]
+        [SubscribeEvent( EventType.PLAYER_REVIVE )]
         internal void OnPlayerRespawn( UnturnedPlayer player, Vector3 vect, byte angle )
         {
             if ( !CachedSkills.ContainsKey( player.CharacterName ) ) return;
@@ -192,7 +192,7 @@ namespace Essentials.Event.Handling
             });
         }
 
-        [SubscribeEvent( EventType.ROCKET_PLAYER_DISCONNECTED )]
+        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
         internal void OnPlayerDisconnect( UnturnedPlayer player )
         {
             var displayName = player.CharacterName;

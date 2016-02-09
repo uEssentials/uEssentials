@@ -44,61 +44,61 @@ namespace Essentials.Api.Event
             {
                 switch (EventType)
                 {
-                    case EventType.ROCKET_PLAYER_UPDATE_BLEEDING:
+                    case EventType.PLAYER_UPDATE_BLEEDING:
                         return "OnPlayerUpdateBleeding";
-                    case EventType.ROCKET_PLAYER_UPDATE_BROKEN:
+                    case EventType.PLAYER_UPDATE_BROKEN:
                         return "OnPlayerUpdateBroken";
-                    case EventType.ROCKET_PLAYER_UPDATE_POSITION:
+                    case EventType.PLAYER_UPDATE_POSITION:
                         return "OnPlayerUpdatePosition";
-                    case EventType.ROCKET_PLAYER_UPDATE_LIFE:
+                    case EventType.PLAYER_UPDATE_LIFE:
                         return "OnPlayerUpdateLife";
-                    case EventType.ROCKET_PLAYER_UPDATE_FOOD:
+                    case EventType.PLAYER_UPDATE_FOOD:
                         return "OnPlayerUpdateFood";
-                    case EventType.ROCKET_PLAYER_UPDATE_HEALTH:
+                    case EventType.PLAYER_UPDATE_HEALTH:
                         return "OnPlayerUpdateHealth";
-                    case EventType.ROCKET_PLAYER_UPDATE_VIRUS:
+                    case EventType.PLAYER_UPDATE_VIRUS:
                         return "OnPlayerUpdateVirus";
-                    case EventType.ROCKET_PLAYER_UPDATE_WATER:
+                    case EventType.PLAYER_UPDATE_WATER:
                         return "OnPlayerUpdateWater";
-                    case EventType.ROCKET_PLAYER_UPDATE_STANCE:
+                    case EventType.PLAYER_UPDATE_STANCE:
                         return "OnPlayerUpdateStance";
-                    case EventType.ROCKET_PLAYER_UPDATE_STAT:
+                    case EventType.PLAYER_UPDATE_STAT:
                         return "OnPlayerUpdateStat";
-                    case EventType.ROCKET_PLAYER_UPDATE_EXPERIENCE:
+                    case EventType.PLAYER_UPDATE_EXPERIENCE:
                         return "OnPlayerUpdateExperience";
-                    case EventType.ROCKET_PLAYER_UPDATE_STAMINA:
+                    case EventType.PLAYER_UPDATE_STAMINA:
                         return "OnPlayerUpdateStamina";
-                    case EventType.ROCKET_PLAYER_UPDATE_GESTURE:
+                    case EventType.PLAYER_UPDATE_GESTURE:
                         return "OnPlayerUpdateGesture";
 
-                    case EventType.ROCKET_PLAYER_INVENTORY_UPDATED:
+                    case EventType.PLAYER_INVENTORY_UPDATED:
                         return "OnPlayerInventoryUpdated";
-                    case EventType.ROCKET_PLAYER_INVENTORY_RESIZED:
+                    case EventType.PLAYER_INVENTORY_RESIZED:
                         return "OnPlayerInventoryResized";
-                    case EventType.ROCKET_PLAYER_INVENTORY_REMOVED:
+                    case EventType.PLAYER_INVENTORY_REMOVED:
                         return "OnPlayerInventoryRemoved";
-                    case EventType.ROCKET_PLAYER_INVENTORY_ADDED:
+                    case EventType.PLAYER_INVENTORY_ADDED:
                         return "OnPlayerInventoryAdded";
 
-                    case EventType.ROCKET_PLAYER_DEATH:
+                    case EventType.PLAYER_DEATH:
                         return "OnPlayerDeath";
-                    case EventType.ROCKET_PLAYER_DEAD:
+                    case EventType.PLAYER_DEAD:
                         return "OnPlayerDead";
-                    case EventType.ROCKET_PLAYER_REVIVE:
+                    case EventType.PLAYER_REVIVE:
                         return "OnPlayerRevive";
-                    case EventType.ROCKET_PLAYER_CHATTED:
+                    case EventType.PLAYER_CHATTED:
                         return "OnPlayerChatted";
-                    case EventType.ROCKET_PLAYER_WEAR:
+                    case EventType.PLAYER_WEAR:
                         return "OnPlayerWear";
 
-                    case EventType.ROCKET_PLAYER_CONNECTED:
+                    case EventType.PLAYER_CONNECTED:
                         return "OnPlayerConnected";
-                    case EventType.ROCKET_PLAYER_DISCONNECTED:
+                    case EventType.PLAYER_DISCONNECTED:
                         return "OnPlayerDisconnected";
-                    case EventType.ROCKET_SERVER_SHUTDOWN:
+                    case EventType.SERVER_SHUTDOWN:
                         return "OnShutdown";
 
-//                    case EventType.ROCKET_PERMISSION_REQUESTED:
+//                    case EventType.PERMISSION_REQUESTED:
 //                        return "OnPermissionRequested";
 
                     default:
@@ -123,38 +123,38 @@ namespace Essentials.Api.Event
 
             switch (eventType)
             {
-                case EventType.ROCKET_PLAYER_UPDATE_BLEEDING:
-                case EventType.ROCKET_PLAYER_UPDATE_BROKEN:
-                case EventType.ROCKET_PLAYER_UPDATE_POSITION:
-                case EventType.ROCKET_PLAYER_UPDATE_LIFE:
-                case EventType.ROCKET_PLAYER_UPDATE_FOOD:
-                case EventType.ROCKET_PLAYER_UPDATE_HEALTH:
-                case EventType.ROCKET_PLAYER_UPDATE_VIRUS:
-                case EventType.ROCKET_PLAYER_UPDATE_WATER:
-                case EventType.ROCKET_PLAYER_UPDATE_STANCE:
-                case EventType.ROCKET_PLAYER_UPDATE_STAT:
-                case EventType.ROCKET_PLAYER_UPDATE_EXPERIENCE:
-                case EventType.ROCKET_PLAYER_UPDATE_STAMINA:
-                case EventType.ROCKET_PLAYER_UPDATE_GESTURE:
-                case EventType.ROCKET_PLAYER_INVENTORY_UPDATED:
-                case EventType.ROCKET_PLAYER_INVENTORY_RESIZED:
-                case EventType.ROCKET_PLAYER_INVENTORY_REMOVED:
-                case EventType.ROCKET_PLAYER_INVENTORY_ADDED:
-                case EventType.ROCKET_PLAYER_DEATH:
-                case EventType.ROCKET_PLAYER_DEAD:
-                case EventType.ROCKET_PLAYER_REVIVE:
-                case EventType.ROCKET_PLAYER_CHATTED:
-                case EventType.ROCKET_PLAYER_WEAR:
+                case EventType.PLAYER_UPDATE_BLEEDING:
+                case EventType.PLAYER_UPDATE_BROKEN:
+                case EventType.PLAYER_UPDATE_POSITION:
+                case EventType.PLAYER_UPDATE_LIFE:
+                case EventType.PLAYER_UPDATE_FOOD:
+                case EventType.PLAYER_UPDATE_HEALTH:
+                case EventType.PLAYER_UPDATE_VIRUS:
+                case EventType.PLAYER_UPDATE_WATER:
+                case EventType.PLAYER_UPDATE_STANCE:
+                case EventType.PLAYER_UPDATE_STAT:
+                case EventType.PLAYER_UPDATE_EXPERIENCE:
+                case EventType.PLAYER_UPDATE_STAMINA:
+                case EventType.PLAYER_UPDATE_GESTURE:
+                case EventType.PLAYER_INVENTORY_UPDATED:
+                case EventType.PLAYER_INVENTORY_RESIZED:
+                case EventType.PLAYER_INVENTORY_REMOVED:
+                case EventType.PLAYER_INVENTORY_ADDED:
+                case EventType.PLAYER_DEATH:
+                case EventType.PLAYER_DEAD:
+                case EventType.PLAYER_REVIVE:
+                case EventType.PLAYER_CHATTED:
+                case EventType.PLAYER_WEAR:
                     TargetType = typeof (UnturnedPlayerEvents);
                     break;
 
-                case EventType.ROCKET_PLAYER_CONNECTED:
-                case EventType.ROCKET_PLAYER_DISCONNECTED:
-                case EventType.ROCKET_SERVER_SHUTDOWN:
+                case EventType.PLAYER_CONNECTED:
+                case EventType.PLAYER_DISCONNECTED:
+                case EventType.SERVER_SHUTDOWN:
                     TargetType = U.Events;
                     break;
                 
-//                case EventType.ROCKET_PERMISSION_REQUESTED:
+//                case EventType.PERMISSION_REQUESTED:
 //                    TargetType = typeof (UnturnedPermissions);
 //                    break;
 
@@ -170,131 +170,131 @@ namespace Essentials.Api.Event
         /// <summary>
         /// Signature: (UnturnedPlayer player, bool bleeding)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_BLEEDING,
+        PLAYER_UPDATE_BLEEDING,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, bool broken)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_BROKEN,
+        PLAYER_UPDATE_BROKEN,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, Vector3 position)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_POSITION,
+        PLAYER_UPDATE_POSITION,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, byte amount)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_LIFE,
+        PLAYER_UPDATE_LIFE,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, byte amount)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_FOOD,
+        PLAYER_UPDATE_FOOD,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, byte amount)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_HEALTH,
+        PLAYER_UPDATE_HEALTH,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, byte amount)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_VIRUS,
+        PLAYER_UPDATE_VIRUS,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, byte amount)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_WATER,
+        PLAYER_UPDATE_WATER,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, byte stance)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_STANCE,
+        PLAYER_UPDATE_STANCE,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, EPlayerStat stat)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_STAT,
+        PLAYER_UPDATE_STAT,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, uint experience)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_EXPERIENCE,
+        PLAYER_UPDATE_EXPERIENCE,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, byte amount)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_STAMINA,
+        PLAYER_UPDATE_STAMINA,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, InventoryGroup inventoryGroup, byte inventoryIndex, ItemJar P)
         /// </summary>
-        ROCKET_PLAYER_INVENTORY_UPDATED,
+        PLAYER_INVENTORY_UPDATED,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, InventoryGroup inventoryGroup, byte O, byte U)
         /// </summary>
-        ROCKET_PLAYER_INVENTORY_RESIZED,
+        PLAYER_INVENTORY_RESIZED,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, InventoryGroup inventoryGroup, byte inventoryIndex, ItemJar P)
         /// </summary>
-        ROCKET_PLAYER_INVENTORY_REMOVED,
+        PLAYER_INVENTORY_REMOVED,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, InventoryGroup inventoryGroup, byte inventoryIndex, ItemJar P)
         /// </summary>
-        ROCKET_PLAYER_INVENTORY_ADDED,
+        PLAYER_INVENTORY_ADDED,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer)
         /// </summary>
-        ROCKET_PLAYER_DEATH,
+        PLAYER_DEATH,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, Vector3 position)
         /// </summary>
-        ROCKET_PLAYER_DEAD,
+        PLAYER_DEAD,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, Vector3 position, byte angle)
         /// </summary>
-        ROCKET_PLAYER_REVIVE,
+        PLAYER_REVIVE,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, ref Color color, string message, EChatMode chatMode, ref bool cancel)
         /// </summary>
-        ROCKET_PLAYER_CHATTED,
+        PLAYER_CHATTED,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, Wearables wear, ushort id, byte? quality)
         /// </summary>
-        ROCKET_PLAYER_WEAR,
+        PLAYER_WEAR,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player)
         /// </summary>
-        ROCKET_PLAYER_CONNECTED,
+        PLAYER_CONNECTED,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player)
         /// </summary>
-        ROCKET_PLAYER_DISCONNECTED,
+        PLAYER_DISCONNECTED,
 
         /// <summary>
         /// Signature: ()
         /// </summary>
-        ROCKET_SERVER_SHUTDOWN,
+        SERVER_SHUTDOWN,
 
  /*       /// <summary>
         /// Signature: (UnturnedPlayer player, string permission, ref bool granted)
         /// </summary>
-        ROCKET_PERMISSION_REQUESTED, */
+        PERMISSION_REQUESTED, */
 
         /// <summary>
         /// Signature: (UnturnedPlayer, UnturnedPlayerEvents.PlayerGesture)
         /// </summary>
-        ROCKET_PLAYER_UPDATE_GESTURE
+        PLAYER_UPDATE_GESTURE
     }
 }
