@@ -320,6 +320,26 @@ namespace Essentials.Api.Unturned
             return RocketPlayer.GetHashCode();
         }
 
+        public bool HasComponent<T>() where T : Component
+        {
+            return GetComponent<T>() != null;
+        }
+
+        public bool HasComponent( Type componentType )
+        {
+            return GetComponent( componentType ) != null;
+        }
+
+        public void RemoveComponent<T>() where T : Component
+        {
+            UnityEngine.Object.Destroy( GetComponent<T>(  ) );
+        }
+
+        public void RemoveComponent( Type componentType )
+        {
+            UnityEngine.Object.Destroy( GetComponent( componentType ) );
+        }
+
         public T AddComponent<T>() where T : Component
         {
             return UnturnedPlayer.gameObject.AddComponent<T>();
