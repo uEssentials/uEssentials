@@ -19,14 +19,12 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System.Collections.Generic;
 using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Core.Components.Player;
 using Essentials.I18n;
-using UnityEngine;
 
 namespace Essentials.Commands
 {

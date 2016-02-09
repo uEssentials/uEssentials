@@ -21,7 +21,6 @@
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.Core.Components;
 using Essentials.Core.Components.Player;
 using Essentials.I18n;
 
