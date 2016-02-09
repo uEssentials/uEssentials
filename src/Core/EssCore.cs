@@ -29,6 +29,7 @@ using Essentials.Api.Logging;
 using Essentials.Api.Module;
 using Essentials.Api.Task;
 using Essentials.Api.Unturned;
+using Essentials.Commands;
 using Essentials.Common;
 using Essentials.Configuration;
 using Essentials.Core.Command;
@@ -40,7 +41,7 @@ using Rocket.API;
 using Rocket.Core;
 using Rocket.Core.Plugins;
 using Rocket.Unturned;
-using Rocket.Unturned.Commands;
+using CommandTp = Rocket.Unturned.Commands.CommandTp;
 using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
 using Essentials.Updater;
@@ -114,72 +115,109 @@ namespace Essentials.Core
             DataFolder = Folder + "data/";
             ModulesFolder = Folder + "modules/";
 
-            if ( !System.IO.Directory.Exists( Folder ) )
-                System.IO.Directory.CreateDirectory( Folder );
-
-            if ( !System.IO.Directory.Exists( TranslationsFolder ) )
-                System.IO.Directory.CreateDirectory( TranslationsFolder );
-
-            if ( !System.IO.Directory.Exists( DataFolder ) )
-                System.IO.Directory.CreateDirectory( DataFolder );
-                
-            if ( !System.IO.Directory.Exists( ModulesFolder ) )
-                System.IO.Directory.CreateDirectory( ModulesFolder );
+            (
+                from directory in new[] { Folder, TranslationsFolder, DataFolder, ModulesFolder }
+                where !System.IO.Directory.Exists( directory )
+                select directory
+            ).ForEach( dir => System.IO.Directory.CreateDirectory( dir ) );
 
             var configPath = $"{Folder}config.json";
 
             Config = new EssConfig();
             Config.Load( configPath );
 
-            if (  Config.AutoAnnouncer.Enabled )
-                Config.AutoAnnouncer.Start();
+            EventManager = new EventManager();
+            CommandManager = new CommandManager();
+            WarpManager = new WarpManager();
+            KitManager = new KitManager();
+            ModuleManager = new ModuleManager();
+            Updater = new GithubUpdater();
+
+            var configFiels = typeof (EssConfig).GetFields();
+            var hasNulls = configFiels.Any( f => f.GetValue( Config ) == null );
+            var nonNullValues = new Dictionary<string, object>();
+
+            /*
+                If has any null value it will update the config
+            */
+            if ( hasNulls )
+            {
+                /*
+                    Save nonnull values
+                */
+                configFiels.Where( f => f.GetValue( Config ) != null ).ForEach( f =>
+                {
+                    nonNullValues.Add( f.Name, f.GetValue( Config ) );
+                } );
+
+                /*
+                    Reload defaults
+                */
+                Config.LoadDefaults();
+
+                /*
+                    Restore nonnull values
+                */
+                nonNullValues.ForEach( pair =>
+                {
+                    typeof(EssConfig).GetField( pair.Key ).SetValue( Config, pair.Value );
+                } );
+
+                Config.Save( configPath );
+            }
 
             EssLang.Load();
 
-            EventManager = new EventManager();
             EventManager.RegisterAll( GetType().Assembly );
+            UnregisterRocketCommand<CommandTp>();
+            CommandManager.RegisterAll( GetType().Assembly );
+            WarpManager.Load();
+            KitManager.Load();
+            ModuleManager.LoadAll( ModulesFolder );
 
             Logger.Log( "Loaded uEssentials", ConsoleColor.Green );
-
             Logger.Log( "Plugin version: ", ConsoleColor.Green, suffix: "" );
             Logger.Log( PLUGIN_VERSION, ConsoleColor.White, "" );
-
             Logger.Log( "Recommended Rocket version: ", ConsoleColor.Green, suffix: "" );
             Logger.Log( ROCKET_VERSION, ConsoleColor.White, "" );
-
             Logger.Log( "Recommended Unturned version: ", ConsoleColor.Green, suffix: "" );
             Logger.Log( UNTURNED_VERSION, ConsoleColor.White, "" );
-
             Logger.Log( "Author: ", ConsoleColor.Green, suffix: "" );
             Logger.Log( "leonardosc", ConsoleColor.White, "" );
-
             Logger.Log( "Wiki: ", ConsoleColor.Green, suffix: "" );
             Logger.Log( "uessentials.github.io", ConsoleColor.White, "" );
-
-            UnregisterRocketCommand<CommandTp>();
-
-            CommandManager = new CommandManager();
-            CommandManager.RegisterAll( GetType().Assembly );
             Logger.LogInfo( $"Loaded {CommandManager.Commands.Count()} commands" );
-
-            WarpManager = new WarpManager();
-            WarpManager.Load();
             Logger.LogInfo( $"Loaded {WarpManager.Count} warps" );
-
-            KitManager = new KitManager();
-            KitManager.Load();
             Logger.LogInfo( $"Loaded {KitManager.Count} kits" );
-
             Logger.LogInfo( "Loading modules..." );
-            ModuleManager = new ModuleManager();
-            ModuleManager.LoadAll( ModulesFolder );
             Logger.LogInfo( $"Loaded {ModuleManager.RunningModules.Count} modules" );
+
+            if ( Config.AutoAnnouncer.Enabled )
+            {
+                Config.AutoAnnouncer.Start();
+            }
+
+            if ( Config.DisabledCommands.Count != 0 )
+            {
+                Config.DisabledCommands.ForEach( cmdName =>
+                {
+                    var command = CommandManager.GetByName( cmdName );
+
+                    if ( command == null || command is CommandEssentials )
+                    {
+                        Logger.LogWarning( $"There no command named '{cmdName}' to unregister." );
+                    }
+                    else
+                    {
+                        CommandManager.Unregister( command );
+                        Logger.LogInfo( $"Unregistered command: '{cmdName}'" );   
+                    }
+                } );
+            }
 
             #if DEV
             SDG.Unturned.CommandWindow.ConsoleOutput.title = "Unturned Server";
             #endif
-
-            Updater = new GithubUpdater();
 
             #if !DEV
             if ( Config.Updater.CheckUpdates )

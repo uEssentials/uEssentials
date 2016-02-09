@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System.Collections.Generic;
 using Essentials.Api.Configuration;
 using Essentials.Misc;
 using Newtonsoft.Json;
@@ -48,6 +49,8 @@ namespace Essentials.Configuration
 
         public AutoAnnouncer    AutoAnnouncer;
 
+        public List<string>     DisabledCommands; 
+
         internal EssConfig() { }
 
         public override void LoadDefaults()
@@ -76,6 +79,8 @@ namespace Essentials.Configuration
 
             Updater                     = new Updater { CheckUpdates = true,
                                                         DownloadLatest = true };
+
+            DisabledCommands            = new List<string>();
         }
     }
 
