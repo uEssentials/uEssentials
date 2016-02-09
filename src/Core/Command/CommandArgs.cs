@@ -166,7 +166,7 @@ namespace Essentials.Core.Command
 
         public string ToLowerString => ToString().ToLower();
 
-        public string ToUpperString => ToString().ToLower();
+        public string ToUpperString => ToString().ToUpper();
 
         public uint ToUint => uint.Parse( RawValue );
 
