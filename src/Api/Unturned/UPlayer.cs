@@ -284,40 +284,20 @@ namespace Essentials.Api.Unturned
             return skills.skills[uSkill.SpecialityIndex][uSkill.SkillIndex];
         }
 
-        public override string ToString()
+        public Vector3? GetEyePosition( float distance, int masks )
         {
-            return DisplayName;
+            RaycastHit raycast;
+            Physics.Raycast( Look.aim.position, Look.aim.forward, out raycast, distance, masks );
+
+            if ( raycast.transform == null )
+                return null;
+
+            return raycast.point;
         }
 
-        public static bool operator ==( UPlayer left, ICommandSource right )
+        public Vector3? GetEyePosition( float distance )
         {
-            if ( Equals( left, right ) )
-                return true;
-
-            return left?.Id == right?.Id;
-        }
-
-        public static bool operator !=( UPlayer left, ICommandSource right )
-        {
-            return !(left == right);
-        }
-
-        protected bool Equals( UPlayer other )
-        {
-            return Equals( this, other );
-        }
-
-        public override bool Equals( object obj )
-        {
-            if ( ReferenceEquals( null, obj ) ) return false;
-            if ( ReferenceEquals( this, obj ) ) return true;
-            if ( obj.GetType() != GetType() ) return false;
-            return Equals( (UPlayer) obj );
-        }
-
-        public override int GetHashCode()
-        {
-            return RocketPlayer.GetHashCode();
+            return GetEyePosition( distance, RayMasks.BLOCK_COLLISION & ~(1 << 0x15) );
         }
 
         public bool HasComponent<T>() where T : Component
@@ -492,6 +472,42 @@ namespace Essentials.Api.Unturned
             }
 
             return false;
+        }
+
+        public override string ToString()
+        {
+            return DisplayName;
+        }
+
+        public static bool operator ==( UPlayer left, ICommandSource right )
+        {
+            if ( Equals( left, right ) )
+                return true;
+
+            return left?.Id == right?.Id;
+        }
+
+        public static bool operator !=( UPlayer left, ICommandSource right )
+        {
+            return !(left == right);
+        }
+
+        protected bool Equals( UPlayer other )
+        {
+            return Equals( this, other );
+        }
+
+        public override bool Equals( object obj )
+        {
+            if ( ReferenceEquals( null, obj ) ) return false;
+            if ( ReferenceEquals( this, obj ) ) return true;
+            if ( obj.GetType() != GetType() ) return false;
+            return Equals( (UPlayer) obj );
+        }
+
+        public override int GetHashCode()
+        {
+            return RocketPlayer.GetHashCode();
         }
     }
 }
