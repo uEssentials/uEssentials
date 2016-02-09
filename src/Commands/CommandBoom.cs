@@ -40,6 +40,21 @@ namespace Essentials.Commands
         {
             switch ( args.Length )
             {
+                case 0:
+                    if ( src.IsConsole )
+                    {
+                        ShowUsage( src );
+                        return;
+                    }
+
+                    var eyePos = src.ToPlayer().GetEyePosition( 3000 );
+
+                    if ( eyePos.HasValue )
+                    {
+                        Explode( eyePos.Value );
+                    }
+                    break;
+
                 case 1:
                     var found = UPlayer.TryGet( args[0], player => 
                         Explode( player.Position ) 
