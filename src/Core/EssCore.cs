@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Essentials.Api.Event;
 using Essentials.Api.Logging;
 using Essentials.Api.Module;
@@ -44,7 +43,6 @@ using Rocket.Unturned;
 using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
 using Essentials.Updater;
-using Newtonsoft.Json.Linq;
 
 // ReSharper disable InconsistentNaming
 
@@ -69,7 +67,7 @@ namespace Essentials.Core
                 - essentials.keepskill.<skill>
         */
         
-        internal const string                         PLUGIN_VERSION              = "1.0.2.0";
+        internal const string                         PLUGIN_VERSION              = "1.0.3.0";
         internal const string                         ROCKET_VERSION              = "4.9.0.0";
         internal const string                         UNTURNED_VERSION            = "3.14.3.1";
         
@@ -221,7 +219,7 @@ namespace Essentials.Core
             #if !DEV
             if ( Config.Updater.CheckUpdates )
             {
-                new Thread( () =>
+                new System.Threading.Thread( () =>
                 {
                     Logger.LogInfo( "Checking updates." );
 
@@ -234,8 +232,8 @@ namespace Essentials.Core
 
                         if ( !lastResult.AdditionalData.IsNullOrEmpty() )
                         {
-                            JToken changesStr;
-                            if ( JObject.Parse( lastResult.AdditionalData ).TryGetValue( "changes", out changesStr ) )
+                            Newtonsoft.Json.Linq.JToken changesStr;
+                            if ( Newtonsoft.Json.Linq.JObject.Parse( lastResult.AdditionalData ).TryGetValue( "changes", out changesStr ) )
                             {
                                 Logger.LogInfo( " ========================= [ Changes ] =========================" );
 
@@ -261,7 +259,7 @@ namespace Essentials.Core
                 } ).Start();
             }
 
-            Essentials.Analytics.Metrics.Init();
+            Analytics.Metrics.Init();
             #endif
 
             TryAddComponent<Tasks>();
