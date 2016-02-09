@@ -150,5 +150,6 @@
 	"TELEPORTED": "You was teleported to '{0}'",
 	"TELEPORTED_SENDER": "Teleported '{0}' to '{1}'",
     "FAILED_FIND_PLACE_OR_PLAYER": "Could not find place or player named '{0}'",
-	"EMPTY_HANDS": "You are not holding an item."
+	"EMPTY_HANDS": "You are not holding an item.",
+	"MUST_POSITIVE": "The value must be positive."
 }
