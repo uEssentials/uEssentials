@@ -20,8 +20,12 @@
 */
 
 using System.Collections.Generic;
+using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Unturned;
+using Essentials.Core.Components.Player;
+using Essentials.I18n;
 using UnityEngine;
 
 namespace Essentials.Commands
@@ -33,11 +37,44 @@ namespace Essentials.Commands
     )]
     public class CommandFreeze : EssCommand
     {
-        internal static readonly List<string> AntiFlood = new List<string>();
-
         public override void OnExecute( ICommandSource source, ICommandArgs parameters )
         {
-            source.SendMessage( "This command was broken and should be fixed soon.", Color.red );
+            if ( parameters.Length == 0 )
+            {
+                ShowUsage( source );
+            }
+            else if ( parameters[0].IsOneOf( new []{ "*", "all" } ) )
+            {
+                foreach ( var player in UServer.Players.Where( player => !player.HasComponent<FrozenPlayer>() ) )
+                {
+                    player.AddComponent<FrozenPlayer>();
+
+                    EssLang.FROZEN_PLAYER.SendTo( player, source.DisplayName );
+                }
+
+                EssLang.FROZEN_ALL.SendTo( source );
+            }
+            else
+            {
+                var found = UPlayer.TryGet( parameters[0], player => {
+                    if ( player.HasComponent<FrozenPlayer>() )
+                    {
+                        EssLang.ALREADY_FROZEN.SendTo( source, player.DisplayName );
+                    }
+                    else
+                    {
+                        player.AddComponent<FrozenPlayer>();
+
+                        EssLang.FROZEN_SENDER.SendTo( source, player.DisplayName );
+                        EssLang.FROZEN_PLAYER.SendTo( player, source.DisplayName );
+                    }
+                } );
+
+                if ( !found )
+                {
+                    EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[0] );
+                }
+            }
         }
     }
 }

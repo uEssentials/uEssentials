@@ -36,7 +36,6 @@ using EventType = Essentials.Api.Event.EventType;
 
 using static Essentials.Commands.CommandSpy;
 using static Essentials.Commands.CommandBack;
-using static Essentials.Commands.CommandFreeze;
 using static Essentials.Commands.CommandTell;
 
 namespace Essentials.Event.Handling
@@ -200,7 +199,6 @@ namespace Essentials.Event.Handling
             Spies           .Remove( displayName );
             CachedSkills    .Remove( displayName );
             BackDict        .Remove( displayName );
-            AntiFlood       .Remove( displayName );
             Conversations   .Remove( displayName );
         }
     }

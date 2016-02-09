@@ -152,7 +152,6 @@ namespace Essentials.I18n
         public static EssLang ALREADY_FROZEN { get; private set; }
         public static EssLang FROZEN_SENDER { get; private set; }
         public static EssLang UNFROZEN_SENDER { get; private set; }
-        public static EssLang YOU_ARE_FROZEN { get; private set; }
         public static EssLang FROZEN_PLAYER { get; private set; }
         public static EssLang UNFROZEN_PLAYER { get; private set; }
         public static EssLang FROZEN_ALL { get; private set; }

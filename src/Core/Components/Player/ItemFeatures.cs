@@ -21,19 +21,20 @@
 
 using System;
 using SDG.Unturned;
-using UnityEngine;
 
-// ReSharper disable UnusedMember.Local
-
-namespace Essentials.Core.Components
+namespace Essentials.Core.Components.Player
 {
-    internal class ItemFeatures : MonoBehaviour
+    internal class ItemFeatures : PlayerComponent
     {
-        private Player              _player;
-        private PlayerEquipment     _equip;
+        private readonly PlayerEquipment     _equip;
 
         public bool AutoRepair { get; set; }
         public bool AutoReload { get; set; }
+
+        public ItemFeatures()
+        {
+            _equip = Player.Equipment;
+        }
 
         private void FixedUpdate()
         {
@@ -64,13 +65,5 @@ namespace Essentials.Core.Components
                 _equip.sendUpdateQuality();
             }
         }
-
-		private void Awake()
-		{
-			_player = gameObject.transform.GetComponent<Player>();
-            _equip = _player.equipment;
-
-			DontDestroyOnLoad( transform.gameObject );
-		}
     }
 }

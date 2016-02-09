@@ -74,7 +74,6 @@
     "ALREADY_FROZEN": "This player already is frozen",
     "FROZEN_SENDER": "Player {0} frozen",
     "UNFROZEN_SENDER": "Player {0} unfrozen",
-    "YOU_ARE_FROZEN": "You are frozen",
     "FROZEN_PLAYER": "You was frozen by {0}",
     "UNFROZEN_PLAYER": "You was unfrozen by {0}",
     "FROZEN_ALL": "You froze all players",
