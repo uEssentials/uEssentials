@@ -47,22 +47,17 @@ namespace Essentials.Commands
                 dist = (float) args[0].ToDouble;
             }
 
-            var aim = player.Look.aim;
-            var masks = RayMasks.BLOCK_COLLISION & ~(1 << 0x15);
-   
-            RaycastHit hit;
+            var eyePos = player.GetEyePosition( dist );
 
-            Physics.Raycast( aim.position, aim.forward, out hit, dist, masks );
-        
-            var point = hit.point;
-
-            if ( point == Vector3.zero )
+            if ( !eyePos.HasValue )
             {
                 EssLang.JUMP_NO_POSITION.SendTo( src );
             }
             else
             {
+                var point = eyePos.Value;
                 point.y += 6;
+
                 player.Teleport( point );
                 EssLang.JUMPED.SendTo( src, point.x, point.y, point.z );
             }
