@@ -68,6 +68,8 @@ namespace Essentials.Api.Event
                         return "OnPlayerUpdateExperience";
                     case EventType.ROCKET_PLAYER_UPDATE_STAMINA:
                         return "OnPlayerUpdateStamina";
+                    case EventType.ROCKET_PLAYER_UPDATE_GESTURE:
+                        return "OnPlayerUpdateGesture";
 
                     case EventType.ROCKET_PLAYER_INVENTORY_UPDATED:
                         return "OnPlayerInventoryUpdated";
@@ -133,6 +135,7 @@ namespace Essentials.Api.Event
                 case EventType.ROCKET_PLAYER_UPDATE_STAT:
                 case EventType.ROCKET_PLAYER_UPDATE_EXPERIENCE:
                 case EventType.ROCKET_PLAYER_UPDATE_STAMINA:
+                case EventType.ROCKET_PLAYER_UPDATE_GESTURE:
                 case EventType.ROCKET_PLAYER_INVENTORY_UPDATED:
                 case EventType.ROCKET_PLAYER_INVENTORY_RESIZED:
                 case EventType.ROCKET_PLAYER_INVENTORY_REMOVED:
@@ -288,5 +291,10 @@ namespace Essentials.Api.Event
         /// Signature: (UnturnedPlayer player, string permission, ref bool granted)
         /// </summary>
         ROCKET_PERMISSION_REQUESTED, */
+
+        /// <summary>
+        /// Signature: (UnturnedPlayer, UnturnedPlayerEvents.PlayerGesture)
+        /// </summary>
+        ROCKET_PLAYER_UPDATE_GESTURE
     }
 }
