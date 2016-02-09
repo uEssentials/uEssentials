@@ -76,9 +76,9 @@ namespace Essentials.Commands
 
             src.SendMessage( $"Name: {name}", color );
             src.SendMessage( $"Description: {description}", color );
+            src.SendMessage( $"Id: {asset.id}", color );
             src.SendMessage( $"Type: {type}", color );
             src.SendMessage( $"IsPro: {isPro}", color );
-            src.SendMessage( $"UsableType: {useType}", color );
         }
 
         private static string WrapMessage( ICommandSource src, string str )
