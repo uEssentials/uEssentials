@@ -70,7 +70,7 @@ namespace Essentials.Core
                 - essentials.keepskill.<skill>
         */
         
-        internal const string                         PLUGIN_VERSION              = "1.0.4.0";
+        internal const string                         PLUGIN_VERSION              = "1.0.4.1";
         internal const string                         ROCKET_VERSION              = "4.9.0.0";
         internal const string                         UNTURNED_VERSION            = "3.14.3.1";
         
