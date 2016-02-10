@@ -26,6 +26,7 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Core.Command;
+using Essentials.Core.Components.Player;
 using Essentials.I18n;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
@@ -275,6 +276,80 @@ namespace Essentials.Commands
             src.SendMessage( $"Id: {asset.id}", color );
             src.SendMessage( $"Type: {type}", color );
             src.SendMessage( $"IsPro: {isPro}", color );
+        }
+
+        [CommandInfo( 
+            Name = "autoreload",
+            Usage = "[on|off]",
+            Description = "Auto reload weapon when ammo is less than 5",
+            AllowedSource = AllowedSource.PLAYER
+        )]
+        public void NeverReloadCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        {
+            var player = src.ToPlayer();
+
+            if ( args.IsEmpty )
+                goto usage;
+
+            switch ( args[0].ToLowerString )
+            {
+                case "on":
+                case "1":
+                    var wFeature = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
+                    wFeature.AutoReload = true;
+                    EssLang.AUTO_RELOAD_ENABLED.SendTo( src );
+                    return;
+
+                case "off":
+                case "0":
+                    wFeature = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
+                    wFeature.AutoReload = false;
+                    EssLang.AUTO_RELOAD_DISABLED.SendTo( src );
+                    return;
+
+                default:
+                    goto usage;
+            }
+
+            usage:
+            src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
+        }
+
+        [CommandInfo( 
+            Name = "autorepair",
+            Usage = "[on|off]",
+            Description = "Auto repair weapon when quality is less than 90",
+            AllowedSource = AllowedSource.PLAYER
+        )]
+        public void NeverRepairCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        {
+            var player = src.ToPlayer();
+
+            if ( args.IsEmpty )
+                goto usage;
+
+            switch ( args[0].ToLowerString )
+            {
+                case "on":
+                case "1":
+                    var wFeature = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
+                    wFeature.AutoRepair = true;
+                    EssLang.AUTO_REPAIR_ENABLED.SendTo( src );
+                    return;
+
+                case "off":
+                case "0":
+                    wFeature = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
+                    wFeature.AutoRepair = false;
+                    EssLang.AUTO_REPAIR_DISABLED.SendTo( src );
+                    return;
+
+                default:
+                    goto usage;
+            }
+
+            usage:
+            src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
         }
 
         # region HELPER METHODS
