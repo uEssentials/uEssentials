@@ -31,14 +31,14 @@ using Newtonsoft.Json.Linq;
 
 namespace Essentials.Updater
 {
-    public class GithubUpdater : IUpdater
+    internal class GithubUpdater : IUpdater
     {
         private const string ReleasesUrl = @"https://api.github.com/repos/uEssentials/uEssentials/releases/latest";
         private static readonly EssLogger Logger = EssProvider.Logger;
 
         public UpdateResult LastResult { get; private set; }
 
-        public GithubUpdater()
+        internal GithubUpdater()
         {
             ServicePointManager.ServerCertificateValidationCallback += (o, certificate, chain, errors) => true;
         }
