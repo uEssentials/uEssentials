@@ -19,7 +19,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using SDG.Unturned;
@@ -34,35 +33,36 @@ namespace Essentials.Commands
     )]
     public class CommandSudo : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override void OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.Length < 2 )
+            if ( args.Length < 2 )
             {
-                ShowUsage( source );
+                ShowUsage( src );
             }
             else
             {
                 string name;
                 
-                if ( parameters[0].Is( name = "*console*" ) )
+                if ( args[0].Is( name = "*console*" ) )
                 {
-                    CommandWindow.ConsoleInput.onInputText( parameters.Join( 1 ) );
+                    CommandWindow.ConsoleInput.onInputText( args.Join( 1 ) );
                 }
                 else
                 {
-                    if ( !parameters[0].IsValidPlayerName )
+                    if ( !args[0].IsValidPlayerName )
                     {
-                        EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[0] );
+                        EssLang.PLAYER_NOT_FOUND.SendTo( src, args[0] );
                         return;
                     }
 
-                    var targetPlayer = parameters[0].ToPlayer;
+                    var targetPlayer = args[0].ToPlayer;
 
-                    Commander.execute( targetPlayer.CSteamId, parameters.Join( 1 ) );
+                    ChatManager.Instance.askChat( targetPlayer.CSteamId, (byte) EChatMode.GLOBAL, args.Join( 1 ) );
+
                     name = targetPlayer.CharacterName;
                 }
 
-                EssLang.SUDO_EXECUTED.SendTo( source, name, parameters.Join( 1 ) );
+                EssLang.SUDO_EXECUTED.SendTo( src, name, args.Join( 1 ) );
             }
         }
     }
