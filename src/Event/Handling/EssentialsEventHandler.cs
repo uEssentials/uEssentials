@@ -34,7 +34,7 @@ using Steamworks;
 using UnityEngine;
 using EventType = Essentials.Api.Event.EventType;
 
-using static Essentials.Commands.CommandSpy;
+using static Essentials.Commands.MiscCommands;
 using static Essentials.Commands.CommandBack;
 using static Essentials.Commands.CommandTell;
 

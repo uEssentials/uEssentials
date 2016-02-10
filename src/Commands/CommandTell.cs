@@ -27,6 +27,8 @@ using Essentials.Api.Unturned;
 using Essentials.I18n;
 using UnityEngine;
 
+using static Essentials.Commands.MiscCommands;
+
 namespace Essentials.Commands
 {
     [CommandInfo(
@@ -63,7 +65,7 @@ namespace Essentials.Commands
 
                     target.SendMessage( message );
 
-                    CommandSpy.Spies.ForEach( p =>
+                    Spies.ForEach( p =>
                     {
                         UPlayer.From( p ).SendMessage( 
                             $"Spy: ({source.DisplayName} -> {target.CharacterName}): {parameters.Join( 1 )}",

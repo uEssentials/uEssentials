@@ -37,6 +37,7 @@ namespace Essentials.Commands
     public class MiscCommands
     {
         private static readonly ICommandArgument One = new CommandArgument( 0, "1" );
+        public static readonly List<string> Spies = new List<string>();
 
         [CommandInfo(
             Name = "ascend",
@@ -352,8 +353,28 @@ namespace Essentials.Commands
             ShowUsage( src, cmd );
         }
 
-        # region HELPER METHODS
+        [CommandInfo(
+            Name = "spy",
+            Description = "Toggle spy mode",
+            AllowedSource = AllowedSource.PLAYER
+        )]
+        public void SpyCommand( ICommandSource source, ICommandArgs parameters )
+        {
+            var displayName = source.DisplayName;
 
+            if ( Spies.Contains( displayName ) )
+            {
+                Spies.Remove( displayName );
+                EssLang.SPY_MODE_OFF.SendTo( source );
+            }
+            else
+            {
+                Spies.Add( displayName );
+                EssLang.SPY_MODE_ON.SendTo( source );
+            }
+        }
+
+        # region HELPER METHODS
         private static void ShowUsage(ICommandSource src, ICommand cmd)
         {
             src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
