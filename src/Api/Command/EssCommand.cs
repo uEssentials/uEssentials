@@ -20,15 +20,13 @@
 */
 
 using Essentials.Api.Command.Source;
+using Essentials.Api.Logging;
 using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.Core;
 
 namespace Essentials.Api.Command
 {
-    /// <summary>
-    /// Author: Leonardosc
-    /// </summary>
     public abstract class EssCommand : ICommand
     {
         private readonly CommandInfo _commandInfo;
@@ -41,6 +39,7 @@ namespace Essentials.Api.Command
             );
 
             UsageMessage = "Use /" + Name + " " + Usage;
+            Logger = EssProvider.Logger;
 
             Permission = GetType().Assembly.Equals( typeof( EssCore ).Assembly ) 
                          ? $"essentials.command.{Name}" 
@@ -63,6 +62,8 @@ namespace Essentials.Api.Command
         public string Description => _commandInfo.Description;
 
         protected string UsageMessage { get; set; }
+
+        protected EssLogger Logger { get; }
 
         protected virtual void ShowUsage( ICommandSource source )
             => source.SendMessage( UsageMessage );
