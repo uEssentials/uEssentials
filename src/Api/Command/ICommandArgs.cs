@@ -25,27 +25,25 @@ using UnityEngine;
 namespace Essentials.Api.Command
 {
     /// <summary>
-    /// <para>The purpose of this is to facilitate 
-    /// the handling of the command arguments</para>
-    /// 
-    /// Author: Leonardosc
+    /// The purpose of this is help the manipulation
+    /// of arguments given when an command is executed.
     /// </summary>
     public interface ICommandArgs
     {
         /// <summary>
-        /// 
+        /// Array containing the raw arguments.
         /// </summary>
         /// <returns></returns>
         string[] RawArguments { get; }
 
         /// <summary>
-        /// 
+        /// Array containing the "treated" arguments.
         /// </summary>
         /// <returns></returns>
         ICommandArgument[] Arguments { get; }
 
         /// <summary>
-        /// 
+        /// Get and argument at given index.
         /// </summary>
         /// <param name="argIndex"></param>
         /// <returns></returns>

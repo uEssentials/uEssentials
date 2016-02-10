@@ -19,8 +19,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
- // ReSharper disable InconsistentNaming
-
 namespace Essentials.Api.Command.Source
 {
     public enum AllowedSource

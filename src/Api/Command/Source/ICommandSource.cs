@@ -25,7 +25,8 @@ using UnityEngine;
 namespace Essentials.Api.Command.Source
 {
     /// <summary>
-    /// Author: Leonardosc
+    /// This classe represents a source of <see cref="ICommand"/>, 
+    /// that executed the command.
     /// </summary>
     public interface ICommandSource : IPermissible
     {

@@ -24,7 +24,7 @@ using Essentials.Api.Command.Source;
 namespace Essentials.Api.Command
 {
     /// <summary>
-    /// Author: Leonardosc
+    /// This class represents an command
     /// </summary>
     public interface ICommand
     {
