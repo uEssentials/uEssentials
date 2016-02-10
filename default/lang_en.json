@@ -105,7 +105,7 @@
     "KIT_LIST": "Available kits: {0}",
     "KIT_NO_PERMISSION": "You don't have access to this kit.",
     "KIT_NONE": "<yellow>There no kits available.",
-    "KIT_INVENTORY_FULL": "<yellow>Your inventory is full, dropping items on ground.",
+    "INVENTORY_FULL": "<yellow>Your inventory is full, dropping items on ground.",
     "KIT_COOLDOWN": "You must have wait {0} to use this kit again.",
     "NOT_IN_VEHICLE": "<red>You aren't in an vehicle.",
     "VEHICLE_REFUELED": "Your vehicle has been refueled",
@@ -129,7 +129,8 @@
     "POLL_NONE": "<red>There no polls running.",
     "SPAWNED_ITEM": "You spawned {0}x {1}",
     "SPAWNED_ITEM_AT": "You spawned {0}x {1} at (x: {2:0.00}, y: {3:0.00}, z: {4:0.00})",
-    "INVALID_ITEM_ID": "<red>Invalid item id {0}",
+    "INVALID_ITEM_ID": "<red>Invalid item id '{0}'",
+    "INVALID_ITEM_ID_NAME": "<red>Invalid item id/name '{0}'",
     "CHAT_ANTI_SPAM": "<yellow>Wait to chat again",
     "ANYONE_TO_REPLY": "<yello>Anyone to reply",
     "NO_LONGER_ONLINE": "This player is no longer online",
@@ -153,5 +154,8 @@
 	"EMPTY_HANDS": "You are not holding an item.",
 	"MUST_POSITIVE": "The value must be positive.",
 	"CLEAR_ITEMS": "All items was removed.",
-	"CLEAR_VEHICLES": "All vehicles was removed."
+	"CLEAR_VEHICLES": "All vehicles was removed.",
+	"RECEIVED_ITEM": "You received {0}x {1}",
+	"GIVEN_ITEM": "You given {0}x '{1}' to '{2}'",
+	"GIVEN_ITEM_ALL": "You given {0}x '{1}' to all players."
 }

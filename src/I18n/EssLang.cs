@@ -183,7 +183,7 @@ namespace Essentials.I18n
         public static EssLang KIT_LIST { get; private set; }
         public static EssLang KIT_NO_PERMISSION { get; private set; }
         public static EssLang KIT_NONE { get; private set; }
-        public static EssLang KIT_INVENTORY_FULL { get; private set; }
+        public static EssLang INVENTORY_FULL { get; private set; }
         public static EssLang DAY { get; private set; }
         public static EssLang SECOND { get; private set; }
         public static EssLang MINUTE { get; private set; }
@@ -239,5 +239,9 @@ namespace Essentials.I18n
         public static EssLang MUST_POSITIVE { get; private set; }
         public static EssLang CLEAR_VEHICLES { get; private set; }
         public static EssLang CLEAR_ITEMS { get; private set; }
+        public static EssLang RECEIVED_ITEM { get; private set; }
+        public static EssLang GIVEN_ITEM { get; private set; }
+        public static EssLang GIVEN_ITEM_ALL { get; private set; }
+        public static EssLang INVALID_ITEM_ID_NAME { get; private set; }
     }
 }

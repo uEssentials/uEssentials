@@ -20,9 +20,14 @@
 */
 
 using System;
+using System.Collections.Generic;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Unturned;
+using Essentials.Common;
+using Essentials.Core.Command;
 using Essentials.I18n;
+using Rocket.Unturned.Items;
 using SDG.Unturned;
 using UnityEngine;
 
@@ -30,6 +35,8 @@ namespace Essentials.Commands
 {
     public class SmallCommands
     {
+        private static readonly ICommandArgument One = new CommandArgument( 0, "1" );
+
         [CommandInfo(
             Name = "ascend",
             Aliases = new []{"asc"},
@@ -143,5 +150,155 @@ namespace Essentials.Commands
                 EssLang.CLEAR_VEHICLES.SendTo( src );
             }
         }
+
+        [CommandInfo(
+            Name = "item",
+            Usage = "[item] <amount> or [player|all] [item] [amount]",
+            Aliases = new []{ "i" }
+        )]
+        public void ItemCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        {
+            switch (args.Length)
+            {
+                /*
+                    /i [item]
+                 */
+                case 1:
+                    if ( src.IsConsole )
+                    {
+                        goto usage;
+                    }
+                    GiveItem( src, src.ToPlayer(), args[0], One );
+                    return;
+                
+                /*
+                    /i [item] [amount]
+                    /i [player] [item]
+                    /i all [item]
+                 */
+                case 2:
+                    if ( args[1].IsInt )
+                    {
+                        if ( src.IsConsole )
+                        {
+                            goto usage;
+                        }
+                        GiveItem( src, src.ToPlayer(), args[0], args[1] );
+                    }
+                    else if ( args[0].Is( "all" ) )
+                    {
+                        GiveItem( src, null, args[1], One, true );
+                    }
+                    else if ( !args[0].IsValidPlayerName )
+                    {
+                        EssLang.PLAYER_NOT_FOUND.SendTo( src, args[0] );
+                    }
+                    else
+                    {
+                        GiveItem( src, UPlayer.From( args[0].ToString() ), args[1], One );
+                    }
+                    return;
+                
+                /*
+                    /i [player] [item] [amount]
+                    /i all [item] [amount]
+                 */
+                case 3:
+                    if ( args[0].Is( "all" ) )
+                    {
+                        GiveItem( src, null, args[1], args[2], true );   
+                    }
+                    else if ( !args[0].IsValidPlayerName )
+                    {
+                        EssLang.PLAYER_NOT_FOUND.SendTo( src, args[0] );
+                    }
+                    else
+                    {
+                        GiveItem( src, UPlayer.From( args[0].ToString() ), args[1], args[2] );
+                    }
+                    return;
+
+                default:
+                    goto usage;
+            }
+
+            usage:
+            src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
+        }
+
+        # region HELPER METHODS
+        private static void GiveItem( ICommandSource src, UPlayer target, ICommandArgument itemArg, 
+                                      ICommandArgument amountArg, bool allPlayers = false )
+        {
+            ItemAsset asset;
+
+            if ( itemArg.IsUshort )
+            {
+                var id = itemArg.ToUshort;
+                asset = (ItemAsset) Assets.find( EAssetType.ITEM, id );
+            }
+            else
+            {
+                asset = UnturnedItems.GetItemAssetByName( itemArg.ToLowerString );
+            }
+
+            if ( asset == null )
+            {
+                src.SendMessage( $"Could not find an item with this name or id: {itemArg}" );
+                return;
+            }
+
+            var amt = 1;
+
+            if ( amountArg != null )
+            {
+                if ( !amountArg.IsInt )
+                {
+                    EssLang.INVALID_NUMBER.SendTo( src, amountArg );
+                }
+                else if ( amountArg.ToInt <= 0 )
+                {
+                    EssLang.MUST_POSITIVE.SendTo( src );
+                }
+                else
+                {
+                    amt = amountArg.ToInt;
+                    goto give;
+                }
+                return;
+            }
+
+            give:
+            var playersToReceive = new List<UPlayer>();
+            var item = new Item( asset.id, (byte) amt, 100 );
+
+            if ( allPlayers )
+            {
+                UServer.Players.ForEach( playersToReceive.Add );
+                EssLang.GIVEN_ITEM_ALL.SendTo( src, amt, asset.Name );
+            }
+            else
+            {
+                playersToReceive.Add( target );
+
+                if ( !src.IsConsole && src.ToPlayer() != target )
+                {
+                    EssLang.GIVEN_ITEM.SendTo( src, amt, asset.Name, target.CharacterName );
+                }
+            }
+
+            playersToReceive.ForEach( p =>
+            {
+                var success = p.GiveItem( item, true );
+
+                EssLang.RECEIVED_ITEM.SendTo( p, amt, asset.Name );
+
+                if ( !success )
+                {
+                    EssLang.INVENTORY_FULL.SendTo( p );
+                }
+            } );
+        }
+        #endregion
     }
 }

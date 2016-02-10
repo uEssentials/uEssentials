@@ -169,7 +169,6 @@ namespace Essentials.Core
             EssLang.Load();
 
             EventManager.RegisterAll( GetType().Assembly );
-            UnregisterRocketCommand<Rocket.Unturned.Commands.CommandTp>();
             CommandManager.RegisterAll( GetType().Assembly );
             WarpManager.Load();
             KitManager.Load();
@@ -215,8 +214,18 @@ namespace Essentials.Core
                 } );
             }
 
+            if ( CommandManager.HasWithName( "tp" ) )
+            {
+                UnregisterRocketCommand<Rocket.Unturned.Commands.CommandTp>();
+            }
+
+            if ( CommandManager.HasWithName( "item" ) )
+            {
+                UnregisterRocketCommand<Rocket.Unturned.Commands.CommandI>();
+            }
+
             #if DEV
-            SDG.Unturned.CommandWindow.ConsoleOutput.title = "Unturned Server";
+            CommandWindow.ConsoleOutput.title = "Unturned Server";
             #endif
 
             #if !DEV

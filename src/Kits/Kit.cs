@@ -97,7 +97,7 @@ namespace Essentials.Kits
 
                 if ( added || onetime ) continue;
 
-                EssLang.KIT_INVENTORY_FULL.SendTo( player );
+                EssLang.INVENTORY_FULL.SendTo( player );
                 onetime = true;
             }
 
