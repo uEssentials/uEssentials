@@ -79,7 +79,7 @@ namespace Essentials.Kits
                     var tokKitItemAmount     = itemObj.GetValue( "Amount", strCmp );
 
                     var itemAsset = (ItemAsset) Assets.find( EAssetType.ITEM, 
-                        tokKitItemId?.Value<byte>() ?? 0 );
+                        tokKitItemId?.Value<ushort>() ?? 0 );
 
                     if ( tokKitItemId == null || itemAsset == null )
                     {
@@ -88,7 +88,7 @@ namespace Essentials.Kits
                         continue;
                     }
 
-                    var kitItemId = tokKitItemId.Value<byte>();
+                    var kitItemId = tokKitItemId.Value<ushort>();
                     var kitItemAmount = tokKitItemAmount?.Value<byte>() ?? 1; 
                     var kitItemDurability = tokKitItemDurability?.Value<byte>() ?? 100;
 
