@@ -26,116 +26,178 @@ using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
+using Essentials.Configuration;
 using Essentials.Core;
 using Essentials.Core.Command;
 using Essentials.I18n;
+using Essentials.Kits;
 using UnityEngine;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
         Name = "essentials",
-        Description = "View plugin informations.",
+        Description = "Plugin commands",
         Aliases = new[] { "ess", "?", "uessentials" }
     )]
     public class CommandEssentials : EssCommand
     {
         private string _cachedCommands;
 
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        private static void ReloadKits()
         {
-            if ( parameters.IsEmpty )
+            var core = EssCore.Instance;
+            core.KitManager = new KitManager();
+            core.KitManager.Load();
+        }
+
+        private static void ReloadLang()
+        {
+            EssLang.Load();
+        }
+
+        public static void ReloadConfig()
+        {
+            var core = EssCore.Instance;
+            var configPath = $"{core.Folder}config.json";
+
+            core.Config = new EssConfig();
+            core.Config.Load( configPath );
+        }
+
+        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        {
+            if ( args.IsEmpty )
             {
-                source.SendMessage( "Use /ess <commands/help/info>" );
+                Console.WriteLine( EssCore.Instance.Config.WarpCooldown );
+                src.SendMessage( "Use /ess <commands/help/info/reload>" );
+                return;
             }
-            else
+
+            switch ( args[0].ToLowerString )
             {
-                switch ( parameters[0].ToString().ToLower() )
-                {
-                    case "commands":
-                        if ( source.IsConsole )
+                case "reload":
+                    if ( args.Length == 1 )
+                    {
+                        EssCore.Instance.Logger.LogInfo( "Reloading all..." );
+                        ReloadConfig();
+                        ReloadKits();
+                        ReloadLang();
+                        EssCore.Instance.Logger.LogInfo( "Reload finished..." );
+                    }
+                    else
+                    {
+                        switch ( args[1].ToLowerString )
                         {
-                            if ( _cachedCommands == null )
-                            {
-                                var builder = new StringBuilder( "Commands: \n" );
+                            case "kits":
+                            case "kit":
+                                EssCore.Instance.Logger.LogInfo( "Reloading kits..." );
+                                ReloadKits();
+                                EssCore.Instance.Logger.LogInfo( "Reload finished..." );
+                                break;
+                            
+                            case "config":
+                                EssCore.Instance.Logger.LogInfo( "Reloading config..." );
+                                ReloadConfig();
+                                EssCore.Instance.Logger.LogInfo( "Reload finished..." );
+                                break;
 
-                                Func<ICommand, bool> isEssentialsCommand = cmd =>
+                            case "lang":
+                                EssCore.Instance.Logger.LogInfo( "Reloading translations..." );
+                                ReloadLang();
+                                EssCore.Instance.Logger.LogInfo( "Reload finished..." );
+                                break;
+                            
+                            default:
+                                src.SendMessage( "Use /ess reload <kits/config/lang>" );
+                                break;
+                        }
+                    }
+                    break;
+                
+                case "commands":
+                    if ( src.IsConsole )
+                    {
+                        if ( _cachedCommands == null )
+                        {
+                            var builder = new StringBuilder( "Commands: \n" );
+
+                            Func<ICommand, bool> isEssentialsCommand = cmd =>
+                            {
+                                var asm = cmd.GetType().Assembly;
+
+                                if ( cmd.GetType() == typeof (MethodCommand) )
                                 {
-                                    var asm = cmd.GetType().Assembly;
+                                    asm = ((MethodCommand) cmd).Owner.Assembly;
+                                }
 
-                                    if ( cmd.GetType() == typeof (MethodCommand) )
-                                    {
-                                        asm = ((MethodCommand) cmd).Owner.Assembly;
-                                    }
+                                return asm.Equals( typeof(EssCore).Assembly );
+                            };
 
-                                    return asm.Equals( typeof(EssCore).Assembly );
-                                };
+                            EssProvider.CommandManager.Commands
+                                .Where( isEssentialsCommand )
+                                .ForEach( command => {
+                                    builder.Append( "  /" )
+                                            .Append( command.Name.ToLower() )
+                                            .Append( command.Usage == "" ? "" : " " + command.Usage )
+                                            .Append( " - " ).Append( command.Description )
+                                            .AppendLine();
+                                } );
 
-                                EssProvider.CommandManager.Commands
-                                    .Where( isEssentialsCommand )
-                                    .ForEach( command => {
-                                        builder.Append( "  /" )
-                                               .Append( command.Name.ToLower() )
-                                               .Append( command.Usage == "" ? "" : " " + command.Usage )
-                                               .Append( " - " ).Append( command.Description )
-                                               .AppendLine();
-                                    } );
+                            _cachedCommands = builder.ToString();
+                        }
 
-                                _cachedCommands = builder.ToString();
-                            }
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine( _cachedCommands );
+                        Console.WriteLine( "Use /ess help <command> to view help page." );
+                    }
+                    else
+                    {
+                        EssLang.PLAYER_CANNOT_EXECUTE.SendTo( src );
+                    }
+                    break;
 
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine( _cachedCommands );
-                            Console.WriteLine( "Use /ess help <command> to view help page." );
+                case "info":
+                    if ( src.IsConsole )
+                        Console.ForegroundColor = ConsoleColor.Green;
+
+                    src.SendMessage( "Author:  leonardosc", Color.yellow );
+                    src.SendMessage( "Skype:   devleeo", Color.yellow );
+                    src.SendMessage( "Github:  github.com/leonardosnt", Color.yellow );
+                    src.SendMessage( "Version: " + EssCore.PLUGIN_VERSION, Color.yellow );
+                    break;
+
+                case "help":
+                    if ( src.IsConsole )
+                        Console.ForegroundColor = ConsoleColor.Green;
+
+                    if ( args.Length == 1 )
+                    {
+                        src.SendMessage( "Use /ess help <command>" );
+                    }
+                    else
+                    {
+                        var command = EssProvider.CommandManager.GetByName( args[1].ToString() );
+
+                        if ( command == null )
+                        {
+                            src.SendMessage( $"Command {args[1]} does not exists", Color.red );
                         }
                         else
                         {
-                            EssLang.PLAYER_CANNOT_EXECUTE.SendTo( source );
+                            src.SendMessage( "Command: " + command.Name , Color.cyan);
+                            src.SendMessage( "  Arguments: <optional> [required]", Color.cyan );
+                            src.SendMessage( "  Help: " + command.Description, Color.cyan );
+                            src.SendMessage( "  Usage: /" + command.Name + " " + command.Usage, Color.cyan );
+                            if ( command.Aliases.Any() )
+                                src.SendMessage( "  Aliases: " + string.Join( ", ", command.Aliases ), Color.cyan );
                         }
-                        break;
+                    }
+                    break;
 
-                    case "info":
-                        if ( source.IsConsole )
-                            Console.ForegroundColor = ConsoleColor.Green;
-
-                        source.SendMessage( "Author:  leonardosc", Color.yellow );
-                        source.SendMessage( "Skype:   devleeo", Color.yellow );
-                        source.SendMessage( "Github:  github.com/leonardosnt", Color.yellow );
-                        source.SendMessage( "Version: " + EssCore.PLUGIN_VERSION, Color.yellow );
-                        break;
-
-                    case "help":
-                        if ( source.IsConsole )
-                            Console.ForegroundColor = ConsoleColor.Green;
-
-                        if ( parameters.Length == 1 )
-                        {
-                            source.SendMessage( "Use /ess help <command>" );
-                        }
-                        else
-                        {
-                            var command = EssProvider.CommandManager.GetByName( parameters[1].ToString() );
-
-                            if ( command == null )
-                            {
-                                source.SendMessage( $"Command {parameters[1]} does not exists", Color.red );
-                            }
-                            else
-                            {
-                                source.SendMessage( "Command: " + command.Name , Color.cyan);
-                                source.SendMessage( "  Arguments: <optional> [required]", Color.cyan );
-                                source.SendMessage( "  Help: " + command.Description, Color.cyan );
-                                source.SendMessage( "  Usage: /" + command.Name + " " + command.Usage, Color.cyan );
-                                if ( command.Aliases.Any() )
-                                    source.SendMessage( "  Aliases: " + string.Join( ", ", command.Aliases ), Color.cyan );
-                            }
-                        }
-                        break;
-
-                    default:
-                        source.SendMessage( "Use /ess <commands/help/info>" );
-                        break;
-                }
+                default:
+                    src.SendMessage( "Use /ess <commands/help/info>" );
+                    break;
             }
         }
     }

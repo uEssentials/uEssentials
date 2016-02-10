@@ -21,8 +21,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using Essentials.Api;
 using Essentials.Api.Event;
 using Essentials.Api.Logging;
 using Essentials.Api.Module;
@@ -43,6 +45,7 @@ using Rocket.Unturned;
 using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
 using Essentials.Updater;
+using SDG.Unturned;
 
 // ReSharper disable InconsistentNaming
 
@@ -71,24 +74,24 @@ namespace Essentials.Core
         internal const string                         ROCKET_VERSION              = "4.9.0.0";
         internal const string                         UNTURNED_VERSION            = "3.14.3.1";
         
-        internal static EssCore                       Instance                    { get; private set; }
+        internal static EssCore                       Instance                    { get; set; }
         
-        internal WarpManager                          WarpManager                 { get; private set; }
-        internal KitManager                           KitManager                  { get; private set; }
-        internal ModuleManager                        ModuleManager               { get; private set; }
-        internal CommandManager                       CommandManager              { get; private set; }
-        internal IEventManager                        EventManager                { get; private set; }
-        internal IUpdater                             Updater                     { get; private set; }
+        internal WarpManager                          WarpManager                 { get; set; }
+        internal KitManager                           KitManager                  { get; set; }
+        internal ModuleManager                        ModuleManager               { get; set; }
+        internal CommandManager                       CommandManager              { get; set; }
+        internal IEventManager                        EventManager                { get; set; }
+        internal IUpdater                             Updater                     { get; set; }
 
-        internal EssConfig                            Config                      { get; private set; }
-        internal EssLogger                            Logger                      { get; private set; }
+        internal EssConfig                            Config                      { get; set; }
+        internal EssLogger                            Logger                      { get; set; }
 
-        internal string                               Folder                      { get; private set; }
-        internal string                               TranslationsFolder          { get; private set; }
-        internal string                               DataFolder                  { get; private set; }
-        internal string                               ModulesFolder               { get; private set; }
+        internal string                               Folder                      { get; set; }
+        internal string                               TranslationsFolder          { get; set; }
+        internal string                               DataFolder                  { get; set; }
+        internal string                               ModulesFolder               { get; set; }
 
-        internal HashSet<UPlayer>                     ConnectedPlayers            { get; private set; }
+        internal HashSet<UPlayer>                     ConnectedPlayers            { get; set; }
 
         protected override void Load()
         {
@@ -272,8 +275,9 @@ namespace Essentials.Core
                 File.Delete( $"{Folder}uEssentials.en.translation.xml" );
                 File.Delete( $"{Folder}uEssentials.configuration.xml" );
             } ).Delay( 100 ).Go();
-        }
 
+            CommandWindow.ConsoleInput.onInputText += ReloadCallback;
+        }
 
         protected override void Unload()
         {
@@ -285,6 +289,7 @@ namespace Essentials.Core
             ModuleManager.UnloadAll();
 
             Tasks.CancelAll();
+            CommandWindow.ConsoleInput.onInputText -= ReloadCallback;
         }
 
         private static void UnregisterRocketCommand<T>() where T : IRocketCommand
@@ -292,6 +297,16 @@ namespace Essentials.Core
             var rocketCommands = AccessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" );
 
             rocketCommands.Value.RemoveAll( cmd => cmd is T );
+        }
+
+        private static void ReloadCallback( string command )
+        {
+            if ( !command.StartsWith( "rocket reload", true, CultureInfo.InvariantCulture ) ) return;
+
+            Console.WriteLine();
+            EssProvider.Logger.LogError( "Rocket reload cause many issues, consider restart the server" );
+            EssProvider.Logger.LogError( "Or use '/essentials reload' to reload essentials correctly." );
+            Console.WriteLine();
         }
     }
 }
