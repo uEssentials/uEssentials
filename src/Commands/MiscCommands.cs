@@ -226,7 +226,70 @@ namespace Essentials.Commands
             src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
         }
 
+        [CommandInfo(
+            Name = "iteminfo",
+            Aliases = new [] {"ii"},
+            Description = "See informations about an item.",
+            Usage = "<item_id>"
+        )]
+        public void ItemInfoCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        {
+            if ( src.IsConsole && args.Length != 1 )
+            {
+                src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
+                return;
+            }
+
+            ItemAsset asset;
+
+            if ( args.Length == 0 )
+            {
+                var equipament = src.ToPlayer().Equipment;
+
+                if ( equipament.HoldingItemID == 0 )
+                {
+                    EssLang.EMPTY_HANDS.SendTo( src );
+                }
+
+                asset = equipament.asset;
+            }
+            else
+            {
+                if ( !args[0].IsUshort ||
+                    (asset = Assets.find( EAssetType.ITEM, args[0].ToUshort ) as ItemAsset) == null)
+                {
+                    EssLang.INVALID_ITEM_ID.SendTo( src, args[0] );
+                    return;
+                }
+            }
+
+            var color       = Color.yellow;
+            var name        = WrapMessage( src, asset.name );
+            var description = WrapMessage( src, asset.Description );
+            var type        = WrapMessage( src, asset.ItemType.ToString() );
+            var isPro       = WrapMessage( src, asset.isPro.ToString() );
+
+
+            src.SendMessage( $"Name: {name}", color );
+            src.SendMessage( $"Description: {description}", color );
+            src.SendMessage( $"Id: {asset.id}", color );
+            src.SendMessage( $"Type: {type}", color );
+            src.SendMessage( $"IsPro: {isPro}", color );
+        }
+
         # region HELPER METHODS
+
+        private static string WrapMessage( ICommandSource src, string str )
+        {
+            if ( str == null )
+                return "null";
+
+            if ( str.Length < 90 || src.IsConsole )
+		        return str;
+		
+	        return str.Substring(0, 90 - 3) + "...";
+        }
+
         private static void GiveItem( ICommandSource src, UPlayer target, ICommandArgument itemArg, 
                                       ICommandArgument amountArg, bool allPlayers = false )
         {
