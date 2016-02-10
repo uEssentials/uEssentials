@@ -49,7 +49,7 @@ namespace Essentials.Commands
         {
             if ( args.IsEmpty )
             {
-                src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
+                ShowUsage( src, cmd );
             }
             else if ( !args[0].IsFloat )
             {
@@ -83,7 +83,7 @@ namespace Essentials.Commands
         {
             if ( args.IsEmpty )
             {
-                src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
+                ShowUsage( src, cmd );
             }
             else if ( !args[0].IsFloat )
             {
@@ -115,7 +115,7 @@ namespace Essentials.Commands
         {
             if ( args.IsEmpty )
             {
-                src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
+                ShowUsage( src, cmd );
                 return;
             }
 
@@ -224,7 +224,7 @@ namespace Essentials.Commands
             }
 
             usage:
-            src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
+            ShowUsage( src, cmd );
         }
 
         [CommandInfo(
@@ -237,7 +237,7 @@ namespace Essentials.Commands
         {
             if ( src.IsConsole && args.Length != 1 )
             {
-                src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
+                ShowUsage( src, cmd );
                 return;
             }
 
@@ -312,7 +312,7 @@ namespace Essentials.Commands
             }
 
             usage:
-            src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
+            ShowUsage( src, cmd );
         }
 
         [CommandInfo( 
@@ -349,10 +349,15 @@ namespace Essentials.Commands
             }
 
             usage:
-            src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
+            ShowUsage( src, cmd );
         }
 
         # region HELPER METHODS
+
+        private static void ShowUsage(ICommandSource src, ICommand cmd)
+        {
+            src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
+        }
 
         private static string WrapMessage( ICommandSource src, string str )
         {
