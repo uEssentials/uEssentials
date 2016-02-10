@@ -1,6 +1,6 @@
 # uEssentials
 
-uEssentials is a modular [Rocket plugin](http://rocketmod.net/) with a lot of command, and systems that help server administration and fun of players.
+uEssentials is a modular [Rocket plugin](http://rocketmod.net/) with a lot of commands and systems that help server administration and fun of players.
 
 uEssentials have an easy and intuitive module system that allow to create new commands, new systems and etc.
 
@@ -17,6 +17,8 @@ uEssentials have an easy and intuitive module system that allow to create new co
 **Wiki**: https://github.com/uEssentials/uEssentials/wiki
 
 **Releases**: https://github.com/uEssentials/uEssentials/releases
+
+**You love my work? consider [Donating](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY)**
 
 ---
 
