@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
@@ -97,13 +98,21 @@ namespace Essentials.Commands
             }
         }
 
-
         [CommandInfo(
             Name = "clear",
-            Description = "Clear all dropped items"
-         )]
+            Description = "Clear things",
+            Usage = "-i = items, -v = vehicles"
+        )]
         public void ClearCommand( ICommandSource src, ICommandArgs args )
         {
+            var joinedArgs = args.Join( 0 );
+
+            Func<string, bool> hasArg = arg =>
+            {
+                return joinedArgs.IndexOf( $"-{arg}", 0, StringComparison.InvariantCultureIgnoreCase ) != -1 ||
+                        (joinedArgs.Contains( "-a" ) || joinedArgs.Contains( "-A" ));
+            };
+
             /*
                 TODO: Options
                     -i = items
@@ -115,7 +124,18 @@ namespace Essentials.Commands
                 
                 /clear -i -z -v = items, zombies, vehicles
             */
-            ItemManager.askClearAllItems();
+
+            if ( hasArg( "i" ) )
+            {
+                ItemManager.askClearAllItems();
+                EssLang.CLEAR_ITEMS.SendTo( src );
+            }
+
+            if ( hasArg( "v" ) )
+            {
+                VehicleManager.askVehicleDestroyAll();
+                EssLang.CLEAR_VEHICLES.SendTo( src );
+            }
         }
     }
 }

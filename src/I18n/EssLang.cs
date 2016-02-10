@@ -237,5 +237,7 @@ namespace Essentials.I18n
         public static EssLang FAILED_FIND_PLACE_OR_PLAYER { get; private set; }
         public static EssLang EMPTY_HANDS { get; private set; }
         public static EssLang MUST_POSITIVE { get; private set; }
+        public static EssLang CLEAR_VEHICLES { get; private set; }
+        public static EssLang CLEAR_ITEMS { get; private set; }
     }
 }

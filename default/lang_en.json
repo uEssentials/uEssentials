@@ -151,5 +151,7 @@
 	"TELEPORTED_SENDER": "Teleported '{0}' to '{1}'",
     "FAILED_FIND_PLACE_OR_PLAYER": "Could not find place or player named '{0}'",
 	"EMPTY_HANDS": "You are not holding an item.",
-	"MUST_POSITIVE": "The value must be positive."
+	"MUST_POSITIVE": "The value must be positive.",
+	"CLEAR_ITEMS": "All items was removed.",
+	"CLEAR_VEHICLES": "All vehicles was removed."
 }
