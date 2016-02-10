@@ -43,48 +43,13 @@ namespace Essentials.Event.Handling
      /* typedef */ internal class SkillCache : Dictionary<string, Dictionary<USkill, byte>> {}
 
     /// <summary>
-    /// Misc Essentials eventhandlers
-    /// 
-    /// Author: leonardosc
+    /// Misc Essentials EventHandlers
     /// </summary>
     internal class EssentialsEventHandler 
     {
         internal static readonly Dictionary<string, DateTime>    LastChatted     = new Dictionary<string, DateTime>();
         internal static readonly SkillCache                      CachedSkills      = new SkillCache();
 
-    /*    [SubscribeEvent( EventType.PERMISSION_REQUESTED )]
-        internal void OnPermissionRequested( UnturnedPlayer player, string permission, 
-                                             ref bool granted )
-        {
-            var command = permission.Substring( 1 );
-
-            if ( command.IndexOf( " ", StringComparison.Ordinal ) > -1 )
-                command = command.Split( ' ' )[0];
-
-            if ( !EssProvider.CommandManager.HasWithName( command ) ||
-                 "ess".EqualsIgnoreCase( command ) ||
-                 "essentials".EqualsIgnoreCase( command ) )
-            {
-                granted = true;
-                return;
-            }
-    
-            var reqCommand = EssProvider.CommandManager.GetByName( command );
-            var uplayer = UPlayer.From( player );
-
-            if ( reqCommand != null )
-            {
-                granted = player.HasPermission( reqCommand.Permission );
-            }
-            else
-            {
-                granted = EssProvider.CommandManager.HasWithName( command ) 
-                            && player.HasPermission( command );
-            }
-
-            if ( !granted )
-                EssLang.COMMAND_NO_PERMISSION.SendTo( uplayer );
-        }*/
 
         [SubscribeEvent( EventType.PLAYER_CHATTED )]
         internal void OnPlayerChatted( UnturnedPlayer player,ref Color color, string message,
