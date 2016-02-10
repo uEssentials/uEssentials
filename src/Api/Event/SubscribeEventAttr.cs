@@ -23,90 +23,11 @@ using System;
 using Rocket.Unturned;
 using Rocket.Unturned.Events;
 
-// ReSharper disable InconsistentNaming
-
-//TODO: Fix PERMISION_REQUESTED, fr34ky broke it in Rocket 4.9.0.0
-
 namespace Essentials.Api.Event
 {
-    /// <summary>
-    /// Author: Leonardosc
-    /// </summary>
     [AttributeUsage( AttributeTargets.Method )]
     public sealed class SubscribeEvent : Attribute
     {
-        /// <summary>
-        /// Name of rocket event delegate
-        /// </summary>
-        public string TargetFieldName
-        {
-            get
-            {
-                switch (EventType)
-                {
-                    case EventType.PLAYER_UPDATE_BLEEDING:
-                        return "OnPlayerUpdateBleeding";
-                    case EventType.PLAYER_UPDATE_BROKEN:
-                        return "OnPlayerUpdateBroken";
-                    case EventType.PLAYER_UPDATE_POSITION:
-                        return "OnPlayerUpdatePosition";
-                    case EventType.PLAYER_UPDATE_LIFE:
-                        return "OnPlayerUpdateLife";
-                    case EventType.PLAYER_UPDATE_FOOD:
-                        return "OnPlayerUpdateFood";
-                    case EventType.PLAYER_UPDATE_HEALTH:
-                        return "OnPlayerUpdateHealth";
-                    case EventType.PLAYER_UPDATE_VIRUS:
-                        return "OnPlayerUpdateVirus";
-                    case EventType.PLAYER_UPDATE_WATER:
-                        return "OnPlayerUpdateWater";
-                    case EventType.PLAYER_UPDATE_STANCE:
-                        return "OnPlayerUpdateStance";
-                    case EventType.PLAYER_UPDATE_STAT:
-                        return "OnPlayerUpdateStat";
-                    case EventType.PLAYER_UPDATE_EXPERIENCE:
-                        return "OnPlayerUpdateExperience";
-                    case EventType.PLAYER_UPDATE_STAMINA:
-                        return "OnPlayerUpdateStamina";
-                    case EventType.PLAYER_UPDATE_GESTURE:
-                        return "OnPlayerUpdateGesture";
-
-                    case EventType.PLAYER_INVENTORY_UPDATED:
-                        return "OnPlayerInventoryUpdated";
-                    case EventType.PLAYER_INVENTORY_RESIZED:
-                        return "OnPlayerInventoryResized";
-                    case EventType.PLAYER_INVENTORY_REMOVED:
-                        return "OnPlayerInventoryRemoved";
-                    case EventType.PLAYER_INVENTORY_ADDED:
-                        return "OnPlayerInventoryAdded";
-
-                    case EventType.PLAYER_DEATH:
-                        return "OnPlayerDeath";
-                    case EventType.PLAYER_DEAD:
-                        return "OnPlayerDead";
-                    case EventType.PLAYER_REVIVE:
-                        return "OnPlayerRevive";
-                    case EventType.PLAYER_CHATTED:
-                        return "OnPlayerChatted";
-                    case EventType.PLAYER_WEAR:
-                        return "OnPlayerWear";
-
-                    case EventType.PLAYER_CONNECTED:
-                        return "OnPlayerConnected";
-                    case EventType.PLAYER_DISCONNECTED:
-                        return "OnPlayerDisconnected";
-                    case EventType.SERVER_SHUTDOWN:
-                        return "OnShutdown";
-
-//                    case EventType.PERMISSION_REQUESTED:
-//                        return "OnPermissionRequested";
-
-                    default:
-                        return "Unknown";
-                }
-            }
-        }
-
         /// <summary>
         /// Type of event event
         /// </summary>
@@ -115,7 +36,8 @@ namespace Essentials.Api.Event
         /// <summary>
         /// Instance or Type of target event
         /// </summary>
-        public object TargetType;
+        public object DelegateOwner { get; }
+        public string DelegateName { get; }
 
         public SubscribeEvent( EventType eventType )
         {
@@ -145,22 +67,53 @@ namespace Essentials.Api.Event
                 case EventType.PLAYER_REVIVE:
                 case EventType.PLAYER_CHATTED:
                 case EventType.PLAYER_WEAR:
-                    TargetType = typeof (UnturnedPlayerEvents);
+                    DelegateOwner = typeof (UnturnedPlayerEvents);
                     break;
 
                 case EventType.PLAYER_CONNECTED:
                 case EventType.PLAYER_DISCONNECTED:
                 case EventType.SERVER_SHUTDOWN:
-                    TargetType = U.Events;
+                    DelegateOwner = U.Events;
                     break;
-                
-//                case EventType.PERMISSION_REQUESTED:
-//                    TargetType = typeof (UnturnedPermissions);
-//                    break;
-
+ 
                 default:
                     throw new ArgumentOutOfRangeException( nameof( eventType ), 
                                                            eventType, null );
+            }
+
+            switch (EventType)
+            {
+                case EventType.PLAYER_UPDATE_BLEEDING:DelegateName = "OnPlayerUpdateBleeding"; break;
+                case EventType.PLAYER_UPDATE_BROKEN:DelegateName = "OnPlayerUpdateBroken"; break;
+                case EventType.PLAYER_UPDATE_POSITION:DelegateName = "OnPlayerUpdatePosition"; break;
+                case EventType.PLAYER_UPDATE_LIFE:DelegateName = "OnPlayerUpdateLife"; break;
+                case EventType.PLAYER_UPDATE_FOOD:DelegateName = "OnPlayerUpdateFood"; break;
+                case EventType.PLAYER_UPDATE_HEALTH:DelegateName = "OnPlayerUpdateHealth"; break;
+                case EventType.PLAYER_UPDATE_VIRUS:DelegateName = "OnPlayerUpdateVirus"; break;
+                case EventType.PLAYER_UPDATE_WATER:DelegateName = "OnPlayerUpdateWater"; break;
+                case EventType.PLAYER_UPDATE_STANCE:DelegateName = "OnPlayerUpdateStance"; break;
+                case EventType.PLAYER_UPDATE_STAT:DelegateName = "OnPlayerUpdateStat"; break;
+                case EventType.PLAYER_UPDATE_EXPERIENCE:DelegateName = "OnPlayerUpdateExperience"; break;
+                case EventType.PLAYER_UPDATE_STAMINA:DelegateName = "OnPlayerUpdateStamina"; break;
+                case EventType.PLAYER_UPDATE_GESTURE:DelegateName = "OnPlayerUpdateGesture"; break;
+
+                case EventType.PLAYER_INVENTORY_UPDATED:DelegateName = "OnPlayerInventoryUpdated"; break;
+                case EventType.PLAYER_INVENTORY_RESIZED:DelegateName = "OnPlayerInventoryResized"; break;
+                case EventType.PLAYER_INVENTORY_REMOVED:DelegateName = "OnPlayerInventoryRemoved"; break;
+                case EventType.PLAYER_INVENTORY_ADDED:DelegateName = "OnPlayerInventoryAdded"; break;
+
+                case EventType.PLAYER_DEATH:DelegateName = "OnPlayerDeath"; break;
+                case EventType.PLAYER_DEAD:DelegateName = "OnPlayerDead"; break;
+                case EventType.PLAYER_REVIVE:DelegateName = "OnPlayerRevive"; break;
+                case EventType.PLAYER_CHATTED:DelegateName = "OnPlayerChatted"; break;
+                case EventType.PLAYER_WEAR:DelegateName = "OnPlayerWear"; break;
+
+                case EventType.PLAYER_CONNECTED:DelegateName = "OnPlayerConnected"; break;
+                case EventType.PLAYER_DISCONNECTED:DelegateName = "OnPlayerDisconnected"; break;
+                case EventType.SERVER_SHUTDOWN:DelegateName = "OnShutdown"; break;
+
+                default:
+                    throw new Exception( "No such TargetFieldName for " + EventType );
             }
         }
     }

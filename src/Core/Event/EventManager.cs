@@ -45,8 +45,8 @@ namespace Essentials.Core.Event
                 if ( eventHandlerAttrs.Length < 1 ) continue;
 
                 var eventHandlerAttr = (SubscribeEvent) eventHandlerAttrs[0];
-                var eventTarget = eventHandlerAttr.TargetType;
-                var targetFieldName = eventHandlerAttr.TargetFieldName;
+                var eventTarget = eventHandlerAttr.DelegateOwner;
+                var targetFieldName = eventHandlerAttr.DelegateName;
 
                 lock ( HandlerMap )
                 {
