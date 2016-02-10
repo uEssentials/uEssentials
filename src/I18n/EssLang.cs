@@ -23,7 +23,6 @@ using Newtonsoft.Json.Linq;
 using Rocket.API;
 using Rocket.Unturned.Chat;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
