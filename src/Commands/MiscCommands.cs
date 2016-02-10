@@ -33,7 +33,7 @@ using UnityEngine;
 
 namespace Essentials.Commands
 {
-    public class SmallCommands
+    public class MiscCommands
     {
         private static readonly ICommandArgument One = new CommandArgument( 0, "1" );
 

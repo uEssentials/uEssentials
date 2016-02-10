@@ -98,7 +98,7 @@
     <Compile Include="src\Commands\CommandBoom.cs" />
     <Compile Include="src\Commands\CommandItemFeatures.cs" />
     <Compile Include="src\Commands\CommandTp.cs" />
-    <Compile Include="src\Commands\SmallCommands.cs" />
+    <Compile Include="src\Commands\MiscCommands.cs" />
     <Compile Include="src\Common\MathParser.cs" />
     <Compile Include="src\Core\Command\MethodCommand.cs" />
     <Compile Include="src\Core\Components\Player\FrozenPlayer.cs" />
