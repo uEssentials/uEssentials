@@ -41,13 +41,12 @@ using Essentials.Warps;
 using Rocket.API;
 using Rocket.Core;
 using Rocket.Core.Plugins;
-using Rocket.Unturned;
 using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
 using Essentials.Updater;
+using Rocket.Unturned.Player;
 using SDG.Unturned;
-
-// ReSharper disable InconsistentNaming
+using Steamworks;
 
 namespace Essentials.Core
 {
@@ -97,18 +96,11 @@ namespace Essentials.Core
         {
             Instance = this;
 
+            Provider.onServerDisconnected += PlayerDisconnectCallback;
+            Provider.onServerConnected += PlayerConnectCallback;
+
             Logger = new EssLogger( "[uEssentials] " );
             ConnectedPlayers = new HashSet<UPlayer>();
-
-            U.Events.OnPlayerConnected += player =>
-            {
-                ConnectedPlayers.Add( new UPlayer( player ) );
-            };
-
-            U.Events.OnPlayerDisconnected += player =>
-            {
-                ConnectedPlayers.RemoveWhere( connectedPlayer => connectedPlayer.RocketPlayer == player );
-            };
 
             Folder = Environment.PluginsDirectory + "/uEssentials/";
             TranslationsFolder = Folder + "translations/";
@@ -290,6 +282,10 @@ namespace Essentials.Core
 
         protected override void Unload()
         {
+            CommandWindow.ConsoleInput.onInputText -= ReloadCallback;
+            Provider.onServerDisconnected -= PlayerDisconnectCallback;
+            Provider.onServerConnected -= PlayerConnectCallback;
+
             WarpManager.Save();
             var executingAssembly = GetType().Assembly;
             
@@ -298,7 +294,6 @@ namespace Essentials.Core
             ModuleManager.UnloadAll();
 
             Tasks.CancelAll();
-            CommandWindow.ConsoleInput.onInputText -= ReloadCallback;
         }
 
         private static void UnregisterRocketCommand<T>() where T : IRocketCommand
@@ -316,6 +311,16 @@ namespace Essentials.Core
             EssProvider.Logger.LogError( "Rocket reload cause many issues, consider restart the server" );
             EssProvider.Logger.LogError( "Or use '/essentials reload' to reload essentials correctly." );
             Console.WriteLine();
+        }
+
+        private static void PlayerConnectCallback( CSteamID id )
+        {
+            Instance.ConnectedPlayers.Add( new UPlayer( UnturnedPlayer.FromCSteamID( id ) ) );
+        }
+
+        private static void PlayerDisconnectCallback( CSteamID id )
+        {
+            Instance.ConnectedPlayers.RemoveWhere( connectedPlayer => connectedPlayer.CSteamId == id );
         }
     }
 }
