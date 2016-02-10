@@ -54,112 +54,104 @@ namespace Essentials.Kits
             var loadedKits = new Dictionary<string, Kit>();
             var rawJsonText = File.ReadAllText( DataFilePath );
 
-            try
+            if ( rawJsonText.Length < 2 )
+                return loadedKits;
+
+            var kitArr = JArray.Parse( rawJsonText );
+            const StringComparison strCmp = StringComparison.InvariantCultureIgnoreCase;
+
+            foreach ( var kitObj in kitArr.Children<JObject>() )
             {
-                if ( rawJsonText.Length < 2 )
-                    return loadedKits;
-
-                var kitArr = JArray.Parse( rawJsonText );
-                const StringComparison strCmp = StringComparison.InvariantCultureIgnoreCase;
-
-                foreach ( var kitObj in kitArr.Children<JObject>() )
-                {
-                    var kit = new Kit
-                    (
-                        kitObj.GetValue( "Name", strCmp ).Value<string>(),
-                        kitObj.GetValue( "Cooldown", strCmp ).Value<uint>(),
-                        kitObj.GetValue( "ResetCooldownWhenDie", strCmp ).Value<bool>()
-                    );
+                var kit = new Kit
+                (
+                    kitObj.GetValue( "Name", strCmp ).Value<string>(),
+                    kitObj.GetValue( "Cooldown", strCmp ).Value<uint>(),
+                    kitObj.GetValue( "ResetCooldownWhenDie", strCmp ).Value<bool>()
+                );
                 
-                    var itemIndex = 0;
+                var itemIndex = 0;
 
-                    foreach ( var itemObj in kitObj.GetValue( "items", strCmp ).Children<JObject>() )
+                foreach ( var itemObj in kitObj.GetValue( "items", strCmp ).Children<JObject>() )
+                {
+                    KitItem kitItem;
+                    var tokKitItemId         = itemObj.GetValue( "id",   strCmp );
+                    var tokKitItemDurability = itemObj.GetValue( "Durability", strCmp );
+                    var tokKitItemAmount     = itemObj.GetValue( "Amount", strCmp );
+
+                    var itemAsset = (ItemAsset) Assets.find( EAssetType.ITEM, 
+                        tokKitItemId?.Value<byte>() ?? 0 );
+
+                    if ( tokKitItemId == null || itemAsset == null )
                     {
-                        KitItem kitItem;
-                        var tokKitItemId         = itemObj.GetValue( "id",   strCmp );
-                        var tokKitItemDurability = itemObj.GetValue( "Durability", strCmp );
-                        var tokKitItemAmount     = itemObj.GetValue( "Amount", strCmp );
-
-                        var itemAsset = (ItemAsset) Assets.find( EAssetType.ITEM, 
-                            tokKitItemId?.Value<byte>() ?? 0 );
-
-                        if ( tokKitItemId == null || itemAsset == null )
-                        {
-                            Console.WriteLine( $"Invalid item id. Kit: {kit.Name}" +
-                                $"Item Index: {itemIndex++}");
-                            continue;
-                        }
-
-                        var kitItemId = tokKitItemId.Value<byte>();
-                        var kitItemAmount = tokKitItemAmount?.Value<byte>() ?? 1; 
-                        var kitItemDurability = tokKitItemDurability?.Value<byte>() ?? 100;
-
-                        if ( itemAsset.UseableType == EUseableType.GUN )
-                            goto weaponItem;
-
-                        kitItem = new KitItem( kitItemId, kitItemDurability, kitItemAmount )
-                        {
-                            Type = itemAsset.UseableType == EUseableType.CLOTHING
-                                   ? KitItem.ItemType.CLOTHING
-                                   : KitItem.ItemType.NORMAL
-                        };
-                        goto add;     
-
-                        weaponItem:
-                        var tokFireMode    = itemObj.GetValue( "FireMode", strCmp );
-                        var tokBarrel      = itemObj.GetValue( "Barrel", strCmp );
-                        var tokSight       = itemObj.GetValue( "Sight", strCmp );
-                        var tokGrip        = itemObj.GetValue( "Grip", strCmp );
-                        var tokMagazine    = itemObj.GetValue( "Magazine", strCmp );
-                        var tokTatical     = itemObj.GetValue( "Tatical", strCmp );
-                        var tokAmmo        = itemObj.GetValue( "Ammo", strCmp );
-
-                        EFiremode? fireMode = null;
-                        var ammo            = tokAmmo?.Value<byte>() ?? null;
-
-                        if ( tokFireMode != null )
-                        {
-                            try
-                            {
-                                fireMode = (EFiremode) Enum.Parse( typeof (EFiremode),
-                                    tokFireMode.Value<string>(), true );
-                            }
-                            catch ( ArgumentException )
-                            {
-                                EssProvider.Logger.LogWarning( $"Invalid firemode '{tokFireMode.Value<string>()}' " +
-                                                              $"in kit '{kit.Name}', item '{itemIndex + 1}'!" );
-                            }
-                        }
-
-                        kitItem = new KitItemWeapon( kitItemId,
-                                                     kitItemDurability,
-                                                     kitItemAmount,
-                                                     ammo,
-                                                     fireMode );
-
-                        var weaponItem = (KitItemWeapon) kitItem;
-
-                        Func<JToken, Attachment> deserializeAttach = json =>
-                        {
-                            return json == null ? null : JsonConvert.DeserializeObject<Attachment>( json.ToString() );
-                        };
-           
-                        weaponItem.Barrel    = deserializeAttach( tokBarrel );
-                        weaponItem.Sight     = deserializeAttach( tokSight );
-                        weaponItem.Tatical   = deserializeAttach( tokTatical );
-                        weaponItem.Grip      = deserializeAttach( tokGrip );
-                        weaponItem.Magazine  = deserializeAttach( tokMagazine );
-
-                        add:
-                        kit.Items.Add( kitItem );
+                        Console.WriteLine( $"Invalid item id. Kit: {kit.Name}" +
+                            $"Item Index: {itemIndex++}");
+                        continue;
                     }
-                    loadedKits.Add( kit.Name, kit );
+
+                    var kitItemId = tokKitItemId.Value<byte>();
+                    var kitItemAmount = tokKitItemAmount?.Value<byte>() ?? 1; 
+                    var kitItemDurability = tokKitItemDurability?.Value<byte>() ?? 100;
+
+                    if ( itemAsset.UseableType == EUseableType.GUN )
+                        goto weaponItem;
+
+                    kitItem = new KitItem( kitItemId, kitItemDurability, kitItemAmount )
+                    {
+                        Type = itemAsset.UseableType == EUseableType.CLOTHING
+                                ? KitItem.ItemType.CLOTHING
+                                : KitItem.ItemType.NORMAL
+                    };
+                    goto add;     
+
+                    weaponItem:
+                    var tokFireMode    = itemObj.GetValue( "FireMode", strCmp );
+                    var tokBarrel      = itemObj.GetValue( "Barrel", strCmp );
+                    var tokSight       = itemObj.GetValue( "Sight", strCmp );
+                    var tokGrip        = itemObj.GetValue( "Grip", strCmp );
+                    var tokMagazine    = itemObj.GetValue( "Magazine", strCmp );
+                    var tokTatical     = itemObj.GetValue( "Tatical", strCmp );
+                    var tokAmmo        = itemObj.GetValue( "Ammo", strCmp );
+
+                    EFiremode? fireMode = null;
+                    var ammo            = tokAmmo?.Value<byte>() ?? null;
+
+                    if ( tokFireMode != null )
+                    {
+                        try
+                        {
+                            fireMode = (EFiremode) Enum.Parse( typeof (EFiremode),
+                                tokFireMode.Value<string>(), true );
+                        }
+                        catch ( ArgumentException )
+                        {
+                            EssProvider.Logger.LogWarning( $"Invalid firemode '{tokFireMode.Value<string>()}' " +
+                                                            $"in kit '{kit.Name}', item '{itemIndex + 1}'!" );
+                        }
+                    }
+
+                    kitItem = new KitItemWeapon( kitItemId,
+                                                    kitItemDurability,
+                                                    kitItemAmount,
+                                                    ammo,
+                                                    fireMode );
+
+                    var weaponItem = (KitItemWeapon) kitItem;
+
+                    Func<JToken, Attachment> deserializeAttach = json =>
+                    {
+                        return json == null ? null : JsonConvert.DeserializeObject<Attachment>( json.ToString() );
+                    };
+           
+                    weaponItem.Barrel    = deserializeAttach( tokBarrel );
+                    weaponItem.Sight     = deserializeAttach( tokSight );
+                    weaponItem.Tatical   = deserializeAttach( tokTatical );
+                    weaponItem.Grip      = deserializeAttach( tokGrip );
+                    weaponItem.Magazine  = deserializeAttach( tokMagazine );
+
+                    add:
+                    kit.Items.Add( kitItem );
                 }
-            }
-            catch (Exception e)
-            {
-                EssProvider.Logger.LogError( "An error occurred attempting to load kits, See: " );
-                EssProvider.Logger.LogError( e.Message );
+                loadedKits.Add( kit.Name, kit );
             }
 
             return loadedKits;
