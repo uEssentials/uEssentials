@@ -103,8 +103,14 @@ namespace Essentials.Commands
             Description = "Clear things",
             Usage = "-i = items, -v = vehicles"
         )]
-        public void ClearCommand( ICommandSource src, ICommandArgs args )
+        public void ClearCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
+            if ( args.IsEmpty )
+            {
+                src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
+                return;
+            }
+
             var joinedArgs = args.Join( 0 );
 
             Func<string, bool> hasArg = arg =>
