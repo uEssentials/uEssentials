@@ -26,7 +26,6 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Core.Command;
-using Essentials.Core.Components;
 using Essentials.Core.Components.Player;
 using Essentials.I18n;
 using Rocket.Unturned.Items;

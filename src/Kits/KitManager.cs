@@ -21,7 +21,6 @@
 
 using System.Collections.Generic;
 using Essentials.Core.Storage;
-using Rocket.Unturned.Items;
 
 namespace Essentials.Kits
 {
