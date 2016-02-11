@@ -69,7 +69,6 @@ namespace Essentials.Commands
         {
             if ( args.IsEmpty )
             {
-                Console.WriteLine( EssCore.Instance.Config.WarpCooldown );
                 src.SendMessage( "Use /ess <commands/help/info/reload>" );
                 return;
             }
