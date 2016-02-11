@@ -99,6 +99,7 @@
     <Compile Include="src\Commands\MiscCommands.cs" />
     <Compile Include="src\Common\MathParser.cs" />
     <Compile Include="src\Core\Command\MethodCommand.cs" />
+    <Compile Include="src\Core\Command\CommandAdapter.cs" />
     <Compile Include="src\Core\Components\Player\FrozenPlayer.cs" />
     <Compile Include="src\Core\Components\Player\ItemFeatures.cs" />
     <Compile Include="src\Core\Components\Player\PlayerComponent.cs" />
@@ -185,7 +186,6 @@
     <Compile Include="src\Api\Command\Source\ICommandSource.cs" />
     <Compile Include="src\Api\Command\Source\AllowedSource.cs" />
     <Compile Include="src\Api\Command\EssCommand.cs" />
-    <Compile Include="src\Core\Command\CommandAdapter.cs" />
     <Compile Include="src\Api\Unturned\UPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
