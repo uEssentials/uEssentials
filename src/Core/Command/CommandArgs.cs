@@ -277,9 +277,6 @@ namespace Essentials.Core.Command
 
         public bool Is( string other, bool ignoreCase = true )
         {
-            if ( !IsString )
-                return false;
-
             return string.Compare( 
                 ToString(),
                 other, 
