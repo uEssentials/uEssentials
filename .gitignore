@@ -1,4 +1,6 @@
 obj/
 bin/
-build-msbuild.bat
 Deprecated/
+Scripts/
+
+build-msbuild.bat
