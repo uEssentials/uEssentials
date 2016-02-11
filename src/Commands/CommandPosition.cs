@@ -21,6 +21,7 @@
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Unturned;
 using Essentials.I18n;
 
 namespace Essentials.Commands
@@ -53,20 +54,16 @@ namespace Essentials.Commands
             }
             else
             {
-                var target = parameters[0].ToPlayer;
+                var found = UPlayer.TryGet( parameters[0], p =>
+                {
+                    EssLang.POSITION_OTHER.SendTo( source,
+                        p.DisplayName, p.Position.x, p.Position.y, p.Position.z );
+                } );
 
-                if ( target == null )
+                if ( !found )
                 {
                     EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[0] );
                 } 
-                else
-                {
-                    EssLang.POSITION_OTHER.SendTo( source, 
-                                                target.DisplayName,
-                                                target.Position.x,
-                                                target.Position.y, 
-                                                target.Position.z );
-                }
             }
         }
     }
