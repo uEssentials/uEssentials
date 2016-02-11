@@ -83,6 +83,7 @@ namespace Essentials.Kits
                     var tokKitItemId         = itemObj.GetValue( "id",   strCmp );
                     var tokKitItemDurability = itemObj.GetValue( "Durability", strCmp );
                     var tokKitItemAmount     = itemObj.GetValue( "Amount", strCmp );
+                    var tokAmmo              = itemObj.GetValue( "Ammo", strCmp );
 
                     var itemAsset = (ItemAsset) Assets.find( EAssetType.ITEM, 
                         tokKitItemId?.Value<ushort>() ?? 0 );
@@ -101,14 +102,16 @@ namespace Essentials.Kits
                     if ( itemAsset.UseableType == EUseableType.GUN )
                         goto weaponItem;
 
-                    kitItem = new KitItem( kitItemId, kitItemDurability, kitItemAmount )
+                    if ( itemAsset is ItemMagazineAsset )
                     {
-                        Type = itemAsset.UseableType == EUseableType.CLOTHING
-                                ? KitItem.ItemType.CLOTHING
-                                : KitItem.ItemType.NORMAL
-                    };
+                        kitItem = new KitItemMagazine( kitItemId, kitItemDurability, kitItemAmount, tokAmmo?.Value<byte>() ?? 1 );
+                    }
+                    else
+                    {
+                        kitItem = new KitItem( kitItemId, kitItemDurability, kitItemAmount );
+                    }
                     goto add;     
-
+                    
                     weaponItem:
                     var tokFireMode    = itemObj.GetValue( "FireMode", strCmp );
                     var tokBarrel      = itemObj.GetValue( "Barrel", strCmp );
@@ -116,7 +119,6 @@ namespace Essentials.Kits
                     var tokGrip        = itemObj.GetValue( "Grip", strCmp );
                     var tokMagazine    = itemObj.GetValue( "Magazine", strCmp );
                     var tokTatical     = itemObj.GetValue( "Tatical", strCmp );
-                    var tokAmmo        = itemObj.GetValue( "Ammo", strCmp );
 
                     EFiremode? fireMode = null;
                     var ammo            = tokAmmo?.Value<byte>() ?? null;

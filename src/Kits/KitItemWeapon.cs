@@ -137,7 +137,6 @@ namespace Essentials.Kits
         {
             FireMode = fireMode;
             Ammo = ammo;
-            Type = ItemType.WEAPON;
         }
 
         public override string ToString()

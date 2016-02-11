@@ -36,12 +36,6 @@ namespace Essentials.Kits
     public class KitItem
     {
         /// <summary>
-        /// Type of item
-        /// </summary>
-        [JsonIgnore]
-        public ItemType Type { get; set; }
-
-        /// <summary>
         /// Id of item
         /// </summary>
         [JsonProperty]
@@ -92,14 +86,7 @@ namespace Essentials.Kits
 
         public override string ToString()
         {
-            return $"Type: {Type}, Id: {Id}, Durability: {Durability}, Amount: {Amount}";
-        }
-
-        public enum ItemType
-        {
-            CLOTHING,
-            WEAPON,
-            NORMAL
+            return $"Id: {Id}, Durability: {Durability}, Amount: {Amount}";
         }
     }
 }
