@@ -59,7 +59,7 @@ namespace Essentials.Kits
             }
             catch (JsonReaderException ex)
             {
-                EssProvider.Logger.LogError( "Invalid kit configuration!" );
+                EssProvider.Logger.LogError( $"Invalid kit configuration ({DataFilePath})" );
                 EssProvider.Logger.LogError( ex.Message );
                 kitArr = JArray.Parse( "[]" );
             }

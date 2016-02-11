@@ -20,9 +20,12 @@
 */
 
 using System.Collections.Generic;
+using System.IO;
+using Essentials.Api;
 using Essentials.Api.Configuration;
 using Essentials.Misc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Essentials.Configuration
 {
@@ -81,6 +84,25 @@ namespace Essentials.Configuration
                                                         DownloadLatest = true };
 
             DisabledCommands            = new List<string>();
+        }
+
+        public override void Load( string filePath )
+        {
+            if ( !File.Exists( filePath ) )
+            {
+                base.Load( filePath );
+            }
+
+            try
+            {
+                JObject.Parse( File.ReadAllText( filePath ) );
+                base.Load( filePath );
+            }
+            catch (JsonReaderException ex)
+            {
+                EssProvider.Logger.LogError( $"Invalid configuration ({filePath})" );
+                EssProvider.Logger.LogError( ex.Message );
+            }
         }
     }
 

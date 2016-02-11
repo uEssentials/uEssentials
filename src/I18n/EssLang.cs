@@ -31,6 +31,7 @@ using Essentials.Api;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
 using Essentials.Common.Util;
+using Newtonsoft.Json;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable once AssignNullToNotNullAttribute
@@ -103,7 +104,23 @@ namespace Essentials.I18n
                 }
             }
 
-            var json = JObject.Parse( File.ReadAllText( translationPath ) );
+            JObject json;
+            
+            try
+            {
+                json = JObject.Parse( File.ReadAllText( translationPath ) );
+            }
+            catch (JsonReaderException ex)
+            {
+                EssProvider.Logger.LogError( $"Invalid configuration ({translationPath})" );
+                EssProvider.Logger.LogError( ex.Message );
+
+                // ReSharper disable once AssignNullToNotNullAttribute
+                json = JObject.Load( new JsonTextReader( new StreamReader( 
+                    Assembly.GetExecutingAssembly().GetManifestResourceStream( $"Essentials.default.lang_{locale}.json" ), 
+                    Encoding.UTF8, true ) 
+                ) );
+            }
 
             //TODO
             /*try
