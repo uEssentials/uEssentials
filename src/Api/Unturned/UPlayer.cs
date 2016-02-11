@@ -211,11 +211,11 @@ namespace Essentials.Api.Unturned
             UnturnedChat.Say( RocketPlayer, message?.ToString() ?? "null" );
         }
 
-        public bool GiveItem( Item item, bool dropIfInventoryIsFull = false )
+        public bool GiveItem( Item item, ushort amount, bool dropIfInventoryIsFull = false )
         {
             var added = false;
 
-            for ( var i = 0; i < item.Amount; i++ )
+            for ( var i = 0; i < amount; i++ )
             {
                 added = UnturnedPlayer.inventory.tryAddItem( item, true );
 
@@ -226,6 +226,11 @@ namespace Essentials.Api.Unturned
             }
 
             return added;
+        }
+
+        public bool GiveItem( Item item, bool dropIfInventoryIsFull = false )
+        {
+            return GiveItem( item, item.Amount, dropIfInventoryIsFull );
         }
 
         public void DispatchCommand( string command )

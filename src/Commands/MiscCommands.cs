@@ -495,21 +495,21 @@ namespace Essentials.Commands
                 return;
             }
 
-            var amt = 1;
+            ushort amt = 1;
 
             if ( amountArg != null )
             {
-                if ( !amountArg.IsInt )
+                if ( !amountArg.IsShort )
                 {
                     EssLang.INVALID_NUMBER.SendTo( src, amountArg );
                 }
-                else if ( amountArg.ToInt <= 0 )
+                else if ( amountArg.ToUshort <= 0 )
                 {
                     EssLang.MUST_POSITIVE.SendTo( src );
                 }
                 else
                 {
-                    amt = amountArg.ToInt;
+                    amt = amountArg.ToUshort;
                     goto give;
                 }
                 return;
@@ -517,7 +517,7 @@ namespace Essentials.Commands
 
             give:
             var playersToReceive = new List<UPlayer>();
-            var item = new Item( asset.id, (byte) amt, 100 );
+            var item = new Item( asset.id, true );
 
             if ( allPlayers )
             {
@@ -536,7 +536,7 @@ namespace Essentials.Commands
 
             playersToReceive.ForEach( p =>
             {
-                var success = p.GiveItem( item, true );
+                var success = p.GiveItem( item, amt, true );
 
                 EssLang.RECEIVED_ITEM.SendTo( p, amt, asset.Name );
 

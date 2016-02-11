@@ -74,7 +74,7 @@ namespace Essentials.Commands
                     return;
                 }
 
-                var item = new Item(id, 1, 100);
+                var item = new Item( id, true );
                 var itemAsset = (ItemAsset) Assets.find(EAssetType.ITEM, id);
 
                 if ( itemAsset == null )
