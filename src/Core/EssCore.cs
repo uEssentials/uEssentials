@@ -241,35 +241,38 @@ namespace Essentials.Core
                     var isUpdated = Updater.IsUpdated();
                     var lastResult = Updater.LastResult;
 
-                    if ( !isUpdated )
-                    {
-                        Logger.LogInfo( $"New version avalaible: {lastResult.LatestVersion}" );
-
-                        if ( !lastResult.AdditionalData.IsNullOrEmpty() )
-                        {
-                            Newtonsoft.Json.Linq.JToken changesStr;
-                            if ( Newtonsoft.Json.Linq.JObject.Parse( lastResult.AdditionalData ).TryGetValue( "changes", out changesStr ) )
-                            {
-                                Logger.LogInfo( " ========================= [ Changes ] =========================" );
-
-                                changesStr.ToString().Split( '\n' ).ForEach( msg =>
-                                {
-                                    Logger.Log( "", ConsoleColor.Green, suffix: "" );
-                                    Logger.Log( "  " + msg, ConsoleColor.White, "" );
-                                } );
-
-                                Logger.LogInfo( " ===============================================================" );
-                            }
-                        }
-
-                        if ( Config.Updater.DownloadLatest )
-                        {
-                            Updater.DownloadLatestRelease( $"{Folder}/updates/" );
-                        }
-                    }
-                    else
+                    if ( isUpdated )
                     {
                         Logger.LogInfo( "Plugin is up-to-date!" );
+                        return;
+                    }
+
+                    Logger.LogInfo( $"New version avalaible: {lastResult.LatestVersion}" );
+
+                    if ( !lastResult.AdditionalData.IsNullOrEmpty() )
+                    {
+                        Newtonsoft.Json.Linq.JToken changesStr;
+                        if ( Newtonsoft.Json.Linq.JObject.Parse( lastResult.AdditionalData ).TryGetValue( "changes", out changesStr ) )
+                        {
+                            Logger.LogInfo( "========================= [ Changes ] =========================" );
+
+                            changesStr.ToString().Split( '\n' ).ForEach( msg =>
+                            {
+                                Logger.Log( "", ConsoleColor.Green, suffix: "" );
+                                Logger.Log( "  " + msg, ConsoleColor.White, "" );
+                            } );
+
+                            Logger.LogInfo( "" );
+                            Logger.Log( "", ConsoleColor.Green, suffix: "" );
+                            Logger.Log( "  " +  $"See more in: https://github.com/uEssentials/uEssentials/releases/tag/{lastResult.LatestVersion}", ConsoleColor.White, "" );
+
+                            Logger.LogInfo( "===============================================================" );
+                        }
+                    }
+
+                    if ( Config.Updater.DownloadLatest )
+                    {
+                        Updater.DownloadLatestRelease( $"{Folder}/updates/" );
                     }
                 } ).Start();
             }
