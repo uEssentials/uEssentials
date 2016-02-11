@@ -289,25 +289,6 @@ namespace Essentials.Core
             } ).Delay( 100 ).Go();
 
             CommandWindow.ConsoleInput.onInputText += ReloadCallback;
-
-           /* Func<string, string> r = x =>
-            {
-                if ( x.Length == 0 )
-                    return "None";
-
-                return new Regex(@"(\[|\]|\<|\>|\(|\)|\|)").Replace( x, @"\$1");
-            };
-
-            CommandManager.Commands.Where( c => !c.Name.EqualsIgnoreCase( "test" ) ).ForEach( c =>
-            {
-                Console.WriteLine( c.Permission );
-                Console.WriteLine(
-                    c.Name + "|" +
-                    r(c.Description) + "|" +
-                    r(string.Join( ", ", c.Aliases )) + "|" +
-                    r(c.Usage)
-                );
-            } );*/
         }
 
         protected override void Unload()
