@@ -78,11 +78,11 @@ namespace Essentials.Commands
                 case "reload":
                     if ( args.Length == 1 )
                     {
-                        EssCore.Instance.Logger.LogInfo( "Reloading all..." );
+                        src.SendMessage( "Reloading all..." );
                         ReloadConfig();
                         ReloadKits();
                         ReloadLang();
-                        EssCore.Instance.Logger.LogInfo( "Reload finished..." );
+                        src.SendMessage( "Reload finished..." );
                     }
                     else
                     {
@@ -90,21 +90,21 @@ namespace Essentials.Commands
                         {
                             case "kits":
                             case "kit":
-                                EssCore.Instance.Logger.LogInfo( "Reloading kits..." );
+                                src.SendMessage( "Reloading kits..." );
                                 ReloadKits();
-                                EssCore.Instance.Logger.LogInfo( "Reload finished..." );
+                                src.SendMessage( "Reload finished..." );
                                 break;
                             
                             case "config":
-                                EssCore.Instance.Logger.LogInfo( "Reloading config..." );
+                                src.SendMessage( "Reloading config..." );
                                 ReloadConfig();
-                                EssCore.Instance.Logger.LogInfo( "Reload finished..." );
+                                src.SendMessage( "Reload finished..." );
                                 break;
 
                             case "lang":
-                                EssCore.Instance.Logger.LogInfo( "Reloading translations..." );
+                                src.SendMessage( "Reloading translations..." );
                                 ReloadLang();
-                                EssCore.Instance.Logger.LogInfo( "Reload finished..." );
+                                src.SendMessage( "Reload finished..." );
                                 break;
                             
                             default:
