@@ -26,7 +26,7 @@ using System.Text;
 
 namespace Essentials.Common.Reflect
 {
-    public class MethodAccessor<TReturnType> : Acessor
+    public class MethodAccessor<TReturnType> : AbstractAccessor
     {
         public readonly MethodInfo Info;
 

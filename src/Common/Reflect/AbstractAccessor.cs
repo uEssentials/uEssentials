@@ -21,11 +21,11 @@
 
 namespace Essentials.Common.Reflect
 {
-    public abstract class Acessor
+    public abstract class AbstractAccessor
     {
         protected object Owner { get; }
 
-        protected Acessor( object owner )
+        protected AbstractAccessor( object owner )
         {
             Owner = Preconditions.NotNull( owner, "Owner cannot be null" );
         }

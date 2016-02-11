@@ -24,7 +24,7 @@ using System.Reflection;
 
 namespace Essentials.Common.Reflect
 {
-    public class FieldAccessor<TFieldType> : Acessor
+    public class FieldAccessor<TFieldType> : AbstractAccessor
     {
         public readonly FieldInfo Info;
 
