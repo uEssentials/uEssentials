@@ -53,11 +53,9 @@ namespace Essentials.Core.Components.Player
 
         private void FixedUpdate()
         {
-            if ( Player.Position != _lastPos )
-            {
-                Player.Teleport( _frozenPos );
-                _lastPos = Player.Position;
-            }
+            if ( Player.Position == _lastPos ) return;
+            Player.Teleport( _frozenPos );
+            _lastPos = Player.Position;
         }
     }
 }
