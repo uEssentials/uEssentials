@@ -26,6 +26,7 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Core.Command;
+using Essentials.Core.Components;
 using Essentials.Core.Components.Player;
 using Essentials.I18n;
 using Rocket.Unturned.Items;
@@ -281,74 +282,156 @@ namespace Essentials.Commands
 
         [CommandInfo( 
             Name = "autoreload",
-            Usage = "[on|off]",
-            Description = "Auto reload weapon when ammo is less than 5",
             AllowedSource = AllowedSource.PLAYER
         )]
+        [Obsolete("I will remove it in 1.0.7.0")]//TODO remove
         public void NeverReloadCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
-            var player = src.ToPlayer();
-
-            if ( args.IsEmpty )
-                goto usage;
-
-            switch ( args[0].ToLowerString )
-            {
-                case "on":
-                case "1":
-                    var wFeature = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
-                    wFeature.AutoReload = true;
-                    EssLang.AUTO_RELOAD_ENABLED.SendTo( src );
-                    return;
-
-                case "off":
-                case "0":
-                    wFeature = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
-                    wFeature.AutoReload = false;
-                    EssLang.AUTO_RELOAD_DISABLED.SendTo( src );
-                    return;
-
-                default:
-                    goto usage;
-            }
-
-            usage:
-            ShowUsage( src, cmd );
+            src.SendMessage( "This command was changed to /itemfeatures autoreload", Color.red );
         }
 
         [CommandInfo( 
             Name = "autorepair",
-            Usage = "[on|off]",
-            Description = "Auto repair weapon when quality is less than 90",
             AllowedSource = AllowedSource.PLAYER
         )]
+        [Obsolete("I will remove it in 1.0.7.0")]//TODO remove
         public void NeverRepairCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
-            var player = src.ToPlayer();
+            src.SendMessage( "This command was changed to /itemfeatures autorepair", Color.red );
+        }
 
-            if ( args.IsEmpty )
-                goto usage;
-
-            switch ( args[0].ToLowerString )
+        [CommandInfo(
+            Name = "itemfeatures",
+            Aliases = new []{ "if" },
+            Usage = "[autoreload | autorepair] [on|off]",
+            Description = "Item features",
+            AllowedSource = AllowedSource.PLAYER
+        )]
+        public void ItemFeaturesCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        {
+            if ( args.Length != 2 )
             {
-                case "on":
-                case "1":
-                    var wFeature = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
-                    wFeature.AutoRepair = true;
-                    EssLang.AUTO_REPAIR_ENABLED.SendTo( src );
+                goto usage;
+            }
+
+            bool toggleValue;
+
+            if ( args[1].IsOneOf( new[] { "1", "on", "true" } ) )
+            {
+                toggleValue = true;
+            }
+            else if ( args[1].IsOneOf( new[] { "0", "off", "false" } ) )
+            {
+                toggleValue = false;
+            }
+            else
+            {
+                goto usage;
+            }
+
+            var player = src.ToPlayer();
+            var component = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
+
+            switch (args[0].ToLowerString)
+            {
+                case "autoreload":
+                    if ( toggleValue )
+                    {
+                        component.AutoReload = true;
+                        EssLang.AUTO_RELOAD_ENABLED.SendTo( src );
+                    }
+                    else
+                    {
+                        component.AutoReload = false;
+                        EssLang.AUTO_RELOAD_DISABLED.SendTo( src );
+                    }
                     return;
 
-                case "off":
-                case "0":
-                    wFeature = player.GetComponent<ItemFeatures>() ?? player.AddComponent<ItemFeatures>();
-                    wFeature.AutoRepair = false;
-                    EssLang.AUTO_REPAIR_DISABLED.SendTo( src );
+                case "autorepair":
+                    if ( toggleValue )
+                    {
+                        component.AutoRepair = true;
+                        EssLang.AUTO_REPAIR_ENABLED.SendTo( src );
+                    }
+                    else
+                    {
+                        component.AutoRepair = false;
+                        EssLang.AUTO_REPAIR_DISABLED.SendTo( src );
+                    }
                     return;
-
+                
                 default:
                     goto usage;
             }
+            
+            usage:
+            ShowUsage( src, cmd );
+        }
 
+        [CommandInfo(
+            Name = "vehiclefeatures",
+            Aliases = new []{ "vehfeatures", "vf" },
+            Usage = "[autorefuel | autorepair] [on|off]",
+            Description = "Vehicle features",
+            AllowedSource = AllowedSource.PLAYER
+        )]
+        public void VehicleFeaturesCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        {
+            if ( args.Length != 2 )
+            {
+                goto usage;
+            }
+
+            bool toggleValue;
+
+            if ( args[1].IsOneOf( new[] { "1", "on", "true" } ) )
+            {
+                toggleValue = true;
+            }
+            else if ( args[1].IsOneOf( new[] { "0", "off", "false" } ) )
+            {
+                toggleValue = false;
+            }
+            else
+            {
+                goto usage;
+            }
+            
+            var player = src.ToPlayer();
+            var component = player.GetComponent<PlayerVehicleFeatures>() ?? player.AddComponent<PlayerVehicleFeatures>();
+
+            switch (args[0].ToLowerString)
+            {
+                case "autorefuel":
+                    if ( toggleValue )
+                    {
+                        component.AutoRefuel = true;
+                        EssLang.AUTO_RELOAD_ENABLED.SendTo( src );
+                    }
+                    else
+                    {
+                        component.AutoRefuel = false;
+                        EssLang.AUTO_RELOAD_DISABLED.SendTo( src );
+                    }
+                    return;
+
+                case "autorepair":
+                    if ( toggleValue )
+                    {
+                        component.AutoRepair = true;
+                        EssLang.AUTO_REPAIR_ENABLED.SendTo( src );
+                    }
+                    else
+                    {
+                        component.AutoRepair = false;
+                        EssLang.AUTO_REPAIR_DISABLED.SendTo( src );
+                    }
+                    return;
+                
+                default:
+                    goto usage;
+            }
+            
             usage:
             ShowUsage( src, cmd );
         }
@@ -375,6 +458,7 @@ namespace Essentials.Commands
         }
 
         # region HELPER METHODS
+
         private static void ShowUsage(ICommandSource src, ICommand cmd)
         {
             src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
@@ -463,6 +547,7 @@ namespace Essentials.Commands
                 }
             } );
         }
+
         #endregion
     }
 }

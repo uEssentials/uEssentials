@@ -102,6 +102,7 @@
     <Compile Include="src\Core\Components\Player\FrozenPlayer.cs" />
     <Compile Include="src\Core\Components\Player\ItemFeatures.cs" />
     <Compile Include="src\Core\Components\Player\PlayerComponent.cs" />
+    <Compile Include="src\Core\Components\Player\PlayerVehicleFeatures.cs" />
     <Compile Include="src\Core\Event\EventManager.cs" />
     <Compile Include="src\Commands\CommandRespawnZombies.cs" />
     <Compile Include="src\Commands\CommandRespawnAnimals.cs" />
