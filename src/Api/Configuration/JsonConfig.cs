@@ -30,7 +30,7 @@ namespace Essentials.Api.Configuration
         [JsonIgnore]
         public string FileName => "config.json";
 
-        public void Load( string filePath )
+        public virtual void Load( string filePath )
         {
             if ( File.Exists( filePath ) )
             {
@@ -43,7 +43,7 @@ namespace Essentials.Api.Configuration
             }
         }
 
-        public void Save( string filePath )
+        public virtual void Save( string filePath )
         {
             JsonUtil.Serialize( filePath, this );
         }
