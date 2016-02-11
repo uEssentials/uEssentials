@@ -22,6 +22,7 @@
 using Essentials.I18n;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Common.Util;
 using SDG.Unturned;
 
 namespace Essentials.Commands
@@ -30,7 +31,7 @@ namespace Essentials.Commands
         Name = "spawnitem",
         Aliases = new [] { "dropitem" },
         Description = "Spawn an item at given position",
-        Usage = "[id] <amount> <x> <y> <z>"
+        Usage = "[item] <amount> <x> <y> <z>"
     )]
     public class CommandSpawnItem : EssCommand
     {
@@ -59,29 +60,23 @@ namespace Essentials.Commands
                     pos = argPos.Value;
                 }
 
-                ushort id;
-                byte amount;
+                ushort amount;
 
-                if ( !ushort.TryParse( rawId, out id ) )
-                {
-                    EssLang.INVALID_NUMBER.SendTo( source, rawId );
-                    return;
-                }
-
-                if ( !byte.TryParse( rawAmount, out amount ) )
+                if ( !ushort.TryParse( rawAmount, out amount ) )
                 {
                     EssLang.INVALID_NUMBER.SendTo( source, rawAmount );
                     return;
                 }
 
-                var item = new Item( id, true );
-                var itemAsset = (ItemAsset) Assets.find(EAssetType.ITEM, id);
+                var itemAsset = ItemUtil.GetItem( rawId );
 
-                if ( itemAsset == null )
+                if ( itemAsset.IsAbsent )
                 {
-                    EssLang.INVALID_ITEM_ID.SendTo( source, id );
+                    EssLang.INVALID_ITEM_ID.SendTo( source, rawId );
                     return;
                 }
+
+                var item = new Item( itemAsset.Value.id, true );
 
                 for ( var i = 0; i < amount; i++ ) 
                 {
@@ -89,9 +84,9 @@ namespace Essentials.Commands
                 }
 
                 if ( parameters.Length == 5 )
-                    EssLang.SPAWNED_ITEM_AT.SendTo( source, amount, itemAsset.Name, pos.x, pos.y, pos.z);
+                    EssLang.SPAWNED_ITEM_AT.SendTo( source, amount, itemAsset.Value.Name, pos.x, pos.y, pos.z );
                 else
-                    EssLang.SPAWNED_ITEM.SendTo( source, amount, itemAsset.Name );
+                    EssLang.SPAWNED_ITEM.SendTo( source, amount, itemAsset.Value.Name );
             }
         }
     }
