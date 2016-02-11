@@ -44,6 +44,8 @@ using Rocket.Core.Plugins;
 using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
 using Essentials.Updater;
+using Rocket.API.Serialisation;
+using Rocket.Core.Permissions;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
@@ -53,6 +55,13 @@ namespace Essentials.Core
     public sealed class EssCore : RocketPlugin
     {
        /*
+            TODO:
+                - AFK KICK
+            
+            Aliases
+                - /tptome -> /tp $1 sender_name
+                - /expme 20 -> /exp give $1 sender_name
+
             PERMISSIONS:
                 - essentials.kit.<kit_name>
                 - essentials.kit.<kit_name>.other // allow to give kit to another player
@@ -95,6 +104,8 @@ namespace Essentials.Core
         protected override void Load()
         {
             Instance = this;
+
+            R.Permissions = new EssentialsPermissionsProvider();
 
             Provider.onServerDisconnected += PlayerDisconnectCallback;
             Provider.onServerConnected += PlayerConnectCallback;
@@ -278,6 +289,25 @@ namespace Essentials.Core
             } ).Delay( 100 ).Go();
 
             CommandWindow.ConsoleInput.onInputText += ReloadCallback;
+
+           /* Func<string, string> r = x =>
+            {
+                if ( x.Length == 0 )
+                    return "None";
+
+                return new Regex(@"(\[|\]|\<|\>|\(|\)|\|)").Replace( x, @"\$1");
+            };
+
+            CommandManager.Commands.Where( c => !c.Name.EqualsIgnoreCase( "test" ) ).ForEach( c =>
+            {
+                Console.WriteLine( c.Permission );
+                Console.WriteLine(
+                    c.Name + "|" +
+                    r(c.Description) + "|" +
+                    r(string.Join( ", ", c.Aliases )) + "|" +
+                    r(c.Usage)
+                );
+            } );*/
         }
 
         protected override void Unload()
@@ -321,6 +351,61 @@ namespace Essentials.Core
         private static void PlayerDisconnectCallback( CSteamID id )
         {
             Instance.ConnectedPlayers.RemoveWhere( connectedPlayer => connectedPlayer.CSteamId == id );
+        }
+
+        private class EssentialsPermissionsProvider : IRocketPermissionsProvider
+        {
+            private readonly IRocketPermissionsProvider _defaultProvider;
+
+            public EssentialsPermissionsProvider()
+            {
+                _defaultProvider = R.Instance.GetComponent<RocketPermissionsManager>();
+            }
+
+            public bool HasPermission( IRocketPlayer player, string requestedPermission, bool defaultReturnValue = false )
+            {
+                Console.WriteLine( requestedPermission );
+
+                return true;
+            }
+
+            public bool HasPermission( IRocketPlayer player, string requestedPermission, out uint? cooldownLeft, bool defaultReturnValue = false )
+            {
+                var essCommand = Instance.CommandManager.GetByName( requestedPermission );
+
+                if ( essCommand != null )
+                {
+                    return _defaultProvider.HasPermission( player, essCommand.Permission, out cooldownLeft, defaultReturnValue );
+                }
+
+                if ( !Instance.CommandManager.HasWithName( requestedPermission ) )
+                {
+                    cooldownLeft = 0;
+                    return true;
+                }
+
+                return _defaultProvider.HasPermission( player, requestedPermission, out cooldownLeft, defaultReturnValue );
+            }
+
+            public List<RocketPermissionsGroup> GetGroups( IRocketPlayer player, bool includeParentGroups )
+            {
+                return _defaultProvider.GetGroups( player, includeParentGroups );
+            }
+
+            public List<Permission> GetPermissions( IRocketPlayer player )
+            {
+                return _defaultProvider.GetPermissions( player );
+            }
+
+            public bool SetGroup( IRocketPlayer player, string groupID )
+            {
+                return _defaultProvider.SetGroup( player, groupID );
+            }
+
+            public void Reload()
+            {
+                _defaultProvider.Reload();
+            }
         }
     }
 }
