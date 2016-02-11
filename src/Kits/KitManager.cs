@@ -54,30 +54,6 @@ namespace Essentials.Kits
         public void Load()
         {
             KitMap = KitData.Load();
-
-            if ( Count != 0 ) return;
-
-            var defaultKit = new Kit( "default", 120, true );
-            defaultKit.Items.Add( new KitItem( 16, 100, 1 ) );
-            defaultKit.Items.Add( new KitItem( 13, 100, 2 ) );
-            defaultKit.Items.Add( new KitItem( 14, 100, 1 ) );
-
-            var defaultKit2 = new Kit( "default2", 1200, false );
-
-            var kitItemWeapon = new KitItemWeapon( 4, 100, 1, 30 )
-            {
-                Barrel = new Attachment( 7, 100 ),
-                Grip = new Attachment( 8, 100 ),
-                Sight = new Attachment( 146, 100 ),
-                Magazine = new Attachment( 17, 100 )
-            };
-
-            defaultKit2.Items.Add( kitItemWeapon );
-
-            KitMap.Add( "default", defaultKit );
-            KitMap.Add( "default2", defaultKit2 );
-
-            Save();
         }
 
         public void Add( Kit kit )

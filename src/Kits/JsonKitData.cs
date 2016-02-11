@@ -36,14 +36,6 @@ namespace Essentials.Kits
     {
         private static string DataFilePath => $"{EssProvider.PluginFolder}kits.json";
 
-        public JsonKitData()
-        {
-            if ( !File.Exists( DataFilePath ) )
-            {
-                File.Create( DataFilePath ).Close();
-            }
-        }
-
         public void Save( Dictionary<string, Kit> type )
         {
             JsonUtil.Serialize( DataFilePath, type.Values );
@@ -52,12 +44,26 @@ namespace Essentials.Kits
         public Dictionary<string, Kit> Load()
         {
             var loadedKits = new Dictionary<string, Kit>();
-            var rawJsonText = File.ReadAllText( DataFilePath );
 
-            if ( rawJsonText.Length < 2 )
-                return loadedKits;
+            if ( !File.Exists( DataFilePath ) )
+            {
+                File.Create( DataFilePath ).Close();
+                LoadDefault();
+            }
+            
+            JArray kitArr;
 
-            var kitArr = JArray.Parse( rawJsonText );
+            try
+            {
+                kitArr = JArray.Parse( File.ReadAllText( DataFilePath ) );
+            }
+            catch (JsonReaderException ex)
+            {
+                EssProvider.Logger.LogError( "Invalid kit configuration!" );
+                EssProvider.Logger.LogError( ex.Message );
+                kitArr = JArray.Parse( "[]" );
+            }
+
             const StringComparison strCmp = StringComparison.InvariantCultureIgnoreCase;
 
             foreach ( var kitObj in kitArr.Children<JObject>() )
@@ -155,6 +161,33 @@ namespace Essentials.Kits
             }
 
             return loadedKits;
+        }
+
+        private void LoadDefault()
+        {
+            var defaultKits = new Dictionary<string, Kit>();
+
+            var defaultKit = new Kit( "default", 120, true );
+            defaultKit.Items.Add( new KitItem( 16, 100, 1 ) );
+            defaultKit.Items.Add( new KitItem( 13, 100, 2 ) );
+            defaultKit.Items.Add( new KitItem( 14, 100, 1 ) );
+
+            var defaultKit2 = new Kit( "default2", 1200, false );
+
+            var kitItemWeapon = new KitItemWeapon( 4, 100, 1, 30 )
+            {
+                Barrel = new Attachment( 7, 100 ),
+                Grip = new Attachment( 8, 100 ),
+                Sight = new Attachment( 146, 100 ),
+                Magazine = new Attachment( 17, 100 )
+            };
+
+            defaultKit2.Items.Add( kitItemWeapon );
+
+            defaultKits.Add( "default", defaultKit );
+            defaultKits.Add( "default2", defaultKit2 );
+
+            Save( defaultKits );
         }
     }
 }
