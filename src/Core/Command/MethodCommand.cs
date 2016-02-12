@@ -20,6 +20,7 @@
 */
 
 using System;
+using System.Reflection;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
@@ -27,57 +28,59 @@ using Essentials.Common.Util;
 
 namespace Essentials.Core.Command
 {
-    //TODO: !!! CLEANUP !!!
     internal class MethodCommand : ICommand
     {
-        internal Type Owner => _methodAction != null
-            ? _methodAction.Method.DeclaringType
-            : _methodActionWithCommand.Method.DeclaringType;
-
         private readonly Action<ICommandSource, ICommandArgs> _methodAction;
         private readonly Action<ICommandSource, ICommandArgs, ICommand> _methodActionWithCommand;
-        private readonly CommandInfo _info;
-        private readonly bool _hasCommandParameter;
-        private readonly string _permission;
+        private CommandInfo _info;
+        private bool _hasCommandParameter;
+
+        internal Type Owner { get; private set; }
+
+        public string Name => _info.Name;
+
+        public string Usage => _info.Usage;
+
+        public string[] Aliases => _info.Aliases;
+
+        public string Description => _info.Description;
+
+        public string Permission { get; private set; }
+
+        public AllowedSource AllowedSource => _info.AllowedSource;
 
         internal MethodCommand( Action<ICommandSource, ICommandArgs> methodAction )
         {
             _methodAction = methodAction;
-            _hasCommandParameter = false;
-
-            _info = Preconditions.NotNull(
-                ReflectionUtil.GetAttributeFrom<CommandInfo>( methodAction.Method ), 
-                "methodAction must have 'CommandInfo' attribute."
-            );
-
-            _permission = GetType().Assembly.Equals( typeof( EssCore ).Assembly ) 
-                ? $"essentials.command.{Name}" 
-                : _info.Permission;
+            Init( false, methodAction.Method );
         }
 
-       internal MethodCommand( Action<ICommandSource, ICommandArgs, ICommand> methodAction )
+        internal MethodCommand( Action<ICommandSource, ICommandArgs, ICommand> methodAction )
         {
             _methodActionWithCommand = methodAction;
-            _hasCommandParameter = true;
-
-            _info = Preconditions.NotNull(
-                ReflectionUtil.GetAttributeFrom<CommandInfo>( methodAction.Method ), 
-                "methodAction must have 'CommandInfo' attribute." );
-
-            _permission = GetType().Assembly.Equals( typeof( EssCore ).Assembly ) 
-                ? $"essentials.command.{Name}" 
-                : _info.Permission;
+            Init( true, methodAction.Method );
         }
 
-        public string Name                      => _info.Name;
-        public string Usage                     => _info.Usage;
-        public string[] Aliases                 => _info.Aliases;
-        public string Description               => _info.Description;
-        public string Permission                => _permission;
-        public AllowedSource AllowedSource      => _info.AllowedSource;
-
-        public void OnExecute(ICommandSource source, ICommandArgs args)
+        private void Init( bool hasCmdParam, MethodInfo method )
         {
+            _info = Preconditions.NotNull(
+                ReflectionUtil.GetAttributeFrom<CommandInfo>( method ),
+                "methodAction must have 'CommandInfo' attribute." 
+            );
+
+            Owner = hasCmdParam ? _methodActionWithCommand.Method.DeclaringType
+                                : _methodAction.Method.DeclaringType;
+
+            _hasCommandParameter = hasCmdParam;
+
+            Permission = GetType().Assembly.Equals( typeof (EssCore).Assembly )
+                        ? $"essentials.command.{Name}"
+                        : _info.Permission;
+        }
+
+        public void OnExecute( ICommandSource source, ICommandArgs args )
+        {
+
             if ( _hasCommandParameter )
                 _methodActionWithCommand( source, args, this );
             else
