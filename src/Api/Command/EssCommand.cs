@@ -31,6 +31,22 @@ namespace Essentials.Api.Command
     {
         private readonly CommandInfo _commandInfo;
 
+        public string Name => _commandInfo.Name;
+
+        public string[] Aliases => _commandInfo.Aliases;
+
+        public string Usage => _commandInfo.Usage;
+
+        public string Permission { get; set; }
+
+        public AllowedSource AllowedSource => _commandInfo.AllowedSource;
+
+        public string Description => _commandInfo.Description;
+
+        protected string UsageMessage { get; set; }
+
+        protected EssLogger Logger { get; }
+
         protected EssCommand()
         {
             _commandInfo = Preconditions.NotNull( 
@@ -49,24 +65,10 @@ namespace Essentials.Api.Command
                 Permission = Name;
         }
 
-        public string Name => _commandInfo.Name;
-
-        public string[] Aliases => _commandInfo.Aliases;
-
-        public string Usage => _commandInfo.Usage;
-
-        public string Permission { get; set; }
-
-        public AllowedSource AllowedSource => _commandInfo.AllowedSource;
-
-        public string Description => _commandInfo.Description;
-
-        protected string UsageMessage { get; set; }
-
-        protected EssLogger Logger { get; }
-
         protected virtual void ShowUsage( ICommandSource source )
-            => source.SendMessage( UsageMessage );
+        {
+            source.SendMessage( UsageMessage );
+        }
 
         public abstract void OnExecute( ICommandSource src, ICommandArgs args );
     }
