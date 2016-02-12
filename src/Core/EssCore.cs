@@ -78,7 +78,7 @@ namespace Essentials.Core
                 - essentials.keepskill.<skill>
         */
         
-        internal const string                         PLUGIN_VERSION              = "1.0.6.0";
+        internal const string                         PLUGIN_VERSION              = "1.0.6.1";
         internal const string                         ROCKET_VERSION              = "4.9.0.0";
         internal const string                         UNTURNED_VERSION            = "3.14.3.1";
         
@@ -348,9 +348,7 @@ namespace Essentials.Core
 
             public bool HasPermission( IRocketPlayer player, string requestedPermission, bool defaultReturnValue = false )
             {
-                Console.WriteLine( requestedPermission );
-
-                return true;
+                return _defaultProvider.HasPermission( player, requestedPermission, defaultReturnValue );
             }
 
             public bool HasPermission( IRocketPlayer player, string requestedPermission, out uint? cooldownLeft, bool defaultReturnValue = false )

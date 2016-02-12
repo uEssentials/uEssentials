@@ -405,12 +405,12 @@ namespace Essentials.Commands
                     if ( toggleValue )
                     {
                         component.AutoRefuel = true;
-                        EssLang.AUTO_RELOAD_ENABLED.SendTo( src );
+                        EssLang.AUTO_REFUEL_ENABLED.SendTo( src );
                     }
                     else
                     {
                         component.AutoRefuel = false;
-                        EssLang.AUTO_RELOAD_DISABLED.SendTo( src );
+                        EssLang.AUTO_REFUEL_DISABLED.SendTo( src );
                     }
                     return;
 
