@@ -94,12 +94,60 @@ namespace Essentials.Core
         internal EssConfig                            Config                      { get; set; }
         internal EssLogger                            Logger                      { get; set; }
 
-        internal string                               Folder                      { get; set; }
-        internal string                               TranslationsFolder          { get; set; }
-        internal string                               DataFolder                  { get; set; }
-        internal string                               ModulesFolder               { get; set; }
-
         internal HashSet<UPlayer>                     ConnectedPlayers            { get; set; }
+
+        private string _folder;
+        private string _translationFolder;
+        private string _dataFolder;
+        private string _modulesFolder;
+
+        internal string Folder
+        {
+            get
+            {
+                if ( !System.IO.Directory.Exists( _folder ) )
+                {
+                    System.IO.Directory.CreateDirectory( _folder );
+                }
+                return _folder;
+            }
+        }
+
+        internal string TranslationFolder
+        {
+            get
+            {
+                if ( !System.IO.Directory.Exists( _translationFolder ) )
+                {
+                    System.IO.Directory.CreateDirectory( _translationFolder );
+                }
+                return _translationFolder;
+            }
+        }
+
+        internal string DataFolder
+        {
+            get
+            {
+                if ( !System.IO.Directory.Exists( _dataFolder ) )
+                {
+                    System.IO.Directory.CreateDirectory( _dataFolder );
+                }
+                return _dataFolder;
+            }
+        }
+
+        internal string ModulesFolder
+        {
+            get
+            {
+                if ( !System.IO.Directory.Exists( _modulesFolder ) )
+                {
+                    System.IO.Directory.CreateDirectory( _modulesFolder );
+                }
+                return _modulesFolder;
+            }
+        }
 
         protected override void Load()
         {
@@ -113,13 +161,13 @@ namespace Essentials.Core
             Logger = new EssLogger( "[uEssentials] " );
             ConnectedPlayers = new HashSet<UPlayer>();
 
-            Folder = Environment.PluginsDirectory + "/uEssentials/";
-            TranslationsFolder = Folder + "translations/";
-            DataFolder = Folder + "data/";
-            ModulesFolder = Folder + "modules/";
+            _folder = Environment.PluginsDirectory + "/uEssentials/";
+            _translationFolder = Folder + "translations/";
+            _dataFolder = Folder + "data/";
+            _modulesFolder = Folder + "modules/";
 
             (
-                from directory in new[] { Folder, TranslationsFolder, DataFolder, ModulesFolder }
+                from directory in new[] { _folder, _translationFolder, _dataFolder, _modulesFolder }
                 where !System.IO.Directory.Exists( directory )
                 select directory
             ).ForEach( dir => System.IO.Directory.CreateDirectory( dir ) );

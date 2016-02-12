@@ -107,7 +107,7 @@ namespace Essentials.Api
         /// <summary>
         /// <returns> Translation folder path </returns>
         /// </summary>
-        public static string TranslationFolder => Core.TranslationsFolder;
+        public static string TranslationFolder => Core.TranslationFolder;
         
         /// <summary>
         /// <returns> Translation folder path </returns>
