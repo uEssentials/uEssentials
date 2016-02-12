@@ -134,7 +134,7 @@ namespace Essentials.I18n
             }*/
 
             Func<string, EssLang> loadFromJson = key => {
-                return new EssLang( json[key]?.ToString() ?? KEY_NOT_FOUND_MESSAGE );
+                return new EssLang( json[key]?.ToString() ?? string.Format( KEY_NOT_FOUND_MESSAGE, key ) );
             };
 
             var fields = typeof (EssLang).GetProperties( BindingFlags.Public | BindingFlags.Static );
