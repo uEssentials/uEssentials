@@ -83,7 +83,7 @@
     "RETURNED": "You have returned to location of your death",
     "SUDO_EXECUTED": "{0} ran the command '{1}'",
     "ALL_REPAIRED": "All items have been repaired",
-    "HAND_REPAIRED": "Items in hand have benn repaired",
+    "HAND_REPAIRED": "Items in hand have been repaired",
     "MAX_SKILLS": "All of your skills was upgraded to max level",
     "MAX_SKILLS_TARGET": "All of {0}'s skills was upgraded to max level",
     "EXPERIENCE_GIVEN": "You given {0} levels of experience to {1}",
