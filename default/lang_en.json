@@ -157,5 +157,7 @@
 	"CLEAR_VEHICLES": "All vehicles was removed.",
 	"RECEIVED_ITEM": "You received {0}x {1}",
 	"GIVEN_ITEM": "You given {0}x '{1}' to '{2}'",
-	"GIVEN_ITEM_ALL": "You given {0}x '{1}' to all players."
+	"GIVEN_ITEM_ALL": "You given {0}x '{1}' to all players.",
+	"AUTO_REFUEL_ENABLED": "Auto-Refuel enabled!",
+	"AUTO_REFUEL_DISABLED": "Auto-Refuel disabled!"
 }
