@@ -341,6 +341,10 @@ namespace Essentials.Core
                 File.Delete( $"{Folder}uEssentials.configuration.xml" );
             } ).Delay( 100 ).Go();
 
+            Tasks.New( t => {
+                CheckRocketCommands();
+            } ).Delay( 500 ).Go();
+
             CommandWindow.ConsoleInput.onInputText += ReloadCallback;
         }
 
@@ -385,6 +389,32 @@ namespace Essentials.Core
         private static void PlayerDisconnectCallback( CSteamID id )
         {
             Instance.ConnectedPlayers.RemoveWhere( connectedPlayer => connectedPlayer.CSteamId == id );
+        }
+
+        private static void CheckRocketCommands()
+        {
+            var rocketCommands = AccessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" );
+            var logger = EssProvider.Logger;
+
+            logger.LogWarning( "Searching for commands that conflict with Essential's command." );
+
+            var count = rocketCommands.Value.RemoveAll( cmd => {
+                if ( EssProvider.CommandManager.GetByName( cmd.Name ) != null )
+                {
+                    logger.LogWarning( $"Found '{cmd.GetType()} ({cmd.Name})'. Disabling it..." );
+
+                    return true;
+                }
+                return false;
+            } );
+
+            if ( count == 0 )
+            {
+                return;
+            }
+
+            logger.LogWarning( $"Disabled {count} commands from another's plugins." );
+            logger.LogWarning( "if you prefer use another command instead of Essentials command, disable it in configuration." );
         }
 
         private class EssentialsPermissionsProvider : IRocketPermissionsProvider
