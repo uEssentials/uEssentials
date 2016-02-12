@@ -27,6 +27,7 @@ using Essentials.Common.Util;
 
 namespace Essentials.Core.Command
 {
+    //TODO: !!! CLEANUP !!!
     internal class MethodCommand : ICommand
     {
         internal Type Owner => _methodAction != null
@@ -37,6 +38,7 @@ namespace Essentials.Core.Command
         private readonly Action<ICommandSource, ICommandArgs, ICommand> _methodActionWithCommand;
         private readonly CommandInfo _info;
         private readonly bool _hasCommandParameter;
+        private readonly string _permission;
 
         internal MethodCommand( Action<ICommandSource, ICommandArgs> methodAction )
         {
@@ -47,6 +49,10 @@ namespace Essentials.Core.Command
                 ReflectionUtil.GetAttributeFrom<CommandInfo>( methodAction.Method ), 
                 "methodAction must have 'CommandInfo' attribute."
             );
+
+            _permission = GetType().Assembly.Equals( typeof( EssCore ).Assembly ) 
+                ? $"essentials.command.{Name}" 
+                : _info.Permission;
         }
 
        internal MethodCommand( Action<ICommandSource, ICommandArgs, ICommand> methodAction )
@@ -56,15 +62,18 @@ namespace Essentials.Core.Command
 
             _info = Preconditions.NotNull(
                 ReflectionUtil.GetAttributeFrom<CommandInfo>( methodAction.Method ), 
-                "methodAction must have 'CommandInfo' attribute."
-            );
+                "methodAction must have 'CommandInfo' attribute." );
+
+            _permission = GetType().Assembly.Equals( typeof( EssCore ).Assembly ) 
+                ? $"essentials.command.{Name}" 
+                : _info.Permission;
         }
 
         public string Name                      => _info.Name;
         public string Usage                     => _info.Usage;
         public string[] Aliases                 => _info.Aliases;
         public string Description               => _info.Description;
-        public string Permission                => _info.Permission;
+        public string Permission                => _permission;
         public AllowedSource AllowedSource      => _info.AllowedSource;
 
         public void OnExecute(ICommandSource source, ICommandArgs args)
