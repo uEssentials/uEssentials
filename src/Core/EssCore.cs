@@ -219,12 +219,6 @@ namespace Essentials.Core
 
             EssLang.Load();
 
-            EventManager.RegisterAll( GetType().Assembly );
-            CommandManager.RegisterAll( GetType().Assembly );
-            WarpManager.Load();
-            KitManager.Load();
-            ModuleManager.LoadAll( ModulesFolder );
-
             Logger.Log( "Loaded uEssentials", ConsoleColor.Green );
             Logger.Log( "Plugin version: ", ConsoleColor.Green, suffix: "" );
             Logger.Log( PLUGIN_VERSION, ConsoleColor.White, "" );
@@ -236,10 +230,18 @@ namespace Essentials.Core
             Logger.Log( "leonardosc", ConsoleColor.White, "" );
             Logger.Log( "Wiki: ", ConsoleColor.Green, suffix: "" );
             Logger.Log( "uessentials.github.io", ConsoleColor.White, "" );
+
+            EventManager.RegisterAll( GetType().Assembly );
+            CommandManager.RegisterAll( GetType().Assembly );
+            WarpManager.Load();
+            KitManager.Load();
+
             Logger.LogInfo( $"Loaded {CommandManager.Commands.Count()} commands" );
             Logger.LogInfo( $"Loaded {WarpManager.Count} warps" );
             Logger.LogInfo( $"Loaded {KitManager.Count} kits" );
+
             Logger.LogInfo( "Loading modules..." );
+            ModuleManager.LoadAll( ModulesFolder );
             Logger.LogInfo( $"Loaded {ModuleManager.RunningModules.Count} modules" );
 
             if ( Config.AutoAnnouncer.Enabled )
