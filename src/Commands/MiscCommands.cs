@@ -286,26 +286,6 @@ namespace Essentials.Commands
             src.SendMessage( $"IsPro: {isPro}", color );
         }
 
-        [CommandInfo( 
-            Name = "autoreload",
-            AllowedSource = AllowedSource.PLAYER
-        )]
-        [Obsolete("I will remove it in 1.0.7.0")]//TODO remove
-        public void NeverReloadCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
-        {
-            src.SendMessage( "This command was changed to /itemfeatures autoreload", Color.red );
-        }
-
-        [CommandInfo( 
-            Name = "autorepair",
-            AllowedSource = AllowedSource.PLAYER
-        )]
-        [Obsolete("I will remove it in 1.0.7.0")]//TODO remove
-        public void NeverRepairCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
-        {
-            src.SendMessage( "This command was changed to /itemfeatures autorepair", Color.red );
-        }
-
         [CommandInfo(
             Name = "itemfeatures",
             Aliases = new []{ "if" },
