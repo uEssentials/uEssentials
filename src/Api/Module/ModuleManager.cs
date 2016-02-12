@@ -117,22 +117,43 @@ namespace Essentials.Api.Module
 
             foreach ( var file in moduleFiles )
             {
-                var rawAssembly = File.ReadAllBytes( file );
-                var moduleAssembly = Assembly.Load( rawAssembly );
+                Load( file );
+            }
+        }
 
-                if ( moduleAssembly == null )
-                    continue;
+        ///<summary>
+        /// Load modules from given assemblyPath
+        ///</summary>
+        /// <param name="assemblyPath">Assembly file path</param>>
+        public void Load( string assemblyPath )
+        {
+            if ( !File.Exists( assemblyPath ) )
+            {
+                throw new FileNotFoundException( $"File not found '{assemblyPath}'" );
+            }
 
-                try
-                {
-                    LoadModule( moduleAssembly );
-                }
-                catch (Exception ex)
-                {
-                    var fileName = (file.Substring( file.LastIndexOf( "/", StringComparison.Ordinal ) + 1 ));
-                    EssProvider.Logger.LogError( "An error occurred attempting to load " + fileName + ", ignoring..." );
-                    EssProvider.Logger.LogError( ex.ToString() );
-                }
+            if ( !Path.HasExtension( assemblyPath ) || Path.GetExtension( assemblyPath ).Equals( "dll" ) )
+            {
+                throw new ArgumentException( $"Invalid file '{assemblyPath}', it isn't a valid assembly file." );
+            }
+
+            var rawAssembly = File.ReadAllBytes( assemblyPath );
+            var moduleAssembly = Assembly.Load( rawAssembly );;
+
+            if ( moduleAssembly == null )
+            {
+                throw new Exception( $"Could not read data from assembly '{assemblyPath}'" );
+            }
+
+            try
+            {
+                LoadModule( moduleAssembly );
+            }
+            catch (Exception ex)
+            {
+                var fileName = (assemblyPath.Substring( assemblyPath.LastIndexOf( "/", StringComparison.Ordinal ) + 1 ));
+                EssProvider.Logger.LogError( "An error occurred attempting to load " + fileName + ", ignoring..." );
+                EssProvider.Logger.LogError( ex.ToString() );
             }
         }
 
