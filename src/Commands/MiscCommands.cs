@@ -148,6 +148,13 @@ namespace Essentials.Commands
 
             if ( hasArg( "v" ) )
             {
+                UWorld.Vehicles.ForEach( v => {
+                    for ( byte i = 0; i < v.passengers.Length; i++ )
+                    {
+                        v.kickPlayer( i );
+                    }
+                } );
+
                 VehicleManager.askVehicleDestroyAll();
                 EssLang.CLEAR_VEHICLES.SendTo( src );
             }
