@@ -77,7 +77,7 @@ namespace Essentials.Core.Command
             var commandBridge = new CommandAdapter( command );
 
             Commander.register( commandBridge );
-            CommandMap.Add( commandBridge.Command.Name, command );
+            CommandMap.Add( commandBridge.Command.Name.ToLowerInvariant(), command );
 
             var aliases = command.Aliases;
 
@@ -198,7 +198,7 @@ namespace Essentials.Core.Command
                 Commander.commands.Any( command => predicate( command ) );
         }
 
-        private static void UnregisterWhere( Func<CommandAdapter, bool> predicate )
+        private void UnregisterWhere( Func<CommandAdapter, bool> predicate )
         {
             for ( var i = 0; i < Commander.Commands.Count; i++ )
             {
@@ -207,7 +207,8 @@ namespace Essentials.Core.Command
                 if ( unturnedCommand is CommandAdapter && predicate( unturnedCommand as CommandAdapter ) )
                 {
                     Commander.deregister( unturnedCommand );
-                }
+                    CommandMap.Remove( unturnedCommand.command.ToLowerInvariant() );
+;                }
             }
         }
 
