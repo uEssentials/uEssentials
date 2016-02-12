@@ -50,14 +50,14 @@ namespace Essentials.Warps
 
         public void Save( Dictionary<string, Warp> type )
         {
+            File.WriteAllText( DataFilePath, string.Empty );
             JsonUtil.Serialize( DataFilePath, type.Values.ToArray() );
         }
 
         public Dictionary<string, Warp> Load()
         {
             var loadedWarps = new Dictionary<string, Warp>();
-            var deserializedWarpArray = JsonConvert.DeserializeObject<Warp[]>(
-                File.ReadAllText( DataFilePath ) );
+            var deserializedWarpArray = JsonConvert.DeserializeObject<Warp[]>( File.ReadAllText( DataFilePath ) );
 
             deserializedWarpArray?.ToList().ForEach( kit =>
             {
