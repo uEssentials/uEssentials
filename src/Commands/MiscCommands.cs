@@ -448,7 +448,7 @@ namespace Essentials.Commands
             Description = "Kill yourself",
             AllowedSource = AllowedSource.PLAYER
         )]
-        public void CreateKitCommand( ICommandSource src, ICommandArgs args )
+        public void SuicideCommand( ICommandSource src, ICommandArgs args )
         {
             src.ToPlayer().Suicide();
         }
