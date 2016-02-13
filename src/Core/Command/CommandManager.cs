@@ -208,7 +208,7 @@ namespace Essentials.Core.Command
                 {
                     Commander.deregister( unturnedCommand );
                     CommandMap.Remove( unturnedCommand.command.ToLowerInvariant() );
-;                }
+                }
             }
         }
 
@@ -246,7 +246,6 @@ namespace Essentials.Core.Command
                         ? Delegate.CreateDelegate( type, method )
                         : Delegate.CreateDelegate( type, obj, method.Name );
             };
-
 
             foreach ( var type in asm.GetTypes() )
             {

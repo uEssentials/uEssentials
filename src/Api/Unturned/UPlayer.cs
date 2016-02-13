@@ -38,6 +38,7 @@ using UnityEngine;
 namespace Essentials.Api.Unturned
 {
     //TODO improve factory methods.
+    //TODO: Remove totally Rocketplayer dependency.
 
     public class UPlayer : ICommandSource
     {   

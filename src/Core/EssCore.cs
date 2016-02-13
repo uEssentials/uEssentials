@@ -162,6 +162,14 @@ namespace Essentials.Core
             Logger = new EssLogger( "[uEssentials] " );
             ConnectedPlayers = new HashSet<UPlayer>();
 
+            if ( Provider.Players.Count > 0 )
+            {
+                Provider.Players.ForEach( p =>
+                {
+                    ConnectedPlayers.Add( new UPlayer( UnturnedPlayer.FromSteamPlayer( p ) ) );
+                } );
+            }
+
             _folder = Environment.PluginsDirectory + "/uEssentials/";
             _translationFolder = Folder + "translations/";
             _dataFolder = Folder + "data/";
@@ -360,6 +368,8 @@ namespace Essentials.Core
             CommandWindow.ConsoleInput.onInputText -= ReloadCallback;
             Provider.onServerDisconnected -= PlayerDisconnectCallback;
             Provider.onServerConnected -= PlayerConnectCallback;
+
+            TryRemoveComponent<Tasks>();
 
             WarpManager.Save();
             var executingAssembly = GetType().Assembly;
