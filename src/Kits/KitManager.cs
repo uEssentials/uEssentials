@@ -42,7 +42,7 @@ namespace Essentials.Kits
 
         public bool Contains( string kitName )
         {
-            return KitMap.ContainsKey( kitName.ToLower() );
+            return KitMap.ContainsKey( kitName.ToLowerInvariant() );
         }
 
         public bool Contains( Kit kit )
@@ -57,14 +57,14 @@ namespace Essentials.Kits
 
         public void Add( Kit kit )
         {
-            KitMap.Add( kit.Name, kit );
+            KitMap.Add( kit.Name.ToLowerInvariant(), kit );
             Save();
         }
 
         public Kit GetByName( string kitName )
         {
             return Contains( kitName ) 
-                   ? KitMap[kitName.ToLower()] 
+                   ? KitMap[kitName.ToLowerInvariant()] 
                    : null;
         }
 

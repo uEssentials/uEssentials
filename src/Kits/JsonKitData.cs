@@ -159,7 +159,7 @@ namespace Essentials.Kits
                     add:
                     kit.Items.Add( kitItem );
                 }
-                loadedKits.Add( kit.Name, kit );
+                loadedKits.Add( kit.Name.ToLowerInvariant(), kit );
             }
 
             return loadedKits;
