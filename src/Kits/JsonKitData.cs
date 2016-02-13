@@ -102,7 +102,7 @@ namespace Essentials.Kits
                     if ( itemAsset.UseableType == EUseableType.GUN )
                         goto weaponItem;
 
-                    if ( itemAsset is ItemMagazineAsset )
+                    if ( itemAsset is ItemMagazineAsset || itemAsset is ItemSupplyAsset  )
                     {
                         kitItem = new KitItemMagazine( kitItemId, kitItemDurability, kitItemAmount, tokAmmo?.Value<byte>() ?? 1 );
                     }
