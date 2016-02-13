@@ -29,6 +29,7 @@ using System.Reflection;
 using System.Text;
 using Essentials.Api;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Common.Util;
 using Newtonsoft.Json;
@@ -177,8 +178,7 @@ namespace Essentials.I18n
             var message = _message.Clone() as string;
             var color = ColorUtil.GetMessageColor( ref message );
 
-            UnturnedChat.Say( new ConsolePlayer(), replacers == null ?
-                message : string.Format( message, replacers ), color );
+            UServer.Broadcast( replacers == null ? message : string.Format( message, replacers ), color );
         }
 
         public void Broadcast()
