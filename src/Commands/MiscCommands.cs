@@ -443,6 +443,16 @@ namespace Essentials.Commands
             }
         }
 
+        [CommandInfo(
+            Name = "sucide",
+            Description = "Kill yourself",
+            AllowedSource = AllowedSource.PLAYER
+        )]
+        public void CreateKitCommand( ICommandSource src, ICommandArgs args )
+        {
+            src.ToPlayer().Suicide();
+        }
+
         # region HELPER METHODS
 
         private static void ShowUsage( ICommandSource src, ICommand cmd )
