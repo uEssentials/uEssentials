@@ -31,6 +31,7 @@ using Essentials.Core;
 using Essentials.Core.Command;
 using Essentials.I18n;
 using Essentials.Kits;
+using Rocket.Core;
 using UnityEngine;
 
 namespace Essentials.Commands
@@ -82,6 +83,7 @@ namespace Essentials.Commands
                         ReloadConfig();
                         ReloadKits();
                         ReloadLang();
+                        R.Permissions.Reload();
                         src.SendMessage( "Reload finished..." );
                     }
                     else
