@@ -509,7 +509,11 @@ namespace Essentials.Api.Unturned
             if ( ReferenceEquals( null, obj ) ) return false;
             if ( ReferenceEquals( this, obj ) ) return true;
             if ( obj.GetType() != GetType() ) return false;
-            return Equals( (UPlayer) obj );
+
+            /*
+                TODO; Improve
+            */
+            return RocketPlayer.Equals( ((UPlayer) obj).RocketPlayer );
         }
 
         public override int GetHashCode()
