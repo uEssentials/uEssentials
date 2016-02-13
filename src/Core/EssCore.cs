@@ -43,6 +43,7 @@ using Rocket.Core;
 using Rocket.Core.Plugins;
 using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
+using Essentials.Event.Handling;
 using Essentials.Updater;
 using Rocket.API.Serialisation;
 using Rocket.Core.Permissions;
@@ -232,6 +233,12 @@ namespace Essentials.Core
             Logger.Log( "uessentials.github.io", ConsoleColor.White, "" );
 
             EventManager.RegisterAll( GetType().Assembly );
+
+            if ( !Config.EnableJoinLeaveMessage )
+            {
+                EventManager.UnregisterAll<JoinLeaveEventHandler>();
+            }
+
             CommandManager.RegisterAll( GetType().Assembly );
             WarpManager.Load();
             KitManager.Load();

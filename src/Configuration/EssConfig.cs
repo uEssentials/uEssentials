@@ -43,6 +43,8 @@ namespace Essentials.Configuration
         public bool             AdminBypassWarpCooldown;
         public bool             PerWarpPermission;
         public int              WarpCooldown;
+
+        public bool             EnableJoinLeaveMessage;
         
         public bool             EnablePollRunningMessage;
         public int              PollRunningMessageCooldown;
@@ -68,6 +70,8 @@ namespace Essentials.Configuration
             AdminBypassWarpCooldown     = true;
             PerWarpPermission           = true;
             WarpCooldown                = 5;
+
+            EnableJoinLeaveMessage      = true;
 
             EnableUnknownMessage        = true;
             
