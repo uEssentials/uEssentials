@@ -168,6 +168,7 @@
     <Compile Include="src\Core\EssCore.cs" />
     <Compile Include="src\Api\EssProvider.cs" />
     <Compile Include="src\Event\Handling\EssentialsEventHandler.cs" />
+    <Compile Include="src\Event\Handling\JoinLeaveEventHandler.cs" />
     <Compile Include="src\Kits\KitItemMagazine.cs" />
     <Compile Include="src\Kits\KitItemWeapon.cs" />
     <Compile Include="src\Core\Storage\IData.cs" />
