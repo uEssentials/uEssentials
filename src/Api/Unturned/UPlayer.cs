@@ -217,11 +217,13 @@ namespace Essentials.Api.Unturned
 
             for ( var i = 0; i < amount; i++ )
             {
-                added = UnturnedPlayer.inventory.tryAddItem( item, true );
+                var clone = new Item( item.ItemID, item.Amount, item.Durability, item.Metadata );
+
+                added = UnturnedPlayer.inventory.tryAddItem( clone, true );
 
                 if ( !added && dropIfInventoryIsFull )
                 {
-                    ItemManager.dropItem( item, Position, true, Dedicator.isDedicated, true );
+                    ItemManager.dropItem( clone, Position, true, Dedicator.isDedicated, true );
                 }
             }
 
