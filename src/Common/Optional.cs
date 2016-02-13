@@ -102,5 +102,10 @@ namespace Essentials.Common
         {
             return EMPTY;
         }
+
+        public override string ToString()
+        {
+            return IsPresent ? $"Optional[{Value}]" : "Optional.Empty";
+        }
     }
 }
