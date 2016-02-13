@@ -99,7 +99,7 @@ namespace Essentials.Kits
 
                     metadata[indexes[0]] = attachIdBytes[0];
                     metadata[indexes[1]] = attachIdBytes[1];
-                    metadata[indexes[2]] = Sight.Durability;
+                    metadata[indexes[2]] = attach.Durability;
                 };
 
                 assembleAttach( new[] { 0x0, 0x1, 0xD }, Sight );
