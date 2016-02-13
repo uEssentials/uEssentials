@@ -427,25 +427,25 @@ namespace Essentials.Commands
             Description = "Toggle spy mode",
             AllowedSource = AllowedSource.PLAYER
         )]
-        public void SpyCommand( ICommandSource source, ICommandArgs parameters )
+        public void SpyCommand( ICommandSource src, ICommandArgs args )
         {
-            var displayName = source.DisplayName;
+            var displayName = src.DisplayName;
 
             if ( Spies.Contains( displayName ) )
             {
                 Spies.Remove( displayName );
-                EssLang.SPY_MODE_OFF.SendTo( source );
+                EssLang.SPY_MODE_OFF.SendTo( src );
             }
             else
             {
                 Spies.Add( displayName );
-                EssLang.SPY_MODE_ON.SendTo( source );
+                EssLang.SPY_MODE_ON.SendTo( src );
             }
         }
 
         # region HELPER METHODS
 
-        private static void ShowUsage(ICommandSource src, ICommand cmd)
+        private static void ShowUsage( ICommandSource src, ICommand cmd )
         {
             src.SendMessage( $"Use /{cmd.Name} {cmd.Usage}" );
         }
