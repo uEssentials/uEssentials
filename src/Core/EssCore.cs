@@ -164,8 +164,7 @@ namespace Essentials.Core
 
             if ( Provider.Players.Count > 0 )
             {
-                Provider.Players.ForEach( p =>
-                {
+                Provider.Players.ForEach( p => {
                     ConnectedPlayers.Add( new UPlayer( UnturnedPlayer.FromSteamPlayer( p ) ) );
                 } );
             }

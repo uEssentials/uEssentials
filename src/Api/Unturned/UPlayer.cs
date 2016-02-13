@@ -377,7 +377,10 @@ namespace Essentials.Api.Unturned
                 }
             }
 
-            return null;
+            var ret = new UPlayer( Rocket.Unturned.Player.UnturnedPlayer.FromPlayer( player ) );
+            EssCore.Instance.ConnectedPlayers.Add( ret );
+
+            return ret;
         }
 
         public static UPlayer From( CSteamID csteamId )
@@ -389,7 +392,7 @@ namespace Essentials.Api.Unturned
 
         public static UPlayer From( SteamPlayer player )
         {
-            return player == null ? null : From( player.player );
+            return player == null ? null : From( player.SteamPlayerID.CSteamID );
         }
 
         /// <summary>
