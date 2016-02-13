@@ -417,6 +417,7 @@ namespace Essentials.Core
 
             if ( count == 0 )
             {
+                logger.LogWarning( "Nothing found!" );
                 return;
             }
 
