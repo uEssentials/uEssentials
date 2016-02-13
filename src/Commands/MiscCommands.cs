@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Core.Command;
@@ -151,11 +152,21 @@ namespace Essentials.Commands
                 UWorld.Vehicles.ForEach( v => {
                     for ( byte i = 0; i < v.passengers.Length; i++ )
                     {
-                        v.kickPlayer( i );
+                        if ( v.passengers[i] == null ||
+                            v.passengers[i].player == null ) continue;;
+
+                        var seat = i;
+                        Vector3 point;
+                        byte angle;
+
+                        v.getExit( seat, out point, out angle);
+                        VehicleManager.sendExitVehicle(v, seat, (point), angle, false);
+
+                        v.passengers[i].player = null;
                     }
                 } );
 
-                VehicleManager.askVehicleDestroyAll();
+                Tasks.New( t => VehicleManager.askVehicleDestroyAll() ).Delay( 200 ).Go();
                 EssLang.CLEAR_VEHICLES.SendTo( src );
             }
         }
