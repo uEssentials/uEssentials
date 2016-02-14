@@ -458,7 +458,7 @@ namespace Essentials.Commands
         }
 
         [CommandInfo(
-            Name = "sucide",
+            Name = "suicide",
             Description = "Kill yourself",
             AllowedSource = AllowedSource.PLAYER
         )]
