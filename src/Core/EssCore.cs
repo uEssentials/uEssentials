@@ -43,6 +43,8 @@ using Rocket.Core;
 using Rocket.Core.Plugins;
 using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
+using Essentials.Compatibility;
+using Essentials.Compatibility.Hooks;
 using Essentials.Event.Handling;
 using Essentials.Updater;
 using Rocket.API.Serialisation;
@@ -92,6 +94,7 @@ namespace Essentials.Core
         internal ModuleManager                        ModuleManager               { get; set; }
         internal CommandManager                       CommandManager              { get; set; }
         internal IEventManager                        EventManager                { get; set; }
+        internal HookManager                          HookManager                 { get; set; }
         internal IUpdater                             Updater                     { get; set; }
 
         internal EssConfig                            Config                      { get; set; }
@@ -193,6 +196,7 @@ namespace Essentials.Core
             KitManager = new KitManager();
             ModuleManager = new ModuleManager();
             Updater = new GithubUpdater();
+            HookManager = new HookManager();
 
             var configFiels = typeof (EssConfig).GetFields();
             var hasNulls = configFiels.Any( f => f.GetValue( Config ) == null );//TODO: does nt work if is primitive tyoe
@@ -259,6 +263,10 @@ namespace Essentials.Core
             Logger.LogInfo( "Loading modules..." );
             ModuleManager.LoadAll( ModulesFolder );
             Logger.LogInfo( $"Loaded {ModuleManager.RunningModules.Count} modules" );
+
+            HookManager.RegisterHook<LPXHook>();
+          //  HookManager.RegisterAll();
+            HookManager.LoadAll();
 
             if ( Config.AutoAnnouncer.Enabled )
             {
@@ -375,6 +383,8 @@ namespace Essentials.Core
             WarpManager.Save();
             var executingAssembly = GetType().Assembly;
             
+            HookManager.UnloadAll();
+            HookManager.UnregisterAll();
             CommandManager.UnregisterAll( executingAssembly );
             EventManager.UnregisterAll( executingAssembly ); 
             ModuleManager.UnloadAll();

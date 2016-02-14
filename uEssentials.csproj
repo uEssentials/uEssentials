@@ -100,6 +100,9 @@
     <Compile Include="src\Common\MathParser.cs" />
     <Compile Include="src\Common\Optional.cs" />
     <Compile Include="src\Common\Util\ItemUtil.cs" />
+    <Compile Include="src\Compatibility\Hook.cs" />
+    <Compile Include="src\Compatibility\HookManager.cs" />
+    <Compile Include="src\Compatibility\Hooks\LPXHook.cs" />
     <Compile Include="src\Core\Command\MethodCommand.cs" />
     <Compile Include="src\Core\Command\CommandAdapter.cs" />
     <Compile Include="src\Core\Components\Player\FrozenPlayer.cs" />
