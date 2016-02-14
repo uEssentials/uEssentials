@@ -36,6 +36,7 @@
 
     "UNKNOWN_COMMAND": "<white>This command does not exist.",
     "INVALID_NUMBER": "<red>Invalid number '{0}'",
+    "INVALID_BOOLEAN": "<red>Invalid value '{0}'. Expected 'true' or 'false'",
     "SECOND": "second",
     "DAY": "day",
     "MINUTE": "minute",
@@ -159,5 +160,6 @@
 	"GIVEN_ITEM": "You given {0}x '{1}' to '{2}'",
 	"GIVEN_ITEM_ALL": "You given {0}x '{1}' to all players.",
 	"AUTO_REFUEL_ENABLED": "Auto-Refuel enabled!",
-	"AUTO_REFUEL_DISABLED": "Auto-Refuel disabled!"
+	"AUTO_REFUEL_DISABLED": "Auto-Refuel disabled!",
+	"CREATED_KIT": "You created a new kit named '{0}'."
 }
