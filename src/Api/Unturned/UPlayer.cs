@@ -24,8 +24,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.Common;
 using Essentials.Core;
+using Rocket.API;
 using Rocket.Core;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
@@ -188,18 +188,7 @@ namespace Essentials.Api.Unturned
 
         public bool HasPermission( string permission )
         {
-            if ( IsAdmin ) return true;
-
-            foreach ( var perm in Permissions )
-            {
-                if ( permission.EqualsIgnoreCase( perm ) )
-                    return true;
-
-                if ( ("!" + permission).EqualsIgnoreCase( perm ) )
-                    return false;
-            }
-
-            return false;
+            return IsAdmin || RocketPlayer.HasPermission( permission );
         }
 
         public void SendMessage( object message, Color color )
