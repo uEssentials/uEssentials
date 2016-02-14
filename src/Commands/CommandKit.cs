@@ -85,12 +85,11 @@ namespace Essentials.Commands
                   .Append( " " )
                   .Append( minutes > 1 ? msgMinutes : msgMinute )
                   .Append(", ");
-            
-            if ( seconds > 0 )
-                sb.Append( seconds )
-                  .Append( " " )
-                  .Append( seconds > 1 ? msgSeconds : msgSecond )
-                  .Append(", ");
+
+            sb.Append( seconds )
+                .Append( " " )
+                .Append( seconds > 1 ? msgSeconds : msgSecond )
+                .Append(", ");
 
             return sb.ToString().Substring( 0, sb.Length - 2 );
         };
@@ -134,7 +133,6 @@ namespace Essentials.Commands
                                 var remainingTime = DateTime.Now - Cooldowns[steamPlayerId][kitName];
                                 if ( remainingTime.TotalSeconds > kitCooldown )
                                 {
-                                    Console.WriteLine( "3" );
                                     Cooldowns[steamPlayerId][kitName] = DateTime.Now;
                                 }
                                 else
