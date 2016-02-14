@@ -131,7 +131,8 @@ namespace Essentials.Commands
                             if ( Cooldowns[steamPlayerId].ContainsKey( kitName ) )
                             {
                                 var remainingTime = DateTime.Now - Cooldowns[steamPlayerId][kitName];
-                                if ( remainingTime.TotalSeconds > kitCooldown )
+
+                                if ( (remainingTime.TotalSeconds + 1) > kitCooldown )
                                 {
                                     Cooldowns[steamPlayerId][kitName] = DateTime.Now;
                                 }
