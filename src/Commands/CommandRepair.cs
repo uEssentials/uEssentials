@@ -76,7 +76,8 @@ namespace Essentials.Commands
             }
             else if ( parameters[0].Is( "hand" ) )
             {
-                Repair( player, player.RocketPlayer.Inventory.Items[0] );
+                Repair( player, player.Inventory.Items[0] );
+                Repair( player, player.Inventory.Items[1] );
                 EssLang.HAND_REPAIRED.SendTo( source );
             }
         }

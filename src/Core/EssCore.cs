@@ -61,7 +61,6 @@ namespace Essentials.Core
        /*
             TODO:
                 - AFK KICK
-                - FIX Repair hand, only repair first slot.
                 - Improve event system to avoid duplicate events.
             
             Aliases
