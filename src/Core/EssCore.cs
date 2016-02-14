@@ -58,6 +58,8 @@ namespace Essentials.Core
        /*
             TODO:
                 - AFK KICK
+                - FIX Repair hand, only repair first slot.
+                - Improve event system to avoid duplicate events.
             
             Aliases
                 - /tptome -> /tp $1 sender_name
@@ -79,7 +81,7 @@ namespace Essentials.Core
                 - essentials.keepskill.<skill>
         */
         
-        internal const string                         PLUGIN_VERSION              = "1.0.8.2";
+        internal const string                         PLUGIN_VERSION              = "1.0.9.0";
         internal const string                         ROCKET_VERSION              = "4.9.2.0";
         internal const string                         UNTURNED_VERSION            = "3.14.4.1";
         
@@ -193,7 +195,7 @@ namespace Essentials.Core
             Updater = new GithubUpdater();
 
             var configFiels = typeof (EssConfig).GetFields();
-            var hasNulls = configFiels.Any( f => f.GetValue( Config ) == null );
+            var hasNulls = configFiels.Any( f => f.GetValue( Config ) == null );//TODO: does nt work if is primitive tyoe
             var nonNullValues = new Dictionary<string, object>();
 
             /*
