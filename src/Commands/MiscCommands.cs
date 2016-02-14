@@ -156,7 +156,7 @@ namespace Essentials.Commands
                     for ( byte i = 0; i < v.passengers.Length; i++ )
                     {
                         if ( v.passengers[i] == null ||
-                            v.passengers[i].player == null ) continue;;
+                            v.passengers[i].player == null ) continue;
 
                         var seat = i;
                         Vector3 point;

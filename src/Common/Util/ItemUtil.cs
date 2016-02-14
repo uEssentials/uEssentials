@@ -86,7 +86,7 @@ namespace Essentials.Common.Util
             switch (type)
             {
                 case AttachmentType.SIGHT:
-                    indexes = new[] {0x0, 0x1, 0xD};
+                    indexes = new[] { 0x0, 0x1, 0xD };
                     break;
 
                 case AttachmentType.TATICAL:
