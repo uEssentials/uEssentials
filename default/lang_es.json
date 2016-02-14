@@ -156,5 +156,8 @@
   "WARP_SET": "Warp {0} fue creado",
   "WARP_TELEPORTED": "Teletransportado al warp {0}",
   "AUTO_REFUEL_ENABLED": "Auto-Refuel ON!",
-  "AUTO_REFUEL_DISABLED": "Auto-Refuel OFF!"
+  "AUTO_REFUEL_DISABLED": "Auto-Refuel OFF!",
+   //TODO need translation.
+  "CREATED_KIT": "You created a new kit named '{0}'.",
+  "INVALID_BOOLEAN": "<red>Invalid value '{0}'. Expected 'true' or 'false'"
 }

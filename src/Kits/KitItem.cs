@@ -21,6 +21,7 @@
 
 using Essentials.Api.Unturned;
 using Essentials.Common;
+using Essentials.Common.Util;
 using Essentials.I18n;
 using Newtonsoft.Json;
 using SDG.Unturned;
@@ -54,11 +55,17 @@ namespace Essentials.Kits
         public byte Amount { get; set; }
 
         /// <summary>
+        /// Amount of item
+        /// </summary>
+        [JsonProperty] 
+        public byte[] Metadata { get; set; }
+
+        /// <summary>
         /// Instance of SDG.Unturned.Item of this item
         /// </summary>
         /// <returns> Instance of SDG.Unturned.Item of this item </returns>>
         [JsonIgnore]
-        public virtual Item UnturnedItem => new Item( Id, Amount, Durability );
+        public virtual Item UnturnedItem => new Item( Id, Amount, Durability, Metadata );
 
         public KitItem( ushort id, byte durability, byte amount )
         {
@@ -70,6 +77,8 @@ namespace Essentials.Kits
             Id = id;
             Durability = durability;
             Amount = amount;
+
+            ItemUtil.GetItem( id ).IfPresent( ass => Metadata = ass.getState() );
         }
 
         /// <summary>

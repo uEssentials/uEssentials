@@ -267,6 +267,7 @@ namespace Essentials.I18n
         public static EssLang POLL_RUNNING { get; private set; }
         public static EssLang POLL_STOPPED { get; private set; }
         public static EssLang INVALID_NUMBER { get; private set; }
+        public static EssLang INVALID_BOOLEAN { get; private set; }
         public static EssLang POLL_LIST { get; private set; }
         public static EssLang POLL_LIST_ENTRY { get; private set; }
         public static EssLang POLL_NOT_EXIST { get; private set; }
@@ -308,5 +309,6 @@ namespace Essentials.I18n
         public static EssLang GIVEN_ITEM { get; private set; }
         public static EssLang GIVEN_ITEM_ALL { get; private set; }
         public static EssLang INVALID_ITEM_ID_NAME { get; private set; }
+        public static EssLang CREATED_KIT { get; private set; }
     }
 }

@@ -156,5 +156,7 @@
 	"GIVEN_ITEM": "Você enviou {0}x '{1}' para '{2}'",
 	"GIVEN_ITEM_ALL": "Você enviou {0}x '{1}' para todos os jogadores.",
 	"AUTO_REFUEL_ENABLED": "Auto-Refuel ativado!",
-	"AUTO_REFUEL_DISABLED": "Auto-Refuel desativado!"
+	"AUTO_REFUEL_DISABLED": "Auto-Refuel desativado!",
+	"CREATED_KIT": "Você criou um novo kit chamado '{0}'.",
+	"INVALID_BOOLEAN": "<red>Valor inválido: '{0}'. Esperado 'true' ou 'false'"
 }
