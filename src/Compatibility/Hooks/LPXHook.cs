@@ -20,12 +20,11 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Essentials.Api;
 using Rocket.API;
-using Rocket.API.Serialisation;
 using Rocket.Core;
+using Essentials.Core.Permission;
 
 namespace Essentials.Compatibility.Hooks
 {
@@ -37,20 +36,19 @@ namespace Essentials.Compatibility.Hooks
 
         public override void OnLoad()
         {
-            var logger = EssProvider.Logger;
+            EssProvider.Logger.LogInfo( "Hooking with LPX..." );
 
-            logger.LogInfo( "Hooking with LPX..." );
             var lpx = R.Plugins.GetPlugins().First( c => c.Name.Equals( "LPX" ) );
             var sqlPerm = lpx.GetType().Assembly.GetType( "LIGHT.SQLPermission" );
 
-            var sqlPermInst = new WrappedLPXSQLPermission( 
+            var sqlPermInst = new EssentialsPermissionsProvider( 
                 (IRocketPermissionsProvider) Activator.CreateInstance( sqlPerm ) 
             );
 
             _defaultProvider = R.Permissions;
-
             R.Permissions = sqlPermInst;
-            logger.LogInfo( "Successfully hooked with LPX." );
+
+            EssProvider.Logger.LogInfo( "Successfully hooked with LPX." );
         }
 
         public override void OnUnload()
@@ -62,55 +60,5 @@ namespace Essentials.Compatibility.Hooks
         {
             return R.Plugins.GetPlugins().Any( c => c.Name.Equals( "LPX" ) );
         }
-    }
-
-    internal class WrappedLPXSQLPermission : IRocketPermissionsProvider
-    {
-        private readonly IRocketPermissionsProvider _lpxSqlPermission;
-
-        public WrappedLPXSQLPermission( IRocketPermissionsProvider lpxSqlPermisssions )
-        {
-            _lpxSqlPermission = lpxSqlPermisssions;
-        }
-
-        public bool HasPermission( IRocketPlayer player, string requestedPermission, bool defaultReturnValue = false )
-        {
-            return _lpxSqlPermission.HasPermission( player, requestedPermission, defaultReturnValue );
-        }
-
-        public bool HasPermission( IRocketPlayer player, string requestedPermission, out uint? cooldownLeft, bool defaultReturnValue = false )
-        {
-            var essCommand = EssProvider.CommandManager.GetByName( requestedPermission );
-
-            if ( essCommand != null )
-            {
-                return _lpxSqlPermission.HasPermission( player, essCommand.Permission, out cooldownLeft, defaultReturnValue );
-            }
-
-            if ( !EssProvider.CommandManager.HasWithName( requestedPermission ) )
-            {
-                cooldownLeft = 0;
-                return true;
-            }
-
-            return _lpxSqlPermission.HasPermission( player, requestedPermission, out cooldownLeft, defaultReturnValue );
-        }
-
-        public List<RocketPermissionsGroup> GetGroups( IRocketPlayer player, bool includeParentGroups )
-        {
-            return _lpxSqlPermission.GetGroups( player, includeParentGroups );
-        }
-
-        public List<Permission> GetPermissions( IRocketPlayer player )
-        {
-            return _lpxSqlPermission.GetPermissions( player );
-        }
-
-        public bool SetGroup( IRocketPlayer player, string groupID )
-        {
-            return _lpxSqlPermission.SetGroup( player, groupID );
-        }
-
-        public void Reload() {}
     }
 }

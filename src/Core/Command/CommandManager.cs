@@ -200,16 +200,14 @@ namespace Essentials.Core.Command
 
         private void UnregisterWhere( Func<CommandAdapter, bool> predicate )
         {
-            for ( var i = 0; i < Commander.Commands.Count; i++ )
-            {
-                var unturnedCommand = Commander.Commands[i];
-
+            Commander.commands.RemoveAll( unturnedCommand => {
                 if ( unturnedCommand is CommandAdapter && predicate( unturnedCommand as CommandAdapter ) )
                 {
-                    Commander.deregister( unturnedCommand );
                     CommandMap.Remove( unturnedCommand.command.ToLowerInvariant() );
+                    return true;
                 }
-            }
+                return false;
+            });
         }
 
         private void RegisterAllWhere( Assembly asm, Predicate<Type> filter )

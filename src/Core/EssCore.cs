@@ -45,6 +45,7 @@ using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
 using Essentials.Compatibility;
 using Essentials.Compatibility.Hooks;
+using Essentials.Core.Permission;
 using Essentials.Event.Handling;
 using Essentials.Updater;
 using Rocket.API.Serialisation;
@@ -264,8 +265,7 @@ namespace Essentials.Core
             ModuleManager.LoadAll( ModulesFolder );
             Logger.LogInfo( $"Loaded {ModuleManager.RunningModules.Count} modules" );
 
-            HookManager.RegisterHook<LPXHook>();
-          //  HookManager.RegisterAll();
+            HookManager.RegisterAll();
             HookManager.LoadAll();
 
             if ( Config.AutoAnnouncer.Enabled )
@@ -275,30 +275,19 @@ namespace Essentials.Core
 
             if ( Config.DisabledCommands.Count != 0 )
             {
-                Config.DisabledCommands.ForEach( cmdName =>
-                {
+                Config.DisabledCommands.ForEach( cmdName => {
                     var command = CommandManager.GetByName( cmdName );
 
                     if ( command == null || command is CommandEssentials )
                     {
-                        Logger.LogWarning( $"There no command named '{cmdName}' to unregister." );
+                        Logger.LogWarning( $"There is no command named '{cmdName}' to disable." );
                     }
                     else
                     {
                         CommandManager.Unregister( command );
-                        Logger.LogInfo( $"Unregistered command: '{cmdName}'" );   
+                        Logger.LogInfo( $"Disabled command: '{command.Name}'" );   
                     }
                 } );
-            }
-
-            if ( CommandManager.HasWithName( "tp" ) )
-            {
-                UnregisterRocketCommand<Rocket.Unturned.Commands.CommandTp>();
-            }
-
-            if ( CommandManager.HasWithName( "item" ) )
-            {
-                UnregisterRocketCommand<Rocket.Unturned.Commands.CommandI>();
             }
 
             #if DEV
@@ -351,7 +340,6 @@ namespace Essentials.Core
                 } ).Start();
             }
 
-            Analytics.Metrics.Init();
             #endif
 
             TryAddComponent<Tasks>();
@@ -424,7 +412,8 @@ namespace Essentials.Core
             var rocketCommands = AccessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" );
             var logger = EssProvider.Logger;
 
-            logger.LogWarning( "Searching for commands that conflict with Essential's command." );
+            logger.LogWarning( "Searching commands that conflict with uEssentials commands." );
+
 
             var count = rocketCommands.Value.RemoveAll( cmd => {
                 if ( EssProvider.CommandManager.GetByName( cmd.Name ) != null )
@@ -444,59 +433,6 @@ namespace Essentials.Core
 
             logger.LogWarning( $"Disabled {count} commands from another's plugins." );
             logger.LogWarning( "if you prefer use another command instead of Essentials command, disable it in configuration." );
-        }
-
-        private class EssentialsPermissionsProvider : IRocketPermissionsProvider
-        {
-            private readonly IRocketPermissionsProvider _defaultProvider;
-
-            public EssentialsPermissionsProvider()
-            {
-                _defaultProvider = R.Instance.GetComponent<RocketPermissionsManager>();
-            }
-
-            public bool HasPermission( IRocketPlayer player, string requestedPermission, bool defaultReturnValue = false )
-            {
-                return _defaultProvider.HasPermission( player, requestedPermission, defaultReturnValue );
-            }
-
-            public bool HasPermission( IRocketPlayer player, string requestedPermission, out uint? cooldownLeft, bool defaultReturnValue = false )
-            {
-                var essCommand = Instance.CommandManager.GetByName( requestedPermission );
-
-                if ( essCommand != null )
-                {
-                    return _defaultProvider.HasPermission( player, essCommand.Permission, out cooldownLeft, defaultReturnValue );
-                }
-
-                if ( !Instance.CommandManager.HasWithName( requestedPermission ) )
-                {
-                    cooldownLeft = 0;
-                    return true;
-                }
-
-                return _defaultProvider.HasPermission( player, requestedPermission, out cooldownLeft, defaultReturnValue );
-            }
-
-            public List<RocketPermissionsGroup> GetGroups( IRocketPlayer player, bool includeParentGroups )
-            {
-                return _defaultProvider.GetGroups( player, includeParentGroups );
-            }
-
-            public List<Permission> GetPermissions( IRocketPlayer player )
-            {
-                return _defaultProvider.GetPermissions( player );
-            }
-
-            public bool SetGroup( IRocketPlayer player, string groupID )
-            {
-                return _defaultProvider.SetGroup( player, groupID );
-            }
-
-            public void Reload()
-            {
-                _defaultProvider.Reload();
-            }
         }
     }
 }

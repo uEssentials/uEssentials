@@ -170,6 +170,7 @@
     <Compile Include="src\Api\Unturned\UWorld.cs" />
     <Compile Include="src\Core\EssCore.cs" />
     <Compile Include="src\Api\EssProvider.cs" />
+    <Compile Include="src\Core\Permission\EssentialsPermissionProvider.cs" />
     <Compile Include="src\Event\Handling\EssentialsEventHandler.cs" />
     <Compile Include="src\Event\Handling\JoinLeaveEventHandler.cs" />
     <Compile Include="src\Kits\KitItemMagazine.cs" />

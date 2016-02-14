@@ -107,7 +107,7 @@
     "KIT_NO_PERMISSION": "You don't have access to this kit.",
     "KIT_NONE": "<yellow>There are no kits available.",
     "INVENTORY_FULL": "<yellow>Your inventory is full, dropping items on ground.",
-    "KIT_COOLDOWN": "You must have wait {0} to use this kit again.",
+    "KIT_COOLDOWN": "You must wait {0} to use this kit again.",
     "NOT_IN_VEHICLE": "<red>You aren't in a vehicle.",
     "VEHICLE_REFUELED": "Your vehicle has been refueled",
     "VEHICLE_REFUELED_ALL": "All vehicles were refueled",
