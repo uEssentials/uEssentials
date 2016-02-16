@@ -308,5 +308,6 @@ namespace Essentials.I18n
         public static EssLang GIVEN_ITEM_ALL { get; private set; }
         public static EssLang INVALID_ITEM_ID_NAME { get; private set; }
         public static EssLang CREATED_KIT { get; private set; }
+        public static EssLang ITEM_NOT_FOUND { get; private set; }
     }
 }

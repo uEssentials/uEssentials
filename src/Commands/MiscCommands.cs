@@ -666,21 +666,11 @@ namespace Essentials.Commands
         private static void GiveItem( ICommandSource src, UPlayer target, ICommandArgument itemArg, 
                                       ICommandArgument amountArg, bool allPlayers = false )
         {
-            ItemAsset asset;
+            var optAsset = GetItem( itemArg.ToString() );
 
-            if ( itemArg.IsUshort )
+            if ( optAsset.IsAbsent )
             {
-                var id = itemArg.ToUshort;
-                asset = (ItemAsset) Assets.find( EAssetType.ITEM, id );
-            }
-            else
-            {
-                asset = UnturnedItems.GetItemAssetByName( itemArg.ToLowerString );
-            }
-
-            if ( asset == null )
-            {
-                src.SendMessage( $"Could not find an item with this name or id: {itemArg}" );
+                EssLang.ITEM_NOT_FOUND.SendTo( src, itemArg );
                 return;
             }
 
@@ -705,6 +695,7 @@ namespace Essentials.Commands
             }
 
             give:
+            var asset = optAsset.Value;
             var playersToReceive = new List<UPlayer>();
             var item = new Item( asset.id, true );
 
