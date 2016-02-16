@@ -57,7 +57,7 @@ namespace Essentials.Commands
             EssLang.Load();
         }
 
-        public static void ReloadConfig()
+        private static void ReloadConfig()
         {
             var core = EssCore.Instance;
             var configPath = $"{core.Folder}config.json";
@@ -77,6 +77,11 @@ namespace Essentials.Commands
             switch ( args[0].ToLowerString )
             {
                 case "reload":
+                    if ( !src.HasPermission( "essentials.reload" ) )
+                    {
+                        EssLang.COMMAND_NO_PERMISSION.SendTo( src );
+                        return;
+                    }
                     if ( args.Length == 1 )
                     {
                         src.SendMessage( "Reloading all..." );
