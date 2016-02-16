@@ -81,7 +81,7 @@ clear|Clear things|None|-i = items, -v = vehicles
 item|None|i|\[item\] \<amount\> or \[player\|all\] \[item\] \[amount\]
 sucide|Kills you|none|none
 
-If you have any suggestions send to us [here](../../issues/).
+If you have any questions or suggestions, then feel free to send them to us [here](../../issues/).
 
 
 Tags:
