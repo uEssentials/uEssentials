@@ -22,7 +22,6 @@
 using Essentials.I18n;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -30,6 +29,7 @@ using Essentials.Api.Event;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
+using Essentials.Common.Util;
 
 namespace Essentials.Commands
 {
@@ -40,60 +40,6 @@ namespace Essentials.Commands
     )]
     public class CommandKit : EssCommand
     {
-        private static readonly Func<uint, string> FormatSeconds = seconds =>
-        {
-            var msgDay       = EssLang.DAY.GetMessage();
-            var msgDays      = EssLang.DAYS.GetMessage();
-            var msgSecond    = EssLang.SECOND.GetMessage();
-            var msgSeconds   = EssLang.SECONDS.GetMessage();
-            var msgMinute    = EssLang.MINUTE.GetMessage();
-            var msgMinutes   = EssLang.MINUTES.GetMessage();
-            var msgHour      = EssLang.HOUR.GetMessage();
-            var msgHours     = EssLang.HOURS.GetMessage();
-
-            const uint MIN  = 60;
-            const uint HOUR = MIN * MIN;
-            const uint DAY  = HOUR * 24;
-
-            uint days, hours, minutes;
-
-            days = seconds / DAY;
-            seconds -= days * DAY;
-
-            hours = seconds / HOUR;
-            seconds -= hours * HOUR;
-
-            minutes = seconds / MIN;
-            seconds -= minutes * MIN;
-
-            var sb = new StringBuilder();
-
-            if ( days > 0 )
-                sb.Append( days )
-                  .Append( " " )
-                  .Append( days > 1 ? msgDays : msgDay )
-                  .Append(", ");
-
-            if ( hours > 0 )
-                sb.Append( hours )
-                  .Append( " " )
-                  .Append( hours > 1 ? msgHours : msgHour )
-                  .Append(", ");
-
-            if ( minutes > 0 )
-                sb.Append( minutes )
-                  .Append( " " )
-                  .Append( minutes > 1 ? msgMinutes : msgMinute )
-                  .Append(", ");
-
-            sb.Append( seconds )
-                .Append( " " )
-                .Append( seconds > 1 ? msgSeconds : msgSecond )
-                .Append(", ");
-
-            return sb.ToString().Substring( 0, sb.Length - 2 );
-        };
-
         public static Dictionary<ulong, Dictionary<string, DateTime>> Cooldowns = 
             new Dictionary<ulong, Dictionary<string, DateTime>>();
 
@@ -138,7 +84,7 @@ namespace Essentials.Commands
                                 }
                                 else
                                 {
-                                    EssLang.KIT_COOLDOWN.SendTo( source, FormatSeconds(
+                                    EssLang.KIT_COOLDOWN.SendTo( source, TimeUtil.FormatSeconds(
                                         (uint) (kitCooldown - remainingTime.TotalSeconds)
                                     ));
                                     return;

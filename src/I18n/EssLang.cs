@@ -309,5 +309,12 @@ namespace Essentials.I18n
         public static EssLang INVALID_ITEM_ID_NAME { get; private set; }
         public static EssLang CREATED_KIT { get; private set; }
         public static EssLang ITEM_NOT_FOUND { get; private set; }
+        public static EssLang WITHOUT_BED { get; private set; }
+        public static EssLang CANNOT_TELEPORT_DRIVING { get; private set; }
+        public static EssLang TELEPORT_DELAY { get; private set; }
+        public static EssLang USE_COOLDOWN { get; private set; }
+        public static EssLang TELEPORTED_BED { get; private set; }
+        public static EssLang TELEPORT_CANCELLED_LOSE_HEALTH { get; private set; }
+        public static EssLang TELEPORT_CANCELLED_MOVED { get; private set; }
     }
 }

@@ -100,6 +100,7 @@
     <Compile Include="src\Common\MathParser.cs" />
     <Compile Include="src\Common\Optional.cs" />
     <Compile Include="src\Common\Util\ItemUtil.cs" />
+    <Compile Include="src\Common\Util\TimeUtil.cs" />
     <Compile Include="src\Compatibility\Hook.cs" />
     <Compile Include="src\Compatibility\HookManager.cs" />
     <Compile Include="src\Compatibility\Hooks\LPXHook.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="src\Api\Logging\EssLogger.cs" />
     <Compile Include="src\Kits\KitItem.cs" />
     <Compile Include="src\Kits\Kit.cs" />
+    <Compile Include="src\Misc\Cooldown.cs" />
     <Compile Include="src\Updater\GithubUpdater.cs" />
     <Compile Include="src\Updater\IUpdater.cs" />
     <Compile Include="src\Updater\UpdateResult.cs" />

@@ -51,6 +51,7 @@ namespace Essentials.Configuration
 
         public AntiSpam         AntiSpam;
         public Updater          Updater;
+        public HomeCommand      HomeCommand;
 
         public AutoAnnouncer    AutoAnnouncer;
 
@@ -87,6 +88,9 @@ namespace Essentials.Configuration
             Updater                     = new Updater { CheckUpdates = true,
                                                         DownloadLatest = true };
 
+            HomeCommand                 = new HomeCommand { Cooldown = 30, Delay = 5,
+                                                            CancelWhenMove = true };
+
             DisabledCommands            = new List<string>();
         }
 
@@ -122,5 +126,13 @@ namespace Essentials.Configuration
     {
         public bool CheckUpdates;
         public bool DownloadLatest;
+    }
+
+    [JsonObject]
+    public struct HomeCommand
+    {
+        public int Cooldown;
+        public int Delay;
+        public bool CancelWhenMove;
     }
 }
