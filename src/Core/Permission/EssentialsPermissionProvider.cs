@@ -21,6 +21,7 @@
 
 using System.Collections.Generic;
 using Essentials.Api;
+using Essentials.Commands;
 using Rocket.API;
 using Rocket.API.Serialisation;
 using Rocket.Core;
@@ -51,15 +52,15 @@ namespace Essentials.Core.Permission
         {
             var essCommand = EssProvider.CommandManager.GetByName( requestedPermission );
 
-            if ( essCommand != null )
-            {
-                return _defaultProvider.HasPermission( player, essCommand.Permission, out cooldownLeft, defaultReturnValue );
-            }
-
-            if ( !EssProvider.CommandManager.HasWithName( requestedPermission ) )
+            if ( essCommand is CommandEssentials )
             {
                 cooldownLeft = 0;
                 return true;
+            }
+
+            if ( essCommand != null )
+            {
+                return _defaultProvider.HasPermission( player, essCommand.Permission, out cooldownLeft, defaultReturnValue );
             }
 
             return _defaultProvider.HasPermission( player, requestedPermission, out cooldownLeft, defaultReturnValue );

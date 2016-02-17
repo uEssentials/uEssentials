@@ -52,12 +52,12 @@ namespace Essentials.Event.Handling
 
 
         [SubscribeEvent( EventType.PLAYER_CHATTED )]
-        internal void OnPlayerChatted( UnturnedPlayer player,ref Color color, string message,
+        internal void OnPlayerChatted( UnturnedPlayer player, ref Color color, string message,
                                        EChatMode mode, ref bool cancel )
         {
-            if ( message.StartsWith( "/" ) && EssProvider.Config.EnableUnknownMessage )
+            if ( message.StartsWith( "/" ) /*&& EssProvider.Config.EnableUnknownMessage*/ )
             {
-                var command = message.Substring( 1 );
+                /*var command = message.Substring( 1 );
 
                 if ( command.IndexOf( " ", StringComparison.Ordinal ) > -1 )
                     command = command.Split( ' ' )[0];
@@ -65,7 +65,7 @@ namespace Essentials.Event.Handling
                 if ( EssProvider.CommandManager.HasWithName( command ) )
                     return;
                 
-                UPlayer.TryGet( player, EssLang.UNKNOWN_COMMAND.SendTo );
+                UPlayer.TryGet( player, EssLang.UNKNOWN_COMMAND.SendTo );*/
                 return;
             }
 
