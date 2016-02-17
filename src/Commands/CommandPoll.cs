@@ -66,7 +66,7 @@ namespace Essentials.Commands
                 switch (parameters[0].ToString().ToLower())
                 {
                     case "start":
-                        if ( source.HasPermission( "essentials.commands.poll.start" ) )
+                        if ( source.HasPermission( "essentials.command.poll.start" ) )
                         {
                             if ( parameters.Length < 4 )
                             {
@@ -109,7 +109,7 @@ namespace Essentials.Commands
                         break;
 
                     case "stop":
-                        if ( source.HasPermission( "essentials.commands.poll.stop" ) )
+                        if ( source.HasPermission( "essentials.command.poll.stop" ) )
                         {
                             if ( parameters.Length < 2 )
                             {
@@ -133,7 +133,7 @@ namespace Essentials.Commands
                         break;
 
                     case "list":
-                        if ( source.HasPermission( "essentials.commands.poll.info" ) )
+                        if ( source.HasPermission( "essentials.command.poll.info" ) )
                         {
                             lock ( Polls )
                             {
@@ -167,7 +167,7 @@ namespace Essentials.Commands
                         break;
 
                     case "info":
-                        if ( source.HasPermission( "essentials.commands.poll.info" ) )
+                        if ( source.HasPermission( "essentials.command.poll.info" ) )
                         {
                             lock ( Polls )
                             {
@@ -276,7 +276,6 @@ namespace Essentials.Commands
                     {
                         lock ( Polls )
                         {
-                            Console.WriteLine( "dsdsdsd" );
                             if ( !Polls.ContainsKey( thiz.Name ) ) return;
 
                             thiz.Stop();
