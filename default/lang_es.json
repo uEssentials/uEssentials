@@ -161,9 +161,9 @@
   "CREATED_KIT": "You created a new kit named '{0}'.",
   "INVALID_BOOLEAN": "<red>Invalid value '{0}'. Expected 'true' or 'false'",
   "WITHOUT_BED": "You do not have a bed to teleport to.",
-  "CANNOT_TELEPORT_DRIVING": "You cannot teleport while driving or riding in a vehicle.",
+  "CANNOT_TELEPORT_DRIVING": "You cannot teleport while being in a vehicle.",
   "TELEPORT_DELAY": "You will be teleported in {0} seconds.",
   "USE_COOLDOWN": "<yellow>Wait {0} to use it again.",
-  "TELEPORTED_BED": "You were teleported to you bed.",
+  "TELEPORTED_BED": "You were teleported to your bed.",
   "TELEPORT_CANCELLED_MOVED": "<yellow>Teleport cancelled because you has moved."
 }
