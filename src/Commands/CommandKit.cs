@@ -137,8 +137,9 @@ namespace Essentials.Commands
             if ( !Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
 
             var playerCooldowns = Cooldowns[player.CSteamID.m_SteamID];
+            var keys = new List<string> ( playerCooldowns.Keys );
 
-            foreach ( var kitName in playerCooldowns.Keys )
+            foreach ( var kitName in keys )
             {
                 var kit = EssProvider.KitManager.GetByName(kitName);
 
