@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using System.Collections.Generic;
 using Essentials.Api;
 using Essentials.Commands;
@@ -43,14 +44,14 @@ namespace Essentials.Core.Permission
             this._defaultProvider = _defaultProvider;
         }
 
-        public bool HasPermission( IRocketPlayer player, string requestedPermission, bool defaultReturnValue = false )
+        public bool HasPermission( IRocketPlayer player, string perm, bool defaultReturnValue = false )
         {
-            return _defaultProvider.HasPermission( player, requestedPermission, defaultReturnValue );
+            return _defaultProvider.HasPermission( player, perm, defaultReturnValue );
         }
 
-        public bool HasPermission( IRocketPlayer player, string requestedPermission, out uint? cooldownLeft, bool defaultReturnValue = false )
+        public bool HasPermission( IRocketPlayer player, string perm, out uint? cooldownLeft, bool defaultReturnValue = false )
         {
-            var essCommand = EssProvider.CommandManager.GetByName( requestedPermission );
+            var essCommand = EssProvider.CommandManager.GetByName( perm );
 
             if ( essCommand is CommandEssentials )
             {
@@ -60,10 +61,17 @@ namespace Essentials.Core.Permission
 
             if ( essCommand != null )
             {
-                return _defaultProvider.HasPermission( player, essCommand.Permission, out cooldownLeft, defaultReturnValue );
+                perm = essCommand.Permission;
             }
 
-            return _defaultProvider.HasPermission( player, requestedPermission, out cooldownLeft, defaultReturnValue );
+            if ( perm.Contains( "." ) && _defaultProvider.HasPermission( player, 
+                                            perm.Substring( 0, perm.LastIndexOf( ".", StringComparison.Ordinal ) ) + ".*" ) )
+            {
+                cooldownLeft = 0;
+                return true;
+            }
+
+            return _defaultProvider.HasPermission( player, perm, out cooldownLeft, defaultReturnValue );
         }
 
         public List<RocketPermissionsGroup> GetGroups( IRocketPlayer player, bool includeParentGroups )
