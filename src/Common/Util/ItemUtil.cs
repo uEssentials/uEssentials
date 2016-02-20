@@ -88,7 +88,7 @@ namespace Essentials.Common.Util
                     indexes = new[] { 0x0, 0x1, 0xD };
                     break;
 
-                case AttachmentType.TATICAL:
+                case AttachmentType.TACTICAL:
                     indexes = new[] { 0x2, 0x3, 0xE };
                     break;
 
@@ -150,7 +150,7 @@ namespace Essentials.Common.Util
                     AssembleAttach( weaponItem, new[] { 0x0, 0x1, 0xD }, attach );
                     break;
 
-                case AttachmentType.TATICAL:
+                case AttachmentType.TACTICAL:
                     AssembleAttach( weaponItem, new[] { 0x2, 0x3, 0xE }, attach );
                     break;
 
@@ -207,7 +207,7 @@ namespace Essentials.Common.Util
             SIGHT,
             BARREL,
             GRIP,
-            TATICAL,
+            TACTICAL,
             MAGAZINE
         }
     }

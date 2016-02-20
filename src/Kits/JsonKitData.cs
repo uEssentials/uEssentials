@@ -118,7 +118,7 @@ namespace Essentials.Kits
                     var tokSight       = itemObj.GetValue( "Sight", strCmp );
                     var tokGrip        = itemObj.GetValue( "Grip", strCmp );
                     var tokMagazine    = itemObj.GetValue( "Magazine", strCmp );
-                    var tokTatical     = itemObj.GetValue( "Tatical", strCmp );
+                    var tokTactical    = itemObj.GetValue( "Tatical", strCmp ) ?? itemObj.GetValue( "Tactical", strCmp );
 
                     EFiremode? fireMode = null;
                     var ammo            = tokAmmo?.Value<byte>() ?? null;
@@ -152,7 +152,7 @@ namespace Essentials.Kits
            
                     weaponItem.Barrel    = deserializeAttach( tokBarrel );
                     weaponItem.Sight     = deserializeAttach( tokSight );
-                    weaponItem.Tatical   = deserializeAttach( tokTatical );
+                    weaponItem.Tactical   = deserializeAttach( tokTactical );
                     weaponItem.Grip      = deserializeAttach( tokGrip );
                     weaponItem.Magazine  = deserializeAttach( tokMagazine );
 

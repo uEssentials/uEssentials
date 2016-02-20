@@ -542,7 +542,7 @@ namespace Essentials.Commands
                             Barrel = GetWeaponAttachment( item, AttachmentType.BARREL ).OrElse( null ),
                             Sight = GetWeaponAttachment( item, AttachmentType.SIGHT ).OrElse( null ),
                             Grip = GetWeaponAttachment( item, AttachmentType.GRIP ).OrElse( null ),
-                            Tatical = GetWeaponAttachment( item, AttachmentType.TATICAL ).OrElse( null )
+                            Tactical = GetWeaponAttachment( item, AttachmentType.TACTICAL ).OrElse( null )
                         };
 
                         kitItem = kItem;

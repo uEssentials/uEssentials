@@ -67,7 +67,7 @@ namespace Essentials.Kits
         /// 
         /// </summary>
         [JsonProperty]
-        public Attachment Tatical { get; set; }
+        public Attachment Tactical { get; set; }
 
         /// <summary>
         /// 
@@ -103,7 +103,7 @@ namespace Essentials.Kits
                 };
 
                 assembleAttach( new[] { 0x0, 0x1, 0xD }, Sight );
-                assembleAttach( new[] { 0x2, 0x3, 0xE }, Tatical );
+                assembleAttach( new[] { 0x2, 0x3, 0xE }, Tactical );
                 assembleAttach( new[] { 0x4, 0x5, 0xF }, Grip );
                 assembleAttach( new[] { 0x6, 0x7, 0x10 }, Barrel );
                 assembleAttach( new[] { 0x8, 0x9, 0x11 }, Magazine );
@@ -142,7 +142,7 @@ namespace Essentials.Kits
         public override string ToString()
         {
             return $"{base.ToString()}, Barrel: {Barrel}, Sight: {Sight}, " +
-                   $"Grip: {Grip}, Tatical: {Tatical}, Magazine: {Magazine}, " +
+                   $"Grip: {Grip}, Tactical: {Tactical}, Magazine: {Magazine}, " +
                    $"FireMode: {FireMode}, Ammo: {Ammo}";
         }
     }
