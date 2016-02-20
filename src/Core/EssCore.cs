@@ -80,9 +80,9 @@ namespace Essentials.Core
                 - essentials.keepskill.<skill>
         */
         
-        internal const string                         PLUGIN_VERSION              = "1.1.0.1";
+        internal const string                         PLUGIN_VERSION              = "1.1.1.0";
         internal const string                         ROCKET_VERSION              = "4.9.2.0";
-        internal const string                         UNTURNED_VERSION            = "3.14.4.1";
+        internal const string                         UNTURNED_VERSION            = "3.14.5.0";
         
         internal static EssCore                       Instance                    { get; set; }
         
