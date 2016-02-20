@@ -44,19 +44,42 @@ namespace Essentials.Core.Components.Player
             /*
                 Weapon feature (Auto reload)
             */
-            if ( AutoReload && _equip.state.Length >= 10 && _equip.state[0xA] < 5 )
+            if ( AutoReload && _equip.state.Length >= 10 && _equip.state[0xA] == 0 )
             {
-                var id = BitConverter.ToUInt16( 
-                    new[] { _equip.state[0x8], _equip.state[0x9] }, 
-                    0x0 
+                var id = BitConverter.ToUInt16(
+                    new[] { _equip.state[0x8], _equip.state[0x9] },
+                    0
                 );
 
                 var maga = Assets.find( EAssetType.ITEM, id ) as ItemMagazineAsset;
+                var newAmmo = maga?.amount ?? 0;
+                var holdId = _equip.HoldingItemID;
 
-                _equip.state[0xA] = maga?.amount ?? 50;
+                switch ( holdId )
+                {
+                    case 519:
+                        _equip.state[0x8] = 8;
+                        _equip.state[0x9] = 2;
+                        break;
+
+                    case 300:
+                        _equip.state[0x8] = 45;
+                        _equip.state[0x9] = 1;
+                        break;
+
+                    case 353:
+                    case 355:
+                    case 356:
+                    case 357:
+                        _equip.state[0x8] = 91;
+                        _equip.state[0x9] = 1;
+                        break;
+                }
+
+                _equip.state[0xA] = newAmmo;
                 _equip.sendUpdateState();
             }
-            
+
             /*
                 Item feature (Auto repair)
             */
