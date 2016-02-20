@@ -21,6 +21,8 @@
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Unturned;
+using Essentials.Common;
 using SDG.Unturned;
 using Essentials.I18n;
 
@@ -29,7 +31,7 @@ namespace Essentials.Commands
     [CommandInfo(
         Name = "sudo",
         Description = "Make player or console execute an command",
-        Usage = "[player/*console*]"
+        Usage = "[player/*console*/all]"
     )]
     public class CommandSudo : EssCommand
     {
@@ -42,10 +44,18 @@ namespace Essentials.Commands
             else
             {
                 string name;
-                
+
                 if ( args[0].Is( name = "*console*" ) )
                 {
                     CommandWindow.ConsoleInput.onInputText( args.Join( 1 ) );
+                }
+                else if ( args[0].IsOneOf( new [] { "*", "all" } ) )
+                {
+                    UServer.Players.ForEach( p => {
+                        ChatManager.Instance.askChat( p.CSteamId, (byte) EChatMode.GLOBAL, args.Join( 1 ) );
+                    } );
+
+                    name = "Everyone";
                 }
                 else
                 {
