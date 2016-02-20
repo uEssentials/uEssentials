@@ -109,6 +109,11 @@ namespace Essentials.Kits
                     else
                     {
                         kitItem = new KitItem( kitItemId, kitItemDurability, kitItemAmount );
+                        
+                        if ( itemAsset is ItemFuelAsset )
+                        {
+                            kitItem.Metadata[0] = 1;
+                        }
                     }
                     goto add;     
                     

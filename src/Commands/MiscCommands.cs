@@ -699,6 +699,11 @@ namespace Essentials.Commands
             var playersToReceive = new List<UPlayer>();
             var item = new Item( asset.id, true );
 
+            if ( asset is ItemFuelAsset )
+            {
+                item.Metadata[0] = 1;
+            }
+
             if ( allPlayers )
             {
                 UServer.Players.ForEach( playersToReceive.Add );

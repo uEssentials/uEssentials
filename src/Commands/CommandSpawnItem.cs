@@ -78,6 +78,11 @@ namespace Essentials.Commands
 
                 var item = new Item( itemAsset.Value.id, true );
 
+                if ( itemAsset.Value is ItemFuelAsset )
+                {
+                    item.Metadata[0] = 1;
+                }
+
                 for ( var i = 0; i < amount; i++ ) 
                 {
                     ItemManager.dropItem( item, pos, true, true, true );
