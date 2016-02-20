@@ -114,23 +114,31 @@ namespace Essentials.I18n
                 EssProvider.Logger.LogError( $"Invalid configuration ({translationPath})" );
                 EssProvider.Logger.LogError( ex.Message );
 
-                // ReSharper disable once AssignNullToNotNullAttribute
                 json = JObject.Load( new JsonTextReader( new StreamReader( 
                     Assembly.GetExecutingAssembly().GetManifestResourceStream( $"Essentials.default.lang_{locale}.json" ), 
                     Encoding.UTF8, true ) 
                 ) );
             }
-
-            //TODO
-            /*try
+            
+            try
             {
                 LoadDefault( locale, tmpTranslationPath );
                 var tmpJson = JObject.Parse( File.ReadAllText( tmpTranslationPath ) );
+
+                if ( json.Count != tmpJson.Count )
+                {
+                    foreach ( var pair in json )
+                    {
+                        tmpJson[pair.Key] = pair.Value;
+                    }
+
+                    File.WriteAllText( translationPath, tmpJson.ToString() );
+                }
             }
             finally
             {
                 File.Delete( tmpTranslationPath );
-            }*/
+            }
 
             Func<string, EssLang> loadFromJson = key => {
                 return new EssLang( json[key]?.ToString() ?? string.Format( KEY_NOT_FOUND_MESSAGE, key ) );
