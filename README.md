@@ -34,17 +34,15 @@ List of commands:
 
 | Command | Description | Aliases | Arguments
 | ------- | ------- | ------- | ------- |
-iteminfo|See informations about an item.|ii|\<item_id\>
-jump|Jump to position that you are looking.|None|\<max_distance\>
-spawnvehicle|Spawn an vehicle at given player/position|spawnveh|\[id\] \[player\] or \[x\] \[y\] \[z\]
-boom|Create an explosion an given position/player|explode|\[player\|x, y, z\]
+jump|Teleport to a position that you are looking towards|None|\<max_distance\>
+spawnvehicle|Spawn a vehicle on player's/given position|spawnveh|\[id\] \[player\] or \[x\] \[y\] \[z\]
+boom|Create an explosion on player's/given position|explode|\[player\|x, y, z\]
 tp|Teleportation command|None|\[player\|place\|x y z\] or \[player\] \[player\|place\|x y z\]
 respawnzombies|Respawn all zombies|None|None
 respawnanimals|Respawn all animals|None|None
-reply|Reply an message|r|\[message\]
-clearinventory|Clear your/player inventory|ci|\<player\>
-spy|Toggle spy mode|None|None
-vote|Vote in current poll|None|\[yes/no\] \[poll_name\]
+reply|Reply to the most recent private message|r|\[message\]
+clearinventory|Clear your/player's inventory|ci|\<player\>
+vote|Vote in an pool|None|\[yes/no\] \[poll_name\]
 repairvehicle|Repair current/all vehicle|repairveh|\<all\>
 refuelvehicle|Refuel current/all vehicles|refuel|\<all\>
 experience|Give experience to you/player|exp|\[give\|take\] \[amount\] \<target\>
@@ -71,15 +69,19 @@ tpall|Teleport all players to an player/position|None|\[player/position\]
 online|View the number of online players|None|None
 kickall|Kick all players|None|\<reason\>
 shutdown|Shutdown server|s|\<reason\>
-unfreeze|Unfreeze an player/all|None|\[player/*\]
-spawnitem|Spawn an item at given position|dropitem|\[id\] \<amount\> \<x\> \<y\> \<z\>
-autoreload|Auto reload weapon when ammo is less than 5|None|\[on\|off\]
-autorepair|Auto repair weapon when quality is less than 90|None|\[on\|off\]
+unfreeze|Unfreeze a player/everyone|None|\[player/*\]
+spawnitem|Spawn an item at given position|dropitem|\[item\] \<amount\> \<x\> \<y\> \<z\>
 ascend|Ascend X "meters".|asc|\[amount\]
 descend|Descend X "meters".|desc|\[amount\]
 clear|Clear things|None|-i = items, -v = vehicles
 item|None|i|\[item\] \<amount\> or \[player\|all\] \[item\] \[amount\]
-suicide|Kills you|none|none
+iteminfo|See information on an item.|ii|\<item_id\>
+itemfeatures|Item features|if|\[autoreload \| autorepair\] \[on\|off\]
+vehiclefeatures|Vehicle features|vehfeatures, vf|\[autorefuel \| autorepair\] \[on\|off\]
+spy|Toggle spy mode|None|None
+suicide|Kill yourself|None|None
+home|Teleport to your bed.|h|None
+createkit|Create a kit.|ckit|\[name\] \[cooldown\] \[resetCooldownWhenDie\[true or false\]\]
 
 If you have any questions or suggestions, then feel free to send them to us [here](../../issues/).
 

@@ -468,7 +468,7 @@ namespace Essentials.Commands
         }
 
         [CommandInfo(
-            Name = "createkick",
+            Name = "createkit",
             Aliases = new [] {"ckit"},
             Description = "",
             Usage = "[name] [cooldown] [resetCooldownWhenDie[true or false]]",

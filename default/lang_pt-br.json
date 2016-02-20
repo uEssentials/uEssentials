@@ -159,10 +159,10 @@
 	"AUTO_REFUEL_DISABLED": "Auto-Refuel desativado!",
 	"CREATED_KIT": "Você criou um novo kit chamado '{0}'.",
 	"INVALID_BOOLEAN": "<red>Valor inválido: '{0}'. Esperado 'true' ou 'false'",
-	"WITHOUT_BED": "You do not have a bed to teleport to.",
-	"CANNOT_TELEPORT_DRIVING": "You cannot teleport while driving or riding in a vehicle.",
-	"TELEPORT_DELAY": "You will be teleported in {0} seconds.",
-	"USE_COOLDOWN": "<yellow>Wait {0} to use it again.",
-	"TELEPORTED_BED": "You were teleported to you bed.",
-	"TELEPORT_CANCELLED_MOVED": "<yellow>Teleport cancelled because you has moved."
+	"WITHOUT_BED": "Você não tem uma cama.",
+	"CANNOT_TELEPORT_DRIVING": "Você não pode se teleportar enquanto estiver dentro de um veículo.",
+	"TELEPORT_DELAY": "Você será teleportado em {0}.",
+	"USE_COOLDOWN": "<yellow>Espere {0} para usar isso novamente.",
+	"TELEPORTED_BED": "Você foi teleportado para sua cama.",
+	"TELEPORT_CANCELLED_MOVED": "<yellow>O teleporte foi cancelado pois você se moveu."
 }
