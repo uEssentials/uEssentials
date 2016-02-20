@@ -32,7 +32,6 @@ using Essentials.Core.Command;
 using Essentials.Core.Components.Player;
 using Essentials.I18n;
 using Essentials.Kits;
-using Rocket.Unturned.Items;
 using SDG.Unturned;
 using UnityEngine;
 
@@ -493,15 +492,14 @@ namespace Essentials.Commands
                 EssLang.INVALID_BOOLEAN.SendTo( src, args[1] );
                 return;
             }
-            else if ( args[1].ToInt < 0 )
+
+            if ( args[1].ToInt < 0 )
             {
                 EssLang.MUST_POSITIVE.SendTo( src );
                 return;
             }
-            else
-            {
-                cooldown = args[1].ToUint;
-            }
+
+            cooldown = args[1].ToUint;
 
             if ( !args[2].IsBool )
             {
