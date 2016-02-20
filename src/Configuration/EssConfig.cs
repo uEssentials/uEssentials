@@ -34,6 +34,7 @@ namespace Essentials.Configuration
         public string           Locale;
         
         public string           PrivateMessageFormat;
+        public string           PrivateMessageFormat2;
         
         public bool             UnfreezeOnDeath;
         public bool             UnfreezeOnQuit;
@@ -64,6 +65,7 @@ namespace Essentials.Configuration
             Locale                      = "en";
 
             PrivateMessageFormat        = "(From {0}): {1}";
+            PrivateMessageFormat2        = "(To {0}): {1}";
 
             UnfreezeOnDeath             = true;
             UnfreezeOnQuit              = true;

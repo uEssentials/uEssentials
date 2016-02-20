@@ -63,7 +63,14 @@ namespace Essentials.Commands
                         parameters.Join( 1 )
                     );
 
+                    var message2 = string.Format(
+                        EssProvider.Config.PrivateMessageFormat2,
+                        target.DisplayName,
+                        parameters.Join( 1 )
+                    );
+
                     target.SendMessage( message );
+                    source.SendMessage( message2 );
 
                     Spies.ForEach( p =>
                     {
