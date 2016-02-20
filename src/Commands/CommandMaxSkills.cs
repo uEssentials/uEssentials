@@ -46,37 +46,56 @@ namespace Essentials.Commands
 
             pSkills.askSkills( player.CSteamId );
             EssLang.MAX_SKILLS.SendTo(player);
-       
         };
 
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override void OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.IsEmpty )
+            if ( args.IsEmpty )
             {
-                if ( source.IsConsole )
-                    ShowUsage( source );
+                if ( src.IsConsole )
+                {
+                    ShowUsage( src );
+                }
                 else
-                    GiveMaxSkills( source.ToPlayer(), false );
+                {
+                    GiveMaxSkills( src.ToPlayer(), false );
+                }
             }
             else
             {
-                if ( !parameters[0].IsBool || parameters.Length < 2 && source.IsConsole )
+                if ( args.Length < 2 && src.IsConsole )
                 {
-                    ShowUsage( source );
+                    ShowUsage( src );
                     return;
                 }
 
-                var overpower = parameters[0].ToBool;
-                var targetPlayer = parameters.Length == 2 ? parameters[1].ToPlayer : source.ToPlayer();
+                if ( !args[0].IsBool )
+                {
+                    EssLang.INVALID_BOOLEAN.SendTo( src, args[0] );
+                    return;
+                }
+
+                if ( args.Length == 2 && !src.HasPermission( Permission + ".other" ) )
+                {
+                    EssLang.COMMAND_NO_PERMISSION.SendTo( src );
+                    return;
+                }
+
+                var overpower = args[0].ToBool;
+                var targetPlayer = args.Length == 2 ? args[1].ToPlayer : src.ToPlayer();
 
                 if ( targetPlayer == null )
-                    EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[1] );
+                {
+                    EssLang.PLAYER_NOT_FOUND.SendTo( src, args[1] );
+                }
                 else
                 {
                     GiveMaxSkills( targetPlayer, overpower );
 
-                    if ( source.IsConsole || source.ToPlayer() != targetPlayer )
-                        EssLang.MAX_SKILLS_TARGET.SendTo( source, targetPlayer.DisplayName );
+                    if ( src.IsConsole || src.ToPlayer() != targetPlayer )
+                    {
+                        EssLang.MAX_SKILLS_TARGET.SendTo( src, targetPlayer.DisplayName );
+                    }
                 }
             }
         }

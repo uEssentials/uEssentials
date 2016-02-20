@@ -33,49 +33,53 @@ namespace Essentials.Commands
 {
     [CommandInfo(
         Name = "repairvehicle",
-        Aliases = new[] {"repairveh"},
+        Aliases = new[] {"repairveh", "repv"},
         Description = "Repair current/all vehicle",
         Usage = "<all>"
-        )]
+    )]
     public class CommandRepairVehicle : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override void OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.IsEmpty )
+            if ( args.IsEmpty )
             {
-                if ( source.IsConsole )
+                if ( src.IsConsole )
                 {
-                    ShowUsage( source );
+                    ShowUsage( src );
                     return;
                 }
 
-                var currentVeh = source.ToPlayer().CurrentVehicle;
+                var currentVeh = src.ToPlayer().CurrentVehicle;
 
                 if ( currentVeh != null )
                 {
                     VehicleManager.sendVehicleHealth( currentVeh, currentVeh.asset.health );
 
-                    EssLang.VEHICLE_REPAIRED.SendTo( source );
+                    EssLang.VEHICLE_REPAIRED.SendTo( src );
                 }
                 else
                 {
-                    EssLang.NOT_IN_VEHICLE.SendTo( source );
+                    EssLang.NOT_IN_VEHICLE.SendTo( src );
                 }
             }
-            else if ( parameters[0].Is( "all" ) )
+            else if ( args[0].Is( "all" ) )
             {
-                var allVehicles = UWorld.Vehicles;
-
-                lock ( allVehicles )
+                if ( !src.HasPermission( Permission + ".all" ) )
                 {
-                    allVehicles
+                    EssLang.COMMAND_NO_PERMISSION.SendTo( src );
+                    return;
+                }
+
+                lock ( UWorld.Vehicles )
+                {
+                    UWorld.Vehicles
                         .Where( veh => !veh.isExploded && !veh.isUnderwater )
                         .ToList()
                         .ForEach( vehicle => {
                             VehicleManager.sendVehicleHealth( vehicle, vehicle.asset.health );
                         } );
 
-                    EssLang.VEHICLE_REPAIRED_ALL.SendTo( source );
+                    EssLang.VEHICLE_REPAIRED_ALL.SendTo( src );
                 }
             }
         }

@@ -38,44 +38,47 @@ namespace Essentials.Commands
      )]
     public class CommandRefuelVehicle : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override void OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.IsEmpty )
+            if ( args.IsEmpty )
             {
-                if ( source.IsConsole )
+                if ( src.IsConsole )
                 {
-                    ShowUsage( source );
+                    ShowUsage( src );
                     return;
                 }
 
-                var currentVeh = source.ToPlayer().CurrentVehicle;
+                var currentVeh = src.ToPlayer().CurrentVehicle;
 
                 if ( currentVeh != null )
                 {
                     VehicleManager.sendVehicleFuel( currentVeh, currentVeh.asset.fuel );
 
-                    EssLang.VEHICLE_REFUELED.SendTo( source );
+                    EssLang.VEHICLE_REFUELED.SendTo( src );
                 }
                 else
                 {
-                    EssLang.NOT_IN_VEHICLE.SendTo( source );
+                    EssLang.NOT_IN_VEHICLE.SendTo( src );
                 }
             }
-            else if ( parameters[0].Is( "all" ) )
+            else if ( args[0].Is( "all" ) )
             {
-                var allVehicles = UWorld.Vehicles;
-
-                lock ( allVehicles )
+                if ( !src.HasPermission( Permission + ".all" ) )
                 {
-                    allVehicles
-                    .Where( veh => !veh.isExploded && !veh.isUnderwater)
-                    .ToList()
-                    .ForEach( vehicle =>
-                    {
-                        VehicleManager.sendVehicleFuel( vehicle, vehicle.asset.fuel );
-                    });
+                    EssLang.COMMAND_NO_PERMISSION.SendTo( src );
+                    return;
+                }
 
-                    EssLang.VEHICLE_REFUELED_ALL.SendTo( source );
+                lock ( UWorld.Vehicles )
+                {
+                    UWorld.Vehicles
+                        .Where( veh => !veh.isExploded && !veh.isUnderwater)
+                        .ToList()
+                        .ForEach( vehicle => {
+                            VehicleManager.sendVehicleFuel( vehicle, vehicle.asset.fuel );
+                        });
+
+                    EssLang.VEHICLE_REFUELED_ALL.SendTo( src );
                 }
             }
         }

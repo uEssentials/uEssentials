@@ -30,26 +30,33 @@ namespace Essentials.Commands
     [CommandInfo(
         Name = "clearinventory",
         Description = "Clear your/player inventory",
-        Aliases = new[] {"ci"},
+        Aliases = new[] { "ci" },
         Usage = "<player>"
     )]
     public class CommandClearInventory : EssCommand
     {
         // https://github.com/Zamirathe/ZaupClearInventoryLib
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override void OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( source.IsConsole && parameters.IsEmpty )
+            if ( args.IsEmpty )
             {
-                ShowUsage( source );
-
+                if ( src.IsConsole )
+                {
+                    ShowUsage( src );
+                    return;
+                }
+            }
+            else if ( !src.HasPermission( Permission + ".other" ) )
+            {
+                EssLang.COMMAND_NO_PERMISSION.SendTo( src );
                 return;
             }
 
-            var player = parameters.Length > 0 ? parameters[0].ToPlayer : source.ToPlayer();
+            var player = args.Length > 0 ? args[0].ToPlayer : src.ToPlayer();
 
             if ( player == null )
             {
-                EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[0] );
+                EssLang.PLAYER_NOT_FOUND.SendTo( src, args[0] );
             }
             else
             {
