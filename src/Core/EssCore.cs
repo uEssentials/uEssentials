@@ -59,25 +59,9 @@ namespace Essentials.Core
             TODO:
                 - AFK KICK
                 - Improve event system to avoid duplicate events.
-            
-            Aliases
-                - /tptome -> /tp $1 sender_name
-                - /expme 20 -> /exp give $1 sender_name
 
-            PERMISSIONS:
-                - essentials.kit.<kit_name>
-                - essentials.kit.<kit_name>.other // allow to give kit to another player
-                - essentials.kits.bypasscooldown
-                - essentials.warp.<warp_name>
-                - essentials.warps.bypasscooldown
-                - essentials.back
-                - essentials.spy
-                - essentials.antispam.bypass
-                - essentials.command.poll.start
-                - essentials.command.poll.stop
-                - essentials.command.poll.list
-                - essentials.command.poll.info
-                - essentials.keepskill.<skill>
+
+
         */
         
         internal const string                         PLUGIN_VERSION              = "1.1.1.0";
