@@ -26,6 +26,7 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common.Reflect;
+using Essentials.Common.Util;
 using SDG.Unturned;
 using Essentials.I18n;
 
@@ -46,8 +47,8 @@ namespace Essentials.Commands
             var items = field.Value;
             byte index = 0;
 
-            items.ForEach( itemJar =>
-            {
+            items.ForEach( itemJar => {
+
                 item.updateQuality( index, 100 );
 
                 player.UnturnedPlayer.inventory.channel.send("tellUpdateQuality", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[]
@@ -56,6 +57,13 @@ namespace Essentials.Commands
     			 	player.UnturnedPlayer.inventory.getIndex(item.page, itemJar.PositionX, itemJar.PositionY),
     				100
 				});
+
+                var optAttach = ItemUtil.GetWeaponAttachment( itemJar.item, ItemUtil.AttachmentType.BARREL );
+
+                optAttach.IfPresent( attach => {
+                    attach.Durability = 100;
+                    ItemUtil.SetWeaponAttachment( itemJar.item, ItemUtil.AttachmentType.BARREL, attach );
+                });
 
                 index++;
             });
@@ -78,6 +86,12 @@ namespace Essentials.Commands
             {
                 Repair( player, player.Inventory.Items[0] );
                 Repair( player, player.Inventory.Items[1] );
+
+                if ( player.Equipment.HoldingItemID != 0 )
+                {
+                    player.Equipment.sendUpdateState();
+                }
+
                 EssLang.HAND_REPAIRED.SendTo( source );
             }
         }
