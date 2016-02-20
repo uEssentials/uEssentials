@@ -20,6 +20,7 @@
 */
 
 using System;
+using Essentials.Common.Util;
 using SDG.Unturned;
 
 namespace Essentials.Core.Components.Player
@@ -59,10 +60,19 @@ namespace Essentials.Core.Components.Player
             /*
                 Item feature (Auto repair)
             */
-            if ( AutoRepair && _equip.quality < 90 )
+            if ( AutoRepair )
             {
-                _equip.quality = 100;
-                _equip.sendUpdateQuality();
+                if ( _equip.quality < 90 )
+                {
+                    _equip.quality = 100;
+                    _equip.sendUpdateQuality();
+                }
+
+                if ( _equip.state[0x10] < 10 )
+                {
+                    _equip.state[0x10] = 100;
+                    _equip.sendUpdateState();
+                }
             }
         }
     }
