@@ -34,10 +34,6 @@ using Steamworks;
 using UnityEngine;
 using EventType = Essentials.Api.Event.EventType;
 
-using static Essentials.Commands.MiscCommands;
-using static Essentials.Commands.CommandBack;
-using static Essentials.Commands.CommandTell;
-
 namespace Essentials.Event.Handling
 {
      /* typedef */ internal class SkillCache : Dictionary<string, Dictionary<USkill, byte>> {}
@@ -52,8 +48,8 @@ namespace Essentials.Event.Handling
 
 
         [SubscribeEvent( EventType.PLAYER_CHATTED )]
-        internal void OnPlayerChatted( UnturnedPlayer player, ref Color color, string message,
-                                       EChatMode mode, ref bool cancel )
+        void OnPlayerChatted( UnturnedPlayer player, ref Color color, string message,
+                              EChatMode mode, ref bool cancel )
         {
             if ( message.StartsWith( "/" ) /*&& EssProvider.Config.EnableUnknownMessage*/ )
             {
@@ -94,8 +90,8 @@ namespace Essentials.Event.Handling
         }
 
         [SubscribeEvent( EventType.PLAYER_DEATH )]
-        internal void OnPlayerDeath( UnturnedPlayer player, EDeathCause cause,
-                                     ELimb limb, CSteamID murderer )
+        void OnPlayerDeath( UnturnedPlayer player, EDeathCause cause,
+                            ELimb limb, CSteamID murderer )
         {
             var uplayer = UPlayer.From( player );
             var displayName = uplayer.DisplayName;
@@ -144,7 +140,7 @@ namespace Essentials.Event.Handling
         }
 
         [SubscribeEvent( EventType.PLAYER_REVIVE )]
-        internal void OnPlayerRespawn( UnturnedPlayer player, Vector3 vect, byte angle )
+        void OnPlayerRespawn( UnturnedPlayer player, Vector3 vect, byte angle )
         {
             if ( !CachedSkills.ContainsKey( player.CharacterName ) ) return;
 
@@ -157,14 +153,26 @@ namespace Essentials.Event.Handling
         }
 
         [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
-        internal void OnPlayerDisconnect( UnturnedPlayer player )
+        void OnPlayerDisconnect( UnturnedPlayer player )
         {
             var displayName = player.CharacterName;
 
-            Spies           .Remove( displayName );
+            Commands.MiscCommands.Spies           .Remove( displayName );
+            Commands.CommandBack.BackDict        .Remove( displayName );
+            Commands.CommandTell.Conversations   .Remove( displayName );
             CachedSkills    .Remove( displayName );
-            BackDict        .Remove( displayName );
-            Conversations   .Remove( displayName );
+        }
+
+        [SubscribeEvent( EventType.PLAYER_CONNECTED )]
+        void JoinMessageCallback( UnturnedPlayer player )
+        {
+            EssLang.PLAYER_JOINED.Broadcast( player.CharacterName );
+        }
+
+        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
+        void LeaveMessageCallback( UnturnedPlayer player )
+        {
+            EssLang.PLAYER_EXITED.Broadcast( player.CharacterName );
         }
     }
 }
