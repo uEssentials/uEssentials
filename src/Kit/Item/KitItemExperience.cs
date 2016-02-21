@@ -20,11 +20,13 @@
 */
 
 using Essentials.Api.Unturned;
+using Newtonsoft.Json;
 
 namespace Essentials.Kit.Item
 {
     public class KitItemExperience : AbstractKitItem
     {
+        [JsonProperty("Xp")]
         public uint Amount { get; set; }
 
         public KitItemExperience( uint amount )

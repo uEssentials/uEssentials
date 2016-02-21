@@ -20,12 +20,14 @@
 */
 
 using Essentials.Api.Unturned;
+using Newtonsoft.Json;
 using SDG.Unturned;
 
 namespace Essentials.Kit.Item
 {
     public class KitItemVehicle : AbstractKitItem
     {
+        [JsonProperty("Vehicle")]
         public ushort Id { get; set; }
 
         public KitItemVehicle( ushort id )
