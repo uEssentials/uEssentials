@@ -43,7 +43,7 @@ namespace Essentials.Core.Components.Player
             /*
                 Weapon feature (Auto reload)
             */
-            if ( AutoReload && _equip.state.Length >= 10 && _equip.state[0xA] == 0 )
+            if ( AutoReload && _equip.state.Length >= 18 && _equip.state[0xA] == 0 )
             {
                 var id = BitConverter.ToUInt16(
                     new[] { _equip.state[0x8], _equip.state[0x9] },
