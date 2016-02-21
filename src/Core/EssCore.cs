@@ -36,8 +36,6 @@ using Essentials.Configuration;
 using Essentials.Core.Command;
 using Essentials.Core.Event;
 using Essentials.I18n;
-using Essentials.Kits;
-using Essentials.Warps;
 using Rocket.API;
 using Rocket.Core;
 using Rocket.Core.Plugins;
