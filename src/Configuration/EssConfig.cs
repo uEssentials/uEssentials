@@ -19,10 +19,13 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Essentials.Api;
 using Essentials.Api.Configuration;
+using Essentials.Common;
 using Essentials.Misc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -105,10 +108,31 @@ namespace Essentials.Configuration
 
             try
             {
-                JObject.Parse( File.ReadAllText( filePath ) );
+                var json = JObject.Parse( File.ReadAllText( filePath ) );
                 base.Load( filePath );
+
+                var configFiels = GetType().GetFields();
+                var needUpdate = configFiels.Length != json.Count;
+                var nonNullFields = new Dictionary<string, object>();
+
+                if ( needUpdate )
+                {
+                    configFiels.Where( f => json[f.Name] != null ).ForEach( f =>
+                    {
+                        nonNullFields.Add( f.Name, f.GetValue( this ) );
+                    } );
+
+                    LoadDefaults();
+
+                    nonNullFields.ForEach( pair =>
+                    {
+                        GetType().GetField( pair.Key ).SetValue( this, pair.Value );
+                    } );
+
+                    Save( filePath );
+                }
             }
-            catch (JsonReaderException ex)
+            catch (Exception ex)
             {
                 EssProvider.Logger.LogError( $"Invalid configuration ({filePath})" );
                 EssProvider.Logger.LogError( ex.Message );

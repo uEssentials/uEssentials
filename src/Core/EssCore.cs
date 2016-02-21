@@ -179,39 +179,6 @@ namespace Essentials.Core
             Updater = new GithubUpdater();
             HookManager = new HookManager();
 
-            var configFiels = typeof (EssConfig).GetFields();
-            var hasNulls = configFiels.Any( f => f.GetValue( Config ) == null );//TODO: does nt work if is primitive tyoe
-            var nonNullValues = new Dictionary<string, object>();
-
-            /*
-                If has any null value it will update the config
-            */
-            if ( hasNulls )
-            {
-                /*
-                    Save nonnull values
-                */
-                configFiels.Where( f => f.GetValue( Config ) != null ).ForEach( f =>
-                {
-                    nonNullValues.Add( f.Name, f.GetValue( Config ) );
-                } );
-
-                /*
-                    Reload defaults
-                */
-                Config.LoadDefaults();
-
-                /*
-                    Restore nonnull values
-                */
-                nonNullValues.ForEach( pair =>
-                {
-                    typeof(EssConfig).GetField( pair.Key ).SetValue( Config, pair.Value );
-                } );
-
-                Config.Save( configPath );
-            }
-
             EssLang.Load();
 
             Logger.Log( "Loaded uEssentials", ConsoleColor.Green );
