@@ -39,7 +39,7 @@ namespace Essentials.Core.Event
 
         public void RegisterAll( Type type )
         {
-            foreach ( var listenerMethod in type.GetMethods( (BindingFlags) 60 ) )
+            foreach ( var listenerMethod in type.GetMethods( (BindingFlags) 0x3C ) )
             {
                 var eventHandlerAttrs = listenerMethod.GetCustomAttributes( typeof (SubscribeEvent), false );
                 if ( eventHandlerAttrs.Length < 1 ) continue;
@@ -120,26 +120,63 @@ namespace Essentials.Core.Event
             {
                 var unregisteredDelegates = new List<Delegate>();
                 var unregisteredHolders = new List<EventHolder>();
+                var handlerMapAsList = HandlerMap.ToList();
 
-                for ( var j = 0; j < HandlerMap.ToList().Count; j++ )
+                for ( var j = 0; j < handlerMapAsList.Count; j++ )
                 {
-                    var handler = HandlerMap.ToList()[j];
+                    var handler = handlerMapAsList[j];
 
                     foreach ( var delegateMethod in handler.Value )
                     {
-                        if ( delegateMethod.Method.ReflectedType != type) continue;
+                        if ( delegateMethod.Method.ReflectedType != type ) continue;
 
                         handler.Key.EventInfo.RemoveEventHandler( handler.Key.Target, delegateMethod );
                         unregisteredDelegates.Add( delegateMethod );
                     }
 
-                    handler.Value.RemoveAll( @delegate =>
-                        unregisteredDelegates.Contains( @delegate ) );
+                    handler.Value.RemoveAll( @delegate => unregisteredDelegates.Contains( @delegate ) );
 
                     if ( handler.Value.Count == 0 ) unregisteredHolders.Add( handler.Key );
                 }
 
-                // Remove empty EventHolders
+                foreach ( var holder in unregisteredHolders )
+                {
+                    HandlerMap.Remove( holder );
+                }
+            }
+        }
+
+        public void Unregister<T>( string methodName )
+        {
+            Unregister( typeof(T), methodName );
+        }
+
+        public void Unregister( Type type, string methodName )
+        {
+            lock ( HandlerMap )
+            {
+                var unregisteredDelegates = new List<Delegate>();
+                var unregisteredHolders = new List<EventHolder>();
+                var handlerMapAsList = HandlerMap.ToList();
+
+                for ( var j = 0; j < handlerMapAsList.Count; j++ )
+                {
+                    var handler = handlerMapAsList[j];
+
+                    foreach ( var delegateMethod in handler.Value )
+                    {
+                        if ( delegateMethod.Method.ReflectedType != type ||
+                            !delegateMethod.Method.Name.EqualsIgnoreCase( methodName ) ) continue;
+
+                        handler.Key.EventInfo.RemoveEventHandler( handler.Key.Target, delegateMethod );
+                        unregisteredDelegates.Add( delegateMethod );
+                    }
+
+                    handler.Value.RemoveAll( @delegate => unregisteredDelegates.Contains( @delegate ) );
+
+                    if ( handler.Value.Count == 0 ) unregisteredHolders.Add( handler.Key );
+                }
+
                 foreach ( var holder in unregisteredHolders )
                 {
                     HandlerMap.Remove( holder );
@@ -168,10 +205,6 @@ namespace Essentials.Core.Event
             }
         }
 
-        /// <summary>
-        /// Simple class that store the Instance of EventInfo of an event, 
-        /// and the instance or type of EventInfo "owner"
-        /// </summary>
         public sealed class EventHolder
         {
             public object Target;

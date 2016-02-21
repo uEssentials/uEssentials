@@ -28,15 +28,19 @@ namespace Essentials.Api.Event
     {
         void RegisterAll( Type type );
 
-        void RegisterAll<TEventType>();
+        void RegisterAll<T>();
 
         void RegisterAll( Assembly asm );
 
         void RegisterAll( string targetNamespace );
 
+        void Unregister( Type type, string methodName );
+
+        void Unregister<T>( string methodName );
+
         void UnregisterAll( Type type );
 
-        void UnregisterAll<TEventType>();
+        void UnregisterAll<T>();
 
         void UnregisterAll( Assembly asm );
 
