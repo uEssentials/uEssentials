@@ -22,13 +22,13 @@
 using Essentials.Api.Unturned;
 using SDG.Unturned;
 
-namespace Essentials.Kit
+namespace Essentials.Kit.Item
 {
     public class KitItemMagazine : KitItem
     {
         public byte Ammo { get; set; }
 
-        public override Item UnturnedItem => new Item( Id, Ammo, Durability );
+        public override SDG.Unturned.Item UnturnedItem => new SDG.Unturned.Item( Id, Ammo, Durability );
 
         public KitItemMagazine( ushort id, byte durability, byte amount, byte ammo ) : base( id, durability, amount )
         {

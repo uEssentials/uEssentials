@@ -24,6 +24,7 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.I18n;
+using Essentials.Kit.Item;
 using Newtonsoft.Json;
 
 namespace Essentials.Kit

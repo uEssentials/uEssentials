@@ -25,7 +25,7 @@ using Newtonsoft.Json.Converters;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
 
-namespace Essentials.Kit
+namespace Essentials.Kit.Item
 {
     /// <summary>
     /// Author: leonardosc
@@ -80,7 +80,7 @@ namespace Essentials.Kit
         /// </summary>
         /// <returns> Instance of SDG.Unturned.Item of this item </returns>>
         [JsonIgnore]
-        public override Item UnturnedItem
+        public override SDG.Unturned.Item UnturnedItem
         {
             get
             {

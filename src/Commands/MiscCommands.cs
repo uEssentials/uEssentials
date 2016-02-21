@@ -31,7 +31,7 @@ using static Essentials.Common.Util.ItemUtil;
 using Essentials.Core.Command;
 using Essentials.Core.Components.Player;
 using Essentials.I18n;
-using Essentials.Kit;
+using Essentials.Kit.Item;
 using SDG.Unturned;
 using UnityEngine;
 

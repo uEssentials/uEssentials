@@ -25,6 +25,7 @@ using System.IO;
 using Essentials.Api;
 using Essentials.Common.Util;
 using Essentials.Core.Storage;
+using Essentials.Kit.Item;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rocket.Unturned.Items;

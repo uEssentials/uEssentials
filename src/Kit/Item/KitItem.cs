@@ -28,7 +28,7 @@ using SDG.Unturned;
 
 // ReSharper disable InconsistentNaming
 
-namespace Essentials.Kit
+namespace Essentials.Kit.Item
 {
     /// <summary>
     /// Author: leonardosc
@@ -65,7 +65,7 @@ namespace Essentials.Kit
         /// </summary>
         /// <returns> Instance of SDG.Unturned.Item of this item </returns>>
         [JsonIgnore]
-        public virtual Item UnturnedItem => new Item( Id, Amount, Durability, Metadata );
+        public virtual SDG.Unturned.Item UnturnedItem => new SDG.Unturned.Item( Id, Amount, Durability, Metadata );
 
         public KitItem( ushort id, byte durability, byte amount )
         {
