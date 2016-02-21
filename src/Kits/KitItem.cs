@@ -55,9 +55,9 @@ namespace Essentials.Kits
         public byte Amount { get; set; }
 
         /// <summary>
-        /// Amount of item
+        /// Metadata of item
         /// </summary>
-        [JsonProperty] 
+        [JsonIgnore] 
         public byte[] Metadata { get; set; }
 
         /// <summary>

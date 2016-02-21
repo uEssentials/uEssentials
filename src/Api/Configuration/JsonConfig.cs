@@ -45,6 +45,7 @@ namespace Essentials.Api.Configuration
 
         public virtual void Save( string filePath )
         {
+            File.WriteAllText( filePath, "" );
             JsonUtil.Serialize( filePath, this );
         }
 
