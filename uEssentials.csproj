@@ -174,12 +174,11 @@
     <Compile Include="src\Api\EssProvider.cs" />
     <Compile Include="src\Core\Permission\EssentialsPermissionProvider.cs" />
     <Compile Include="src\Event\Handling\EssentialsEventHandler.cs" />
-    <Compile Include="src\Event\Handling\JoinLeaveEventHandler.cs" />
-    <Compile Include="src\Kits\KitItemMagazine.cs" />
-    <Compile Include="src\Kits\KitItemWeapon.cs" />
+    <Compile Include="src\Kit\KitItemMagazine.cs" />
+    <Compile Include="src\Kit\KitItemWeapon.cs" />
     <Compile Include="src\Core\Storage\IData.cs" />
-    <Compile Include="src\Kits\JsonKitData.cs" />
-    <Compile Include="src\Kits\KitManager.cs" />
+    <Compile Include="src\Kit\JsonKitData.cs" />
+    <Compile Include="src\Kit\KitManager.cs" />
     <Compile Include="src\Misc\AutoAnnouncer.cs" />
     <Compile Include="src\I18n\EssLang.cs" />
     <Compile Include="src\Api\Logging\EssLogger.cs" />
@@ -207,6 +206,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="default\lang_es.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Kit\Item\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
