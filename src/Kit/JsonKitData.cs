@@ -80,7 +80,28 @@ namespace Essentials.Kit
 
                 foreach ( var itemObj in kitObj.GetValue( "items", strCmp ).Children<JObject>() )
                 {
-                    KitItem kitItem;
+                    AbstractKitItem kitItem;
+
+                    if ( itemObj.GetValue( "xp", strCmp ) != null )
+                    {
+                        kitItem = new KitItemExperience( itemObj.GetValue( "xp", strCmp ).Value<uint>() );
+                        goto add;
+                    }
+
+                    if ( itemObj.GetValue( "vehicle", strCmp ) != null)
+                    {
+                        var vehicleId = itemObj.GetValue( "vehicle", strCmp ).Value<ushort>();
+
+                        if ( Assets.find( EAssetType.VEHICLE, vehicleId ) == null )
+                        {
+                            EssProvider.Logger.LogWarning( $"Invalid vehicle id. Kit: {kit.Name} item Index: {itemIndex++}");
+                            continue;
+                        }
+
+                        kitItem = new KitItemVehicle( vehicleId );
+                        goto add;
+                    }
+
                     var tokKitItemId         = itemObj.GetValue( "id",   strCmp );
                     var tokKitItemDurability = itemObj.GetValue( "Durability", strCmp );
                     var tokKitItemAmount     = itemObj.GetValue( "Amount", strCmp );
@@ -91,8 +112,7 @@ namespace Essentials.Kit
 
                     if ( tokKitItemId == null || itemAsset == null )
                     {
-                        Console.WriteLine( $"Invalid item id. Kit: {kit.Name}" +
-                            $"Item Index: {itemIndex++}");
+                        EssProvider.Logger.LogWarning( $"Invalid item id. Kit: {kit.Name} item Index: {itemIndex++}");
                         continue;
                     }
 
@@ -113,7 +133,7 @@ namespace Essentials.Kit
                         
                         if ( itemAsset is ItemFuelAsset )
                         {
-                            kitItem.Metadata[0] = 1;
+                            ((KitItem) kitItem).Metadata[0] = 1;
                         }
                     }
                     goto add;     
@@ -158,7 +178,7 @@ namespace Essentials.Kit
            
                     weaponItem.Barrel    = deserializeAttach( tokBarrel );
                     weaponItem.Sight     = deserializeAttach( tokSight );
-                    weaponItem.Tactical   = deserializeAttach( tokTactical );
+                    weaponItem.Tactical  = deserializeAttach( tokTactical );
                     weaponItem.Grip      = deserializeAttach( tokGrip );
                     weaponItem.Magazine  = deserializeAttach( tokMagazine );
 

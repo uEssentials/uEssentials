@@ -511,7 +511,7 @@ namespace Essentials.Commands
 
             var inventory = player.Inventory;
             var clothing = player.Clothing;
-            var items = new List<KitItem>();
+            var items = new List<AbstractKitItem>();
 
             Action<byte> addItemsFromPage = page =>
             {

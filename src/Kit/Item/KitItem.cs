@@ -34,7 +34,7 @@ namespace Essentials.Kit.Item
     /// Author: leonardosc
     /// </summary>
     [JsonObject( Id = "Item" )]
-    public class KitItem
+    public class KitItem : AbstractKitItem
     {
         /// <summary>
         /// Id of item
@@ -88,7 +88,7 @@ namespace Essentials.Kit.Item
         /// <param name="dropIfInventoryFull"> determine if this item should be dropped 
         /// on ground if inventory is full </param>
         /// <returns> False if could not be added(full inventory) otherwise true </returns>
-        public virtual bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
+        public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
         {
             return player.GiveItem( UnturnedItem, dropIfInventoryFull );
         }

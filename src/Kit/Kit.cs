@@ -46,7 +46,7 @@ namespace Essentials.Kit
         /// List of items
         /// </summary>
         [JsonProperty]
-        public List<KitItem> Items { get; set; }
+        public List<AbstractKitItem> Items { get; set; }
 
         /// <summary>
         /// Cooldown in seconds
@@ -74,7 +74,7 @@ namespace Essentials.Kit
             Name = name;
             Cooldown = cooldown;
             ResetCooldownWhenDie = resetCooldownWhenDie;
-            Items = new List<KitItem>();
+            Items = new List<AbstractKitItem>();
         }
 
         /// <summary>
