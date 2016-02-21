@@ -20,7 +20,6 @@
 */
 
 using System;
-using Essentials.Common.Util;
 using SDG.Unturned;
 
 namespace Essentials.Core.Components.Player
@@ -66,7 +65,8 @@ namespace Essentials.Core.Components.Player
                         _equip.state[0x8] = 45;
                         _equip.state[0x9] = 1;
                         break;
-
+                    
+                    case 346:
                     case 353:
                     case 355:
                     case 356:
