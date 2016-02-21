@@ -24,8 +24,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Essentials.Api;
 using Essentials.Api.Event;
+using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Common;
+using Essentials.Core;
 using Essentials.I18n;
 using Rocket.API;
 using Rocket.Unturned.Player;
@@ -161,6 +163,27 @@ namespace Essentials.Event.Handling
             Commands.CommandBack.BackDict        .Remove( displayName );
             Commands.CommandTell.Conversations   .Remove( displayName );
             CachedSkills    .Remove( displayName );
+        }
+
+        private DateTime lastUpdateCheck = DateTime.Now;
+
+        [SubscribeEvent( EventType.PLAYER_CONNECTED )]
+        void UpdaterAlertOnJoin( UnturnedPlayer player )
+        { 
+            if ( !player.IsAdmin || lastUpdateCheck > DateTime.Now ) return;
+
+            var updater = EssCore.Instance.Updater;
+
+            if ( !updater.IsUpdated() )
+            {
+                lastUpdateCheck = DateTime.Now.AddMinutes( 10 );
+
+                Tasks.New( t => {
+                    UPlayer.From( player ).SendMessage( "[uEssentials] New version avalaible " +
+                                                        $"{updater.LastResult.LatestVersion}!", Color.cyan );
+                } ).Delay( 1000 ).Go();
+
+            }
         }
 
         [SubscribeEvent( EventType.PLAYER_CONNECTED )]

@@ -91,7 +91,8 @@ namespace Essentials.Configuration
                                                          Interval = 3 };
 
             Updater                     = new Updater { CheckUpdates = true,
-                                                        DownloadLatest = true };
+                                                        DownloadLatest = true,
+                                                        AlertOnJoin = true };
 
             HomeCommand                 = new HomeCommand { Cooldown = 30, Delay = 5,
                                                             CancelWhenMove = true };
@@ -131,6 +132,12 @@ namespace Essentials.Configuration
 
                     Save( filePath );
                 }
+
+                if ( json["Updater"]["AlertOnJoin"] == null )
+                {
+                    Updater.AlertOnJoin = true;
+                    Save( filePath );
+                }
             }
             catch (Exception ex)
             {
@@ -152,6 +159,7 @@ namespace Essentials.Configuration
     {
         public bool CheckUpdates;
         public bool DownloadLatest;
+        public bool AlertOnJoin;
     }
 
     [JsonObject]

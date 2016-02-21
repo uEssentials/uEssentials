@@ -197,7 +197,8 @@ namespace Essentials.Core
 
             if ( !Config.EnableJoinLeaveMessage )
             {
-                EventManager.UnregisterAll<JoinLeaveEventHandler>();
+                EventManager.Unregister<EssentialsEventHandler>( "JoinMessageCallback" );
+                EventManager.Unregister<EssentialsEventHandler>( "LeaveMessageCallback" );
             }
 
             CommandManager.RegisterAll( GetType().Assembly );
@@ -218,6 +219,11 @@ namespace Essentials.Core
             if ( Config.AutoAnnouncer.Enabled )
             {
                 Config.AutoAnnouncer.Start();
+            }
+
+            if ( !Config.Updater.AlertOnJoin )
+            {
+                EventManager.Unregister<EssentialsEventHandler>( "UpdaterAlertOnJoin" );
             }
 
             if ( Config.DisabledCommands.Count != 0 )
