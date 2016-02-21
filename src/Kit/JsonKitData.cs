@@ -30,7 +30,7 @@ using Newtonsoft.Json.Linq;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
 
-namespace Essentials.Kits
+namespace Essentials.Kit
 {
     public class JsonKitData : IData<Dictionary<string, Kit>>
     {

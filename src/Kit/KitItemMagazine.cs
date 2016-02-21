@@ -22,7 +22,7 @@
 using Essentials.Api.Unturned;
 using SDG.Unturned;
 
-namespace Essentials.Kits
+namespace Essentials.Kit
 {
     public class KitItemMagazine : KitItem
     {

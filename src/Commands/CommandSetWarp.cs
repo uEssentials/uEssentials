@@ -23,7 +23,6 @@ using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
-using Essentials.Warps;
 
 namespace Essentials.Commands
 {
@@ -46,7 +45,7 @@ namespace Essentials.Commands
                     }
 
                     var player = source.ToPlayer();
-                    var warp = new Warp( parameters[0].ToString(),  player.Position, player.Rotation );
+                    var warp = new Warp.Warp( parameters[0].ToString(),  player.Position, player.Rotation );
                     EssProvider.WarpManager.Add( warp );
                     EssLang.WARP_SET.SendTo( source, parameters[0] );
                     break;
@@ -56,7 +55,7 @@ namespace Essentials.Commands
 
                     if ( pos.HasValue )
                     {
-                        warp = new Warp( parameters[0].ToString(), pos.Value, 0.0F );
+                        warp = new Warp.Warp( parameters[0].ToString(), pos.Value, 0.0F );
 
                         EssProvider.WarpManager.Add( warp );
 

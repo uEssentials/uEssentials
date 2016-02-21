@@ -22,7 +22,7 @@
 using System.Collections.Generic;
 using Essentials.Core.Storage;
 
-namespace Essentials.Kits
+namespace Essentials.Kit
 {
     public sealed class KitManager
     {

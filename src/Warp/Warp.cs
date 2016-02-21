@@ -24,7 +24,7 @@ using Essentials.Common;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Essentials.Warps
+namespace Essentials.Warp
 {
     /// <summary>
     /// Author: Leonardosc

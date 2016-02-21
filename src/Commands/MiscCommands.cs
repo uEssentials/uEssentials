@@ -31,7 +31,7 @@ using static Essentials.Common.Util.ItemUtil;
 using Essentials.Core.Command;
 using Essentials.Core.Components.Player;
 using Essentials.I18n;
-using Essentials.Kits;
+using Essentials.Kit;
 using SDG.Unturned;
 using UnityEngine;
 
@@ -634,7 +634,7 @@ namespace Essentials.Commands
 
             // End Mask & Hat
 
-            var kit = new Kit( name, cooldown, resetCooldownWhenDie ) {
+            var kit = new Kit.Kit( name, cooldown, resetCooldownWhenDie ) {
                 Items = items
             };
 

@@ -22,7 +22,7 @@
 using System.Collections.Generic;
 using Essentials.Core.Storage;
 
-namespace Essentials.Warps
+namespace Essentials.Warp
 {
     public sealed class WarpManager
     {

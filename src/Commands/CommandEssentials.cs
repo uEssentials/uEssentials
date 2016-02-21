@@ -30,7 +30,7 @@ using Essentials.Configuration;
 using Essentials.Core;
 using Essentials.Core.Command;
 using Essentials.I18n;
-using Essentials.Kits;
+using Essentials.Kit;
 using Rocket.Core;
 using UnityEngine;
 

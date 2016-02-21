@@ -26,7 +26,7 @@ using Essentials.Common;
 using Essentials.I18n;
 using Newtonsoft.Json;
 
-namespace Essentials.Kits
+namespace Essentials.Kit
 {
     /// <summary>
     /// Author: leonardosc

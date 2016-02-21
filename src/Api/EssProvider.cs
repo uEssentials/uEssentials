@@ -27,8 +27,8 @@ using Essentials.Api.Module;
 using Essentials.Common;
 using Essentials.Configuration;
 using Essentials.Core;
-using Essentials.Kits;
-using Essentials.Warps;
+using Essentials.Kit;
+using Essentials.Warp;
 
 // ReSharper disable InconsistentNaming
 
