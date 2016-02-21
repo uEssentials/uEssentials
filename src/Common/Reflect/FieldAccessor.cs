@@ -26,7 +26,7 @@ namespace Essentials.Common.Reflect
 {
     public class FieldAccessor<TFieldType> : AbstractAccessor
     {
-        public readonly FieldInfo Info;
+        public FieldInfo Info { get; }
 
         public FieldAccessor( object obj, FieldInfo fieldInfo ) : base( obj )
         {

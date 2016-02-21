@@ -28,7 +28,7 @@ namespace Essentials.Common.Reflect
 {
     public class MethodAccessor<TReturnType> : AbstractAccessor
     {
-        public readonly MethodInfo Info;
+        public MethodInfo Info { get; }
 
         public MethodAccessor( object obj, MethodInfo methodInfo ) : base( obj )
         {
