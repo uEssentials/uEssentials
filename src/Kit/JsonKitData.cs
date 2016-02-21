@@ -196,24 +196,29 @@ namespace Essentials.Kit
             var defaultKits = new Dictionary<string, Kit>();
 
             var defaultKit = new Kit( "default", 120, true );
+            var weaponKit = new Kit( "default2", 1200, false );
+            var planeKit = new Kit( "plane", 9000, false );
+            var xpKit = new Kit( "xp", 1200, false );
+
             defaultKit.Items.Add( new KitItem( 16, 100, 1 ) );
             defaultKit.Items.Add( new KitItem( 13, 100, 2 ) );
             defaultKit.Items.Add( new KitItem( 14, 100, 1 ) );
 
-            var defaultKit2 = new Kit( "default2", 1200, false );
-
-            var kitItemWeapon = new KitItemWeapon( 4, 100, 1, 30 )
-            {
+            weaponKit.Items.Add( new KitItemWeapon( 4, 100, 1, 30, EFiremode.BURST ) {
                 Barrel = new Attachment( 7, 100 ),
                 Grip = new Attachment( 8, 100 ),
                 Sight = new Attachment( 146, 100 ),
-                Magazine = new Attachment( 17, 100 )
-            };
+                Magazine = new Attachment( 17, 100 ),
+                Tactical = new Attachment( 151, 100 )
+            } );
 
-            defaultKit2.Items.Add( kitItemWeapon );
+            planeKit.Items.Add( new KitItemVehicle( 92 ) );
+            xpKit.Items.Add( new KitItemExperience( 100 ) );
 
             defaultKits.Add( "default", defaultKit );
-            defaultKits.Add( "default2", defaultKit2 );
+            defaultKits.Add( "weapon", weaponKit );
+            defaultKits.Add( "plane", planeKit );
+            defaultKits.Add( "xp", xpKit );
 
             Save( defaultKits );
         }
