@@ -133,7 +133,7 @@ namespace Essentials.Kit.Item
         /// <param name="ammo"></param>
         /// <param name="fireMode"></param>
         public KitItemWeapon( ushort id, byte durability,  byte amount, byte? ammo, 
-                              EFiremode? fireMode = EFiremode.AUTO )  : base( id, durability, amount )
+                              EFiremode? fireMode = EFiremode.SAFETY )  : base( id, durability, amount )
         {
             FireMode = fireMode;
             Ammo = ammo;
