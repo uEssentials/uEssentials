@@ -20,6 +20,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Essentials.Api;
@@ -44,6 +45,19 @@ namespace Essentials.Commands
     public class CommandEssentials : EssCommand
     {
         private string _cachedCommands;
+        private List<List<string>> _ingameCommandPages;
+
+        private static readonly Func<ICommand, bool> _isEssentialsCommand = cmd =>
+        {
+            var asm = cmd.GetType().Assembly;
+
+            if ( cmd.GetType() == typeof (MethodCommand) )
+            {
+                asm = ((MethodCommand) cmd).Owner.Assembly;
+            }
+
+            return asm.Equals( typeof(EssCore).Assembly );
+        };
 
         private static void ReloadKits()
         {
@@ -128,27 +142,17 @@ namespace Essentials.Commands
                         {
                             var builder = new StringBuilder( "Commands: \n" );
 
-                            Func<ICommand, bool> isEssentialsCommand = cmd =>
-                            {
-                                var asm = cmd.GetType().Assembly;
-
-                                if ( cmd.GetType() == typeof (MethodCommand) )
-                                {
-                                    asm = ((MethodCommand) cmd).Owner.Assembly;
-                                }
-
-                                return asm.Equals( typeof(EssCore).Assembly );
-                            };
-
-                            EssProvider.CommandManager.Commands
-                                .Where( isEssentialsCommand )
-                                .ForEach( command => {
-                                    builder.Append( "  /" )
-                                            .Append( command.Name.ToLower() )
-                                            .Append( command.Usage == "" ? "" : " " + command.Usage )
-                                            .Append( " - " ).Append( command.Description )
-                                            .AppendLine();
-                                } );
+                            (
+                                from command in EssProvider.CommandManager.Commands
+                                where _isEssentialsCommand(command)
+                                select command
+                            ).ForEach( command => {
+                                builder.Append( "  /" )
+                                       .Append( command.Name.ToLower() )
+                                       .Append( command.Usage == "" ? "" : " " + command.Usage )
+                                       .Append( " - " ).Append( command.Description )
+                                       .AppendLine();
+                            } );
 
                             _cachedCommands = builder.ToString();
                         }
@@ -157,9 +161,61 @@ namespace Essentials.Commands
                         Console.WriteLine( _cachedCommands );
                         Console.WriteLine( "Use /ess help <command> to view help page." );
                     }
+                    else if ( args.Length != 2 || !args[1].IsInt )
+                    {
+                        src.SendMessage( "Use /ess commands [page]" );
+                    }
                     else
                     {
-                        EssLang.PLAYER_CANNOT_EXECUTE.SendTo( src );
+                        if ( _ingameCommandPages == null )
+                        {
+                            const int PAGE_SIZE = 16;
+
+                            _ingameCommandPages = new List<List<string>>(50) {
+                                new List<string>(PAGE_SIZE)
+                            };
+
+                            var builder = new StringBuilder( "Commands: \n" );
+                            var count = 0;
+                            var page = 0;
+
+                            (
+                                from command in EssProvider.CommandManager.Commands
+                                where _isEssentialsCommand(command)
+                                select command
+                            ).ForEach( command => {
+                                                      Console.WriteLine( count + "  " + page + "  " + "  " + _ingameCommandPages.Count );
+                                if ( count >= (PAGE_SIZE - 1) )
+                                {
+                                    _ingameCommandPages[page++].Add( "Use /ess help <command> to view help page." );
+                                    _ingameCommandPages.Add( new List<string>(PAGE_SIZE) );
+                                    count = 0;
+                                }
+
+                                builder.Append( "  /" )
+                                       .Append( command.Name.ToLower() )
+                                       .Append( command.Usage == "" ? "" : " " + command.Usage )
+                                       .Append( " - " ).Append( command.Description )
+                                       .AppendLine();
+
+                                _ingameCommandPages[page].Add( builder.ToString() );
+                                builder.Length = 0;
+                                count++;
+                            } );;
+                        }
+
+                        var pageArg = args[1].ToInt;
+
+                        if ( pageArg < 1 || pageArg > _ingameCommandPages.Count - 1 )
+                        {
+                            src.SendMessage( $"Page must be between 1 and {_ingameCommandPages.Count - 1}", Color.red );
+                        }
+                        else
+                        {
+                            _ingameCommandPages[pageArg - 1].ForEach( s => {
+                                src.SendMessage( s, Color.cyan );
+                            } );
+                        }
                     }
                     break;
 
