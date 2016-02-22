@@ -38,16 +38,10 @@ using EventType = Essentials.Api.Event.EventType;
 
 namespace Essentials.Event.Handling
 {
-     /* typedef */ internal class SkillCache : Dictionary<string, Dictionary<USkill, byte>> {}
-
-    /// <summary>
-    /// Misc Essentials EventHandlers
-    /// </summary>
     internal class EssentialsEventHandler 
     {
-        internal static readonly Dictionary<string, DateTime>    LastChatted     = new Dictionary<string, DateTime>();
-        internal static readonly SkillCache                      CachedSkills      = new SkillCache();
-
+        internal static readonly Dictionary<string, DateTime>                   LastChatted     = new Dictionary<string, DateTime>();
+        internal static readonly Dictionary<string, Dictionary<USkill, byte>>   CachedSkills    = new Dictionary<string, Dictionary<USkill, byte>>();
 
         [SubscribeEvent( EventType.PLAYER_CHATTED )]
         void OnPlayerChatted( UnturnedPlayer player, ref Color color, string message,

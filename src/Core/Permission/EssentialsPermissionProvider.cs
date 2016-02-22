@@ -30,7 +30,7 @@ using Rocket.Core.Permissions;
 
 namespace Essentials.Core.Permission
 {
-    public class EssentialsPermissionsProvider : IRocketPermissionsProvider
+    internal class EssentialsPermissionsProvider : IRocketPermissionsProvider
     {
         private readonly IRocketPermissionsProvider _defaultProvider;
 
