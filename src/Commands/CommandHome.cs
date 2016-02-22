@@ -23,16 +23,12 @@ using System.Collections.Generic;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.Api.Event;
 using Essentials.Api.Task;
-using Essentials.Api.Unturned;
 using Essentials.Common.Util;
 using Essentials.I18n;
 using Essentials.Misc;
 using UnityEngine;
-using Rocket.Unturned.Player;
 using SDG.Unturned;
-using EventType = Essentials.Api.Event.EventType;
 
 namespace Essentials.Commands
 {
@@ -100,19 +96,6 @@ namespace Essentials.Commands
                     Cooldown.Add( playerId, cooldown );
                 }   
             }
-        }
-
-        [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
-        internal void OnPlayerMove( UnturnedPlayer player, Vector3 pos )
-        {
-            if ( !EssProvider.Config.HomeCommand.CancelWhenMove ||
-                !Delay.ContainsKey( player.CSteamID.m_SteamID ) ) return;
-
-            Delay[player.CSteamID.m_SteamID].Cancel();
-            Delay.Remove( player.CSteamID.m_SteamID );
-            Cooldown.Remove( player.CSteamID );
-
-            UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
         }
     }
 }

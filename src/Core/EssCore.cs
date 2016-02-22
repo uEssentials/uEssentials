@@ -197,8 +197,8 @@ namespace Essentials.Core
 
             if ( !Config.EnableJoinLeaveMessage )
             {
-                EventManager.Unregister<EssentialsEventHandler>( "JoinMessageCallback" );
-                EventManager.Unregister<EssentialsEventHandler>( "LeaveMessageCallback" );
+                EventManager.Unregister<EssentialsEventHandler>( "JoinMessage" );
+                EventManager.Unregister<EssentialsEventHandler>( "LeaveMessage" );
             }
 
             CommandManager.RegisterAll( GetType().Assembly );
@@ -238,7 +238,20 @@ namespace Essentials.Core
                     else
                     {
                         CommandManager.Unregister( command );
-                        Logger.LogInfo( $"Disabled command: '{command.Name}'" );   
+                        Logger.LogInfo( $"Disabled command: '{command.Name}'" );
+
+                        if ( command is CommandBack )
+                        {
+                            EventManager.Unregister<EssentialsEventHandler>( "BackPlayerDeath" );
+                        }
+                        else if ( command is CommandKit )
+                        {
+                            EventManager.Unregister<EssentialsEventHandler>( "KitPlayerDeath" );
+                        }
+                        else if ( command is CommandHome )
+                        {
+                            EventManager.Unregister<EssentialsEventHandler>( "HomePlayerMove" );
+                        }
                     }
                 } );
             }

@@ -47,17 +47,25 @@ namespace Essentials.Event.Handling
         void OnPlayerChatted( UnturnedPlayer player, ref Color color, string message,
                               EChatMode mode, ref bool cancel )
         {
-            if ( message.StartsWith( "/" ) /*&& EssProvider.Config.EnableUnknownMessage*/ )
+            if ( message.StartsWith( "/" ) && EssProvider.Config.EnableUnknownMessage )
             {
-                /*var command = message.Substring( 1 );
+                var command = message.Substring( 1 );
 
                 if ( command.IndexOf( " ", StringComparison.Ordinal ) > -1 )
+                {
                     command = command.Split( ' ' )[0];
+                }
 
                 if ( EssProvider.CommandManager.HasWithName( command ) )
+                {
                     return;
+                }
                 
-                UPlayer.TryGet( player, EssLang.UNKNOWN_COMMAND.SendTo );*/
+                UPlayer.TryGet( player, p => {
+                    EssLang.UNKNOWN_COMMAND.SendTo( p, command );
+                } );
+
+                cancel = true;
                 return;
             }
 
@@ -181,15 +189,66 @@ namespace Essentials.Event.Handling
         }
 
         [SubscribeEvent( EventType.PLAYER_CONNECTED )]
-        void JoinMessageCallback( UnturnedPlayer player )
+        void JoinMessage( UnturnedPlayer player )
         {
             EssLang.PLAYER_JOINED.Broadcast( player.CharacterName );
         }
 
         [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
-        void LeaveMessageCallback( UnturnedPlayer player )
+        void LeaveMessage( UnturnedPlayer player )
         {
             EssLang.PLAYER_EXITED.Broadcast( player.CharacterName );
+        }
+
+        [SubscribeEvent( EventType.PLAYER_DEATH )]
+        void BackPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb,  CSteamID murderer )
+        {
+            if ( !player.HasPermission( "essentials.command.back" ) )
+                return;
+
+            var displayName = player.DisplayName;
+
+            if ( Commands.CommandBack.BackDict.ContainsKey( displayName ) )
+            {
+                Commands.CommandBack.BackDict.Remove( displayName );
+            }
+
+            Commands.CommandBack.BackDict.Add( displayName, player.Position );
+        }
+
+        [SubscribeEvent( EventType.PLAYER_DEATH )]
+        void KitPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
+        {
+            if ( !Commands.CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
+
+            var playerCooldowns = Commands.CommandKit.Cooldowns[player.CSteamID.m_SteamID];
+            var keys = new List<string> ( playerCooldowns.Keys );
+
+            foreach ( var kitName in keys )
+            {
+                var kit = EssProvider.KitManager.GetByName(kitName);
+
+                if ( kit.ResetCooldownWhenDie )
+                {
+                    playerCooldowns[kitName] = DateTime.Now.AddSeconds( -kit.Cooldown );
+                }
+            }
+        }
+
+        [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
+        void HomePlayerMove( UnturnedPlayer player, Vector3 pos )
+        {
+            if ( !EssProvider.Config.HomeCommand.CancelWhenMove ||
+                 !Commands.CommandHome.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
+            {
+                return;
+            }
+
+            Commands.CommandHome.Delay[player.CSteamID.m_SteamID].Cancel();
+            Commands.CommandHome.Delay.Remove( player.CSteamID.m_SteamID );
+            Commands.CommandHome.Cooldown.Remove( player.CSteamID );
+
+            UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
         }
     }
 }

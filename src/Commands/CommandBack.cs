@@ -22,14 +22,8 @@
 using System.Collections.Generic;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.Api.Event;
 using UnityEngine;
 using Essentials.I18n;
-using Rocket.API;
-using Rocket.Unturned.Player;
-using SDG.Unturned;
-using Steamworks;
-using EventType = Essentials.Api.Event.EventType;
 
 namespace Essentials.Commands
 {
@@ -59,20 +53,6 @@ namespace Essentials.Commands
             {
                 EssLang.NOT_DIED_YET.SendTo( source );
             }
-        }
-
-        [SubscribeEvent( EventType.PLAYER_DEATH )]
-        void OnPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb,  CSteamID murderer )
-        {
-            if ( !player.HasPermission( "essentials.command.back" ) )
-                return;
-
-            var displayName = player.DisplayName;
-
-            if ( BackDict.ContainsKey( displayName ) )
-                BackDict.Remove( displayName );
-
-            BackDict.Add( displayName, player.Position );
         }
     }
 }

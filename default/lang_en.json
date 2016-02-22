@@ -34,7 +34,7 @@
     	The default color is Green.
     */
 
-    "UNKNOWN_COMMAND": "<white>This command does not exist.",
+    "UNKNOWN_COMMAND": "<white>There is no command named '/{0}'!",
     "INVALID_NUMBER": "<red>Invalid number '{0}'",
     "INVALID_BOOLEAN": "<red>Invalid value '{0}'. Expected 'true' or 'false'",
     "SECOND": "second",

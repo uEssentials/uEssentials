@@ -25,10 +25,6 @@ using System.Collections.Generic;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.Api.Event;
-using Rocket.Unturned.Player;
-using SDG.Unturned;
-using Steamworks;
 using Essentials.Common.Util;
 
 namespace Essentials.Commands
@@ -40,15 +36,13 @@ namespace Essentials.Commands
     )]
     public class CommandKit : EssCommand
     {
-        public static Dictionary<ulong, Dictionary<string, DateTime>> Cooldowns = 
-            new Dictionary<ulong, Dictionary<string, DateTime>>();
+        internal static Dictionary<ulong, Dictionary<string, DateTime>> Cooldowns = new Dictionary<ulong, Dictionary<string, DateTime>>();
 
         public override void OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.Length == 0 || ( parameters.Length == 1 && source.IsConsole ) )
             {
-                source.SendMessage( source.IsAdmin ? 
-                    UsageMessage : "Use /kit [kit_name]" );
+                source.SendMessage( source.IsAdmin ? UsageMessage : "Use /kit [kit_name]" );
             }
             else if ( parameters.Length == 1 )
             {
@@ -127,23 +121,6 @@ namespace Essentials.Commands
                 {
                     EssLang.KIT_NOT_EXIST.SendTo( source, kitName );
                 }
-            }
-        }
-
-        [SubscribeEvent( EventType.PLAYER_DEATH )]
-        void OnPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
-        {
-            if ( !Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
-
-            var playerCooldowns = Cooldowns[player.CSteamID.m_SteamID];
-            var keys = new List<string> ( playerCooldowns.Keys );
-
-            foreach ( var kitName in keys )
-            {
-                var kit = EssProvider.KitManager.GetByName(kitName);
-
-                if ( kit.ResetCooldownWhenDie )
-                    playerCooldowns[kitName] = DateTime.Now.AddSeconds( -kit.Cooldown );
             }
         }
     }
