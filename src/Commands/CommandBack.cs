@@ -62,8 +62,7 @@ namespace Essentials.Commands
         }
 
         [SubscribeEvent( EventType.PLAYER_DEATH )]
-        internal void OnPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, 
-                                     CSteamID murderer )
+        void OnPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb,  CSteamID murderer )
         {
             if ( !player.HasPermission( "essentials.command.back" ) )
                 return;

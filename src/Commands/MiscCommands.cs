@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -640,6 +641,53 @@ namespace Essentials.Commands
 
             EssProvider.KitManager.Add( kit );
             EssLang.CREATED_KIT.SendTo( src, name );
+        }
+
+        [CommandInfo(
+            Name = "position",
+            Aliases = new[] {"pos", "coords"},
+            Description = "View your/another player position.",
+            Usage = "<player>"
+        )]
+        public void PositionCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        {
+            if ( args.Length == 0 )
+            {
+                if ( src.IsConsole )
+                {
+                    ShowUsage( src, cmd );
+                }
+                else
+                {
+                    var player = src.ToPlayer();
+
+                    EssLang.POSITION.SendTo( player, 
+                                            player.Position.x,
+                                            player.Position.y, 
+                                            player.Position.z );
+                }
+            }
+            else
+            {
+                var found = UPlayer.TryGet( args[0], p => {
+                    EssLang.POSITION_OTHER.SendTo( src, p.DisplayName, 
+                                                   p.Position.x, p.Position.y, p.Position.z );
+                } );
+
+                if ( !found )
+                {
+                    EssLang.PLAYER_NOT_FOUND.SendTo( src, args[0] );
+                } 
+            }   
+        }
+
+        [CommandInfo(
+            Name = "online",
+            Description = "View the number of online players"
+        )]
+        public void OnlineCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        {
+            EssLang.ONLINE_PLAYERS.SendTo( src, UServer.Players.Count(), UServer.MaxPlayers );
         }
 
 

@@ -131,8 +131,7 @@ namespace Essentials.Commands
         }
 
         [SubscribeEvent( EventType.PLAYER_DEATH )]
-        internal void OnPlayerDeath( UnturnedPlayer player,EDeathCause cause, ELimb limb,
-                                     CSteamID murderer )
+        void OnPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
         {
             if ( !Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
 

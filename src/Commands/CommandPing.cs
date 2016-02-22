@@ -47,9 +47,13 @@ namespace Essentials.Commands
                 var target = parameters[0].ToPlayer;
 
                 if ( target == null )
+                {
                     EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[0] );
+                }
                 else
+                {
                     EssLang.PING_OTHER.SendTo( source, target.DisplayName, target.Ping );
+                }
             }
         }
     }

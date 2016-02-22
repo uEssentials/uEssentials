@@ -129,7 +129,6 @@
     <Compile Include="src\Commands\CommandEssentials.cs" />
     <Compile Include="src\Commands\CommandKillZombies.cs" />
     <Compile Include="src\Commands\CommandTell.cs" />
-    <Compile Include="src\Commands\CommandPosition.cs" />
     <Compile Include="src\Commands\CommandResetPlayer.cs" />
     <Compile Include="src\Commands\CommandSetWarp.cs" />
     <Compile Include="src\Commands\CommandPing.cs" />
@@ -141,7 +140,6 @@
     <Compile Include="src\Commands\CommandWarps.cs" />
     <Compile Include="src\Commands\CommandTest.cs" />
     <Compile Include="src\Commands\CommandTpAll.cs" />
-    <Compile Include="src\Commands\CommandOnline.cs" />
     <Compile Include="src\Commands\CommandKickAll.cs" />
     <Compile Include="src\Commands\CommandShutdown.cs" />
     <Compile Include="src\Commands\CommandUnfreeze.cs" />
