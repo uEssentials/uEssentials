@@ -4,3 +4,4 @@ Deprecated/
 Scripts/
 
 build-msbuild.bat
+src/.vscode/launch.json

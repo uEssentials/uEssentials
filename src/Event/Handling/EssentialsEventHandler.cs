@@ -161,10 +161,33 @@ namespace Essentials.Event.Handling
         {
             var displayName = player.CharacterName;
 
-            Commands.MiscCommands.Spies           .Remove( displayName );
+            Commands.MiscCommands.Spies          .Remove( displayName );
             Commands.CommandBack.BackDict        .Remove( displayName );
             Commands.CommandTell.Conversations   .Remove( displayName );
-            CachedSkills    .Remove( displayName );
+            CachedSkills                         .Remove( displayName );
+
+            if ( Commands.CommandKit.Cooldowns.Count != 0 )
+            {
+                var playerCooldowns = Commands.CommandKit.Cooldowns[player.CSteamID.m_SteamID];
+                var keys = new List<string> ( playerCooldowns.Keys );
+
+                foreach ( var kitName in keys )
+                {
+                    var kit = EssProvider.KitManager.GetByName(kitName);
+
+                    if ( !kit.ResetCooldownWhenDie ) continue;
+
+                    if ( playerCooldowns[kitName] < DateTime.Now ) 
+                    {
+                        playerCooldowns.Remove( kitName );                        
+                    }
+                }
+                
+                if ( playerCooldowns.Count == 0 )
+                {
+                    Commands.CommandKit.Cooldowns.Remove( player.CSteamID.m_SteamID );
+                }
+            }
         }
 
         private DateTime lastUpdateCheck = DateTime.Now;
