@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
@@ -20,31 +20,30 @@
 */
 
 using System.Linq;
-using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.Commands
+namespace Essentials.InternalModules.Kit.Commands
 {
     [CommandInfo(
-        Name = "warps",
-        Description = "View available warps"
+        Name = "kits",
+        Description = "View available kits"
     )]
-    public class CommandWarps : EssCommand
+    public class CommandKits : EssCommand
     {
         public override void OnExecute( ICommandSource source, ICommandArgs parameters )
         {
-            var warps = ( 
-                from warp in EssProvider.WarpManager.Warps
-                where warp.CanUse( source )
-                select warp.Name 
-            ).ToArray();
+            var kits = ( 
+                from kit in KitModule.Instance.KitManager.Kits
+                where kit.CanUse( source )
+                select kit.Name 
+            ).ToList();
 
-            if ( warps.Length == 0 )
-                EssLang.WARP_NONE.SendTo( source );
+            if ( kits.Count == 0 )
+                EssLang.KIT_NONE.SendTo( source );
             else
-                EssLang.WARP_LIST.SendTo( source, string.Join( ", ", warps ) );
+                EssLang.KIT_LIST.SendTo( source, string.Join( ", ", kits.ToArray() ) );
         }
     }
 }

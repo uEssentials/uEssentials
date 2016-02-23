@@ -27,7 +27,7 @@ using Essentials.Common.Util;
 using Essentials.Core.Storage;
 using Newtonsoft.Json;
 
-namespace Essentials.Warp
+namespace Essentials.InternalModules.Warp.Data
 {
     public class WarpData : IData< Dictionary< string, Warp > >
     {

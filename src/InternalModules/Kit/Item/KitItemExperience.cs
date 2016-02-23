@@ -20,11 +20,24 @@
 */
 
 using Essentials.Api.Unturned;
+using Newtonsoft.Json;
 
-namespace Essentials.Kit.Item
+namespace Essentials.InternalModules.Kit.Item
 {
-    public abstract class AbstractKitItem
+    public class KitItemExperience : AbstractKitItem
     {
-        public abstract bool GiveTo( UPlayer player, bool dropIfInventoryFull = true );
+        [JsonProperty("Xp")]
+        public uint Amount { get; set; }
+
+        public KitItemExperience( uint amount )
+        {
+            Amount = amount;
+        }
+
+        public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
+        {
+            player.RocketPlayer.Experience += Amount;
+            return true;
+        }
     }
 }

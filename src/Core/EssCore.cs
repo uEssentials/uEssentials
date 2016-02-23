@@ -41,12 +41,13 @@ using Rocket.Core;
 using Rocket.Core.Plugins;
 using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
+using Essentials.Common.Util;
 using Essentials.Compatibility;
 using Essentials.Core.Permission;
 using Essentials.Event.Handling;
-using Essentials.Kit;
+using Essentials.InternalModules;
+using Essentials.InternalModules.Kit.Commands;
 using Essentials.Updater;
-using Essentials.Warp;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
@@ -60,6 +61,12 @@ namespace Essentials.Core
                 - AFK KICK
                 - Improve event system to avoid duplicate events.
 
+            Internal modules
+            
+            "EnabledSystems": { 
+                "kits",
+                "warps"
+            }
 
 
         */
@@ -70,8 +77,6 @@ namespace Essentials.Core
         
         internal static EssCore                       Instance                    { get; set; }
         
-        internal WarpManager                          WarpManager                 { get; set; }
-        internal KitManager                           KitManager                  { get; set; }
         internal ModuleManager                        ModuleManager               { get; set; }
         internal CommandManager                       CommandManager              { get; set; }
         internal IEventManager                        EventManager                { get; set; }
@@ -179,8 +184,6 @@ namespace Essentials.Core
 
             EventManager = new EventManager();
             CommandManager = new CommandManager();
-            WarpManager = new WarpManager();
-            KitManager = new KitManager();
             ModuleManager = new ModuleManager();
             Updater = new GithubUpdater();
             HookManager = new HookManager();
@@ -207,17 +210,27 @@ namespace Essentials.Core
                 EventManager.Unregister<EssentialsEventHandler>( "LeaveMessage" );
             }
 
-            CommandManager.RegisterAll( GetType().Assembly );
-            WarpManager.Load();
-            KitManager.Load();
+            CommandManager.RegisterAll( "Essentials.Commands" );
+
+            /*
+                Load internal modules
+            */
+            (
+                from type in Assembly.GetTypes()
+                where typeof(InternalModule).IsAssignableFrom( type )
+                where !type.IsAbstract
+                let mAttr = (ModuleInfo) type.GetCustomAttributes( typeof(ModuleInfo), false )[0]
+                where Config.EnabledSystems.Any( s => s.Equals(mAttr.Name, StringComparison.OrdinalIgnoreCase) )
+                select type
+             ).ForEach( type => {
+                 ModuleManager.LoadModule( (InternalModule) Activator.CreateInstance( type ) );
+             } );
 
             Logger.LogInfo( $"Loaded {CommandManager.Commands.Count()} commands" );
-            Logger.LogInfo( $"Loaded {WarpManager.Count} warps" );
-            Logger.LogInfo( $"Loaded {KitManager.Count} kits" );
 
             Logger.LogInfo( "Loading modules..." );
             ModuleManager.LoadAll( ModulesFolder );
-            Logger.LogInfo( $"Loaded {ModuleManager.RunningModules.Count} modules" );
+            Logger.LogInfo( $"Loaded {ModuleManager.RunningModules.Count(t => !(t is InternalModule))} modules" );
 
             HookManager.RegisterAll();
             HookManager.LoadAll();
@@ -317,10 +330,6 @@ namespace Essentials.Core
             TryAddComponent<Tasks>();
 
             Tasks.New( t => {
-                WarpManager.Save();
-            }).Delay( 60 * 1000 ).Interval( 60 * 1000 ).Go();
-
-            Tasks.New( t => {
                 File.Delete( $"{Folder}uEssentials.en.translation.xml" );
                 File.Delete( $"{Folder}uEssentials.configuration.xml" );
             } ).Delay( 100 ).Go();
@@ -340,7 +349,6 @@ namespace Essentials.Core
 
             TryRemoveComponent<Tasks>();
 
-            WarpManager.Save();
             var executingAssembly = GetType().Assembly;
             
             HookManager.UnloadAll();

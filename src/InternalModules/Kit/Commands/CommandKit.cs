@@ -19,15 +19,14 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using Essentials.I18n;
 using System;
 using System.Collections.Generic;
-using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common.Util;
+using Essentials.I18n;
 
-namespace Essentials.Commands
+namespace Essentials.InternalModules.Kit.Commands
 {
     [CommandInfo(
         Name = "kit",
@@ -48,10 +47,10 @@ namespace Essentials.Commands
             {
                 var player = source.ToPlayer();
 
-                if ( EssProvider.KitManager.Contains( parameters[0].ToString() ) )
+                if ( KitModule.Instance.KitManager.Contains( parameters[0].ToString() ) )
                 {
                     var kitName = parameters[0].ToLowerString;
-                    var requestedKit = EssProvider.KitManager.GetByName(kitName);
+                    var requestedKit = KitModule.Instance.KitManager.GetByName(kitName);
 
                     if ( !requestedKit.CanUse( player ) )
                     {
@@ -89,7 +88,7 @@ namespace Essentials.Commands
                                 Cooldowns[steamPlayerId].Add( kitName, DateTime.Now );
                             }
                         }
-                        EssProvider.KitManager.GetByName( kitName ).GiveTo( player );
+                        KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( player );
                     }
                 }
                 else
@@ -112,9 +111,9 @@ namespace Essentials.Commands
                 {
                     EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[1] );
                 }
-                else if ( EssProvider.KitManager.Contains( kitName ) )
+                else if ( KitModule.Instance.KitManager.Contains( kitName ) )
                 {
-                    EssProvider.KitManager.GetByName(kitName).GiveTo( target );
+                    KitModule.Instance.KitManager.GetByName(kitName).GiveTo( target );
                     EssLang.KIT_GIVEN_SENDER.SendTo( source, kitName, target );
                 }
                 else

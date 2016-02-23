@@ -28,7 +28,7 @@ using SDG.Unturned;
 
 // ReSharper disable InconsistentNaming
 
-namespace Essentials.Kit.Item
+namespace Essentials.InternalModules.Kit.Item
 {
     /// <summary>
     /// Author: leonardosc

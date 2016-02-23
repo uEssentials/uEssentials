@@ -31,7 +31,7 @@ using Essentials.Configuration;
 using Essentials.Core;
 using Essentials.Core.Command;
 using Essentials.I18n;
-using Essentials.Kit;
+using Essentials.InternalModules.Kit;
 using Rocket.Core;
 using UnityEngine;
 
@@ -51,6 +51,11 @@ namespace Essentials.Commands
         {
             var asm = cmd.GetType().Assembly;
 
+            if ( cmd is CommandTest )
+            {
+                return false;
+            }
+
             if ( cmd.GetType() == typeof (MethodCommand) )
             {
                 asm = ((MethodCommand) cmd).Owner.Assembly;
@@ -61,9 +66,10 @@ namespace Essentials.Commands
 
         private static void ReloadKits()
         {
-            var core = EssCore.Instance;
-            core.KitManager = new KitManager();
-            core.KitManager.Load();
+            EssProvider.ModuleManager.GetModule<KitModule>().IfPresent( m => {
+                m.KitManager = new KitManager();;
+                m.KitManager.Load();
+            } );
         }
 
         private static void ReloadLang()

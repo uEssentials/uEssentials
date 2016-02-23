@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
@@ -19,26 +19,31 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using Essentials.Api.Unturned;
-using Newtonsoft.Json;
-using SDG.Unturned;
+using System.Linq;
+using Essentials.Api.Command;
+using Essentials.Api.Command.Source;
+using Essentials.I18n;
 
-namespace Essentials.Kit.Item
+namespace Essentials.InternalModules.Warp.Commands
 {
-    public class KitItemVehicle : AbstractKitItem
+    [CommandInfo(
+        Name = "warps",
+        Description = "View available warps"
+    )]
+    public class CommandWarps : EssCommand
     {
-        [JsonProperty("Vehicle")]
-        public ushort Id { get; set; }
-
-        public KitItemVehicle( ushort id )
+        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
         {
-            Id = id;
-        }
+            var warps = ( 
+                from warp in WarpModule.Instance.WarpManager.Warps
+                where warp.CanUse( source )
+                select warp.Name 
+            ).ToArray();
 
-        public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
-        {
-            VehicleTool.giveVehicle( player.UnturnedPlayer, Id );
-            return true;
+            if ( warps.Length == 0 )
+                EssLang.WARP_NONE.SendTo( source );
+            else
+                EssLang.WARP_LIST.SendTo( source, string.Join( ", ", warps ) );
         }
     }
 }

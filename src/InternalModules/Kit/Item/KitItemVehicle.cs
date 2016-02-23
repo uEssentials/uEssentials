@@ -19,32 +19,26 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using Essentials.I18n;
-using System.Linq;
-using Essentials.Api;
-using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
+using Essentials.Api.Unturned;
+using Newtonsoft.Json;
+using SDG.Unturned;
 
-namespace Essentials.Commands
+namespace Essentials.InternalModules.Kit.Item
 {
-    [CommandInfo(
-        Name = "kits",
-        Description = "View available kits"
-    )]
-    public class CommandKits : EssCommand
+    public class KitItemVehicle : AbstractKitItem
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
-        {
-            var kits = ( 
-                from kit in EssProvider.KitManager.Kits
-                where kit.CanUse( source )
-                select kit.Name 
-            ).ToList();
+        [JsonProperty("Vehicle")]
+        public ushort Id { get; set; }
 
-            if ( kits.Count == 0 )
-                EssLang.KIT_NONE.SendTo( source );
-            else
-                EssLang.KIT_LIST.SendTo( source, string.Join( ", ", kits.ToArray() ) );
+        public KitItemVehicle( ushort id )
+        {
+            Id = id;
+        }
+
+        public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
+        {
+            VehicleTool.giveVehicle( player.UnturnedPlayer, Id );
+            return true;
         }
     }
 }

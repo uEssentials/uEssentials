@@ -19,12 +19,11 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.Commands
+namespace Essentials.InternalModules.Warp.Commands
 {
     [CommandInfo(
         Name = "delwarp",
@@ -40,13 +39,13 @@ namespace Essentials.Commands
             {
                 ShowUsage( source );
             }
-            else if ( !EssProvider.WarpManager.Contains( parameters[0].ToString() ) )
+            else if ( !WarpModule.Instance.WarpManager.Contains( parameters[0].ToString() ) )
             {
                 EssLang.WARP_NOT_EXIST.SendTo( source, parameters[0] );
             }
             else
             {
-                EssProvider.WarpManager.Delete( parameters[0].ToString() );
+                WarpModule.Instance.WarpManager.Delete( parameters[0].ToString() );
                 EssLang.WARP_REMOVED.SendTo( source, parameters[0] );
             }
         }

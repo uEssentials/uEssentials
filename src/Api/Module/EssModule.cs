@@ -41,17 +41,17 @@ namespace Essentials.Api.Module
         /// <summary>
         /// Module Info
         /// </summary>
-        public ModuleInfo Info { get; }
+        public ModuleInfo Info { get; internal set; }
 
         /// <summary>
         /// Module logger
         /// </summary>
-        public EssLogger Logger { get; }
+        public EssLogger Logger { get; internal set; }
 
         /// <summary>
         /// Module folder
         /// </summary>
-        public string Folder { get; }
+        public string Folder { get; internal set; }
 
         /// <summary>
         /// Constructor :D

@@ -25,13 +25,13 @@ using System.IO;
 using Essentials.Api;
 using Essentials.Common.Util;
 using Essentials.Core.Storage;
-using Essentials.Kit.Item;
+using Essentials.InternalModules.Kit.Item;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
 
-namespace Essentials.Kit.Data
+namespace Essentials.InternalModules.Kit.Data
 {
     internal class KitData : IData<Dictionary<string, Kit>>
     {

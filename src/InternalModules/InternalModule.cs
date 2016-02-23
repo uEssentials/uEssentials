@@ -19,38 +19,17 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System;
 using Essentials.Api;
-using System.Collections.Generic;
-using System.Net;
-using System.IO;
+using Essentials.Api.Module;
 
-namespace Essentials.Kit.Data
+namespace Essentials.InternalModules
 {
-    internal class WebKitData : KitData
+    public abstract class InternalModule : EssModule
     {
-        public override Dictionary<string, Kit> Load()
+        protected InternalModule()
         {
-            var logger = EssProvider.Logger;
-            var url = EssProvider.Config.WebKits.Url;
-            
-            try
-            {
-                logger.LogInfo( $"Loading web kits from '{url}'" );
-                
-                using ( var wc = new WebClient() )
-                {
-                    var resp = wc.DownloadString( url );
-                    File.WriteAllText( DataFilePath, resp );
-                }
-            }
-            catch(Exception ex)
-            {
-                logger.LogError( "Could not load webkits." );
-                logger.LogError( ex.ToString() );
-            }
-
-            return base.Load();
+            Assembly = GetType().Assembly;
+            Logger = EssProvider.Logger;
         }
     }
 }

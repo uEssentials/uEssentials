@@ -19,12 +19,11 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.Commands
+namespace Essentials.InternalModules.Warp.Commands
 {
     [CommandInfo(
         Name = "setwarp",
@@ -45,8 +44,8 @@ namespace Essentials.Commands
                     }
 
                     var player = source.ToPlayer();
-                    var warp = new Warp.Warp( parameters[0].ToString(),  player.Position, player.Rotation );
-                    EssProvider.WarpManager.Add( warp );
+                    var warp = new Warp( parameters[0].ToString(),  player.Position, player.Rotation );
+                    WarpModule.Instance.WarpManager.Add( warp );
                     EssLang.WARP_SET.SendTo( source, parameters[0] );
                     break;
 
@@ -55,9 +54,9 @@ namespace Essentials.Commands
 
                     if ( pos.HasValue )
                     {
-                        warp = new Warp.Warp( parameters[0].ToString(), pos.Value, 0.0F );
+                        warp = new Warp( parameters[0].ToString(), pos.Value, 0.0F );
 
-                        EssProvider.WarpManager.Add( warp );
+                        WarpModule.Instance.WarpManager.Add( warp );
 
                         EssLang.WARP_SET.SendTo( source, parameters[0] );
                     }

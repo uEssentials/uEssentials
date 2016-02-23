@@ -245,7 +245,7 @@ namespace Essentials.Core.Command
                         : Delegate.CreateDelegate( type, obj, method.Name );
             };
 
-            foreach ( var type in asm.GetTypes() )
+            foreach ( var type in asm.GetTypes().Where( filter.Invoke ) )
             {
                 foreach ( var method in type.GetMethods() )
                 {

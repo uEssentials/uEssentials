@@ -21,8 +21,9 @@
 
 using System.Collections.Generic;
 using Essentials.Core.Storage;
+using Essentials.InternalModules.Warp.Data;
 
-namespace Essentials.Warp
+namespace Essentials.InternalModules.Warp
 {
     public sealed class WarpManager
     {

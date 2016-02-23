@@ -61,6 +61,7 @@ namespace Essentials.Configuration
 
         public AutoAnnouncer    AutoAnnouncer;
 
+        public List<string>     EnabledSystems; 
         public List<string>     DisabledCommands; 
 
         internal EssConfig() { }
@@ -99,11 +100,12 @@ namespace Essentials.Configuration
             HomeCommand                 = new HomeCommand { Cooldown = 30, Delay = 5,
                                                             CancelWhenMove = true };
 
-            WebKits                     = new WebKits { Enabled = false, Url = "http://pastebin.com/raw/VsnXkaA9" };
+            WebKits                     = new WebKits { Enabled = false, Url = "" };
             
-            WebConfig                   = new WebConfig { Enabled = false, Url = "http://pastebin.com/raw/0jn7h5U8" };
+            WebConfig                   = new WebConfig { Enabled = false, Url = "" };
 
             DisabledCommands            = new List<string>();
+            EnabledSystems              = new List<string> { "kits", "warps" };
         }
 
         public override void Load( string filePath )

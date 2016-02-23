@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Essentials.Common;
 using Essentials.Core;
@@ -155,6 +156,16 @@ namespace Essentials.Api.Module
                 EssProvider.Logger.LogError( "An error occurred attempting to load " + fileName + ", ignoring..." );
                 EssProvider.Logger.LogError( ex.ToString() );
             }
+        }
+
+        public Optional<T> GetModule<T>() where T : EssModule
+        {
+            return Optional<T>.OfNullable( RunningModules.FirstOrDefault(m => m.GetType() == typeof (T)) as T );
+        }
+        
+        public Optional<EssModule> GetModule( Type type )
+        {
+            return Optional<EssModule>.OfNullable( RunningModules.FirstOrDefault(m => m.GetType() == type ) );
         }
 
         ///<summary>

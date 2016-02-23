@@ -26,7 +26,7 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Task;
 using Essentials.I18n;
 
-namespace Essentials.Commands
+namespace Essentials.InternalModules.Warp.Commands
 {
     [CommandInfo(
         Name = "warp",
@@ -44,7 +44,7 @@ namespace Essentials.Commands
             {
                 ShowUsage( source );
             }
-            else if ( !EssProvider.WarpManager.Contains( parameters[0].ToString() ) )
+            else if ( !WarpModule.Instance.WarpManager.Contains( parameters[0].ToString() ) )
             {
                 EssLang.WARP_NOT_EXIST.SendTo( source, parameters[0] );
             }
@@ -54,7 +54,7 @@ namespace Essentials.Commands
             }
             else
             {
-                var dest = EssProvider.WarpManager[parameters[0].ToString()];
+                var dest = WarpModule.Instance.WarpManager[parameters[0].ToString()];
                 var cooldown = EssProvider.Config.WarpCooldown;
 
                 if ( cooldown > 0 && !player.HasPermission( "essentials.warps.bypasscooldown" ) )

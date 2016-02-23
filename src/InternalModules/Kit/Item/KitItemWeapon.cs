@@ -25,7 +25,7 @@ using Newtonsoft.Json.Converters;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
 
-namespace Essentials.Kit.Item
+namespace Essentials.InternalModules.Kit.Item
 {
     /// <summary>
     /// Author: leonardosc

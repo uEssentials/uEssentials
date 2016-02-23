@@ -29,6 +29,8 @@ using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Core;
 using Essentials.I18n;
+using Essentials.InternalModules.Kit;
+using Essentials.InternalModules.Kit.Commands;
 using Rocket.API;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -166,14 +168,15 @@ namespace Essentials.Event.Handling
             Commands.CommandTell.Conversations   .Remove( displayName );
             CachedSkills                         .Remove( displayName );
 
-            if ( Commands.CommandKit.Cooldowns.Count != 0 )
-            {
-                var playerCooldowns = Commands.CommandKit.Cooldowns[player.CSteamID.m_SteamID];
+            EssProvider.ModuleManager.GetModule<KitModule>().IfPresent( m => {
+                if ( CommandKit.Cooldowns.Count == 0 ) return;
+
+                var playerCooldowns = CommandKit.Cooldowns[player.CSteamID.m_SteamID];
                 var keys = new List<string> ( playerCooldowns.Keys );
 
                 foreach ( var kitName in keys )
                 {
-                    var kit = EssProvider.KitManager.GetByName(kitName);
+                    var kit = m.KitManager.GetByName(kitName);
 
                     if ( !kit.ResetCooldownWhenDie ) continue;
 
@@ -185,9 +188,9 @@ namespace Essentials.Event.Handling
                 
                 if ( playerCooldowns.Count == 0 )
                 {
-                    Commands.CommandKit.Cooldowns.Remove( player.CSteamID.m_SteamID );
+                    CommandKit.Cooldowns.Remove( player.CSteamID.m_SteamID );
                 }
-            }
+            } );
         }
 
         private DateTime lastUpdateCheck = DateTime.Now;
@@ -242,14 +245,14 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.PLAYER_DEATH )]
         void KitPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
         {
-            if ( !Commands.CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
+            if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
 
-            var playerCooldowns = Commands.CommandKit.Cooldowns[player.CSteamID.m_SteamID];
+            var playerCooldowns = CommandKit.Cooldowns[player.CSteamID.m_SteamID];
             var keys = new List<string> ( playerCooldowns.Keys );
 
             foreach ( var kitName in keys )
             {
-                var kit = EssProvider.KitManager.GetByName(kitName);
+                var kit = KitModule.Instance.KitManager.GetByName(kitName);
 
                 if ( kit.ResetCooldownWhenDie )
                 {

@@ -19,39 +19,38 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using Essentials.Api.Unturned;
-using SDG.Unturned;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using Essentials.Api;
 
-namespace Essentials.Kit.Item
+namespace Essentials.InternalModules.Kit.Data
 {
-    public class KitItemMagazine : KitItem
+    internal class WebKitData : KitData
     {
-        public byte Ammo { get; set; }
-
-        public override SDG.Unturned.Item UnturnedItem => new SDG.Unturned.Item( Id, Ammo, Durability );
-
-        public KitItemMagazine( ushort id, byte durability, byte amount, byte ammo ) : base( id, durability, amount )
+        public override Dictionary<string, Kit> Load()
         {
-            Amount = amount;
-            Ammo = ammo;
-        }
-
-        public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
-        {
-            var added = false;
-            var item = UnturnedItem;
-
-            for ( var i = 0; i < Amount; i++ )
+            var logger = EssProvider.Logger;
+            var url = EssProvider.Config.WebKits.Url;
+            
+            try
             {
-                added = player.Inventory.tryAddItem( item, true );
-
-                if ( !added && dropIfInventoryFull )
+                logger.LogInfo( $"Loading web kits from '{url}'" );
+                
+                using ( var wc = new WebClient() )
                 {
-                    ItemManager.dropItem( item, player.Position, true, Dedicator.isDedicated, true );
+                    var resp = wc.DownloadString( url );
+                    File.WriteAllText( DataFilePath, resp );
                 }
             }
+            catch(Exception ex)
+            {
+                logger.LogError( "Could not load webkits." );
+                logger.LogError( ex.ToString() );
+            }
 
-            return added;
+            return base.Load();
         }
     }
 }

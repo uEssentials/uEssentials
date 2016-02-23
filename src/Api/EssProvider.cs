@@ -27,8 +27,6 @@ using Essentials.Api.Module;
 using Essentials.Common;
 using Essentials.Configuration;
 using Essentials.Core;
-using Essentials.Kit;
-using Essentials.Warp;
 
 // ReSharper disable InconsistentNaming
 
@@ -63,16 +61,6 @@ namespace Essentials.Api
         /// <returns> Instance of CommandManager </returns>
         /// </summary>
         public static ICommandManager CommandManager => Core.CommandManager;
-
-        /// <summary>
-        /// <returns> Instance of KitManager </returns>
-        /// </summary>
-        public static KitManager KitManager => Core.KitManager;
-
-        /// <summary>
-        /// <returns> Instance of WarpManager </returns>
-        /// </summary>
-        public static WarpManager WarpManager => Core.WarpManager;
 
         /// <summary>
         /// <returns> Instance of ModuleManager </returns>

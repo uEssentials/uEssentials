@@ -20,11 +20,11 @@
 */
 
 using System.Collections.Generic;
-using Essentials.Core.Storage;
 using Essentials.Api;
-using Essentials.Kit.Data;
+using Essentials.Core.Storage;
+using Essentials.InternalModules.Kit.Data;
 
-namespace Essentials.Kit
+namespace Essentials.InternalModules.Kit
 {
     public sealed class KitManager
     {
