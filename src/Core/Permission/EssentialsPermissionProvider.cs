@@ -46,6 +46,12 @@ namespace Essentials.Core.Permission
 
         public bool HasPermission( IRocketPlayer player, string perm, bool defaultReturnValue = false )
         {
+            if ( perm.Contains( "." ) && _defaultProvider.HasPermission( player,
+                        perm.Substring( 0, perm.LastIndexOf( ".", StringComparison.Ordinal ) ) + ".*" ) )
+            {
+                return true;
+            }
+
             return _defaultProvider.HasPermission( player, perm, defaultReturnValue );
         }
 
@@ -62,13 +68,6 @@ namespace Essentials.Core.Permission
             if ( essCommand != null )
             {
                 perm = essCommand.Permission;
-            }
-
-            if ( perm.Contains( "." ) && _defaultProvider.HasPermission( player, 
-                                            perm.Substring( 0, perm.LastIndexOf( ".", StringComparison.Ordinal ) ) + ".*" ) )
-            {
-                cooldownLeft = 0;
-                return true;
             }
 
             return _defaultProvider.HasPermission( player, perm, out cooldownLeft, defaultReturnValue );
