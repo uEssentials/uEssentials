@@ -179,9 +179,9 @@
     <Compile Include="src\Kit\Item\KitItemVehicle.cs" />
     <Compile Include="src\Kit\Item\KitItemWeapon.cs" />
     <Compile Include="src\Core\Storage\IData.cs" />
-    <Compile Include="src\Kit\KitData.cs" />
+    <Compile Include="src\Kit\Data\KitData.cs" />
     <Compile Include="src\Kit\KitManager.cs" />
-    <Compile Include="src\Kit\WebKitData.cs" />
+    <Compile Include="src\Kit\Data\WebKitData.cs" />
     <Compile Include="src\Misc\AutoAnnouncer.cs" />
     <Compile Include="src\I18n\EssLang.cs" />
     <Compile Include="src\Api\Logging\EssLogger.cs" />
@@ -193,7 +193,7 @@
     <Compile Include="src\Updater\UpdateResult.cs" />
     <Compile Include="src\Warp\WarpManager.cs" />
     <Compile Include="src\Warp\Warp.cs" />
-    <Compile Include="src\Warp\JsonWarpData.cs" />
+    <Compile Include="src\Warp\WarpData.cs" />
     <Compile Include="src\Api\Command\CommandInfoAttr.cs" />
     <Compile Include="src\Core\Command\CommandManager.cs" />
     <Compile Include="src\Api\Command\Source\ICommandSource.cs" />
