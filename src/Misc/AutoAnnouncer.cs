@@ -29,9 +29,6 @@ using Rocket.Core.Assets;
 
 namespace Essentials.Misc
 {
-    /// <summary>
-    /// Author: leonardosc
-    /// </summary>
     [JsonObject]
     public class AutoAnnouncer : IDefaultable
     {

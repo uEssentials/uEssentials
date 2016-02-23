@@ -24,7 +24,7 @@ using SDG.Unturned;
 
 namespace Essentials.Core.Components.Player
 {
-    internal class ItemFeatures : PlayerComponent
+    public class ItemFeatures : PlayerComponent
     {
         private readonly PlayerEquipment     _equip;
 

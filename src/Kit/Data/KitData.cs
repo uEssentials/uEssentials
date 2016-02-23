@@ -31,9 +31,9 @@ using Newtonsoft.Json.Linq;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
 
-namespace Essentials.Kit
+namespace Essentials.Kit.Data
 {
-    public class KitData : IData<Dictionary<string, Kit>>
+    internal class KitData : IData<Dictionary<string, Kit>>
     {
         protected static string DataFilePath => $"{EssProvider.PluginFolder}kits.json";
 

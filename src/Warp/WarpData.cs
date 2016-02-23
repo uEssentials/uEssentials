@@ -29,7 +29,7 @@ using Newtonsoft.Json;
 
 namespace Essentials.Warp
 {
-    public class JsonWarpData : IData< Dictionary< string, Warp > >
+    public class WarpData : IData< Dictionary< string, Warp > >
     {
         private static string DataFilePath
         {

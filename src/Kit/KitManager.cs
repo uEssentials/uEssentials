@@ -22,6 +22,7 @@
 using System.Collections.Generic;
 using Essentials.Core.Storage;
 using Essentials.Api;
+using Essentials.Kit.Data;
 
 namespace Essentials.Kit
 {

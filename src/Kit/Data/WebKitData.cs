@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.IO;
 
-namespace Essentials.Kit
+namespace Essentials.Kit.Data
 {
     internal class WebKitData : KitData
     {

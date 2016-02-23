@@ -37,7 +37,7 @@ namespace Essentials.Warp
         internal WarpManager()
         {
             WarpMap = new Dictionary<string, Warp>();
-            WarpData = new JsonWarpData();
+            WarpData = new WarpData();
         }
 
         public Warp this[ string warpName ] => GetByName( warpName );
