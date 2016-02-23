@@ -28,29 +28,24 @@ using Essentials.Common;
 using Essentials.Configuration;
 using Essentials.Core;
 
-// ReSharper disable InconsistentNaming
-
 namespace Essentials.Api
 {
-    /// <summary>
-    /// Author: Leonardosc
-    /// </summary>
-    public sealed class EssProvider
+    public static class EssProvider
     {
         /// <summary>
         /// Version of uEssentials
         /// </summary>
-        public string PLUGIN_VERSION => EssCore.PLUGIN_VERSION;
+        public static string PLUGIN_VERSION => EssCore.PLUGIN_VERSION;
 
         /// <summary>
         /// Recommended version of Unturned
         /// </summary>
-        public string UNTURNED_VERSION => EssCore.UNTURNED_VERSION;
+        public static string UNTURNED_VERSION => EssCore.UNTURNED_VERSION;
 
         /// <summary>
         /// Recommended version of Rocket
         /// </summary>
-        public string ROCKET_VERSION => EssCore.ROCKET_VERSION;
+        public static string ROCKET_VERSION => EssCore.ROCKET_VERSION;
 
         /// <summary>
         /// <returns> Instance of CommandManager </returns>
@@ -65,17 +60,17 @@ namespace Essentials.Api
         /// <summary>
         /// <returns> Instance of ModuleManager </returns>
         /// </summary>
-        public static ModuleManager ModuleManager = Core.ModuleManager;
+        public static ModuleManager ModuleManager => Core.ModuleManager;
 
         /// <summary>
         /// <returns> Instance of plugin configuration </returns>
         /// </summary>
-        public static EssConfig Config = Core.Config;
+        public static EssConfig Config => Core.Config;
 
         /// <summary>
         /// <returns> Instance of EssLogger </returns>
         /// </summary>
-        public static EssLogger Logger = Core.Logger;
+        public static EssLogger Logger => Core.Logger;
 
         /// <summary>
         /// Singleton instance of ConsoleSource
