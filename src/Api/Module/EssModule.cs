@@ -88,8 +88,15 @@ namespace Essentials.Api.Module
 
             OnLoad();
 
-            EssProvider.CommandManager.RegisterAll( Assembly );
-            EssProvider.EventManager.RegisterAll( Assembly );
+            if ( (Info.Flags & ModuleFlags.AUTO_REGISTER_COMMANDS) == ModuleFlags.AUTO_REGISTER_COMMANDS )
+            {
+                EssProvider.CommandManager.RegisterAll( Assembly );
+            }
+
+            if ( (Info.Flags & ModuleFlags.AUTO_REGISTER_EVENTS) == ModuleFlags.AUTO_REGISTER_EVENTS )
+            {
+                EssProvider.EventManager.RegisterAll( Assembly );
+            }
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
@@ -23,27 +23,22 @@ using System;
 
 namespace Essentials.Api.Module
 {
-    [AttributeUsage( AttributeTargets.Class, Inherited = false )]
-    public sealed class ModuleInfo : Attribute
+    [Flags]
+    public enum ModuleFlags
     {
         /// <summary>
-        /// Name of module
+        /// Nothing
         /// </summary>
-        public string Name { get; set; }
+        NONE                   = 0 << 0,
 
         /// <summary>
-        /// Version of module
+        /// Dynamically register all commands in Module.
         /// </summary>
-        public string Version { get; set; } = "0.0.0.0";
+        AUTO_REGISTER_COMMANDS = 1 << 0,
 
         /// <summary>
-        /// Author of module
+        /// Dynamically register all events (handlers) in Module.
         /// </summary>
-        public string Author { get; set; } = "Undefined";
-
-        /// <summary>
-        /// Flags of module
-        /// </summary>
-        public ModuleFlags Flags { get; set; } = ModuleFlags.AUTO_REGISTER_COMMANDS | ModuleFlags.AUTO_REGISTER_EVENTS;
+        AUTO_REGISTER_EVENTS   = 1 << 1
     }
 }
