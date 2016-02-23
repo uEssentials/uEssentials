@@ -56,6 +56,8 @@ namespace Essentials.Configuration
         public AntiSpam         AntiSpam;
         public Updater          Updater;
         public HomeCommand      HomeCommand;
+        public WebKits          WebKits;
+        public WebConfig        WebConfig;
 
         public AutoAnnouncer    AutoAnnouncer;
 
@@ -96,6 +98,10 @@ namespace Essentials.Configuration
 
             HomeCommand                 = new HomeCommand { Cooldown = 30, Delay = 5,
                                                             CancelWhenMove = true };
+
+            WebKits                     = new WebKits { Enabled = false, Url = "http://pastebin.com/raw/VsnXkaA9" };
+            
+            WebConfig                   = new WebConfig { Enabled = false, Url = "http://pastebin.com/raw/0jn7h5U8" };
 
             DisabledCommands            = new List<string>();
         }
@@ -168,5 +174,19 @@ namespace Essentials.Configuration
         public int Cooldown;
         public int Delay;
         public bool CancelWhenMove;
+    }
+
+    [JsonObject]
+    public struct WebKits
+    {
+        public string Url;
+        public bool Enabled;
+    }
+    
+    [JsonObject]
+    public struct WebConfig
+    {
+        public string Url;
+        public bool Enabled;
     }
 }

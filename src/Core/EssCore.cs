@@ -170,6 +170,12 @@ namespace Essentials.Core
 
             Config = new EssConfig();
             Config.Load( configPath );
+            
+            if ( Config.WebConfig.Enabled )
+            {
+                Config = new EssWebConfig();
+                Config.Load( configPath );
+            }
 
             EventManager = new EventManager();
             CommandManager = new CommandManager();

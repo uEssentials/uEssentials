@@ -33,16 +33,16 @@ using SDG.Unturned;
 
 namespace Essentials.Kit
 {
-    public class JsonKitData : IData<Dictionary<string, Kit>>
+    public class KitData : IData<Dictionary<string, Kit>>
     {
-        private static string DataFilePath => $"{EssProvider.PluginFolder}kits.json";
+        protected static string DataFilePath => $"{EssProvider.PluginFolder}kits.json";
 
-        public void Save( Dictionary<string, Kit> type )
+        public virtual void Save( Dictionary<string, Kit> type )
         {
             JsonUtil.Serialize( DataFilePath, type.Values );
         }
 
-        public Dictionary<string, Kit> Load()
+        public virtual Dictionary<string, Kit> Load()
         {
             var loadedKits = new Dictionary<string, Kit>();
 

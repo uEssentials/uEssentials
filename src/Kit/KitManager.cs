@@ -21,6 +21,7 @@
 
 using System.Collections.Generic;
 using Essentials.Core.Storage;
+using Essentials.Api;
 
 namespace Essentials.Kit
 {
@@ -37,7 +38,7 @@ namespace Essentials.Kit
         internal KitManager()
         {
             KitMap = new Dictionary<string, Kit>();
-            KitData = new JsonKitData();
+            KitData = EssProvider.Config.WebKits.Enabled ? new WebKitData() : new KitData();
         }
 
         public bool Contains( string kitName )
