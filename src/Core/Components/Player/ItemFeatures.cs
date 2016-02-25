@@ -43,10 +43,10 @@ namespace Essentials.Core.Components.Player
             /*
                 Weapon feature (Auto reload)
             */
-            if ( AutoReload && _equip.state.Length >= 18 && _equip.state[0xA] == 0 )
+            if ( AutoReload && _equip.state.Length >= 18 && _equip.state[10] == 0 )
             {
                 var id = BitConverter.ToUInt16(
-                    new[] { _equip.state[0x8], _equip.state[0x9] },
+                    new[] { _equip.state[8], _equip.state[9] },
                     0
                 );
 
@@ -57,13 +57,13 @@ namespace Essentials.Core.Components.Player
                 switch ( holdId )
                 {
                     case 519:
-                        _equip.state[0x8] = 8;
-                        _equip.state[0x9] = 2;
+                        _equip.state[8] = 8;
+                        _equip.state[9] = 2;
                         break;
 
                     case 300:
-                        _equip.state[0x8] = 45;
-                        _equip.state[0x9] = 1;
+                        _equip.state[8] = 45;
+                        _equip.state[9] = 1;
                         break;
                     
                     case 346:
@@ -71,8 +71,8 @@ namespace Essentials.Core.Components.Player
                     case 355:
                     case 356:
                     case 357:
-                        _equip.state[0x8] = 91;
-                        _equip.state[0x9] = 1;
+                        _equip.state[8] = 91;
+                        _equip.state[9] = 1;
                         break;
                 }
 
@@ -91,9 +91,9 @@ namespace Essentials.Core.Components.Player
                     _equip.sendUpdateQuality();
                 }
 
-                if ( _equip.state[0x10] < 10 )
+                if ( _equip.state.Length > 16 && _equip.state[16] < 10 )
                 {
-                    _equip.state[0x10] = 100;
+                    _equip.state[16] = 100;
                     _equip.sendUpdateState();
                 }
             }
