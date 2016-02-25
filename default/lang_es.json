@@ -157,13 +157,12 @@
   "WARP_TELEPORTED": "Teletransportado al warp {0}",
   "AUTO_REFUEL_ENABLED": "Auto-Refuel ON!",
   "AUTO_REFUEL_DISABLED": "Auto-Refuel OFF!",
-   //TODO need translation.
-  "CREATED_KIT": "You created a new kit named '{0}'.",
-  "INVALID_BOOLEAN": "<red>Invalid value '{0}'. Expected 'true' or 'false'",
-  "WITHOUT_BED": "You do not have a bed to teleport to.",
-  "CANNOT_TELEPORT_DRIVING": "You cannot teleport while being in a vehicle.",
-  "TELEPORT_DELAY": "You will be teleported in {0} seconds.",
-  "USE_COOLDOWN": "<yellow>Wait {0} to use it again.",
-  "TELEPORTED_BED": "You were teleported to your bed.",
-  "TELEPORT_CANCELLED_MOVED": "<yellow>Teleport cancelled because you has moved."
+  "CREATED_KIT": "Has creado un nuevo kit llamado '{0}'.",
+  "INVALID_BOOLEAN": "<red>Valor invalido '{0}'. esperando 'true' o 'false'",
+  "WITHOUT_BED": "No tienes una cama para teletransportarte.",
+  "CANNOT_TELEPORT_DRIVING": "Tu no puedes teletransportarte estando en un vehiculo.",
+  "TELEPORT_DELAY": "Seras teletransportado en {0} segundos.",
+  "USE_COOLDOWN": "<yellow>Espera {0} segundos para usar esto denuevo.",
+  "TELEPORTED_BED": "Has sido teletransportado a tu cama.",
+  "TELEPORT_CANCELLED_MOVED": "<yellow>Teleportar cancelado por que te has movido."
 }
