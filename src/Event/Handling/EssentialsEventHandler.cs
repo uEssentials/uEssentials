@@ -170,6 +170,7 @@ namespace Essentials.Event.Handling
 
             EssProvider.ModuleManager.GetModule<KitModule>().IfPresent( m => {
                 if ( CommandKit.Cooldowns.Count == 0 ) return;
+                if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
 
                 var playerCooldowns = CommandKit.Cooldowns[player.CSteamID.m_SteamID];
                 var keys = new List<string> ( playerCooldowns.Keys );
