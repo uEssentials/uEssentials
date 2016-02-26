@@ -31,7 +31,7 @@
     	A cor padrão é Verde.
     */
 
-    "UNKNOWN_COMMAND": "<white>Não existe um comando chamado '/{0}'.",
+    "UNKNOWN_COMMAND": "<white>Não existe um comando chamado '/{0}'",
     "INVALID_NUMBER": "<red>Número inválido '{0}'",
     "SECOND": "segundo",
     "DAY": "dia",
@@ -43,9 +43,9 @@
     "HOURS": "horas",
     "PLAYER_JOINED": "<yellow>{0} entrou no servidor.",
     "PLAYER_EXITED": "<yellow>{0} saiu do servidor.",
-    "PLAYER_CANNOT_EXECUTE": "<red>Esse comando não pode ser executad no jogo.",
-    "CONSOLE_CANNOT_EXECUTE": "<red>Esse comando não pode ser executado no console.",
-    "COMMAND_ERROR_OCURRED": "<red>Ocorreu um erro ao tentar executar esse comando, por favor contate um administrador.",
+    "PLAYER_CANNOT_EXECUTE": "<red>Este comando não pode ser executado no jogo.",
+    "CONSOLE_CANNOT_EXECUTE": "<red>Este comando não pode ser executado no console.",
+    "COMMAND_ERROR_OCURRED": "<red>Ocorreu um erro ao tentar executar este comando, por favor contate um administrador.",
     "COMMAND_NO_PERMISSION": "<red>Você não tem acesso a este comando.",
     "ONLY_NUMBERS": "Use apenas números.",
     "ONLINE_PLAYERS": "Há {0} de {1} jogadores online agora.",
@@ -95,7 +95,7 @@
     "TELEPORTED_ALL_PLAYER": "Todos os jogadores foram teleportados para '{0}'",
     "NO_PLAYERS_FOR_TELEPORT": "Não há nenhum jogador para ser teleportado.",
     "NO_PLAYERS_FOR_KICK": "Não há nenhum jogador para kickar.",
-    "KICKED_ALL": "Você kickou '{0}' jogadores.",
+    "KICKED_ALL": "Você kickou {0} jogadores.",
     "INVALID_COORDS": "<red>Coordenadas inválidas ({0}, {1}, {2})",
     "KIT_NOT_EXIST": "<yellow>O kit '{0}' não existe, Use /kits para ver os kits disponíveis.",
     "KIT_GIVEN_SENDER": "Você deu o kit '{0}' para '{1}'",
