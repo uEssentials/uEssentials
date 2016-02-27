@@ -1,6 +1,4 @@
 
-TEST TEST
-
 # uEssentials
 
 [![Join the chat at https://gitter.im/uEssentials/uEssentials](https://badges.gitter.im/uEssentials/uEssentials.svg)](https://gitter.im/uEssentials/uEssentials?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
