@@ -166,5 +166,7 @@
     "USE_COOLDOWN": "<yellow>Wait {0} seconds to use it again.",
     "TELEPORT_CANCELLED_MOVED": "<yellow>Teleport cancelled because you moved.",
 	"KIT_ALREADY_EXIST": "<yellow>There is already a kit named '{0}'.",
-	"DELETED_KIT": "<magenta>You deleted the '{0}' kit."
+	"DELETED_KIT": "<magenta>You deleted the '{0}' kit.",
+    "RESPAWNED_ITEMS": "<cyan>Successfully respawned all items!",
+    "RESPAWNED_VEHICLES": "<cyan>Successfully respawned all vehicles!"
 }

@@ -512,6 +512,56 @@ namespace Essentials.Commands
             EssLang.ONLINE_PLAYERS.SendTo( src, UServer.Players.Count(), UServer.MaxPlayers );
         }
 
+        [CommandInfo(
+            Name = "respawnitems",
+            Description = "Respawn all items."
+        )]
+        public void RespawnItemsCommand( ICommandSource src, ICommandArgs args )
+        {
+            for ( byte b = 0; b < Regions.WORLD_SIZE; b += 1 )
+            {
+                for ( byte b2 = 0; b2 < Regions.WORLD_SIZE; b2 += 1 )
+                {
+                    if ( LevelItems.spawns[b, b2].Count <= 0 ) continue;
+
+                    for ( var i = 0; i < LevelItems.spawns[b, b2].Count; i++ )
+                    {
+                        var itemSpawnpoint = LevelItems.spawns[b, b2][i];
+                        var item = LevelItems.getItem( itemSpawnpoint );
+
+                        if ( item == 0 ) continue;
+
+                        var item2 = new Item( item, true );
+                        ItemManager.dropItem( item2, itemSpawnpoint.point, false, false, false );
+                    }
+                }
+            }
+
+            EssLang.RESPAWNED_ITEMS.SendTo( src );
+        }
+
+        [CommandInfo(
+            Name = "respawnvehicles",
+            Description = "Respawn all vehicles."
+        )]
+        public void RespawnVehiclesCommand( ICommandSource src, ICommandArgs args )
+        {
+            var spawns = LevelVehicles.spawns;
+            for ( var j = 0; j < spawns.Count; j++ )
+            {
+                var vehicleSpawnpoint = spawns[j];
+                var vehicle = LevelVehicles.getVehicle( vehicleSpawnpoint );
+
+                if ( vehicle == 0 ) continue;
+
+                var point = vehicleSpawnpoint.point;
+                point.y += 1f;
+                VehicleManager.spawnVehicle( vehicle, point, Quaternion.Euler( 0f, vehicleSpawnpoint.angle, 0f ) );
+            }
+
+            EssLang.RESPAWNED_VEHICLES.SendTo( src );
+        }
+
 
         # region HELPER METHODS
 

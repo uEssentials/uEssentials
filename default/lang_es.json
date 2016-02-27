@@ -166,5 +166,7 @@
   "TELEPORTED_BED": "Has sido teletransportado a tu cama.",
   "TELEPORT_CANCELLED_MOVED": "<yellow>Teleportar cancelado por que te has movido.",
   "KIT_ALREADY_EXIST": "<yellow>There is already kit named '{0}'.",
-  "DELETED_KIT": "<yellow>You deleted the '{0}' kit."
+  "DELETED_KIT": "<yellow>You deleted the '{0}' kit.",
+  "RESPAWNED_ITEMS": "<cyan>Successfully respawned all items!",
+  "RESPAWNED_VEHICLES": "<cyan>Successfully respawned all vehicles!"
 }

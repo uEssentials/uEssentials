@@ -327,5 +327,7 @@ namespace Essentials.I18n
         public static EssLang NOBODY_TO_REPLY { get; private set; }
         public static EssLang KIT_ALREADY_EXIST { get; private set; }
         public static EssLang DELETED_KIT { get; private set; }
+        public static EssLang RESPAWNED_ITEMS { get; private set; }
+        public static EssLang RESPAWNED_VEHICLES { get; private set; }
     }
 }
