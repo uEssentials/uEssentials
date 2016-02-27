@@ -27,7 +27,7 @@ uEssentials have an easy and intuitive module system that allow to create new co
 List of features:
 - Kits
 - Warps
-- Over 40 commands
+- Over 50 commands
 - Intuitive and easy module system
 
 List of commands:
