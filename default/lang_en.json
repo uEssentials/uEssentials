@@ -1,9 +1,5 @@
 {
     /*
-        !!! SORRY FOR MY ENGLISH !!!
-    */
-
-    /*
     	Colors:
     		Use: <colorName OR hex value>
     		HEX:
@@ -133,8 +129,7 @@
     "INVALID_ITEM_ID": "<red>Invalid item id '{0}'.",
     "INVALID_ITEM_ID_NAME": "<yellow>Invalid item id/name '{0}'.",
     "CHAT_ANTI_SPAM": "<yellow>Antispam is active; wait to chat again.",
-    "ANYONE_TO_REPLY": "<yellow>There is nobody to reply to.",
-    /*   ^ ???   */
+    "NOBODY_TO_REPLY": "<yellow>There is nobody to reply to.",
     "NO_LONGER_ONLINE": "<yellow>This player is no longer online.",
     "SPY_MODE_OFF": "<magenta>Spy mode off.",
     "SPY_MODE_ON": "<cyan>Spy mode on.",
@@ -169,5 +164,7 @@
     "CANNOT_TELEPORT_DRIVING": "<yellow>You cannot teleport while being in a vehicle.",
     "TELEPORT_DELAY": "<blue>You will be teleported in {0} seconds.",
     "USE_COOLDOWN": "<yellow>Wait {0} seconds to use it again.",
-    "TELEPORT_CANCELLED_MOVED": "<yellow>Teleport cancelled because you moved."
+    "TELEPORT_CANCELLED_MOVED": "<yellow>Teleport cancelled because you moved.",
+	"KIT_ALREADY_EXIST": "<yellow>There is already kit named '{0}'.",
+	"DELETED_KIT": "<yellow>You deleted the '{0}' kit."
 }

@@ -29,37 +29,38 @@ namespace Essentials.Api.Command
     public interface ICommand
     {
         /// <summary>
-        /// Name of the command
+        /// Name of this command
         /// </summary>
         string Name { get; }
 
         /// <summary>
-        /// Usage of the command
+        /// Usage of this command
         /// </summary>
         string Usage { get; }
 
         /// <summary>
-        /// Aliases of the command
+        /// Aliases of this command
         /// </summary>
         string[] Aliases { get; }
 
         /// <summary>
-        /// Description of the command
+        /// Description of this command
         /// </summary>
         string Description { get; }
 
         /// <summary>
-        /// Permission of the command
+        /// Permission of this command
         /// </summary>
         string Permission { get; }
 
         /// <summary>
         /// Allowed sources
         /// </summary>
+        /// <see cref="AllowedSource"/>
         AllowedSource AllowedSource { get; }
 
         /// <summary>
-        /// This method is called when player execute this command
+        /// Called when someone execute this command.
         /// </summary>
         /// <param name="src">Source who is calling this command, can be console or player</param>
         /// <param name="args">Arguments passed when this command is called</param>

@@ -31,38 +31,33 @@ namespace Essentials.Api.Command
     {
         private readonly CommandInfo _commandInfo;
 
-        public string Name => _commandInfo.Name;
-
-        public string[] Aliases => _commandInfo.Aliases;
-
-        public string Usage => _commandInfo.Usage;
-
-        public string Permission { get; set; }
-
-        public AllowedSource AllowedSource => _commandInfo.AllowedSource;
-
-        public string Description => _commandInfo.Description;
-
-        protected string UsageMessage { get; set; }
-
-        protected EssLogger Logger { get; }
+        protected string        UsageMessage    { get; set; }
+        protected EssLogger     Logger          { get; }
+        public string           Permission      { get; }
+        public string           Name            => _commandInfo.Name;
+        public string[]         Aliases         => _commandInfo.Aliases;
+        public string           Usage           => _commandInfo.Usage;
+        public AllowedSource    AllowedSource   => _commandInfo.AllowedSource;
+        public string           Description     => _commandInfo.Description;
 
         protected EssCommand()
         {
-            _commandInfo = Preconditions.NotNull( 
-                ReflectionUtil.GetAttributeFrom<CommandInfo>( this ), 
+            _commandInfo = Preconditions.NotNull(
+                ReflectionUtil.GetAttributeFrom<CommandInfo>( this ),
                 "EssCommand must have 'CommandInfo' attribute" 
             );
 
             UsageMessage = "Use /" + Name + " " + Usage;
             Logger = EssProvider.Logger;
 
-            Permission = GetType().Assembly.Equals( typeof( EssCore ).Assembly ) 
-                         ? $"essentials.command.{Name}" 
-                         : _commandInfo.Permission;
+            Permission = GetType().Assembly.Equals( typeof (EssCore).Assembly )
+                ? $"essentials.command.{Name}"
+                : _commandInfo.Permission;
 
             if ( Permission.IsNullOrEmpty() )
+            {
                 Permission = Name;
+            }
         }
 
         protected virtual void ShowUsage( ICommandSource source )

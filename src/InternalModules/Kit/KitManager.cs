@@ -30,7 +30,7 @@ namespace Essentials.InternalModules.Kit
     {
         private Dictionary<string, Kit> KitMap { get; set; }
 
-        private IData<Dictionary<string, Kit>> KitData { get; set; }
+        private IData<Dictionary<string, Kit>> KitData { get; }
 
         public int Count => KitMap.Count;
 
@@ -60,6 +60,12 @@ namespace Essentials.InternalModules.Kit
         public void Add( Kit kit )
         {
             KitMap.Add( kit.Name.ToLowerInvariant(), kit );
+            Save();
+        }
+
+        public void Remove( Kit kit )
+        {
+            KitMap.Remove( kit.Name.ToLowerInvariant() );
             Save();
         }
 

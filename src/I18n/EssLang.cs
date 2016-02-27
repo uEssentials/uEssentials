@@ -324,5 +324,8 @@ namespace Essentials.I18n
         public static EssLang TELEPORTED_BED { get; private set; }
         public static EssLang TELEPORT_CANCELLED_LOSE_HEALTH { get; private set; }
         public static EssLang TELEPORT_CANCELLED_MOVED { get; private set; }
+        public static EssLang NOBODY_TO_REPLY { get; private set; }
+        public static EssLang KIT_ALREADY_EXIST { get; private set; }
+        public static EssLang DELETED_KIT { get; private set; }
     }
 }

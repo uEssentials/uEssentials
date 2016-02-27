@@ -43,6 +43,7 @@ namespace Essentials.InternalModules.Kit
             CommandManager.Register<CommandKit>();
             CommandManager.Register<CommandKits>();
             CommandManager.Register<CommandCreateKit>();
+            CommandManager.Register<CommandDeleteKit>();
         }
 
         public override void OnUnload()
@@ -50,6 +51,7 @@ namespace Essentials.InternalModules.Kit
             CommandManager.Unregister<CommandKit>();
             CommandManager.Unregister<CommandKits>();
             CommandManager.Unregister<CommandCreateKit>();
+            CommandManager.Unregister<CommandDeleteKit>();
         }
     }
 }

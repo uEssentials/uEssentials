@@ -33,17 +33,13 @@ namespace Essentials.Core.Command
 {
     ///<summary>
     /// Default implementation of ICommandArgs
-    /// Author: Leonardosc
     ///</summary>
     internal class CommandArgs : ICommandArgs
     {
-        public string[] RawArguments { get; }
-
-        public ICommandArgument[] Arguments { get; }
-
-        public int Length => RawArguments.Length;
-
-        public bool IsEmpty => Length == 0;
+        public string[]             RawArguments    { get; }
+        public ICommandArgument[]   Arguments       { get; }
+        public int                  Length          => RawArguments.Length;
+        public bool                 IsEmpty         => Length == 0;
 
         public CommandArgs( string rawArgs )
         {
@@ -106,7 +102,6 @@ namespace Essentials.Core.Command
 
             Arguments = arguments;
         }
-
 
         public ICommandArgument this[ int argumentIndex ]
         {

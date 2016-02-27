@@ -34,7 +34,7 @@ namespace Essentials.InternalModules.Kit.Commands
         Name = "createkit",
         Aliases = new [] {"ckit"},
         Description = "",
-        Usage = "[name] [cooldown] [resetCooldownWhenDie[true or false]]",
+        Usage = "[name] <cooldown>",
         AllowedSource = AllowedSource.PLAYER
     )]
     public class CommandCreateKit : EssCommand
@@ -43,37 +43,37 @@ namespace Essentials.InternalModules.Kit.Commands
         {
             var player = src.ToPlayer();
 
-            if ( args.Length != 3 )
+            if ( args.Length < 1 )
             {
                 ShowUsage( src );
                 return;
             }
 
             var name = args[0].ToString();
-            uint cooldown;
-            bool resetCooldownWhenDie;
+            uint cooldown = 0;
 
-            if ( !args[1].IsInt )
+            if ( KitModule.Instance.KitManager.Contains( name ) )
             {
-                EssLang.INVALID_BOOLEAN.SendTo( src, args[1] );
+                src.SendMessage( "This kit already exists." );
                 return;
             }
 
-            if ( args[1].ToInt < 0 )
+            if ( args.Length < 1 )
             {
-                EssLang.MUST_POSITIVE.SendTo( src );
-                return;
+                if ( !args[1].IsInt )
+                {
+                    EssLang.INVALID_BOOLEAN.SendTo( src, args[1] );
+                    return;
+                }
+
+                if ( args[1].ToInt < 0 )
+                {
+                    EssLang.MUST_POSITIVE.SendTo( src );
+                    return;
+                }
+
+                cooldown = args[1].ToUint;
             }
-
-            cooldown = args[1].ToUint;
-
-            if ( !args[2].IsBool )
-            {
-                EssLang.INVALID_BOOLEAN.SendTo( src, args[2] );
-                return;
-            }
-
-            resetCooldownWhenDie = args[2].ToBool;
 
             var inventory = player.Inventory;
             var clothing = player.Clothing;
@@ -200,7 +200,7 @@ namespace Essentials.InternalModules.Kit.Commands
 
             // End Mask & Hat
 
-            var kit = new Kit( name, cooldown, resetCooldownWhenDie ) {
+            var kit = new Kit( name, cooldown, true ) {
                 Items = items
             };
 

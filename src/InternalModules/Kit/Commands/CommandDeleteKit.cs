@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
@@ -19,52 +19,39 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
-using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
-using static Essentials.Commands.CommandTell;
 using Essentials.I18n;
 
-namespace Essentials.Commands
+namespace Essentials.InternalModules.Kit.Commands
 {
     [CommandInfo(
-        Name = "reply",
-        Aliases = new[] {"r"},
-        Description = "Reply an message",
-        AllowedSource = AllowedSource.PLAYER,
-        Usage = "[message]"
+        Name = "deletekit",
+        Aliases = new[] {"dkit"},
+        Description = "Delete an kit.",
+        Usage = "[name]"
     )]
-    public class CommandReply : EssCommand
+    public class CommandDeleteKit : EssCommand
     {
         public override void OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( args.Length == 0 )
+            if ( args.IsEmpty )
             {
                 ShowUsage( src );
             }
             else
             {
-                if ( !Conversations.ContainsKey( src.DisplayName ) )
+                var km = KitModule.Instance.KitManager;
+
+                if ( !km.Contains( args[0].ToString() ) )
                 {
-                    EssLang.NOBODY_TO_REPLY.SendTo( src );
-                    return;
+                    EssLang.KIT_NOT_EXIST.SendTo( src, args[0] );
                 }
-
-                var target = ( from conversation
-                               in Conversations
-                               where conversation.Value.Equals( src.DisplayName )
-                               select UPlayer.From( conversation.Key )
-                              ).FirstOrDefault();
-
-                if ( target == null )
+                else
                 {
-                    EssLang.NO_LONGER_ONLINE.SendTo( src );
-                    return;
+                    km.Remove( km.GetByName( args[0].ToString() ) );
+                    EssLang.DELETED_KIT.SendTo( src, args[0] );
                 }
-
-                src.DispatchCommand( $"tell {target.DisplayName} {args.Join( 0 )}" );
             }
         }
     }

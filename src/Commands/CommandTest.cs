@@ -19,58 +19,121 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System;
 using System.Reflection;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Common;
 using SDG.Unturned;
 using UnityEngine;
+using System.Text;
+using Essentials.InternalModules.Kit.Commands;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
         Name = "test"
-    )]
+     )]
     public class CommandTest : EssCommand
-    { 
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+    {
+        public static string tostr( byte[] obj )
         {
-            var player = source.ToPlayer();
-            var p = player.UnturnedPlayer;
+            var sb = new StringBuilder();
+            obj.ForEach( o => sb.Append( o.ToString() ).Append( ", " ) );
+            return sb.Remove( 0, sb.Length ).Append( "]" ).ToString();
+        }
 
-          //  Console.WriteLine( p.GetComponent<CharacterController>() == null );
-            //   p.movement.GetComponent<CharacterController>().attachedRigidbody.constraints = RigidbodyConstraints.FreezePositionX;
+
+        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        {
+            var player = src.ToPlayer();
+            var _equip = player.Equipment;
+            //
+            
+            src.SendMessage( CommandKit.Cooldowns[player.CSteamId.m_SteamID].Count );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
             return;
+            var p = player.UnturnedPlayer;
+
 
             RaycastHit hit;
 
-            Physics.Raycast(p.look.aim.position, p.look.aim.forward, out hit, 114f, RayMasks.PLAYER_INTERACT);
+            Physics.Raycast( p.look.aim.position, p.look.aim.forward, out hit, 114f, RayMasks.BARRICADE | RayMasks.STRUCTURE );
 
-            
-            var barricade = hit.transform?.GetComponent<InteractableDoor>();
 
-            byte b;
-			byte b2;
-			ushort num;
-			ushort num2;
-			BarricadeRegion barricadeRegion;
-            if ( BarricadeManager.tryGetInfo( barricade.transform, out b, out b2, out num, out num2, out barricadeRegion ) )
-            {
-                Console.WriteLine( b + " " +b2 + " " + num + " " + num2) ;
-            }
+            var a = hit.transform?.GetComponent<Interactable>();
+            //    var b = hit.transform?.GetComponent<Interactable2>();
+
+            //  BarricadeManager.toggleDoor( hit.transform );
+            //   BarricadeManager.toggleDoor( hit.transform.GetChild( 0 ) );
+            // BarricadeManager.damage( a.transform, float.MaxValue, 1 );
 
 
             return;
-            var animalManager = typeof( AnimalManager ).GetField( "manager", BindingFlags.NonPublic | BindingFlags.Static ).GetValue( null ) as AnimalManager;
-            
-            typeof( AnimalManager ).GetMethod( "addAnimal", BindingFlags.NonPublic | BindingFlags.Instance )
-            .Invoke( animalManager, new object[] { (byte) 3, player.Position + new Vector3( 2, 0, 0 ), 0.0f, false } );
-            
+            var animalManager = typeof (AnimalManager).GetField( "manager", BindingFlags.NonPublic | BindingFlags.Static ).GetValue( null ) as AnimalManager;
+
+            typeof (AnimalManager).GetMethod( "addAnimal", BindingFlags.NonPublic | BindingFlags.Instance )
+                .Invoke( animalManager, new object[] {(byte) 3, player.Position + new Vector3( 2, 0, 0 ), 0.0f, false} );
+
             animalManager.askAnimals( player.CSteamId );
-            
+
             return;
 
 

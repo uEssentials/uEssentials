@@ -33,7 +33,7 @@
 
   "ALL_REPAIRED": "Todos los items han sido reparados",
   "ALREADY_FROZEN": "Este jugador ya esta congelado",
-  "ANYONE_TO_REPLY": "<yello>Cualquiera puede responder",
+  "NOBODY_TO_REPLY": "<yello>Cualquiera puede responder",
   "AUTO_RELOAD_DISABLED": "Auto-Reload OFF!",
   "AUTO_RELOAD_ENABLED": "Auto-Reload ON!",
   "AUTO_REPAIR_DISABLED": "Auto-Repair OFF!",
@@ -164,5 +164,7 @@
   "TELEPORT_DELAY": "Seras teletransportado en {0} segundos.",
   "USE_COOLDOWN": "<yellow>Espera {0} segundos para usar esto denuevo.",
   "TELEPORTED_BED": "Has sido teletransportado a tu cama.",
-  "TELEPORT_CANCELLED_MOVED": "<yellow>Teleportar cancelado por que te has movido."
+  "TELEPORT_CANCELLED_MOVED": "<yellow>Teleportar cancelado por que te has movido.",
+  "KIT_ALREADY_EXIST": "<yellow>There is already kit named '{0}'.",
+  "DELETED_KIT": "<yellow>You deleted the '{0}' kit."
 }

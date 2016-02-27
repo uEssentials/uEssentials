@@ -129,7 +129,7 @@
     "SPAWNED_ITEM_AT": "Você spawnou {0}x {1} em (x: {2:0.00}, y: {3:0.00}, z: {4:0.00})",
     "INVALID_ITEM_ID": "<red>'{0}' não é um id de item válido.",
     "CHAT_ANTI_SPAM": "<yellow>Espere para falar novamente.",
-    "ANYONE_TO_REPLY": "<yello>ninguém para responder.",
+    "NOBODY_TO_REPLY": "<yello>ninguém para responder.",
     "NO_LONGER_ONLINE": "Este jogador não está mais online.",
     "SPY_MODE_OFF": "<yellow>Modo espião desligado.",
     "SPY_MODE_ON": "<yellow>Modo espião ligado.",
@@ -164,5 +164,7 @@
 	"TELEPORT_DELAY": "Você será teleportado em {0}.",
 	"USE_COOLDOWN": "<yellow>Espere {0} para usar isso novamente.",
 	"TELEPORTED_BED": "Você foi teleportado para sua cama.",
-	"TELEPORT_CANCELLED_MOVED": "<yellow>O teleporte foi cancelado pois você se moveu."
+	"TELEPORT_CANCELLED_MOVED": "<yellow>O teleporte foi cancelado pois você se moveu.",
+	"KIT_ALREADY_EXIST": "<yellow>There is already kit named '{0}'.",
+	"DELETED_KIT": "<yellow>You deleted the '{0}' kit."
 }
