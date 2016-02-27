@@ -39,6 +39,7 @@ namespace Essentials.InternalModules.Kit.Data
 
         public virtual void Save( Dictionary<string, Kit> type )
         {
+            File.WriteAllText( DataFilePath, string.Empty );
             JsonUtil.Serialize( DataFilePath, type.Values );
         }
 
