@@ -41,7 +41,6 @@ using Rocket.Core;
 using Rocket.Core.Plugins;
 using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
-using Essentials.Common.Util;
 using Essentials.Compatibility;
 using Essentials.Core.Permission;
 using Essentials.Event.Handling;
@@ -60,20 +59,11 @@ namespace Essentials.Core
             TODO:
                 - AFK KICK
                 - Improve event system to avoid duplicate events.
-
-            Internal modules
-            
-            "EnabledSystems": { 
-                "kits",
-                "warps"
-            }
-
-
         */
         
-        internal const string                         PLUGIN_VERSION              = "1.1.3.0";
+        internal const string                         PLUGIN_VERSION              = "1.1.4.0";
         internal const string                         ROCKET_VERSION              = "4.9.2.0";
-        internal const string                         UNTURNED_VERSION            = "3.14.5.0";
+        internal const string                         UNTURNED_VERSION            = "3.14.6.2";
         
         internal static EssCore                       Instance                    { get; set; }
         
