@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
@@ -36,7 +37,7 @@ namespace Essentials.Commands
     {
         public override void OnExecute( ICommandSource source, ICommandArgs parameters )
         {
-            if ( parameters.Length < 2)
+            if ( (parameters.Length != 2 && Polls.Count != 1 ) || parameters.Length < 1 )
             {
                 ShowUsage( source );
             }
@@ -47,7 +48,7 @@ namespace Essentials.Commands
                     case "yes":
                     case "y":
                     {
-                        var pollName = parameters[1].ToString();
+                        var pollName = parameters.Length == 1 ? Polls.Keys.First() : parameters[1].ToString();
                             
                         if ( !PollExists( pollName, source ) ) return;
                         
