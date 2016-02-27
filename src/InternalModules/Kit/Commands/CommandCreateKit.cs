@@ -182,7 +182,7 @@ namespace Essentials.InternalModules.Kit.Commands
 
             // End Pants
 
-            // Mask & Hat
+            // Mask, Glasses & Hat
 
             if ( clothing.mask != 0 )
             {
@@ -197,8 +197,15 @@ namespace Essentials.InternalModules.Kit.Commands
                     Metadata = clothing.hatState
                 } );
             }
+            
+            if ( clothing.glasses != 0 )
+            {
+                items.Add( new KitItem( clothing.glasses, clothing.glassesQuality, 1 ) {
+                    Metadata = clothing.glassesState
+                } );
+            }
 
-            // End Mask & Hat
+            // End Mask, Glasses & Hat
 
             var kit = new Kit( name, cooldown, true ) {
                 Items = items
