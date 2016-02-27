@@ -70,6 +70,13 @@ namespace Essentials.Core.Permission
                 perm = essCommand.Permission;
             }
 
+            if ( perm.Contains( "." ) && _defaultProvider.HasPermission( player,
+                        perm.Substring( 0, perm.LastIndexOf( ".", StringComparison.Ordinal ) ) + ".*" ) )
+            {
+                cooldownLeft = 0;
+                return true;
+            }
+
             return _defaultProvider.HasPermission( player, perm, out cooldownLeft, defaultReturnValue );
         }
 
