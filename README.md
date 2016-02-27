@@ -1,3 +1,4 @@
+
 # uEssentials
 
 [![Join the chat at https://gitter.im/uEssentials/uEssentials](https://badges.gitter.im/uEssentials/uEssentials.svg)](https://gitter.im/uEssentials/uEssentials?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -27,7 +28,7 @@ uEssentials have an easy and intuitive module system that allow to create new co
 List of features:
 - Kits
 - Warps
-- Over 40 commands
+- Over 50 commands
 - Intuitive and easy module system
 
 List of commands:
