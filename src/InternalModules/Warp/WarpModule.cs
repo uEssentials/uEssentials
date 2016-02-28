@@ -29,8 +29,8 @@ namespace Essentials.InternalModules.Warp
     [ModuleInfo( Name = "Warps", Flags = ModuleFlags.NONE )]
     public class WarpModule : InternalModule
     {
-        public WarpManager WarpManager        { get; internal set; }
-        public static WarpModule Instance    { get; private set; }
+        public WarpManager          WarpManager { get; private set; }
+        public static WarpModule    Instance    { get; private set; }
 
         public override void OnLoad()
         {

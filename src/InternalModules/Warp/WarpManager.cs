@@ -27,13 +27,10 @@ namespace Essentials.InternalModules.Warp
 {
     public sealed class WarpManager
     {
-        private Dictionary<string, Warp> WarpMap { get; set; }
-
-        private IData<Dictionary<string, Warp>> WarpData { get; }
-
-        public int Count => WarpMap.Count;
-
-        public IEnumerable<Warp> Warps => WarpMap.Values; 
+        private Dictionary<string, Warp>        WarpMap     { get; set; }
+        private IData<Dictionary<string, Warp>> WarpData    { get; }
+        public IEnumerable<Warp>                Warps       => WarpMap.Values; 
+        public int                              Count       => WarpMap.Count;
 
         internal WarpManager()
         {

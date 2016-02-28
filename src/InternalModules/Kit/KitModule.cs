@@ -28,7 +28,7 @@ namespace Essentials.InternalModules.Kit
     [ModuleInfo( Name = "Kits", Flags = ModuleFlags.NONE )]
     public class KitModule : InternalModule
     {
-        public KitManager KitManager        { get; internal set; }
+        public KitManager       KitManager  { get; private set; }
         public static KitModule Instance    { get; private set; }
 
         public override void OnLoad()

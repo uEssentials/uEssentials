@@ -28,13 +28,10 @@ namespace Essentials.InternalModules.Kit
 {
     public sealed class KitManager
     {
-        private Dictionary<string, Kit> KitMap { get; set; }
-
-        private IData<Dictionary<string, Kit>> KitData { get; }
-
-        public int Count => KitMap.Count;
-
-        public IEnumerable<Kit> Kits => KitMap.Values; 
+        private Dictionary<string, Kit>         KitMap  { get; set; }
+        private IData<Dictionary<string, Kit>>  KitData { get; }
+        public IEnumerable<Kit>                 Kits    => KitMap.Values; 
+        public int                              Count   => KitMap.Count;
 
         internal KitManager()
         {
