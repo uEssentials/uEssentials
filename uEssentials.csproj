@@ -124,6 +124,7 @@
     <Compile Include="src\InternalModules\InternalModule.cs" />
     <Compile Include="src\InternalModules\Kit\Commands\CommandDeleteKit.cs" />
     <Compile Include="src\InternalModules\Kit\Commands\CommandCreateKit.cs" />
+    <Compile Include="src\InternalModules\Kit\Commands\CommandDropKit.cs" />
     <Compile Include="src\InternalModules\Kit\Commands\CommandKits.cs" />
     <Compile Include="src\InternalModules\Kit\Commands\CommandKit.cs" />
     <Compile Include="src\Commands\CommandMaxSkills.cs" />

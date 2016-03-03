@@ -20,7 +20,6 @@
 */
 
 using Essentials.Api.Module;
-using Essentials.InternalModules.Kit.Commands;
 using static Essentials.Api.EssProvider;
 
 namespace Essentials.InternalModules.Kit
@@ -40,18 +39,12 @@ namespace Essentials.InternalModules.Kit
             
             Logger.LogInfo( $"Loaded {KitManager.Count} kits" );
 
-            CommandManager.Register<CommandKit>();
-            CommandManager.Register<CommandKits>();
-            CommandManager.Register<CommandCreateKit>();
-            CommandManager.Register<CommandDeleteKit>();
+            CommandManager.RegisterAll( "Essentials.InternalModules.Kit.Commands" );
         }
 
         public override void OnUnload()
         {
-            CommandManager.Unregister<CommandKit>();
-            CommandManager.Unregister<CommandKits>();
-            CommandManager.Unregister<CommandCreateKit>();
-            CommandManager.Unregister<CommandDeleteKit>();
+            CommandManager.UnregisterAll( "Essentials.InternalModules.Kit.Commands" );
         }
     }
 }

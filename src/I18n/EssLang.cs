@@ -329,5 +329,8 @@ namespace Essentials.I18n
         public static EssLang DELETED_KIT { get; private set; }
         public static EssLang RESPAWNED_ITEMS { get; private set; }
         public static EssLang RESPAWNED_VEHICLES { get; private set; }
+        public static EssLang DROPKIT_SENDER { get; private set; }
+        public static EssLang DROPKIT_PLAYER { get; private set; }
+        public static EssLang DROPKIT_LOCATION { get; private set; }
     }
 }

@@ -168,5 +168,8 @@
 	"KIT_ALREADY_EXIST": "<yellow>There is already kit named '{0}'.",
 	"DELETED_KIT": "<yellow>You deleted the '{0}' kit.",
     "RESPAWNED_ITEMS": "<cyan>Successfully respawned all items!",
-    "RESPAWNED_VEHICLES": "<cyan>Successfully respawned all vehicles!"
+    "RESPAWNED_VEHICLES": "<cyan>Successfully respawned all vehicles!",
+	"DROPKIT_SENDER": "Dropped kit '{0}' at your position.",
+	"DROPKIT_PLAYER": "Dropped kit '{0}' at '{1}' position.",
+	"DROPKIT_LOCATION": "Dropped kit '{0}' at (x: {1:0.00}, y: {2:0.00}, z: {3:0.00})"
 }
