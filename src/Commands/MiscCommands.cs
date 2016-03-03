@@ -112,7 +112,7 @@ namespace Essentials.Commands
         [CommandInfo(
             Name = "clear",
             Description = "Clear things",
-            Usage = "-i = items, -v = vehicles"
+            Usage = "i = items, v = vehicles, ev = empty vehicles"
         )]
         public void ClearCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
@@ -126,8 +126,8 @@ namespace Essentials.Commands
 
             Func<string, bool> hasArg = arg =>
             {
-                return joinedArgs.IndexOf( $"-{arg}", 0, StringComparison.InvariantCultureIgnoreCase ) != -1 ||
-                        (joinedArgs.Contains( "-a" ) || joinedArgs.Contains( "-A" ));
+                return joinedArgs.IndexOf( arg, 0, StringComparison.InvariantCultureIgnoreCase ) != -1 ||
+                        (joinedArgs.Contains( "a" ) || joinedArgs.Contains( "A" ));
             };
 
             /*
