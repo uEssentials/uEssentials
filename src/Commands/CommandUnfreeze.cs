@@ -31,7 +31,7 @@ namespace Essentials.Commands
     [CommandInfo(
         Name = "unfreeze",
         Usage = "[player/*]",
-        Description = "Unfreeze an player/all"
+        Description = "Unfreeze an player/* = all"
     )]
     public class CommandUnfreeze : EssCommand
     {
@@ -41,7 +41,7 @@ namespace Essentials.Commands
             {
                 ShowUsage( source );
             }
-            else if ( parameters[0].IsOneOf( new []{ "*", "all" } ) )
+            else if ( parameters[0].Is( "*" ) )
             {
                 foreach ( var player in UServer.Players.Where( player => player.HasComponent<FrozenPlayer>() ) )
                 {

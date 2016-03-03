@@ -174,7 +174,7 @@ namespace Essentials.Commands
 
         [CommandInfo(
             Name = "item",
-            Usage = "[item] <amount> or [player|all] [item] [amount]",
+            Usage = "[item] <amount> or [player|* = all] [item] [amount]",
             Aliases = new []{ "i" }
         )]
         public void ItemCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
@@ -206,7 +206,7 @@ namespace Essentials.Commands
                         }
                         GiveItem( src, src.ToPlayer(), args[0], args[1] );
                     }
-                    else if ( args[0].Is( "all" ) )
+                    else if ( args[0].Is( "*" ) )
                     {
                         GiveItem( src, null, args[1], One, true );
                     }
@@ -225,7 +225,7 @@ namespace Essentials.Commands
                     /i all [item] [amount]
                  */
                 case 3:
-                    if ( args[0].Is( "all" ) )
+                    if ( args[0].Is( "*" ) )
                     {
                         GiveItem( src, null, args[1], args[2], true );   
                     }

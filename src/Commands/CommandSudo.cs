@@ -31,7 +31,7 @@ namespace Essentials.Commands
     [CommandInfo(
         Name = "sudo",
         Description = "Make player or console execute an command",
-        Usage = "[player/*console*/all]"
+        Usage = "[player/*console*/* = all]"
     )]
     public class CommandSudo : EssCommand
     {
@@ -49,7 +49,7 @@ namespace Essentials.Commands
                 {
                     CommandWindow.ConsoleInput.onInputText( args.Join( 1 ) );
                 }
-                else if ( args[0].IsOneOf( new [] { "*", "all" } ) )
+                else if ( args[0].Is( "*" ) )
                 {
                     UServer.Players.ForEach( p => {
                         ChatManager.Instance.askChat( p.CSteamId, (byte) EChatMode.GLOBAL, args.Join( 1 ) );
