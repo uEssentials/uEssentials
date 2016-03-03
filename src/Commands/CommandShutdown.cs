@@ -28,7 +28,7 @@ namespace Essentials.Commands
 {
     [CommandInfo(
         Name = "shutdown",
-        Aliases = new[] {"s"},
+        Aliases = new[] {"stop"},
         Description = "Shutdown server",
         Usage = "<reason>"
     )]
