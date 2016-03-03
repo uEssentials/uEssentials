@@ -127,6 +127,7 @@
     <Compile Include="src\InternalModules\Kit\Commands\CommandDropKit.cs" />
     <Compile Include="src\InternalModules\Kit\Commands\CommandKits.cs" />
     <Compile Include="src\InternalModules\Kit\Commands\CommandKit.cs" />
+    <Compile Include="src\InternalModules\Kit\Commands\CommandEditKit.cs" />
     <Compile Include="src\Commands\CommandMaxSkills.cs" />
     <Compile Include="src\Commands\CommandRepair.cs" />
     <Compile Include="src\Commands\CommandSudo.cs" />
