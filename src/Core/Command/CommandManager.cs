@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
@@ -74,10 +75,18 @@ namespace Essentials.Core.Command
             Preconditions.NotNull( command, "Command cannot be null" );
             Preconditions.NotNull( command.Name, "Command name cannot be null" );
 
-            var commandBridge = new CommandAdapter( command );
+            var name = command.Name.ToLowerInvariant();
 
-            Commander.register( commandBridge );
-            CommandMap.Add( commandBridge.Command.Name.ToLowerInvariant(), command );
+            if ( CommandMap.ContainsKey( name ) )
+            {
+                EssProvider.Logger.LogError( $"Could not register '{command.GetType().Name}' because there is already a command called '{name}'" );
+                return;
+            }
+
+            var adapter = new CommandAdapter( command );
+
+            Commander.register( adapter );
+            CommandMap.Add( name, command );
 
             var aliases = command.Aliases;
 
