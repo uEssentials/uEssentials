@@ -61,14 +61,14 @@ namespace Essentials.Core.Command
         {
             var msg = message is string ? (string) message : message.ToString();
 
-            Console.WriteLine( msg );
+            SendMessage( message, Color.green );
         }
 
         public void SendMessage( object message, Color color )
         {
             var oldColor = Console.ForegroundColor;
             Console.ForegroundColor = ColorUtil.UnityColorToConsoleColor( color );
-            SendMessage( message );
+            Console.WriteLine( message );
             Console.ForegroundColor = oldColor;
         }
 
