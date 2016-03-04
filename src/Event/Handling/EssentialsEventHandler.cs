@@ -71,7 +71,7 @@ namespace Essentials.Event.Handling
                 return;
             }
 
-            if ( player.HasPermission( "essentials.antispam.bypass" ) ||
+            if ( player.HasPermission( "essentials.bypass.antispam" ) ||
                  !EssProvider.Config.AntiSpam.Enabled ) return;
 
             var playerName = player.CharacterName;

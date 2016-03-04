@@ -57,7 +57,7 @@ namespace Essentials.InternalModules.Warp.Commands
                 var dest = WarpModule.Instance.WarpManager[parameters[0].ToString()];
                 var cooldown = EssProvider.Config.WarpCooldown;
 
-                if ( cooldown > 0 && !player.HasPermission( "essentials.warps.bypasscooldown" ) )
+                if ( cooldown > 0 && !player.HasPermission( "essentials.bypass.warpcooldown" ) )
                 {
                     EssLang.WARP_COOLDOWN.SendTo( source, cooldown );
                 }
@@ -66,7 +66,7 @@ namespace Essentials.InternalModules.Warp.Commands
                 {
                     player.Teleport( dest.Location, dest.Rotation );
                     EssLang.WARP_TELEPORTED.SendTo( source, parameters[0] );
-                }).Delay( player.HasPermission( "essentials.warps.bypasscooldown" ) ? 0 : cooldown * 1000 ).Go();
+                }).Delay( player.HasPermission( "essentials.bypass.warpcooldown" ) ? 0 : cooldown * 1000 ).Go();
             }
         }
     }

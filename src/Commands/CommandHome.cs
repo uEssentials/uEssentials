@@ -72,7 +72,7 @@ namespace Essentials.Commands
                     var delay = homeCommand.Delay;
                     var cooldown = homeCommand.Cooldown;
 
-                    if ( player.HasPermission( "essentials.home.bypasscooldown" ) )
+                    if ( player.HasPermission( "essentials.bypass.homecooldown" ) )
                     {
                         delay = 0;
                         cooldown = 0;

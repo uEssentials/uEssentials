@@ -61,7 +61,7 @@ namespace Essentials.InternalModules.Kit.Commands
                         var steamPlayerId    = player.CSteamId.m_SteamID;
                         var kitCooldown      = requestedKit.Cooldown;
 
-                        if ( !source.HasPermission("essentials.kits.bypasscooldown") )
+                        if ( !source.HasPermission("essentials.bypass.kitcooldown") )
                         {
                             if ( !Cooldowns.ContainsKey( steamPlayerId ) )
                             {
