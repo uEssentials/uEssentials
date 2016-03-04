@@ -48,13 +48,12 @@ namespace Essentials.Common.Util
                 return GetItem( id );
             }
 
-            var asset = (
-                from it in Assets.find( EAssetType.ITEM ) 
-                let itemAsset = (ItemAsset) it
-                where itemAsset.Name != null
-                where itemAsset.Name.ToLower().Contains( name.ToLower() )
-                select itemAsset
-            ).FirstOrDefault();
+            var asset = Assets.find( EAssetType.ITEM )
+                              .Cast<ItemAsset>()
+                              .Where( i => i.Name != null )
+                              .OrderBy( i => i.Name.EqualsIgnoreCase( name ) )
+                              .ThenBy( i => i.Name.ContainsIgnoreCase( name ) )
+                              .LastOrDefault();
 
             return Optional<ItemAsset>.OfNullable( asset );
         }

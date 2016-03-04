@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Essentials.Common
 {
@@ -29,6 +30,11 @@ namespace Essentials.Common
         public static bool EqualsIgnoreCase( this string str1, string str2 )
         {
             return string.Compare( str1, str2, StringComparison.OrdinalIgnoreCase ) == 0;
+        }
+
+        public static bool ContainsIgnoreCase( this string str, string part )
+        {
+            return CultureInfo.InvariantCulture.CompareInfo.IndexOf( str, part, CompareOptions.IgnoreCase ) >= 0;
         }
 
 		public static bool IsNullOrEmpty( this string str )
