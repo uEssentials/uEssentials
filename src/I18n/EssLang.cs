@@ -33,7 +33,6 @@ using Essentials.Common.Util;
 using Newtonsoft.Json;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
-// ReSharper disable once AssignNullToNotNullAttribute
 
 namespace Essentials.I18n
 {
@@ -298,7 +297,7 @@ namespace Essentials.I18n
         public static EssLang INVENTORY_CLEAN { get; private set; }
         public static EssLang AUTO_RELOAD_ENABLED { get; private set; }
         public static EssLang AUTO_REFUEL_ENABLED { get; private set; }
-        public static EssLang AUTO_REFUEL_DISABLED { get; private set; }//todo add in pt-br & es
+        public static EssLang AUTO_REFUEL_DISABLED { get; private set; }
         public static EssLang AUTO_RELOAD_DISABLED { get; private set; }
         public static EssLang AUTO_REPAIR_ENABLED { get; private set; }
         public static EssLang AUTO_REPAIR_DISABLED { get; private set; }

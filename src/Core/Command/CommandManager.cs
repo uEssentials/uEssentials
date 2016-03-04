@@ -32,8 +32,6 @@ using Rocket.API;
 using Rocket.Core;
 using SDG.Unturned;
 
-// ReSharper disable ConvertToLambdaExpression
-
 namespace Essentials.Core.Command
 {
     internal class CommandManager : ICommandManager
@@ -210,7 +208,7 @@ namespace Essentials.Core.Command
         private void UnregisterWhere( Func<CommandAdapter, bool> predicate )
         {
             Commander.commands.RemoveAll( unturnedCommand => {
-                if ( unturnedCommand is CommandAdapter && predicate( unturnedCommand as CommandAdapter ) )
+                if ( unturnedCommand is CommandAdapter && predicate( (CommandAdapter) unturnedCommand ) )
                 {
                     CommandMap.Remove( unturnedCommand.command.ToLowerInvariant() );
                     return true;

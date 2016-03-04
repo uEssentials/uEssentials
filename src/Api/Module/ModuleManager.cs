@@ -139,7 +139,7 @@ namespace Essentials.Api.Module
             }
 
             var rawAssembly = File.ReadAllBytes( assemblyPath );
-            var moduleAssembly = Assembly.Load( rawAssembly );;
+            var moduleAssembly = Assembly.Load( rawAssembly );
 
             if ( moduleAssembly == null )
             {

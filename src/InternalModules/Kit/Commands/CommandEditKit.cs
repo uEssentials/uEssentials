@@ -245,8 +245,8 @@ namespace Essentials.InternalModules.Kit.Commands
                 case "delitem":
                     if ( args.Length != 3 )
                     {
-                        src.SendMessage( $"Use /ekit [kit] delitem [itemIndex]" );
-                        src.SendMessage( $"Use /ekit [kit] see [items] to view valid indexes." );
+                        src.SendMessage( "Use /ekit [kit] delitem [itemIndex]" );
+                        src.SendMessage( "Use /ekit [kit] see [items] to view valid indexes." );
                     }
                     else
                     {
@@ -268,7 +268,7 @@ namespace Essentials.InternalModules.Kit.Commands
                         if ( (argAsInt - 1) > kit.Items.Count ) 
                         {
                             src.SendMessage( $"Invalid index, index must be between 1 and {kit.Items.Count}" );
-                            src.SendMessage( $"Use /ekit [kit] see [items] to view valid indexes." );
+                            src.SendMessage( "Use /ekit [kit] see [items] to view valid indexes." );
                         }
                         else
                         {

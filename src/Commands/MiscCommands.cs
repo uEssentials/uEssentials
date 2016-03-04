@@ -32,6 +32,7 @@ using Essentials.Core.Command;
 using Essentials.Core.Components.Player;
 using Essentials.I18n;
 using SDG.Unturned;
+using Steamworks;
 using UnityEngine;
 
 namespace Essentials.Commands
@@ -560,6 +561,24 @@ namespace Essentials.Commands
             }
 
             EssLang.RESPAWNED_VEHICLES.SendTo( src );
+        }
+
+        [CommandInfo(
+            Name = "shutdown",
+            Aliases = new[] {"stop"},
+            Description = "Shutdown server",
+            Usage = "<reason>"
+        )]
+        public class CommandShutdown : EssCommand
+        {
+            public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+            {
+                if ( !parameters.IsEmpty )
+                {
+                    Commander.execute( CSteamID.Nil, "kickall " + parameters.Join(0) );
+                }
+                Provider.shutdown();
+            }
         }
 
 

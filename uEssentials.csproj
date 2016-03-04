@@ -147,7 +147,6 @@
     <Compile Include="src\Commands\CommandTest.cs" />
     <Compile Include="src\Commands\CommandTpAll.cs" />
     <Compile Include="src\Commands\CommandKickAll.cs" />
-    <Compile Include="src\Commands\CommandShutdown.cs" />
     <Compile Include="src\Commands\CommandUnfreeze.cs" />
     <Compile Include="src\Commands\CommandSpawnItem.cs" />
     <Compile Include="src\Common\Reflect\AbstractAccessor.cs" />

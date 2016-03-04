@@ -67,7 +67,7 @@ namespace Essentials.Commands
         private static void ReloadKits()
         {
             EssProvider.ModuleManager.GetModule<KitModule>().IfPresent( m => {
-                m.KitManager = new KitManager();;
+                m.KitManager = new KitManager();
                 m.KitManager.Load();
             } );
         }
@@ -207,7 +207,7 @@ namespace Essentials.Commands
                                 _ingameCommandPages[page].Add( builder.ToString() );
                                 builder.Length = 0;
                                 count++;
-                            } );;
+                            } );
                         }
 
                         var pageArg = args[1].ToInt;

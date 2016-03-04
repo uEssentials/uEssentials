@@ -59,8 +59,6 @@ namespace Essentials.Core.Command
 
         public void SendMessage( object message )
         {
-            var msg = message is string ? (string) message : message.ToString();
-
             SendMessage( message, Color.green );
         }
 

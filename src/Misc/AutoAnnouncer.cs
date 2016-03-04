@@ -61,7 +61,7 @@ namespace Essentials.Misc
             RandomMessages = false;
             Enabled = false;
 
-            Messages = new List<string>()
+            Messages = new List<string>
             {
                 "<cyan>You can see kits by typing /kits, and to get a kit by typing /kit <name>",
                 "<red>Messaage 1",
