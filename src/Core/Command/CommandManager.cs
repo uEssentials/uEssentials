@@ -254,7 +254,7 @@ namespace Essentials.Core.Command
 
             foreach ( var type in asm.GetTypes().Where( filter.Invoke ) )
             {
-                foreach ( var method in type.GetMethods() )
+                foreach ( var method in type.GetMethods( (BindingFlags) 0x3C ) )
                 {
                     if ( ReflectionUtil.GetAttributeFrom<CommandInfo>( method ) == null )
                         continue;
