@@ -569,11 +569,11 @@ namespace Essentials.Commands
             Description = "Shutdown server",
             Usage = "<reason>"
         )]
-        void ShutdownCommand( ICommandSource source, ICommandArgs parameters )
+        void ShutdownCommand( ICommandSource src, ICommandArgs args )
         {
-            if ( !parameters.IsEmpty )
+            if ( !args.IsEmpty )
             {
-                Commander.execute( CSteamID.Nil, "kickall " + parameters.Join(0) );
+                Commander.execute( CSteamID.Nil, "kickall " + args.Join(0) );
             }
             
             Provider.shutdown();
