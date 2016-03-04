@@ -72,9 +72,15 @@ namespace Essentials.Common.Util
             return optItem.IsPresent ? Optional<T>.Of( optItem.Value as T ) : Optional<T>.Empty();
         }
 
+
         public static Optional<Attachment> GetWeaponAttachment( Item weaponItem, AttachmentType type )
         {
-            if ( weaponItem.Metadata.Length < 18 )
+            return GetWeaponAttachment( weaponItem.Metadata, type );
+        }
+
+        public static Optional<Attachment> GetWeaponAttachment( byte[] metadata, AttachmentType type )
+        {
+            if ( metadata.Length < 18 )
             {
                 return Optional<Attachment>.Empty();
             }
@@ -107,10 +113,10 @@ namespace Essentials.Common.Util
                     throw new ArgumentOutOfRangeException( nameof( type ), type, null );
             }
 
-            var attachDurability = weaponItem.Metadata[indexes[2]];
+            var attachDurability = metadata[indexes[2]];
             var attachId = BitConverter.ToUInt16( new [] {
-                weaponItem.Metadata[indexes[0]],
-                weaponItem.Metadata[indexes[1]]
+                metadata[indexes[0]],
+                metadata[indexes[1]]
             }, 0 );
 
             return Optional<Attachment>.Of( new Attachment( attachId, attachDurability ) );
@@ -118,23 +124,34 @@ namespace Essentials.Common.Util
 
         public static Optional<EFiremode> GetWeaponFiremode( Item weaponItem )
         {
-            if ( weaponItem.Metadata.Length < 18 )
+            return GetWeaponFiremode( weaponItem.Metadata );
+
+        }
+        public static Optional<EFiremode> GetWeaponFiremode( byte[] metadata )
+        {
+            if ( metadata.Length < 18 )
             {
                 return Optional<EFiremode>.Empty();
             }
 
-            return Optional<EFiremode>.OfNullable( (EFiremode) weaponItem.Metadata[0xB] );
+            return Optional<EFiremode>.OfNullable( (EFiremode) metadata[0xB] );
         }
 
-        public static byte GetWeaponAmmo( Item weaponItem )
+        public static Optional<byte> GetWeaponAmmo(Item weaponItem)
         {
-            if ( weaponItem.Metadata.Length < 18 )
+            return GetWeaponAmmo( weaponItem.Metadata );
+        }
+
+        public static Optional<byte> GetWeaponAmmo( byte[] metadata )
+        {
+            if ( metadata.Length < 18 )
             {
-                return 0;
+                return Optional<byte>.Empty();
             }
 
-            return weaponItem.Metadata[0xA];
+            return Optional<byte>.Of( metadata[0xA] );
         }
+
 
         public static void SetWeaponAttachment( Item weaponItem, AttachmentType type, Attachment attach )
         {

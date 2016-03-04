@@ -100,7 +100,7 @@ namespace Essentials.InternalModules.Kit.Commands
                         var ammo = GetWeaponAmmo( item );
                         var firemode = GetWeaponFiremode( item ).OrElse( EFiremode.SAFETY );
 
-                        var kItem = new KitItemWeapon( item.id, item.Durability, 1, ammo, firemode )
+                        var kItem = new KitItemWeapon( item.id, item.Durability, 1, ammo.OrElse( 0 ), firemode )
                         {
                             Magazine = GetWeaponAttachment( item, AttachmentType.MAGAZINE ).OrElse( null ),
                             Barrel = GetWeaponAttachment( item, AttachmentType.BARREL ).OrElse( null ),
