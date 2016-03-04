@@ -49,7 +49,7 @@ namespace Essentials.Commands
             Description = "Ascend X \"meters\".",
             AllowedSource = AllowedSource.PLAYER
         )]
-        public void AscendCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        void AscendCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
             if ( args.IsEmpty )
             {
@@ -83,7 +83,7 @@ namespace Essentials.Commands
             Description = "Descend X \"meters\".",
             AllowedSource = AllowedSource.PLAYER
         )]
-        public void DescendCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        void DescendCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
             if ( args.IsEmpty )
             {
@@ -115,7 +115,7 @@ namespace Essentials.Commands
             Description = "Clear things",
             Usage = "i = items, v = vehicles, ev = empty vehicles"
         )]
-        public void ClearCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        void ClearCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
             if ( args.IsEmpty )
             {
@@ -178,7 +178,7 @@ namespace Essentials.Commands
             Usage = "[item] <amount> or [player|* = all] [item] [amount]",
             Aliases = new []{ "i" }
         )]
-        public void ItemCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        void ItemCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
             switch (args.Length)
             {
@@ -254,7 +254,7 @@ namespace Essentials.Commands
             Description = "See informations about an item.",
             Usage = "<item_id>"
         )]
-        public void ItemInfoCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        void ItemInfoCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
             if ( src.IsConsole && args.Length != 1 )
             {
@@ -306,7 +306,7 @@ namespace Essentials.Commands
             Description = "Item features",
             AllowedSource = AllowedSource.PLAYER
         )]
-        public void ItemFeaturesCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        void ItemFeaturesCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
             if ( args.Length != 2 )
             {
@@ -374,7 +374,7 @@ namespace Essentials.Commands
             Description = "Vehicle features",
             AllowedSource = AllowedSource.PLAYER
         )]
-        public void VehicleFeaturesCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        void VehicleFeaturesCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
             if ( args.Length != 2 )
             {
@@ -440,7 +440,7 @@ namespace Essentials.Commands
             Description = "Toggle spy mode",
             AllowedSource = AllowedSource.PLAYER
         )]
-        public void SpyCommand( ICommandSource src, ICommandArgs args )
+        void SpyCommand( ICommandSource src, ICommandArgs args )
         {
             var displayName = src.DisplayName;
 
@@ -461,7 +461,7 @@ namespace Essentials.Commands
             Description = "Kill yourself",
             AllowedSource = AllowedSource.PLAYER
         )]
-        public void SuicideCommand( ICommandSource src, ICommandArgs args )
+        void SuicideCommand( ICommandSource src, ICommandArgs args )
         {
             src.ToPlayer().Suicide();
         }
@@ -472,7 +472,7 @@ namespace Essentials.Commands
             Description = "View your/another player position.",
             Usage = "<player>"
         )]
-        public void PositionCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        void PositionCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
             if ( args.Length == 0 )
             {
@@ -508,7 +508,7 @@ namespace Essentials.Commands
             Name = "online",
             Description = "View the number of online players"
         )]
-        public void OnlineCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        void OnlineCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
             EssLang.ONLINE_PLAYERS.SendTo( src, UServer.Players.Count(), UServer.MaxPlayers );
         }
@@ -517,7 +517,7 @@ namespace Essentials.Commands
             Name = "respawnitems",
             Description = "Respawn all items."
         )]
-        public void RespawnItemsCommand( ICommandSource src, ICommandArgs args )
+        void RespawnItemsCommand( ICommandSource src, ICommandArgs args )
         {
             for ( byte b = 0; b < Regions.WORLD_SIZE; b += 1 )
             {
@@ -545,7 +545,7 @@ namespace Essentials.Commands
             Name = "respawnvehicles",
             Description = "Respawn all vehicles."
         )]
-        public void RespawnVehiclesCommand( ICommandSource src, ICommandArgs args )
+        void RespawnVehiclesCommand( ICommandSource src, ICommandArgs args )
         {
             var spawns = LevelVehicles.spawns;
             for ( var j = 0; j < spawns.Count; j++ )
@@ -569,7 +569,7 @@ namespace Essentials.Commands
             Description = "Shutdown server",
             Usage = "<reason>"
         )]
-        public void ShutdownCommand( ICommandSource source, ICommandArgs parameters )
+        void ShutdownCommand( ICommandSource source, ICommandArgs parameters )
         {
             if ( !parameters.IsEmpty )
             {
