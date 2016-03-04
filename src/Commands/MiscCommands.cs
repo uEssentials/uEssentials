@@ -569,16 +569,14 @@ namespace Essentials.Commands
             Description = "Shutdown server",
             Usage = "<reason>"
         )]
-        public class CommandShutdown : EssCommand
+        public void ShutdownCommand( ICommandSource source, ICommandArgs parameters )
         {
-            public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+            if ( !parameters.IsEmpty )
             {
-                if ( !parameters.IsEmpty )
-                {
-                    Commander.execute( CSteamID.Nil, "kickall " + parameters.Join(0) );
-                }
-                Provider.shutdown();
+                Commander.execute( CSteamID.Nil, "kickall " + parameters.Join(0) );
             }
+            
+            Provider.shutdown();
         }
 
 
