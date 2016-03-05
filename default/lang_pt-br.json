@@ -171,5 +171,8 @@
     "RESPAWNED_VEHICLES": "<cyan>Successfully respawned all vehicles!",
 	"DROPKIT_SENDER": "Dropped kit '{0}' at your position.",
 	"DROPKIT_PLAYER": "Dropped kit '{0}' at '{1}' position.",
-	"DROPKIT_LOCATION": "Dropped kit '{0}' at (x: {1:0.00}, y: {2:0.00}, z: {3:0.00})"
+	"DROPKIT_LOCATION": "Dropped kit '{0}' at (x: {1:0.00}, y: {2:0.00}, z: {3:0.00})",
+    "RECEIVED_VEHICLE": "You received a {0} ({1})",
+    "GIVEN_VEHICLE": "You gave a {0} ({1}) to '{2}'",
+    "GIVEN_VEHICLE_ALL": "You gave a {0} ({1}) to all players."
 }
