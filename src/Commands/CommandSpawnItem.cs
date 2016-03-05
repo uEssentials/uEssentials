@@ -24,6 +24,7 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common.Util;
 using SDG.Unturned;
+using UnityEngine;
 
 namespace Essentials.Commands
 {
@@ -35,17 +36,6 @@ namespace Essentials.Commands
     )]
     public class CommandSpawnItem : EssCommand
     {
-        /*
-            TODO ERROR
-
-            >spawnitem maplestrike 1 255 255 255
-            [uEssentials] System.InvalidOperationException: Cannot convert Console to Player
-              at Essentials.Common.Preconditions.CheckState (Boolean expr, System.String message, System.Object[] messageArgs) [0x00000] in <filename unknown>:0
-              at Essentials.Api.Command.Source.CommandSourceExtension.ToPlayer (ICommandSource src) [0x00000] in <filename unknown>:0
-              at Essentials.Commands.CommandSpawnItem.OnExecute(ICommandSource source, ICommandArgs parameters) [0x00000] in <filename unknown>:0
-              at Essentials.Core.Command.CommandAdapter.execute (CSteamID executorId, System.String parameter) [0x00000] in <filename unknown>:0
-        */
-
         public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.IsEmpty || (parameters.Length < 5 && source.IsConsole) )
@@ -55,7 +45,7 @@ namespace Essentials.Commands
 
             var rawId = parameters[0].ToString();
             var rawAmount = parameters.Length >= 2 ? parameters[1].ToString() : "1";
-            var pos = source.ToPlayer().Position;
+            Vector3 pos;
 
             if ( parameters.Length == 5 )
             {
@@ -67,6 +57,10 @@ namespace Essentials.Commands
                 }
 
                 pos = argPos.Value;
+            }
+            else
+            {
+                pos = source.ToPlayer().Position;
             }
 
             ushort amount;
