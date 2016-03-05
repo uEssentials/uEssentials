@@ -34,6 +34,7 @@ using Essentials.I18n;
 using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
+using Essentials.Common.Util;
 
 namespace Essentials.Commands
 {
@@ -577,6 +578,74 @@ namespace Essentials.Commands
             }
             
             Provider.shutdown();
+        }
+        
+        // TODO: Wrap in spawned? (GTA STYLE)
+        
+        [CommandInfo(
+            Name = "vehicle",
+            Aliases = new[] {"v"},
+            Description = "",
+            Usage = "[vehicle] or [player|* = all] [vehicle]"
+        )]
+        void VehicleCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
+        {
+            if ( args.Length == 1 )
+            {
+                if ( src.IsConsole )
+                {
+                    ShowUsage( src, cmd );
+                    return;
+                }
+                
+                var optAsset = VehicleUtil.GetVehicle( args[0].ToString() );
+                
+                if ( optAsset.IsAbsent )
+                {
+                    EssLang.INVALID_VEHICLE_ID.SendTo( src, args[0] );
+                    return;
+                }
+                
+                VehicleTool.giveVehicle( src.ToPlayer().UnturnedPlayer, optAsset.Value.id );
+                
+                EssLang.RECEIVED_VEHICLE.SendTo( src, optAsset.Value.Name, optAsset.Value.Id );
+            }
+            else if ( args.Length == 2 )
+            {
+                var optAsset = VehicleUtil.GetVehicle( args[1].ToString() );
+                
+                if ( optAsset.IsAbsent )
+                {
+                    EssLang.INVALID_VEHICLE_ID.SendTo( src, args[0] );
+                    return;
+                }
+                
+                var vehAsset = optAsset.Value;
+                
+                if ( args[0].Is("*") )
+                {
+                    UServer.Players.ForEach( p => {
+                          VehicleTool.giveVehicle( p.UnturnedPlayer, vehAsset.id );  
+                    });
+                    
+                    EssLang.GIVEN_VEHICLE_ALL.SendTo( src, vehAsset.Name, vehAsset.Id );
+                }
+                else if ( !args[0].IsValidPlayerName )
+                {
+                    EssLang.PLAYER_NOT_FOUND.SendTo( src, args[0] );
+                }
+                else
+                {
+                    var target = UPlayer.From( args[0].ToString() );
+                    VehicleTool.giveVehicle( target.UnturnedPlayer, vehAsset.id );
+                    
+                    EssLang.GIVEN_VEHICLE.SendTo( src, vehAsset.Name, vehAsset.Id,target.DisplayName );
+                }
+            }
+            else
+            {
+                ShowUsage( src, cmd );
+            }
         }
 
 

@@ -138,7 +138,7 @@
     "INVENTORY_CLEAN": "<magenta>Your inventory was cleared.",
     "SPAWNED_VEHICLE_AT_POSITION": "<cyan>You spawned a vehicle at (x: {0:0.00}, y: {1:0.00}, z: {2:0.00}).",
     "SPAWNED_VEHICLE_AT_PLAYER": "<cyan>You spawned a vehicle at {0}'s position.",
-    "INVALID_VEHICLE_ID" : "<yellow>Invalid vehicle id '{0}'.",
+    "INVALID_VEHICLE_ID" : "<yellow>Invalid vehicle id/name '{0}'.",
     "AUTO_RELOAD_ENABLED": "<cyan>Auto-Reload enabled!",
     "AUTO_RELOAD_DISABLED": "<magenta>Auto-Reload disabled!",
     "AUTO_REPAIR_ENABLED": "<cyan>Auto-Repair enabled!",
@@ -171,5 +171,8 @@
     "RESPAWNED_VEHICLES": "<cyan>Successfully respawned all vehicles!",
 	"DROPKIT_SENDER": "Dropped kit '{0}' at your position.",
 	"DROPKIT_PLAYER": "Dropped kit '{0}' at '{1}' position.",
-	"DROPKIT_LOCATION": "Dropped kit '{0}' at (x: {1:0.00}, y: {2:0.00}, z: {3:0.00})"
+	"DROPKIT_LOCATION": "Dropped kit '{0}' at (x: {1:0.00}, y: {2:0.00}, z: {3:0.00})",
+    "RECEIVED_VEHICLE": "You received a {0} ({1})",
+    "GIVEN_VEHICLE": "You gave a {0} ({1}) to '{2}'",
+    "GIVEN_VEHICLE_ALL": "You gave a {0} ({1}) to all players."
 }

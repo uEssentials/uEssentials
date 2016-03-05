@@ -331,5 +331,8 @@ namespace Essentials.I18n
         public static EssLang DROPKIT_SENDER { get; private set; }
         public static EssLang DROPKIT_PLAYER { get; private set; }
         public static EssLang DROPKIT_LOCATION { get; private set; }
+        public static EssLang RECEIVED_VEHICLE { get; private set; }
+        public static EssLang GIVEN_VEHICLE { get; private set; }
+        public static EssLang GIVEN_VEHICLE_ALL { get; private set; }
     }
 }
