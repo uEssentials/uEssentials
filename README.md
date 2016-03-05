@@ -74,7 +74,7 @@ unfreeze|Unfreeze a player/everyone|None|\[player/*\]
 spawnitem|Spawn an item at given position|dropitem|\[item\] \<amount\> \<x\> \<y\> \<z\>
 ascend|Ascend X "meters".|asc|\[amount\]
 descend|Descend X "meters".|desc|\[amount\]
-clear|Clear things|None|-i = items, -v = vehicles
+clear|Clear things|None|i = items, v = vehicles
 item|None|i|\[item\] \<amount\> or \[player\|all\] \[item\] \[amount\]
 iteminfo|See information on an item.|ii|\<item_id\>
 itemfeatures|Item features|if|\[autoreload \| autorepair\] \[on\|off\]
