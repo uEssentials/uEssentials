@@ -50,15 +50,39 @@ namespace Essentials.Common.Util
 
         public static Color GetMessageColor( ref string message )
         {
-            var color = Color.green;
+            Color? color = null;
 
-            if ( message.IndexOfAny( new[] {'<', '>'} ) == -1 ) return color;
+            if ( message.IndexOfAny( new[] {'<', '>'} ) == -1 )
+            {
+                return Color.green;
+            }
 
             var rawColor = message.Split( '<' )[1].Split( '>' )[0];
-            color = UnturnedChat.GetColorFromName( rawColor, color );// try parse color
-            message = message.Replace( $"<{rawColor}>", "" );// remove color from text
 
-            return color;
+            switch (rawColor.Trim().ToLower())
+            {
+                case "black": color =  Color.black; break;
+                case "blue": color = Color.blue; break;
+                case "clear": color = Color.clear; break;
+                case "cyan": color = Color.cyan; break;
+                case "gray": color = Color.gray; break;
+                case "green": color = Color.green; break;
+                case "grey": color = Color.grey; break;
+                case "magenta": color = Color.magenta; break;
+                case "red": color = Color.red; break;
+                case "white": color = Color.white; break;
+                case "yellow": color = Color.yellow; break;
+            }
+
+            if ( !color.HasValue )
+                color = UnturnedChat.GetColorFromHex(rawColor);
+
+            if ( color.HasValue )
+            {
+                message = message.Replace( $"<{rawColor}>", "" );
+            }
+
+            return color ?? Color.green;
         }
     }
 }
