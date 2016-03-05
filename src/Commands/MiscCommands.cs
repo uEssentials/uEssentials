@@ -642,23 +642,26 @@ namespace Essentials.Commands
             if ( allPlayers )
             {
                 UServer.Players.ForEach( playersToReceive.Add );
-                EssLang.GIVEN_ITEM_ALL.SendTo( src, amt, asset.Name );
+                EssLang.GIVEN_ITEM_ALL.SendTo( src, amt, asset.Name, asset.Id );
             }
             else
             {
                 playersToReceive.Add( target );
-
-                if ( !src.IsConsole && src.ToPlayer() != target )
+                
+                if ( !src.IsConsole && src.ToPlayer() == target ) 
                 {
-                    EssLang.GIVEN_ITEM.SendTo( src, amt, asset.Name, target.CharacterName );
+                    goto give2;
                 }
+
+                EssLang.GIVEN_ITEM.SendTo( src, amt, asset.Name, asset.Id, target.CharacterName );
             }
 
+            give2:
             playersToReceive.ForEach( p =>
             {
                 var success = p.GiveItem( item, amt, true );
 
-                EssLang.RECEIVED_ITEM.SendTo( p, amt, asset.Name );
+                EssLang.RECEIVED_ITEM.SendTo( p, amt, asset.Name, asset.Id );
 
                 if ( !success )
                 {
