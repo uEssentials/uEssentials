@@ -90,6 +90,9 @@
     <Compile Include="src\Api\Command\ICommandManager.cs" />
     <Compile Include="src\Api\Command\Source\CommandSourceExtension.cs" />
     <Compile Include="src\Api\Configuration\JsonConfig.cs" />
+    <Compile Include="src\Api\Events\CommandPreExecuteEvent.cs" />
+    <Compile Include="src\Api\Events\CommandPosExecuteEvent.cs" />
+    <Compile Include="src\Api\Event\ICancellable.cs" />
     <Compile Include="src\Api\Event\IEventManager.cs" />
     <Compile Include="src\Api\Configuration\IConfig.cs" />
     <Compile Include="src\Api\Module\ModuleFlags.cs" />
@@ -123,6 +126,7 @@
     <Compile Include="src\Commands\CommandRepairVehicle.cs" />
     <Compile Include="src\Commands\CommandRefuelVehicle.cs" />
     <Compile Include="src\Commands\CommandExperience.cs" />
+    <Compile Include="src\Event\EssentialsEvents.cs" />
     <Compile Include="src\InternalModules\InternalModule.cs" />
     <Compile Include="src\InternalModules\Kit\Commands\CommandDeleteKit.cs" />
     <Compile Include="src\InternalModules\Kit\Commands\CommandCreateKit.cs" />

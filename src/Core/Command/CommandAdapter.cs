@@ -23,11 +23,12 @@ using System;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Events;
 using Essentials.Api.Unturned;
 using Essentials.Common.Util;
+using Essentials.Event;
 using Steamworks;
 using Essentials.I18n;
-using UnityEngine;
 
 namespace Essentials.Core.Command
 {
@@ -59,8 +60,16 @@ namespace Essentials.Core.Command
                 {
                     EssLang.PLAYER_CANNOT_EXECUTE.SendTo( commandSource );    
                 }
-                else 
+                else
                 {
+                    var preExec = new CommandPreExecuteEvent( Command );
+                    EssentialsEvents._OnCommandPreExecute?.Invoke( preExec );
+
+                    if ( preExec.Cancel )
+                    {
+                        return;
+                    }
+
                     var result = Command.OnExecute( commandSource , new CommandArgs( parameter ) );
 
                     if ( result == null ) return;
@@ -77,6 +86,9 @@ namespace Essentials.Core.Command
 
                         commandSource.SendMessage( message, color );
                     }
+
+                    var posExec = new CommandPosExecuteEvent( Command, result );
+                    EssentialsEvents._OnCommandPosExecute?.Invoke( posExec );
 ;                }
             }
             catch ( Exception e )

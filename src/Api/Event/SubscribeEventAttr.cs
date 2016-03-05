@@ -20,6 +20,7 @@
 */
 
 using System;
+using Essentials.Event;
 using Rocket.Unturned;
 using Rocket.Unturned.Events;
 
@@ -75,7 +76,12 @@ namespace Essentials.Api.Event
                 case EventType.SERVER_SHUTDOWN:
                     DelegateOwner = U.Events;
                     break;
- 
+                
+                case EventType.ESSENTIALS_COMMAND_POS_EXECUTED:
+                case EventType.ESSENTIALS_COMMAND_PRE_EXECUTED:
+                    DelegateOwner = typeof (EssentialsEvents);
+                    break;
+                
                 default:
                     throw new ArgumentOutOfRangeException( nameof( eventType ), 
                                                            eventType, null );
@@ -111,6 +117,9 @@ namespace Essentials.Api.Event
                 case EventType.PLAYER_CONNECTED:DelegateName = "OnPlayerConnected"; break;
                 case EventType.PLAYER_DISCONNECTED:DelegateName = "OnPlayerDisconnected"; break;
                 case EventType.SERVER_SHUTDOWN:DelegateName = "OnShutdown"; break;
+
+                case EventType.ESSENTIALS_COMMAND_PRE_EXECUTED:DelegateName = "OnCommandPreExecute"; break;
+                case EventType.ESSENTIALS_COMMAND_POS_EXECUTED:DelegateName = "OnCommandPosExecute"; break;
 
                 default:
                     throw new Exception( "No such TargetFieldName for " + EventType );
@@ -240,14 +249,19 @@ namespace Essentials.Api.Event
         /// </summary>
         SERVER_SHUTDOWN,
 
- /*       /// <summary>
-        /// Signature: (UnturnedPlayer player, string permission, ref bool granted)
-        /// </summary>
-        PERMISSION_REQUESTED, */
-
         /// <summary>
         /// Signature: (UnturnedPlayer, UnturnedPlayerEvents.PlayerGesture)
         /// </summary>
-        PLAYER_UPDATE_GESTURE
+        PLAYER_UPDATE_GESTURE,
+
+        /// <summary>
+        /// Signature: (CommandPreExecutedEvent)
+        /// </summary>
+        ESSENTIALS_COMMAND_PRE_EXECUTED,
+
+        /// <summary>
+        /// Signature: (CommandPosExecutedEvent)
+        /// </summary>
+        ESSENTIALS_COMMAND_POS_EXECUTED
     }
 }
