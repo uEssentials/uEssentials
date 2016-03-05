@@ -36,7 +36,7 @@ namespace Essentials.Commands
     )]
     public class CommandSpawnVehicle : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             if ( args.Length == 2 )
             {

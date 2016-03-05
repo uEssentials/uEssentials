@@ -34,7 +34,7 @@ namespace Essentials.Commands
     )]
     public class CommandRespawnZombies : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             var count = 0;
 

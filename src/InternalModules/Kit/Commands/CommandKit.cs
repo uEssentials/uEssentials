@@ -37,7 +37,7 @@ namespace Essentials.InternalModules.Kit.Commands
     {
         internal static Dictionary<ulong, Dictionary<string, DateTime>> Cooldowns = new Dictionary<ulong, Dictionary<string, DateTime>>();
 
-        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.Length == 0 || ( parameters.Length == 1 && source.IsConsole ) )
             {

@@ -41,7 +41,7 @@ namespace Essentials.Commands
     {
         internal static readonly Dictionary<string, string> Conversations = new Dictionary<string, string>();
 
-        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.Length < 2 )
             {

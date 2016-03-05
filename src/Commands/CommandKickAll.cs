@@ -34,7 +34,7 @@ namespace Essentials.Commands
     )]
     public class CommandKickAll : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             var players = new List<UPlayer>( UServer.Players );
 

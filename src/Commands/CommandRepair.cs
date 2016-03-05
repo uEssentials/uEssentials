@@ -69,7 +69,7 @@ namespace Essentials.Commands
             });
         };
 
-        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             var player = source.ToPlayer();
 

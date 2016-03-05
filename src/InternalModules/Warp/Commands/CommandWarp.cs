@@ -36,7 +36,7 @@ namespace Essentials.InternalModules.Warp.Commands
     )]
     public class CommandWarp : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             var player = source.ToPlayer();
 

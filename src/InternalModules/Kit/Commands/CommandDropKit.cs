@@ -38,7 +38,7 @@ namespace Essentials.InternalModules.Kit.Commands
     )]
     public class CommandDropKit : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             switch (args.Length)
             {

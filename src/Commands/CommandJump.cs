@@ -33,7 +33,7 @@ namespace Essentials.Commands
     )]
     public class CommandJump : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             var player = src.ToPlayer();
             var dist = 1000f;

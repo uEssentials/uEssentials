@@ -36,7 +36,7 @@ namespace Essentials.Commands
     )]
     public class CommandTp : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             if ( src.IsConsole && (args.Length == 1 || args.Length == 3) )
             {

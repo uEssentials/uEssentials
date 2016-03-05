@@ -48,7 +48,7 @@ namespace Essentials.Commands
             EssLang.MAX_SKILLS.SendTo(player);
         };
 
-        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             if ( args.IsEmpty )
             {

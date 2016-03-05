@@ -32,7 +32,7 @@ namespace Essentials.InternalModules.Warp.Commands
     )]
     public class CommandSetWarp : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             switch ( parameters.Length )
             {

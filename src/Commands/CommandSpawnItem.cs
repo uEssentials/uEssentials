@@ -42,7 +42,7 @@ namespace Essentials.Commands
             [uEssentials] System.InvalidOperationException: Cannot convert Console to Player
               at Essentials.Common.Preconditions.CheckState (Boolean expr, System.String message, System.Object[] messageArgs) [0x00000] in <filename unknown>:0
               at Essentials.Api.Command.Source.CommandSourceExtension.ToPlayer (ICommandSource src) [0x00000] in <filename unknown>:0
-              at Essentials.Commands.CommandSpawnItem.OnExecute (ICommandSource source, ICommandArgs parameters) [0x00000] in <filename unknown>:0
+              at Essentials.Commands.CommandSpawnItem.OnExecute(ICommandSource source, ICommandArgs parameters) [0x00000] in <filename unknown>:0
               at Essentials.Core.Command.CommandAdapter.execute (CSteamID executorId, System.String parameter) [0x00000] in <filename unknown>:0
         */
 

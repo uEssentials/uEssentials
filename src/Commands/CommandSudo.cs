@@ -35,7 +35,7 @@ namespace Essentials.Commands
     )]
     public class CommandSudo : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             if ( args.Length < 2 )
             {

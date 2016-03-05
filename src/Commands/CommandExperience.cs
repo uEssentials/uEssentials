@@ -34,7 +34,7 @@ namespace Essentials.Commands
     )]
     public class CommandExperience : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             if ( (!src.IsConsole && args.Length < 2) || (src.IsConsole && args.Length < 3) )
                 return CommandResult.ShowUsage();

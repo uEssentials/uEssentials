@@ -39,7 +39,7 @@ namespace Essentials.InternalModules.Kit.Commands
     )]
     public class CommandCreateKit : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             var player = src.ToPlayer();
 

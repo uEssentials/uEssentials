@@ -33,7 +33,7 @@ namespace Essentials.InternalModules.Warp.Commands
     )]
     public class CommandDelWarp : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.IsEmpty || parameters.Length > 1 )
             {

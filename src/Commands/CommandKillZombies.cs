@@ -36,7 +36,7 @@ namespace Essentials.Commands
     )]
     public class CommandKillZombies : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             var killedCount = 0;
 

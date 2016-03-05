@@ -35,7 +35,7 @@ namespace Essentials.Commands
     )]
     public class CommandVote : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             if ( (parameters.Length != 2 && Polls.Count != 1 ) || parameters.Length < 1 )
             {

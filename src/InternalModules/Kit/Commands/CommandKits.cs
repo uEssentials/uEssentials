@@ -32,7 +32,7 @@ namespace Essentials.InternalModules.Kit.Commands
     )]
     public class CommandKits : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             var kits = ( 
                 from kit in KitModule.Instance.KitManager.Kits

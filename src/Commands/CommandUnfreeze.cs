@@ -35,7 +35,7 @@ namespace Essentials.Commands
     )]
     public class CommandUnfreeze : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.Length == 0 )
             {

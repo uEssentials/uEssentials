@@ -33,7 +33,7 @@ namespace Essentials.InternalModules.Kit.Commands
     )]
     public class CommandDeleteKit : EssCommand
     {
-        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             if ( args.IsEmpty )
             {
