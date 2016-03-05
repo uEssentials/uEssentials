@@ -38,14 +38,13 @@ namespace Essentials.Commands
      )]
     public class CommandRefuelVehicle : EssCommand
     {
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
         {
             if ( args.IsEmpty )
             {
                 if ( src.IsConsole )
                 {
-                    ShowUsage( src );
-                    return;
+                    return CommandResult.ShowUsage();
                 }
 
                 var currentVeh = src.ToPlayer().CurrentVehicle;
@@ -58,15 +57,14 @@ namespace Essentials.Commands
                 }
                 else
                 {
-                    EssLang.NOT_IN_VEHICLE.SendTo( src );
+                    return CommandResult.Lang( EssLang.NOT_IN_VEHICLE );
                 }
             }
             else if ( args[0].Is( "all" ) )
             {
                 if ( !src.HasPermission( Permission + ".all" ) )
                 {
-                    EssLang.COMMAND_NO_PERMISSION.SendTo( src );
-                    return;
+                    return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
                 }
 
                 lock ( UWorld.Vehicles )
@@ -81,6 +79,8 @@ namespace Essentials.Commands
                     EssLang.VEHICLE_REFUELED_ALL.SendTo( src );
                 }
             }
+
+            return CommandResult.Success();
         }
     }
 }

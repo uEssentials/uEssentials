@@ -24,8 +24,10 @@ using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
+using Essentials.Common.Util;
 using Steamworks;
 using Essentials.I18n;
+using UnityEngine;
 
 namespace Essentials.Core.Command
 {
@@ -59,8 +61,23 @@ namespace Essentials.Core.Command
                 }
                 else 
                 {
-                    Command.OnExecute( commandSource , new CommandArgs( parameter ) );  
-                }
+                    var result = Command.OnExecute( commandSource , new CommandArgs( parameter ) );
+
+                    if ( result == null ) return;
+
+                    if ( result.Type == CommandResult.ResultType.SHOW_USAGE )
+                    {
+                        commandSource.SendMessage( $"Use /{Command.Name} {Command.Usage}" );
+                    }
+                    else if ( result.Message != null )
+                    {
+                        var message = result.Message;
+
+                        var color = ColorUtil.GetMessageColor( ref message );
+
+                        commandSource.SendMessage( message, color );
+                    }
+;                }
             }
             catch ( Exception e )
             {

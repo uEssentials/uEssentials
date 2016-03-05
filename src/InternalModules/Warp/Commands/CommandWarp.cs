@@ -36,38 +36,40 @@ namespace Essentials.InternalModules.Warp.Commands
     )]
     public class CommandWarp : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
         {
             var player = source.ToPlayer();
 
             if ( parameters.Length == 0 || parameters.Length > 1 )
             {
-                ShowUsage( source );
+                return CommandResult.ShowUsage();
             }
-            else if ( !WarpModule.Instance.WarpManager.Contains( parameters[0].ToString() ) )
-            {
-                EssLang.WARP_NOT_EXIST.SendTo( source, parameters[0] );
-            }
-            else if ( !player.HasPermission( $"essentials.warp.{parameters[0]}" ) )
-            {
-                EssLang.WARP_NO_PERMISSION.SendTo( source, parameters[0] );
-            }
-            else
-            {
-                var dest = WarpModule.Instance.WarpManager[parameters[0].ToString()];
-                var cooldown = EssProvider.Config.WarpCooldown;
 
-                if ( cooldown > 0 && !player.HasPermission( "essentials.bypass.warpcooldown" ) )
-                {
-                    EssLang.WARP_COOLDOWN.SendTo( source, cooldown );
-                }
-
-                Tasks.New( t =>
-                {
-                    player.Teleport( dest.Location, dest.Rotation );
-                    EssLang.WARP_TELEPORTED.SendTo( source, parameters[0] );
-                }).Delay( player.HasPermission( "essentials.bypass.warpcooldown" ) ? 0 : cooldown * 1000 ).Go();
+            if ( !WarpModule.Instance.WarpManager.Contains( parameters[0].ToString() ) )
+            {
+                return CommandResult.Lang( EssLang.WARP_NOT_EXIST, parameters[0] );
             }
+
+            if ( !player.HasPermission( $"essentials.warp.{parameters[0]}" ) )
+            {
+                return CommandResult.Lang( EssLang.WARP_NO_PERMISSION, parameters[0] );
+            }
+
+            var dest = WarpModule.Instance.WarpManager[parameters[0].ToString()];
+            var cooldown = EssProvider.Config.WarpCooldown;
+
+            if ( cooldown > 0 && !player.HasPermission( "essentials.bypass.warpcooldown" ) )
+            {
+                EssLang.WARP_COOLDOWN.SendTo( source, cooldown );
+            }
+
+            Tasks.New( t =>
+            {
+                player.Teleport( dest.Location, dest.Rotation );
+                EssLang.WARP_TELEPORTED.SendTo( source, parameters[0] );
+            }).Delay( player.HasPermission( "essentials.bypass.warpcooldown" ) ? 0 : cooldown * 1000 ).Go();
+
+            return CommandResult.Success();
         }
     }
 }

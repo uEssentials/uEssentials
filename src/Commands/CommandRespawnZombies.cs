@@ -34,7 +34,7 @@ namespace Essentials.Commands
     )]
     public class CommandRespawnZombies : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
         {
             var count = 0;
 
@@ -55,6 +55,8 @@ namespace Essentials.Commands
             });
 
             EssLang.RESPAWNED_ZOMBIES.SendTo( source, count );
+
+            return CommandResult.Success();
         }
     }
 }

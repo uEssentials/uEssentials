@@ -32,26 +32,26 @@ namespace Essentials.Commands
     )]
     public class CommandKill : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.IsEmpty )
             {
-                ShowUsage( source );
+                return CommandResult.ShowUsage();
+            }
+
+            var target = parameters[0].ToPlayer;
+
+            if ( target == null )
+            {
+                EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[0] );
             }
             else
             {
-                var target = parameters[0].ToPlayer;
-
-                if ( target == null )
-                {
-                    EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[0] );
-                }
-                else
-                {
-                    target.Kill();
-                    EssLang.KILL_PLAYER.SendTo( source, target.DisplayName );
-                }
+                target.Kill();
+                EssLang.KILL_PLAYER.SendTo( source, target.DisplayName );
             }
+
+            return CommandResult.Success();
         }
     }
 }

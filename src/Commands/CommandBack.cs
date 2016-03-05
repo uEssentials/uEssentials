@@ -37,22 +37,20 @@ namespace Essentials.Commands
     {
         internal static readonly Dictionary<string, Vector3> BackDict = new Dictionary<string, Vector3>();
 
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             var displayName = source.DisplayName;
 
-            if ( BackDict.ContainsKey( displayName ) )
+            if ( !BackDict.ContainsKey( displayName ) )
             {
-                source.ToPlayer().Teleport( BackDict[displayName] );
-
-                BackDict.Remove( displayName );
-
-                EssLang.RETURNED.SendTo( source );
+                return CommandResult.Lang( EssLang.NOT_DIED_YET );
             }
-            else
-            {
-                EssLang.NOT_DIED_YET.SendTo( source );
-            }
+
+            source.ToPlayer().Teleport( BackDict[displayName] );
+            BackDict.Remove( displayName );
+            EssLang.RETURNED.SendTo( source );
+
+            return CommandResult.Success();
         }
     }
 }

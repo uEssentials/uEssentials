@@ -39,14 +39,13 @@ namespace Essentials.InternalModules.Kit.Commands
     )]
     public class CommandCreateKit : EssCommand
     {
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
         {
             var player = src.ToPlayer();
 
             if ( args.Length < 1 )
             {
-                ShowUsage( src );
-                return;
+                return CommandResult.ShowUsage();
             }
 
             var name = args[0].ToString();
@@ -54,22 +53,19 @@ namespace Essentials.InternalModules.Kit.Commands
 
             if ( KitModule.Instance.KitManager.Contains( name ) )
             {
-                src.SendMessage( "This kit already exists." );
-                return;
+                return CommandResult.Lang( EssLang.KIT_ALREADY_EXIST, name );
             }
 
             if ( args.Length < 1 )
             {
                 if ( !args[1].IsInt )
                 {
-                    EssLang.INVALID_BOOLEAN.SendTo( src, args[1] );
-                    return;
+                    return CommandResult.Lang( EssLang.INVALID_BOOLEAN, args[1] );
                 }
 
                 if ( args[1].ToInt < 0 )
                 {
-                    EssLang.MUST_POSITIVE.SendTo( src );
-                    return;
+                    return CommandResult.Lang( EssLang.MUST_POSITIVE );
                 }
 
                 cooldown = args[1].ToUint;
@@ -213,6 +209,8 @@ namespace Essentials.InternalModules.Kit.Commands
 
             KitModule.Instance.KitManager.Add( kit );
             EssLang.CREATED_KIT.SendTo( src, name );
+
+            return CommandResult.Success();
         } 
     }
 }

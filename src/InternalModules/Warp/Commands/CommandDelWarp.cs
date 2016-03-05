@@ -33,21 +33,22 @@ namespace Essentials.InternalModules.Warp.Commands
     )]
     public class CommandDelWarp : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.IsEmpty || parameters.Length > 1 )
             {
-                ShowUsage( source );
+                return CommandResult.ShowUsage();
             }
-            else if ( !WarpModule.Instance.WarpManager.Contains( parameters[0].ToString() ) )
+
+            if ( !WarpModule.Instance.WarpManager.Contains( parameters[0].ToString() ) )
             {
-                EssLang.WARP_NOT_EXIST.SendTo( source, parameters[0] );
+                return CommandResult.Lang( EssLang.WARP_NOT_EXIST, parameters[0] );
             }
-            else
-            {
-                WarpModule.Instance.WarpManager.Delete( parameters[0].ToString() );
-                EssLang.WARP_REMOVED.SendTo( source, parameters[0] );
-            }
+
+            WarpModule.Instance.WarpManager.Delete( parameters[0].ToString() );
+            EssLang.WARP_REMOVED.SendTo( source, parameters[0] );
+
+            return CommandResult.Success();
         }
     }
 }

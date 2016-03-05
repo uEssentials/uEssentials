@@ -38,19 +38,19 @@ namespace Essentials.InternalModules.Kit.Commands
     )]
     public class CommandDropKit : EssCommand
     {
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
         {
             switch (args.Length)
             {
                 case 1:
                     if ( src.IsConsole )
                     {
-                        goto usage;
+                        return CommandResult.ShowUsage();
                     }
 
                     DropKit( src, args[0], src.ToPlayer().Position );
                     EssLang.DROPKIT_SENDER.SendTo( src );
-                    return;
+                    break;
 
                 case 2:
                     var found = UPlayer.TryGet( args[1], player => {
@@ -60,9 +60,9 @@ namespace Essentials.InternalModules.Kit.Commands
 
                     if ( !found )
                     {
-                        EssLang.PLAYER_NOT_FOUND.SendTo( src, args[1] );
+                        return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[1] );
                     }
-                    return;
+                    break;
 
                 case 4:
                     var pos = args.GetVector3( 1 );
@@ -74,16 +74,15 @@ namespace Essentials.InternalModules.Kit.Commands
                     }
                     else
                     {
-                        EssLang.INVALID_COORDS.SendTo( src, args[1], args[2], args[3] );    
+                        return CommandResult.Lang( EssLang.INVALID_COORDS, args[1], args[2], args[3] );    
                     }
-                    return;
+                    break;
 
                 default:
-                    goto usage;
+                    return CommandResult.ShowUsage();
             }
 
-            usage:
-            ShowUsage( src );
+            return CommandResult.Success();
         }
 
         public static void DropKit( ICommandSource src, ICommandArgument kitArg, Vector3 pos )

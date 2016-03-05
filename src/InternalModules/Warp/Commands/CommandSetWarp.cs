@@ -32,19 +32,19 @@ namespace Essentials.InternalModules.Warp.Commands
     )]
     public class CommandSetWarp : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
         {
             switch ( parameters.Length )
             {
                 case 1:
                     if ( source.IsConsole )
                     {
-                        ShowUsage( source );
-                        break;
+                        return CommandResult.ShowUsage();
                     }
 
                     var player = source.ToPlayer();
                     var warp = new Warp( parameters[0].ToString(),  player.Position, player.Rotation );
+
                     WarpModule.Instance.WarpManager.Add( warp );
                     EssLang.WARP_SET.SendTo( source, parameters[0] );
                     break;
@@ -62,14 +62,15 @@ namespace Essentials.InternalModules.Warp.Commands
                     }
                     else
                     {
-                        EssLang.INVALID_COORDS.SendTo( source, parameters[1], parameters[2], parameters[3] );
+                        return CommandResult.Lang( EssLang.INVALID_COORDS, parameters[1], parameters[2], parameters[3] );
                     }
                     break;
 
                 default:
-                    ShowUsage( source );
-                    break;
+                    return CommandResult.ShowUsage();
             }
+
+            return CommandResult.Success();
         }
     }
 }

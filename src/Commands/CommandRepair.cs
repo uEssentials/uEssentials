@@ -69,15 +69,15 @@ namespace Essentials.Commands
             });
         };
 
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
         {
             var player = source.ToPlayer();
 
             if ( parameters.IsEmpty )
             {
-                ShowUsage( source );
+                return CommandResult.ShowUsage();
             }
-            else if ( parameters[0].Is( "all" ) )
+            if ( parameters[0].Is( "all" ) )
             {
                 player.RocketPlayer.Inventory.Items.ToList().ForEach( item => Repair( player, item ) );
                 EssLang.ALL_REPAIRED.SendTo( source );
@@ -94,6 +94,8 @@ namespace Essentials.Commands
 
                 EssLang.HAND_REPAIRED.SendTo( source );
             }
+
+            return CommandResult.Success();
         }
     }
 }

@@ -52,13 +52,13 @@ namespace Essentials.Api.Command
         /// 
         /// </summary>
         /// <param name="method"></param>
-        void Register( Action<ICommandSource, ICommandArgs> method );
+        void Register( Func<ICommandSource, ICommandArgs, CommandResult> method );
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="method"></param>
-        void Register( Action<ICommandSource, ICommandArgs, ICommand> method );
+        void Register( Func<ICommandSource, ICommandArgs, ICommand, CommandResult> method );
 
         /// <summary>
         /// 

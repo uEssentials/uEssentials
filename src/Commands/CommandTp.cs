@@ -36,10 +36,12 @@ namespace Essentials.Commands
     )]
     public class CommandTp : EssCommand
     {
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
         {
             if ( src.IsConsole && (args.Length == 1 || args.Length == 3) )
-                goto usage;
+            {
+                return CommandResult.ShowUsage();
+            }
 
             switch ( args.Length )
             {
@@ -55,44 +57,39 @@ namespace Essentials.Commands
 
                     if ( !dataFound )
                     {
-                        EssLang.FAILED_FIND_PLACE_OR_PLAYER.SendTo( src, args[0] );
+                        return CommandResult.Lang( EssLang.FAILED_FIND_PLACE_OR_PLAYER, args[0] );
                     }
-                    else
-                    {
-                        src.ToPlayer().Teleport( dataPosition );
-                        EssLang.TELEPORTED.SendTo( src, dataName );
-                    }
-                    return;
+
+                    src.ToPlayer().Teleport( dataPosition );
+                    EssLang.TELEPORTED.SendTo( src, dataName );
+                    break;
 
                 /*
                     /tp player other   -> player to other
                     /tp player place   -> player to place
                 */
                 case 2:
-                    var found = UPlayer.TryGet( args[0], p =>
-                    {
-                        data            = FindPlaceOrPlayer( args[1].ToString() );
-                        dataFound       = (bool) data[0];
-                        dataPosition    = (Vector3) data[1];
-                        dataName        = (string) data[2];
+                    var target = UPlayer.From( args[0].ToString() );
 
-                        if ( !dataFound )
-                        {
-                            EssLang.FAILED_FIND_PLACE_OR_PLAYER.SendTo( src, args[0] );
-                        }
-                        else
-                        {
-                            p.Teleport( dataPosition );
-                            EssLang.TELEPORTED.SendTo( p, dataName );
-                            EssLang.TELEPORTED_SENDER.SendTo( src, p, dataName );
-                        }
-                    } );
-
-                    if ( !found )
+                    if ( target == null)
                     {
-                        EssLang.PLAYER_NOT_FOUND.SendTo( src, args[0] );
+                        return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
                     }
-                    return;
+
+                    data            = FindPlaceOrPlayer( args[1].ToString() );
+                    dataFound       = (bool) data[0];
+                    dataPosition    = (Vector3) data[1];
+                    dataName        = (string) data[2];
+
+                    if ( !dataFound )
+                    {
+                        return CommandResult.Lang( EssLang.FAILED_FIND_PLACE_OR_PLAYER, args[0] );
+                    }
+
+                    target.Teleport( dataPosition );
+                    EssLang.TELEPORTED.SendTo( target, dataName );
+                    EssLang.TELEPORTED_SENDER.SendTo( src, target, dataName );
+                    break;
 
                 /*
                     /tp x y z          -> sender to x,y,z
@@ -107,42 +104,40 @@ namespace Essentials.Commands
                     }
                     else
                     {
-                        EssLang.INVALID_COORDS.SendTo( src, args[0], args[1], args[2] );
+                        return CommandResult.Lang( EssLang.INVALID_COORDS, args[0], args[1], args[2] );
                     }
-                    return;
+                    break;
 
                 /*
                     /tp player x y z   -> player to x, y, z
                 */
                 case 4:
-                    found = UPlayer.TryGet( args[0], p =>
-                    {
-                        location = args.GetVector3( 1 );
+                    target = UPlayer.From( args[0].ToString() );
 
-                        if ( location.HasValue )
-                        {
-                            p.Teleport( location.Value );
-                            EssLang.TELEPORTED.SendTo( p, location );
-                            EssLang.TELEPORTED_SENDER.SendTo( src, p, location );
-                        }
-                        else
-                        {
-                            EssLang.INVALID_COORDS.SendTo( src, args[1], args[2], args[3] );
-                        }
-                    } );
-
-                    if ( !found )
+                    if ( target == null )
                     {
-                        EssLang.PLAYER_NOT_FOUND.SendTo( src, args[0] );
+                        return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
                     }
-                    return;
+
+                    location = args.GetVector3( 1 );
+
+                    if ( location.HasValue )
+                    {
+                        target.Teleport( location.Value );
+                        EssLang.TELEPORTED.SendTo( target, location );
+                        EssLang.TELEPORTED_SENDER.SendTo( src, target, location );
+                    }
+                    else
+                    {
+                        return CommandResult.Lang( EssLang.INVALID_COORDS, args[1], args[2], args[3] );
+                    }
+                    break;
 
                 default:
-                    goto usage;
+                    return CommandResult.ShowUsage();
             }
 
-            usage:
-            ShowUsage( src );
+            return CommandResult.Success();
         }
 
         /*

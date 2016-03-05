@@ -101,14 +101,14 @@ namespace Essentials.Core.Command
             Register( Activator.CreateInstance<TCommandType>() );
         }
 
-        public void Register( Action<ICommandSource, ICommandArgs> method )
+        public void Register( Func<ICommandSource, ICommandArgs, CommandResult> method )
         {
             Preconditions.NotNull( method, "method cannot be null" );
 
             Register( new MethodCommand( method ) );
         }
 
-                public void Register( Action<ICommandSource, ICommandArgs, ICommand> method )
+                public void Register( Func<ICommandSource, ICommandArgs, ICommand, CommandResult> method )
         {
             Preconditions.NotNull( method, "method cannot be null" );
 
@@ -262,24 +262,32 @@ namespace Essentials.Core.Command
                     var inst = method.IsStatic ? null : createInstance( type );
                     var paramz = method.GetParameters();
 
+                    if ( method.ReturnType != typeof (CommandResult) )
+                    {
+                        EssProvider.Logger.LogError( $"Invalid method signature in '{method}'. " +
+                                                      "Expected 'CommandResult methodName(ICommandSource, ICommandArgs)'");
+                        continue;
+                    }
+
                     if ( paramz.Length == 2 &&
                          paramz[0].ParameterType == typeof (ICommandSource) &&
                          paramz[1].ParameterType == typeof (ICommandArgs) )
                     {
-                        Register( (Action<ICommandSource, ICommandArgs>) createDelegate(
-                            typeof (Action<ICommandSource, ICommandArgs>), inst, method ) );
+                        Register( (Func<ICommandSource, ICommandArgs, CommandResult>) createDelegate(
+                            typeof (Func<ICommandSource, ICommandArgs, CommandResult>), inst, method ) );
                     }
                     else if ( paramz.Length == 3 &&
                               paramz[0].ParameterType == typeof (ICommandSource) &&
                               paramz[1].ParameterType == typeof (ICommandArgs) &&
                               paramz[2].ParameterType == typeof (ICommand) )
                     {
-                        Register( (Action<ICommandSource, ICommandArgs, ICommand>) createDelegate(
-                            typeof (Action<ICommandSource, ICommandArgs, ICommand>), inst, method ) );
+                        Register( (Func<ICommandSource, ICommandArgs, ICommand, CommandResult>) createDelegate(
+                            typeof (Func<ICommandSource, ICommandArgs, ICommand, CommandResult>), inst, method ) );
                     }
                     else
                     {
-                        throw new InvalidOperationException( $"Invalid method signature {method}");
+                        EssProvider.Logger.LogError( $"Invalid method signature in '{method}'. " +
+                                                      "Expected 'CommandResult methodName(ICommandSource, ICommandArgs)'");
                     }
                 }
             }

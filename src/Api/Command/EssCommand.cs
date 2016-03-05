@@ -65,6 +65,6 @@ namespace Essentials.Api.Command
             source.SendMessage( UsageMessage );
         }
 
-        public abstract void OnExecute( ICommandSource src, ICommandArgs args );
+        public abstract CommandResult OnExecute( ICommandSource src, ICommandArgs args );
     }
 }

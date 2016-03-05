@@ -40,7 +40,8 @@ namespace Essentials.Commands
     [CommandInfo(
         Name = "essentials",
         Description = "Plugin commands",
-        Aliases = new[] { "ess", "?", "uessentials" }
+        Aliases = new[] { "ess", "?", "uessentials" },
+        Usage = "<commands/help/info/reload>"
     )]
     public class CommandEssentials : EssCommand
     {
@@ -86,12 +87,11 @@ namespace Essentials.Commands
             core.Config.Load( configPath );
         }
 
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             if ( args.IsEmpty )
             {
-                src.SendMessage( "Use /ess <commands/help/info/reload>" );
-                return;
+                return CommandResult.ShowUsage();
             }
 
             switch ( args[0].ToLowerString )
@@ -99,9 +99,9 @@ namespace Essentials.Commands
                 case "reload":
                     if ( !src.HasPermission( "essentials.reload" ) )
                     {
-                        EssLang.COMMAND_NO_PERMISSION.SendTo( src );
-                        return;
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
                     }
+
                     if ( args.Length == 1 )
                     {
                         src.SendMessage( "Reloading all..." );
@@ -135,8 +135,7 @@ namespace Essentials.Commands
                                 break;
                             
                             default:
-                                src.SendMessage( "Use /ess reload <kits/config/lang>" );
-                                break;
+                                return CommandResult.InvalidArgs( "Use /ess reload <kits/config/lang>" );
                         }
                     }
                     break;
@@ -264,9 +263,10 @@ namespace Essentials.Commands
                     break;
 
                 default:
-                    src.SendMessage( "Use /ess <commands/help/info>" );
-                    break;
+                    return CommandResult.ShowUsage();
             }
+
+            return CommandResult.Success();
         }
     }
 }

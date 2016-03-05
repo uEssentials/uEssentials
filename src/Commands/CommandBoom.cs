@@ -36,15 +36,14 @@ namespace Essentials.Commands
     )]
     public class CommandBoom : EssCommand
     {
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             switch ( args.Length )
             {
                 case 0:
                     if ( src.IsConsole )
                     {
-                        ShowUsage( src );
-                        return;
+                        return CommandResult.ShowUsage();
                     }
 
                     var eyePos = src.ToPlayer().GetEyePosition( 3000 );
@@ -62,7 +61,7 @@ namespace Essentials.Commands
 
                     if ( !found )
                     {
-                        EssLang.PLAYER_NOT_FOUND.SendTo( src, args[0] );
+                        return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
                     }
                     break;
 
@@ -75,14 +74,15 @@ namespace Essentials.Commands
                     }
                     else
                     {
-                        EssLang.INVALID_COORDS.SendTo( src, args[0], args[1], args[2] );
+                        return CommandResult.Lang( EssLang.INVALID_COORDS, args[0], args[1], args[2] );
                     }
                     break;
 
                 default:
-                    ShowUsage( src );
-                    return;
+                    return CommandResult.ShowUsage();
             }
+
+            return CommandResult.Success();
         }
 
         private static void Explode( Vector3 pos )

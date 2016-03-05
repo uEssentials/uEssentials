@@ -48,37 +48,32 @@ namespace Essentials.Commands
             EssLang.MAX_SKILLS.SendTo(player);
         };
 
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
         {
             if ( args.IsEmpty )
             {
                 if ( src.IsConsole )
                 {
-                    ShowUsage( src );
+                    return CommandResult.ShowUsage();
                 }
-                else
-                {
-                    GiveMaxSkills( src.ToPlayer(), false );
-                }
+
+                GiveMaxSkills( src.ToPlayer(), false );
             }
             else
             {
                 if ( args.Length < 2 && src.IsConsole )
                 {
-                    ShowUsage( src );
-                    return;
+                    return CommandResult.ShowUsage();
                 }
 
                 if ( !args[0].IsBool )
                 {
-                    EssLang.INVALID_BOOLEAN.SendTo( src, args[0] );
-                    return;
+                    return CommandResult.Lang( EssLang.INVALID_BOOLEAN, args[0] );
                 }
 
                 if ( args.Length == 2 && !src.HasPermission( Permission + ".other" ) )
                 {
-                    EssLang.COMMAND_NO_PERMISSION.SendTo( src );
-                    return;
+                    return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
                 }
 
                 var overpower = args[0].ToBool;
@@ -86,18 +81,18 @@ namespace Essentials.Commands
 
                 if ( targetPlayer == null )
                 {
-                    EssLang.PLAYER_NOT_FOUND.SendTo( src, args[1] );
+                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[1] );
                 }
-                else
-                {
-                    GiveMaxSkills( targetPlayer, overpower );
 
-                    if ( src.IsConsole || src.ToPlayer() != targetPlayer )
-                    {
-                        EssLang.MAX_SKILLS_TARGET.SendTo( src, targetPlayer.DisplayName );
-                    }
+                GiveMaxSkills( targetPlayer, overpower );
+
+                if ( src.IsConsole || src.ToPlayer() != targetPlayer )
+                {
+                    EssLang.MAX_SKILLS_TARGET.SendTo( src, targetPlayer.DisplayName );
                 }
             }
+
+            return CommandResult.Success();
         }
     }
 }

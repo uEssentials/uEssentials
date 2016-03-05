@@ -38,34 +38,32 @@ namespace Essentials.Commands
     )]
     public class CommandReply : EssCommand
     {
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
         {
             if ( args.Length == 0 )
             {
-                ShowUsage( src );
+                return CommandResult.ShowUsage();
             }
-            else
+
+            if ( !Conversations.ContainsKey( src.DisplayName ) )
             {
-                if ( !Conversations.ContainsKey( src.DisplayName ) )
-                {
-                    EssLang.NOBODY_TO_REPLY.SendTo( src );
-                    return;
-                }
-
-                var target = ( from conversation
-                               in Conversations
-                               where conversation.Value.Equals( src.DisplayName )
-                               select UPlayer.From( conversation.Key )
-                              ).FirstOrDefault();
-
-                if ( target == null )
-                {
-                    EssLang.NO_LONGER_ONLINE.SendTo( src );
-                    return;
-                }
-
-                src.DispatchCommand( $"tell {target.DisplayName} {args.Join( 0 )}" );
+                return CommandResult.Lang( EssLang.NOBODY_TO_REPLY );;
             }
+
+            var target = ( from conversation
+                            in Conversations
+                            where conversation.Value.Equals( src.DisplayName )
+                            select UPlayer.From( conversation.Key )
+                            ).FirstOrDefault();
+
+            if ( target == null )
+            {
+                return CommandResult.Lang( EssLang.NO_LONGER_ONLINE );
+            }
+
+            src.DispatchCommand( $"tell {target.DisplayName} {args.Join( 0 )}" );
+
+            return CommandResult.Success();
         }
     }
 }

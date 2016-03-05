@@ -35,13 +35,14 @@ namespace Essentials.Commands
     )]
     public class CommandUnfreeze : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.Length == 0 )
             {
-                ShowUsage( source );
+                return CommandResult.ShowUsage();
             }
-            else if ( parameters[0].Is( "*" ) )
+
+            if ( parameters[0].Is( "*" ) )
             {
                 foreach ( var player in UServer.Players.Where( player => player.HasComponent<FrozenPlayer>() ) )
                 {
@@ -54,25 +55,27 @@ namespace Essentials.Commands
             }
             else
             {
-                var found = UPlayer.TryGet( parameters[0], player => {
-                    if ( !player.HasComponent<FrozenPlayer>() )
-                    {
-                        EssLang.NOT_FROZEN.SendTo( source, player.DisplayName );
-                    }
-                    else
-                    {
-                        player.RemoveComponent<FrozenPlayer>();
+                var target = UPlayer.From( parameters[0].ToString() );
 
-                        EssLang.UNFROZEN_SENDER.SendTo( source, player.DisplayName );
-                        EssLang.UNFROZEN_PLAYER.SendTo( player, source.DisplayName );
-                    }
-                } );
-
-                if ( !found )
+                if ( target == null )
                 {
-                    EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[0] );
+                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, parameters[0] );
+                }
+
+                if ( !target.HasComponent<FrozenPlayer>() )
+                {
+                    return CommandResult.Lang( EssLang.NOT_FROZEN, target.DisplayName );
+                }
+                else
+                {
+                    target.RemoveComponent<FrozenPlayer>();
+
+                    EssLang.UNFROZEN_SENDER.SendTo( source, target.DisplayName );
+                    EssLang.UNFROZEN_PLAYER.SendTo( target, source.DisplayName );
                 }
             }
+
+            return CommandResult.Success();
         }
     }
 }

@@ -35,13 +35,13 @@ namespace Essentials.Commands
     )]
     public class CommandFreeze : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.Length == 0 )
             {
-                ShowUsage( source );
+                return CommandResult.ShowUsage();
             }
-            else if ( parameters[0].Is( "*" ) )
+            if ( parameters[0].Is( "*" ) )
             {
                 foreach ( var player in UServer.Players.Where( player => !player.HasComponent<FrozenPlayer>() ) )
                 {
@@ -54,7 +54,8 @@ namespace Essentials.Commands
             }
             else
             {
-                var found = UPlayer.TryGet( parameters[0], player => {
+                var found = UPlayer.TryGet( parameters[0], player => 
+                {
                     if ( player.HasComponent<FrozenPlayer>() )
                     {
                         EssLang.ALREADY_FROZEN.SendTo( source, player.DisplayName );
@@ -70,9 +71,11 @@ namespace Essentials.Commands
 
                 if ( !found )
                 {
-                    EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[0] );
+                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, parameters[0] );
                 }
             }
+
+            return CommandResult.Success();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Essentials.InternalModules.Kit.Commands
     )]
     public class CommandKits : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
         {
             var kits = ( 
                 from kit in KitModule.Instance.KitManager.Kits
@@ -44,6 +44,8 @@ namespace Essentials.InternalModules.Kit.Commands
                 EssLang.KIT_NONE.SendTo( source );
             else
                 EssLang.KIT_LIST.SendTo( source, string.Join( ", ", kits.ToArray() ) );
+
+            return CommandResult.Success();
         }
     }
 }

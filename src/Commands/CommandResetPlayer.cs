@@ -47,44 +47,41 @@ namespace Essentials.Commands
             }
         };
 
-        public override void OnExecute(ICommandSource source, ICommandArgs parameters)
+        public override CommandResult OnExecute (ICommandSource source, ICommandArgs parameters)
         {
             if ( parameters.IsEmpty || parameters.Length > 1 )
             {
-                source.SendMessage( "Use /resetplayer [player/playerid]" );
+                return CommandResult.ShowUsage();
             }
-            else
+
+            try
             {
-                try
-                {
-                    var steamId = new CSteamID( ulong.Parse( parameters[0].ToString() ) );
+                var steamId = new CSteamID( ulong.Parse( parameters[0].ToString() ) );
 
-                    if ( !steamId.IsValid() )
-                    {
-                        EssLang.INVALID_STEAMID.SendTo( source, steamId.m_SteamID);
-                    }
-                    else
-                    {
-                        ResetPlayer( steamId.m_SteamID );
-                        EssLang.PLAYER_RESET.SendTo( source );
-                    }
-                }
-                catch (FormatException)
+                if ( !steamId.IsValid() )
                 {
-                    var target = parameters[0].ToPlayer;
-
-                    if ( target == null )
-                    {
-                        EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[0] );
-                    }
-                    else
-                    {
-                        target.Kick( EssLang.PLAYER_RESET_KICK.GetMessage() );
-                        ResetPlayer( target.CSteamId.m_SteamID );
-                        EssLang.PLAYER_RESET.SendTo( source );
-                    }
+                    return CommandResult.Lang( EssLang.INVALID_STEAMID, steamId.m_SteamID );
                 }
+
+                ResetPlayer( steamId.m_SteamID );
+                EssLang.PLAYER_RESET.SendTo( source );
             }
+            catch (FormatException)
+            {
+                var target = parameters[0].ToPlayer;
+
+                if ( target == null )
+                {
+                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, parameters[0] );
+                }
+
+                target.Kick( EssLang.PLAYER_RESET_KICK.GetMessage() );
+                ResetPlayer( target.CSteamId.m_SteamID );
+
+                EssLang.PLAYER_RESET.SendTo( source );
+            }
+
+            return CommandResult.Success();
         }
     }
 }

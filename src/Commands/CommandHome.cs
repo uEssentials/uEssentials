@@ -43,59 +43,58 @@ namespace Essentials.Commands
         internal static Dictionary<ulong, Tasks.Task> Delay = new Dictionary<ulong, Tasks.Task>();
         internal static Cooldown Cooldown = new Cooldown();
         
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             var player = src.ToPlayer();
             var playerId = player.CSteamId;
 
             if ( Cooldown.Has( playerId ) )
             {
-                EssLang.USE_COOLDOWN.SendTo( src, TimeUtil.FormatSeconds( 
-                    (uint) Cooldown.GetRemaining( playerId ) ) );
+                return CommandResult.Lang( EssLang.USE_COOLDOWN, 
+                                           TimeUtil.FormatSeconds( (uint) Cooldown.GetRemaining( playerId ) ) );
             }
-            else
+
+            Vector3 position;
+            byte angle;
+
+            if ( player.RocketPlayer.Stance == EPlayerStance.DRIVING || player.RocketPlayer.Stance == EPlayerStance.SITTING )
             {
-                Vector3 position;
-                byte angle;
-
-                if ( player.RocketPlayer.Stance == EPlayerStance.DRIVING || player.RocketPlayer.Stance == EPlayerStance.SITTING )
-                {
-                    EssLang.CANNOT_TELEPORT_DRIVING.SendTo( src );
-                }
-                else if ( !BarricadeManager.tryGetBed( player.CSteamId, out position, out angle ) )
-                {
-                    EssLang.WITHOUT_BED.SendTo( src );
-                }
-                else
-                {
-                    var homeCommand = EssProvider.Config.HomeCommand;
-                    var delay = homeCommand.Delay;
-                    var cooldown = homeCommand.Cooldown;
-
-                    if ( player.HasPermission( "essentials.bypass.homecooldown" ) )
-                    {
-                        delay = 0;
-                        cooldown = 0;
-                    }
-
-                    if ( delay > 0 )
-                    {
-                        EssLang.TELEPORT_DELAY.SendTo( src, TimeUtil.FormatSeconds( (uint) delay ));
-                    }
-
-                    var task = Tasks.New( t =>  {
-                        player.Teleport( position, angle );
-                        Delay.Remove( playerId.m_SteamID );
-
-                        EssLang.TELEPORTED_BED.SendTo( src );
-                    } ).Delay( delay * 1000 );
-
-                    task.Go();
-
-                    Delay.Add( playerId.m_SteamID, task );
-                    Cooldown.Add( playerId, cooldown );
-                }   
+                return CommandResult.Lang( EssLang.CANNOT_TELEPORT_DRIVING );
             }
+
+            if ( !BarricadeManager.tryGetBed( player.CSteamId, out position, out angle ) )
+            {
+                return CommandResult.Lang( EssLang.WITHOUT_BED );
+            }
+
+            var homeCommand = EssProvider.Config.HomeCommand;
+            var delay = homeCommand.Delay;
+            var cooldown = homeCommand.Cooldown;
+
+            if ( player.HasPermission( "essentials.bypass.homecooldown" ) )
+            {
+                delay = 0;
+                cooldown = 0;
+            }
+
+            if ( delay > 0 )
+            {
+                EssLang.TELEPORT_DELAY.SendTo( src, TimeUtil.FormatSeconds( (uint) delay ));
+            }
+
+            var task = Tasks.New( t =>  {
+                player.Teleport( position, angle );
+                Delay.Remove( playerId.m_SteamID );
+
+                EssLang.TELEPORTED_BED.SendTo( src );
+            } ).Delay( delay * 1000 );
+
+            task.Go();
+
+            Delay.Add( playerId.m_SteamID, task );
+            Cooldown.Add( playerId, cooldown );
+
+            return CommandResult.Success();
         }
     }
 }

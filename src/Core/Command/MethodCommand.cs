@@ -30,8 +30,8 @@ namespace Essentials.Core.Command
 {
     internal class MethodCommand : ICommand
     {
-        private readonly Action<ICommandSource, ICommandArgs> _methodAction;
-        private readonly Action<ICommandSource, ICommandArgs, ICommand> _methodActionWithCommand;
+        private readonly Func<ICommandSource, ICommandArgs, CommandResult> _methodFunc;
+        private readonly Func<ICommandSource, ICommandArgs, ICommand, CommandResult> _methodFuncWithCommand;
         private CommandInfo _info;
         private bool _hasCommandParameter;
 
@@ -49,16 +49,16 @@ namespace Essentials.Core.Command
 
         public AllowedSource AllowedSource => _info.AllowedSource;
 
-        internal MethodCommand( Action<ICommandSource, ICommandArgs> methodAction )
+        internal MethodCommand( Func<ICommandSource, ICommandArgs, CommandResult> methodFunc )
         {
-            _methodAction = methodAction;
-            Init( false, methodAction.Method );
+            _methodFunc = methodFunc;
+            Init( false, methodFunc.Method );
         }
 
-        internal MethodCommand( Action<ICommandSource, ICommandArgs, ICommand> methodAction )
+        internal MethodCommand( Func<ICommandSource, ICommandArgs, ICommand, CommandResult> methodFunc )
         {
-            _methodActionWithCommand = methodAction;
-            Init( true, methodAction.Method );
+            _methodFuncWithCommand = methodFunc;
+            Init( true, methodFunc.Method );
         }
 
         private void Init( bool hasCmdParam, MethodInfo method )
@@ -68,8 +68,8 @@ namespace Essentials.Core.Command
                 "methodAction must have 'CommandInfo' attribute." 
             );
 
-            Owner = hasCmdParam ? _methodActionWithCommand.Method.DeclaringType
-                                : _methodAction.Method.DeclaringType;
+            Owner = hasCmdParam ? _methodFuncWithCommand.Method.DeclaringType
+                                : _methodFunc.Method.DeclaringType;
 
             _hasCommandParameter = hasCmdParam;
 
@@ -78,13 +78,13 @@ namespace Essentials.Core.Command
                         : _info.Permission;
         }
 
-        public void OnExecute( ICommandSource source, ICommandArgs args )
+        public CommandResult OnExecute( ICommandSource source, ICommandArgs args )
         {
+            var result = _hasCommandParameter 
+                    ? _methodFuncWithCommand( source, args, this ) 
+                    : _methodFunc( source, args );
 
-            if ( _hasCommandParameter )
-                _methodActionWithCommand( source, args, this );
-            else
-                _methodAction( source, args );
+            return result;
         }
     }
 }

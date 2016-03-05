@@ -33,26 +33,24 @@ namespace Essentials.InternalModules.Kit.Commands
     )]
     public class CommandDeleteKit : EssCommand
     {
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
         {
             if ( args.IsEmpty )
             {
-                ShowUsage( src );
+                return CommandResult.ShowUsage();
             }
-            else
-            {
-                var km = KitModule.Instance.KitManager;
 
-                if ( !km.Contains( args[0].ToString() ) )
-                {
-                    EssLang.KIT_NOT_EXIST.SendTo( src, args[0] );
-                }
-                else
-                {
-                    km.Remove( km.GetByName( args[0].ToString() ) );
-                    EssLang.DELETED_KIT.SendTo( src, args[0] );
-                }
+            var km = KitModule.Instance.KitManager;
+
+            if ( !km.Contains( args[0].ToString() ) )
+            {
+                return CommandResult.Lang( EssLang.KIT_NOT_EXIST, args[0] );
             }
+
+            km.Remove( km.GetByName( args[0].ToString() ) );
+            EssLang.DELETED_KIT.SendTo( src, args[0] );
+
+            return CommandResult.Success();
         }
     }
 }

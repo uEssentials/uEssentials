@@ -32,7 +32,7 @@ namespace Essentials.InternalModules.Warp.Commands
     )]
     public class CommandWarps : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
         {
             var warps = ( 
                 from warp in WarpModule.Instance.WarpManager.Warps
@@ -44,6 +44,8 @@ namespace Essentials.InternalModules.Warp.Commands
                 EssLang.WARP_NONE.SendTo( source );
             else
                 EssLang.WARP_LIST.SendTo( source, string.Join( ", ", warps ) );
+
+            return CommandResult.Success();
         }
     }
 }

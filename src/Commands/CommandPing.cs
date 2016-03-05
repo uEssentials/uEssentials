@@ -32,15 +32,16 @@ namespace Essentials.Commands
     )]
     public class CommandPing : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
         {
-
             if ( parameters.IsEmpty || parameters.Length > 1 )
             {
                 if ( source.IsConsole )
-                    source.SendMessage( "Use /ping [player]" );
-                else
-                    EssLang.PING.SendTo( source, source.ToPlayer().Ping );
+                {
+                    return CommandResult.ShowUsage();
+                }
+
+                EssLang.PING.SendTo( source, source.ToPlayer().Ping );
             }
             else
             {
@@ -48,13 +49,13 @@ namespace Essentials.Commands
 
                 if ( target == null )
                 {
-                    EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[0] );
+                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, parameters[0] );
                 }
-                else
-                {
-                    EssLang.PING_OTHER.SendTo( source, target.DisplayName, target.Ping );
-                }
+
+                EssLang.PING_OTHER.SendTo( source, target.DisplayName, target.Ping );
             }
+
+            return CommandResult.Success();
         }
     }
 }

@@ -35,75 +35,74 @@ namespace Essentials.Commands
     )]
     public class CommandVote : EssCommand
     {
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
         {
             if ( (parameters.Length != 2 && Polls.Count != 1 ) || parameters.Length < 1 )
             {
-                ShowUsage( source );
+                return CommandResult.ShowUsage();
             }
-            else
+
+            switch ( parameters[0].ToString().ToLower() )
             {
-                switch ( parameters[0].ToString().ToLower() )
-                {
-                    case "yes":
-                    case "y":
+                case "yes":
+                case "y":
+                    var pollName = parameters.Length == 1 ? Polls.Keys.First() : parameters[1].ToString();
+
+                    if ( !PollExists( pollName, source ) )
                     {
-                        var pollName = parameters.Length == 1 ? Polls.Keys.First() : parameters[1].ToString();
-                            
-                        if ( !PollExists( pollName, source ) ) return;
+                        return CommandResult.Empty();
+                    }
                         
-                        lock ( Polls )
+                    lock ( Polls )
+                    {
+                        var poll = Polls[pollName];
+                            
+                        if ( poll.Voted.Contains( source.DisplayName ) )
                         {
-                            var poll = Polls[pollName];
-                            
-                            if ( poll.Voted.Contains( source.DisplayName ) )
-                            {
-                                EssLang.POLL_ALREADY_VOTED.SendTo( source );
-                                return;
-                            }
-                            
-                            poll.YesVotes += 1;
-                            poll.Voted.Add( source.DisplayName );
-                            
-                            Polls[pollName] = poll;
-                            
-                            EssLang.POLL_VOTED_YES.SendTo( source, pollName );
+                            return CommandResult.Lang( EssLang.POLL_ALREADY_VOTED );
                         }
+                            
+                        poll.YesVotes += 1;
+                        poll.Voted.Add( source.DisplayName );
+                            
+                        Polls[pollName] = poll;
+                            
+                        EssLang.POLL_VOTED_YES.SendTo( source, pollName );
                     }
                     break;
 
-                    case "no":
-                    case "n":
+                case "no":
+                case "n":
+                    pollName = parameters[1].ToString();
+
+                    if ( !PollExists( pollName, source ) )
                     {
-                        var pollName = parameters[1].ToString();
+                        return CommandResult.Empty();
+                    }
                         
-                        if ( !PollExists( pollName, source ) ) return;
-                        
-                        lock ( Polls )
+                    lock ( Polls )
+                    {
+                        var poll = Polls[pollName];
+                            
+                        if ( poll.Voted.Contains( source.DisplayName ) )
                         {
-                            var poll = Polls[pollName];
-                            
-                            if ( poll.Voted.Contains( source.DisplayName ) )
-                            {
-                                EssLang.POLL_ALREADY_VOTED.SendTo( source );
-                                return;
-                            }
-                            
-                            poll.NoVotes += 1;
-                            poll.Voted.Add( source.DisplayName );
-                            
-                            Polls[pollName] = poll;
-                            
-                            EssLang.POLL_VOTED_YES.SendTo( source, pollName );
+                            return CommandResult.Lang( EssLang.POLL_ALREADY_VOTED );
                         }
+                            
+                        poll.NoVotes += 1;
+                        poll.Voted.Add( source.DisplayName );
+                            
+                        Polls[pollName] = poll;
+                            
+                        EssLang.POLL_VOTED_YES.SendTo( source, pollName );
                     }
                     break;
 
-                    default:
-                        ShowUsage( source );
-                        break;
-                }
+                default:
+                    return CommandResult.ShowUsage();
             }
+
+            return CommandResult.Success();
         }
     }
 }

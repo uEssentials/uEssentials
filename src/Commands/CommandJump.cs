@@ -33,7 +33,7 @@ namespace Essentials.Commands
     )]
     public class CommandJump : EssCommand
     {
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
         {
             var player = src.ToPlayer();
             var dist = 1000f;
@@ -41,7 +41,10 @@ namespace Essentials.Commands
             if ( args.Length == 1 )
             {
                 if ( !args[0].IsDouble )
-                    goto usage;
+                {
+                    return CommandResult.ShowUsage();
+                }
+
                 dist = (float) args[0].ToDouble;
             }
 
@@ -49,20 +52,16 @@ namespace Essentials.Commands
 
             if ( !eyePos.HasValue )
             {
-                EssLang.JUMP_NO_POSITION.SendTo( src );
+                return CommandResult.Lang( EssLang.JUMP_NO_POSITION );
             }
-            else
-            {
-                var point = eyePos.Value;
-                point.y += 6;
 
-                player.Teleport( point );
-                EssLang.JUMPED.SendTo( src, point.x, point.y, point.z );
-            }
-            return;
+            var point = eyePos.Value;
+            point.y += 6;
 
-            usage:
-            ShowUsage( src );
+            player.Teleport( point );
+            EssLang.JUMPED.SendTo( src, point.x, point.y, point.z );
+
+            return CommandResult.Success();
         }
     }
 }

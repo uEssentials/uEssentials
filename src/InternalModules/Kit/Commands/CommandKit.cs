@@ -37,13 +37,14 @@ namespace Essentials.InternalModules.Kit.Commands
     {
         internal static Dictionary<ulong, Dictionary<string, DateTime>> Cooldowns = new Dictionary<ulong, Dictionary<string, DateTime>>();
 
-        public override void OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute ( ICommandSource source, ICommandArgs parameters )
         {
             if ( parameters.Length == 0 || ( parameters.Length == 1 && source.IsConsole ) )
             {
-                source.SendMessage( source.IsAdmin ? UsageMessage : "Use /kit [kit_name]" );
+                return CommandResult.InvalidArgs( source.IsAdmin ? UsageMessage : "Use /kit [kit_name]" );
             }
-            else if ( parameters.Length == 1 )
+
+            if ( parameters.Length == 1 )
             {
                 var player = source.ToPlayer();
 
@@ -54,46 +55,42 @@ namespace Essentials.InternalModules.Kit.Commands
 
                     if ( !requestedKit.CanUse( player ) )
                     {
-                        EssLang.KIT_NO_PERMISSION.SendTo( player );
+                        return CommandResult.Lang( EssLang.KIT_NO_PERMISSION );
                     }
-                    else
+
+                    var steamPlayerId    = player.CSteamId.m_SteamID;
+                    var kitCooldown      = requestedKit.Cooldown;
+
+                    if ( !source.HasPermission("essentials.bypass.kitcooldown") )
                     {
-                        var steamPlayerId    = player.CSteamId.m_SteamID;
-                        var kitCooldown      = requestedKit.Cooldown;
-
-                        if ( !source.HasPermission("essentials.bypass.kitcooldown") )
+                        if ( !Cooldowns.ContainsKey( steamPlayerId ) )
                         {
-                            if ( !Cooldowns.ContainsKey( steamPlayerId ) )
-                            {
-                                Cooldowns.Add( steamPlayerId, new Dictionary<string, DateTime>() );
-                            }
-                            if ( Cooldowns[steamPlayerId].ContainsKey( kitName ) )
-                            {
-                                var remainingTime = DateTime.Now - Cooldowns[steamPlayerId][kitName];
+                            Cooldowns.Add( steamPlayerId, new Dictionary<string, DateTime>() );
+                        }
+                        if ( Cooldowns[steamPlayerId].ContainsKey( kitName ) )
+                        {
+                            var remainingTime = DateTime.Now - Cooldowns[steamPlayerId][kitName];
 
-                                if ( (remainingTime.TotalSeconds + 1) > kitCooldown )
-                                {
-                                    Cooldowns[steamPlayerId][kitName] = DateTime.Now;
-                                }
-                                else
-                                {
-                                    EssLang.KIT_COOLDOWN.SendTo( source, TimeUtil.FormatSeconds(
-                                        (uint) (kitCooldown - remainingTime.TotalSeconds)
-                                    ));
-                                    return;
-                                }
+                            if ( (remainingTime.TotalSeconds + 1) > kitCooldown )
+                            {
+                                Cooldowns[steamPlayerId][kitName] = DateTime.Now;
                             }
                             else
                             {
-                                Cooldowns[steamPlayerId].Add( kitName, DateTime.Now );
+                                return CommandResult.Lang( EssLang.KIT_COOLDOWN, TimeUtil.FormatSeconds(
+                                    (uint) (kitCooldown - remainingTime.TotalSeconds) ) );
                             }
                         }
-                        KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( player );
+                        else
+                        {
+                            Cooldowns[steamPlayerId].Add( kitName, DateTime.Now );
+                        }
                     }
+                    KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( player );
                 }
                 else
                 {
-                    EssLang.KIT_NOT_EXIST.SendTo( player, parameters[0] );
+                    return CommandResult.Lang( EssLang.KIT_NOT_EXIST, parameters[0] );
                 }
             }
             else if ( parameters.Length == 2 )
@@ -102,7 +99,7 @@ namespace Essentials.InternalModules.Kit.Commands
 
                 if ( !source.HasPermission( $"essentials.kit.{kitName}.other" ) )
                 {
-                    return;
+                    return CommandResult.Empty();
                 }
 
                 var target = parameters[1].ToPlayer;
@@ -118,9 +115,11 @@ namespace Essentials.InternalModules.Kit.Commands
                 }
                 else
                 {
-                    EssLang.KIT_NOT_EXIST.SendTo( source, kitName );
+                    return CommandResult.Lang( EssLang.KIT_NOT_EXIST, kitName );
                 }
             }
+
+            return CommandResult.Success();
         }
     }
 }

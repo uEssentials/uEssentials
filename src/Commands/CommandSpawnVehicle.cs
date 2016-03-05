@@ -36,27 +36,26 @@ namespace Essentials.Commands
     )]
     public class CommandSpawnVehicle : EssCommand
     {
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute ( ICommandSource src, ICommandArgs args )
         {
             if ( args.Length == 2 )
             {
-                var found = UPlayer.TryGet( args[1], player => {
-                    var vehId = args[0];
+                var target = UPlayer.From( args[1].ToString() );
+                var vehId = args[0];
 
-                    if ( !vehId.IsUshort || !IsValidVehicleId( vehId.ToUshort ) )
-                    {
-                        EssLang.INVALID_VEHICLE_ID.SendTo( src, vehId );
-                    }
-                    else
-                    {
-                        VehicleTool.giveVehicle( player.UnturnedPlayer, vehId.ToUshort );
-                        EssLang.SPAWNED_VEHICLE_AT_PLAYER.SendTo( src, args[1] );
-                    }
-                });
-
-                if ( !found )
+                if ( target == null )
                 {
-                    EssLang.PLAYER_NOT_FOUND.SendTo( src, args[1] );
+                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[1] );
+                }
+
+                if ( !vehId.IsUshort || !IsValidVehicleId( vehId.ToUshort ) )
+                {
+                    EssLang.INVALID_VEHICLE_ID.SendTo( src, vehId );
+                }
+                else
+                {
+                    VehicleTool.giveVehicle( target.UnturnedPlayer, vehId.ToUshort );
+                    EssLang.SPAWNED_VEHICLE_AT_PLAYER.SendTo( src, args[1] );
                 }
             }
             else if ( args.Length == 4 )
@@ -70,23 +69,23 @@ namespace Essentials.Commands
 
                     if ( !vehId.IsUshort || !IsValidVehicleId( vehId.ToUshort ) )
                     {
-                        EssLang.INVALID_VEHICLE_ID.SendTo( src, vehId );
+                        return CommandResult.Lang( EssLang.INVALID_VEHICLE_ID, vehId );
                     }
-                    else
-                    {
-                        SpawnVehicle( pVal, vehId.ToUshort );
-                        EssLang.SPAWNED_VEHICLE_AT_POSITION.SendTo( src, pVal.x, pVal.y, pVal.z );
-                    }
+
+                    SpawnVehicle( pVal, vehId.ToUshort );
+                    EssLang.SPAWNED_VEHICLE_AT_POSITION.SendTo( src, pVal.x, pVal.y, pVal.z );
                 }
                 else
                 {
-                    EssLang.INVALID_COORDS.SendTo( src, args[1], args[2], args[3] );
+                    return CommandResult.Lang( EssLang.INVALID_COORDS, args[1], args[2], args[3] );
                 }
             }
             else
             {
-                ShowUsage( src );
+                return CommandResult.ShowUsage();
             }
+
+            return CommandResult.Success();
         }
         
         private static void SpawnVehicle( Vector3 pos, ushort id )
