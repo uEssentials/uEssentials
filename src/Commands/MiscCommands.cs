@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Task;
@@ -715,6 +716,11 @@ namespace Essentials.Commands
             if ( asset is ItemFuelAsset )
             {
                 item.Metadata[0] = 1;
+            }
+
+            if ( !target.HasPermission( "essentials.bypass.itemlimit" ) && amt > EssProvider.Config.ItemSpawnLimit )
+            {
+                amt = EssProvider.Config.ItemSpawnLimit;
             }
 
             if ( allPlayers )

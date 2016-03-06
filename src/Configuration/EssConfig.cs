@@ -53,6 +53,8 @@ namespace Essentials.Configuration
         public bool             EnablePollRunningMessage;
         public int              PollRunningMessageCooldown;
 
+        public ushort           ItemSpawnLimit;
+
         public AntiSpam         AntiSpam;
         public Updater          Updater;
         public HomeCommand      HomeCommand;
@@ -106,6 +108,8 @@ namespace Essentials.Configuration
 
             DisabledCommands            = new List<string>();
             EnabledSystems              = new List<string> { "kits", "warps" };
+
+            ItemSpawnLimit              = 10;
         }
 
         public override void Load( string filePath )
