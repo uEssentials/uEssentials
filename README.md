@@ -82,10 +82,6 @@ vehiclefeatures|Vehicle features|vehfeatures, vf|\[autorefuel \| autorepair\] \[
 spy|Toggle spy mode|None|None
 suicide|Kill yourself|None|None
 home|Teleport to your bed.|h|None
-createkit|Create a kit.|ckit|\[name\] \[cooldown\] \[resetCooldownWhenDie\[true or false\]\]
+createkit|Create a kit.|ckit|\[name\] \<cooldown\>
 
 If you have any questions or suggestions, then feel free to send them to us [here](../../issues/).
-
-
-Tags:
-rocket essentials, unturned essentials
