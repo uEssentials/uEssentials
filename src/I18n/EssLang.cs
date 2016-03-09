@@ -334,5 +334,6 @@ namespace Essentials.I18n
         public static EssLang RECEIVED_VEHICLE { get; private set; }
         public static EssLang GIVEN_VEHICLE { get; private set; }
         public static EssLang GIVEN_VEHICLE_ALL { get; private set; }
+        public static EssLang KILL_ALL { get; private set; }
     }
 }

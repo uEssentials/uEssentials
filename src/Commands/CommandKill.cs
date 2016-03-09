@@ -21,6 +21,8 @@
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Unturned;
+using Essentials.Common;
 using Essentials.I18n;
 
 namespace Essentials.Commands
@@ -32,23 +34,29 @@ namespace Essentials.Commands
     )]
     public class CommandKill : EssCommand
     {
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.IsEmpty )
+            if ( args.IsEmpty )
             {
                 return CommandResult.ShowUsage();
             }
 
-            var target = parameters[0].ToPlayer;
-
-            if ( target == null )
+            if ( args[0].Is( "*" ) )
             {
-                EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[0] );
+                UServer.Players.ForEach( p => p.Kill() );
+
+                EssLang.KILL_ALL.SendTo( src );
+            }
+            else if ( args[0].IsValidPlayerName )
+            {
+                var target = args[0].ToPlayer;
+                target.Kill();
+
+                EssLang.KILL_PLAYER.SendTo( src, target.DisplayName );
             }
             else
             {
-                target.Kill();
-                EssLang.KILL_PLAYER.SendTo( source, target.DisplayName );
+                 EssLang.PLAYER_NOT_FOUND.SendTo( src, args[0] );
             }
 
             return CommandResult.Success();

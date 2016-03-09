@@ -174,5 +174,6 @@
 	"DROPKIT_LOCATION": "Você dropou o kit '{0}' em (x: {1:0.00}, y: {2:0.00}, z: {3:0.00})",
     "RECEIVED_VEHICLE": "Você recebeu um {0} ({1})",
     "GIVEN_VEHICLE": "Você deu um {0} ({1}) para '{2}'",
-    "GIVEN_VEHICLE_ALL": "Você deu um {0} ({1}) para todos os jogadores."
+    "GIVEN_VEHICLE_ALL": "Você deu um {0} ({1}) para todos os jogadores.",
+	"KILL_ALL": "You killed everyone!"
 }
