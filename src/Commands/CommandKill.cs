@@ -30,7 +30,7 @@ namespace Essentials.Commands
     [CommandInfo(
         Name = "kill",
         Description = "Kill an player",
-        Usage = "[player]"
+        Usage = "[player/*]"
     )]
     public class CommandKill : EssCommand
     {
