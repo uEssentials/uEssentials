@@ -56,11 +56,11 @@ namespace Essentials.InternalModules.Kit.Commands
                 return CommandResult.Lang( EssLang.KIT_ALREADY_EXIST, name );
             }
 
-            if ( args.Length < 1 )
+            if ( args.Length > 1 )
             {
                 if ( !args[1].IsInt )
                 {
-                    return CommandResult.Lang( EssLang.INVALID_BOOLEAN, args[1] );
+                    return CommandResult.Lang( EssLang.INVALID_NUMBER, args[1] );
                 }
 
                 if ( args[1].ToInt < 0 )
