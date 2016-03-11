@@ -25,6 +25,7 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Task;
 using Essentials.I18n;
+using SDG.Unturned;
 
 namespace Essentials.InternalModules.Warp.Commands
 {
@@ -53,6 +54,11 @@ namespace Essentials.InternalModules.Warp.Commands
             if ( !player.HasPermission( $"essentials.warp.{parameters[0]}" ) )
             {
                 return CommandResult.Lang( EssLang.WARP_NO_PERMISSION, parameters[0] );
+            }
+
+            if ( player.RocketPlayer.Stance == EPlayerStance.DRIVING || player.RocketPlayer.Stance == EPlayerStance.SITTING )
+            {
+                return CommandResult.Lang( EssLang.CANNOT_TELEPORT_DRIVING );
             }
 
             var dest = WarpModule.Instance.WarpManager[parameters[0].ToString()];
