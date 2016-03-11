@@ -32,37 +32,47 @@ namespace Essentials.InternalModules.Warp.Commands
     )]
     public class CommandSetWarp : EssCommand
     {
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            switch ( parameters.Length )
+            switch ( args.Length )
             {
                 case 1:
-                    if ( source.IsConsole )
+                    if ( src.IsConsole )
                     {
                         return CommandResult.ShowUsage();
                     }
+                    
+                    if ( WarpModule.Instance.WarpManager.Contains( args[0].ToString() ) )
+                    {
+                        return CommandResult.Lang( EssLang.WARP_ALREADY_EXISTS );
+                    }
 
-                    var player = source.ToPlayer();
-                    var warp = new Warp( parameters[0].ToString(),  player.Position, player.Rotation );
+                    var player = src.ToPlayer();
+                    var warp = new Warp( args[0].ToString(),  player.Position, player.Rotation );
 
                     WarpModule.Instance.WarpManager.Add( warp );
-                    EssLang.WARP_SET.SendTo( source, parameters[0] );
+                    EssLang.WARP_SET.SendTo( src, args[0] );
                     break;
 
                 case 4:
-                    var pos = parameters.GetVector3( 1 );
+                    var pos = args.GetVector3( 1 );
 
                     if ( pos.HasValue )
                     {
-                        warp = new Warp( parameters[0].ToString(), pos.Value, 0.0F );
+                        warp = new Warp( args[0].ToString(), pos.Value, 0.0F );
+
+                        if ( WarpModule.Instance.WarpManager.Contains( args[0].ToString() ) )
+                        {
+                            return CommandResult.Lang( EssLang.WARP_ALREADY_EXISTS );
+                        }
 
                         WarpModule.Instance.WarpManager.Add( warp );
 
-                        EssLang.WARP_SET.SendTo( source, parameters[0] );
+                        EssLang.WARP_SET.SendTo( src, args[0] );
                     }
                     else
                     {
-                        return CommandResult.Lang( EssLang.INVALID_COORDS, parameters[1], parameters[2], parameters[3] );
+                        return CommandResult.Lang( EssLang.INVALID_COORDS, args[1], args[2], args[3] );
                     }
                     break;
 

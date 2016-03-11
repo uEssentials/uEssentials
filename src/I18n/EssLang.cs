@@ -199,6 +199,7 @@ namespace Essentials.I18n
         public static EssLang ONLY_NUMBERS { get; private set; }
         public static EssLang ONLINE_PLAYERS { get; private set; }
         public static EssLang WARP_LIST { get; private set; }
+        public static EssLang WARP_ALREADY_EXISTS { get; private set; }
         public static EssLang WARP_SET { get; private set; }
         public static EssLang WARP_REMOVED { get; private set; }
         public static EssLang WARP_NOT_EXIST { get; private set; }

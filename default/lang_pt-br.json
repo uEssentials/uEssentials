@@ -175,5 +175,6 @@
     "RECEIVED_VEHICLE": "Você recebeu um {0} ({1})",
     "GIVEN_VEHICLE": "Você deu um {0} ({1}) para '{2}'",
     "GIVEN_VEHICLE_ALL": "Você deu um {0} ({1}) para todos os jogadores.",
-	"KILL_ALL": "You killed everyone!"
+	"KILL_ALL": "You killed everyone!",
+    "WARP_ALREADY_EXISTS": "<yellow>A warp with this name already exists."
 }
