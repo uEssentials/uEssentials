@@ -61,9 +61,9 @@ resetplayer|Reset all player data.|None|\[player/playerid\]
 setwarp|Set an warp.|None|\[warp_name\] \<x\> \<y\> \<z\>
 ping|View your/another player ping|None|\<player\>
 poll|Start/Stop an poll|None|\[start/stop/list/info\]
-kill|Kill an player|None|\[player\]
+kill|Kill an player|None|\[player/*\]
 delwarp|Delete an existing warp|deletewarp|\[warp_name\]
-freeze|Freeze an player/all|None|\[player/all\]
+freeze|Freeze an player/all|None|\[player/*\]
 warp|Teleport you to given warp.|None|\[warp_name\]
 warps|View available warps|None|None
 tpall|Teleport all players to an player/position|None|\[player/position\]
