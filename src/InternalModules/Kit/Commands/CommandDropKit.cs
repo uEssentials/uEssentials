@@ -33,6 +33,7 @@ namespace Essentials.InternalModules.Kit.Commands
 {
     [CommandInfo(
         Name = "dropkit",
+        Aliases = new [] {"dk"},
         Description = "Drop an kit at given player/position",
         Usage = "[kit] <player | x y z>"
     )]
