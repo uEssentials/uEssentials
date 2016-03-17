@@ -50,13 +50,13 @@ namespace Essentials.InternalModules.Kit.Commands
                     }
 
                     DropKit( src, args[0], src.ToPlayer().Position );
-                    EssLang.DROPKIT_SENDER.SendTo( src );
+                    EssLang.DROPKIT_SENDER.SendTo( src, args[0] );
                     break;
 
                 case 2:
                     var found = UPlayer.TryGet( args[1], player => {
                         DropKit( src, args[0], player.Position );
-                        EssLang.DROPKIT_PLAYER.SendTo( src, player.DisplayName );
+                        EssLang.DROPKIT_PLAYER.SendTo( src, args[0], player.DisplayName );
                     } );
 
                     if ( !found )
