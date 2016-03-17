@@ -189,7 +189,6 @@ namespace Essentials.Commands
                                 where _isEssentialsCommand(command)
                                 select command
                             ).ForEach( command => {
-                                                      Console.WriteLine( count + "  " + page + "  " + "  " + _ingameCommandPages.Count );
                                 if ( count >= (PAGE_SIZE - 1) )
                                 {
                                     _ingameCommandPages[page++].Add( "Use /ess help <command> to view help page." );
