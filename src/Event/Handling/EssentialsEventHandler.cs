@@ -255,6 +255,12 @@ namespace Essentials.Event.Handling
             {
                 var kit = KitModule.Instance.KitManager.GetByName(kitName);
 
+                if ( kit == null )
+                {
+                    playerCooldowns.Remove( kitName );
+                    continue;
+                }
+
                 if ( kit.ResetCooldownWhenDie )
                 {
                     playerCooldowns[kitName] = DateTime.Now.AddSeconds( -kit.Cooldown );
