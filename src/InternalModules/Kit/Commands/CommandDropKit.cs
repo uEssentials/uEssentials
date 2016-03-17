@@ -54,6 +54,11 @@ namespace Essentials.InternalModules.Kit.Commands
                     break;
 
                 case 2:
+                    if ( !src.HasPermission( $"{Permission}.other" ) )
+                    {
+                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                    }
+
                     var found = UPlayer.TryGet( args[1], player => {
                         DropKit( src, args[0], player.Position );
                         EssLang.DROPKIT_PLAYER.SendTo( src, args[0], player.DisplayName );
