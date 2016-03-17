@@ -25,6 +25,8 @@ using Essentials.Api.Unturned;
 using UnityEngine;
 using Essentials.I18n;
 using SDG.Unturned;
+using Essentials.Common;
+using System.Linq;
 
 namespace Essentials.Commands
 {
@@ -32,7 +34,7 @@ namespace Essentials.Commands
         Name = "boom",
         Aliases = new[] { "explode" },
         Description = "Create an explosion an given position/player",
-        Usage = "[player|x, y, z]"
+        Usage = "[player | * | x, y, z]"
     )]
     public class CommandBoom : EssCommand
     {
@@ -55,13 +57,25 @@ namespace Essentials.Commands
                     break;
 
                 case 1:
-                    var found = UPlayer.TryGet( args[0], player => 
-                        Explode( player.Position ) 
-                    );
-
-                    if ( !found )
+                    if ( args[0].Is("*") )
                     {
-                        return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
+                        UPlayer caller = null;
+
+                        if ( !src.IsConsole )
+                        {
+                            caller = src.ToPlayer();
+                        }
+
+                        UServer.Players.Where( p => p != caller ).ForEach( p => Explode( p.Position ) );
+                    }
+                    else
+                    {
+                        var found = UPlayer.TryGet( args[0], player => Explode(player.Position) );
+
+                        if (!found)
+                        {
+                            return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
+                        }
                     }
                     break;
 
