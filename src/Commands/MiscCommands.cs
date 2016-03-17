@@ -708,6 +708,12 @@ namespace Essentials.Commands
         private static void GiveItem( ICommandSource src, UPlayer target, ICommandArgument itemArg, 
                                       ICommandArgument amountArg, bool allPlayers = false )
         {
+            if ( !src.HasPermission("essentials.command.item.other") && target != src )
+            {
+                EssLang.COMMAND_NO_PERMISSION.SendTo( src );
+                return;
+            }
+
             var optAsset = GetItem( itemArg.ToString() );
 
             if ( optAsset.IsAbsent )
