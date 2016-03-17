@@ -35,9 +35,9 @@ namespace Essentials.Commands
      )]
     public class CommandTest : EssCommand
     {
-        public override void OnExecute( ICommandSource src, ICommandArgs args )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            
+            return CommandResult.Success();
         }
     }
 }
