@@ -134,8 +134,7 @@ namespace Essentials.Commands
 
             var joinedArgs = args.Join( 0 );
 
-            Func<string, bool> hasArg = arg =>
-            {
+            Func<string, bool> hasArg = arg => {
                 return joinedArgs.IndexOf( arg, 0, StringComparison.InvariantCultureIgnoreCase ) != -1 ||
                         (joinedArgs.Contains( "a" ) || joinedArgs.Contains( "A" ));
             };
@@ -154,12 +153,22 @@ namespace Essentials.Commands
 
             if ( hasArg( "i" ) )
             {
+                if ( !src.HasPermission( cmd.Permission + ".items") )
+                {
+                    return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                }
+
                 ItemManager.askClearAllItems();
                 EssLang.CLEAR_ITEMS.SendTo( src );
             }
 
             if ( hasArg( "v" ) )
             {
+                if ( !src.HasPermission( cmd.Permission + ".vehicles" ) )
+                {
+                    return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                }
+
                 UWorld.Vehicles.ForEach( v => {
                     for ( byte i = 0; i < v.passengers.Length; i++ )
                     {
