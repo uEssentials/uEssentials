@@ -158,6 +158,12 @@ namespace Essentials.Event.Handling
             });
         }
 
+        [SubscribeEvent(EventType.PLAYER_CONNECTED)]
+        void OnPlayerConnected( UnturnedPlayer player )
+        {
+            Analytics.Metrics.ReportPlayer( player );
+        }
+
         [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
         void OnPlayerDisconnect( UnturnedPlayer player )
         {
@@ -197,7 +203,7 @@ namespace Essentials.Event.Handling
         private DateTime lastUpdateCheck = DateTime.Now;
 
         [SubscribeEvent( EventType.PLAYER_CONNECTED )]
-        void UpdaterAlertOnJoin( UnturnedPlayer player )
+        void UpdateAlert( UnturnedPlayer player )
         { 
             if ( !player.IsAdmin || lastUpdateCheck > DateTime.Now ) return;
 
