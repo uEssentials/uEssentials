@@ -177,7 +177,7 @@ namespace Essentials.Commands
                     }
                 } );
 
-                Tasks.New( t => VehicleManager.askVehicleDestroyAll() ).Delay( 200 ).Go();
+                Tasks.New( t => VehicleManager.askVehicleDestroyAll() ).Delay( 100 ).Go();
                 EssLang.CLEAR_VEHICLES.SendTo( src );
             }
 

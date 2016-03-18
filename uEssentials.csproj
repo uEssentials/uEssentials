@@ -226,7 +226,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y  "$(TargetDir)uEssentials.dll" "C:\Users\Leonardo\Documents\Unturned\Rocket\All\Servers\MyFirstRocketServer\Rocket\Plugins\*.*"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y  "$(TargetDir)uEssentials.dll" "C:\Users\Leonardo\Documents\Unturned\Rocket\All\Unturned\Servers\MyFirstRocketServer\Rocket\Plugins\*.*"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>for /f "tokens=2 delims=," %25%25F in ('tasklist /nh /fi "WINDOWTITLE eq Unturned Server" /fo csv') do taskkill /PID %25%25~F /F
