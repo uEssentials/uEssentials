@@ -101,48 +101,98 @@ namespace Essentials.Event.Handling
         {
             var uplayer = UPlayer.From( player );
             var displayName = uplayer.DisplayName;
-            var skillNameIdx = 0;
 
-            string[] skillNames =
+            const string KEEP_SKILL_PERM = "essentials.keepskill.";
+
+            int globalPercentage = -1;
+            var playerPermissions = player.GetPermissions().Select( p => p.Name ).ToList();
+
+            /*
+                Search for 'global percentage' Ex: (essentials.keepskill.50)
+            */
+            foreach ( var p in playerPermissions )
             {
-                "OVERKILL",
-                "SHARPSHOOTER",
-                "DEXTERITY",
-                "CARDIO",
-                "EXERCISE", 
-                "DIVING",
-                "PARKOUR",
-                "SNEAKYBEAKY",
-                "VITALITY",
-                "IMMUNITY", 
-                "TOUGHNESS",
-                "STRENGTH",
-                "WARMBLOODED",
-                "SURVIVAL",
-                "HEALING", 
-                "CRAFTING",
-                "OUTDOORS",
-                "COOKING",
-                "FISHING",
-                "AGRICULTURE",
-                "MECHANIC",
-                "ENGINEER"
-            };
-            
+                if ( !p.StartsWith( KEEP_SKILL_PERM ) )
+                {
+                    continue;
+                }
+
+                var rawAmount = p.Substring( KEEP_SKILL_PERM.Length );
+
+                if ( int.TryParse( rawAmount, out globalPercentage ) )
+                {
+                    break;
+                }
+                else
+                {
+                    globalPercentage = -1;
+                }
+            }
+
+            /*
+                If player has global percentage he will keep all skills.
+            */
+            var hasGlobalPercentage = (globalPercentage != -1);
+            Console.WriteLine(hasGlobalPercentage);
             var skillValues = (
                 from skill 
                 in USkill.Skills
-                let permss = $"essentials.keepskill.{skillNames[skillNameIdx++]}"
-                where uplayer.HasPermission( permss )
+                where hasGlobalPercentage || uplayer.HasPermission( KEEP_SKILL_PERM + skill.Name )
                 select skill
-            ).ToDictionary( skill => skill, skill => uplayer.GetSkillLevel( skill ) );
+            )
+            .ToDictionary( skill => skill, skill => {
+                var currentLevel = uplayer.GetSkillLevel( skill );
+
+                if ( hasGlobalPercentage )
+                {
+                    return (byte) Math.Round((currentLevel * globalPercentage) / 100.0);
+                }
+                else
+                {
+                    /*
+                        Search for single percentage.
+                    */
+                    var skillPermission = KEEP_SKILL_PERM + skill.Name + ".";
+                    var skillPercentage = -1;
+
+                    foreach ( var p in playerPermissions )
+                    {
+                        if ( !p.StartsWith( skillPermission ) )
+                        {
+                            continue;
+                        }
+
+                        var rawAmount = p.Substring( skillPermission.Length );
+
+                        if ( int.TryParse( rawAmount, out skillPercentage ) )
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            skillPercentage = -1;
+                        }
+                    }
+
+                    if ( skillPercentage != -1 )
+                    {
+                        return (byte) Math.Round( (currentLevel * skillPercentage) / 100.0 );
+                    }
+                }
+
+                return currentLevel;
+            });
 
             if ( skillValues.Count == 0 ) return;
             
-            if ( CachedSkills.ContainsKey( displayName) )
+            if ( CachedSkills.ContainsKey( displayName ) )
+            {
                 CachedSkills[displayName] = skillValues;
+            }
             else
-                CachedSkills.Add( displayName, skillValues ); 
+            {
+                CachedSkills.Add(displayName, skillValues);
+            }
         }
 
         [SubscribeEvent( EventType.PLAYER_REVIVE )]
