@@ -20,7 +20,6 @@
 */
 
 using System;
-using System.Runtime.Remoting.Messaging;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;

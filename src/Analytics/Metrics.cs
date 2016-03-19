@@ -3,7 +3,6 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using SDG.Unturned;
-using System.IO;
 
 // ReSharper disable InconsistentNaming
 
