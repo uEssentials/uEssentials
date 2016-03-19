@@ -30,6 +30,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
+using Essentials.Core;
+using Essentials.Compatibility.Hooks;
 
 namespace Essentials.InternalModules.Kit.Data
 {
@@ -78,10 +80,25 @@ namespace Essentials.InternalModules.Kit.Data
                 );
                 
                 var itemIndex = 0;
+                var economyHook = EssCore.Instance.HookManager.GetByType<UconomyHook>();
 
                 foreach ( var itemObj in kitObj.GetValue( "items", strCmp ).Children<JObject>() )
                 {
                     AbstractKitItem kitItem;
+
+                    if ( itemObj.GetValue( "money", strCmp ) != null )
+                    {
+                        if ( economyHook.IsAbsent )
+                        {
+                            EssProvider.Logger.LogWarning(
+                                $"Cannot add money item, no economy plugin found. Kit: {kit.Name}" );
+
+                            continue;
+                        }
+
+                        kitItem = new KitItemMoney( itemObj.GetValue( "money", strCmp ).Value<decimal>() );
+                        goto add;
+                    }
 
                     if ( itemObj.GetValue( "xp", strCmp ) != null )
                     {

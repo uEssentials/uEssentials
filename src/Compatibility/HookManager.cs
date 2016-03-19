@@ -79,9 +79,23 @@ namespace Essentials.Compatibility
             RegisterHook( typeof (T) );
         }
 
-        public Hook GetByName( string hookName )
+        public Optional<Hook> GetByName( string hookName )
         {
-            return _activeHooks[hookName.ToLowerInvariant()];
+            hookName = hookName.ToLowerInvariant();
+
+            if ( _activeHooks.ContainsKey( hookName ) )
+            {
+                return Optional<Hook>.Of( _activeHooks[hookName] );
+            }
+
+            return  Optional<Hook>.Empty();
+        }
+
+        public Optional<THookType> GetByType<THookType>() where THookType : Hook
+        {
+            return Optional<THookType>.OfNullable(
+                (THookType) _activeHooks.FirstOrDefault( h => h.Value is THookType  ).Value
+            );
         }
     }
 }

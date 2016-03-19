@@ -110,6 +110,7 @@
     <Compile Include="src\Common\Util\TimeUtil.cs" />
     <Compile Include="src\Compatibility\Hook.cs" />
     <Compile Include="src\Compatibility\HookManager.cs" />
+    <Compile Include="src\Compatibility\Hooks\UconomyHook.cs" />
     <Compile Include="src\Compatibility\Hooks\LPXHook.cs" />
     <Compile Include="src\Core\Command\MethodCommand.cs" />
     <Compile Include="src\Core\Command\CommandAdapter.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="src\Commands\CommandKillZombies.cs" />
     <Compile Include="src\Commands\CommandTell.cs" />
     <Compile Include="src\Commands\CommandResetPlayer.cs" />
+    <Compile Include="src\InternalModules\Kit\Item\KitItemMoney.cs" />
     <Compile Include="src\InternalModules\Warp\Commands\CommandSetWarp.cs" />
     <Compile Include="src\Commands\CommandPing.cs" />
     <Compile Include="src\Commands\CommandPoll.cs" />

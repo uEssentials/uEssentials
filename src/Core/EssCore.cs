@@ -202,6 +202,9 @@ namespace Essentials.Core
 
             CommandManager.RegisterAll( "Essentials.Commands" );
 
+            HookManager.RegisterAll();
+            HookManager.LoadAll();
+
             /*
                 Load internal modules
             */
@@ -220,10 +223,7 @@ namespace Essentials.Core
 
             Logger.LogInfo( "Loading modules..." );
             ModuleManager.LoadAll( ModulesFolder );
-            Logger.LogInfo( $"Loaded {ModuleManager.RunningModules.Count(t => !(t is InternalModule))} modules" );
-
-            HookManager.RegisterAll();
-            HookManager.LoadAll();
+            Logger.LogInfo( $"Loaded {ModuleManager.RunningModules.Count( t => !(t is InternalModule) )} modules" );
 
             if ( Config.AutoAnnouncer.Enabled )
             {
@@ -232,7 +232,7 @@ namespace Essentials.Core
 
             if ( !Config.Updater.AlertOnJoin )
             {
-                EventManager.Unregister<EssentialsEventHandler>( "UpdaterAlertOnJoin" );
+                EventManager.Unregister<EssentialsEventHandler>( "UpdaterAlert" );
             }
 
             if ( Config.DisabledCommands.Count != 0 )
