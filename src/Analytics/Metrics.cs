@@ -70,8 +70,9 @@ namespace Essentials.Analytics
                         stream.Write( data, 0, data.Length );
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
+                    // ignored
                 }
             } ).Start();
         }
@@ -106,8 +107,9 @@ namespace Essentials.Analytics
                         stream.Write(data, 0, data.Length);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
+                    // ignored
                 }
             }).Start();
         }
