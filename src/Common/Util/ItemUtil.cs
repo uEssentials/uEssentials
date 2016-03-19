@@ -48,12 +48,15 @@ namespace Essentials.Common.Util
                 return GetItem( id );
             }
 
-            var asset = Assets.find( EAssetType.ITEM )
-                              .Cast<ItemAsset>()
+            // Search for item that name is same of given name.
+            var asset = Assets.find(EAssetType.ITEM)
+                              .Cast<ItemAsset>(  )
                               .Where( i => i.Name != null )
-                              .OrderBy( i => i.Name.EqualsIgnoreCase( name ) )
-                              .ThenBy( i => i.Name.ContainsIgnoreCase( name ) )
-                              .LastOrDefault();
+                              .FirstOrDefault(i => i.Name.EqualsIgnoreCase( name )) ?? // If not found it will search for items that contains given name.
+                               Assets.find(EAssetType.ITEM)
+                                     .Cast<ItemAsset>(  )
+                                     .Where( i => i.Name != null )
+                                     .FirstOrDefault(i => i.Name.ContainsIgnoreCase( name )); ;
 
             return Optional<ItemAsset>.OfNullable( asset );
         }
