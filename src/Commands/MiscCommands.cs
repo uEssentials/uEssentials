@@ -761,7 +761,7 @@ namespace Essentials.Commands
                 item.Metadata[0] = 1;
             }
 
-            if ( !target.HasPermission( "essentials.bypass.itemlimit" ) && amt > EssProvider.Config.ItemSpawnLimit )
+            if ( !src.HasPermission( "essentials.bypass.itemlimit" ) && amt > EssProvider.Config.ItemSpawnLimit )
             {
                 amt = EssProvider.Config.ItemSpawnLimit;
             }
