@@ -40,5 +40,10 @@ namespace Essentials.InternalModules.Kit.Item
             VehicleTool.giveVehicle( player.UnturnedPlayer, Id );
             return true;
         }
+
+        public override string ToString()
+        {
+            return $"Vehicle: {Id}";
+        }
     }
 }

@@ -39,5 +39,10 @@ namespace Essentials.InternalModules.Kit.Item
             player.RocketPlayer.Experience += Amount;
             return true;
         }
+
+        public override string ToString()
+        {
+            return $"Xp: {Amount}";
+        }
     }
 }

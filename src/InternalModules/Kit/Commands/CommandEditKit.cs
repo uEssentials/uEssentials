@@ -68,29 +68,7 @@ namespace Essentials.InternalModules.Kit.Commands
                         var index = 0;
                         
                         kit.Items.ForEach( i => {
-                            string message;
-                            
-                            if ( i is KitItemExperience )
-                            {
-                                message = $"Xp: {((KitItemExperience) i).Amount}";
-                            }
-                            else if ( i is KitItemVehicle )
-                            {
-                                message = $"Vehicle: {((KitItemVehicle) i).Id}" ;
-                            }
-                            else
-                            {
-                                var kitItem = i as KitItem;
-                                
-                                if ( kitItem == null )
-                                {
-                                    return;
-                                }
-                                
-                                message = $"Id: '{kitItem.Id}' Durability: '{kitItem.Durability}' Amount: '{kitItem.Amount}'";
-                            }
-
-                            src.SendMessage( message.Insert( 0, $"[{(index++) + 1}] " ) );
+                            src.SendMessage( i.ToString().Insert( 0, $"[{(index++) + 1}] " ) );
                         });
                     }
                     else
