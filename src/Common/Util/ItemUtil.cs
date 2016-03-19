@@ -52,11 +52,11 @@ namespace Essentials.Common.Util
             var asset = Assets.find(EAssetType.ITEM)
                               .Cast<ItemAsset>(  )
                               .Where( i => i.Name != null )
-                              .FirstOrDefault(i => i.Name.EqualsIgnoreCase( name )) ?? // If not found it will search for items that contains given name.
+                              .FirstOrDefault( i => i.Name.EqualsIgnoreCase( name ) ) ?? // If not found it will search for items that contains given name.
                                Assets.find(EAssetType.ITEM)
                                      .Cast<ItemAsset>(  )
                                      .Where( i => i.Name != null )
-                                     .FirstOrDefault(i => i.Name.ContainsIgnoreCase( name )); ;
+                                     .FirstOrDefault( i => i.Name.ContainsIgnoreCase( name ) ); ;
 
             return Optional<ItemAsset>.OfNullable( asset );
         }
