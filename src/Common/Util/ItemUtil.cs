@@ -56,7 +56,20 @@ namespace Essentials.Common.Util
                                Assets.find(EAssetType.ITEM)
                                      .Cast<ItemAsset>(  )
                                      .Where( i => i.Name != null )
-                                     .FirstOrDefault( i => i.Name.ContainsIgnoreCase( name ) ); ;
+                                     .FirstOrDefault( i => {
+                                         if ( name.Contains( " " ) )
+                                         {
+                                             // 'Search by parts'
+                                             // For example, if name is 'mili nigh' it will return Military nightvision
+                                             var parts = name.Split( ' ' );
+
+                                             if ( parts.All( p => i.Name.ContainsIgnoreCase( p ) ) )
+                                             {
+                                                 return true;
+                                             }
+                                         }
+                                         return i.Name.ContainsIgnoreCase( name );
+                                     } ); ;
 
             return Optional<ItemAsset>.OfNullable( asset );
         }
