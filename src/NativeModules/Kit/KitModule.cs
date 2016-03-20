@@ -39,12 +39,12 @@ namespace Essentials.NativeModules.Kit
             
             Logger.LogInfo( $"Loaded {KitManager.Count} kits" );
 
-            CommandManager.RegisterAll( "Essentials.InternalModules.Kit.Commands" );
+            CommandManager.RegisterAll( "Essentials.NativeModules.Kit.Commands" );
         }
 
         public override void OnUnload()
         {
-            CommandManager.UnregisterAll( "Essentials.InternalModules.Kit.Commands" );
+            CommandManager.UnregisterAll( "Essentials.NativeModules.Kit.Commands" );
         }
     }
 }
