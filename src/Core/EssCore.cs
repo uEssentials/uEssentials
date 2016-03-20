@@ -44,8 +44,8 @@ using Essentials.Common.Reflect;
 using Essentials.Compatibility;
 using Essentials.Core.Permission;
 using Essentials.Event.Handling;
-using Essentials.InternalModules;
-using Essentials.InternalModules.Kit.Commands;
+using Essentials.NativeModules;
+using Essentials.NativeModules.Kit.Commands;
 using Essentials.Updater;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -210,20 +210,20 @@ namespace Essentials.Core
             */
             (
                 from type in Assembly.GetTypes()
-                where typeof(InternalModule).IsAssignableFrom( type )
+                where typeof(NativeModule).IsAssignableFrom( type )
                 where !type.IsAbstract
                 let mAttr = (ModuleInfo) type.GetCustomAttributes( typeof(ModuleInfo), false )[0]
                 where Config.EnabledSystems.Any( s => s.Equals(mAttr.Name, StringComparison.OrdinalIgnoreCase) )
                 select type
              ).ForEach( type => {
-                 ModuleManager.LoadModule( (InternalModule) Activator.CreateInstance( type ) );
+                 ModuleManager.LoadModule( (NativeModule) Activator.CreateInstance( type ) );
              } );
 
             Logger.LogInfo( $"Loaded {CommandManager.Commands.Count()} commands" );
 
             Logger.LogInfo( "Loading modules..." );
             ModuleManager.LoadAll( ModulesFolder );
-            Logger.LogInfo( $"Loaded {ModuleManager.RunningModules.Count( t => !(t is InternalModule) )} modules" );
+            Logger.LogInfo( $"Loaded {ModuleManager.RunningModules.Count( t => !(t is NativeModule) )} modules" );
 
             if ( Config.AutoAnnouncer.Enabled )
             {
