@@ -25,6 +25,7 @@ using Essentials.Api.Event;
 using Essentials.Api.Logging;
 using Essentials.Api.Module;
 using Essentials.Common;
+using Essentials.Compatibility;
 using Essentials.Configuration;
 using Essentials.Core;
 
@@ -61,6 +62,11 @@ namespace Essentials.Api
         /// <returns> Instance of ModuleManager </returns>
         /// </summary>
         public static ModuleManager ModuleManager => Core.ModuleManager;
+
+        /// <summary>
+        /// <returns> Instance of HookManager </returns>
+        /// </summary>
+        public static HookManager HookManager => Core.HookManager;
 
         /// <summary>
         /// <returns> Instance of plugin configuration </returns>
