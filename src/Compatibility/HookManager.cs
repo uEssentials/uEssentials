@@ -37,12 +37,12 @@ namespace Essentials.Compatibility
 
         public void LoadAll()
         {
-            ( from hook in Hooks where hook.CanBeLoaded() select hook ).ForEach( h => h.OnLoad() );
+            Hooks.ForEach( h => h.Load() );
         }
 
         public void UnloadAll()
         {
-            Hooks.ForEach( h => h.OnUnload() );
+            Hooks.ForEach( h => h.Unload() );
         }
 
         public void RegisterAll()
@@ -77,6 +77,39 @@ namespace Essentials.Compatibility
         public void RegisterHook<T>() where T : Hook
         {
             RegisterHook( typeof (T) );
+        }
+
+        /// <summary>
+        /// Get hook if he is active
+        /// </summary>
+        /// <param name="hookName"></param>
+        /// <returns></returns>
+        public Optional<Hook> GetActiveByName( string hookName )
+        {
+            var hook = GetByName( hookName );
+
+            if ( hook.IsPresent && hook.Value.IsLoaded )
+            {
+                return hook;
+            }
+
+            return Optional<Hook>.Empty();
+        }
+
+        /// <summary>
+        /// Get hook if he is active
+        /// </summary>
+        /// <returns></returns>
+        public Optional<THookType> GetActiveByType<THookType>() where THookType : Hook
+        {
+            var hook = GetByType<THookType>();
+
+            if ( hook.IsPresent && hook.Value.IsLoaded )
+            {
+                return hook;
+            }
+
+            return Optional<THookType>.Empty();
         }
 
         public Optional<Hook> GetByName( string hookName )

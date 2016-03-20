@@ -60,6 +60,7 @@ namespace Essentials.Configuration
         public HomeCommand      HomeCommand;
         public WebKits          WebKits;
         public WebConfig        WebConfig;
+        public Kit              Kit;
 
         public AutoAnnouncer    AutoAnnouncer;
 
@@ -105,6 +106,8 @@ namespace Essentials.Configuration
             WebKits                     = new WebKits { Enabled = false, Url = "" };
             
             WebConfig                   = new WebConfig { Enabled = false, Url = "" };
+
+            Kit                         = new Kit { ShowCost = true, ShowCostIfZero = false, CostFormat = "{0}({1}$)" };
 
             DisabledCommands            = new List<string>();
             EnabledSystems              = new List<string> { "kits", "warps" };
@@ -194,5 +197,13 @@ namespace Essentials.Configuration
     {
         public string Url;
         public bool Enabled;
+    }
+
+    [JsonObject]
+    public struct Kit
+    {
+        public bool ShowCost;
+        public bool ShowCostIfZero;
+        public string CostFormat;
     }
 }

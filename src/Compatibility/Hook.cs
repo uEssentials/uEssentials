@@ -24,10 +24,28 @@ namespace Essentials.Compatibility
     public abstract class Hook
     {
         public string Name { get; }
+        public bool IsLoaded { get; private set; }
 
         protected Hook( string name )
         {
             Name = name;
+        }
+
+        internal void Load()
+        {
+            if ( !CanBeLoaded() )
+            {
+                return;
+            }
+
+            IsLoaded = true;
+            OnLoad();
+        }
+
+        internal void Unload()
+        {
+            IsLoaded = false;
+            OnUnload();
         }
 
         public abstract void OnLoad();

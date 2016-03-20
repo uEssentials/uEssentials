@@ -72,30 +72,28 @@ namespace Essentials.NativeModules.Kit.Data
 
             foreach ( var kitObj in kitArr.Children<JObject>() )
             {
-                var kit = new Kit
-                (
+                var kit = new Kit (
                     kitObj.GetValue( "Name", strCmp ).Value<string>(),
                     kitObj.GetValue( "Cooldown", strCmp ).Value<uint>(),
                     kitObj.GetValue( "ResetCooldownWhenDie", strCmp ).Value<bool>()
                 );
+
+                var rawCost = kitObj.GetValue( "Cost", strCmp );
+
+                if ( rawCost != null )
+                {
+                    kit.Cost = rawCost.Value<decimal>();
+                }
                 
                 var itemIndex = 0;
-                var economyHook = EssCore.Instance.HookManager.GetByType<UconomyHook>();
+                var economyHook = EssCore.Instance.HookManager.GetActiveByType<UconomyHook>();
 
                 foreach ( var itemObj in kitObj.GetValue( "items", strCmp ).Children<JObject>() )
                 {
                     AbstractKitItem kitItem;
 
-                    if ( itemObj.GetValue( "money", strCmp ) != null )
+                    if ( itemObj.GetValue( "money", strCmp ) != null && economyHook.IsPresent)
                     {
-                        if ( economyHook.IsAbsent )
-                        {
-                            EssProvider.Logger.LogWarning(
-                                $"Cannot add money item, no economy plugin found. Kit: {kit.Name}" );
-
-                            continue;
-                        }
-
                         kitItem = new KitItemMoney( itemObj.GetValue( "money", strCmp ).Value<decimal>() );
                         goto add;
                     }
@@ -189,8 +187,7 @@ namespace Essentials.NativeModules.Kit.Data
 
                     var weaponItem = (KitItemWeapon) kitItem;
 
-                    Func<JToken, Attachment> deserializeAttach = json =>
-                    {
+                    Func<JToken, Attachment> deserializeAttach = json => {
                         return json == null ? null : JsonConvert.DeserializeObject<Attachment>( json.ToString() );
                     };
            
@@ -215,8 +212,8 @@ namespace Essentials.NativeModules.Kit.Data
 
             var defaultKit = new Kit( "default", 120, true );
             var weaponKit = new Kit( "default2", 1200, false );
-            var planeKit = new Kit( "plane", 9000, false );
-            var xpKit = new Kit( "xp", 1200, false );
+            var planeKit = new Kit( "plane", 9000, 100.0m, false );
+            var xpKit = new Kit( "xp", 1200, 50.0m, false );
 
             defaultKit.Items.Add( new KitItem( 16, 100, 1 ) );
             defaultKit.Items.Add( new KitItem( 13, 100, 2 ) );

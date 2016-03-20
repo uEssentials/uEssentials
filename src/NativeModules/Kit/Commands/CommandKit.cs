@@ -21,9 +21,11 @@
 
 using System;
 using System.Collections.Generic;
+using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common.Util;
+using Essentials.Compatibility.Hooks;
 using Essentials.I18n;
 
 namespace Essentials.NativeModules.Kit.Commands
@@ -60,6 +62,17 @@ namespace Essentials.NativeModules.Kit.Commands
 
                     var steamPlayerId    = player.CSteamId.m_SteamID;
                     var kitCooldown      = requestedKit.Cooldown;
+                    var kitCost          = requestedKit.Cost;
+
+                    if ( kitCost > 0 )
+                    {
+                        var ecoHook = EssProvider.HookManager.GetActiveByType<UconomyHook>(); // TODO cache ??!
+
+                        if ( ecoHook.IsPresent && (ecoHook.Value.GetBalance( steamPlayerId ) - kitCost) < 0 )
+                        {
+                            return CommandResult.Lang( EssLang.KIT_NO_MONEY, kitCost );
+                        }
+                    } 
 
                     if ( !source.HasPermission("essentials.bypass.kitcooldown") )
                     {
@@ -67,6 +80,7 @@ namespace Essentials.NativeModules.Kit.Commands
                         {
                             Cooldowns.Add( steamPlayerId, new Dictionary<string, DateTime>() );
                         }
+
                         if ( Cooldowns[steamPlayerId].ContainsKey( kitName ) )
                         {
                             var remainingTime = DateTime.Now - Cooldowns[steamPlayerId][kitName];
@@ -106,11 +120,24 @@ namespace Essentials.NativeModules.Kit.Commands
 
                 if ( target == null )
                 {
-                    EssLang.PLAYER_NOT_FOUND.SendTo( source, parameters[1] );
+                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, parameters[1] ) ;
                 }
-                else if ( KitModule.Instance.KitManager.Contains( kitName ) )
+                 
+                if ( KitModule.Instance.KitManager.Contains( kitName ) )
                 {
-                    KitModule.Instance.KitManager.GetByName(kitName).GiveTo( target );
+                    var kit = KitModule.Instance.KitManager.GetByName( kitName );
+
+                    if ( kit.Cost > 0 )
+                    {
+                        var ecoHook = EssProvider.HookManager.GetActiveByType<UconomyHook>(); // TODO cache ??!
+
+                        if ( ecoHook.IsPresent && (ecoHook.Value.GetBalance( target.CSteamId.m_SteamID ) - kit.Cost) < 0 )
+                        {
+                            return CommandResult.Lang( EssLang.KIT_NO_MONEY_OTHER, target.CharacterName, kit.Cost );
+                        }
+                    }
+
+                    kit.GiveTo( target );
                     EssLang.KIT_GIVEN_SENDER.SendTo( source, kitName, target );
                 }
                 else

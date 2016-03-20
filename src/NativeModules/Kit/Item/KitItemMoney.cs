@@ -38,7 +38,7 @@ namespace Essentials.NativeModules.Kit.Item
 
         public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
         {
-            EssCore.Instance.HookManager.GetByType<UconomyHook>().IfPresent( h => {
+            EssCore.Instance.HookManager.GetActiveByType<UconomyHook>().IfPresent( h => {
                 h.Deposit( player.CSteamId.m_SteamID, Amount );
             } );
             return true;

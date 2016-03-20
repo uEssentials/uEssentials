@@ -20,9 +20,11 @@
 */
 
 using System.Collections.Generic;
+using Essentials.Api;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
+using Essentials.Compatibility.Hooks;
 using Essentials.I18n;
 using Essentials.NativeModules.Kit.Item;
 using Newtonsoft.Json;
@@ -55,6 +57,12 @@ namespace Essentials.NativeModules.Kit
         public uint Cooldown { get; set; }
 
         /// <summary>
+        /// Cost of kit.
+        /// </summary>
+        [JsonProperty]
+        public decimal Cost { get; set; }
+
+        /// <summary>
         /// Flag that determines if cooldown will be reseted when player die
         /// </summary>
         [JsonProperty]
@@ -75,6 +83,11 @@ namespace Essentials.NativeModules.Kit
             Cooldown = cooldown;
             ResetCooldownWhenDie = resetCooldownWhenDie;
             Items = new List<AbstractKitItem>();
+        }
+
+        public Kit( string name, uint cooldown, decimal cost, bool resetCooldownWhenDie ) : this(name, cooldown, resetCooldownWhenDie)
+        {
+            Cost = cost;
         }
 
         /// <summary>
@@ -100,6 +113,15 @@ namespace Essentials.NativeModules.Kit
 
                 EssLang.INVENTORY_FULL.SendTo( player );
                 onetime = true;
+            }
+
+            if ( Cost > 0)
+            {
+                EssProvider.HookManager.GetActiveByType<UconomyHook>().IfPresent( h => {
+                    h.Withdraw( player.CSteamId.m_SteamID, Cost );
+
+                    EssLang.KIT_PAID.SendTo( player, Cost );
+                } );
             }
 
             EssLang.KIT_GIVEN_RECEIVER.SendTo( player, Name );
