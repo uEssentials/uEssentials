@@ -359,6 +359,10 @@ namespace Essentials.Commands
             switch (args[0].ToLowerString)
             {
                 case "autoreload":
+                    if ( !src.HasPermission( $"{cmd.Permission}.autoreload" ) )
+                    {
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                    }
                     if ( toggleValue )
                     {
                         component.AutoReload = true;
@@ -372,6 +376,10 @@ namespace Essentials.Commands
                     break;
 
                 case "autorepair":
+                    if ( !src.HasPermission( $"{cmd.Permission}.autorepair" ) )
+                    {
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                    }
                     if ( toggleValue )
                     {
                         component.AutoRepair = true;
