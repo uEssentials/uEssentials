@@ -34,7 +34,7 @@ namespace Essentials.NativeModules.Kit.Commands
         Name = "createkit",
         Aliases = new [] {"ckit"},
         Description = "",
-        Usage = "[name] <cooldown>",
+        Usage = "[name] <cooldown> <resetCooldownWhenDie> <cost>",
         AllowedSource = AllowedSource.PLAYER
     )]
     public class CommandCreateKit : EssCommand
@@ -50,6 +50,8 @@ namespace Essentials.NativeModules.Kit.Commands
 
             var name = args[0].ToString();
             uint cooldown = 0;
+            var resetCooldownWhenDie = false;
+            var cost = 0d;
 
             if ( KitModule.Instance.KitManager.Contains( name ) )
             {
@@ -69,6 +71,31 @@ namespace Essentials.NativeModules.Kit.Commands
                 }
 
                 cooldown = args[1].ToUint;
+            }
+
+            if ( args.Length > 2 )
+            {
+                if ( !args[2].IsBool )
+                {
+                    return CommandResult.Lang( EssLang.INVALID_BOOLEAN, args[2] );
+                }
+
+                resetCooldownWhenDie = args[2].ToBool;
+            }
+
+            if ( args.Length > 3 )
+            {
+                if ( !args[3].IsDouble )
+                {
+                    return CommandResult.Lang( EssLang.INVALID_NUMBER, args[3] );
+                }
+
+                if ( args[3].ToDouble < 0 )
+                {
+                    return CommandResult.Lang( EssLang.MUST_POSITIVE );
+                }
+
+                cost = args[3].ToDouble;
             }
 
             var inventory = player.Inventory;
@@ -203,7 +230,7 @@ namespace Essentials.NativeModules.Kit.Commands
 
             // End Mask, Glasses & Hat
 
-            var kit = new Kit( name, cooldown, true ) {
+            var kit = new Kit( name, cooldown, (decimal) cost, resetCooldownWhenDie ) {
                 Items = items
             };
 
