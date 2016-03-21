@@ -73,6 +73,7 @@ namespace Essentials.Core
         internal HookManager                          HookManager                 { get; set; }
         internal IUpdater                             Updater                     { get; set; }
 
+        internal CommandsConfig                       CommandsConfig              { get; set; }
         internal EssConfig                            Config                      { get; set; }
         internal EssLogger                            Logger                      { get; set; }
 
@@ -171,6 +172,9 @@ namespace Essentials.Core
                 Config = new EssWebConfig();
                 Config.Load( configPath );
             }
+
+            CommandsConfig = new CommandsConfig();
+            CommandsConfig.Load( $"{Folder}commands.json" );
 
             EventManager = new EventManager();
             CommandManager = new CommandManager();

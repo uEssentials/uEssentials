@@ -33,12 +33,12 @@ namespace Essentials.Api.Command
 
         protected string        UsageMessage    { get; set; }
         protected EssLogger     Logger          { get; }
-        public string           Permission      { get; }
-        public string           Name            => _commandInfo.Name;
-        public string[]         Aliases         => _commandInfo.Aliases;
-        public string           Usage           => _commandInfo.Usage;
-        public AllowedSource    AllowedSource   => _commandInfo.AllowedSource;
-        public string           Description     => _commandInfo.Description;
+        public string           Name            { get; set; }
+        public string           Permission      { get; set; }
+        public string[]         Aliases         { get; set; }
+        public string           Usage           { get; set; }
+        public AllowedSource    AllowedSource   { get; set; }
+        public string           Description     { get; set; }
 
         protected EssCommand()
         {
@@ -49,6 +49,12 @@ namespace Essentials.Api.Command
 
             UsageMessage = "Use /" + Name + " " + Usage;
             Logger = EssProvider.Logger;
+
+            Name = _commandInfo.Name;
+            Usage = _commandInfo.Usage;
+            Description = _commandInfo.Description;
+            AllowedSource = _commandInfo.AllowedSource;
+            Aliases = _commandInfo.Aliases;
 
             Permission = GetType().Assembly.Equals( typeof (EssCore).Assembly )
                 ? $"essentials.command.{Name}"

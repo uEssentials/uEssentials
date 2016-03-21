@@ -37,17 +37,17 @@ namespace Essentials.Core.Command
 
         internal Type Owner { get; private set; }
 
-        public string Name => _info.Name;
+        public string Name { get; set; }
 
-        public string Usage => _info.Usage;
+        public string Usage { get; set; }
 
-        public string[] Aliases => _info.Aliases;
+        public string[] Aliases { get; set; }
 
-        public string Description => _info.Description;
+        public string Description { get; set; }
 
-        public string Permission { get; private set; }
+        public string Permission { get; set; }
 
-        public AllowedSource AllowedSource => _info.AllowedSource;
+        public AllowedSource AllowedSource { get; set; }
 
         internal MethodCommand( Func<ICommandSource, ICommandArgs, CommandResult> methodFunc )
         {
@@ -72,6 +72,12 @@ namespace Essentials.Core.Command
                                 : _methodFunc.Method.DeclaringType;
 
             _hasCommandParameter = hasCmdParam;
+
+            Name = _info.Name;
+            Usage = _info.Usage;
+            Description = _info.Description;
+            AllowedSource = _info.AllowedSource;
+            Aliases = _info.Aliases;
 
             Permission = GetType().Assembly.Equals( typeof (EssCore).Assembly )
                         ? $"essentials.command.{Name}"

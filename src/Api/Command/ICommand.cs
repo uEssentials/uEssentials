@@ -36,28 +36,28 @@ namespace Essentials.Api.Command
         /// <summary>
         /// Usage of this command
         /// </summary>
-        string Usage { get; }
+        string Usage { get; set; }
 
         /// <summary>
         /// Aliases of this command
         /// </summary>
-        string[] Aliases { get; }
+        string[] Aliases { get; set; }
 
         /// <summary>
         /// Description of this command
         /// </summary>
-        string Description { get; }
+        string Description { get; set; }
 
         /// <summary>
         /// Permission of this command
         /// </summary>
-        string Permission { get; }
+        string Permission { get; set; }
 
         /// <summary>
         /// Allowed sources
         /// </summary>
         /// <see cref="AllowedSource"/>
-        AllowedSource AllowedSource { get; }
+        AllowedSource AllowedSource { get; set; }
 
         /// <summary>
         /// Called when someone execute this command.

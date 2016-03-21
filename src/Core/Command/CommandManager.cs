@@ -27,6 +27,7 @@ using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
+using Essentials.Common.Reflect;
 using Essentials.Common.Util;
 using Rocket.API;
 using Rocket.Core;
@@ -79,6 +80,13 @@ namespace Essentials.Core.Command
             {
                 EssProvider.Logger.LogError( $"Could not register '{command.GetType().Name}' because there is already a command called '{name}'" );
                 return;
+            }
+
+            var configCommnads = EssCore.Instance.CommandsConfig.Commands;
+
+            if ( configCommnads.ContainsKey( command.Name ) )
+            {
+                command.Aliases = configCommnads[command.Name].Aliases ?? new string[0];
             }
 
             var adapter = new CommandAdapter( command );
