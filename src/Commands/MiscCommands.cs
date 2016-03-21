@@ -708,8 +708,19 @@ namespace Essentials.Commands
             return CommandResult.Success();
         }
 
+        [CommandInfo(
+            Name = "systemtime",
+            Aliases = new[] {"stime"},
+            Description = "Show system time."
+        )]
+        CommandResult SystemTimeCommand( ICommandSource src, ICommandArgs args )
+        {
+            src.SendMessage( DateTime.Now, Color.yellow );
+            return CommandResult.Success();
+        }
 
-        # region HELPER METHODS
+
+        #region HELPER METHODS
 
         private static string WrapMessage( ICommandSource src, string str )
         {
