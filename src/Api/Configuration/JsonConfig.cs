@@ -28,7 +28,7 @@ namespace Essentials.Api.Configuration
     public abstract class JsonConfig : IConfig
     {
         [JsonIgnore]
-        public string FileName => "config.json";
+        public virtual string FileName => "config.json";
 
         public virtual void Load( string filePath )
         {
