@@ -337,7 +337,6 @@ namespace Essentials.I18n
         public static EssLang GIVEN_VEHICLE_ALL { get; private set; }
         public static EssLang KILL_ALL { get; private set; }
         public static EssLang KIT_NO_MONEY { get; private set; }
-        public static EssLang KIT_NO_MONEY_OTHER { get; private set; }
         public static EssLang KIT_PAID { get; private set; }
     }
 }

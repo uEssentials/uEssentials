@@ -178,6 +178,5 @@
 	"KILL_ALL": "You killed everyone!",
     "WARP_ALREADY_EXISTS": "<yellow>A warp with this name already exists.",
 	"KIT_NO_MONEY": "You must have at least ({0}$) to use this kit.",
-	"KIT_NO_MONEY_OTHER": "{0} must have at least ({1}$) to use this kit.",
 	"KIT_PAID": "You have paid ({0}$) for using this kit."
 }

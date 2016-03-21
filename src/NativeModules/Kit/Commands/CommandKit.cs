@@ -100,6 +100,13 @@ namespace Essentials.NativeModules.Kit.Commands
                             Cooldowns[steamPlayerId].Add( kitName, DateTime.Now );
                         }
                     }
+
+                    EssProvider.HookManager.GetActiveByType<UconomyHook>().IfPresent( h => {
+                        h.Withdraw( player.CSteamId.m_SteamID, requestedKit.Cost );
+
+                        EssLang.KIT_PAID.SendTo( player, requestedKit.Cost );
+                    } );
+
                     KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( player );
                 }
                 else
@@ -125,19 +132,7 @@ namespace Essentials.NativeModules.Kit.Commands
                  
                 if ( KitModule.Instance.KitManager.Contains( kitName ) )
                 {
-                    var kit = KitModule.Instance.KitManager.GetByName( kitName );
-
-                    if ( kit.Cost > 0 )
-                    {
-                        var ecoHook = EssProvider.HookManager.GetActiveByType<UconomyHook>(); // TODO cache ??!
-
-                        if ( ecoHook.IsPresent && (ecoHook.Value.GetBalance( target.CSteamId.m_SteamID ) - kit.Cost) < 0 )
-                        {
-                            return CommandResult.Lang( EssLang.KIT_NO_MONEY_OTHER, target.CharacterName, kit.Cost );
-                        }
-                    }
-
-                    kit.GiveTo( target );
+                    KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( target );
                     EssLang.KIT_GIVEN_SENDER.SendTo( source, kitName, target );
                 }
                 else

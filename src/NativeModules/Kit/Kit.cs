@@ -115,15 +115,6 @@ namespace Essentials.NativeModules.Kit
                 onetime = true;
             }
 
-            if ( Cost > 0)
-            {
-                EssProvider.HookManager.GetActiveByType<UconomyHook>().IfPresent( h => {
-                    h.Withdraw( player.CSteamId.m_SteamID, Cost );
-
-                    EssLang.KIT_PAID.SendTo( player, Cost );
-                } );
-            }
-
             EssLang.KIT_GIVEN_RECEIVER.SendTo( player, Name );
         }
     }
