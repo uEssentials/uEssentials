@@ -53,8 +53,6 @@ namespace Essentials.Configuration
 
                 var allCommands = FindAllCommands();
 
-                Console.WriteLine( allCommands.Count + "     " + Commands.Count );
-
                 /*
                     Add new commands, if necessary.
                 */
