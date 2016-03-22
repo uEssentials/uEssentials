@@ -20,6 +20,7 @@
 */
 
 using Essentials.Api.Command;
+using Essentials.Api.Command.Source;
 
 namespace Essentials.Api.Events
 {
@@ -31,13 +32,19 @@ namespace Essentials.Api.Events
         public ICommand Command { get; set; }
 
         /// <summary>
+        /// Who is executing the <see cref="Command"/>.
+        /// </summary>
+        public ICommandSource Source { get; set; }
+
+        /// <summary>
         /// Result of execution.
         /// </summary>
         public CommandResult Result { get; set; }
 
-        public CommandPosExecuteEvent( ICommand command, CommandResult result )
+        public CommandPosExecuteEvent( ICommand command, ICommandSource source, CommandResult result )
         {
             Command = command;
+            Source = source;
             Result = result;
         }
     }

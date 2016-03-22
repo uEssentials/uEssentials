@@ -20,6 +20,7 @@
 */
 
 using Essentials.Api.Command;
+using Essentials.Api.Command.Source;
 using Essentials.Api.Event;
 
 namespace Essentials.Api.Events
@@ -32,13 +33,19 @@ namespace Essentials.Api.Events
         public ICommand Command { get; set; }
 
         /// <summary>
+        /// Who is executing the <see cref="Command"/>.
+        /// </summary>
+        public ICommandSource Source { get; set; }
+
+        /// <summary>
         /// Define if this event will be cancelled.
         /// </summary>
         public bool Cancel { get; set; }
 
-        public CommandPreExecuteEvent( ICommand command )
+        public CommandPreExecuteEvent( ICommand command, ICommandSource source )
         {
             Command = command;
+            Source = source;
         }
     }
 }
