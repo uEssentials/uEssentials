@@ -175,11 +175,10 @@
     "RECEIVED_VEHICLE": "You received a {0} ({1})",
     "GIVEN_VEHICLE": "You gave a {0} ({1}) to '{2}'",
     "GIVEN_VEHICLE_ALL": "You gave a {0} ({1}) to all players.",
-	"KILL_ALL": "You killed everyone!",
+    "KILL_ALL": "You killed everyone!",
     "WARP_ALREADY_EXISTS": "<yellow>A warp with this name already exists.",
-	"KIT_NO_MONEY": "You must have at least ({0}$) to use this kit.",
-	"KIT_NO_MONEY_OTHER": "{0} must have at least ({1}$) to use this kit.",
-	"KIT_PAID": "You have paid ({0}$) for using this kit.",
-	"COMMAND_NO_MONEY": "You must have at least ({0}$) to use this command.",
-	"COMMAND_PAID": "You have paid ({0}$) for using this command."
+    "KIT_NO_MONEY": "You must have at least ({0}$) to use this kit.",
+    "KIT_PAID": "You have paid ({0}$) for using this kit.",
+    "COMMAND_NO_MONEY": "You must have at least ({0}$) to use this command.",
+    "COMMAND_PAID": "You have paid ({0}$) for using this command."
 }
