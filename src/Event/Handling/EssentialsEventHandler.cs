@@ -23,10 +23,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Essentials.Api;
+using Essentials.Api.Command;
 using Essentials.Api.Event;
+using Essentials.Api.Events;
 using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Common;
+using Essentials.Compatibility.Hooks;
+using Essentials.Configuration;
 using Essentials.Core;
 using Essentials.I18n;
 using Essentials.NativeModules.Kit;
@@ -332,6 +336,100 @@ namespace Essentials.Event.Handling
             Commands.CommandHome.Cooldown.Remove( player.CSteamID );
 
             UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
+        }
+
+        private static Optional<UconomyHook> _cachedEconomyHook;
+        private static IDictionary<string, Configuration.Command> _cachedCommands;
+
+        /*
+            TODO: Cache commands & cost ??
+        */
+        [SubscribeEvent( EventType.ESSENTIALS_COMMAND_PRE_EXECUTED )]
+        void OnCommandPreExecuted( CommandPreExecuteEvent e )
+        {
+            if ( _cachedEconomyHook == null )
+            {
+                _cachedEconomyHook = EssProvider.HookManager.GetActiveByType<UconomyHook>();
+            }
+
+            if ( _cachedEconomyHook.IsAbsent )
+            {
+                /*
+                    If economy hook is not present, this "handler" will be unregistered.
+                */
+                EssCore.Instance.EventManager.Unregister( GetType(), "OnCommandPreExecuted" );
+                EssCore.Instance.EventManager.Unregister( GetType(), "OnCommandPosExecuted" );
+            }
+
+            if ( e.Source.IsConsole || e.Source.HasPermission( "essentials.bypass.commandcost" ) )
+            {
+                return;
+            }
+
+            if ( _cachedCommands == null )
+            {
+                _cachedCommands = EssCore.Instance.CommandsConfig.Commands;
+            }
+
+            if ( !_cachedCommands.ContainsKey( e.Command.Name ) )
+            {
+                return;
+            }
+
+            var sourceId = ulong.Parse( e.Source.Id );
+            var cost = _cachedCommands[e.Command.Name].Cost;
+
+            if ( cost <= 0 )
+            {
+                return;
+            }
+
+            /*
+                Check if player has sufficient money to use this command.
+            */
+            if ( (_cachedEconomyHook.Value.GetBalance( sourceId ) - cost) >= 0 )
+            {
+                return;
+            }
+
+            EssLang.COMMAND_NO_MONEY.SendTo( e.Source, cost );
+            e.Cancelled = true;
+        }
+
+        [SubscribeEvent( EventType.ESSENTIALS_COMMAND_POS_EXECUTED )]
+        void OnCommandPosExecuted( CommandPosExecuteEvent e )
+        {
+            /*
+                I will not check if _cachedEconomyHook is null or absent 
+                because im already doing it in PreExecute
+            */
+            if ( e.Source.IsConsole || e.Source.HasPermission( "essentials.bypass.commandcost" ) )
+            {
+                return;
+            }
+
+            /*
+               He will not charge if command was not successfully executed.
+            */
+            if ( e.Result?.Type != CommandResult.ResultType.SUCCESS )
+            {
+                return;
+            }
+
+            if ( !_cachedCommands.ContainsKey( e.Command.Name ) )
+            {
+                return;
+            }
+
+            var cost = _cachedCommands[e.Command.Name].Cost;
+
+            if ( cost <= 0 )
+            {
+                return;
+            }
+
+            _cachedEconomyHook.Value.Withdraw( ulong.Parse( e.Source.Id ), cost );
+            EssLang.COMMAND_PAID.SendTo( e.Source, cost );
         }
     }
 }

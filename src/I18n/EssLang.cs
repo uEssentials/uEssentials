@@ -338,5 +338,7 @@ namespace Essentials.I18n
         public static EssLang KILL_ALL { get; private set; }
         public static EssLang KIT_NO_MONEY { get; private set; }
         public static EssLang KIT_PAID { get; private set; }
+        public static EssLang COMMAND_NO_MONEY { get; private set; }
+        public static EssLang COMMAND_PAID { get; private set; }
     }
 }
