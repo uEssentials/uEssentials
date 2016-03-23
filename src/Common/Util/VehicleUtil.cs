@@ -48,9 +48,22 @@ namespace Essentials.Common.Util
             var asset = Assets.find( EAssetType.VEHICLE )
                               .Cast<VehicleAsset>()
                               .Where( i => i.Name != null )
-                              .OrderBy( i => i.Name.EqualsIgnoreCase( name ) )
-                              .ThenBy( i => i.Name.ContainsIgnoreCase( name ) )
-                              .LastOrDefault();
+                              .FirstOrDefault( i => i.Name.EqualsIgnoreCase( name ) ) ??
+                               Assets.find( EAssetType.VEHICLE )
+                                     .Cast<VehicleAsset>()
+                                     .Where( i => i.Name != null )
+                                     .FirstOrDefault( i => {
+                                         if ( name.Contains( " " ) )
+                                         {
+                                             var parts = name.Split( ' ' );
+
+                                             if ( parts.All( p => i.Name.ContainsIgnoreCase( p ) ) )
+                                             {
+                                                 return true;
+                                             }
+                                         }
+                                         return i.Name.ContainsIgnoreCase( name );
+                                     } );
 
             return Optional<VehicleAsset>.OfNullable( asset );
         }
