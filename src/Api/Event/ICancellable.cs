@@ -23,6 +23,6 @@ namespace Essentials.Api.Event
 {
     public interface ICancellable
     {
-        bool Cancel { get; set; }
+        bool Cancelled { get; set; }
     }
 }

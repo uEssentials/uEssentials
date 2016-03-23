@@ -65,7 +65,7 @@ namespace Essentials.Core.Command
                     var preExec = new CommandPreExecuteEvent( Command, commandSource );
                     EssentialsEvents._OnCommandPreExecute?.Invoke( preExec );
 
-                    if ( preExec.Cancel )
+                    if ( preExec.Cancelled )
                     {
                         return;
                     }
