@@ -62,7 +62,7 @@ namespace Essentials.Core.Command
                 }
                 else
                 {
-                    var preExec = new CommandPreExecuteEvent( Command );
+                    var preExec = new CommandPreExecuteEvent( Command, commandSource );
                     EssentialsEvents._OnCommandPreExecute?.Invoke( preExec );
 
                     if ( preExec.Cancel )
@@ -87,7 +87,7 @@ namespace Essentials.Core.Command
                         commandSource.SendMessage( message, color );
                     }
 
-                    var posExec = new CommandPosExecuteEvent( Command, result );
+                    var posExec = new CommandPosExecuteEvent( Command, commandSource, result );
                     EssentialsEvents._OnCommandPosExecute?.Invoke( posExec );
 ;                }
             }
