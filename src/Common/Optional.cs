@@ -33,9 +33,9 @@ namespace Essentials.Common
         private static readonly Optional<T> EMPTY = new Optional<T>( default(T) );
         private readonly T _value;
 
-        public bool IsPresent { get; }
+        public bool IsPresent => Value != null;
 
-        public bool IsAbsent { get; }
+        public bool IsAbsent => Value == null;
 
         public T Value
         {
@@ -53,9 +53,6 @@ namespace Essentials.Common
         private Optional( T value )
         {
             _value = value;
-
-            IsPresent = value != null;
-            IsAbsent  = value == null;
         }
 
         public void IfPresent( Action<T> consumer )
