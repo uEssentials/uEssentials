@@ -104,7 +104,7 @@ namespace Essentials.Event.Handling
 
             const string KEEP_SKILL_PERM = "essentials.keepskill.";
 
-            int globalPercentage = -1;
+            var globalPercentage = -1;
             var playerPermissions = player.GetPermissions().Select( p => p.Name ).ToList();
 
             /*
@@ -123,17 +123,15 @@ namespace Essentials.Event.Handling
                 {
                     break;
                 }
-                else
-                {
-                    globalPercentage = -1;
-                }
+
+                globalPercentage = -1;
             }
 
             /*
                 If player has global percentage he will keep all skills.
             */
             var hasGlobalPercentage = (globalPercentage != -1);
-            Console.WriteLine(hasGlobalPercentage);
+
             var skillValues = (
                 from skill 
                 in USkill.Skills
@@ -147,37 +145,33 @@ namespace Essentials.Event.Handling
                 {
                     return (byte) Math.Round((currentLevel * globalPercentage) / 100.0);
                 }
-                else
+
+                /*
+                    Search for single percentage.
+                */
+                var skillPermission = KEEP_SKILL_PERM + skill.Name + ".";
+                var skillPercentage = -1;
+
+                foreach ( var p in playerPermissions )
                 {
-                    /*
-                        Search for single percentage.
-                    */
-                    var skillPermission = KEEP_SKILL_PERM + skill.Name + ".";
-                    var skillPercentage = -1;
-
-                    foreach ( var p in playerPermissions )
+                    if ( !p.StartsWith( skillPermission ) )
                     {
-                        if ( !p.StartsWith( skillPermission ) )
-                        {
-                            continue;
-                        }
-
-                        var rawAmount = p.Substring( skillPermission.Length );
-
-                        if ( int.TryParse( rawAmount, out skillPercentage ) )
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            skillPercentage = -1;
-                        }
+                        continue;
                     }
 
-                    if ( skillPercentage != -1 )
+                    var rawAmount = p.Substring( skillPermission.Length );
+
+                    if ( int.TryParse( rawAmount, out skillPercentage ) )
                     {
-                        return (byte) Math.Round( (currentLevel * skillPercentage) / 100.0 );
+                        break;
                     }
+
+                    skillPercentage = -1;
+                }
+
+                if ( skillPercentage != -1 )
+                {
+                    return (byte) Math.Round( (currentLevel * skillPercentage) / 100.0 );
                 }
 
                 return currentLevel;
