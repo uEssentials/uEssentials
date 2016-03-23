@@ -69,7 +69,7 @@ namespace Essentials.Common.Util
                                              }
                                          }
                                          return i.Name.ContainsIgnoreCase( name );
-                                     } ); ;
+                                     } );
 
             return Optional<ItemAsset>.OfNullable( asset );
         }
