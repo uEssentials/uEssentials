@@ -46,8 +46,7 @@ namespace Essentials.Api.Command
                 ReflectionUtil.GetAttributeFrom<CommandInfo>( this ),
                 "EssCommand must have 'CommandInfo' attribute" 
             );
-
-            UsageMessage = "Use /" + Name + " " + Usage;
+            
             Logger = EssProvider.Logger;
 
             Name = _commandInfo.Name;
@@ -55,6 +54,7 @@ namespace Essentials.Api.Command
             Description = _commandInfo.Description;
             AllowedSource = _commandInfo.AllowedSource;
             Aliases = _commandInfo.Aliases;
+            UsageMessage = "Use /" + Name + " " + Usage;
 
             Permission = GetType().Assembly.Equals( typeof (EssCore).Assembly )
                 ? $"essentials.command.{Name}"
