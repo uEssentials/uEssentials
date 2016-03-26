@@ -234,6 +234,11 @@ namespace Essentials.Core
                 Config.AutoAnnouncer.Start();
             }
 
+            if ( Config.AutoCommands.Enabled )
+            {
+                Config.AutoCommands.Start();
+            }
+
             if ( !Config.Updater.AlertOnJoin )
             {
                 EventManager.Unregister<EssentialsEventHandler>( "UpdaterAlert" );

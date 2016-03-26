@@ -129,6 +129,7 @@
     <Compile Include="src\Commands\CommandRefuelVehicle.cs" />
     <Compile Include="src\Commands\CommandExperience.cs" />
     <Compile Include="src\Event\EssentialsEvents.cs" />
+    <Compile Include="src\Misc\AutoCommands.cs" />
     <Compile Include="src\NativeModules\NativeModule.cs" />
     <Compile Include="src\NativeModules\Kit\Commands\CommandDeleteKit.cs" />
     <Compile Include="src\NativeModules\Kit\Commands\CommandCreateKit.cs" />

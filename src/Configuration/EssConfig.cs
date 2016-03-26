@@ -63,6 +63,7 @@ namespace Essentials.Configuration
         public Kit              Kit;
 
         public AutoAnnouncer    AutoAnnouncer;
+        public AutoCommands     AutoCommands;
 
         public List<string>     EnabledSystems; 
         public List<string>     DisabledCommands; 
@@ -92,6 +93,9 @@ namespace Essentials.Configuration
 
             AutoAnnouncer               = new AutoAnnouncer();
             AutoAnnouncer               .LoadDefaults();
+
+            AutoCommands                = new AutoCommands();
+            AutoCommands                .LoadDefaults();
 
             AntiSpam                    = new AntiSpam { Enabled = true,
                                                          Interval = 3 };
