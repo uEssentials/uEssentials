@@ -390,7 +390,6 @@ namespace Essentials.Core
 
             logger.LogWarning( "Searching commands that conflict with uEssentials commands." );
 
-
             var count = rocketCommands.Value.RemoveAll( cmd => {
                 if ( EssProvider.CommandManager.GetByName( cmd.Name ) != null )
                 {
