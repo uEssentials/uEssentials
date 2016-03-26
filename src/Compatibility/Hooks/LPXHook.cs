@@ -22,7 +22,6 @@
 using System;
 using System.Linq;
 using Essentials.Api;
-using Essentials.Api.Task;
 using Rocket.API;
 using Rocket.Core;
 using Essentials.Core.Permission;
