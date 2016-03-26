@@ -22,6 +22,7 @@
 using System;
 using System.Linq;
 using Essentials.Api;
+using Essentials.Api.Task;
 using Rocket.API;
 using Rocket.Core;
 using Essentials.Core.Permission;
@@ -36,9 +37,25 @@ namespace Essentials.Compatibility.Hooks
 
         public override void OnLoad()
         {
+            var lpx = R.Plugins.GetPlugins().First( c => c.Name.Equals( "LPX" ) );
+
+            if ( lpx == null )
+            {
+                return;
+            }
+
+            var lpxBaseType = lpx.GetType().BaseType;
+            var configProp = lpxBaseType?.GetProperty( "Configuration" )?.GetValue( lpx, new object[0] );
+            var configInst = configProp?.GetType().GetProperty( "Instance" )?.GetValue( configProp, new object[0] );
+            var lpxEnabledField = configInst?.GetType().GetField( "LPXEnabled" )?.GetValue( configInst );
+
+            if ( lpxEnabledField is bool && !(bool) lpxEnabledField )
+            {
+                return;
+            }
+
             EssProvider.Logger.LogInfo( "Hooking with LPX..." );
 
-            var lpx = R.Plugins.GetPlugins().First( c => c.Name.Equals( "LPX" ) );
             var sqlPerm = lpx.GetType().Assembly.GetType( "LIGHT.SQLPermission" );
 
             var sqlPermInst = new EssentialsPermissionsProvider( 
@@ -58,24 +75,7 @@ namespace Essentials.Compatibility.Hooks
 
         public override bool CanBeLoaded()
         {
-            var lpx = R.Plugins.GetPlugins().First( c => c.Name.Equals( "LPX" ) );
-
-            if ( lpx == null )
-            {
-                return false;
-            }
-
-            var lpxBaseType = lpx.GetType().BaseType;
-            var configProp = lpxBaseType?.GetProperty( "Configuration" )?.GetValue( lpx, new object[0] );
-            var configInst = configProp?.GetType().GetProperty( "Instance" )?.GetValue( configProp, new object[0] );
-            var lpxEnabledField = configInst?.GetType().GetField( "LPXEnabled" )?.GetValue( configInst );
-
-            if ( lpxEnabledField is bool && !(bool) lpxEnabledField )
-            {
-                return false;
-            }
-
-            return true;
+            return R.Plugins.GetPlugins().Any( p => p.Name.Equals( "LPX" ) );
         }
     }
 }
