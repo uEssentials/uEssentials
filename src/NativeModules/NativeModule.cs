@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System.IO;
 using Essentials.Api;
 using Essentials.Api.Module;
 
@@ -30,6 +31,8 @@ namespace Essentials.NativeModules
         {
             Assembly = GetType().Assembly;
             Logger = EssProvider.Logger;
+
+            Directory.Delete( Folder );
         }
     }
 }
