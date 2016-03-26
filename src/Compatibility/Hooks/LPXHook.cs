@@ -20,11 +20,16 @@
 */
 
 using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using Essentials.Api;
+using Essentials.Common;
+using Essentials.Common.Reflect;
 using Rocket.API;
 using Rocket.Core;
 using Essentials.Core.Permission;
+using Rocket.Core.Assets;
 
 namespace Essentials.Compatibility.Hooks
 {
@@ -58,7 +63,24 @@ namespace Essentials.Compatibility.Hooks
 
         public override bool CanBeLoaded()
         {
-            return R.Plugins.GetPlugins().Any( c => c.Name.Equals( "LPX" ) );
+            var lpx = R.Plugins.GetPlugins().First( c => c.Name.Equals( "LPX" ) );
+
+            if ( lpx == null )
+            {
+                return false;
+            }
+
+            var lpxBaseType = lpx.GetType().BaseType;
+            var configProp = lpxBaseType?.GetProperty( "Configuration" )?.GetValue( lpx, new object[0] );
+            var configInst = configProp?.GetType().GetProperty( "Instance" )?.GetValue( configProp, new object[0] );
+            var lpxEnabledField = configInst?.GetType().GetField( "LPXEnabled" )?.GetValue( configInst );
+
+            if ( lpxEnabledField is bool && !(bool) lpxEnabledField )
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
