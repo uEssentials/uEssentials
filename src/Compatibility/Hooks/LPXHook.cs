@@ -20,16 +20,11 @@
 */
 
 using System;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using Essentials.Api;
-using Essentials.Common;
-using Essentials.Common.Reflect;
 using Rocket.API;
 using Rocket.Core;
 using Essentials.Core.Permission;
-using Rocket.Core.Assets;
 
 namespace Essentials.Compatibility.Hooks
 {

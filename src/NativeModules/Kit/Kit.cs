@@ -20,11 +20,9 @@
 */
 
 using System.Collections.Generic;
-using Essentials.Api;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
-using Essentials.Compatibility.Hooks;
 using Essentials.I18n;
 using Essentials.NativeModules.Kit.Item;
 using Newtonsoft.Json;

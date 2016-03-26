@@ -27,7 +27,6 @@ using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
-using Essentials.Common.Reflect;
 using Essentials.Common.Util;
 using Rocket.API;
 using Rocket.Core;

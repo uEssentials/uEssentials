@@ -30,7 +30,6 @@ using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Compatibility.Hooks;
-using Essentials.Configuration;
 using Essentials.Core;
 using Essentials.I18n;
 using Essentials.NativeModules.Kit;
