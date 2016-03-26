@@ -46,13 +46,25 @@ namespace Essentials.Core.Permission
 
         public bool HasPermission( IRocketPlayer player, string perm, bool defaultReturnValue = false )
         {
-            if ( perm.Contains( "." ) && _defaultProvider.HasPermission( player,
-                        perm.Substring( 0, perm.LastIndexOf( ".", StringComparison.Ordinal ) ) + ".*" ) )
+            if ( _defaultProvider.HasPermission( player, perm, defaultReturnValue ) )
             {
                 return true;
             }
 
-            return _defaultProvider.HasPermission( player, perm, defaultReturnValue );
+            for ( var i = perm.Length - 1; i >= 0; i-- )
+            {
+                if ( perm[i] != '.' )
+                {
+                    continue;
+                }
+
+                if ( _defaultProvider.HasPermission( player, perm.Substring( 0, i + 1 ) + '*' ) )
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public bool HasPermission( IRocketPlayer player, string perm, out uint? cooldownLeft, bool defaultReturnValue = false )
@@ -70,14 +82,26 @@ namespace Essentials.Core.Permission
                 perm = essCommand.Permission;
             }
 
-            if ( perm.Contains( "." ) && _defaultProvider.HasPermission( player,
-                        perm.Substring( 0, perm.LastIndexOf( ".", StringComparison.Ordinal ) ) + ".*" ) )
+            if ( _defaultProvider.HasPermission( player, perm, out cooldownLeft, defaultReturnValue ) )
             {
-                cooldownLeft = 0;
                 return true;
             }
 
-            return _defaultProvider.HasPermission( player, perm, out cooldownLeft, defaultReturnValue );
+            for ( var i = perm.Length - 1; i >= 0; i-- )
+            {
+                if ( perm[i] != '.' )
+                {
+                    continue;
+                }
+
+                if ( _defaultProvider.HasPermission( player, perm.Substring( 0, i + 1 ) + '*' ) )
+                {
+                    cooldownLeft = 0;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public List<RocketPermissionsGroup> GetGroups( IRocketPlayer player, bool includeParentGroups )
