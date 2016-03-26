@@ -210,7 +210,7 @@ namespace Essentials.Core
             HookManager.LoadAll();
 
             /*
-                Load internal modules
+                Load native modules
             */
             (
                 from type in Assembly.GetTypes()
@@ -356,16 +356,12 @@ namespace Essentials.Core
             Tasks.CancelAll();
         }
 
-        private static void UnregisterRocketCommand<T>() where T : IRocketCommand
-        {
-            var rocketCommands = AccessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" );
-
-            rocketCommands.Value.RemoveAll( cmd => cmd is T );
-        }
-
         private static void ReloadCallback( string command )
         {
-            if ( !command.StartsWith( "rocket reload", true, CultureInfo.InvariantCulture ) ) return;
+            if ( !command.StartsWith( "rocket reload", true, CultureInfo.InvariantCulture ) )
+            {
+                return;
+            }
 
             Console.WriteLine();
             EssProvider.Logger.LogError( "Rocket reload cause many issues, consider restart the server" );
