@@ -38,11 +38,12 @@ namespace Essentials.Commands
         private static readonly Action<ulong> ResetPlayer = steamId =>
         {
             var sep = Path.DirectorySeparatorChar.ToString();
+            var idStr = steamId.ToString();
 
             foreach ( var dic in Directory.GetDirectories(Directory.GetParent( 
                     Directory.GetCurrentDirectory() ).ToString() + $"{sep}Players{sep}" ) )
             {
-                if ( dic.Substring( dic.LastIndexOf( sep, StringComparison.Ordinal ) + 1 ).StartsWith( steamId.ToString() ) )
+                if ( dic.Substring( dic.LastIndexOf( sep, StringComparison.Ordinal ) + 1 ).StartsWith( idStr ) )
                 {
                     Directory.Delete( dic, true );
                 }
