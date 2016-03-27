@@ -32,7 +32,7 @@ namespace Essentials.Commands
         Name = "spawnvehicle",
         Aliases = new [] {"spawnveh"},
         Usage = "[id] [player] or [x] [y] [z]",
-        Description = "Spawn an vehicle at given player/position"
+        Description = "Spawn a vehicle on player's/given position"
     )]
     public class CommandSpawnVehicle : EssCommand
     {
