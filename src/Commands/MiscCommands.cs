@@ -81,7 +81,6 @@ namespace Essentials.Commands
         }
 
 
-
         [CommandInfo(
             Name = "descend",
             Aliases = new[] {"desc"},
@@ -117,7 +116,6 @@ namespace Essentials.Commands
 
             return CommandResult.Success();
         }
-
 
 
         [CommandInfo(
@@ -192,7 +190,6 @@ namespace Essentials.Commands
 
             return CommandResult.Success();
         }
-
 
 
         [CommandInfo(
@@ -270,7 +267,6 @@ namespace Essentials.Commands
         }
 
 
-
         [CommandInfo(
             Name = "iteminfo",
             Aliases = new [] {"ii"},
@@ -321,7 +317,6 @@ namespace Essentials.Commands
 
             return CommandResult.Success();
         }
-
 
 
         [CommandInfo(
@@ -400,7 +395,6 @@ namespace Essentials.Commands
         }
 
 
-
         [CommandInfo(
             Name = "vehiclefeatures",
             Aliases = new []{ "vehfeatures", "vf" },
@@ -469,7 +463,6 @@ namespace Essentials.Commands
         }
 
 
-
         [CommandInfo(
             Name = "spy",
             Description = "Toggle spy mode",
@@ -494,7 +487,6 @@ namespace Essentials.Commands
         }
 
 
-
         [CommandInfo(
             Name = "suicide",
             Description = "Kill yourself",
@@ -506,7 +498,6 @@ namespace Essentials.Commands
 
             return CommandResult.Success();
         }
-
 
 
         [CommandInfo(
@@ -549,7 +540,6 @@ namespace Essentials.Commands
         }
 
 
-
         [CommandInfo(
             Name = "online",
             Description = "View the number of online players"
@@ -560,7 +550,6 @@ namespace Essentials.Commands
 
             return CommandResult.Success();
         }
-
 
 
         [CommandInfo(
@@ -594,7 +583,6 @@ namespace Essentials.Commands
         }
 
 
-
         [CommandInfo(
             Name = "respawnvehicles",
             Description = "Respawn all vehicles."
@@ -620,7 +608,6 @@ namespace Essentials.Commands
         }
 
 
-
         [CommandInfo(
             Name = "shutdown",
             Aliases = new[] {"stop"},
@@ -640,9 +627,7 @@ namespace Essentials.Commands
         }
         
 
-
         // TODO: Wrap in spawned? (GTA STYLE)
-        
         [CommandInfo(
             Name = "vehicle",
             Aliases = new[] {"v"},
@@ -708,6 +693,7 @@ namespace Essentials.Commands
             return CommandResult.Success();
         }
 
+
         [CommandInfo(
             Name = "systemtime",
             Aliases = new[] { "stime" },
@@ -718,6 +704,7 @@ namespace Essentials.Commands
             src.SendMessage( DateTime.Now, Color.yellow );
             return CommandResult.Success();
         }
+
 
         [CommandInfo(
             Name = "skill",
