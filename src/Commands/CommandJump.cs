@@ -27,7 +27,7 @@ namespace Essentials.Commands
 {
     [CommandInfo(
         Name = "jump",
-        Description = "Jump to position that you are looking.",
+        Description = "Teleport to a position that you are looking towards.",
         Usage = "<max_distance>",
         AllowedSource = AllowedSource.PLAYER
     )]
