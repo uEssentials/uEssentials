@@ -28,7 +28,7 @@ namespace Essentials.Commands
 {
     [CommandInfo(
         Name = "clearinventory",
-        Description = "Clear your/player inventory",
+        Description = "Clear your/player's inventory",
         Aliases = new[] { "ci" },
         Usage = "<player>"
     )]

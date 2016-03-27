@@ -35,7 +35,7 @@ namespace Essentials.Commands
     [CommandInfo(
         Name = "home",
         Aliases = new[] { "h" },
-        Description = "",
+        Description = "Teleport to your bed.",
         AllowedSource = AllowedSource.PLAYER
     )]
     public class CommandHome : EssCommand

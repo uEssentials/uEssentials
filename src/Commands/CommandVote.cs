@@ -29,7 +29,7 @@ namespace Essentials.Commands
 {
     [CommandInfo(
         Name = "vote",
-        Description = "Vote in current poll",
+        Description = "Vote in an pool",
         Usage = "[yes/no] [poll_name]",
         AllowedSource = AllowedSource.PLAYER
     )]

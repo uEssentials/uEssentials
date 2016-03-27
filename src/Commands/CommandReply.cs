@@ -32,7 +32,7 @@ namespace Essentials.Commands
     [CommandInfo(
         Name = "reply",
         Aliases = new[] {"r"},
-        Description = "Reply an message",
+        Description = "Reply to the most recent private message",
         AllowedSource = AllowedSource.PLAYER,
         Usage = "[message]"
     )]

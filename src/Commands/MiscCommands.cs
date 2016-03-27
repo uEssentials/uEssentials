@@ -194,6 +194,7 @@ namespace Essentials.Commands
 
         [CommandInfo(
             Name = "item",
+            Description = "Give an item to you/another player",
             Usage = "[item] <amount> or [player|* = all] [item] [amount]",
             Aliases = new []{ "i" }
         )]
@@ -270,7 +271,7 @@ namespace Essentials.Commands
         [CommandInfo(
             Name = "iteminfo",
             Aliases = new [] {"ii"},
-            Description = "See informations about an item.",
+            Description = "See information on an item.",
             Usage = "<item_id>"
         )]
         CommandResult ItemInfoCommand( ICommandSource src, ICommandArgs args, ICommand cmd )

@@ -31,7 +31,7 @@ namespace Essentials.Commands
     [CommandInfo(
         Name = "unfreeze",
         Usage = "[player/*]",
-        Description = "Unfreeze an player/* = all"
+        Description = "Unfreeze a player/everyone"
     )]
     public class CommandUnfreeze : EssCommand
     {
