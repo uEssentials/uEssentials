@@ -19,6 +19,11 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
+using System.Linq;
+using Essentials.Api.Command;
+using Essentials.Common;
+
 namespace Essentials.Api.Unturned
 {
     /// <summary>
@@ -85,6 +90,23 @@ namespace Essentials.Api.Unturned
             SpecialityIndex = specialityIndex;
             SkillIndex = skillIndex;
             Name = name;
+        }
+
+        /// <summary>
+        ///   Get skill from name.
+        /// </summary>
+        /// <param name="input">Skill name</param>
+        /// <returns>
+        ///   <see cref="Optional{USkill}.Empty"/> if not found, 
+        ///   otherwise return an <see cref="Optional{USkill}"/> containing the skill.
+        /// </returns>
+        public static Optional<USkill> FromName( string input )
+        {
+            var skill = Skills
+                .FirstOrDefault( sk => sk.Name.EqualsIgnoreCase( input ) )
+                ?? Skills.FirstOrDefault( sk => sk.Name.ContainsIgnoreCase( input ) );
+
+            return Optional<USkill>.OfNullable( skill );
         }
     };
 }

@@ -710,12 +710,125 @@ namespace Essentials.Commands
 
         [CommandInfo(
             Name = "systemtime",
-            Aliases = new[] {"stime"},
+            Aliases = new[] { "stime" },
             Description = "Show system time."
         )]
         CommandResult SystemTimeCommand( ICommandSource src, ICommandArgs args )
         {
             src.SendMessage( DateTime.Now, Color.yellow );
+            return CommandResult.Success();
+        }
+
+        [CommandInfo(
+            Name = "skill",
+            Description = "Edit skill of an player|you",
+            Usage = "[skill] [value|max] or [player|*] [skill] [value|max]"
+        )]
+        CommandResult SkillCommand( ICommandSource src, ICommandArgs args )
+        {
+            switch ( args.Length )
+            {
+                // /skill [skill] [value]
+                case 2:
+                    if ( src.IsConsole )
+                    {
+                        return CommandResult.ShowUsage();
+                    }
+
+                    var optSkill = USkill.FromName( args[0].ToString() );
+
+                    if ( optSkill.IsAbsent )
+                    {
+                        return CommandResult.Lang( EssLang.INVALID_SKILL, args[0] );
+                    }
+
+                    var player = src.ToPlayer();
+                    byte value;
+
+                    if ( args[1].Is( "max" ) )
+                    {
+                        value = player.GetSkill( optSkill.Value ).max;
+                    }
+                    else if ( args[1].IsInt )
+                    {
+                        if ( args[1].ToInt < 0 || args[1].ToInt > byte.MaxValue )
+                        {
+                            return CommandResult.Lang( EssLang.NEGATIVE_OR_LARGE );
+                        }
+
+                        value = (byte) args[1].ToInt;
+                    }
+                    else
+                    {
+                        return CommandResult.Lang( EssLang.INVALID_NUMBER, args[1] );
+                    }
+
+                    player.SetSkillLevel( optSkill.Value, value );
+                    EssLang.SKILL_SET.SendTo( src, optSkill.Value.Name.Capitalize(), args[1] );
+                    break;
+
+                // /skill [player|*] [skill] [value]
+                case 3:
+                    if ( args[0].Is( "*" ) )
+                    {
+                        if ( !UServer.Players.Any() )
+                        {
+                            return CommandResult.Lang( EssLang.ANYONE_ONLINE );
+                        }
+
+                        player = UServer.Players.First();
+                    }
+                    else
+                    {
+                        if ( !args[0].IsValidPlayerName )
+                        {
+                            return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND );
+                        }
+
+                        player = args[0].ToPlayer;
+                    }
+
+                    optSkill = USkill.FromName( args[1].ToString() );
+
+                    if ( optSkill.IsAbsent )
+                    {
+                        return CommandResult.Lang( EssLang.INVALID_SKILL, args[0] );
+                    }
+
+                    if ( args[2].Is( "max" ) )
+                    {
+                        value = player.GetSkill( optSkill.Value ).max;
+                    }
+                    else if ( args[2].IsInt )
+                    {
+                        if ( args[2].ToInt < 0 || args[2].ToInt > byte.MaxValue )
+                        {
+                            return CommandResult.Lang( EssLang.NEGATIVE_OR_LARGE );
+                        }
+
+                        value = (byte) args[2].ToInt;
+                    }
+                    else
+                    {
+                        return CommandResult.Lang( EssLang.INVALID_NUMBER, args[2] );
+                    }
+
+                    if ( args[0].Is( "*" ) )
+                    {
+                        UServer.Players.ForEach( p => p.SetSkillLevel( optSkill.Value, value ) );
+                        EssLang.SKILL_SET_ALL.SendTo( src, optSkill.Value.Name.Capitalize(), args[2] );
+                    }
+                    else
+                    {
+                        player.SetSkillLevel( optSkill.Value, value );
+                        EssLang.SKILL_SET_PLAYER.SendTo( src, optSkill.Value.Name.Capitalize(),
+                                                      player.CharacterName, args[2] );
+                    }
+                    break;
+
+                default:
+                    return CommandResult.ShowUsage();
+            }
             return CommandResult.Success();
         }
 

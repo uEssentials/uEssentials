@@ -340,5 +340,11 @@ namespace Essentials.I18n
         public static EssLang KIT_PAID { get; private set; }
         public static EssLang COMMAND_NO_MONEY { get; private set; }
         public static EssLang COMMAND_PAID { get; private set; }
+        public static EssLang NUMBER_BETWEEN { get; private set; }
+        public static EssLang SKILL_SET { get; private set; }
+        public static EssLang SKILL_SET_PLAYER { get; private set; }
+        public static EssLang SKILL_SET_ALL { get; private set; }
+        public static EssLang INVALID_SKILL { get; private set; }
+        public static EssLang ANYONE_ONLINE { get; private set; }
     }
 }

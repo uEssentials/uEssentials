@@ -180,5 +180,11 @@
     "KIT_NO_MONEY": "Você precisa ter pelo menos ({0}$) para usar esse kit.",
     "KIT_PAID": "Você pagou ({0}$) para usar esse kit.",
     "COMMAND_NO_MONEY": "Você precisa ter pelo menos ({0}$) para usar esse comando.",
-    "COMMAND_PAID": "Você pagou ({0}$) para usar esse comando."
+    "COMMAND_PAID": "Você pagou ({0}$) para usar esse comando.",
+	"NUMBER_BETWEEN": "<yellow>The given number must be between {0} and {1}",
+	"INVALID_SKILL": "<yellow>Invalid skill: {0}",
+	"SKILL_SET": "The level of your skill '{0}' was set to {1}",
+	"SKILL_SET_PLAYER": "The level of '{0}' skill of '{1}' was set to {2}.",
+	"SKILL_SET_ALL": "The level of '{0}' skill of everyone was set to {1}.",
+	"ANYONE_ONLINE": "There is no players online."
 }
