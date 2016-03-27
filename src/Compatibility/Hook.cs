@@ -19,6 +19,10 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
+using Essentials.Api;
+using Essentials.Api.Logging;
+
 namespace Essentials.Compatibility
 {
     public abstract class Hook
@@ -39,13 +43,31 @@ namespace Essentials.Compatibility
             }
 
             IsLoaded = true;
-            OnLoad();
+
+            try
+            {
+                OnLoad();
+            }
+            catch ( Exception ex )
+            {
+                EssProvider.Logger.LogError( $"Failed to load '{Name}' hook." );
+                EssProvider.Logger.LogError( ex.Message );
+            }
         }
 
         internal void Unload()
         {
             IsLoaded = false;
-            OnUnload();
+
+            try
+            {
+                OnUnload();
+            }
+            catch ( Exception ex )
+            {
+                EssProvider.Logger.LogError( $"Failed to unload '{Name}' hook." );
+                EssProvider.Logger.LogError( ex.Message );
+            }
         }
 
         public abstract void OnLoad();
