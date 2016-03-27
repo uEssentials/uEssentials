@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
 
 namespace Essentials.Common
 {
@@ -41,6 +42,12 @@ namespace Essentials.Common
 		{
 			return string.IsNullOrEmpty( str );
 		}
+
+        public static string Capitalize( this string str )
+        {
+            return Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase( str.ToLowerInvariant() );
+        }
+
 
         public static void ForEach<T>( this T[] array, Action<T> act )
         {
