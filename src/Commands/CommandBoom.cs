@@ -33,7 +33,7 @@ namespace Essentials.Commands
     [CommandInfo(
         Name = "boom",
         Aliases = new[] { "explode" },
-        Description = "Create an explosion an given position/player",
+        Description = "Create an explosion on player's/given position",
         Usage = "[player | * | x, y, z]"
     )]
     public class CommandBoom : EssCommand
