@@ -324,6 +324,8 @@ namespace Essentials.Core
                 } ).Start();
             }
 
+            Analytics.Metrics.Init();
+
             #endif
 
             TryAddComponent<Tasks>();
@@ -338,8 +340,6 @@ namespace Essentials.Core
             } ).Delay( 500 ).Go();
 
             CommandWindow.ConsoleInput.onInputText += ReloadCallback;
-
-            Analytics.Metrics.Init();
         }
 
         protected override void Unload()
