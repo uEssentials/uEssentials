@@ -99,6 +99,7 @@
     <Compile Include="src\Api\Task\Tasks.cs" />
     <Compile Include="src\Commands\CommandHome.cs" />
     <Compile Include="src\Commands\CommandJump.cs" />
+    <Compile Include="src\Commands\CommandKillAnimals.cs" />
     <Compile Include="src\Commands\CommandSpawnVehicle.cs" />
     <Compile Include="src\Commands\CommandBoom.cs" />
     <Compile Include="src\Commands\CommandTp.cs" />

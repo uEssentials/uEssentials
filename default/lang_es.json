@@ -186,5 +186,6 @@
 	"SKILL_SET": "The level of your skill '{0}' was set to {1}",
 	"SKILL_SET_PLAYER": "The level of '{0}' skill of '{1}' was set to {2}.",
 	"SKILL_SET_ALL": "The level of '{0}' skill of everyone was set to {1}.",
-	"ANYONE_ONLINE": "There is no players online."
+	"ANYONE_ONLINE": "There is no players online.",
+	"KILLED_ANIMALS": "Killed {0} animals."
 }
