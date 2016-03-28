@@ -42,7 +42,7 @@ namespace Essentials.Commands
         {
             var killedCount = 0;
 
-            UWorld.Zombies.Where( zombie => zombie.isDead ).ForEach( zombie => {
+            UWorld.Zombies.Where( zombie => !zombie.isDead ).ForEach( zombie => {
                 ZombieManager.sendZombieDead( zombie, Vector3.zero );
                 killedCount++;
             });
