@@ -591,6 +591,7 @@ namespace Essentials.Commands
         CommandResult RespawnVehiclesCommand( ICommandSource src, ICommandArgs args )
         {
             var spawns = LevelVehicles.spawns;
+
             for ( var j = 0; j < spawns.Count; j++ )
             {
                 var vehicleSpawnpoint = spawns[j];
@@ -637,58 +638,59 @@ namespace Essentials.Commands
         )]
         CommandResult VehicleCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
-            if ( args.Length == 1 )
+            switch ( args.Length )
             {
-                if ( src.IsConsole )
-                {
+                case 1:
+                    if ( src.IsConsole )
+                    {
+                        return CommandResult.ShowUsage();
+                    }
+                
+                    var optAsset = VehicleUtil.GetVehicle( args[0].ToString() );
+                
+                    if ( optAsset.IsAbsent )
+                    {
+                        return CommandResult.Lang( EssLang.INVALID_VEHICLE_ID, args[0] );
+                    }
+                
+                    VehicleTool.giveVehicle( src.ToPlayer().UnturnedPlayer, optAsset.Value.id );
+                
+                    EssLang.RECEIVED_VEHICLE.SendTo( src, optAsset.Value.Name, optAsset.Value.Id );
+                    break;
+                
+                case 2:
+                    optAsset = VehicleUtil.GetVehicle( args[1].ToString() );
+                
+                    if ( optAsset.IsAbsent )
+                    {
+                        return CommandResult.Lang( EssLang.INVALID_VEHICLE_ID, args[0] );
+                    }
+                
+                    var vehAsset = optAsset.Value;
+                
+                    if ( args[0].Is("*") )
+                    {
+                        UServer.Players.ForEach( p => {
+                            VehicleTool.giveVehicle( p.UnturnedPlayer, vehAsset.id );  
+                        });
+                    
+                        EssLang.GIVEN_VEHICLE_ALL.SendTo( src, vehAsset.Name, vehAsset.Id );
+                    }
+                    else if ( !args[0].IsValidPlayerName )
+                    {
+                        return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
+                    }
+                    else
+                    {
+                        var target = UPlayer.From( args[0].ToString() );
+                        VehicleTool.giveVehicle( target.UnturnedPlayer, vehAsset.id );
+                    
+                        EssLang.GIVEN_VEHICLE.SendTo( src, vehAsset.Name, vehAsset.Id,target.DisplayName );
+                    }
+                    break;
+                
+                default:
                     return CommandResult.ShowUsage();
-                }
-                
-                var optAsset = VehicleUtil.GetVehicle( args[0].ToString() );
-                
-                if ( optAsset.IsAbsent )
-                {
-                    return CommandResult.Lang( EssLang.INVALID_VEHICLE_ID, args[0] );
-                }
-                
-                VehicleTool.giveVehicle( src.ToPlayer().UnturnedPlayer, optAsset.Value.id );
-                
-                EssLang.RECEIVED_VEHICLE.SendTo( src, optAsset.Value.Name, optAsset.Value.Id );
-            }
-            else if ( args.Length == 2 )
-            {
-                var optAsset = VehicleUtil.GetVehicle( args[1].ToString() );
-                
-                if ( optAsset.IsAbsent )
-                {
-                    return CommandResult.Lang( EssLang.INVALID_VEHICLE_ID, args[0] );
-                }
-                
-                var vehAsset = optAsset.Value;
-                
-                if ( args[0].Is("*") )
-                {
-                    UServer.Players.ForEach( p => {
-                          VehicleTool.giveVehicle( p.UnturnedPlayer, vehAsset.id );  
-                    });
-                    
-                    EssLang.GIVEN_VEHICLE_ALL.SendTo( src, vehAsset.Name, vehAsset.Id );
-                }
-                else if ( !args[0].IsValidPlayerName )
-                {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
-                }
-                else
-                {
-                    var target = UPlayer.From( args[0].ToString() );
-                    VehicleTool.giveVehicle( target.UnturnedPlayer, vehAsset.id );
-                    
-                    EssLang.GIVEN_VEHICLE.SendTo( src, vehAsset.Name, vehAsset.Id,target.DisplayName );
-                }
-            }
-            else
-            {
-                return CommandResult.ShowUsage();
             }
 
             return CommandResult.Success();
