@@ -6,3 +6,5 @@ Scripts/
 build-msbuild.bat
 src/.vscode/launch.json
 .vs/
+
+test/
