@@ -20,12 +20,14 @@
 */
 
 
+using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using SDG.Unturned;
 using UnityEngine;
 using Essentials.I18n;
+using Essentials.Common;
 
 namespace Essentials.Commands
 {
@@ -40,8 +42,7 @@ namespace Essentials.Commands
         {
             var killedCount = 0;
 
-            UWorld.Zombies.ForEach( zombie => {
-                if ( zombie.isDead ) return;
+            UWorld.Zombies.Where( zombie => zombie.isDead ).ForEach( zombie => {
                 ZombieManager.sendZombieDead( zombie, Vector3.zero );
                 killedCount++;
             });
