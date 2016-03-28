@@ -347,5 +347,7 @@ namespace Essentials.I18n
         public static EssLang INVALID_SKILL { get; private set; }
         public static EssLang ANYONE_ONLINE { get; private set; }
         public static EssLang KILLED_ANIMALS { get; private set; }
+        public static EssLang DESCENDED { get; private set; }
+        public static EssLang ASCENDED { get; private set; }
     }
 }

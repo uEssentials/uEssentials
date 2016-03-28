@@ -75,7 +75,7 @@ namespace Essentials.Commands
             pos.y += num;
 
             player.Teleport( pos );
-            player.SendMessage( $"You ascended {num} \"meters\"" );
+            EssLang.ASCENDED.SendTo( src, num );
 
             return CommandResult.Success();
         }
@@ -112,7 +112,7 @@ namespace Essentials.Commands
             pos.y -= num;
 
             player.Teleport( pos );
-            player.SendMessage( $"You descended {num} \"meters\"" );
+            EssLang.DESCENDED.SendTo( src, num );
 
             return CommandResult.Success();
         }
