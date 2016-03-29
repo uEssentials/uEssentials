@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -167,25 +168,26 @@ namespace Essentials.Commands
                     return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
                 }
 
-                UWorld.Vehicles.ForEach( v => {
-                    for ( byte i = 0; i < v.passengers.Length; i++ )
-                    {
-                        if ( v.passengers[i] == null ||
-                            v.passengers[i].player == null ) continue;
+                new Thread( () => {
+                    UWorld.Vehicles.ForEach( v => {
+                        for ( byte i = 0; i < v.passengers.Length; i++ )
+                        {
+                            if ( v.passengers[i] == null ||
+                                 v.passengers[i].player == null ) continue;
 
-                        var seat = i;
-                        Vector3 point;
-                        byte angle;
+                            Vector3 point;
+                            byte angle;
 
-                        v.getExit( seat, out point, out angle);
-                        VehicleManager.sendExitVehicle(v, seat, (point), angle, false);
+                            v.getExit( i, out point, out angle );
+                            VehicleManager.sendExitVehicle( v, i, point, angle, false );
 
-                        v.passengers[i].player = null;
-                    }
-                } );
+                            v.passengers[i].player = null;
+                        }
+                    } );
 
-                Tasks.New( t => VehicleManager.askVehicleDestroyAll() ).Delay( 100 ).Go();
-                EssLang.CLEAR_VEHICLES.SendTo( src );
+                    VehicleManager.askVehicleDestroyAll();
+                    EssLang.CLEAR_VEHICLES.SendTo( src );
+                } ).Start();
             }
 
             return CommandResult.Success();
