@@ -733,7 +733,7 @@ namespace Essentials.Commands
                 color = Color.red;
             }
 
-            src.SendMessage( tps, color );
+            src.SendMessage( $"Ticks per second: {tps}", color );
             return CommandResult.Success();
         }
 
