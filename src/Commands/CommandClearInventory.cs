@@ -63,7 +63,7 @@ namespace Essentials.Commands
             player.Channel.send( "tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, (byte) 1, (byte) 0, new byte[0] );
             
             // Remove items
-            for ( byte page = 0; page < PlayerInventory.PAGES; page++ )
+            for ( byte page = 0; page < 8; page++ )
             {
                 var count = playerInventory.getItemCount( page );
                 
