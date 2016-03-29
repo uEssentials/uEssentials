@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using Essentials.Api;
@@ -130,13 +131,6 @@ namespace Essentials.Commands
                 return CommandResult.ShowUsage();
             }
 
-            var joinedArgs = args.Join( 0 );
-
-            Func<string, bool> hasArg = arg => {
-                return joinedArgs.IndexOf( arg, 0, StringComparison.InvariantCultureIgnoreCase ) != -1 ||
-                        (joinedArgs.Contains( "a" ) || joinedArgs.Contains( "A" ));
-            };
-
             /*
                 TODO: Options
                     -i = items
@@ -149,44 +143,75 @@ namespace Essentials.Commands
                 /clear -i -z -v = items, zombies, vehicles
             */
 
-            if ( hasArg( "i" ) )
+            switch ( args[0].ToLowerString )
             {
-                if ( !src.HasPermission( cmd.Permission + ".items") )
-                {
-                    return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
-                }
+                case "ev":
+                case "emptyvehicles":
+                    if ( !src.HasPermission( cmd.Permission + ".emptyvehicles" ) )
+                    {
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                    }
 
-                ItemManager.askClearAllItems();
-                EssLang.CLEAR_ITEMS.SendTo( src );
-            }
+                    new Thread( () => {
+                        var toRemove = new List<uint>();
 
-            if ( hasArg( "v" ) )
-            {
-                if ( !src.HasPermission( cmd.Permission + ".vehicles" ) )
-                {
-                    return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
-                }
+                        UWorld.Vehicles
+                              .Where( v => v.passengers.All( p => p?.player == null ) )
+                              .Select( v => v.instanceID )
+                              .ForEach( toRemove.Add );
 
-                new Thread( () => {
-                    UWorld.Vehicles.ForEach( v => {
-                        for ( byte i = 0; i < v.passengers.Length; i++ )
-                        {
-                            if ( v.passengers[i] == null ||
-                                 v.passengers[i].player == null ) continue;
+                        toRemove.ForEach( id => {
+                            VehicleManager.Instance.SteamChannel.send(
+                                "tellVehicleDestroy",
+                                ESteamCall.ALL,
+                                ESteamPacket.UPDATE_RELIABLE_BUFFER,
+                                id
+                            );
+                        } );
+                    } ).Start();
+                    break;
 
-                            Vector3 point;
-                            byte angle;
+                case "v":
+                case "vehicle":
+                    return CommandResult.Generic( "This option is currently disabled, use /clear ev instead" );
+                    if ( !src.HasPermission( cmd.Permission + ".vehicles" ) )
+                    {
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                    }
 
-                            v.getExit( i, out point, out angle );
-                            VehicleManager.sendExitVehicle( v, i, point, angle, false );
+                    new Thread( () => {
+                        UWorld.Vehicles.ForEach( v => {
+                            for ( byte i = 0; i < v.passengers.Length; i++ )
+                            {
+                                if ( v.passengers[i] == null ||
+                                     v.passengers[i].player == null ) continue;
 
-                            v.passengers[i].player = null;
-                        }
-                    } );
+                                Vector3 point;
+                                byte angle;
 
-                    VehicleManager.askVehicleDestroyAll();
-                    EssLang.CLEAR_VEHICLES.SendTo( src );
-                } ).Start();
+                                v.getExit( i, out point, out angle );
+                                VehicleManager.sendExitVehicle( v, i, point, angle, true );
+                            }
+                        } );
+
+                        VehicleManager.askVehicleDestroyAll();
+                        EssLang.CLEAR_VEHICLES.SendTo( src );
+                    } ).Start();
+                    break;
+
+                case "i":
+                case "items":
+                    if ( !src.HasPermission( cmd.Permission + ".items" ) )
+                    {
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                    }
+
+                    ItemManager.askClearAllItems();
+                    EssLang.CLEAR_ITEMS.SendTo( src );
+                    break;
+                
+                default:
+                    return CommandResult.ShowUsage();
             }
 
             return CommandResult.Success();
