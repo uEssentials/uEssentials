@@ -712,6 +712,33 @@ namespace Essentials.Commands
 
 
         [CommandInfo(
+            Name = "tps",
+            Description = "Show tps."
+        )]
+        CommandResult TpsCommand( ICommandSource src, ICommandArgs args )
+        {
+            Color color;
+            var tps = Provider.debugTPS;
+
+            if ( tps > 40 )
+            {
+                color = Color.green;
+            }
+            else if ( tps < 40 && tps > 25 )
+            {
+                color = Color.yellow;
+            }
+            else
+            {
+                color = Color.red;
+            }
+
+            src.SendMessage( tps, color );
+            return CommandResult.Success();
+        }
+
+
+        [CommandInfo(
             Name = "skill",
             Description = "Edit skill of an player|you",
             Usage = "[skill] [value|max] or [player|*] [skill] [value|max]"
