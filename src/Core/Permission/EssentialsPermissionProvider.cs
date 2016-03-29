@@ -30,6 +30,7 @@ using Rocket.Core.Permissions;
 
 namespace Essentials.Core.Permission
 {
+    //TODO: Remove duplicated codes.
     internal class EssentialsPermissionsProvider : IRocketPermissionsProvider
     {
         private readonly IRocketPermissionsProvider _defaultProvider;
@@ -49,6 +50,12 @@ namespace Essentials.Core.Permission
             if ( _defaultProvider.HasPermission( player, perm, defaultReturnValue ) )
             {
                 return true;
+            }
+
+            /* Negate permission */
+            if ( _defaultProvider.HasPermission( player, $"!{perm}", defaultReturnValue ) )
+            {
+                return false;
             }
 
             for ( var i = perm.Length - 1; i >= 0; i-- )
@@ -80,6 +87,12 @@ namespace Essentials.Core.Permission
             if ( essCommand != null )
             {
                 perm = essCommand.Permission;
+            }
+
+            /* Negate permission */
+            if ( _defaultProvider.HasPermission( player, $"!{perm}", out cooldownLeft, defaultReturnValue ) )
+            {
+                return false;
             }
 
             if ( _defaultProvider.HasPermission( player, perm, out cooldownLeft, defaultReturnValue ) )
