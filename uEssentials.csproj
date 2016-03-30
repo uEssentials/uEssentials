@@ -230,13 +230,6 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /y  "$(TargetDir)uEssentials.dll" "C:\Users\Leonardo\Documents\Unturned\Rocket\All\Unturned\Servers\MyFirstRocketServer\Rocket\Plugins\*.*"</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>for /f "tokens=2 delims=," %25%25F in ('tasklist /nh /fi "WINDOWTITLE eq Unturned Server" /fo csv') do taskkill /PID %25%25~F /F
-EXIT 0</PreBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
