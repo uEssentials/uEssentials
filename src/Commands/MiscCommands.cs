@@ -122,7 +122,7 @@ namespace Essentials.Commands
         [CommandInfo(
             Name = "clear",
             Description = "Clear things",
-            Usage = "i = items, v = vehicles, ev = empty vehicles"
+            Usage = "[i = items, v = vehicles, ev = empty vehicles] <distance>"
         )]
         CommandResult ClearCommand( ICommandSource src, ICommandArgs args, ICommand cmd )
         {
@@ -142,6 +142,28 @@ namespace Essentials.Commands
                 
                 /clear -i -z -v = items, zombies, vehicles
             */
+            
+            var distance = -1;
+            
+            if ( args.Length > 1 )
+            {
+                if ( src.IsConsole )
+                {
+                    return CommandResult.ShowUsage();                                        
+                }
+
+                if ( !args[1].IsInt )
+                {
+                    return CommandResult.Lang( EssLang.INVALID_NUMBER, args[1] );
+                }
+
+                if ( args[1].ToInt < 1 ) 
+                {
+                    return CommandResult.Lang( EssLang.NUMBER_BETWEEN, 1, int.MaxValue );
+                }
+                
+                distance = args[1].ToInt;
+            }
 
             switch ( args[0].ToLowerString )
             {
@@ -157,6 +179,10 @@ namespace Essentials.Commands
 
                         UWorld.Vehicles
                               .Where( v => v.passengers.All( p => p?.player == null ) )
+                              .Where( v => {
+                                  if ( distance == -1 ) return true;
+                                  return Vector3.Distance( v.transform.position, src.ToPlayer().Position ) <= distance;
+                              })
                               .Select( v => v.instanceID )
                               .ForEach( toRemove.Add );
 
