@@ -187,13 +187,11 @@ namespace Essentials.Commands
                               .ForEach( toRemove.Add );
 
                         toRemove.ForEach( id => {
-                            VehicleManager.Instance.SteamChannel.send(
-                                "tellVehicleDestroy",
-                                ESteamCall.ALL,
-                                ESteamPacket.UPDATE_RELIABLE_BUFFER,
-                                id
-                            );
-                        } );
+                            VehicleManager.Instance.SteamChannel.send( "tellVehicleDestroy", 
+                                ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id );
+                        });
+
+                        EssLang.CLEAR_EMPTY_VEHICLES.SendTo( src, toRemove.Count );
                     } ).Start();
                     break;
 
