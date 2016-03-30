@@ -140,10 +140,12 @@ namespace Essentials.I18n
             }
 
             Func<string, EssLang> loadFromJson = key => {
-                return new EssLang( json[key]?.ToString() ?? string.Format( KEY_NOT_FOUND_MESSAGE, key ) );
+                return new EssLang( json[key]?.ToString() 
+                                    ?? string.Format( KEY_NOT_FOUND_MESSAGE, key ) );
             };
 
-            var fields = typeof (EssLang).GetProperties( BindingFlags.Public | BindingFlags.Static );
+            var fields = typeof (EssLang).GetProperties( BindingFlags.Public | 
+                                                         BindingFlags.Static );
 
             foreach ( var field in fields )
             {
@@ -183,7 +185,9 @@ namespace Essentials.I18n
             var message = _message.Clone() as string;
             var color = ColorUtil.GetMessageColor( ref message );
 
-            UServer.Broadcast( replacers == null ? message : string.Format( message, replacers ), color );
+            UServer.Broadcast( replacers == null 
+                               ? message 
+                               : string.Format( message, replacers ), color );
         }
 
         public void Broadcast()
