@@ -1,7 +1,7 @@
 
 # uEssentials
 
-[![Join the chat at https://gitter.im/uEssentials/uEssentials](https://badges.gitter.im/uEssentials/uEssentials.svg)](https://gitter.im/uEssentials/uEssentials?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Donate https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY](https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_74x21.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY) ![Travis-CI](https://api.travis-ci.org/uEssentials/uEssentials.svg?branch=master)
+[![Join the chat at https://gitter.im/uEssentials/uEssentials](https://badges.gitter.im/uEssentials/uEssentials.svg)](https://gitter.im/uEssentials/uEssentials?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Donate https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY](https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_74x21.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY) [![Travis-CI](https://api.travis-ci.org/uEssentials/uEssentials.svg?branch=master)](https://travis-ci.org/uEssentials/uEssentials)
 
 uEssentials is a modular [Rocket](http://rocketmod.net/) plugin with commands and systems to help server administration, and the fun of players.
 
