@@ -89,7 +89,7 @@ namespace Essentials.Core.Command
 
                     var posExec = new CommandPosExecuteEvent( Command, commandSource, result );
                     EssentialsEvents._OnCommandPosExecute?.Invoke( posExec );
-;                }
+                }
             }
             catch ( Exception e )
             {
