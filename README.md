@@ -11,7 +11,7 @@ uEssentials has an easy and intuitive module system to allow the creation of com
 
 **How to Install:**
 
-- Download the latest [release](https://github.com/uEssentials/uEssentials/releases).
+- Download the latest [release](https://github.com/uEssentials/uEssentials/releases/latest).
 - Extract contents to the server's Rocket folder. _(The Libraries and Plugins folders, to "../Servers/ServerName/Rocket".)_
 - Have fun!
 
@@ -26,8 +26,8 @@ uEssentials has an easy and intuitive module system to allow the creation of com
 ---
 
 **Resources:**
-- Info: https://github.com/uEssentials/uEssentials/wiki
-- Download: https://github.com/uEssentials/uEssentials/releases
+- Wiki: https://github.com/uEssentials/uEssentials/wiki
+- Releases: https://github.com/uEssentials/uEssentials/releases
 
 ---
 
