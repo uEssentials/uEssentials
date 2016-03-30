@@ -52,6 +52,7 @@ namespace Essentials.Configuration
         
         public bool             EnablePollRunningMessage;
         public int              PollRunningMessageCooldown;
+        public int              ServerFrameRate;
 
         public ushort           ItemSpawnLimit;
 
@@ -90,6 +91,7 @@ namespace Essentials.Configuration
             
             EnablePollRunningMessage    = true;
             PollRunningMessageCooldown  = 20;
+            ServerFrameRate             = -1; // http://docs.unity3d.com/ScriptReference/Application-targetFrameRate.html
 
             AutoAnnouncer               = new AutoAnnouncer();
             AutoAnnouncer               .LoadDefaults();

@@ -243,6 +243,18 @@ namespace Essentials.Core
             {
                 EventManager.Unregister<EssentialsEventHandler>( "UpdaterAlert" );
             }
+            
+            if ( Config.ServerFrameRate != -1 )
+            {
+                var frameRate = Config.ServerFrameRate;
+                
+                if ( Config.ServerFrameRate < -1 )
+                {
+                    frameRate = -1; // Default    
+                }
+                
+                UnityEngine.Application.targetFrameRate = frameRate;
+            }
 
             if ( Config.DisabledCommands.Count != 0 )
             {
