@@ -143,7 +143,7 @@ namespace Essentials.Core.Command
     /// Default implementation of ICommandArgument
     /// Author: Leonardosc
     ///</summary>
-    public class CommandArgument : ICommandArgument
+    internal class CommandArgument : ICommandArgument
     {
         public int Index { get; }
 
