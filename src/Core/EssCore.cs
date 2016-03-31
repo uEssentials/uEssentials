@@ -286,11 +286,9 @@ namespace Essentials.Core
                 } );
             }
 
-            #if DEV
+#if DEV
             CommandWindow.ConsoleOutput.title = "Unturned Server";
-            #endif
-
-            #if !DEV
+#else
             if ( Config.Updater.CheckUpdates )
             {
                 new System.Threading.Thread( () =>
@@ -337,8 +335,7 @@ namespace Essentials.Core
             }
 
             Analytics.Metrics.Init();
-
-            #endif
+#endif
 
             TryAddComponent<Tasks>();
 
