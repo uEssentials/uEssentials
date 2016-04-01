@@ -99,6 +99,7 @@ namespace Essentials.Core.Components.Player
                             _equip.state[8] = (byte) (_lastArrowId1 == 0 ? 91 : _lastArrowId1);
                             _equip.state[9] = (byte) (_lastArrowId2 == 0 ? 1 : _lastArrowId2);
                             _equip.state[10] = 1;
+                            _equip.state[17] = 100; // Durability (for arrows)
                             goto update;
                     }
                     
