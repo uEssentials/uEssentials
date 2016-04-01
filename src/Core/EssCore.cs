@@ -285,7 +285,6 @@ namespace Essentials.Core
                     }
                 } );
             }
-
 #if !DEV
             if ( Config.Updater.CheckUpdates )
             {
@@ -336,7 +335,6 @@ namespace Essentials.Core
 #else
             CommandWindow.ConsoleOutput.title = "Unturned Server";
 #endif
-
             TryAddComponent<Tasks>();
 
             Tasks.New( t => {
