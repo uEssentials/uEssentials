@@ -3,6 +3,6 @@ bin/
 Deprecated/
 Scripts/
 
-build-msbuild.bat
+build.bat
 src/.vscode/launch.json
 .vs/
