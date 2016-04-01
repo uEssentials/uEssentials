@@ -26,7 +26,7 @@ namespace Essentials.Core.Components.Player
 {
     public class ItemFeatures : PlayerComponent
     {
-        private readonly PlayerEquipment     _equip;
+        private readonly PlayerEquipment _equip;
 
         public bool AutoRepair { get; set; }
         public bool AutoReload { get; set; }
