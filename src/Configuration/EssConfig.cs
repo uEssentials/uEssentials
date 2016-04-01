@@ -113,7 +113,9 @@ namespace Essentials.Configuration
             
             WebConfig                   = new WebConfig { Enabled = false, Url = "" };
 
-            Kit                         = new Kit { ShowCost = true, ShowCostIfZero = false, CostFormat = "{0}({1}$)" };
+            Kit                         = new Kit { ShowCost = true, ShowCostIfZero = false, 
+                                                    CostFormat = "{0}({1}$)", GlobalCooldown = 0,
+                                                    ResetGlobalCooldownWhenDie = false };
 
             DisabledCommands            = new List<string>();
             EnabledSystems              = new List<string> { "kits", "warps" };
@@ -154,9 +156,24 @@ namespace Essentials.Configuration
                     Save( filePath );
                 }
 
+                /*
+                    Update old configs
+                */
                 if ( json["Updater"]["AlertOnJoin"] == null )
                 {
                     Updater.AlertOnJoin = true;
+                    Save( filePath );
+                }
+                
+                if ( json["Kit"]["GlobalCooldown"] == null )
+                {
+                    Kit.GlobalCooldown = 0;
+                    Save( filePath );
+                }
+                
+                if ( json["Kit"]["ResetGlobalCooldownWhenDie"] == null )
+                {
+                    Kit.ResetGlobalCooldownWhenDie = false;
                     Save( filePath );
                 }
             }
@@ -211,5 +228,7 @@ namespace Essentials.Configuration
         public bool ShowCost;
         public bool ShowCostIfZero;
         public string CostFormat;
+        public uint GlobalCooldown;
+        public bool ResetGlobalCooldownWhenDie;
     }
 }

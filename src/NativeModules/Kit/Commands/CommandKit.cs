@@ -27,6 +27,7 @@ using Essentials.Api.Command.Source;
 using Essentials.Common.Util;
 using Essentials.Compatibility.Hooks;
 using Essentials.I18n;
+using Essentials.Core;
 
 namespace Essentials.NativeModules.Kit.Commands
 {
@@ -37,7 +38,11 @@ namespace Essentials.NativeModules.Kit.Commands
     )]
     public class CommandKit : EssCommand
     {
+        /*
+            player_id -> [kit_name, time]
+        */
         internal static Dictionary<ulong, Dictionary<string, DateTime>> Cooldowns = new Dictionary<ulong, Dictionary<string, DateTime>>();
+        internal static Dictionary<ulong, DateTime> GlobalCooldown = new Dictionary<ulong, DateTime>();
 
         public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
@@ -61,7 +66,6 @@ namespace Essentials.NativeModules.Kit.Commands
                     }
 
                     var steamPlayerId    = player.CSteamId.m_SteamID;
-                    var kitCooldown      = requestedKit.Cooldown;
                     var kitCost          = requestedKit.Cost;
 
                     if ( kitCost > 0 )
@@ -76,28 +80,56 @@ namespace Essentials.NativeModules.Kit.Commands
 
                     if ( !source.HasPermission("essentials.bypass.kitcooldown") )
                     {
-                        if ( !Cooldowns.ContainsKey( steamPlayerId ) )
+                        var globalCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
+                        
+                        if (  globalCooldown > 0 )
                         {
-                            Cooldowns.Add( steamPlayerId, new Dictionary<string, DateTime>() );
-                        }
-
-                        if ( Cooldowns[steamPlayerId].ContainsKey( kitName ) )
-                        {
-                            var remainingTime = DateTime.Now - Cooldowns[steamPlayerId][kitName];
-
-                            if ( (remainingTime.TotalSeconds + 1) > kitCooldown )
+                            if ( GlobalCooldown.ContainsKey( steamPlayerId ) )
                             {
-                                Cooldowns[steamPlayerId][kitName] = DateTime.Now;
+                                var remainingTime = DateTime.Now - GlobalCooldown[steamPlayerId];
+                                
+                                if ( (remainingTime.TotalSeconds + 1) > globalCooldown ) 
+                                {
+                                    GlobalCooldown[steamPlayerId] = DateTime.Now;
+                                }
+                                else
+                                {
+                                    return CommandResult.Lang( EssLang.KIT_GLOBAL_COOLDOWN, 
+                                        TimeUtil.FormatSeconds( (uint) (globalCooldown - remainingTime.TotalSeconds)) );    
+                                }
                             }
                             else
                             {
-                                return CommandResult.Lang( EssLang.KIT_COOLDOWN, TimeUtil.FormatSeconds(
-                                    (uint) (kitCooldown - remainingTime.TotalSeconds) ) );
+                                GlobalCooldown.Add( steamPlayerId, DateTime.Now );
                             }
                         }
                         else
                         {
-                            Cooldowns[steamPlayerId].Add( kitName, DateTime.Now );
+                            var kitCooldown = requestedKit.Cooldown;
+                            
+                            if ( !Cooldowns.ContainsKey( steamPlayerId ) )
+                            {
+                                Cooldowns.Add( steamPlayerId, new Dictionary<string, DateTime>() );
+                            }
+
+                            if ( Cooldowns[steamPlayerId].ContainsKey( kitName ) )
+                            {
+                                var remainingTime = DateTime.Now - Cooldowns[steamPlayerId][kitName];
+
+                                if ( (remainingTime.TotalSeconds + 1) > kitCooldown )
+                                {
+                                    Cooldowns[steamPlayerId][kitName] = DateTime.Now;
+                                }
+                                else
+                                {
+                                    return CommandResult.Lang( EssLang.KIT_COOLDOWN, TimeUtil.FormatSeconds(
+                                        (uint) (kitCooldown - remainingTime.TotalSeconds) ) );
+                                }
+                            }
+                            else
+                            {
+                                Cooldowns[steamPlayerId].Add( kitName, DateTime.Now );
+                            }
                         }
                     }
 

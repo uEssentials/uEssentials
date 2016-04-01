@@ -354,5 +354,6 @@ namespace Essentials.I18n
         public static EssLang DESCENDED { get; private set; }
         public static EssLang ASCENDED { get; private set; }
         public static EssLang CLEAR_EMPTY_VEHICLES { get; private set; }
+        public static EssLang KIT_GLOBAL_COOLDOWN { get; private set; }
     }
 }

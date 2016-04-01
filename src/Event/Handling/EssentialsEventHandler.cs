@@ -225,16 +225,29 @@ namespace Essentials.Event.Handling
                 if ( CommandKit.Cooldowns.Count == 0 ) return;
                 if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
 
-                var playerCooldowns = CommandKit.Cooldowns[player.CSteamID.m_SteamID];
+                var playerId = player.CSteamID.m_SteamID;
+                var playerCooldowns = CommandKit.Cooldowns[playerId];
                 var keys = new List<string> ( playerCooldowns.Keys );
-
+                
+                /*
+                    Remove from list if cooldown has expired.
+                    
+                    Global and per kit
+                */
+                if ( CommandKit.GlobalCooldown.ContainsKey( playerId ) &&
+                     CommandKit.GlobalCooldown[playerId].AddSeconds(
+                         EssCore.Instance.Config.Kit.GlobalCooldown) < DateTime.Now ) 
+                {
+                    CommandKit.GlobalCooldown.Remove( playerId );
+                }
+                
                 foreach ( var kitName in keys )
                 {
                     var kit = m.KitManager.GetByName(kitName);
 
-                    if ( !kit.ResetCooldownWhenDie ) continue;
+                    Console.WriteLine( playerCooldowns[kitName] );
 
-                    if ( playerCooldowns[kitName] < DateTime.Now ) 
+                    if ( playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now ) 
                     {
                         playerCooldowns.Remove( kitName );                        
                     }
@@ -242,7 +255,7 @@ namespace Essentials.Event.Handling
                 
                 if ( playerCooldowns.Count == 0 )
                 {
-                    CommandKit.Cooldowns.Remove( player.CSteamID.m_SteamID );
+                    CommandKit.Cooldowns.Remove( playerId );
                 }
             } );
         }
@@ -299,6 +312,15 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.PLAYER_DEATH )]
         void KitPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
         {
+            var globalKitCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
+
+            if ( CommandKit.GlobalCooldown.ContainsKey( player.CSteamID.m_SteamID ) &&
+                 EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie ) 
+            {
+                CommandKit.GlobalCooldown[player.CSteamID.m_SteamID] =
+                        DateTime.Now.AddSeconds( - globalKitCooldown );
+            }
+            
             if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
 
             var playerCooldowns = CommandKit.Cooldowns[player.CSteamID.m_SteamID];
