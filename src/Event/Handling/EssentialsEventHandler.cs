@@ -245,8 +245,6 @@ namespace Essentials.Event.Handling
                 {
                     var kit = m.KitManager.GetByName(kitName);
 
-                    Console.WriteLine( playerCooldowns[kitName] );
-
                     if ( playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now ) 
                     {
                         playerCooldowns.Remove( kitName );                        
