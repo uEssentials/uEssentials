@@ -310,8 +310,7 @@ namespace Essentials.Core
                         {
                             Logger.LogInfo( "========================= [ Changes ] =========================" );
 
-                            changesStr.ToString().Split( '\n' ).ForEach( msg =>
-                            {
+                            changesStr.ToString().Split( '\n' ).ForEach( msg => {
                                 Logger.Log( "", ConsoleColor.Green, suffix: "" );
                                 Logger.Log( "  " + msg, ConsoleColor.White, "" );
                             } );
