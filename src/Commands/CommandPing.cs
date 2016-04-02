@@ -27,7 +27,7 @@ namespace Essentials.Commands
 {
     [CommandInfo(
         Name = "ping",
-        Description = "View your/another player ping",
+        Description = "View your/player ping",
         Usage = "<player>"
     )]
     public class CommandPing : EssCommand
