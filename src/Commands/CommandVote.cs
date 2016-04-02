@@ -73,7 +73,7 @@ namespace Essentials.Commands
 
                 case "no":
                 case "n":
-                    pollName = parameters[1].ToString();
+                    pollName = parameters.Length == 1 ? Polls.Keys.First() : parameters[1].ToString();
 
                     if ( !PollExists( pollName, source ) )
                     {
