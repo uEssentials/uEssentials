@@ -21,7 +21,6 @@
 
 using System;
 using Essentials.Api;
-using Essentials.Api.Logging;
 
 namespace Essentials.Compatibility
 {
