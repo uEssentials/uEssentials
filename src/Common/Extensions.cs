@@ -47,6 +47,11 @@ namespace Essentials.Common
         {
             return Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase( str.ToLowerInvariant() );
         }
+        
+        public static string Format( this string str, params object[] args ) 
+        {
+            return string.Format( str, args );   
+        }
 
 
         public static void ForEach<T>( this T[] array, Action<T> act )

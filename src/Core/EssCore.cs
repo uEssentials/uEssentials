@@ -250,7 +250,7 @@ namespace Essentials.Core
                 
                 if ( Config.ServerFrameRate < -1 )
                 {
-                    frameRate = -1; // Default    
+                    frameRate = -1; // Set to default
                 }
                 
                 UnityEngine.Application.targetFrameRate = frameRate;
@@ -394,6 +394,11 @@ namespace Essentials.Core
         {
             var rocketCommands = AccessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" );
             var logger = EssProvider.Logger;
+
+            if ( rocketCommands == null ) 
+            {
+                return;
+            }
 
             logger.LogWarning( "Searching commands that conflict with uEssentials commands." );
 
