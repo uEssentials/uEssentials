@@ -768,17 +768,11 @@ namespace Essentials.Commands
             var tps = Provider.debugTPS;
 
             if ( tps > 40 )
-            {
                 color = Color.green;
-            }
             else if ( tps < 40 && tps > 25 )
-            {
                 color = Color.yellow;
-            }
             else
-            {
                 color = Color.red;
-            }
 
             src.SendMessage( $"Ticks per second: {tps}", color );
             return CommandResult.Success();
