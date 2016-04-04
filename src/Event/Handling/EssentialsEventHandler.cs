@@ -28,6 +28,7 @@ using Essentials.Api.Event;
 using Essentials.Api.Events;
 using Essentials.Api.Task;
 using Essentials.Api.Unturned;
+using Essentials.Commands;
 using Essentials.Common;
 using Essentials.Compatibility.Hooks;
 using Essentials.Core;
@@ -212,13 +213,35 @@ namespace Essentials.Event.Handling
         }
 
         [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
+        void TpaPlayerDisconnect( UnturnedPlayer player )
+        {
+            var playerId = player.CSteamID.m_SteamID;
+            var requests = CommandTpa.Requests;
+            
+           /* if ( requests.ContainsKey( playerId ) )
+            {
+                requests.Remove( playerId );
+            }
+            else*/ if ( requests.ContainsValue(playerId) )
+            {
+                var val = requests.Keys.FirstOrDefault(k => requests[k] == playerId);
+                
+                if ( val != default(ulong) )
+                {
+                    requests.Remove( val );
+                    System.Console.WriteLine(player);
+                }
+            }
+        }
+
+        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
         void OnPlayerDisconnect( UnturnedPlayer player )
         {
             var displayName = player.CharacterName;
 
-            Commands.MiscCommands.Spies          .Remove( displayName );
-            Commands.CommandBack.BackDict        .Remove( displayName );
-            Commands.CommandTell.Conversations   .Remove( displayName );
+            MiscCommands.Spies          .Remove( displayName );
+            CommandBack.BackDict        .Remove( displayName );
+            CommandTell.Conversations   .Remove( displayName );
             CachedSkills                         .Remove( displayName );
 
             EssProvider.ModuleManager.GetModule<KitModule>().IfPresent( m => {
@@ -316,7 +339,7 @@ namespace Essentials.Event.Handling
                  EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie ) 
             {
                 CommandKit.GlobalCooldown[player.CSteamID.m_SteamID] =
-                        DateTime.Now.AddSeconds( - globalKitCooldown );
+                        DateTime.Now.AddSeconds( -globalKitCooldown );
             }
             
             if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;

@@ -278,6 +278,10 @@ namespace Essentials.Core
                         {
                             EventManager.Unregister<EssentialsEventHandler>( "KitPlayerDeath" );
                         }
+                        else if ( command is CommandTpa )
+                        {
+                            EventManager.Unregister<EssentialsEventHandler>( "TpaPlayerDisconnect" );
+                        }
                         else if ( command is CommandHome )
                         {
                             EventManager.Unregister<EssentialsEventHandler>( "HomePlayerMove" );
