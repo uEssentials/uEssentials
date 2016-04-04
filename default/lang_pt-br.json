@@ -190,5 +190,15 @@
 	"KILLED_ANIMALS": "Você matou {0} animais.",
 	"DESCENDED": "Você desceu {0} 'metros'",
 	"CLEAR_EMPTY_VEHICLES": "Removido {0} veículos.",
-	"KIT_GLOBAL_COOLDOWN": "<yellow>Você precisa esperar {0} para usar outro kit."
+	"KIT_GLOBAL_COOLDOWN": "<yellow>Você precisa esperar {0} para usar outro kit.",
+    "TPA_YOURSELF": "You cannot send a tpa request to yourself.",
+    "TPA_SENT": "{0} has sent you a tpa request, use '/tpa accept/deny'.",
+    "TPA_SENT_SENDER": "You sent a tpa request to {0}, Use '/tpa cancel' to cancel.",
+    "TPA_NONE": "You don't have any tpa request.",
+    "TPA_ACCEPTED": "'{0}' has accepted your tpa request.",
+    "TPA_ACCEPTED_SENDER": "You accepted {0}'s tpa request.",
+    "TPA_DENIED": "'{0}' has denied your tpa request.",
+    "TPA_DENIED_SENDER": "You denied {0}'s tpa request.",
+    "TPA_CANCELLED": "You cancelled your tpa request.",
+    "TPA_CANNOT_TELEPORT": "Cannot teleport '{0}' because he is in a vehicle."
 }

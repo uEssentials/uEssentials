@@ -354,6 +354,16 @@ namespace Essentials.I18n
         public static EssLang DESCENDED { get; private set; }
         public static EssLang ASCENDED { get; private set; }
         public static EssLang CLEAR_EMPTY_VEHICLES { get; private set; }
-        public static EssLang KIT_GLOBAL_COOLDOWN { get; private set; }
+        public static EssLang KIT_GLOBAL_COOLDOWN { get; private set; }  
+        public static EssLang TPA_YOURSELF { get; private set; }
+        public static EssLang TPA_SENT_SENDER { get; private set; }
+        public static EssLang TPA_SENT { get; private set; }
+        public static EssLang TPA_NONE { get; private set; }
+        public static EssLang TPA_ACCEPTED { get; private set; }
+        public static EssLang TPA_ACCEPTED_SENDER { get; private set; }
+        public static EssLang TPA_DENIED { get; private set; }
+        public static EssLang TPA_DENIED_SENDER { get; private set; }
+        public static EssLang TPA_CANCELLED { get; private set; }
+        public static EssLang TPA_CANNOT_TELEPORT { get; private set; }
     }
 }

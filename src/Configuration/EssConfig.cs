@@ -62,6 +62,7 @@ namespace Essentials.Configuration
         public WebKits          WebKits;
         public WebConfig        WebConfig;
         public Kit              Kit;
+        public Tpa              Tpa;
 
         public AutoAnnouncer    AutoAnnouncer;
         public AutoCommands     AutoCommands;
@@ -116,6 +117,8 @@ namespace Essentials.Configuration
             Kit                         = new Kit { ShowCost = true, ShowCostIfZero = false, 
                                                     CostFormat = "{0}({1}$)", GlobalCooldown = 0,
                                                     ResetGlobalCooldownWhenDie = false };
+           
+           Tpa                          = new Tpa { ExpireDelay = 10, TeleportDelay = 5 };
 
             DisabledCommands            = new List<string>();
             EnabledSystems              = new List<string> { "kits", "warps" };
@@ -230,5 +233,12 @@ namespace Essentials.Configuration
         public string CostFormat;
         public uint GlobalCooldown;
         public bool ResetGlobalCooldownWhenDie;
+    }
+    
+    [JsonObject]
+    public struct Tpa
+    {
+        public int ExpireDelay;
+        public int TeleportDelay;
     }
 }

@@ -69,6 +69,7 @@ namespace Essentials.Api.Unturned
         public PlayerClothing       Clothing        => UnturnedPlayer.clothing;
         public PlayerLife           Life            => UnturnedPlayer.life;
         public PlayerEquipment      Equipment       => UnturnedPlayer.equipment;
+        public EPlayerStance        Stance          => RocketPlayer.Stance;
 
         internal UPlayer( UnturnedPlayer player )
         {

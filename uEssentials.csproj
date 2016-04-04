@@ -126,6 +126,7 @@
     <Compile Include="src\Commands\CommandRespawnAnimals.cs" />
     <Compile Include="src\Commands\CommandReply.cs" />
     <Compile Include="src\Commands\CommandClearInventory.cs" />
+    <Compile Include="src\Commands\CommandTpa.cs" />
     <Compile Include="src\Commands\CommandVote.cs" />
     <Compile Include="src\Commands\CommandRepairVehicle.cs" />
     <Compile Include="src\Commands\CommandRefuelVehicle.cs" />
