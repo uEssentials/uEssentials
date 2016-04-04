@@ -200,5 +200,7 @@
     "TPA_DENIED": "'{0}' has denied your tpa request.",
     "TPA_DENIED_SENDER": "You denied {0}'s tpa request.",
     "TPA_CANCELLED": "You cancelled your tpa request.",
-    "TPA_CANNOT_TELEPORT": "Cannot teleport '{0}' because he is in a vehicle."
+    "TPA_CANNOT_TELEPORT": "Cannot teleport '{0}' because he is in a vehicle.",
+    "PVP_DISABLED": "Pvp disabled!",
+    "PVP_ENABLED": "Pvp enabled!"
 }

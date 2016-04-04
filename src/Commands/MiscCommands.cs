@@ -893,6 +893,42 @@ namespace Essentials.Commands
         }
 
 
+        [CommandInfo(
+            Name = "PVP",
+            Description = "Enable or disable pvp",
+            Usage = "[on|off]"
+        )]
+        CommandResult PvpCommand( ICommandSource src, ICommandArgs args )
+        {
+            if ( args.IsEmpty )
+            {
+                return CommandResult.ShowUsage();
+            }
+            
+            switch (args[0].ToLowerString)
+            {
+                case "on":
+                case "true":
+                case "yes":
+                    Provider.PvP = true;
+                    EssLang.PVP_ENABLED.SendTo( src );
+                    break;
+                
+                case "off":
+                case "false":
+                case "no":
+                    Provider.PvP = false;
+                    EssLang.PVP_DISABLED.SendTo( src );
+                    break;
+                
+                default:
+                    return CommandResult.ShowUsage();
+            }
+            
+            return CommandResult.Success();
+        }
+        
+        
         #region HELPER METHODS
 
         private static string WrapMessage( ICommandSource src, string str )

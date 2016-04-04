@@ -365,5 +365,7 @@ namespace Essentials.I18n
         public static EssLang TPA_DENIED_SENDER { get; private set; }
         public static EssLang TPA_CANCELLED { get; private set; }
         public static EssLang TPA_CANNOT_TELEPORT { get; private set; }
+        public static EssLang PVP_DISABLED { get; private set; }
+        public static EssLang PVP_ENABLED { get; private set; }
     }
 }
