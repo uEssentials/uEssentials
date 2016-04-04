@@ -194,7 +194,7 @@
     "KIT_GLOBAL_COOLDOWN": "<yellow>You must wait {0} to use another kit again.",
     "TPA_YOURSELF": "You cannot send a tpa request to yourself.",
     "TPA_SENT": "{0} has sent you a tpa request, use '/tpa accept/deny'.",
-    "TPA_SENT_SENDER": "You sent a tpa request to {0}, Use '/tpa cancel' to cancel.",
+    "TPA_SENT_SENDER": "You sent a tpa request to {0}, use '/tpa cancel' to cancel.",
     "TPA_NONE": "You don't have any tpa request.",
     "TPA_ACCEPTED": "'{0}' has accepted your tpa request.",
     "TPA_ACCEPTED_SENDER": "You accepted {0}'s tpa request.",
