@@ -20,7 +20,7 @@ uEssentials has an easy and intuitive module system to allow the creation of com
 **Features:**
 - Kits
 - Warps
-- [Over 50 commands](https://github.com/uEssentials/uEssentials/wiki/Command-Reference)
+- [Over 60 commands](https://github.com/uEssentials/uEssentials/wiki/Command-Reference)
 - Intuitive and easy module system
 
 ---
