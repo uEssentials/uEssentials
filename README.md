@@ -34,6 +34,8 @@ uEssentials has an easy and intuitive module system to allow the creation of com
 **Videos**
 - Rusian: https://www.youtube.com/watch?v=HPNWKFj_tqw
 
+---
+
 **Do you love my work?**
 
   _[Consider donating! :heart:](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY)_
