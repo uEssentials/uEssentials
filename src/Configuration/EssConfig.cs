@@ -56,13 +56,13 @@ namespace Essentials.Configuration
 
         public ushort           ItemSpawnLimit;
 
-        public AntiSpam         AntiSpam;
-        public Updater          Updater;
-        public HomeCommand      HomeCommand;
-        public WebKits          WebKits;
-        public WebConfig        WebConfig;
-        public Kit              Kit;
-        public Tpa              Tpa;
+        public AntiSpamSettings         AntiSpam;
+        public UpdaterSettings          Updater;
+        public HomeCommandSettings      HomeCommand;
+        public WebKitsSettings          WebKits;
+        public WebConfigSettings        WebConfig;
+        public KitSettings              Kit;
+        public TpaSettings              Tpa;
 
         public AutoAnnouncer    AutoAnnouncer;
         public AutoCommands     AutoCommands;
@@ -100,25 +100,25 @@ namespace Essentials.Configuration
             AutoCommands                = new AutoCommands();
             AutoCommands                .LoadDefaults();
 
-            AntiSpam                    = new AntiSpam { Enabled = true,
+            AntiSpam                    = new AntiSpamSettings { Enabled = true,
                                                          Interval = 3 };
 
-            Updater                     = new Updater { CheckUpdates = true,
+            Updater                     = new UpdaterSettings { CheckUpdates = true,
                                                         DownloadLatest = true,
                                                         AlertOnJoin = true };
 
-            HomeCommand                 = new HomeCommand { Cooldown = 30, Delay = 5,
+            HomeCommand                 = new HomeCommandSettings { Cooldown = 30, Delay = 5,
                                                             CancelWhenMove = true };
 
-            WebKits                     = new WebKits { Enabled = false, Url = "" };
+            WebKits                     = new WebKitsSettings { Enabled = false, Url = "" };
             
-            WebConfig                   = new WebConfig { Enabled = false, Url = "" };
+            WebConfig                   = new WebConfigSettings { Enabled = false, Url = "" };
 
-            Kit                         = new Kit { ShowCost = true, ShowCostIfZero = false, 
+            Kit                         = new KitSettings { ShowCost = true, ShowCostIfZero = false, 
                                                     CostFormat = "{0}({1}$)", GlobalCooldown = 0,
                                                     ResetGlobalCooldownWhenDie = false };
            
-           Tpa                          = new Tpa { ExpireDelay = 10, TeleportDelay = 5 };
+           Tpa                          = new TpaSettings { ExpireDelay = 10, TeleportDelay = 5 };
 
             DisabledCommands            = new List<string>();
             EnabledSystems              = new List<string> { "kits", "warps" };
@@ -189,14 +189,14 @@ namespace Essentials.Configuration
     }
 
     [JsonObject]
-    public struct AntiSpam
+    public struct AntiSpamSettings
     {
         public bool Enabled;
         public int Interval;
     }
 
     [JsonObject]
-    public struct Updater
+    public struct UpdaterSettings
     {
         public bool CheckUpdates;
         public bool DownloadLatest;
@@ -204,7 +204,7 @@ namespace Essentials.Configuration
     }
 
     [JsonObject]
-    public struct HomeCommand
+    public struct HomeCommandSettings
     {
         public int Cooldown;
         public int Delay;
@@ -212,21 +212,21 @@ namespace Essentials.Configuration
     }
 
     [JsonObject]
-    public struct WebKits
+    public struct WebKitsSettings
     {
         public string Url;
         public bool Enabled;
     }
     
     [JsonObject]
-    public struct WebConfig
+    public struct WebConfigSettings
     {
         public string Url;
         public bool Enabled;
     }
 
     [JsonObject]
-    public struct Kit
+    public struct KitSettings
     {
         public bool ShowCost;
         public bool ShowCostIfZero;
@@ -236,7 +236,7 @@ namespace Essentials.Configuration
     }
     
     [JsonObject]
-    public struct Tpa
+    public struct TpaSettings
     {
         public int ExpireDelay;
         public int TeleportDelay;
