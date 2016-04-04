@@ -32,7 +32,7 @@ uEssentials has an easy and intuitive module system to allow the creation of com
 ---
 
 **Videos**
-- Rusian: https://www.youtube.com/watch?v=HPNWKFj_tqw
+- Russian: https://www.youtube.com/watch?v=HPNWKFj_tqw
 
 ---
 
