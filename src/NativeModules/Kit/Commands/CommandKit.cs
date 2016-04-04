@@ -28,6 +28,7 @@ using Essentials.Common.Util;
 using Essentials.Compatibility.Hooks;
 using Essentials.I18n;
 using Essentials.Core;
+using Essentials.Event.Handling;
 
 namespace Essentials.NativeModules.Kit.Commands
 {
@@ -173,5 +174,8 @@ namespace Essentials.NativeModules.Kit.Commands
 
             return CommandResult.Success();
         }
+        
+        protected override void OnUnregistered() 
+            => EssProvider.EventManager.Unregister<EssentialsEventHandler>( "KitPlayerDeath" );
     }
 }

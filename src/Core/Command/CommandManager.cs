@@ -27,6 +27,7 @@ using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
+using Essentials.Common.Reflect;
 using Essentials.Common.Util;
 using Rocket.API;
 using Rocket.Core;
@@ -92,6 +93,11 @@ namespace Essentials.Core.Command
 
             Commander.register( adapter );
             CommandMap.Add( name, command );
+            
+            if ( command is EssCommand )
+            {
+                AccessorFactory.AccessMethod<EssCommand>( command, "OnRegistered" ).Invoke();
+            }
 
             var aliases = command.Aliases;
 
@@ -218,6 +224,13 @@ namespace Essentials.Core.Command
                 if ( unturnedCommand is CommandAdapter && predicate( (CommandAdapter) unturnedCommand ) )
                 {
                     CommandMap.Remove( unturnedCommand.command.ToLowerInvariant() );
+
+                    var command = ((CommandAdapter) unturnedCommand).Command;
+                    
+                    if ( command  is EssCommand )
+                    {
+                        AccessorFactory.AccessMethod<EssCommand>( command, "OnUnregistered" ).Invoke();
+                    }
                     return true;
                 }
                 return false;

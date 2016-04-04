@@ -70,7 +70,15 @@ namespace Essentials.Api.Command
         {
             source.SendMessage( UsageMessage );
         }
-
+        
+        /*
+            For now i will add only in EssCommand, maybe i will
+            add in ICommand...
+        */
+        protected virtual void OnUnregistered() {}
+        
+        protected virtual void OnRegistered() {}
+        
         public abstract CommandResult OnExecute( ICommandSource src, ICommandArgs args );
     }
 }

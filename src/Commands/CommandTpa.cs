@@ -21,11 +21,13 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Core;
+using Essentials.Event.Handling;
 using Essentials.I18n;
 using SDG.Unturned;
 
@@ -169,5 +171,8 @@ namespace Essentials.Commands
             
             return CommandResult.Success();
         }
+        
+        protected override void OnUnregistered()
+            => EssProvider.EventManager.Unregister<EssentialsEventHandler>( "TpaPlayerDisconnect" );
     }
 }

@@ -24,6 +24,8 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using UnityEngine;
 using Essentials.I18n;
+using Essentials.Api;
+using Essentials.Event.Handling;
 
 namespace Essentials.Commands
 {
@@ -52,5 +54,8 @@ namespace Essentials.Commands
 
             return CommandResult.Success();
         }
+        
+        protected override void OnUnregistered() 
+            => EssProvider.EventManager.Unregister<EssentialsEventHandler>( "BackPlayerDeath" );
     }
 }

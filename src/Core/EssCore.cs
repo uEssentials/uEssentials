@@ -269,23 +269,6 @@ namespace Essentials.Core
                     {
                         CommandManager.Unregister( command );
                         Logger.LogInfo( $"Disabled command: '{command.Name}'" );
-
-                        if ( command is CommandBack )
-                        {
-                            EventManager.Unregister<EssentialsEventHandler>( "BackPlayerDeath" );
-                        }
-                        else if ( command is CommandKit )
-                        {
-                            EventManager.Unregister<EssentialsEventHandler>( "KitPlayerDeath" );
-                        }
-                        else if ( command is CommandTpa )
-                        {
-                            EventManager.Unregister<EssentialsEventHandler>( "TpaPlayerDisconnect" );
-                        }
-                        else if ( command is CommandHome )
-                        {
-                            EventManager.Unregister<EssentialsEventHandler>( "HomePlayerMove" );
-                        }
                     }
                 } );
             }
