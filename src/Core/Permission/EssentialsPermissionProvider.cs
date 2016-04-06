@@ -19,10 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System;
 using System.Collections.Generic;
-using Essentials.Api;
-using Essentials.Commands;
 using Rocket.API;
 using Rocket.API.Serialisation;
 using Rocket.Core;
@@ -30,7 +27,6 @@ using Rocket.Core.Permissions;
 
 namespace Essentials.Core.Permission
 {
-    //TODO: Remove duplicated codes.
     internal class EssentialsPermissionsProvider : IRocketPermissionsProvider
     {
         private readonly IRocketPermissionsProvider _defaultProvider;
@@ -52,22 +48,9 @@ namespace Essentials.Core.Permission
                 return false;
             }
             
-            if ( _defaultProvider.HasPermission( player, perm, defaultReturnValue ) )
+            if ( Check( player, perm, defaultReturnValue ) )
             {
                 return true;
-            }
-
-            for ( var i = perm.Length - 1; i >= 0; i-- )
-            {
-                if ( perm[i] != '.' )
-                {
-                    continue;
-                }
-
-                if ( _defaultProvider.HasPermission( player, perm.Substring( 0, i + 1 ) + '*' ) )
-                {
-                    return true;
-                }
             }
             
             return false;
@@ -83,27 +66,10 @@ namespace Essentials.Core.Permission
             
             var perm = command.Permissions.Count > 0 ? command.Permissions[0] : null;
 
-            if ( perm != null )
+            if ( perm != null && Check( player, perm, defaultReturnValue ) )
             {
-                if ( _defaultProvider.HasPermission( player, $"!{perm}", defaultReturnValue ) )
-                {
-                    cooldownLeft = null;
-                    return false;
-                }
-                
-                for ( var i = perm.Length - 1; i >= 0; i-- )
-                {
-                    if ( perm[i] != '.' )
-                    {
-                        continue;
-                    }
-
-                    if ( _defaultProvider.HasPermission( player, perm.Substring( 0, i + 1 ) + '*' ) )
-                    {
-                        cooldownLeft = null;
-                        return true;
-                    }
-                }
+                cooldownLeft = 0;
+                return true;
             }
             
             return _defaultProvider.HasPermission( player, command, out cooldownLeft, defaultReturnValue );
@@ -132,6 +98,29 @@ namespace Essentials.Core.Permission
         public void Reload()
         {
             _defaultProvider.Reload();
+        }
+        
+        private bool Check( IRocketPlayer player, string perm, bool defaultReturnValue )
+        {
+            if ( _defaultProvider.HasPermission( player, $"!{perm}", defaultReturnValue ) )
+            {
+                return false;
+            }
+            
+            for ( var i = perm.Length - 1; i >= 0; i-- )
+            {
+                if ( perm[i] != '.' )
+                {
+                    continue;
+                }
+
+                if ( _defaultProvider.HasPermission( player, perm.Substring( 0, i + 1 ) + '*' ) )
+                {
+                    return true;
+                }
+            }
+            
+            return false;
         }
     }
 }
