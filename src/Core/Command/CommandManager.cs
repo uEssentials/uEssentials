@@ -38,12 +38,14 @@ namespace Essentials.Core.Command
     internal class CommandManager : ICommandManager
     {
         private Dictionary<string, ICommand> CommandMap { get; }
+        private List<IRocketCommand> _rocketCommands;
 
         public IEnumerable<ICommand> Commands => CommandMap.Values; 
 
         internal CommandManager()
         {
             CommandMap = new Dictionary<string, ICommand>();
+            _rocketCommands = AccessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" ).Value;
         }
 
         public ICommand GetByName( string name, bool includeAliases = true )
@@ -52,10 +54,9 @@ namespace Essentials.Core.Command
 
             return GetWhere( command => 
             {
-                if ( command is CommandAdapter.CommandAliasAdapter 
-                    && !includeAliases ) return false;
+                if ( command is CommandAdapter && !includeAliases ) return false;
 
-                return command.command.EqualsIgnoreCase( name );
+                return command.Name.EqualsIgnoreCase( name );
             } );
         }
 
@@ -91,21 +92,21 @@ namespace Essentials.Core.Command
 
             var adapter = new CommandAdapter( command );
 
-            Commander.register( adapter );
+            _rocketCommands.Add( adapter );
             CommandMap.Add( name, command );
             
             if ( command is EssCommand )
             {
                 AccessorFactory.AccessMethod<EssCommand>( command, "OnRegistered" ).Invoke();
             }
-
+            
             var aliases = command.Aliases;
 
             if ( aliases == null || aliases.Length == 0 ) return;
 
             foreach ( var alias in aliases )
             {
-                Commander.register( new CommandAdapter.CommandAliasAdapter( command, alias ) );
+                _rocketCommands.Add( new CommandAdapter.CommandAliasAdapter( command, alias ) );
             }
         }
 
@@ -220,20 +221,17 @@ namespace Essentials.Core.Command
 
         private void UnregisterWhere( Func<CommandAdapter, bool> predicate )
         {
-            Commander.commands.RemoveAll( unturnedCommand => {
-                if ( unturnedCommand is CommandAdapter && predicate( (CommandAdapter) unturnedCommand ) )
-                {
-                    CommandMap.Remove( unturnedCommand.command.ToLowerInvariant() );
-
-                    var command = ((CommandAdapter) unturnedCommand).Command;
-                    
+            _rocketCommands.RemoveAll( cmd => {
+               if ( cmd is CommandAdapter && predicate( (CommandAdapter) cmd ) )
+               {
+                    var command = ((CommandAdapter) cmd).Command;
                     if ( command  is EssCommand )
                     {
                         AccessorFactory.AccessMethod<EssCommand>( command, "OnUnregistered" ).Invoke();
                     }
                     return true;
                 }
-                return false;
+                return false; 
             });
         }
 
@@ -313,10 +311,10 @@ namespace Essentials.Core.Command
             }
         }
 
-        private static ICommand GetWhere( Func<CommandAdapter, bool> predicate )
+        private ICommand GetWhere( Func<CommandAdapter, bool> predicate )
         {
             return (
-                from command in Commander.Commands
+                from command in _rocketCommands
                 where command is CommandAdapter
                 let cmdAdapter = command as CommandAdapter
                 where predicate( cmdAdapter )

@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using System.Collections.Generic;
 using Essentials.Api;
 using Essentials.Commands;
@@ -46,17 +47,16 @@ namespace Essentials.Core.Permission
 
         public bool HasPermission( IRocketPlayer player, string perm, bool defaultReturnValue = false )
         {
+            if ( _defaultProvider.HasPermission( player, $"!{perm}", defaultReturnValue ) )
+            {
+                return false;
+            }
+            
             if ( _defaultProvider.HasPermission( player, perm, defaultReturnValue ) )
             {
                 return true;
             }
 
-            /* Negate permission */
-            if ( _defaultProvider.HasPermission( player, $"!{perm}", defaultReturnValue ) )
-            {
-                return false;
-            }
-
             for ( var i = perm.Length - 1; i >= 0; i-- )
             {
                 if ( perm[i] != '.' )
@@ -69,51 +69,51 @@ namespace Essentials.Core.Permission
                     return true;
                 }
             }
-
+            
             return false;
         }
 
-        public bool HasPermission( IRocketPlayer player, string perm, out uint? cooldownLeft, bool defaultReturnValue = false )
+        public bool HasPermission( IRocketPlayer player, IRocketCommand command, out uint? cooldownLeft, bool defaultReturnValue = false )
         {
-            var essCommand = EssProvider.CommandManager.GetByName( perm );
-
-            if ( essCommand is CommandEssentials )
+            if ( command == null )
             {
-                cooldownLeft = 0;
+                cooldownLeft = null;
                 return true;
             }
+            
+            var perm = command.Permissions.Count > 0 ? command.Permissions[0] : null;
 
-            if ( essCommand != null )
-            {
-                perm = essCommand.Permission;
-            }
+System.Console.WriteLine(perm);
 
-            /* Negate permission */
-            if ( _defaultProvider.HasPermission( player, $"!{perm}", out cooldownLeft, defaultReturnValue ) )
+            if ( perm != null )
             {
-                return false;
-            }
-
-            if ( _defaultProvider.HasPermission( player, perm, out cooldownLeft, defaultReturnValue ) )
-            {
-                return true;
-            }
-
-            for ( var i = perm.Length - 1; i >= 0; i-- )
-            {
-                if ( perm[i] != '.' )
+                if ( _defaultProvider.HasPermission( player, $"!{perm}", defaultReturnValue ) )
                 {
-                    continue;
+                    cooldownLeft = null;
+                    return false;
                 }
-
-                if ( _defaultProvider.HasPermission( player, perm.Substring( 0, i + 1 ) + '*' ) )
+                
+                for ( var i = perm.Length - 1; i >= 0; i-- )
                 {
-                    cooldownLeft = 0;
-                    return true;
+                    if ( perm[i] != '.' )
+                    {
+                        continue;
+                    }
+
+                    if ( _defaultProvider.HasPermission( player, perm.Substring( 0, i + 1 ) + '*' ) )
+                    {
+                        cooldownLeft = null;
+                        return true;
+                    }
                 }
             }
+            
+            return _defaultProvider.HasPermission( player, command, out cooldownLeft, defaultReturnValue );
+        }
 
-            return false;
+        public bool HasPermission( IRocketPlayer player, List<string> requestedPermissions, out uint? cooldownLeft, bool defaultReturnValue = false )
+        {
+            return _defaultProvider.HasPermission( player, requestedPermissions, out cooldownLeft, defaultReturnValue );
         }
 
         public List<RocketPermissionsGroup> GetGroups( IRocketPlayer player, bool includeParentGroups )

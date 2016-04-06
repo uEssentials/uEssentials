@@ -328,11 +328,8 @@ namespace Essentials.Core
                 File.Delete( $"{Folder}uEssentials.configuration.xml" );
             } ).Delay( 100 ).Go();
 
-            Tasks.New( t => {
-                CheckRocketCommands();
-            } ).Delay( 500 ).Go();
-
             CommandWindow.ConsoleInput.onInputText += ReloadCallback;
+            UnregisterRocketCommands();
         }
 
         protected override void Unload()
@@ -376,37 +373,20 @@ namespace Essentials.Core
         {
             Instance.ConnectedPlayers.RemoveWhere( connectedPlayer => connectedPlayer.CSteamId == id );
         }
-
-        private static void CheckRocketCommands()
+        
+        private static void UnregisterRocketCommands()
         {
-            var rocketCommands = AccessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" );
-            var logger = EssProvider.Logger;
-
-            if ( rocketCommands == null ) 
-            {
-                return;
-            }
-
-            logger.LogWarning( "Searching commands that conflict with uEssentials commands." );
-
-            var count = rocketCommands.Value.RemoveAll( cmd => {
-                if ( EssProvider.CommandManager.GetByName( cmd.Name ) != null )
-                {
-                    logger.LogWarning( $"Found '{cmd.GetType()} ({cmd.Name})'. Disabling it..." );
-
-                    return true;
-                }
-                return false;
-            } );
-
-            if ( count == 0 )
-            {
-                logger.LogWarning( "Nothing found!" );
-                return;
-            }
-
-            logger.LogWarning( $"Disabled {count} commands from another's plugins." );
-            logger.LogWarning( "if you prefer use another command instead of Essentials command, disable it in configuration." );
+            var _rocketCommands = AccessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" ).Value;
+            
+            /* All names & aliases of uEssentials command */
+            var essCommands = _rocketCommands
+                               .Where( c => c is CommandAdapter )
+                               .Select( c => c.Name.ToLowerInvariant() )
+                               .ToList();
+            
+            _rocketCommands.RemoveAll( c => {
+                return essCommands.Contains( c.Name.ToLowerInvariant() ) && !(c is CommandAdapter); 
+            });
         }
     }
 }

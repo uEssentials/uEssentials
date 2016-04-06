@@ -29,28 +29,42 @@ using Essentials.Common.Util;
 using Essentials.Event;
 using Steamworks;
 using Essentials.I18n;
+using Rocket.API;
+using System.Collections.Generic;
+using System.Linq;
+using Rocket.Unturned.Player;
 
 namespace Essentials.Core.Command
 {
-    internal class CommandAdapter : SDG.Unturned.Command
+    internal class CommandAdapter : Rocket.API.IRocketCommand
     {
+        public List<string> Aliases { get; }
+        public AllowedCaller AllowedCaller { get; }
+        public string Help { get; }
+        public string Name { get; private set; }
+        public List<string> Permissions { get; }
+        public string Syntax { get; }
+        
         internal readonly ICommand Command;
 
         internal CommandAdapter( ICommand command )
         {
             Command = command;
-            _help = command.Description;
-            _info = command.Name + " " + command.Usage;
-            _command = command.Name;
-        }
+            Name = command.Name;
+            Aliases = command.Aliases.ToList();
+            Help = command.Description;
+            Syntax = command.Usage;
+            Permissions = new List<string>(1) { command.Permission };
+            AllowedCaller = AllowedCaller.Both;
+        } 
 
-        protected override void execute( CSteamID executorId, string parameter )
+        public void Execute( IRocketPlayer caller, string[] args )
         {
             try
             {
-                var commandSource = executorId == CSteamID.Nil
-                                    ? EssProvider.ConsoleSource
-                                    : UPlayer.From( executorId );
+                var commandSource = caller is UnturnedPlayer
+                                    ? UPlayer.From( (UnturnedPlayer) caller )
+                                    : EssProvider.ConsoleSource;
 
                 if ( commandSource.IsConsole && Command.AllowedSource == AllowedSource.PLAYER ) 
                 {
@@ -70,7 +84,7 @@ namespace Essentials.Core.Command
                         return;
                     }
 
-                    var result = Command.OnExecute( commandSource , new CommandArgs( parameter ) );
+                    var result = Command.OnExecute( commandSource , new CommandArgs( string.Join(" ", args) ) );
 
                     if ( result == null ) return;
 
@@ -93,19 +107,18 @@ namespace Essentials.Core.Command
             }
             catch ( Exception e )
             {
-                UPlayer.TryGet( executorId, EssLang.COMMAND_ERROR_OCURRED.SendTo );
+                if ( caller is UnturnedPlayer )
+                    UPlayer.TryGet( (UnturnedPlayer) caller, EssLang.COMMAND_ERROR_OCURRED.SendTo );
 
                 EssProvider.Logger.LogError( e.ToString() );
             }
         }
-
-        internal class CommandAliasAdapter : CommandAdapter
+        
+       internal class CommandAliasAdapter : CommandAdapter
         {
             internal CommandAliasAdapter( ICommand command, string alias ) : base(command)
             {
-                _help = command.Description;
-                _info = alias + " " + command.Usage;
-                _command = alias;
+                base.Name = alias;
             }
         }
     }
