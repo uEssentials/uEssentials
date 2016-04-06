@@ -137,12 +137,15 @@ namespace Essentials.NativeModules.Kit.Commands
                     }
                 }
 
-                EssProvider.HookManager.GetActiveByType<UconomyHook>().IfPresent( h => {
-                    h.Withdraw( player.CSteamId.m_SteamID, requestedKit.Cost );
+                if ( kitCost > 0 )
+                {
+                    EssProvider.HookManager.GetActiveByType<UconomyHook>().IfPresent( h => {
+                        h.Withdraw( player.CSteamId.m_SteamID, requestedKit.Cost );
 
-                    EssLang.KIT_PAID.SendTo( player, requestedKit.Cost );
-                } );
-
+                        EssLang.KIT_PAID.SendTo( player, requestedKit.Cost );
+                    } );
+                }
+                
                 KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( player );
             }
             else if ( parameters.Length == 2 )
