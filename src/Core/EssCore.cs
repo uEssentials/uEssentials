@@ -272,7 +272,73 @@ namespace Essentials.Core
                     }
                 } );
             }
-#if !DEV
+            
+            #if !DEV
+              CheckUpdates();
+              Analytics.Metrics.Init();
+            #else
+              CommandWindow.ConsoleOutput.title = "Unturned Server";
+            #endif
+            
+            TryAddComponent<Tasks>();
+
+            Tasks.New( t => {
+                File.Delete( $"{Folder}uEssentials.en.translation.xml" );
+                File.Delete( $"{Folder}uEssentials.configuration.xml" );
+            } ).Delay( 100 ).Go();
+            
+            Tasks.New( t => {
+                UnregisterRocketCommands( true ); // Second check, silently.
+            }).Delay( 3000 ).Go();
+
+            CommandWindow.ConsoleInput.onInputText += ReloadCallback;
+            UnregisterRocketCommands(); // First check. 
+        }
+
+        protected override void Unload()
+        {
+            CommandWindow.ConsoleInput.onInputText -= ReloadCallback;
+            Provider.onServerDisconnected -= PlayerDisconnectCallback;
+            Provider.onServerConnected -= PlayerConnectCallback;
+
+            TryRemoveComponent<Tasks>();
+
+            var executingAssembly = GetType().Assembly;
+            
+            HookManager.UnloadAll();
+            HookManager.UnregisterAll();
+            CommandManager.UnregisterAll( executingAssembly );
+            EventManager.UnregisterAll( executingAssembly ); 
+            ModuleManager.UnloadAll();
+
+            Tasks.CancelAll();
+        }
+
+        private static void ReloadCallback( string command )
+        {
+            if ( !command.StartsWith( "rocket reload", true, CultureInfo.InvariantCulture ) )
+            {
+                return;
+            }
+
+            Console.WriteLine();
+            EssProvider.Logger.LogError( "Rocket reload cause many issues, consider restart the server" );
+            EssProvider.Logger.LogError( "Or use '/essentials reload' to reload essentials correctly." );
+            Console.WriteLine();
+        }
+
+        private void PlayerConnectCallback( CSteamID id )
+        {
+            ConnectedPlayers.Add( new UPlayer( UnturnedPlayer.FromCSteamID( id ) ) );
+        }
+
+        private void PlayerDisconnectCallback( CSteamID id )
+        {
+            ConnectedPlayers.RemoveWhere( connectedPlayer => connectedPlayer.CSteamId == id );
+        }
+        
+        private void CheckUpdates()
+        {
             if ( Config.Updater.CheckUpdates )
             {
                 new System.Threading.Thread( () =>
@@ -316,65 +382,9 @@ namespace Essentials.Core
                     }
                 } ).Start();
             }
-
-            Analytics.Metrics.Init();
-#else
-            CommandWindow.ConsoleOutput.title = "Unturned Server";
-#endif
-            TryAddComponent<Tasks>();
-
-            Tasks.New( t => {
-                File.Delete( $"{Folder}uEssentials.en.translation.xml" );
-                File.Delete( $"{Folder}uEssentials.configuration.xml" );
-            } ).Delay( 100 ).Go();
-
-            CommandWindow.ConsoleInput.onInputText += ReloadCallback;
-            UnregisterRocketCommands();
-        }
-
-        protected override void Unload()
-        {
-            CommandWindow.ConsoleInput.onInputText -= ReloadCallback;
-            Provider.onServerDisconnected -= PlayerDisconnectCallback;
-            Provider.onServerConnected -= PlayerConnectCallback;
-
-            TryRemoveComponent<Tasks>();
-
-            var executingAssembly = GetType().Assembly;
-            
-            HookManager.UnloadAll();
-            HookManager.UnregisterAll();
-            CommandManager.UnregisterAll( executingAssembly );
-            EventManager.UnregisterAll( executingAssembly ); 
-            ModuleManager.UnloadAll();
-
-            Tasks.CancelAll();
-        }
-
-        private static void ReloadCallback( string command )
-        {
-            if ( !command.StartsWith( "rocket reload", true, CultureInfo.InvariantCulture ) )
-            {
-                return;
-            }
-
-            Console.WriteLine();
-            EssProvider.Logger.LogError( "Rocket reload cause many issues, consider restart the server" );
-            EssProvider.Logger.LogError( "Or use '/essentials reload' to reload essentials correctly." );
-            Console.WriteLine();
-        }
-
-        private static void PlayerConnectCallback( CSteamID id )
-        {
-            Instance.ConnectedPlayers.Add( new UPlayer( UnturnedPlayer.FromCSteamID( id ) ) );
-        }
-
-        private static void PlayerDisconnectCallback( CSteamID id )
-        {
-            Instance.ConnectedPlayers.RemoveWhere( connectedPlayer => connectedPlayer.CSteamId == id );
         }
         
-        private static void UnregisterRocketCommands()
+        private void UnregisterRocketCommands( bool silent = false )
         {
             var _rocketCommands = AccessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" ).Value;
             
@@ -385,7 +395,13 @@ namespace Essentials.Core
                                .ToList();
             
             _rocketCommands.RemoveAll( c => {
-                return essCommands.Contains( c.Name.ToLowerInvariant() ) && !(c is CommandAdapter); 
+                if ( essCommands.Contains( c.Name.ToLowerInvariant() ) && !(c is CommandAdapter) )
+                {
+                    if ( !silent )
+                        Logger.LogInfo( $"Overriding Rocket command ({c.Name.ToLowerInvariant()})" );
+                    return true;
+                }
+                return false;
             });
         }
     }

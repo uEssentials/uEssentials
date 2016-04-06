@@ -27,7 +27,6 @@ using Essentials.Api.Events;
 using Essentials.Api.Unturned;
 using Essentials.Common.Util;
 using Essentials.Event;
-using Steamworks;
 using Essentials.I18n;
 using Rocket.API;
 using System.Collections.Generic;
@@ -38,24 +37,24 @@ namespace Essentials.Core.Command
 {
     internal class CommandAdapter : Rocket.API.IRocketCommand
     {
-        public List<string> Aliases { get; }
-        public AllowedCaller AllowedCaller { get; }
-        public string Help { get; }
-        public string Name { get; private set; }
-        public List<string> Permissions { get; }
-        public string Syntax { get; }
+        public List<string>     Aliases         { get; }
+        public AllowedCaller    AllowedCaller   { get; }
+        public string           Help            { get; }
+        public string           Name            { get; private set; }
+        public List<string>     Permissions     { get; }
+        public string           Syntax          { get; }
         
         internal readonly ICommand Command;
 
         internal CommandAdapter( ICommand command )
         {
-            Command = command;
-            Name = command.Name;
-            Aliases = command.Aliases.ToList();
-            Help = command.Description;
-            Syntax = command.Usage;
-            Permissions = new List<string>(1) { command.Permission };
-            AllowedCaller = AllowedCaller.Both;
+            Command         = command;
+            Name            = command.Name;
+            Aliases         = command.Aliases.ToList();
+            Help            = command.Description;
+            Syntax          = command.Usage;
+            Permissions     = new List<string>(1) { command.Permission };
+            AllowedCaller   = AllowedCaller.Both;
         } 
 
         public void Execute( IRocketPlayer caller, string[] args )
@@ -72,7 +71,7 @@ namespace Essentials.Core.Command
                 }
                 else if ( !commandSource.IsConsole && Command.AllowedSource == AllowedSource.CONSOLE ) 
                 {
-                    EssLang.PLAYER_CANNOT_EXECUTE.SendTo( commandSource );    
+                    EssLang.PLAYER_CANNOT_EXECUTE.SendTo( commandSource );
                 }
                 else
                 {
@@ -113,8 +112,8 @@ namespace Essentials.Core.Command
                 EssProvider.Logger.LogError( e.ToString() );
             }
         }
-        
-       internal class CommandAliasAdapter : CommandAdapter
+
+        internal class CommandAliasAdapter : CommandAdapter
         {
             internal CommandAliasAdapter( ICommand command, string alias ) : base(command)
             {
