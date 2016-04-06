@@ -37,7 +37,7 @@ namespace Essentials.Commands
         Name = "tpa",
         Usage = "[player|accept|deny|cancel]",
         AllowedSource = AllowedSource.PLAYER
-     )]
+    )]
     public class CommandTpa : EssCommand
     {
         /*
