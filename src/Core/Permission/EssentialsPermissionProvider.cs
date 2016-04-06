@@ -102,11 +102,16 @@ namespace Essentials.Core.Permission
         
         private bool Check( IRocketPlayer player, string perm, bool defaultReturnValue )
         {
+            if ( _defaultProvider.HasPermission( player, "*", defaultReturnValue ) )
+            {
+                return true;
+            }
+
             if ( _defaultProvider.HasPermission( player, $"!{perm}", defaultReturnValue ) )
             {
                 return false;
             }
-            
+
             for ( var i = perm.Length - 1; i >= 0; i-- )
             {
                 if ( perm[i] != '.' )
