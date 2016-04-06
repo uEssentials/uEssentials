@@ -83,8 +83,6 @@ namespace Essentials.Core.Permission
             
             var perm = command.Permissions.Count > 0 ? command.Permissions[0] : null;
 
-System.Console.WriteLine(perm);
-
             if ( perm != null )
             {
                 if ( _defaultProvider.HasPermission( player, $"!{perm}", defaultReturnValue ) )
