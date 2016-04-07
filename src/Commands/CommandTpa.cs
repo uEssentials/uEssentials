@@ -154,9 +154,9 @@ namespace Essentials.Commands
                     }
                     
                     Requests.Add( senderId, target.CSteamId.m_SteamID );
-                    EssLang.TPA_SENT.SendTo( src, target.DisplayName );
-                    EssLang.TPA_SENT_SENDER.SendTo( target, src.DisplayName );
-                     
+                    EssLang.TPA_SENT_SENDER.SendTo( src, target.DisplayName );
+                    EssLang.TPA_SENT.SendTo( target, src.DisplayName );
+
                     var tpaSettings = EssCore.Instance.Config.Tpa;
 
                     if ( tpaSettings.ExpireDelay > 0 )
