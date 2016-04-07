@@ -43,17 +43,12 @@ namespace Essentials.Core.Permission
 
         public bool HasPermission( IRocketPlayer player, string perm, bool defaultReturnValue = false )
         {
-            if ( _defaultProvider.HasPermission( player, $"!{perm}", defaultReturnValue ) )
-            {
-                return false;
-            }
-            
             if ( Check( player, perm, defaultReturnValue ) )
             {
                 return true;
             }
             
-            return false;
+            return _defaultProvider.HasPermission( player, perm, defaultReturnValue );
         }
 
         public bool HasPermission( IRocketPlayer player, IRocketCommand command, out uint? cooldownLeft, bool defaultReturnValue = false )
