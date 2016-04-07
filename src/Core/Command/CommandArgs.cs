@@ -159,9 +159,9 @@ namespace Essentials.Core.Command
 
         public UPlayer ToPlayer => UPlayer.From( RawValue );
 
-        public string ToLowerString => ToString().ToLower();
+        public string ToLowerString => ToString().ToLowerInvariant();
 
-        public string ToUpperString => ToString().ToUpper();
+        public string ToUpperString => ToString().ToUpperInvariant();
 
         public uint ToUint => uint.Parse( RawValue );
 
