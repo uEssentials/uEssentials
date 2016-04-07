@@ -41,12 +41,10 @@ namespace Essentials.NativeModules.Kit.Commands
             var hasEconomyPlugin = EssProvider.HookManager.GetActiveByType<UconomyHook>().IsPresent;
 
             var kits = KitModule.Instance.KitManager.Kits.Where( k => k.CanUse( source ) ).Select( k => {
-
                 if ( !hasEconomyPlugin || !kitConfig.ShowCost || (k.Cost <= 0 && !kitConfig.ShowCostIfZero) )
                 {
                     return k.Name;
                 }
-
                 return string.Format( kitConfig.CostFormat, k.Name, k.Cost );
             } ).ToList();
 
