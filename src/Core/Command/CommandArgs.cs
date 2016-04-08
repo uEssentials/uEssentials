@@ -41,9 +41,9 @@ namespace Essentials.Core.Command
         public int                  Length          => RawArguments.Length;
         public bool                 IsEmpty         => Length == 0;
 
-        public CommandArgs( string rawArgs )
+        public CommandArgs( string[] rawArgs )
         {
-            RawArguments = new string[0];
+            /*RawArguments = new string[0];
 
             if ( rawArgs.Length < 0 )
                 return;
@@ -90,9 +90,9 @@ namespace Essentials.Core.Command
                     args.Add( argBuilder.ToString() );
                     argBuilder.Length = 0;
                 }
-            }
+            }*/
 
-            RawArguments = args.ToArray();
+            RawArguments = rawArgs;
             var arguments = new ICommandArgument[ Length ];
 
             for ( var i = 0; i < RawArguments.Length; i++ )
@@ -113,12 +113,16 @@ namespace Essentials.Core.Command
 
         public string Join( int initialIndex )
         {
-            return string.Join( " ", RawArguments.Skip( initialIndex ).ToArray() );
+            return string.Join( " ", Arguments.Skip( initialIndex )
+                                              .Select( arg => arg.ToString() )
+                                              .ToArray() );
         }
         
         public string Join( int startIndex, int endIndex, string separator )
         {
-            return string.Join( separator, RawArguments.Skip( startIndex ).Take( endIndex + 1 ).ToArray() );
+            return string.Join( separator, Arguments.Skip( startIndex )
+                                                    .Select( arg => arg.ToString() )
+                                                    .ToArray() );
         }
 
         public Vector3? GetVector3( int initialIndex )

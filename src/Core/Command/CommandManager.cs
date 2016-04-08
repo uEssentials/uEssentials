@@ -31,6 +31,7 @@ using Essentials.Common.Reflect;
 using Essentials.Common.Util;
 using Rocket.API;
 using Rocket.Core;
+using Rocket.Core.Commands;
 using SDG.Unturned;
 
 namespace Essentials.Core.Command
@@ -38,14 +39,14 @@ namespace Essentials.Core.Command
     internal class CommandManager : ICommandManager
     {
         private Dictionary<string, ICommand> CommandMap { get; }
-        private List<IRocketCommand> _rocketCommands;
+        private List<RocketCommandManager.RegisteredRocketCommand> _rocketCommands;
 
         public IEnumerable<ICommand> Commands => CommandMap.Values; 
 
         internal CommandManager()
         {
             CommandMap = new Dictionary<string, ICommand>();
-            _rocketCommands = AccessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" ).Value;
+            _rocketCommands = AccessorFactory.AccessField<List<RocketCommandManager.RegisteredRocketCommand>>( R.Commands, "commands" ).Value;
         }
 
         public ICommand GetByName( string name, bool includeAliases = true )
@@ -92,7 +93,7 @@ namespace Essentials.Core.Command
 
             var adapter = new CommandAdapter( command );
 
-            _rocketCommands.Add( adapter );
+            _rocketCommands.Add( new RocketCommandManager.RegisteredRocketCommand( name, adapter ) );
             CommandMap.Add( name, command );
             
             if ( command is EssCommand )
@@ -106,7 +107,8 @@ namespace Essentials.Core.Command
 
             foreach ( var alias in aliases )
             {
-                _rocketCommands.Add( new CommandAdapter.CommandAliasAdapter( command, alias ) );
+                _rocketCommands.Add( new RocketCommandManager.RegisteredRocketCommand( 
+                    alias.ToLowerInvariant(), new CommandAdapter.CommandAliasAdapter( command, alias )) );
             }
         }
 
@@ -222,9 +224,9 @@ namespace Essentials.Core.Command
         private void UnregisterWhere( Func<CommandAdapter, bool> predicate )
         {
             _rocketCommands.RemoveAll( cmd => {
-               if ( cmd is CommandAdapter && predicate( (CommandAdapter) cmd ) )
+               if ( cmd.Command is CommandAdapter && predicate( (CommandAdapter) cmd.Command ) )
                {
-                    var command = ((CommandAdapter) cmd).Command;
+                    var command = ((CommandAdapter) cmd.Command).Command;
                     if ( command  is EssCommand )
                     {
                         AccessorFactory.AccessMethod<EssCommand>( command, "OnUnregistered" ).Invoke();
@@ -315,8 +317,8 @@ namespace Essentials.Core.Command
         {
             return (
                 from command in _rocketCommands
-                where command is CommandAdapter
-                let cmdAdapter = command as CommandAdapter
+                where command.Command is CommandAdapter
+                let cmdAdapter = command.Command as CommandAdapter
                 where predicate( cmdAdapter )
                 select cmdAdapter.Command
             ).FirstOrDefault();

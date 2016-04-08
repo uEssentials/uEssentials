@@ -83,7 +83,7 @@ namespace Essentials.Core.Command
                         return;
                     }
 
-                    var result = Command.OnExecute( commandSource , new CommandArgs( string.Join(" ", args) ) );
+                    var result = Command.OnExecute( commandSource , new CommandArgs( args ) );
 
                     if ( result == null ) return;
 

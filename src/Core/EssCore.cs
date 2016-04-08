@@ -50,6 +50,7 @@ using Essentials.Updater;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
+using Rocket.Core.Commands;
 
 namespace Essentials.Core
 {
@@ -386,16 +387,16 @@ namespace Essentials.Core
         
         private void UnregisterRocketCommands( bool silent = false )
         {
-            var _rocketCommands = AccessorFactory.AccessField<List<IRocketCommand>>( R.Commands, "commands" ).Value;
+            var _rocketCommands = AccessorFactory.AccessField<List<RocketCommandManager.RegisteredRocketCommand>>( R.Commands, "commands" ).Value;
             
             /* All names & aliases of uEssentials command */
             var essCommands = _rocketCommands
-                               .Where( c => c is CommandAdapter )
+                               .Where( c => c.Command is CommandAdapter )
                                .Select( c => c.Name.ToLowerInvariant() )
                                .ToList();
             
             _rocketCommands.RemoveAll( c => {
-                if ( essCommands.Contains( c.Name.ToLowerInvariant() ) && !(c is CommandAdapter) )
+                if ( essCommands.Contains( c.Name.ToLowerInvariant() ) && !(c.Command is CommandAdapter) )
                 {
                     if ( !silent )
                         Logger.LogInfo( $"Overriding Rocket command ({c.Name.ToLowerInvariant()})" );

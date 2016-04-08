@@ -233,7 +233,7 @@ namespace Essentials.Api.Unturned
             if ( command.StartsWith( "/" ) )
                 command = command.Substring( 1 );
 
-            Commander.execute( CSteamId, command );
+            R.Commands.Execute( RocketPlayer, command );
         }
 
         public void Kill()

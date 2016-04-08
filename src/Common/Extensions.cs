@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+using Essentials.Common.Util;
 
 namespace Essentials.Common
 {
@@ -68,6 +69,11 @@ namespace Essentials.Common
             {
                 act( obj );
             }   
+        }
+        
+        public static string ArrayToString<T>( this T[] arr )
+        {
+            return MiscUtil.ArrayToString( arr );
         }
     }
 }
