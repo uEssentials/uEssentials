@@ -87,7 +87,6 @@ namespace Essentials.I18n
 
             var locale = EssProvider.Config.Locale.ToLowerInvariant();
             var translationPath = $"{EssProvider.TranslationFolder}lang_{locale}.json";
-            var tmpTranslationPath = $"{EssProvider.TranslationFolder}lang_{locale}.tmp";
 
             if ( !File.Exists( translationPath ) )
             {
@@ -119,26 +118,6 @@ namespace Essentials.I18n
                 ) );
             }
             
-            try
-            {
-                LoadDefault( locale, tmpTranslationPath );
-                var tmpJson = JObject.Parse( File.ReadAllText( tmpTranslationPath ) );
-
-                if ( json.Count != tmpJson.Count )
-                {
-                    foreach ( var pair in json )
-                    {
-                        tmpJson[pair.Key] = pair.Value;
-                    }
-
-                    File.WriteAllText( translationPath, tmpJson.ToString() );
-                }
-            }
-            finally
-            {
-                File.Delete( tmpTranslationPath );
-            }
-
             Func<string, EssLang> loadFromJson = key => {
                 return new EssLang( json[key]?.ToString() 
                                     ?? string.Format( KEY_NOT_FOUND_MESSAGE, key ) );
