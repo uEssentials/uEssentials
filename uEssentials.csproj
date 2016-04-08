@@ -230,6 +230,9 @@
   <ItemGroup>
     <EmbeddedResource Include="default\lang_es.json" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="default\lang_ru.json" />
+  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

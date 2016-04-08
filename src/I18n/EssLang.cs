@@ -38,7 +38,7 @@ namespace Essentials.I18n
 {
     public sealed class EssLang
     {
-        private static readonly string[] LANGS = { "en", "pt-br", "es" };
+        private static readonly string[] LANGS = { "en", "pt-br", "es", "ru" };
         private const string KEY_NOT_FOUND_MESSAGE = "<red>Lang: Key not found '{0}', report to an adminstrator.";
         private readonly string _message;
 
