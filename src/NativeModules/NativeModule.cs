@@ -32,7 +32,7 @@ namespace Essentials.NativeModules
             Assembly = GetType().Assembly;
             Logger = EssProvider.Logger;
 
-            Directory.Delete( Folder );
+            Directory.Delete( Folder, true );
         }
     }
 }
