@@ -708,6 +708,11 @@ namespace Essentials.Commands
                     break;
                 
                 case 2:
+                    if ( !src.HasPermission( $"{cmd.Permission}.other") ) 
+                    {
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );  
+                    }
+                    
                     optAsset = VehicleUtil.GetVehicle( args[1].ToString() );
                 
                     if ( optAsset.IsAbsent )
