@@ -24,6 +24,7 @@ using Rocket.API;
 using Rocket.API.Serialisation;
 using Rocket.Core;
 using Rocket.Core.Permissions;
+using Essentials.Common;
 
 namespace Essentials.Core.Permission
 {
@@ -53,7 +54,7 @@ namespace Essentials.Core.Permission
 
         public bool HasPermission( IRocketPlayer player, IRocketCommand command, out uint? cooldownLeft, bool defaultReturnValue = false )
         {
-            if ( command == null )
+            if ( command == null || command.Name.EqualsIgnoreCase( "essentials" ) )
             {
                 cooldownLeft = null;
                 return true;
