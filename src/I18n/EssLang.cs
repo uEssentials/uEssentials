@@ -346,5 +346,7 @@ namespace Essentials.I18n
         public static EssLang TPA_CANNOT_TELEPORT { get; private set; }
         public static EssLang PVP_DISABLED { get; private set; }
         public static EssLang PVP_ENABLED { get; private set; }
+        public static EssLang BLACKLISTED_ITEM { get; private set; }
+        public static EssLang BLACKLISTED_VEHICLE { get; private set; }
     }
 }

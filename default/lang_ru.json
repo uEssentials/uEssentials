@@ -200,5 +200,7 @@
     "TPA_CANCELLED": "Вы отменили свой запрос телепортации.",
     "TPA_CANNOT_TELEPORT": "Игрок {0} не может телепортироваться пока он в машине.",
     "PVP_DISABLED": "PvP запрещен!",
-    "PVP_ENABLED": "PvP разрешен!"
+    "PVP_ENABLED": "PvP разрешен!",
+    "BLACKLISTED_ITEM": "You can't spawn '{0}' because is blacklisted.",
+    "BLACKLISTED_VEHICLE": "You can't spawn '{0}' because is blacklisted."
 }

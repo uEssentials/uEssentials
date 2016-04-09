@@ -696,15 +696,23 @@ namespace Essentials.Commands
                     }
                 
                     var optAsset = VehicleUtil.GetVehicle( args[0].ToString() );
-                
+                    
                     if ( optAsset.IsAbsent )
                     {
                         return CommandResult.Lang( EssLang.INVALID_VEHICLE_ID, args[0] );
                     }
+                    
+                    var id = optAsset.Value.id;
+                    
+                    if ( EssProvider.Config.VehicleBlacklist.Contains( id )         &&
+                         !src.HasPermission( "essentials.bypass.blacklist.vehicle" ) )
+                    {
+                        return CommandResult.Lang( EssLang.BLACKLISTED_VEHICLE, $"{optAsset.Value.vehicleName} ({id})" );
+                    }
                 
-                    VehicleTool.giveVehicle( src.ToPlayer().UnturnedPlayer, optAsset.Value.id );
+                    VehicleTool.giveVehicle( src.ToPlayer().UnturnedPlayer, id );
                 
-                    EssLang.RECEIVED_VEHICLE.SendTo( src, optAsset.Value.Name, optAsset.Value.Id );
+                    EssLang.RECEIVED_VEHICLE.SendTo( src, optAsset.Value.Name, id );
                     break;
                 
                 case 2:
@@ -961,6 +969,13 @@ namespace Essentials.Commands
             if ( optAsset.IsAbsent )
             {
                 EssLang.ITEM_NOT_FOUND.SendTo( src, itemArg );
+                return;
+            }
+            
+            if ( EssProvider.Config.GiveItemBlacklist.Contains( optAsset.Value.id ) &&
+                 !src.HasPermission( "essentials.bypass.blacklist.item" )            )
+            {
+                EssLang.BLACKLISTED_ITEM.SendTo(src, $"{optAsset.Value.itemName} ({optAsset.Value.Id})" );
                 return;
             }
 

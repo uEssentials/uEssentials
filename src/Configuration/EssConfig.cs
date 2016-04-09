@@ -66,7 +66,9 @@ namespace Essentials.Configuration
 
         public AutoAnnouncer    AutoAnnouncer;
         public AutoCommands     AutoCommands;
-
+        
+        public List<ushort>     GiveItemBlacklist;
+        public List<ushort>     VehicleBlacklist;
         public List<string>     EnabledSystems; 
         public List<string>     DisabledCommands; 
 
@@ -74,6 +76,7 @@ namespace Essentials.Configuration
 
         public override void LoadDefaults()
         {
+            
             Locale                      = "en";
 
             PrivateMessageFormat        = "(From {0}): {1}";
@@ -120,10 +123,12 @@ namespace Essentials.Configuration
            
            Tpa                          = new TpaSettings { ExpireDelay = 10, TeleportDelay = 5 };
 
-            DisabledCommands            = new List<string>();
-            EnabledSystems              = new List<string> { "kits", "warps" };
+           GiveItemBlacklist           = new List<ushort>();
+           VehicleBlacklist            = new List<ushort>();
+           DisabledCommands            = new List<string>();
+           EnabledSystems              = new List<string> { "kits", "warps" };
 
-            ItemSpawnLimit              = 10;
+           ItemSpawnLimit              = 10;
         }
 
         public override void Load( string filePath )

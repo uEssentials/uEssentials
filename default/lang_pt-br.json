@@ -202,5 +202,7 @@
     "TPA_CANCELLED": "Você cancelou seu pedido de tpa",
     "TPA_CANNOT_TELEPORT": "Não foi possível teleportar '{0}' pois ele está em um veículo.",
     "PVP_DISABLED": "Pvp disabled!",
-    "PVP_ENABLED": "Pvp enabled!"
+    "PVP_ENABLED": "Pvp enabled!",
+    "BLACKLISTED_ITEM": "You can't spawn '{0}' because is blacklisted.",
+    "BLACKLISTED_VEHICLE": "You can't spawn '{0}' because is blacklisted."
 }
