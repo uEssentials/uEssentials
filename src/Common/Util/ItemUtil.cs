@@ -48,30 +48,39 @@ namespace Essentials.Common.Util
                 return GetItem( id );
             }
 
-            // Search for item that name is same of given name.
-            var asset = Assets.find(EAssetType.ITEM)
-                              .Cast<ItemAsset>(  )
-                              .Where( i => i.Name != null )
-                              .FirstOrDefault( i => i.Name.EqualsIgnoreCase( name ) ) ?? // If not found it will search for items that contains given name.
-                               Assets.find(EAssetType.ITEM)
-                                     .Cast<ItemAsset>(  )
-                                     .Where( i => i.Name != null )
-                                     .FirstOrDefault( i => {
-                                         if ( name.Contains( " " ) )
-                                         {
-                                             // 'Search by parts'
-                                             // For example, if name is 'mili nigh' it will return Military nightvision
-                                             var parts = name.Split( ' ' );
+            int lastPriority = 0;
+            ItemAsset lastAsset = null;
 
-                                             if ( parts.All( p => i.Name.ContainsIgnoreCase( p ) ) )
-                                             {
-                                                 return true;
-                                             }
-                                         }
-                                         return i.Name.ContainsIgnoreCase( name );
-                                     } );
+            Assets.find(EAssetType.ITEM)
+            .Cast<ItemAsset>()
+            .Where( i => i.Name != null)
+            .ForEach( i => {
+                var itemPriority = 0;
+                var itemName = i.Name;
+                
+                if ( itemName.EqualsIgnoreCase( name ) )
+                {
+                    itemPriority = 3;
+                }
+                else if ( itemName.StartsWith( name ) )
+                {
+                    itemPriority = 2;
+                }
+                else if ( (name.Contains( " " ) && 
+                          name.Split( ' ' ).All( p => i.Name.ContainsIgnoreCase( p ) ) &&
+                          name.Split( ' ' ).Length == itemName.Split( ' ').Length ) ||
+                          i.Name.ContainsIgnoreCase( name ) )
+                {
+                    itemPriority = 1;
+                }
+                
+                if ( itemPriority > lastPriority )
+                {
+                    lastAsset = i;
+                }
+            });
 
-            return Optional<ItemAsset>.OfNullable( asset );
+            return Optional<ItemAsset>.OfNullable( lastAsset );
         }
 
         public static Optional<T> GetItemAs<T>( string name ) where T : ItemAsset

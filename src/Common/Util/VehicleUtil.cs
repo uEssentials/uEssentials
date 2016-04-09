@@ -45,27 +45,39 @@ namespace Essentials.Common.Util
                 return GetVehicle( id );
             }
 
-            var asset = Assets.find( EAssetType.VEHICLE )
-                              .Cast<VehicleAsset>()
-                              .Where( i => i.Name != null )
-                              .FirstOrDefault( i => i.Name.EqualsIgnoreCase( name ) ) ??
-                               Assets.find( EAssetType.VEHICLE )
-                                     .Cast<VehicleAsset>()
-                                     .Where( i => i.Name != null )
-                                     .FirstOrDefault( i => {
-                                         if ( name.Contains( " " ) )
-                                         {
-                                             var parts = name.Split( ' ' );
+            int lastPriority = 0;
+            VehicleAsset lastAsset = null;
 
-                                             if ( parts.All( p => i.Name.ContainsIgnoreCase( p ) ) )
-                                             {
-                                                 return true;
-                                             }
-                                         }
-                                         return i.Name.ContainsIgnoreCase( name );
-                                     } );
+            Assets.find( EAssetType.VEHICLE )
+            .Cast<VehicleAsset>()
+            .Where( i => i.Name != null)
+            .ForEach( i => {
+                var itemPriority = 0;
+                var itemName = i.Name;
+                
+                if ( itemName.EqualsIgnoreCase( name ) )
+                {
+                    itemPriority = 3;
+                }
+                else if ( itemName.StartsWith( name ) )
+                {
+                    itemPriority = 2;
+                }
+                else if ( (name.Contains( " " ) && 
+                          name.Split( ' ' ).All( p => i.Name.ContainsIgnoreCase( p ) ) &&
+                          name.Split( ' ' ).Length == itemName.Split( ' ').Length ) ||
+                          i.Name.ContainsIgnoreCase( name ) )
+                {
+                    itemPriority = 1;
+                }
+                
+                if ( itemPriority > lastPriority )
+                {
+                    lastAsset = i;
+                }
+            });
 
-            return Optional<VehicleAsset>.OfNullable( asset );
+            return Optional<VehicleAsset>.OfNullable( lastAsset );
         }
     }
 }
