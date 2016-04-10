@@ -169,6 +169,10 @@ namespace Essentials.Commands
                             Requests.Remove( senderId );
                         }).Delay( tpaSettings.ExpireDelay * 1000 ).Go();
                     }
+                    else
+                    {
+                        Requests.Remove( senderId );
+                    }
                     break;
                 }
             }
