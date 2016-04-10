@@ -94,6 +94,10 @@ namespace Essentials.Commands
                             whoSent.Teleport( player.Position );
                         }).Delay( tpaSettings.TeleportDelay * 1000 ).Go();
                     }
+                    else
+                    {
+                        whoSent.Teleport( player.Position );
+                    }
                     break;
                 }
                 
