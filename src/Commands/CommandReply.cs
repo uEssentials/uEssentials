@@ -54,14 +54,14 @@ namespace Essentials.Commands
                             in Conversations
                             where conversation.Value.Equals( src.DisplayName )
                             select UPlayer.From( conversation.Key )
-                            ).FirstOrDefault();
+                         ).FirstOrDefault();
 
             if ( target == null )
             {
                 return CommandResult.Lang( EssLang.NO_LONGER_ONLINE );
             }
 
-            src.DispatchCommand( $"tell {target.DisplayName} {args.Join( 0 )}" );
+            src.DispatchCommand( $"tell \"{target.DisplayName}\" \"{args.Join( 0 )}\"" );
 
             return CommandResult.Success();
         }
