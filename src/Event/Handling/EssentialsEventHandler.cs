@@ -53,6 +53,9 @@ namespace Essentials.Event.Handling
         void OnPlayerChatted( UnturnedPlayer player, ref Color color, string message,
                               EChatMode mode, ref bool cancel )
         {
+            /*
+            Rocket implemented this 'feature'...
+            
             if ( message.StartsWith( "/" ) && EssProvider.Config.EnableUnknownMessage )
             {
                 var command = message.Substring( 1 );
@@ -74,6 +77,7 @@ namespace Essentials.Event.Handling
                 cancel = true;
                 return;
             }
+            */
 
             if ( player.HasPermission( "essentials.bypass.antispam" ) ||
                  !EssProvider.Config.AntiSpam.Enabled ) return;
@@ -218,11 +222,11 @@ namespace Essentials.Event.Handling
             var playerId = player.CSteamID.m_SteamID;
             var requests = CommandTpa.Requests;
             
-           /* if ( requests.ContainsKey( playerId ) )
+            if ( requests.ContainsKey( playerId ) )
             {
                 requests.Remove( playerId );
             }
-            else*/ if ( requests.ContainsValue(playerId) )
+            else if ( requests.ContainsValue(playerId) )
             {
                 var val = requests.Keys.FirstOrDefault(k => requests[k] == playerId);
                 
