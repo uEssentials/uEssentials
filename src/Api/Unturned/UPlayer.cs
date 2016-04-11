@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Common;
 using Essentials.Core;
 using Rocket.API;
 using Rocket.Core;
@@ -354,23 +355,38 @@ namespace Essentials.Api.Unturned
 
         public static UPlayer From( string name )
         {
-            Player player;
-
-            if ( name == null || (player = PlayerTool.getPlayer( name.ToLower() )) == null )
-                return null;
-
-            foreach ( var connectedPlayer in EssCore.Instance.ConnectedPlayers )
+            var connectedPlayers = EssCore.Instance.ConnectedPlayers;
+            var lastPlayer = null as UPlayer;
+            
+            /*
+                Equals -> StartWith -> Contains
+            */
+            
+            foreach ( var player in connectedPlayers )
             {
-                if ( connectedPlayer.UnturnedPlayer == player )
+                var pCharName = player.CharacterName;
+                var pSteamName = player.SteamName;
+                
+                if ( pCharName.EqualsIgnoreCase( name ) ||
+                     pSteamName.EqualsIgnoreCase( name )  )
                 {
-                    return connectedPlayer;
+                    return player;
+                }
+                
+                if ( pCharName.ToLowerInvariant().StartsWith( name.ToLowerInvariant() ) ||
+                     pSteamName.ToLowerInvariant().StartsWith( name.ToLowerInvariant() ) )
+                {
+                    return player;
+                }
+                
+                if ( pCharName.ContainsIgnoreCase( name ) ||
+                     pSteamName.ContainsIgnoreCase( name ) )
+                {
+                    lastPlayer = player;
                 }
             }
-
-            var ret = new UPlayer( Rocket.Unturned.Player.UnturnedPlayer.FromPlayer( player ) );
-            EssCore.Instance.ConnectedPlayers.Add( ret );
-
-            return ret;
+            
+            return lastPlayer;
         }
 
         public static UPlayer From( CSteamID csteamId )
