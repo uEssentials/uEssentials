@@ -139,25 +139,24 @@ namespace Essentials.Event.Handling
                 If player has global percentage he will keep all skills.
             */
             var hasGlobalPercentage = (globalPercentage != -1);
+            var skillValues = new Dictionary<USkill, byte>();
 
-            var skillValues = (
-                from skill 
-                in USkill.Skills
-                where hasGlobalPercentage || uplayer.HasPermission( KEEP_SKILL_PERM + skill.Name )
-                select skill
-            )
-            .ToDictionary( skill => skill, skill => {
+            foreach ( var skill in USkill.Skills )
+            {
                 var currentLevel = uplayer.GetSkillLevel( skill );
-
+                var newLevel = (byte?) null;
+                
                 if ( hasGlobalPercentage )
                 {
-                    return (byte) Math.Round((currentLevel * globalPercentage) / 100.0);
+                    newLevel = (byte) Math.Round((currentLevel * globalPercentage) / 100.0);
+                    goto add;
                 }
 
                 /*
                     Search for single percentage.
                 */
-                var skillPermission = KEEP_SKILL_PERM + skill.Name + ".";
+                var skillPermission = KEEP_SKILL_PERM + skill.Name.ToLowerInvariant() + ".";
+                var skillPermission2 = KEEP_SKILL_PERM + skill.Name.ToLowerInvariant();
                 var skillPercentage = -1;
 
                 foreach ( var p in playerPermissions )
@@ -179,11 +178,23 @@ namespace Essentials.Event.Handling
 
                 if ( skillPercentage != -1 )
                 {
-                    return (byte) Math.Round( (currentLevel * skillPercentage) / 100.0 );
+                    newLevel =  (byte) Math.Round( (currentLevel * skillPercentage) / 100.0 );
                 }
-
-                return currentLevel;
-            });
+                
+                /*
+                    Ccheck for 'essentials.keepskill.SKILL'
+                */
+                if ( !newLevel.HasValue && player.HasPermission( skillPermission2 ) )
+                {
+                    newLevel = currentLevel;
+                }
+                
+                add:
+                if ( newLevel.HasValue )
+                {
+                    skillValues.Add( skill, newLevel.Value );
+                }
+            }
 
             if ( skillValues.Count == 0 ) return;
             
@@ -204,8 +215,7 @@ namespace Essentials.Event.Handling
 
             var uplayer = UPlayer.From( player );
 
-            CachedSkills[ uplayer.DisplayName ].ForEach( pair => 
-            {
+            CachedSkills[ uplayer.DisplayName ].ForEach( pair => {
                 uplayer.SetSkillLevel( pair.Key, pair.Value );
             });
         }
@@ -246,7 +256,7 @@ namespace Essentials.Event.Handling
             MiscCommands.Spies          .Remove( displayName );
             CommandBack.BackDict        .Remove( displayName );
             CommandTell.Conversations   .Remove( displayName );
-            CachedSkills                         .Remove( displayName );
+            CachedSkills                .Remove( displayName );
 
             EssProvider.ModuleManager.GetModule<KitModule>().IfPresent( m => {
                 if ( CommandKit.Cooldowns.Count == 0 ) return;
