@@ -44,7 +44,7 @@ using EventType = Essentials.Api.Event.EventType;
 
 namespace Essentials.Event.Handling
 {
-    internal class EssentialsEventHandler 
+    internal class EssentialsEventHandler
     {
         internal static readonly Dictionary<string, DateTime>                   LastChatted     = new Dictionary<string, DateTime>();
         internal static readonly Dictionary<string, Dictionary<USkill, byte>>   CachedSkills    = new Dictionary<string, Dictionary<USkill, byte>>();
