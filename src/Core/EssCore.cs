@@ -49,6 +49,8 @@ using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 using Rocket.Core.Commands;
+using Essentials.Core.Economy;
+using Essentials.Compatibility.Hooks;
 
 namespace Essentials.Core
 {
@@ -66,6 +68,7 @@ namespace Essentials.Core
         
         internal static EssCore                       Instance                    { get; set; }
         
+        internal Optional<IEconomyProvider>           EconomyProvider             { get; set; }
         internal ModuleManager                        ModuleManager               { get; set; }
         internal CommandManager                       CommandManager              { get; set; }
         internal IEventManager                        EventManager                { get; set; }
@@ -207,6 +210,16 @@ namespace Essentials.Core
 
             HookManager.RegisterAll();
             HookManager.LoadAll();
+            
+            if ( Config.Economy.UseXp )
+            {
+                EconomyProvider = Optional<IEconomyProvider>.Of( new ExpEconomyProvider() );
+            }
+            else if ( HookManager.GetActiveByType<UconomyHook>().IsPresent )
+            {
+                EconomyProvider = Optional<IEconomyProvider>.Of( 
+                        HookManager.GetActiveByType<UconomyHook>().Value );
+            } 
 
             /*
                 Load native modules

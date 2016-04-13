@@ -72,13 +72,13 @@ namespace Essentials.NativeModules.Kit.Commands
                 var steamPlayerId    = player.CSteamId.m_SteamID;
                 var kitCost          = requestedKit.Cost;
 
-                if ( kitCost > 0 )
+                if ( kitCost > 0 && EssProvider.EconomyProvider.IsPresent )
                 {
-                    var ecoHook = EssProvider.HookManager.GetActiveByType<UconomyHook>(); // TODO cache ??!
-
-                    if ( ecoHook.IsPresent && (ecoHook.Value.GetBalance( steamPlayerId ) - kitCost) < 0 )
+                    var ecoProvider = EssProvider.EconomyProvider.Value;
+                    
+                    if ( !ecoProvider.Has( player, kitCost ) )
                     {
-                        return CommandResult.Lang( EssLang.KIT_NO_MONEY, kitCost );
+                        return CommandResult.Lang( EssLang.KIT_NO_MONEY, kitCost, ecoProvider.Currency );
                     }
                 } 
 
@@ -136,16 +136,15 @@ namespace Essentials.NativeModules.Kit.Commands
                         }
                     }
                 }
-
+                
                 if ( kitCost > 0 )
                 {
-                    EssProvider.HookManager.GetActiveByType<UconomyHook>().IfPresent( h => {
-                        h.Withdraw( player.CSteamId.m_SteamID, requestedKit.Cost );
+                    EssProvider.EconomyProvider.IfPresent( ec => {
+                        ec.Withdraw( player, kitCost );
+                        CommandResult.Lang( EssLang.KIT_PAID, kitCost, ec.Currency );
+                    });
+                } 
 
-                        EssLang.KIT_PAID.SendTo( player, requestedKit.Cost );
-                    } );
-                }
-                
                 KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( player );
             }
             else if ( parameters.Length == 2 )

@@ -106,6 +106,18 @@ namespace Essentials.Api.Unturned
             }
         }
 
+        public uint Experience
+        {
+            get
+            {
+                return RocketPlayer.Experience;
+            }
+            set
+            {
+                RocketPlayer.Experience = value;
+            }
+        }
+
         public byte Hunger
         {
             get

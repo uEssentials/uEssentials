@@ -112,6 +112,8 @@
     <Compile Include="src\Common\Util\MiscUtil.cs" />
     <Compile Include="src\Compatibility\Hook.cs" />
     <Compile Include="src\Compatibility\HookManager.cs" />
+    <Compile Include="src\Core\Economy\IEconomyProvider.cs" />
+    <Compile Include="src\Core\Economy\ExpEconomyProvider.cs" />
     <Compile Include="src\Compatibility\Hooks\UconomyHook.cs" />
     <Compile Include="src\Compatibility\Hooks\LPXHook.cs" />
     <Compile Include="src\Configuration\CommandsConfig.cs" />

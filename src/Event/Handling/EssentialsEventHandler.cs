@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Essentials.Api;
 using Essentials.Api.Command;
+using Essentials.Api.Command.Source;
 using Essentials.Api.Event;
 using Essentials.Api.Events;
 using Essentials.Api.Task;
@@ -32,6 +33,7 @@ using Essentials.Commands;
 using Essentials.Common;
 using Essentials.Compatibility.Hooks;
 using Essentials.Core;
+using Essentials.Core.Economy;
 using Essentials.I18n;
 using Essentials.NativeModules.Kit;
 using Essentials.NativeModules.Kit.Commands;
@@ -79,7 +81,7 @@ namespace Essentials.Event.Handling
             }
             */
 
-            if ( player.HasPermission( "essentials.bypass.antispam" ) ||
+            if ( message.StartsWith( "/" ) || player.HasPermission( "essentials.bypass.antispam" ) ||
                  !EssProvider.Config.AntiSpam.Enabled ) return;
 
             var playerName = player.CharacterName;
@@ -394,7 +396,7 @@ namespace Essentials.Event.Handling
             UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
         }
 
-        private static Optional<UconomyHook> _cachedEconomyHook;
+        private static Optional<IEconomyProvider> _cachedEconomyProvider;
         private static IDictionary<string, Configuration.Command> _cachedCommands;
 
         /*
@@ -403,23 +405,23 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.ESSENTIALS_COMMAND_PRE_EXECUTED )]
         void OnCommandPreExecuted( CommandPreExecuteEvent e )
         {
-            if ( _cachedEconomyHook == null )
+            if ( e.Source.IsConsole || e.Source.HasPermission( "essentials.bypass.commandcost" ) )
             {
-                _cachedEconomyHook = EssProvider.HookManager.GetActiveByType<UconomyHook>();
+                return;
+            }
+            
+            if ( _cachedEconomyProvider == null )
+            {
+                _cachedEconomyProvider = EssProvider.EconomyProvider;
             }
 
-            if ( _cachedEconomyHook.IsAbsent )
+            if ( _cachedEconomyProvider.IsAbsent )
             {
                 /*
                     If economy hook is not present, this "handler" will be unregistered.
                 */
                 EssCore.Instance.EventManager.Unregister( GetType(), "OnCommandPreExecuted" );
                 EssCore.Instance.EventManager.Unregister( GetType(), "OnCommandPosExecuted" );
-            }
-
-            if ( e.Source.IsConsole || e.Source.HasPermission( "essentials.bypass.commandcost" ) )
-            {
-                return;
             }
 
             if ( _cachedCommands == null )
@@ -432,7 +434,6 @@ namespace Essentials.Event.Handling
                 return;
             }
 
-            var sourceId = ulong.Parse( e.Source.Id );
             var cost = _cachedCommands[e.Command.Name].Cost;
 
             if ( cost <= 0 )
@@ -443,7 +444,7 @@ namespace Essentials.Event.Handling
             /*
                 Check if player has sufficient money to use this command.
             */
-            if ( (_cachedEconomyHook.Value.GetBalance( sourceId ) - cost) >= 0 )
+            if ( _cachedEconomyProvider.Value.Has( e.Source.ToPlayer(), cost ) )
             {
                 return;
             }
@@ -455,11 +456,8 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.ESSENTIALS_COMMAND_POS_EXECUTED )]
         void OnCommandPosExecuted( CommandPosExecuteEvent e )
         {
-            /*
-                I will not check if _cachedEconomyHook is null or absent 
-                because im already doing it in PreExecute
-            */
-            if ( e.Source.IsConsole || e.Source.HasPermission( "essentials.bypass.commandcost" ) )
+            if ( _cachedEconomyProvider == null || 
+                 e.Source.IsConsole || e.Source.HasPermission( "essentials.bypass.commandcost" ) )
             {
                 return;
             }
@@ -467,12 +465,8 @@ namespace Essentials.Event.Handling
             /*
                He will not charge if command was not successfully executed.
             */
-            if ( e.Result?.Type != CommandResult.ResultType.SUCCESS )
-            {
-                return;
-            }
-
-            if ( !_cachedCommands.ContainsKey( e.Command.Name ) )
+            if ( e.Result?.Type != CommandResult.ResultType.SUCCESS ||
+                 !_cachedCommands.ContainsKey( e.Command.Name ) )
             {
                 return;
             }
@@ -484,7 +478,7 @@ namespace Essentials.Event.Handling
                 return;
             }
 
-            _cachedEconomyHook.Value.Withdraw( ulong.Parse( e.Source.Id ), cost );
+            _cachedEconomyProvider.Value.Withdraw( e.Source.ToPlayer(), cost );
             EssLang.COMMAND_PAID.SendTo( e.Source, cost );
         }
     }

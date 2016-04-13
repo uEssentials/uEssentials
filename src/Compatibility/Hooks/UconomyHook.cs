@@ -19,16 +19,22 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using Essentials.Common;
 using Essentials.Common.Reflect;
 using Rocket.Core;
 using System.Linq;
 using System.Reflection;
+using Essentials.Api;
+using Essentials.Api.Unturned;
+using Essentials.Core.Economy;
 
 namespace Essentials.Compatibility.Hooks
 {
-    public class UconomyHook : Hook
+    public class UconomyHook : Hook, IEconomyProvider
     {
+        public string Currency => EssProvider.Config.Economy.UconomyCurrency;
+
         private MethodAccessor<decimal> _getBalanceMethod;
         private MethodAccessor<decimal> _increaseBalanceMethod;
 
@@ -36,37 +42,47 @@ namespace Essentials.Compatibility.Hooks
 
         public override void OnLoad()
         {
-            var uconomyPlugin   = R.Plugins.GetPlugins().FirstOrDefault( c => c.Name.EqualsIgnoreCase( "uconomy" ) );
-            var uconomyType     = uconomyPlugin.GetType().Assembly.GetType( "fr34kyn01535.Uconomy.Uconomy" );
-            var uconomyInstance = uconomyType.GetField( "Instance", BindingFlags.Static | BindingFlags.Public ).GetValue( uconomyPlugin );
+            try
+            {
+                var uconomyPlugin = R.Plugins.GetPlugins().FirstOrDefault( c => c.Name.EqualsIgnoreCase( "uconomy" ) );
+                var uconomyType = uconomyPlugin.GetType().Assembly.GetType( "fr34kyn01535.Uconomy.Uconomy" );
+                var uconomyInstance = uconomyType.GetField( "Instance", BindingFlags.Static | BindingFlags.Public ).GetValue( uconomyPlugin );
 
-            var databaseInstance = uconomyInstance.GetType().GetField( "Database" ).GetValue( uconomyInstance );
-            _getBalanceMethod = AccessorFactory.AccessMethod<decimal>( databaseInstance, "GetBalance" );
-            _increaseBalanceMethod = AccessorFactory.AccessMethod<decimal>( databaseInstance, "IncreaseBalance" );
+                var databaseInstance = uconomyInstance.GetType().GetField( "Database" ).GetValue( uconomyInstance );
+                _getBalanceMethod = AccessorFactory.AccessMethod<decimal>( databaseInstance, "GetBalance" );
+                _increaseBalanceMethod = AccessorFactory.AccessMethod<decimal>( databaseInstance, "IncreaseBalance" );
+            }
+            catch ( Exception )
+            {
+                EssProvider.Logger.LogError( "Could not hook with Uconomy." );
+            }
         }
 
-        public override void OnUnload()
-        {
-        }
+        public override void OnUnload() { }
 
         public override bool CanBeLoaded()
         {
             return R.Plugins.GetPlugins().Any( c => c.Name.EqualsIgnoreCase( "uconomy" ) );
         }
 
-        public decimal Withdraw( ulong playerId, decimal amount )
+        public decimal Withdraw( UPlayer player, decimal amount )
         {
-            return _increaseBalanceMethod.Invoke( playerId.ToString(), -amount );
+            return _increaseBalanceMethod.Invoke( player.CSteamId.m_SteamID.ToString(), -amount );
         }
 
-        public decimal Deposit( ulong playerId, decimal amount )
+        public decimal Deposit( UPlayer player, decimal amount )
         {
-            return _increaseBalanceMethod.Invoke( playerId.ToString(), amount );
+            return _increaseBalanceMethod.Invoke( player.CSteamId.m_SteamID.ToString(), amount );
         }
 
-        public decimal GetBalance( ulong playerId )
+        public decimal GetBalance( UPlayer player )
         {
-            return _getBalanceMethod.Invoke( playerId.ToString() );
+            return _getBalanceMethod.Invoke( player.CSteamId.m_SteamID.ToString() );
+        }
+
+        public bool Has( UPlayer player, decimal amount )
+        {
+            return (GetBalance( player ) - amount) >= 0;
         }
     }
 }

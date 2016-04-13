@@ -28,6 +28,7 @@ using Essentials.Common;
 using Essentials.Compatibility;
 using Essentials.Configuration;
 using Essentials.Core;
+using Essentials.Core.Economy;
 
 namespace Essentials.Api
 {
@@ -77,6 +78,8 @@ namespace Essentials.Api
         /// <returns> Instance of EssLogger </returns>
         /// </summary>
         public static EssLogger Logger => Core.Logger;
+        
+        public static Optional<IEconomyProvider> EconomyProvider => Core.EconomyProvider;
 
         /// <summary>
         /// Singleton instance of ConsoleSource

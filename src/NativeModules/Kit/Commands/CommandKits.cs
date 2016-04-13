@@ -23,7 +23,6 @@ using System.Linq;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.Compatibility.Hooks;
 using Essentials.Core;
 using Essentials.I18n;
 
@@ -38,14 +37,14 @@ namespace Essentials.NativeModules.Kit.Commands
         public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             var kitConfig = EssCore.Instance.Config.Kit;
-            var hasEconomyPlugin = EssProvider.HookManager.GetActiveByType<UconomyHook>().IsPresent;
+            var hasEconomyProvider = EssProvider.EconomyProvider.IsPresent;
 
             var kits = KitModule.Instance.KitManager.Kits.Where( k => k.CanUse( source ) ).Select( k => {
-                if ( !hasEconomyPlugin || !kitConfig.ShowCost || (k.Cost <= 0 && !kitConfig.ShowCostIfZero) )
+                if ( !hasEconomyProvider || !kitConfig.ShowCost || (k.Cost <= 0 && !kitConfig.ShowCostIfZero) )
                 {
                     return k.Name;
                 }
-                return string.Format( kitConfig.CostFormat, k.Name, k.Cost );
+                return string.Format( kitConfig.CostFormat, k.Name, k.Cost, EssProvider.EconomyProvider.Value.Currency );
             } ).ToList();
 
 

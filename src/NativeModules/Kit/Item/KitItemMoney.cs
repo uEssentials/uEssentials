@@ -19,9 +19,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using Essentials.Api;
 using Essentials.Api.Unturned;
-using Essentials.Compatibility.Hooks;
-using Essentials.Core;
 using Newtonsoft.Json;
 
 namespace Essentials.NativeModules.Kit.Item
@@ -38,9 +37,7 @@ namespace Essentials.NativeModules.Kit.Item
 
         public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
         {
-            EssCore.Instance.HookManager.GetActiveByType<UconomyHook>().IfPresent( h => {
-                h.Deposit( player.CSteamId.m_SteamID, Amount );
-            } );
+            EssProvider.EconomyProvider.IfPresent( h => h.Deposit( player, Amount ) );
             return true;
         }
 

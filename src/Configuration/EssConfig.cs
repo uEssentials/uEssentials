@@ -63,6 +63,7 @@ namespace Essentials.Configuration
         public WebConfigSettings        WebConfig;
         public KitSettings              Kit;
         public TpaSettings              Tpa;
+        public EconomySettings          Economy;
 
         public AutoAnnouncer    AutoAnnouncer;
         public AutoCommands     AutoCommands;
@@ -76,7 +77,6 @@ namespace Essentials.Configuration
 
         public override void LoadDefaults()
         {
-            
             Locale                      = "en";
 
             PrivateMessageFormat        = "(From {0}): {1}";
@@ -118,17 +118,19 @@ namespace Essentials.Configuration
             WebConfig                   = new WebConfigSettings { Enabled = false, Url = "" };
 
             Kit                         = new KitSettings { ShowCost = true, ShowCostIfZero = false, 
-                                                    CostFormat = "{0}({1}$)", GlobalCooldown = 0,
+                                                    CostFormat = "{0}({1}{2})", GlobalCooldown = 0,
                                                     ResetGlobalCooldownWhenDie = false };
-           
-           Tpa                          = new TpaSettings { ExpireDelay = 10, TeleportDelay = 5 };
 
-           GiveItemBlacklist           = new List<ushort>();
-           VehicleBlacklist            = new List<ushort>();
-           DisabledCommands            = new List<string>();
-           EnabledSystems              = new List<string> { "kits", "warps" };
+            Tpa                          = new TpaSettings { ExpireDelay = 10, TeleportDelay = 5 };
 
-           ItemSpawnLimit              = 10;
+            Economy                     = new EconomySettings { UseXp =  false, UconomyCurrency = "$", XpCurrency = "Xp" };
+
+            GiveItemBlacklist           = new List<ushort>();
+            VehicleBlacklist            = new List<ushort>();
+            DisabledCommands            = new List<string>();
+            EnabledSystems              = new List<string> { "kits", "warps" };
+
+            ItemSpawnLimit              = 10;
         }
 
         public override void Load( string filePath )
@@ -245,5 +247,13 @@ namespace Essentials.Configuration
     {
         public int ExpireDelay;
         public int TeleportDelay;
+    }
+
+    [JsonObject]
+    public struct EconomySettings
+    {
+        public bool UseXp;
+        public string XpCurrency;
+        public string UconomyCurrency;
     }
 }

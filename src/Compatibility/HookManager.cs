@@ -102,14 +102,12 @@ namespace Essentials.Compatibility
         /// <returns></returns>
         public Optional<THookType> GetActiveByType<THookType>() where THookType : Hook
         {
-            var hook = GetByType<THookType>();
+            var hook = Optional<THookType>.OfNullable(
+                (THookType) _activeHooks.FirstOrDefault( h => h.Value is THookType && 
+                                                         h.Value.IsLoaded ).Value
+            );
 
-            if ( hook.IsPresent && hook.Value.IsLoaded )
-            {
-                return hook;
-            }
-
-            return Optional<THookType>.Empty();
+            return hook;
         }
 
         public Optional<Hook> GetByName( string hookName )
