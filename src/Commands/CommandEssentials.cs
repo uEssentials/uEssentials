@@ -57,7 +57,7 @@ namespace Essentials.Commands
                 return false;
             }
 
-            if ( cmd.GetType() == typeof (MethodCommand) )
+            if ( cmd.GetType() == typeof(MethodCommand) )
             {
                 asm = ((MethodCommand) cmd).Owner.Assembly;
             }
