@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -56,16 +57,16 @@ namespace Essentials.Core
 {
     public sealed class EssCore : RocketPlugin
     {
-       /*
-            TODO:
-                - AFK KICK
-                - Improve event system to avoid duplicate events.
-        */
-        
-        internal const string                         PLUGIN_VERSION              = "1.1.9.3";
         internal const string                         ROCKET_VERSION              = "4.9.4.0";
         internal const string                         UNTURNED_VERSION            = "3.14.12.2";
+        internal const string                         PLUGIN_VERSION              =
         
+        #if EXPERIMENTAL
+          "1.1.9.3-experimental";
+        #else
+          "1.1.9.3";
+        #endif
+
         internal static EssCore                       Instance                    { get; set; }
         
         internal Optional<IEconomyProvider>           EconomyProvider             { get; set; }
@@ -291,6 +292,10 @@ namespace Essentials.Core
             #else
               CommandWindow.ConsoleOutput.title = "Unturned Server";
             #endif
+
+            #if EXPERIMENTAL
+              Logger.LogWarning( "This is an experimental build, can be buggy." );
+            #endif
             
             TryAddComponent<Tasks>();
 
@@ -351,49 +356,60 @@ namespace Essentials.Core
         
         private void CheckUpdates()
         {
-            if ( Config.Updater.CheckUpdates )
+            if ( !Config.Updater.CheckUpdates )
             {
-                new System.Threading.Thread( () =>
-                {
-                    Logger.LogInfo( "Checking updates." );
-
-                    var isUpdated = Updater.IsUpdated();
-                    var lastResult = Updater.LastResult;
-
-                    if ( isUpdated )
-                    {
-                        Logger.LogInfo( "Plugin is up-to-date!" );
-                        return;
-                    }
-
-                    Logger.LogInfo( $"New version avalaible: {lastResult.LatestVersion}" );
-
-                    if ( !lastResult.AdditionalData.IsNullOrEmpty() )
-                    {
-                        Newtonsoft.Json.Linq.JToken changesStr;
-                        if ( Newtonsoft.Json.Linq.JObject.Parse( lastResult.AdditionalData ).TryGetValue( "changes", out changesStr ) )
-                        {
-                            Logger.LogInfo( "========================= [ Changes ] =========================" );
-
-                            changesStr.ToString().Split( '\n' ).ForEach( msg => {
-                                Logger.Log( "", ConsoleColor.Green, suffix: "" );
-                                Logger.Log( "  " + msg, ConsoleColor.White, "" );
-                            } );
-
-                            Logger.LogInfo( "" );
-                            Logger.Log( "", ConsoleColor.Green, suffix: "" );
-                            Logger.Log( "  " +  $"See more in: https://github.com/uEssentials/uEssentials/releases/tag/{lastResult.LatestVersion}", ConsoleColor.White, "" );
-
-                            Logger.LogInfo( "===============================================================" );
-                        }
-                    }
-
-                    if ( Config.Updater.DownloadLatest )
-                    {
-                        Updater.DownloadLatestRelease( $"{Folder}/updates/" );
-                    }
-                } ).Start();
+                return;
             }
+
+            var worker = new BackgroundWorker();
+
+            worker.DoWork += ( sender, args ) => 
+            {
+                Logger.LogInfo( "Checking updates." );
+
+                var isUpdated = Updater.IsUpdated();
+                var lastResult = Updater.LastResult;
+
+                if ( isUpdated )
+                {
+                    Logger.LogInfo( "Plugin is up-to-date!" );
+                    return;
+                }
+
+                Logger.LogInfo( $"New version avalaible: {lastResult.LatestVersion}" );
+
+                if ( !lastResult.AdditionalData.IsNullOrEmpty() )
+                {
+                    Newtonsoft.Json.Linq.JToken changesStr;
+                    if ( Newtonsoft.Json.Linq.JObject.Parse( lastResult.AdditionalData ).TryGetValue( "changes", out changesStr ) )
+                    {
+                        Logger.LogInfo( "========================= [ Changes ] =========================" );
+
+                        changesStr.ToString().Split( '\n' ).ForEach( msg => {
+                            Logger.Log( "", ConsoleColor.Green, suffix: "" );
+                            Logger.Log( "  " + msg, ConsoleColor.White, "" );
+                        } );
+
+                        Logger.LogInfo( "" );
+                        Logger.Log( "", ConsoleColor.Green, suffix: "" );
+                        Logger.Log( "  " + $"See more in: https://github.com/uEssentials/uEssentials/releases/tag/{lastResult.LatestVersion}", ConsoleColor.White, "" );
+
+                        Logger.LogInfo( "===============================================================" );
+                    }
+                }
+
+                if ( Config.Updater.DownloadLatest )
+                {
+                    Updater.DownloadLatestRelease( $"{Folder}/updates/" );
+                }
+            };
+
+            worker.RunWorkerCompleted += ( sender, args ) => {
+                if ( args.Error != null )
+                    Logger.LogError( $"Could not update, try again later. ({args.Error.Message})" );
+            };
+
+            worker.RunWorkerAsync();
         }
         
         private void UnregisterRocketCommands( bool silent = false )
