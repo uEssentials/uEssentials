@@ -725,7 +725,7 @@ namespace Essentials.Commands
                 
                     if ( optAsset.IsAbsent )
                     {
-                        return CommandResult.Lang( EssLang.INVALID_VEHICLE_ID, args[0] );
+                        return CommandResult.Lang( EssLang.INVALID_VEHICLE_ID, args[1] );
                     }
                 
                     var vehAsset = optAsset.Value;
@@ -744,7 +744,7 @@ namespace Essentials.Commands
                     }
                     else
                     {
-                        var target = UPlayer.From( args[0].ToString() );
+                        var target = args[0].ToPlayer;
                         VehicleTool.giveVehicle( target.UnturnedPlayer, vehAsset.id );
                     
                         EssLang.GIVEN_VEHICLE.SendTo( src, vehAsset.Name, vehAsset.Id,target.DisplayName );
