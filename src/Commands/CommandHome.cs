@@ -84,6 +84,8 @@ namespace Essentials.Commands
             }
 
             var task = Tasks.New( t =>  {
+                if ( player == null ) // player disconnected
+                    return;
                 player.Teleport( position, angle );
                 Delay.Remove( playerId.m_SteamID );
 

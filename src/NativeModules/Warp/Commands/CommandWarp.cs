@@ -69,8 +69,9 @@ namespace Essentials.NativeModules.Warp.Commands
                 EssLang.WARP_COOLDOWN.SendTo( source, cooldown );
             }
 
-            Tasks.New( t =>
-            {
+            Tasks.New( t => {
+                if ( player == null ) // player disconnected
+                    return;
                 player.Teleport( dest.Location, dest.Rotation );
                 EssLang.WARP_TELEPORTED.SendTo( source, parameters[0] );
             }).Delay( player.HasPermission( "essentials.bypass.warpcooldown" ) ? 0 : cooldown * 1000 ).Go();

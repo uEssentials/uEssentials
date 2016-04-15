@@ -38,12 +38,27 @@ namespace Essentials.Api.Task
 
                 if ( task.NextExecution > DateTime.Now ) continue;
 
-                task.Action(task);
+                /*
+                    If any error occurs he will remove task from Pool.
+                */
+                try
+                {
+                    task.Action(task);
 
-                if ( task.IntervalValue < 0 )
+                    if ( task.IntervalValue < 0 )
+                    {
+                        Pool.Remove(task);
+                    }
+                    else
+                    {
+                        task.NextExecution = DateTime.Now.AddMilliseconds( task.IntervalValue );
+                    }
+                }
+                catch (Exception)
+                {
                     Pool.Remove(task);
-                else
-                    task.NextExecution = DateTime.Now.AddMilliseconds( task.IntervalValue );
+                    throw;
+                }
             }
         }
 
