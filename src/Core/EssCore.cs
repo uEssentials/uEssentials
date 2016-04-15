@@ -220,7 +220,11 @@ namespace Essentials.Core
             {
                 EconomyProvider = Optional<IEconomyProvider>.Of( 
                         HookManager.GetActiveByType<UconomyHook>().Value );
-            } 
+            }
+            else
+            {
+                EconomyProvider = Optional<IEconomyProvider>.Empty();
+            }
 
             /*
                 Load native modules
