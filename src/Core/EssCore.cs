@@ -58,13 +58,13 @@ namespace Essentials.Core
     public sealed class EssCore : RocketPlugin
     {
         internal const string                         ROCKET_VERSION              = "4.9.4.0";
-        internal const string                         UNTURNED_VERSION            = "3.14.12.2";
+        internal const string                         UNTURNED_VERSION            = "3.14.13.1";
         internal const string                         PLUGIN_VERSION              =
         
         #if EXPERIMENTAL
-          "1.1.9.3-experimental";
+          "1.2.0.0-experimental";
         #else
-          "1.1.9.3";
+          "1.2.0.0";
         #endif
 
         internal static EssCore                       Instance                    { get; set; }
@@ -311,7 +311,7 @@ namespace Essentials.Core
             #endif
 
             #if EXPERIMENTAL
-              Logger.LogWarning( "This is an experimental build, can be buggy." );
+              Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
             #endif
             
             TryAddComponent<Tasks>();
