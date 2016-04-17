@@ -481,5 +481,130 @@ namespace Essentials.Event.Handling
             _cachedEconomyProvider.Value.Withdraw( e.Source.ToPlayer(), cost );
             EssLang.COMMAND_PAID.SendTo( e.Source, cost );
         }
+        
+        [SubscribeEvent( EventType.PLAYER_DEATH )]
+        void DeathMessages( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer )
+        {
+            switch (cause)
+            {
+                case EDeathCause.BLEEDING:
+                    EssLang.DEATH_BLEEDING.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.BONES:
+                    EssLang.DEATH_BONES.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.FREEZING:
+                    EssLang.DEATH_FREEZING.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.BURNING:
+                    EssLang.DEATH_BURNING.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.FOOD:
+                    EssLang.DEATH_FOOD.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.WATER:
+                    EssLang.DEATH_WATER.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.GUN:
+                    var pKiller = UPlayer.From( killer )?.CharacterName ?? "?";
+                    EssLang.DEATH_GUN.Broadcast( player.CharacterName, TranslateLimb( limb ), pKiller );
+                    break;
+
+                case EDeathCause.MELEE:
+                    pKiller = UPlayer.From( killer )?.CharacterName ?? "?";
+                    EssLang.DEATH_MELEE.Broadcast( player.CharacterName, TranslateLimb( limb ), pKiller );
+                    break;
+
+                case EDeathCause.ZOMBIE:
+                    EssLang.DEATH_ZOMBIE.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.ANIMAL:
+                    EssLang.DEATH_ANIMAL.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.SUICIDE:
+                    EssLang.DEATH_SUICIDE.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.KILL:
+                    EssLang.DEATH_KILL.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.INFECTION:
+                    EssLang.DEATH_INFECTION.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.PUNCH:
+                    pKiller = UPlayer.From( killer )?.CharacterName ?? "?";
+                    EssLang.DEATH_PUNCH.Broadcast( player.CharacterName, TranslateLimb( limb ), pKiller );
+                    break;
+
+                case EDeathCause.BREATH:
+                    EssLang.DEATH_BREATH.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.ROADKILL:
+                    pKiller = UPlayer.From( killer )?.CharacterName ?? "?";
+                    EssLang.DEATH_ROADKILL.Broadcast( pKiller, player.CharacterName );
+                    break;
+
+                case EDeathCause.VEHICLE:
+                    EssLang.DEATH_VEHICLE.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.GRENADE:
+                    EssLang.DEATH_GRENADE.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.SHRED:
+                    EssLang.DEATH_SHRED.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.LANDMINE:
+                    EssLang.DEATH_LANDMINE.Broadcast( player.CharacterName );
+                    break;
+
+                case EDeathCause.ARENA:
+                    EssLang.DEATH_ARENA.Broadcast( player.CharacterName );
+                    break;
+                
+                default:
+                    break;
+            }
+        }
+        
+        private string TranslateLimb( ELimb limb )
+        {
+            switch (limb)
+            {
+                case ELimb.SKULL: 
+                    return EssLang.LIMB_HEAD.GetMessage();
+
+                case ELimb.LEFT_HAND:
+                case ELimb.RIGHT_HAND:
+                case ELimb.LEFT_ARM:
+                case ELimb.RIGHT_ARM:
+                    return EssLang.LIMB_ARM.GetMessage();
+
+                case ELimb.LEFT_FOOT:
+                case ELimb.RIGHT_FOOT:
+                case ELimb.LEFT_LEG:
+                case ELimb.RIGHT_LEG:
+                    return EssLang.LIMB_LEG.GetMessage(); 
+
+                case ELimb.SPINE:
+                    return EssLang.LIMB_TORSO.GetMessage();
+
+                default:
+                    return "?";
+            }
+        }
     }
 }

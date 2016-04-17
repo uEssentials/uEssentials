@@ -348,5 +348,30 @@ namespace Essentials.I18n
         public static EssLang PVP_ENABLED { get; private set; }
         public static EssLang BLACKLISTED_ITEM { get; private set; }
         public static EssLang BLACKLISTED_VEHICLE { get; private set; }
+        public static EssLang DEATH_BLEEDING { get; private set; }
+        public static EssLang DEATH_BONES { get; private set; }
+        public static EssLang DEATH_FREEZING { get; private set; }
+        public static EssLang DEATH_BURNING { get; private set; }
+        public static EssLang DEATH_FOOD { get; private set; }
+        public static EssLang DEATH_WATER { get; private set; }
+        public static EssLang DEATH_GUN { get; private set; }
+        public static EssLang DEATH_MELEE { get; private set; }
+        public static EssLang DEATH_ZOMBIE { get; private set; }
+        public static EssLang DEATH_ANIMAL { get; private set; }
+        public static EssLang DEATH_SUICIDE { get; private set; }
+        public static EssLang DEATH_KILL { get; private set; }
+        public static EssLang DEATH_INFECTION { get; private set; }
+        public static EssLang DEATH_PUNCH { get; private set; }
+        public static EssLang DEATH_BREATH { get; private set; }
+        public static EssLang DEATH_ROADKILL { get; private set; }
+        public static EssLang DEATH_VEHICLE { get; private set; }
+        public static EssLang DEATH_GRENADE { get; private set; }
+        public static EssLang DEATH_SHRED { get; private set; }
+        public static EssLang DEATH_LANDMINE { get; private set; }
+        public static EssLang DEATH_ARENA { get; private set; }
+        public static EssLang LIMB_HEAD { get; private set; }
+        public static EssLang LIMB_LEG { get; private set; }
+        public static EssLang LIMB_TORSO { get; private set; }
+        public static EssLang LIMB_ARM { get; private set; }
     }
 }
