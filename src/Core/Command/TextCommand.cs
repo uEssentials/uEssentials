@@ -38,8 +38,6 @@ namespace Essentials.Core.Command
         
         private TextCommands.TextCommandData Data;
         
-        public TextCommand() {}
-        
         public TextCommand( TextCommands.TextCommandData data )
         {
             Data = data;
