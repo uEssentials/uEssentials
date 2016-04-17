@@ -694,48 +694,48 @@ namespace Essentials.Commands
                     {
                         return CommandResult.ShowUsage();
                     }
-                
+
                     var optAsset = VehicleUtil.GetVehicle( args[0].ToString() );
-                    
+
                     if ( optAsset.IsAbsent )
                     {
                         return CommandResult.Lang( EssLang.INVALID_VEHICLE_ID, args[0] );
                     }
-                    
+
                     var id = optAsset.Value.id;
-                    
+
                     if ( EssProvider.Config.VehicleBlacklist.Contains( id )         &&
                          !src.HasPermission( "essentials.bypass.blacklist.vehicle" ) )
                     {
                         return CommandResult.Lang( EssLang.BLACKLISTED_VEHICLE, $"{optAsset.Value.vehicleName} ({id})" );
                     }
-                
+
                     VehicleTool.giveVehicle( src.ToPlayer().UnturnedPlayer, id );
-                
+
                     EssLang.RECEIVED_VEHICLE.SendTo( src, optAsset.Value.Name, id );
                     break;
-                
+
                 case 2:
                     if ( !src.HasPermission( $"{cmd.Permission}.other") ) 
                     {
                         return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );  
                     }
-                    
+
                     optAsset = VehicleUtil.GetVehicle( args[1].ToString() );
-                
+
                     if ( optAsset.IsAbsent )
                     {
                         return CommandResult.Lang( EssLang.INVALID_VEHICLE_ID, args[1] );
                     }
-                
+
                     var vehAsset = optAsset.Value;
-                
+
                     if ( args[0].Is("*") )
                     {
                         UServer.Players.ForEach( p => {
                             VehicleTool.giveVehicle( p.UnturnedPlayer, vehAsset.id );  
                         });
-                    
+
                         EssLang.GIVEN_VEHICLE_ALL.SendTo( src, vehAsset.Name, vehAsset.Id );
                     }
                     else if ( !args[0].IsValidPlayerName )
@@ -746,11 +746,11 @@ namespace Essentials.Commands
                     {
                         var target = args[0].ToPlayer;
                         VehicleTool.giveVehicle( target.UnturnedPlayer, vehAsset.id );
-                    
+
                         EssLang.GIVEN_VEHICLE.SendTo( src, vehAsset.Name, vehAsset.Id,target.DisplayName );
                     }
                     break;
-                
+
                 default:
                     return CommandResult.ShowUsage();
             }
