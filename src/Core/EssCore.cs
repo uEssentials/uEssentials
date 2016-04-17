@@ -299,7 +299,6 @@ namespace Essentials.Core
                 TextCommands.Load( textCommandsFile );
                 
                 TextCommands.Commands.ForEach( txtCommand => {
-                    System.Console.WriteLine("registered " + txtCommand.Name);
                     CommandManager.Register( new TextCommand(txtCommand) ); 
                 });
             }
