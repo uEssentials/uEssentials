@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
@@ -48,37 +49,40 @@ namespace Essentials.Common.Util
                 return GetItem( id );
             }
 
+            var lastAsset = null as ItemAsset;
             int lastPriority = 0;
-            ItemAsset lastAsset = null;
+            var allAssets = Assets.find( EAssetType.ITEM )
+                                  .Cast<ItemAsset>()
+                                  .Where( i => i.Name != null )
+                                  .OrderBy( i => i.Id );
 
-            Assets.find(EAssetType.ITEM)
-            .Cast<ItemAsset>()
-            .Where( i => i.Name != null)
-            .ForEach( i => {
+            foreach ( var asset in allAssets )
+            {
                 var itemPriority = 0;
-                var itemName = i.Name;
+                var itemName = asset.Name;
                 
                 if ( itemName.EqualsIgnoreCase( name ) )
                 {
-                    itemPriority = 3;
+                    lastAsset = asset;
+                    break;
                 }
-                else if ( itemName.StartsWith( name ) )
+
+                if ( itemName.StartsWith( name, true, CultureInfo.InvariantCulture ) )
                 {
                     itemPriority = 2;
                 }
-                else if ( (name.Contains( " " ) && 
-                          name.Split( ' ' ).All( p => i.Name.ContainsIgnoreCase( p ) ) &&
-                          name.Split( ' ' ).Length == itemName.Split( ' ').Length ) ||
-                          i.Name.ContainsIgnoreCase( name ) )
+                else if ( name.Contains( " " ) && 
+                          name.Split( ' ' ).All( p => itemName.ContainsIgnoreCase( p ) ) )
                 {
                     itemPriority = 1;
                 }
-                
+
                 if ( itemPriority > lastPriority )
                 {
-                    lastAsset = i;
+                    lastAsset = asset;
+                    lastPriority = itemPriority;
                 }
-            });
+            }
 
             return Optional<ItemAsset>.OfNullable( lastAsset );
         }
