@@ -117,6 +117,8 @@
     <Compile Include="src\Compatibility\Hooks\UconomyHook.cs" />
     <Compile Include="src\Compatibility\Hooks\LPXHook.cs" />
     <Compile Include="src\Configuration\CommandsConfig.cs" />
+    <Compile Include="src\Configuration\TextCommands.cs" />
+    <Compile Include="src\Core\Command\TextCommand.cs" />
     <Compile Include="src\Core\Command\MethodCommand.cs" />
     <Compile Include="src\Core\Command\CommandAdapter.cs" />
     <Compile Include="src\Core\Components\Player\FrozenPlayer.cs" />
