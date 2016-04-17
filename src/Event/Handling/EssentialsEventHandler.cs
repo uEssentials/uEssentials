@@ -31,7 +31,6 @@ using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Commands;
 using Essentials.Common;
-using Essentials.Compatibility.Hooks;
 using Essentials.Core;
 using Essentials.Core.Economy;
 using Essentials.I18n;
