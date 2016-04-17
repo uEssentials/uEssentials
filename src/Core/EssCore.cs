@@ -77,6 +77,7 @@ namespace Essentials.Core
         internal IUpdater                             Updater                     { get; set; }
 
         internal CommandsConfig                       CommandsConfig              { get; set; }
+        internal TextCommands                         TextCommands                { get; set; }
         internal EssConfig                            Config                      { get; set; }
         internal EssLogger                            Logger                      { get; set; }
 
@@ -288,6 +289,19 @@ namespace Essentials.Core
                         Logger.LogInfo( $"Disabled command: '{command.Name}'" );
                     }
                 } );
+            }
+            
+            if ( Config.EnableTextCommands )
+            {
+                var textCommandsFile = $"{Folder}textcommands.json";
+                
+                TextCommands = new TextCommands();
+                TextCommands.Load( textCommandsFile );
+                
+                TextCommands.Commands.ForEach( txtCommand => {
+                    System.Console.WriteLine("registered " + txtCommand.Name);
+                    CommandManager.Register( new TextCommand(txtCommand) ); 
+                });
             }
             
             #if !DEV

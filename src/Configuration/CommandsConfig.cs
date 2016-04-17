@@ -92,7 +92,9 @@ namespace Essentials.Configuration
             var commands = new Dictionary<string, Command>();
 
             Predicate<Type> defaultPredicate = type => {
-                return (typeof( ICommand ).IsAssignableFrom( type ) && !type.IsAbstract && type != typeof( MethodCommand ));
+                return ( typeof( ICommand ).IsAssignableFrom( type ) 
+                         && !type.IsAbstract && type != typeof( MethodCommand )
+                         && type != typeof( TextCommand ) );
             };
 
             /*

@@ -43,6 +43,7 @@ namespace Essentials.Configuration
         public bool             UnfreezeOnQuit;
         
         public bool             EnableUnknownMessage;
+        public bool             EnableTextCommands;
         
         public bool             AdminBypassWarpCooldown;
         public bool             PerWarpPermission;
@@ -90,8 +91,8 @@ namespace Essentials.Configuration
             WarpCooldown                = 5;
 
             EnableJoinLeaveMessage      = true;
-
             EnableUnknownMessage        = true;
+            EnableTextCommands          = true;
             
             EnablePollRunningMessage    = true;
             PollRunningMessageCooldown  = 20;

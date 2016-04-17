@@ -84,11 +84,11 @@ namespace Essentials.Core.Command
                 return;
             }
 
-            var configCommnads = EssCore.Instance.CommandsConfig.Commands;
+            var configCommands = EssCore.Instance.CommandsConfig.Commands;
 
-            if ( configCommnads.ContainsKey( command.Name ) )
+            if ( configCommands.ContainsKey( command.Name ) )
             {
-                command.Aliases = configCommnads[command.Name].Aliases ?? new string[0];
+                command.Aliases = configCommands[command.Name].Aliases ?? new string[0];
             }
 
             var adapter = new CommandAdapter( command );

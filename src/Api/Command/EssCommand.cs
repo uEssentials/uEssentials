@@ -33,7 +33,7 @@ namespace Essentials.Api.Command
 
         protected string        UsageMessage    { get; set; }
         protected EssLogger     Logger          { get; }
-        public string           Name            { get; set; }
+        public string           Name            { get; internal set; }
         public string           Permission      { get; set; }
         public string[]         Aliases         { get; set; }
         public string           Usage           { get; set; }
