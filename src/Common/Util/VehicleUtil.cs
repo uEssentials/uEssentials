@@ -66,6 +66,10 @@ namespace Essentials.Common.Util
 
                 if ( itemName.StartsWith( name, true, CultureInfo.InvariantCulture ) )
                 {
+                    itemPriority = 3;
+                }
+                else if ( itemName.ContainsIgnoreCase( name ) )
+                {
                     itemPriority = 2;
                 }
                 else if ( name.Contains( " " ) && 
