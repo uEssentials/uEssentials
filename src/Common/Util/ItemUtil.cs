@@ -30,6 +30,8 @@ namespace Essentials.Common.Util
 {
     public static class ItemUtil
     {
+        private static IOrderedEnumerable<ItemAsset> _cachedAssets;
+        
         public static Optional<ItemAsset> GetItem( ushort id )
         {
             return Optional<ItemAsset>.OfNullable( (ItemAsset) Assets.find( EAssetType.ITEM, id ) );
@@ -49,14 +51,18 @@ namespace Essentials.Common.Util
                 return GetItem( id );
             }
 
-            var lastAsset = null as ItemAsset;
-            int lastPriority = 0;
-            var allAssets = Assets.find( EAssetType.ITEM )
+            if ( _cachedAssets == null )
+            {
+                _cachedAssets = Assets.find( EAssetType.ITEM )
                                   .Cast<ItemAsset>()
                                   .Where( i => i.Name != null )
                                   .OrderBy( i => i.Id );
+            }
 
-            foreach ( var asset in allAssets )
+            var lastAsset = null as ItemAsset;
+            int lastPriority = 0;
+
+            foreach ( var asset in _cachedAssets )
             {
                 var itemPriority = 0;
                 var itemName = asset.Name;
@@ -87,7 +93,7 @@ namespace Essentials.Common.Util
                     lastPriority = itemPriority;
                 }
             }
-
+            
             return Optional<ItemAsset>.OfNullable( lastAsset );
         }
 
