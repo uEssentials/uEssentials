@@ -59,14 +59,8 @@ namespace Essentials.Core
     {
         internal const string                         ROCKET_VERSION              = "4.9.4.0";
         internal const string                         UNTURNED_VERSION            = "3.14.13.1";
-        internal const string                         PLUGIN_VERSION              =
+        internal const string                         PLUGIN_VERSION              = "1.2.0.0";
         
-        #if EXPERIMENTAL
-          "1.2.0.0-experimental";
-        #else
-          "1.2.0.0";
-        #endif
-
         internal static EssCore                       Instance                    { get; set; }
         
         internal Optional<IEconomyProvider>           EconomyProvider             { get; set; }
@@ -190,7 +184,13 @@ namespace Essentials.Core
 
             Logger.Log( "Loaded uEssentials", ConsoleColor.Green );
             Logger.Log( "Plugin version: ", ConsoleColor.Green, suffix: "" );
-            Logger.Log( PLUGIN_VERSION, ConsoleColor.White, "" );
+            
+            #if EXPERIMENTAL
+              Logger.Log( $"{PLUGIN_VERSION} (Experimental)", ConsoleColor.White, "" );
+            #else
+              Logger.Log( PLUGIN_VERSION, ConsoleColor.White, "" );
+            #endif
+            
             Logger.Log( "Recommended Rocket version: ", ConsoleColor.Green, suffix: "" );
             Logger.Log( ROCKET_VERSION, ConsoleColor.White, "" );
             Logger.Log( "Recommended Unturned version: ", ConsoleColor.Green, suffix: "" );
