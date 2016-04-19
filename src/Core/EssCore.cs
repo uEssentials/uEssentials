@@ -303,6 +303,11 @@ namespace Essentials.Core
                 });
             }
             
+            if ( !Config.EnableDeathMessages )
+            {
+                EventManager.Unregister<EssentialsEventHandler>( "DeathMessages" );
+            }
+            
             #if !DEV
               CheckUpdates();
               Analytics.Metrics.Init();
