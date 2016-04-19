@@ -83,7 +83,7 @@ namespace Essentials.Common.Util
                 {
                     itemPriority = 1;
                 }
-                
+
                 if ( itemPriority > lastPriority )
                 {
                     lastAsset = asset;

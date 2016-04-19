@@ -93,7 +93,7 @@ namespace Essentials.Common.Util
                     lastPriority = itemPriority;
                 }
             }
-            
+
             return Optional<ItemAsset>.OfNullable( lastAsset );
         }
 
