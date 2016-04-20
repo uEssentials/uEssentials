@@ -37,10 +37,10 @@ namespace Essentials.Misc
         {
             Enabled = false;
 
-            Commands = new List<AutoCommand>() {
+            Commands = new List<AutoCommand> {
                 new AutoCommand {
                     Timer = 120,
-                    Commands = new [] { "say Be sure to drink your Ovaltine!/0/255/255", "item * glue" }
+                    Commands = new [] { "say \"Be sure to drink your Ovaltine!\" 0 255 255", "item * glue" }
                 },
                 new AutoCommand {
                     Timer = 900,
@@ -53,12 +53,13 @@ namespace Essentials.Misc
         public void Start()
         {
             Commands.ForEach( cmd => {
-                var task = 
-                Tasks.New( t => 
-                    cmd.Commands.ForEach( UServer.DispatchCommand)
+                var task = Tasks.New( t => 
+                    cmd.Commands.ForEach( UServer.DispatchCommand )
                 ).Delay( cmd.Timer * 1000 );
+
                 if ( !cmd.RunOnce ) 
                     task.Interval( cmd.Timer * 1000 );
+
                 task.Go();
             } );
         }

@@ -47,6 +47,12 @@ namespace Essentials.I18n
             _message = message;
         }
 
+        private static Stream GetDefaultStream( string locale )
+        {
+            var path = $"Essentials.default.lang_{locale}.json";
+            return Assembly.GetExecutingAssembly().GetManifestResourceStream( path );
+        }
+
         public static void LoadDefault( string locale )
         {
             LoadDefault( locale, $"{EssProvider.TranslationFolder}lang_{locale}.json" );
@@ -60,8 +66,7 @@ namespace Essentials.I18n
                 File.Create( translationPath ).Close();
 
             var sw = new StreamWriter( translationPath );
-            var defaultLangStream = Assembly.GetExecutingAssembly()
-                .GetManifestResourceStream( $"Essentials.default.lang_{locale}.json" );
+            var defaultLangStream = GetDefaultStream( locale );
 
             using (var sr = new StreamReader( defaultLangStream, Encoding.UTF8, true ))
             {
@@ -76,13 +81,10 @@ namespace Essentials.I18n
 
         public static void Load()
         {
+            // Load defaults
             LANGS.ForEach( l => {
                 var lpath = $"{EssProvider.TranslationFolder}lang_{l}.json";
-
-                if ( !File.Exists( lpath ) )
-                {
-                    LoadDefault( l );
-                }
+                if ( !File.Exists( lpath ) ) LoadDefault( l );
             } );
 
             var locale = EssProvider.Config.Locale.ToLowerInvariant();
@@ -112,8 +114,9 @@ namespace Essentials.I18n
                 EssProvider.Logger.LogError( $"Invalid configuration ({translationPath})" );
                 EssProvider.Logger.LogError( ex.Message );
 
+                // Load default
                 json = JObject.Load( new JsonTextReader( new StreamReader( 
-                    Assembly.GetExecutingAssembly().GetManifestResourceStream( $"Essentials.default.lang_{locale}.json" ), 
+                    GetDefaultStream( locale ), 
                     Encoding.UTF8, true ) 
                 ) );
             }
@@ -123,14 +126,12 @@ namespace Essentials.I18n
                                     ?? string.Format( KEY_NOT_FOUND_MESSAGE, key ) );
             };
 
-            var fields = typeof (EssLang).GetProperties( BindingFlags.Public | 
-                                                         BindingFlags.Static );
+            var props = typeof (EssLang).GetProperties( BindingFlags.Public | 
+                                                        BindingFlags.Static );
 
-            foreach ( var field in fields )
+            foreach ( var field in props )
             {
-                var fromJson = loadFromJson( field.Name );
-
-                field.SetValue( null, fromJson, null );
+                field.SetValue( null, loadFromJson( field.Name ), null );
             }
         }
 
