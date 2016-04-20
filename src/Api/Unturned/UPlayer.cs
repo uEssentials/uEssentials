@@ -38,7 +38,6 @@ using UnityEngine;
 
 namespace Essentials.Api.Unturned
 {
-    //TODO improve factory methods.
     //TODO: Remove totally Rocketplayer dependency.
 
     public class UPlayer : ICommandSource
@@ -51,26 +50,25 @@ namespace Essentials.Api.Unturned
         public string               SteamName       => SteamPlayer.SteamPlayerID.SteamName;
         public float                Rotation        => RocketPlayer.Rotation;
         public bool                 IsOnGround      => UnturnedPlayer.movement.isGrounded;
-        public byte                 Stamina         => RocketPlayer.Stamina;
-        public bool                 IsDead          => RocketPlayer.Dead;
-        public bool                 IsPro           => RocketPlayer.IsPro;
+        public byte                 Stamina         => Life.Stamina;
+        public bool                 IsDead          => Life.Dead;
+        public bool                 IsPro           => SteamPlayer.IsPro;
         public bool                 IsInVehicle     => CurrentVehicle != null;
-        public bool                 IsFreezing      => RocketPlayer.Freezing;
         public uint                 Ping            => (uint) (RocketPlayer.Player.SteamChannel.SteamPlayer.ping*1000);
         public SteamChannel         Channel         => UnturnedPlayer.SteamChannel;
         public List<string>         Permissions     => R.Permissions.GetPermissions( RocketPlayer ).Select( p => p.Name ).ToList();
         public Player               UnturnedPlayer  => RocketPlayer.Player;
-        public SteamPlayer          SteamPlayer     => RocketPlayer.Player.SteamChannel.SteamPlayer;
+        public SteamPlayer          SteamPlayer     => Channel.SteamPlayer;
         public Vector3              Position        => RocketPlayer.Position;
         public PlayerInventory      Inventory       => RocketPlayer.Inventory;
         public InteractableVehicle  CurrentVehicle  => UnturnedPlayer.movement.getVehicle();
-        public CSteamID             CSteamId        => RocketPlayer.CSteamID;
+        public CSteamID             CSteamId        => SteamPlayer.SteamPlayerID.CSteamID;
         public PlayerMovement       Movement        => UnturnedPlayer.movement;
         public PlayerLook           Look            => UnturnedPlayer.look;
         public PlayerClothing       Clothing        => UnturnedPlayer.clothing;
         public PlayerLife           Life            => UnturnedPlayer.life;
         public PlayerEquipment      Equipment       => UnturnedPlayer.equipment;
-        public EPlayerStance        Stance          => RocketPlayer.Stance;
+        public EPlayerStance        Stance          => UnturnedPlayer.Stance.Stance;
 
         internal UPlayer( UnturnedPlayer player )
         {
