@@ -356,14 +356,11 @@ namespace Essentials.Commands
             var name        = WrapMessage( src, asset.name );
             var description = WrapMessage( src, asset.Description );
             var type        = WrapMessage( src, asset.ItemType.ToString() );
-            var isPro       = WrapMessage( src, asset.isPro.ToString() );
-
-
+            
             src.SendMessage( $"Name: {name}", color );
             src.SendMessage( $"Description: {description}", color );
             src.SendMessage( $"Id: {asset.id}", color );
             src.SendMessage( $"Type: {type}", color );
-            src.SendMessage( $"IsPro: {isPro}", color );
 
             return CommandResult.Success();
         }
