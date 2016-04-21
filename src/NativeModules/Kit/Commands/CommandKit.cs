@@ -25,7 +25,6 @@ using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common.Util;
-using Essentials.Compatibility.Hooks;
 using Essentials.I18n;
 using Essentials.Core;
 using Essentials.Event.Handling;
@@ -141,7 +140,7 @@ namespace Essentials.NativeModules.Kit.Commands
                 {
                     EssProvider.EconomyProvider.IfPresent( ec => {
                         ec.Withdraw( player, kitCost );
-                        CommandResult.Lang( EssLang.KIT_PAID, kitCost, ec.Currency );
+                        EssLang.KIT_PAID.SendTo( player, kitCost, ec.Currency );
                     });
                 } 
 
