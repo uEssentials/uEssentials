@@ -28,13 +28,15 @@ using Essentials.Common.Util;
 using Essentials.I18n;
 using Essentials.Core;
 using Essentials.Event.Handling;
+using Essentials.Api.Unturned;
+using Essentials.Common;
 
 namespace Essentials.NativeModules.Kit.Commands
 {
     [CommandInfo(
         Name = "kit",
         Description = "Get an kit",
-        Usage = "[kit_name] <player>"
+        Usage = "[kit_name] <player | *>"
     )]
     public class CommandKit : EssCommand
     {
@@ -148,27 +150,37 @@ namespace Essentials.NativeModules.Kit.Commands
             }
             else if ( args.Length == 2 )
             {
-                var kitName = args[0].ToString();
+                var kitName = args[0].ToLowerString;
 
                 if ( !src.HasPermission( $"essentials.kit.{kitName}.other" ) )
                 {
                     return CommandResult.Empty();
                 }
                 
-                if ( KitModule.Instance.KitManager.Contains( kitName ) )
+                if ( !KitModule.Instance.KitManager.Contains( kitName ) )
                 {
                     return CommandResult.Lang( EssLang.KIT_NOT_EXIST, kitName );
                 }
+                
+                var kit = KitModule.Instance.KitManager.GetByName( kitName );
 
-                var target = args[1].ToPlayer;
-
-                if ( target == null )
+                if ( args[1].Is( "*" ) ) 
                 {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[1] ) ;
+                    UServer.Players.ForEach( kit.GiveTo );
+                    EssLang.KIT_GIVEN_SENDER_ALL.SendTo( src, kitName );
                 }
-                 
-                KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( target );
-                EssLang.KIT_GIVEN_SENDER.SendTo( src, kitName, target );
+                else
+                {
+                    var target = args[1].ToPlayer;
+
+                    if ( target == null )
+                    {
+                        return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[1] ) ;
+                    }
+                    
+                    kit.GiveTo( target );
+                    EssLang.KIT_GIVEN_SENDER.SendTo( src, kitName, target );
+                }
             }
 
             return CommandResult.Success();

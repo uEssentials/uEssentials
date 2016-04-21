@@ -99,6 +99,7 @@
     "KIT_NOT_EXIST": "<yellow>Кит '{0}' не существует. Используйте /kits чтобы увидеть доступные киты.",
     "KIT_GIVEN_SENDER": "<cyan>Кит '{0}' выдан игроку {1}!",
     "KIT_GIVEN_RECEIVER": "<cyan>Вы получили кит '{0}'!",
+    "KIT_GIVEN_SENDER_ALL": "<cyan>Kit '{0}' given to everyone!",
     "KIT_LIST": "<blue>Доступные киты: {0}",
     "KIT_NO_PERMISSION": "<yellow>У Вас нет доступа к этому киту.",
     "KIT_NONE": "<yellow>Нет доступных китов.",

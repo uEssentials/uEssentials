@@ -99,6 +99,7 @@
     "INVALID_COORDS": "<red>Coordenadas inválidas ({0}, {1}, {2})",
     "KIT_NOT_EXIST": "<yellow>O kit '{0}' não existe, Use /kits para ver os kits disponíveis.",
     "KIT_GIVEN_SENDER": "Você deu o kit '{0}' para '{1}'",
+    "KIT_GIVEN_SENDER_ALL": "<cyan>Você deu o kit '{0}' para todos os jogadores!",
     "KIT_GIVEN_RECEIVER": "Você recebeu o kit '{0}'",
     "KIT_LIST": "Kits disponíveis: {0}",
     "KIT_NO_PERMISSION": "Você não tem acesso a este kit.",

@@ -77,6 +77,7 @@
     "KIT_COOLDOWN": "Tienes que esperar {0} para usar el kit.",
     "KIT_GIVEN_RECEIVER": "Has recibido el kit {0}",
     "KIT_GIVEN_SENDER": "kit '{0}' entregado a '{1}'",
+    "KIT_GIVEN_SENDER_ALL": "<cyan>Kit '{0}' given to everyone!",
     "KIT_LIST": "Kits disponibles: {0}",
     "KIT_NO_PERMISSION": "No tienes acceso a este kit.",
     "KIT_NONE": "<yellow>No hay kits disponibles.",

@@ -232,6 +232,7 @@ namespace Essentials.I18n
         public static EssLang INVALID_COORDS { get; private set; }
         public static EssLang KIT_NOT_EXIST { get; private set; }
         public static EssLang KIT_GIVEN_SENDER { get; private set; }
+        public static EssLang KIT_GIVEN_SENDER_ALL { get; private set; }
         public static EssLang KIT_GIVEN_RECEIVER { get; private set; }
         public static EssLang KIT_LIST { get; private set; }
         public static EssLang KIT_NO_PERMISSION { get; private set; }

@@ -98,6 +98,7 @@
     "INVALID_COORDS": "<yellow>Invalid coordinates ({0}, {1}, {2})!",
     "KIT_NOT_EXIST": "<yellow>Kit '{0}' does not exist.  Use /kits to see available kits.",
     "KIT_GIVEN_SENDER": "<cyan>Kit '{0}' given to {1}!",
+    "KIT_GIVEN_SENDER_ALL": "<cyan>Kit '{0}' given to everyone!",
     "KIT_GIVEN_RECEIVER": "<cyan>You received kit '{0}'!",
     "KIT_LIST": "<blue>Available kits: {0}",
     "KIT_NO_PERMISSION": "<yellow>You don't have access to this kit.",
