@@ -76,7 +76,6 @@ namespace Essentials.Commands
             {
                 case "take":
                     playerExp -= playerExp < amount ? playerExp : amount;
-
                     if ( target != src )
                         EssLang.EXPERIENCE_TAKE.SendTo( src, amount, target.DisplayName );
                     EssLang.EXPERIENCE_LOST.SendTo( target, amount );
@@ -84,7 +83,6 @@ namespace Essentials.Commands
 
                 case "give":
                     playerExp += amount;
-
                     if ( target != src )
                         EssLang.EXPERIENCE_GIVEN.SendTo( src, amount, target.DisplayName );
                     EssLang.EXPERIENCE_RECEIVED.SendTo( target, amount );
