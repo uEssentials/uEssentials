@@ -44,23 +44,23 @@ namespace Essentials.NativeModules.Kit.Commands
         internal static Dictionary<ulong, Dictionary<string, DateTime>> Cooldowns = new Dictionary<ulong, Dictionary<string, DateTime>>();
         internal static Dictionary<ulong, DateTime> GlobalCooldown = new Dictionary<ulong, DateTime>();
 
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.Length == 0 || ( parameters.Length == 1 && source.IsConsole ) )
+            if ( args.Length == 0 || ( args.Length == 1 && src.IsConsole ) )
             {
-                return CommandResult.InvalidArgs( source.IsAdmin ? UsageMessage : "Use /kit [kit_name]" );
+                return CommandResult.InvalidArgs( src.IsAdmin ? UsageMessage : "Use /kit [kit_name]" );
             }
 
-            if ( parameters.Length == 1 )
+            if ( args.Length == 1 )
             {
-                var player = source.ToPlayer();
+                var player = src.ToPlayer();
 
-                if ( !KitModule.Instance.KitManager.Contains( parameters[0].ToString() ) )
+                if ( !KitModule.Instance.KitManager.Contains( args[0].ToString() ) )
                 {
-                    return CommandResult.Lang( EssLang.KIT_NOT_EXIST, parameters[0] );
+                    return CommandResult.Lang( EssLang.KIT_NOT_EXIST, args[0] );
                 }
                 
-                var kitName = parameters[0].ToLowerString;
+                var kitName = args[0].ToLowerString;
                 var requestedKit = KitModule.Instance.KitManager.GetByName(kitName);
 
                 if ( !requestedKit.CanUse( player ) )
@@ -81,7 +81,7 @@ namespace Essentials.NativeModules.Kit.Commands
                     }
                 } 
 
-                if ( !source.HasPermission("essentials.bypass.kitcooldown") )
+                if ( !src.HasPermission("essentials.bypass.kitcooldown") )
                 {
                     var globalCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
                     
@@ -146,31 +146,29 @@ namespace Essentials.NativeModules.Kit.Commands
 
                 KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( player );
             }
-            else if ( parameters.Length == 2 )
+            else if ( args.Length == 2 )
             {
-                var kitName = parameters[0].ToString();
+                var kitName = args[0].ToString();
 
-                if ( !source.HasPermission( $"essentials.kit.{kitName}.other" ) )
+                if ( !src.HasPermission( $"essentials.kit.{kitName}.other" ) )
                 {
                     return CommandResult.Empty();
                 }
-
-                var target = parameters[1].ToPlayer;
-
-                if ( target == null )
-                {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, parameters[1] ) ;
-                }
-                 
+                
                 if ( KitModule.Instance.KitManager.Contains( kitName ) )
-                {
-                    KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( target );
-                    EssLang.KIT_GIVEN_SENDER.SendTo( source, kitName, target );
-                }
-                else
                 {
                     return CommandResult.Lang( EssLang.KIT_NOT_EXIST, kitName );
                 }
+
+                var target = args[1].ToPlayer;
+
+                if ( target == null )
+                {
+                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[1] ) ;
+                }
+                 
+                KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( target );
+                EssLang.KIT_GIVEN_SENDER.SendTo( src, kitName, target );
             }
 
             return CommandResult.Success();
