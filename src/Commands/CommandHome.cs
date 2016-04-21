@@ -52,13 +52,14 @@ namespace Essentials.Commands
             if ( Cooldown.Has( playerId ) )
             {
                 return CommandResult.Lang( EssLang.USE_COOLDOWN, 
-                                           TimeUtil.FormatSeconds( (uint) Cooldown.GetRemaining( playerId ) ) );
+                    TimeUtil.FormatSeconds( (uint) Cooldown.GetRemaining( playerId ) ) );
             }
 
             Vector3 position;
             byte angle;
 
-            if ( player.RocketPlayer.Stance == EPlayerStance.DRIVING || player.RocketPlayer.Stance == EPlayerStance.SITTING )
+            if ( player.RocketPlayer.Stance == EPlayerStance.DRIVING || 
+                 player.RocketPlayer.Stance == EPlayerStance.SITTING )
             {
                 return CommandResult.Lang( EssLang.CANNOT_TELEPORT_DRIVING );
             }

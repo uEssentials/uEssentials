@@ -55,25 +55,25 @@ namespace Essentials.Commands
             }
         };
 
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.IsEmpty )
+            if ( args.IsEmpty )
             {
                 return CommandResult.ShowUsage();
             }
             else
             {
-                switch (parameters[0].ToString().ToLower())
+                switch (args[0].ToString().ToLower())
                 {
                     case "start":
-                        if ( source.HasPermission( "essentials.command.poll.start" ) )
+                        if ( src.HasPermission( "essentials.command.poll.start" ) )
                         {
-                            if ( parameters.Length < 4 )
+                            if ( args.Length < 4 )
                             {
                                 return CommandResult.InvalidArgs( "/poll start [name] [duration] [description]" );
                             }
 
-                            var pollName = parameters[1].ToString();
+                            var pollName = args[1].ToString();
 
                             lock ( Polls )
                             {
@@ -83,21 +83,21 @@ namespace Essentials.Commands
                                 }
                             }
 
-                            var pollDescription = parameters.Join( 3 );
+                            var pollDescription = args.Join( 3 );
 
-                            if ( parameters[2].IsInt )
+                            if ( args[2].IsInt )
                             {
                                 var poll = new Poll( 
                                     pollName, 
                                     pollDescription,
-                                    parameters[2].ToInt 
+                                    args[2].ToInt 
                                 );
 
                                 poll.Start();
                             }
                             else
                             {
-                                return CommandResult.Lang( EssLang.INVALID_NUMBER, parameters[2] );
+                                return CommandResult.Lang( EssLang.INVALID_NUMBER, args[2] );
                             }
                         }
                         else
@@ -107,16 +107,16 @@ namespace Essentials.Commands
                         break;
 
                     case "stop":
-                        if ( source.HasPermission( "essentials.command.poll.stop" ) )
+                        if ( src.HasPermission( "essentials.command.poll.stop" ) )
                         {
-                            if ( parameters.Length < 2 )
+                            if ( args.Length < 2 )
                             {
                                 return CommandResult.InvalidArgs( "/poll stop [name]" );
                             }
 
-                            var pollName = parameters[1].ToString();
+                            var pollName = args[1].ToString();
 
-                            if ( !PollExists( pollName, source ) )
+                            if ( !PollExists( pollName, src ) )
                             {
                                 return CommandResult.Empty();
                             }
@@ -133,7 +133,7 @@ namespace Essentials.Commands
                         break;
 
                     case "list":
-                        if ( source.HasPermission( "essentials.command.poll.info" ) )
+                        if ( src.HasPermission( "essentials.command.poll.info" ) )
                         {
                             lock ( Polls )
                             {
@@ -144,12 +144,12 @@ namespace Essentials.Commands
 
                                 lock ( Polls )
                                 {
-                                    EssLang.POLL_LIST.SendTo( source );
+                                    EssLang.POLL_LIST.SendTo( src );
 
                                     foreach ( var poll in Polls.Values )
                                     {
                                         EssLang.POLL_LIST_ENTRY.SendTo( 
-                                            source,
+                                            src,
                                             poll.Name,
                                             poll.Description, 
                                             poll.YesVotes,
@@ -166,7 +166,7 @@ namespace Essentials.Commands
                         break;
 
                     case "info":
-                        if ( source.HasPermission( "essentials.command.poll.info" ) )
+                        if ( src.HasPermission( "essentials.command.poll.info" ) )
                         {
                             lock ( Polls )
                             {
@@ -175,24 +175,24 @@ namespace Essentials.Commands
                                     return CommandResult.Lang( EssLang.POLL_NONE );
                                 }
 
-                                if ( parameters.Length < 2 )
+                                if ( args.Length < 2 )
                                 {
                                     return CommandResult.InvalidArgs( "Use /poll info [poll_name]" );
                                 }
 
-                                var pollName = parameters[1].ToString();
+                                var pollName = args[1].ToString();
 
-                                if ( !PollExists( pollName, source ) )
+                                if ( !PollExists( pollName, src ) )
                                 {
                                     return CommandResult.Empty();
                                 }
 
                                 var poll = Polls[pollName];
 
-                                EssLang.POLL_INFO.SendTo( source, pollName );
+                                EssLang.POLL_INFO.SendTo( src, pollName );
 
                                 EssLang.POLL_LIST_ENTRY.SendTo( 
-                                    source, 
+                                    src, 
                                     pollName, 
                                     poll.Description, 
                                     poll.YesVotes, 

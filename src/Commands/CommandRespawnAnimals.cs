@@ -34,17 +34,16 @@ namespace Essentials.Commands
     )]
     public class CommandRespawnAnimal : EssCommand
     {
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             var respawnedCount = 0;
 
-            UWorld.Animals.ForEach( animal =>
-            {
+            UWorld.Animals.ForEach( animal => {
                 AnimalManager.sendAnimalAlive( animal, animal.transform.position, 0 );
                 respawnedCount++;
             });
 
-            EssLang.RESPAWNED_ANIMALS.SendTo( source, respawnedCount );
+            EssLang.RESPAWNED_ANIMALS.SendTo( src, respawnedCount );
 
             return CommandResult.Success();
         }

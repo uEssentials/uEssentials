@@ -36,31 +36,31 @@ namespace Essentials.Commands
     )]
     public class CommandSpawnItem : EssCommand
     {
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.IsEmpty || (parameters.Length < 5 && source.IsConsole) )
+            if ( args.IsEmpty || (args.Length < 5 && src.IsConsole) )
             {
                 return CommandResult.ShowUsage();
             }
 
-            var rawId = parameters[0].ToString();
-            var rawAmount = parameters.Length >= 2 ? parameters[1].ToString() : "1";
+            var rawId = args[0].ToString();
+            var rawAmount = args.Length >= 2 ? args[1].ToString() : "1";
             Vector3 pos;
 
-            if ( parameters.Length == 5 )
+            if ( args.Length == 5 )
             {
-                var argPos = parameters.GetVector3( 2 );
+                var argPos = args.GetVector3( 2 );
 
                 if ( !argPos.HasValue )
                 {
-                    return CommandResult.Lang( EssLang.INVALID_COORDS, parameters[2], parameters[3], parameters[4] );
+                    return CommandResult.Lang( EssLang.INVALID_COORDS, args[2], args[3], args[4] );
                 }
 
                 pos = argPos.Value;
             }
             else
             {
-                pos = source.ToPlayer().Position;
+                pos = src.ToPlayer().Position;
             }
 
             ushort amount;
@@ -89,10 +89,10 @@ namespace Essentials.Commands
                 ItemManager.dropItem( item, pos, true, true, true );
             }
 
-            if ( parameters.Length == 5 )
-                EssLang.SPAWNED_ITEM_AT.SendTo( source, amount, itemAsset.Value.Name, pos.x, pos.y, pos.z );
+            if ( args.Length == 5 )
+                EssLang.SPAWNED_ITEM_AT.SendTo( src, amount, itemAsset.Value.Name, pos.x, pos.y, pos.z );
             else
-                EssLang.SPAWNED_ITEM.SendTo( source, amount, itemAsset.Value.Name );
+                EssLang.SPAWNED_ITEM.SendTo( src, amount, itemAsset.Value.Name );
 
             return CommandResult.Success();
         }

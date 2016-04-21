@@ -38,7 +38,7 @@ namespace Essentials.Commands
     )]
     public class CommandKillZombies : EssCommand
     {
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             var killedCount = 0;
 
@@ -47,7 +47,7 @@ namespace Essentials.Commands
                 killedCount++;
             });
 
-            EssLang.KILLED_ZOMBIES.SendTo( source, killedCount );
+            EssLang.KILLED_ZOMBIES.SendTo( src, killedCount );
 
             return CommandResult.Success();
         }

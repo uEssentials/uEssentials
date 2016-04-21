@@ -52,11 +52,11 @@ namespace Essentials.Commands
                 item.updateQuality( index, 100 );
 
                 player.UnturnedPlayer.inventory.channel.send("tellUpdateQuality", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[]
-				{
-    				item.page,
-    			 	player.UnturnedPlayer.inventory.getIndex(item.page, itemJar.PositionX, itemJar.PositionY),
-    				100
-				});
+                {
+                    item.page,
+                    player.UnturnedPlayer.inventory.getIndex(item.page, itemJar.PositionX, itemJar.PositionY),
+                    100
+                });
 
                 var optAttach = ItemUtil.GetWeaponAttachment( itemJar.item, ItemUtil.AttachmentType.BARREL );
 
@@ -69,20 +69,20 @@ namespace Essentials.Commands
             });
         };
 
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            var player = source.ToPlayer();
+            var player = src.ToPlayer();
 
-            if ( parameters.IsEmpty )
+            if ( args.IsEmpty )
             {
                 return CommandResult.ShowUsage();
             }
-            if ( parameters[0].Is( "all" ) )
+            if ( args[0].Is( "all" ) )
             {
                 player.RocketPlayer.Inventory.Items.ToList().ForEach( item => Repair( player, item ) );
-                EssLang.ALL_REPAIRED.SendTo( source );
+                EssLang.ALL_REPAIRED.SendTo( src );
             }
-            else if ( parameters[0].Is( "hand" ) )
+            else if ( args[0].Is( "hand" ) )
             {
                 Repair( player, player.Inventory.Items[0] );
                 Repair( player, player.Inventory.Items[1] );
@@ -92,7 +92,7 @@ namespace Essentials.Commands
                     player.Equipment.sendUpdateState();
                 }
 
-                EssLang.HAND_REPAIRED.SendTo( source );
+                EssLang.HAND_REPAIRED.SendTo( src );
             }
 
             return CommandResult.Success();

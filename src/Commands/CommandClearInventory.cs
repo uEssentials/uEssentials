@@ -34,7 +34,6 @@ namespace Essentials.Commands
     )]
     public class CommandClearInventory : EssCommand
     {
-        // https://github.com/Zamirathe/ZaupClearInventoryLib
         public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             if ( args.IsEmpty )

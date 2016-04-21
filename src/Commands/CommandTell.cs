@@ -41,50 +41,50 @@ namespace Essentials.Commands
     {
         internal static readonly Dictionary<string, string> Conversations = new Dictionary<string, string>();
 
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.Length < 2 )
+            if ( args.Length < 2 )
             {
                 return CommandResult.ShowUsage();
             }
 
-            var target = parameters[0].ToPlayer;
+            var target = args[0].ToPlayer;
 
             if ( target == null )
             {
-                return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, parameters[0] );
+                return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
             }
 
             var message = string.Format(
                 EssProvider.Config.PrivateMessageFormat,
-                source.DisplayName,
-                parameters.Join( 1 )
+                src.DisplayName,
+                args.Join( 1 )
             );
 
             var message2 = string.Format(
                 EssProvider.Config.PrivateMessageFormat2,
                 target.DisplayName,
-                parameters.Join( 1 )
+                args.Join( 1 )
             );
 
             target.SendMessage( message );
-            source.SendMessage( message2 );
+            src.SendMessage( message2 );
 
             Spies.ForEach( p => {
                 UPlayer.From( p ).SendMessage( 
-                    $"Spy: ({source.DisplayName} -> {target.CharacterName}): {parameters.Join( 1 )}", Color.gray );
+                    $"Spy: ({src.DisplayName} -> {target.CharacterName}): {args.Join( 1 )}", Color.gray );
             } );
 
-            if ( Conversations.ContainsKey( source.DisplayName ) )
+            if ( Conversations.ContainsKey( src.DisplayName ) )
             {
-                if ( !Conversations[ source.DisplayName ].Equals( target.DisplayName ) )
+                if ( !Conversations[ src.DisplayName ].Equals( target.DisplayName ) )
                 {
-                    Conversations[ source.DisplayName ] = target.CharacterName;
+                    Conversations[ src.DisplayName ] = target.CharacterName;
                 }
             }
             else
             {
-                Conversations.Add( source.DisplayName, target.DisplayName );
+                Conversations.Add( src.DisplayName, target.DisplayName );
             }
 
             return CommandResult.Success();

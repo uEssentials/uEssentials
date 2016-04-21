@@ -44,54 +44,54 @@ namespace Essentials.Commands
             );
         };
 
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             var players = UServer.Players.ToList();
 
-            if ( players.Count == ( source.IsConsole ? 0 : 1) )
+            if ( players.Count == ( src.IsConsole ? 0 : 1) )
             {
                 return CommandResult.Lang( EssLang.NO_PLAYERS_FOR_TELEPORT );
             }
-            switch ( parameters.Length )
+            switch ( args.Length )
             {
                 case 0:
-                    if ( source.IsConsole )
+                    if ( src.IsConsole )
                     {
                         return CommandResult.ShowUsage();
                     }
 
-                    TeleportAll( source.ToPlayer().RocketPlayer.Position, players );
-                    EssLang.TELEPORTED_ALL_YOU.SendTo( source );
+                    TeleportAll( src.ToPlayer().RocketPlayer.Position, players );
+                    EssLang.TELEPORTED_ALL_YOU.SendTo( src );
                     break;
 
                 case 1:
-                    var found = UPlayer.TryGet( parameters[0], player => {
+                    var found = UPlayer.TryGet( args[0], player => {
                         TeleportAll( player.Position, players );
-                        EssLang.TELEPORTED_ALL_PLAYER.SendTo( source, player.DisplayName );
+                        EssLang.TELEPORTED_ALL_PLAYER.SendTo( src, player.DisplayName );
                     } );
 
                     if ( !found )
                     {
-                        return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, parameters[0] );
+                        return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
                     }
                     break;
 
                 case 3:
                     try
                     {
-                        var x = (float) parameters[0].ToDouble;
-                        var y = (float) parameters[1].ToDouble;
-                        var z = (float) parameters[2].ToDouble;
+                        var x = (float) args[0].ToDouble;
+                        var y = (float) args[1].ToDouble;
+                        var z = (float) args[2].ToDouble;
 
                         var pos = new Vector3( x, y, z );
 
                         TeleportAll( pos, players );
-                        EssLang.TELEPORTED_ALL_COORDS.SendTo( source, x, y, z );
+                        EssLang.TELEPORTED_ALL_COORDS.SendTo( src, x, y, z );
                     }
                     catch ( FormatException )
                     {
                         return CommandResult.Lang( EssLang.INVALID_COORDS,
-                            source, parameters[0], parameters[1], parameters[2] );
+                            src, args[0], args[1], args[2] );
                     }
                     break;
 

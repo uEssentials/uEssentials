@@ -35,31 +35,31 @@ namespace Essentials.Commands
     )]
     public class CommandUnfreeze : EssCommand
     {
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.Length == 0 )
+            if ( args.Length == 0 )
             {
                 return CommandResult.ShowUsage();
             }
 
-            if ( parameters[0].Is( "*" ) )
+            if ( args[0].Is( "*" ) )
             {
                 foreach ( var player in UServer.Players.Where( player => player.HasComponent<FrozenPlayer>() ) )
                 {
                     player.RemoveComponent<FrozenPlayer>();
 
-                    EssLang.UNFROZEN_PLAYER.SendTo( player, source.DisplayName );
+                    EssLang.UNFROZEN_PLAYER.SendTo( player, src.DisplayName );
                 }
 
-                EssLang.UNFROZEN_ALL.SendTo( source );
+                EssLang.UNFROZEN_ALL.SendTo( src );
             }
             else
             {
-                var target = UPlayer.From( parameters[0].ToString() );
+                var target = UPlayer.From( args[0].ToString() );
 
                 if ( target == null )
                 {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, parameters[0] );
+                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
                 }
 
                 if ( !target.HasComponent<FrozenPlayer>() )
@@ -70,8 +70,8 @@ namespace Essentials.Commands
                 {
                     target.RemoveComponent<FrozenPlayer>();
 
-                    EssLang.UNFROZEN_SENDER.SendTo( source, target.DisplayName );
-                    EssLang.UNFROZEN_PLAYER.SendTo( target, source.DisplayName );
+                    EssLang.UNFROZEN_SENDER.SendTo( src, target.DisplayName );
+                    EssLang.UNFROZEN_PLAYER.SendTo( target, src.DisplayName );
                 }
             }
 

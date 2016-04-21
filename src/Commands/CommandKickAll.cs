@@ -34,7 +34,7 @@ namespace Essentials.Commands
     )]
     public class CommandKickAll : EssCommand
     {
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             var players = new List<UPlayer>( UServer.Players );
 
@@ -47,12 +47,12 @@ namespace Essentials.Commands
 
             players.ForEach( player =>
             {
-                player.Kick( parameters.IsEmpty
+                player.Kick( args.IsEmpty
                     ? noReasonMessage
-                    : parameters.Join( 0 ) );
+                    : args.Join( 0 ) );
             } );
 
-            EssLang.KICKED_ALL.SendTo( source, players.Count );
+            EssLang.KICKED_ALL.SendTo( src, players.Count );
 
             return CommandResult.Success();
         }

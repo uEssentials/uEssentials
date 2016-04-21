@@ -50,16 +50,16 @@ namespace Essentials.Commands
             }
         };
 
-        public override CommandResult OnExecute(ICommandSource source, ICommandArgs parameters)
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.IsEmpty || parameters.Length > 1 )
+            if ( args.IsEmpty || args.Length > 1 )
             {
                 return CommandResult.ShowUsage();
             }
 
             try
             {
-                var steamId = new CSteamID( ulong.Parse( parameters[0].ToString() ) );
+                var steamId = new CSteamID( ulong.Parse( args[0].ToString() ) );
 
                 if ( !steamId.IsValid() )
                 {
@@ -67,21 +67,21 @@ namespace Essentials.Commands
                 }
 
                 ResetPlayer( steamId.m_SteamID );
-                EssLang.PLAYER_RESET.SendTo( source );
+                EssLang.PLAYER_RESET.SendTo( src );
             }
             catch (FormatException)
             {
-                var target = parameters[0].ToPlayer;
+                var target = args[0].ToPlayer;
 
                 if ( target == null )
                 {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, parameters[0] );
+                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
                 }
 
                 target.Kick( EssLang.PLAYER_RESET_KICK.GetMessage() );
                 ResetPlayer( target.CSteamId.m_SteamID );
 
-                EssLang.PLAYER_RESET.SendTo( source );
+                EssLang.PLAYER_RESET.SendTo( src );
             }
 
             return CommandResult.Success();

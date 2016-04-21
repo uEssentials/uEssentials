@@ -23,6 +23,7 @@ using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
+using Essentials.Common;
 using Essentials.Core.Components.Player;
 using Essentials.I18n;
 
@@ -35,43 +36,42 @@ namespace Essentials.Commands
     )]
     public class CommandFreeze : EssCommand
     {
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
+        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if ( parameters.Length == 0 )
+            if ( args.Length == 0 )
             {
                 return CommandResult.ShowUsage();
             }
-            if ( parameters[0].Is( "*" ) )
+            if ( args[0].Is( "*" ) )
             {
-                foreach ( var player in UServer.Players.Where( player => !player.HasComponent<FrozenPlayer>() ) )
-                {
-                    player.AddComponent<FrozenPlayer>();
+                UServer.Players
+                    .Where( player => !player.HasComponent<FrozenPlayer>() )
+                    .ForEach( player => {
+                        player.AddComponent<FrozenPlayer>();
+                        EssLang.FROZEN_PLAYER.SendTo( player, src.DisplayName );    
+                    });
 
-                    EssLang.FROZEN_PLAYER.SendTo( player, source.DisplayName );
-                }
-
-                EssLang.FROZEN_ALL.SendTo( source );
+                EssLang.FROZEN_ALL.SendTo( src );
             }
             else
             {
-                var found = UPlayer.TryGet( parameters[0], player => 
-                {
+                var found = UPlayer.TryGet( args[0], player => {
                     if ( player.HasComponent<FrozenPlayer>() )
                     {
-                        EssLang.ALREADY_FROZEN.SendTo( source, player.DisplayName );
+                        EssLang.ALREADY_FROZEN.SendTo( src, player.DisplayName );
                     }
                     else
                     {
                         player.AddComponent<FrozenPlayer>();
 
-                        EssLang.FROZEN_SENDER.SendTo( source, player.DisplayName );
-                        EssLang.FROZEN_PLAYER.SendTo( player, source.DisplayName );
+                        EssLang.FROZEN_SENDER.SendTo( src, player.DisplayName );
+                        EssLang.FROZEN_PLAYER.SendTo( player, src.DisplayName );
                     }
                 } );
 
                 if ( !found )
                 {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, parameters[0] );
+                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
                 }
             }
 
