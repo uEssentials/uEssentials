@@ -51,9 +51,7 @@ namespace Essentials.Commands
 
                 if ( currentVeh != null )
                 {
-                    VehicleManager.Instance.channel.send( "tellVehicleFuel", ESteamCall.ALL, 
-                       ESteamPacket.UPDATE_UNRELIABLE_BUFFER, currentVeh.instanceID, currentVeh.asset.fuel );
-
+                    RefuelVehicle( currentVeh );
                     EssLang.VEHICLE_REFUELED.SendTo( src );
                 }
                 else
@@ -73,15 +71,19 @@ namespace Essentials.Commands
                     UWorld.Vehicles
                         .Where( veh => !veh.isExploded && !veh.isUnderwater)
                         .ToList()
-                        .ForEach( vehicle => {
-                            VehicleManager.sendVehicleFuel( vehicle, vehicle.asset.fuel );
-                        });
+                        .ForEach( RefuelVehicle );
 
                     EssLang.VEHICLE_REFUELED_ALL.SendTo( src );
                 }
             }
 
             return CommandResult.Success();
+        }
+
+        private void RefuelVehicle( InteractableVehicle veh ) 
+        {
+            VehicleManager.Instance.channel.send( "tellVehicleFuel", ESteamCall.ALL, 
+                ESteamPacket.UPDATE_UNRELIABLE_BUFFER, veh.instanceID, veh.asset.fuel );
         }
     }
 }
