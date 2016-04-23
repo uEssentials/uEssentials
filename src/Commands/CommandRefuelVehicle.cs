@@ -51,9 +51,8 @@ namespace Essentials.Commands
 
                 if ( currentVeh != null )
                 {
-                 //   VehicleManager.sendVehicleFuel( currentVeh, currentVeh.asset.fuel );
-
-VehicleManager.Instance.channel.send("tellVehicleFuel", ESteamCall.ALL, ESteamPacket.UPDATE_UNRELIABLE_BUFFER, new object[] { currentVeh.instanceID, currentVeh.asset.fuel });
+                    VehicleManager.Instance.channel.send( "tellVehicleFuel", ESteamCall.ALL, 
+                       ESteamPacket.UPDATE_UNRELIABLE_BUFFER, currentVeh.instanceID, currentVeh.asset.fuel );
 
                     EssLang.VEHICLE_REFUELED.SendTo( src );
                 }
