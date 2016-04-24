@@ -947,9 +947,9 @@ namespace Essentials.Commands
                 return "null";
 
             if ( str.Length < 90 || src.IsConsole )
-		        return str;
-		
-	        return str.Substring(0, 90 - 3) + "...";
+                return str;
+
+            return str.Substring(0, 90 - 3) + "...";
         }
 
         private static void GiveItem( ICommandSource src, UPlayer target, ICommandArgument itemArg, 
