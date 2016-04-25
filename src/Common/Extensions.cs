@@ -22,7 +22,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Threading;
 using Essentials.Common.Util;
 
 namespace Essentials.Common
@@ -46,7 +45,7 @@ namespace Essentials.Common
 
         public static string Capitalize( this string str )
         {
-            return Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase( str.ToLowerInvariant() );
+            return CultureInfo.InvariantCulture.TextInfo.ToTitleCase( str.ToLowerInvariant() );
         }
         
         public static string Format( this string str, params object[] args ) 
