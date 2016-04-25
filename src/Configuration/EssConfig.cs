@@ -34,29 +34,27 @@ namespace Essentials.Configuration
 {
     public class EssConfig : JsonConfig
     {
-        public string           Locale;
+        public string                   Locale;
+        public string                   PrivateMessageFormat;
+        public string                   PrivateMessageFormat2;
         
-        public string           PrivateMessageFormat;
-        public string           PrivateMessageFormat2;
+        public bool                     UnfreezeOnDeath;
+        public bool                     UnfreezeOnQuit;
         
-        public bool             UnfreezeOnDeath;
-        public bool             UnfreezeOnQuit;
+        public bool                     EnableUnknownMessage;
+        public bool                     EnableTextCommands;
+        public bool                     EnableDeathMessages;
+        public bool                     EnableJoinLeaveMessage;
         
-        public bool             EnableUnknownMessage;
-        public bool             EnableTextCommands;
-        public bool             EnableDeathMessages;
+        public bool                     AdminBypassWarpCooldown;
+        public bool                     PerWarpPermission;
+        public int                      WarpCooldown;
         
-        public bool             AdminBypassWarpCooldown;
-        public bool             PerWarpPermission;
-        public int              WarpCooldown;
+        public bool                     EnablePollRunningMessage;
+        public int                      PollRunningMessageCooldown;
+        public int                      ServerFrameRate;
 
-        public bool             EnableJoinLeaveMessage;
-        
-        public bool             EnablePollRunningMessage;
-        public int              PollRunningMessageCooldown;
-        public int              ServerFrameRate;
-
-        public ushort           ItemSpawnLimit;
+        public ushort                   ItemSpawnLimit;
 
         public AntiSpamSettings         AntiSpam;
         public UpdaterSettings          Updater;
@@ -67,13 +65,13 @@ namespace Essentials.Configuration
         public TpaSettings              Tpa;
         public EconomySettings          Economy;
 
-        public AutoAnnouncer    AutoAnnouncer;
-        public AutoCommands     AutoCommands;
+        public AutoAnnouncer            AutoAnnouncer;
+        public AutoCommands             AutoCommands;
         
-        public List<ushort>     GiveItemBlacklist;
-        public List<ushort>     VehicleBlacklist;
-        public List<string>     EnabledSystems; 
-        public List<string>     DisabledCommands; 
+        public List<ushort>             GiveItemBlacklist;
+        public List<ushort>             VehicleBlacklist;
+        public List<string>             EnabledSystems; 
+        public List<string>             DisabledCommands; 
 
         internal EssConfig() { }
 
@@ -126,7 +124,8 @@ namespace Essentials.Configuration
 
             Tpa                          = new TpaSettings { ExpireDelay = 10, TeleportDelay = 5 };
 
-            Economy                     = new EconomySettings { UseXp =  false, UconomyCurrency = "$", XpCurrency = "Xp" };
+            Economy                     = new EconomySettings { UseXp =  false, UconomyCurrency = "$", 
+                                                                XpCurrency = "Xp" };
 
             GiveItemBlacklist           = new List<ushort>();
             VehicleBlacklist            = new List<ushort>();
@@ -196,67 +195,67 @@ namespace Essentials.Configuration
                 EssProvider.Logger.LogError( ex.Message );
             }
         }
-    }
+        
+        [JsonObject]
+        public struct AntiSpamSettings
+        {
+            public bool Enabled;
+            public int Interval;
+        }
 
-    [JsonObject]
-    public struct AntiSpamSettings
-    {
-        public bool Enabled;
-        public int Interval;
-    }
+        [JsonObject]
+        public struct UpdaterSettings
+        {
+            public bool CheckUpdates;
+            public bool DownloadLatest;
+            public bool AlertOnJoin;
+        }
 
-    [JsonObject]
-    public struct UpdaterSettings
-    {
-        public bool CheckUpdates;
-        public bool DownloadLatest;
-        public bool AlertOnJoin;
-    }
+        [JsonObject]
+        public struct HomeCommandSettings
+        {
+            public int Cooldown;
+            public int Delay;
+            public bool CancelWhenMove;
+        }
 
-    [JsonObject]
-    public struct HomeCommandSettings
-    {
-        public int Cooldown;
-        public int Delay;
-        public bool CancelWhenMove;
-    }
+        [JsonObject]
+        public struct WebKitsSettings
+        {
+            public string Url;
+            public bool Enabled;
+        }
+        
+        [JsonObject]
+        public struct WebConfigSettings
+        {
+            public string Url;
+            public bool Enabled;
+        }
 
-    [JsonObject]
-    public struct WebKitsSettings
-    {
-        public string Url;
-        public bool Enabled;
-    }
-    
-    [JsonObject]
-    public struct WebConfigSettings
-    {
-        public string Url;
-        public bool Enabled;
-    }
+        [JsonObject]
+        public struct KitSettings
+        {
+            public bool ShowCost;
+            public bool ShowCostIfZero;
+            public string CostFormat;
+            public uint GlobalCooldown;
+            public bool ResetGlobalCooldownWhenDie;
+        }
+        
+        [JsonObject]
+        public struct TpaSettings
+        {
+            public int ExpireDelay;
+            public int TeleportDelay;
+        }
 
-    [JsonObject]
-    public struct KitSettings
-    {
-        public bool ShowCost;
-        public bool ShowCostIfZero;
-        public string CostFormat;
-        public uint GlobalCooldown;
-        public bool ResetGlobalCooldownWhenDie;
-    }
-    
-    [JsonObject]
-    public struct TpaSettings
-    {
-        public int ExpireDelay;
-        public int TeleportDelay;
-    }
-
-    [JsonObject]
-    public struct EconomySettings
-    {
-        public bool UseXp;
-        public string XpCurrency;
-        public string UconomyCurrency;
+        [JsonObject]
+        public struct EconomySettings
+        {
+            public bool UseXp;
+            public string XpCurrency;
+            public string UconomyCurrency;
+        }
     }
 }
