@@ -904,7 +904,7 @@ namespace Essentials.Commands
 
 
         [CommandInfo(
-            Name = "PVP",
+            Name = "pvp",
             Description = "Enable or disable pvp",
             Usage = "[on|off]"
         )]
