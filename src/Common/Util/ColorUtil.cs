@@ -48,7 +48,7 @@ namespace Essentials.Common.Util
             return ConsoleColor.White;
         }
 
-        public static Color GetMessageColor( ref string message )
+        public static Color GetColorFromString( ref string message )
         {
             Color? color = null;
 
@@ -75,7 +75,9 @@ namespace Essentials.Common.Util
             }
 
             if ( !color.HasValue )
+            {
                 color = UnturnedChat.GetColorFromHex(rawColor);
+            }
 
             if ( color.HasValue )
             {

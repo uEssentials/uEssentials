@@ -89,7 +89,7 @@ namespace Essentials.Misc
                             : (++messageIndex == messagesCount ? 0 : messageIndex);
 
                 var message = (string) Messages[messageIndex].Clone();
-                var messageColor = ColorUtil.GetMessageColor( ref message );
+                var messageColor = ColorUtil.GetColorFromString( ref message );
 
                 UServer.Broadcast( message, messageColor );
             } ).Delay( MessageInterval*1000 ).Interval( MessageInterval*1000 ).Go();

@@ -138,7 +138,7 @@ namespace Essentials.I18n
         public void SendTo( ICommandSource source, params object[] replacers )
         {
             var message = _message.Clone() as string;
-            var color = ColorUtil.GetMessageColor( ref message );
+            var color = ColorUtil.GetColorFromString( ref message );
 
             source.SendMessage( replacers == null ? message :
                 string.Format( message, replacers ), color );
@@ -163,7 +163,7 @@ namespace Essentials.I18n
         public void Broadcast( params object[] replacers )
         {
             var message = _message.Clone() as string;
-            var color = ColorUtil.GetMessageColor( ref message );
+            var color = ColorUtil.GetColorFromString( ref message );
 
             UServer.Broadcast( replacers == null 
                                ? message 

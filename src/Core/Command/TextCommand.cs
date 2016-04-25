@@ -52,7 +52,7 @@ namespace Essentials.Core.Command
         public CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             Data.Text.ForEach( txt => {
-                var color = ColorUtil.GetMessageColor( ref txt );
+                var color = ColorUtil.GetColorFromString( ref txt );
                 src.SendMessage( txt, color );
             });
             return CommandResult.Success();

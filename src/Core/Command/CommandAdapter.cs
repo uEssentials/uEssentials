@@ -95,7 +95,7 @@ namespace Essentials.Core.Command
                     {
                         var message = result.Message;
 
-                        var color = ColorUtil.GetMessageColor( ref message );
+                        var color = ColorUtil.GetColorFromString( ref message );
 
                         commandSource.SendMessage( message, color );
                     }
