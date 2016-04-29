@@ -85,11 +85,12 @@ namespace Essentials.Commands
             }
 
             var task = Tasks.New( t =>  {
-                if ( player == null ) // player disconnected
-                    return;
-                player.Teleport( position, angle );
                 Delay.Remove( playerId.m_SteamID );
-
+                if ( !player.IsOnline )
+                {
+                    return;
+                }
+                player.Teleport( position, angle );
                 EssLang.TELEPORTED_BED.SendTo( src );
             } ).Delay( delay * 1000 );
 

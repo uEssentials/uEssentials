@@ -70,8 +70,10 @@ namespace Essentials.NativeModules.Warp.Commands
             }
 
             Tasks.New( t => {
-                if ( player == null ) // player disconnected
+                if ( !player.IsOnline )
+                {
                     return;
+                }
                 player.Teleport( dest.Location, dest.Rotation );
                 EssLang.WARP_TELEPORTED.SendTo( source, parameters[0] );
             }).Delay( player.HasPermission( "essentials.bypass.warpcooldown" ) ? 0 : cooldown * 1000 ).Go();

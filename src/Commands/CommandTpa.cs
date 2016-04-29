@@ -91,6 +91,10 @@ namespace Essentials.Commands
                     if ( tpaSettings.TeleportDelay > 0 )
                     {
                         Tasks.New( t => {
+                            if ( !whoSent.IsOnline || !player.IsOnline )
+                            {
+                                return;
+                            }
                             whoSent.Teleport( player.Position );
                         }).Delay( tpaSettings.TeleportDelay * 1000 ).Go();
                     }

@@ -69,6 +69,7 @@ namespace Essentials.Api.Unturned
         public PlayerLife           Life            => UnturnedPlayer.life;
         public PlayerEquipment      Equipment       => UnturnedPlayer.equipment;
         public EPlayerStance        Stance          => UnturnedPlayer.Stance.Stance;
+        public bool                 IsOnline        => RocketPlayer != null && UnturnedPlayer != null;
 
         internal UPlayer( UnturnedPlayer player )
         {
