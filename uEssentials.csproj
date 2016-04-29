@@ -90,6 +90,7 @@
     <Compile Include="src\Api\Command\ICommandManager.cs" />
     <Compile Include="src\Api\Command\Source\CommandSourceExtension.cs" />
     <Compile Include="src\Api\Configuration\JsonConfig.cs" />
+    <Compile Include="src\Api\Events\CommandEvent.cs" />
     <Compile Include="src\Api\Events\CommandPreExecuteEvent.cs" />
     <Compile Include="src\Api\Events\CommandPosExecuteEvent.cs" />
     <Compile Include="src\Api\Event\ICancellable.cs" />
