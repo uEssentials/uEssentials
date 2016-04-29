@@ -96,7 +96,7 @@
     "NO_PLAYERS_FOR_KICK": "<yellow>There are no players to kick!",
     "KICKED_ALL": "Kicked {0} players!",
     "INVALID_COORDS": "<yellow>Invalid coordinates ({0}, {1}, {2})!",
-    "KIT_NOT_EXIST": "<yellow>Kit '{0}' does not exist.  Use /kits to see available kits.",
+    "KIT_NOT_EXIST": "<yellow>Kit '{0}' does not exist. Use /kits to see available kits.",
     "KIT_GIVEN_SENDER": "<cyan>Kit '{0}' given to {1}!",
     "KIT_GIVEN_SENDER_ALL": "<cyan>Kit '{0}' given to everyone!",
     "KIT_GIVEN_RECEIVER": "<cyan>You received kit '{0}'!",

@@ -27,7 +27,7 @@ namespace Essentials.Api.Events
     public class CommandEvent
     {
         /// <summary>
-        /// Command that will be executed.
+        /// Command that was/will be executed.
         /// </summary>
         public ICommand Command { get; set; }
         
