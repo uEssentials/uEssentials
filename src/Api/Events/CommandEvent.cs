@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
@@ -24,17 +24,28 @@ using Essentials.Api.Command.Source;
 
 namespace Essentials.Api.Events
 {
-    public class CommandPosExecuteEvent : CommandEvent
+    public class CommandEvent
     {
         /// <summary>
-        /// Result of execution.
+        /// Command that will be executed.
         /// </summary>
-        public CommandResult Result { get; set; }
+        public ICommand Command { get; set; }
+        
+        /// <summary>
+        /// Arguments
+        /// </summary>
+        public ICommandArgs Arguments { get; set; }
 
-        public CommandPosExecuteEvent( ICommand command, ICommandArgs args, 
-                                       ICommandSource src, CommandResult result) : base(command, args, src)
+        /// <summary>
+        /// Who is executing the <see cref="Command"/>.
+        /// </summary>
+        public ICommandSource Source { get; set; }
+
+        public CommandEvent( ICommand command, ICommandArgs args, ICommandSource src )
         {
-            Result = result;
+            Command = command;
+            Arguments = args;
+            Source = src;
         }
     }
 }

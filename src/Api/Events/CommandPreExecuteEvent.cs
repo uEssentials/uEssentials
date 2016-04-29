@@ -21,31 +21,18 @@
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.Api.Event;
 
 namespace Essentials.Api.Events
 {
-    public class CommandPreExecuteEvent : ICancellable
+    public class CommandPreExecuteEvent : CommandEvent
     {
-        /// <summary>
-        /// Command that will be executed.
-        /// </summary>
-        public ICommand Command { get; set; }
-
-        /// <summary>
-        /// Who is executing the <see cref="Command"/>.
-        /// </summary>
-        public ICommandSource Source { get; set; }
-
         /// <summary>
         /// Define if this event will be cancelled.
         /// </summary>
         public bool Cancelled { get; set; }
-
-        public CommandPreExecuteEvent( ICommand command, ICommandSource source )
-        {
-            Command = command;
-            Source = source;
-        }
+        
+        public CommandPreExecuteEvent( ICommand command, ICommandArgs args, 
+                                       ICommandSource src ) : base(command, args, src)
+        {}
     }
 }
