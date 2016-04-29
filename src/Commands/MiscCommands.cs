@@ -1009,6 +1009,7 @@ namespace Essentials.Commands
             if ( !src.HasPermission( "essentials.bypass.itemlimit" ) && amt > EssProvider.Config.ItemSpawnLimit )
             {
                 amt = EssProvider.Config.ItemSpawnLimit;
+                EssLang.ITEM_LIMIT.SendTo( src, amt );
             }
 
             if ( allPlayers )

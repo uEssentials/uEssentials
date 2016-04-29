@@ -228,5 +228,6 @@
     "LIMB_HEAD": "head",
     "LIMB_LEG": "leg",
     "LIMB_TORSO": "torso",
-    "LIMB_ARM": "arm"
+    "LIMB_ARM": "arm",
+    "ITEM_LIMIT": "<red>You cannot spawn more than {0} items at once time."
 }

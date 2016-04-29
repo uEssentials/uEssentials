@@ -123,12 +123,12 @@ namespace Essentials.I18n
                         if ( json.TryGetValue( key.Key, out outVal ) )
                         {
                             defaultJson[key.Key] = outVal;
-                            System.Console.WriteLine("missing " + key.Key );
                         }
                     }
 
                     File.WriteAllText( translationPath, string.Empty );
                     JsonUtil.Serialize( translationPath, defaultJson );
+                    json = defaultJson;
                 }
             }
             catch (JsonReaderException ex)
@@ -395,5 +395,6 @@ namespace Essentials.I18n
         public static EssLang LIMB_LEG { get; private set; }
         public static EssLang LIMB_TORSO { get; private set; }
         public static EssLang LIMB_ARM { get; private set; }
+        public static EssLang ITEM_LIMIT { get; private set; }
     }
 }
