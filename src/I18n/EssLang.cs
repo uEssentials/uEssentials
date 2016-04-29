@@ -108,17 +108,37 @@ namespace Essentials.I18n
             try
             {
                 json = JObject.Parse( File.ReadAllText( translationPath ) );
+
+                /* 
+                    Update translation
+                */
+                var defaultJson = JObject.Load( new JsonTextReader( new StreamReader( 
+                    GetDefaultStream( locale ), Encoding.UTF8, true ) ) );
+
+                if ( defaultJson.Count != json.Count )
+                {
+                    foreach ( var key in  defaultJson )
+                    {
+                        JToken outVal;
+                        if ( json.TryGetValue( key.Key, out outVal ) )
+                        {
+                            defaultJson[key.Key] = outVal;
+                            System.Console.WriteLine("missing " + key.Key );
+                        }
+                    }
+
+                    File.WriteAllText( translationPath, string.Empty );
+                    JsonUtil.Serialize( translationPath, defaultJson );
+                }
             }
             catch (JsonReaderException ex)
             {
-                EssProvider.Logger.LogError( $"Invalid configuration ({translationPath})" );
+                EssProvider.Logger.LogError( $"Invalid translation ({translationPath})" );
                 EssProvider.Logger.LogError( ex.Message );
 
                 // Load default
                 json = JObject.Load( new JsonTextReader( new StreamReader( 
-                    GetDefaultStream( locale ), 
-                    Encoding.UTF8, true ) 
-                ) );
+                    GetDefaultStream( locale ), Encoding.UTF8, true ) ) );
             }
             
             Func<string, EssLang> loadFromJson = key => {
@@ -126,7 +146,7 @@ namespace Essentials.I18n
                                     ?? string.Format( KEY_NOT_FOUND_MESSAGE, key ) );
             };
 
-            var props = typeof (EssLang).GetProperties( BindingFlags.Public | 
+            var props = typeof(EssLang).GetProperties( BindingFlags.Public | 
                                                         BindingFlags.Static );
 
             foreach ( var field in props )
