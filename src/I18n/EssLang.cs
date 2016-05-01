@@ -32,8 +32,6 @@ using Essentials.Common;
 using Essentials.Common.Util;
 using Newtonsoft.Json;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Local
-
 namespace Essentials.I18n
 {
     public sealed class EssLang
