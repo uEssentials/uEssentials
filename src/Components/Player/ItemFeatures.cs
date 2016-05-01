@@ -22,7 +22,7 @@
 using System;
 using SDG.Unturned;
 
-namespace Essentials.Core.Components.Player
+namespace Essentials.Components.Player
 {
     public class ItemFeatures : PlayerComponent
     {

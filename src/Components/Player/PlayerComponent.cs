@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
@@ -19,33 +19,18 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using Essentials.Api;
 using Essentials.Api.Unturned;
+using UnityEngine;
 
-namespace Essentials.Core.Economy
+namespace Essentials.Components.Player
 {
-    public class  ExpEconomyProvider : IEconomyProvider
+    public abstract class PlayerComponent : MonoBehaviour
     {
-        public string Currency => EssProvider.Config.Economy.XpCurrency;
+        public UPlayer Player;
 
-        public decimal Withdraw( UPlayer player, decimal amount )
+        protected PlayerComponent()
         {
-            return (player.Experience -= (uint) amount);
-        }
-
-        public decimal Deposit( UPlayer player, decimal amount )
-        {
-            return (player.Experience += (uint) amount);
-        }
-
-        public decimal GetBalance( UPlayer player )
-        {
-            return player.Experience;
-        }
-
-        public bool Has( UPlayer player, decimal amount )
-        {
-            return (player.Experience - amount) >= 0;
+            Player = UPlayer.From( GetComponent<SDG.Unturned.Player>() );
         }
     }
 }

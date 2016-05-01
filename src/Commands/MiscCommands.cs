@@ -30,12 +30,12 @@ using Essentials.Api.Unturned;
 using Essentials.Common;
 using static Essentials.Common.Util.ItemUtil;
 using Essentials.Core.Command;
-using Essentials.Core.Components.Player;
 using Essentials.I18n;
 using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
 using Essentials.Common.Util;
+using Essentials.Components.Player;
 
 namespace Essentials.Commands
 {
@@ -701,7 +701,7 @@ namespace Essentials.Commands
 
                     var id = optAsset.Value.id;
 
-                    if ( EssProvider.Config.VehicleBlacklist.Contains( id )         &&
+                    if ( UEssentials.Config.VehicleBlacklist.Contains( id )         &&
                          !src.HasPermission( "essentials.bypass.blacklist.vehicle" ) )
                     {
                         return CommandResult.Lang( EssLang.BLACKLISTED_VEHICLE, $"{optAsset.Value.vehicleName} ({id})" );
@@ -969,7 +969,7 @@ namespace Essentials.Commands
                 return;
             }
             
-            if ( EssProvider.Config.GiveItemBlacklist.Contains( optAsset.Value.id ) &&
+            if ( UEssentials.Config.GiveItemBlacklist.Contains( optAsset.Value.id ) &&
                  !src.HasPermission( "essentials.bypass.blacklist.item" )            )
             {
                 EssLang.BLACKLISTED_ITEM.SendTo(src, $"{optAsset.Value.itemName} ({optAsset.Value.Id})" );
@@ -1006,9 +1006,9 @@ namespace Essentials.Commands
                 item.Metadata[0] = 1;
             }
 
-            if ( !src.HasPermission( "essentials.bypass.itemlimit" ) && amt > EssProvider.Config.ItemSpawnLimit )
+            if ( !src.HasPermission( "essentials.bypass.itemlimit" ) && amt > UEssentials.Config.ItemSpawnLimit )
             {
-                amt = EssProvider.Config.ItemSpawnLimit;
+                amt = UEssentials.Config.ItemSpawnLimit;
                 EssLang.ITEM_LIMIT.SendTo( src, amt );
             }
 

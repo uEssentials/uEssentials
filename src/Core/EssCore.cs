@@ -50,8 +50,8 @@ using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 using Rocket.Core.Commands;
-using Essentials.Core.Economy;
 using Essentials.Compatibility.Hooks;
+using Essentials.Economy;
 
 namespace Essentials.Core
 {
@@ -319,7 +319,7 @@ namespace Essentials.Core
               Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
             #endif
             
-            TryAddComponent<Tasks>();
+            TryAddComponent<Tasks.TaskExecutor>();
 
             Tasks.New( t => {
                 File.Delete( $"{Folder}uEssentials.en.translation.xml" );
@@ -340,7 +340,7 @@ namespace Essentials.Core
             Provider.onServerDisconnected -= PlayerDisconnectCallback;
             Provider.onServerConnected -= PlayerConnectCallback;
 
-            TryRemoveComponent<Tasks>();
+            TryRemoveComponent<Tasks.TaskExecutor>();
 
             var executingAssembly = GetType().Assembly;
             
@@ -361,8 +361,8 @@ namespace Essentials.Core
             }
 
             Console.WriteLine();
-            EssProvider.Logger.LogError( "Rocket reload cause many issues, consider restart the server" );
-            EssProvider.Logger.LogError( "Or use '/essentials reload' to reload essentials correctly." );
+            UEssentials.Logger.LogError( "Rocket reload cause many issues, consider restart the server" );
+            UEssentials.Logger.LogError( "Or use '/essentials reload' to reload essentials correctly." );
             Console.WriteLine();
         }
 

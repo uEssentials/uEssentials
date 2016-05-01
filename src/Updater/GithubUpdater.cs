@@ -34,7 +34,7 @@ namespace Essentials.Updater
     internal class GithubUpdater : IUpdater
     {
         private const string ReleasesUrl = @"https://api.github.com/repos/uEssentials/uEssentials/releases/latest";
-        private static readonly EssLogger Logger = EssProvider.Logger;
+        private static readonly EssLogger Logger = UEssentials.Logger;
 
         public UpdateResult LastResult { get; private set; }
 

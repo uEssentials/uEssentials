@@ -36,7 +36,7 @@ namespace Essentials.NativeModules.Kit
         internal KitManager()
         {
             KitMap = new Dictionary<string, Kit>();
-            KitData = EssProvider.Config.WebKits.Enabled ? new WebKitData() : new KitData();
+            KitData = UEssentials.Config.WebKits.Enabled ? new WebKitData() : new KitData();
         }
 
         public bool Contains( string kitName )

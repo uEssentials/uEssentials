@@ -19,7 +19,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System;
 using Essentials.Common;
 using Essentials.Common.Reflect;
 using Rocket.Core;
@@ -27,13 +26,13 @@ using System.Linq;
 using System.Reflection;
 using Essentials.Api;
 using Essentials.Api.Unturned;
-using Essentials.Core.Economy;
+using Essentials.Economy;
 
 namespace Essentials.Compatibility.Hooks
 {
     public class UconomyHook : Hook, IEconomyProvider
     {
-        public string Currency => EssProvider.Config.Economy.UconomyCurrency;
+        public string Currency => UEssentials.Config.Economy.UconomyCurrency;
 
         private MethodAccessor<decimal> _getBalanceMethod;
         private MethodAccessor<decimal> _increaseBalanceMethod;
@@ -42,20 +41,13 @@ namespace Essentials.Compatibility.Hooks
 
         public override void OnLoad()
         {
-            try
-            {
-                var uconomyPlugin = R.Plugins.GetPlugins().FirstOrDefault( c => c.Name.EqualsIgnoreCase( "uconomy" ) );
-                var uconomyType = uconomyPlugin.GetType().Assembly.GetType( "fr34kyn01535.Uconomy.Uconomy" );
-                var uconomyInstance = uconomyType.GetField( "Instance", BindingFlags.Static | BindingFlags.Public ).GetValue( uconomyPlugin );
+            var uconomyPlugin = R.Plugins.GetPlugins().FirstOrDefault( c => c.Name.EqualsIgnoreCase( "uconomy" ) );
+            var uconomyType = uconomyPlugin.GetType().Assembly.GetType( "fr34kyn01535.Uconomy.Uconomy" );
+            var uconomyInstance = uconomyType.GetField( "Instance", BindingFlags.Static | BindingFlags.Public ).GetValue( uconomyPlugin );
 
-                var databaseInstance = uconomyInstance.GetType().GetField( "Database" ).GetValue( uconomyInstance );
-                _getBalanceMethod = AccessorFactory.AccessMethod<decimal>( databaseInstance, "GetBalance" );
-                _increaseBalanceMethod = AccessorFactory.AccessMethod<decimal>( databaseInstance, "IncreaseBalance" );
-            }
-            catch ( Exception )
-            {
-                EssProvider.Logger.LogError( "Could not hook with Uconomy." );
-            }
+            var databaseInstance = uconomyInstance.GetType().GetField( "Database" ).GetValue( uconomyInstance );
+            _getBalanceMethod = AccessorFactory.AccessMethod<decimal>( databaseInstance, "GetBalance" );
+            _increaseBalanceMethod = AccessorFactory.AccessMethod<decimal>( databaseInstance, "IncreaseBalance" );
         }
 
         public override void OnUnload() { }

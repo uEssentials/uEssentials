@@ -113,8 +113,8 @@
     <Compile Include="src\Common\Util\MiscUtil.cs" />
     <Compile Include="src\Compatibility\Hook.cs" />
     <Compile Include="src\Compatibility\HookManager.cs" />
-    <Compile Include="src\Core\Economy\IEconomyProvider.cs" />
-    <Compile Include="src\Core\Economy\ExpEconomyProvider.cs" />
+    <Compile Include="src\Economy\IEconomyProvider.cs" />
+    <Compile Include="src\Economy\ExpEconomyProvider.cs" />
     <Compile Include="src\Compatibility\Hooks\UconomyHook.cs" />
     <Compile Include="src\Compatibility\Hooks\LPXHook.cs" />
     <Compile Include="src\Configuration\CommandsConfig.cs" />
@@ -122,10 +122,10 @@
     <Compile Include="src\Core\Command\TextCommand.cs" />
     <Compile Include="src\Core\Command\MethodCommand.cs" />
     <Compile Include="src\Core\Command\CommandAdapter.cs" />
-    <Compile Include="src\Core\Components\Player\FrozenPlayer.cs" />
-    <Compile Include="src\Core\Components\Player\ItemFeatures.cs" />
-    <Compile Include="src\Core\Components\Player\PlayerComponent.cs" />
-    <Compile Include="src\Core\Components\Player\PlayerVehicleFeatures.cs" />
+    <Compile Include="src\Components\Player\FrozenPlayer.cs" />
+    <Compile Include="src\Components\Player\ItemFeatures.cs" />
+    <Compile Include="src\Components\Player\PlayerComponent.cs" />
+    <Compile Include="src\Components\Player\PlayerVehicleFeatures.cs" />
     <Compile Include="src\Core\Event\EventManager.cs" />
     <Compile Include="src\Commands\CommandRespawnZombies.cs" />
     <Compile Include="src\Commands\CommandRespawnAnimals.cs" />
@@ -193,7 +193,7 @@
     <Compile Include="src\Api\Unturned\UServer.cs" />
     <Compile Include="src\Api\Unturned\UWorld.cs" />
     <Compile Include="src\Core\EssCore.cs" />
-    <Compile Include="src\Api\EssProvider.cs" />
+    <Compile Include="src\Api\UEssentials.cs" />
     <Compile Include="src\Core\Permission\EssentialsPermissionProvider.cs" />
     <Compile Include="src\Event\Handling\EssentialsEventHandler.cs" />
     <Compile Include="src\NativeModules\Kit\Item\AbstractKitItem.cs" />

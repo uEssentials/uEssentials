@@ -22,7 +22,7 @@
 using SDG.Unturned;
 using UnityEngine;
 
-namespace Essentials.Core.Components.Player
+namespace Essentials.Components.Player
 {
     public class FrozenPlayer : PlayerComponent
     {

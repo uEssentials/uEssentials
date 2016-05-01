@@ -185,6 +185,6 @@ namespace Essentials.Commands
         }
         
         protected override void OnUnregistered()
-            => EssProvider.EventManager.Unregister<EssentialsEventHandler>( "TpaPlayerDisconnect" );
+            => UEssentials.EventManager.Unregister<EssentialsEventHandler>( "TpaPlayerDisconnect" );
     }
 }

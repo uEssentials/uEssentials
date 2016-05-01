@@ -29,9 +29,9 @@ namespace Essentials.Compatibility
 {
     public class HookManager
     {
-        private readonly Dictionary<string, Hook> _activeHooks = new Dictionary<string, Hook>();
+        private readonly Dictionary<string, Hook> _hooks = new Dictionary<string, Hook>();
 
-        public IEnumerable<Hook> Hooks => _activeHooks.Values;
+        public IEnumerable<Hook> Hooks => _hooks.Values;
 
         internal HookManager() {}
 
@@ -62,7 +62,7 @@ namespace Essentials.Compatibility
 
         public void UnregisterAll()
         {
-            _activeHooks.Clear();
+            _hooks.Clear();
         }
 
         public void RegisterHook( Type hookType )
@@ -71,7 +71,7 @@ namespace Essentials.Compatibility
 
             var hook = (Hook) Activator.CreateInstance( hookType );
 
-            _activeHooks.Add( hook.Name.ToLowerInvariant(), hook );
+            _hooks.Add( hook.Name.ToLowerInvariant(), hook );
         }
 
         public void RegisterHook<T>() where T : Hook
@@ -103,7 +103,7 @@ namespace Essentials.Compatibility
         public Optional<THookType> GetActiveByType<THookType>() where THookType : Hook
         {
             var hook = Optional<THookType>.OfNullable(
-                (THookType) _activeHooks.FirstOrDefault( h => h.Value is THookType && 
+                (THookType) _hooks.FirstOrDefault( h => h.Value is THookType && 
                                                          h.Value.IsLoaded ).Value
             );
 
@@ -114,9 +114,9 @@ namespace Essentials.Compatibility
         {
             hookName = hookName.ToLowerInvariant();
 
-            if ( _activeHooks.ContainsKey( hookName ) )
+            if ( _hooks.ContainsKey( hookName ) )
             {
-                return Optional<Hook>.Of( _activeHooks[hookName] );
+                return Optional<Hook>.Of( _hooks[hookName] );
             }
 
             return  Optional<Hook>.Empty();
@@ -125,7 +125,7 @@ namespace Essentials.Compatibility
         public Optional<THookType> GetByType<THookType>() where THookType : Hook
         {
             return Optional<THookType>.OfNullable(
-                (THookType) _activeHooks.FirstOrDefault( h => h.Value is THookType  ).Value
+                (THookType) _hooks.FirstOrDefault( h => h.Value is THookType  ).Value
             );
         }
     }

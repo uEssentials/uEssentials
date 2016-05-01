@@ -37,7 +37,7 @@ namespace Essentials.NativeModules.Kit.Data
 {
     internal class KitData : IData<Dictionary<string, Kit>>
     {
-        protected static string DataFilePath => $"{EssProvider.PluginFolder}kits.json";
+        protected static string DataFilePath => $"{UEssentials.PluginFolder}kits.json";
 
         public virtual void Save( Dictionary<string, Kit> type )
         {
@@ -63,8 +63,8 @@ namespace Essentials.NativeModules.Kit.Data
             }
             catch (JsonReaderException ex)
             {
-                EssProvider.Logger.LogError( $"Invalid kit configuration ({DataFilePath})" );
-                EssProvider.Logger.LogError( ex.Message );
+                UEssentials.Logger.LogError( $"Invalid kit configuration ({DataFilePath})" );
+                UEssentials.Logger.LogError( ex.Message );
                 kitArr = JArray.Parse( "[]" );
             }
 
@@ -110,7 +110,7 @@ namespace Essentials.NativeModules.Kit.Data
 
                         if ( Assets.find( EAssetType.VEHICLE, vehicleId ) == null )
                         {
-                            EssProvider.Logger.LogWarning( $"Invalid vehicle id. Kit: {kit.Name} item Index: {itemIndex++}");
+                            UEssentials.Logger.LogWarning( $"Invalid vehicle id. Kit: {kit.Name} item Index: {itemIndex++}");
                             continue;
                         }
 
@@ -128,7 +128,7 @@ namespace Essentials.NativeModules.Kit.Data
 
                     if ( tokKitItemId == null || itemAsset == null )
                     {
-                        EssProvider.Logger.LogWarning( $"Invalid item id. Kit: {kit.Name} item Index: {itemIndex++}");
+                        UEssentials.Logger.LogWarning( $"Invalid item id. Kit: {kit.Name} item Index: {itemIndex++}");
                         continue;
                     }
 
@@ -174,7 +174,7 @@ namespace Essentials.NativeModules.Kit.Data
                         }
                         catch ( ArgumentException )
                         {
-                            EssProvider.Logger.LogWarning( $"Invalid firemode '{tokFireMode.Value<string>()}' " +
+                            UEssentials.Logger.LogWarning( $"Invalid firemode '{tokFireMode.Value<string>()}' " +
                                                             $"in kit '{kit.Name}', item '{itemIndex + 1}'!" );
                         }
                     }

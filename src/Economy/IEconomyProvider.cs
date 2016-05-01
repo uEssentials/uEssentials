@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
@@ -19,32 +19,20 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using Essentials.Api.Module;
-using static Essentials.Api.UEssentials;
+using Essentials.Api.Unturned;
 
-namespace Essentials.NativeModules.Kit
+namespace Essentials.Economy
 {
-    [ModuleInfo( Name = "Kits", Flags = ModuleFlags.NONE )]
-    public class KitModule : NativeModule
+    public interface IEconomyProvider
     {
-        public KitManager       KitManager  { get; internal set; }
-        public static KitModule Instance    { get; internal set; }
+        string Currency { get; }
 
-        public override void OnLoad()
-        {
-            Instance = this;
+        decimal Withdraw( UPlayer player, decimal amount );
 
-            KitManager = new KitManager();
-            KitManager.Load();
-            
-            Logger.LogInfo( $"Loaded {KitManager.Count} kits" );
+        decimal Deposit( UPlayer player, decimal amount );
 
-            CommandManager.RegisterAll( "Essentials.NativeModules.Kit.Commands" );
-        }
+        decimal GetBalance( UPlayer player );
 
-        public override void OnUnload()
-        {
-            CommandManager.UnregisterAll( "Essentials.NativeModules.Kit.Commands" );
-        }
+        bool Has( UPlayer player, decimal amount );
     }
 }

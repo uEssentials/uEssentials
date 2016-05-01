@@ -1,14 +1,33 @@
-﻿using System;
+﻿/*
+ *  This file is part of uEssentials project.
+ *      https://uessentials.github.io/
+ *
+ *  Copyright (C) 2015-2016  Leonardosc
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*/
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Essentials.Api.Task
 {
-    public class Tasks : MonoBehaviour
+    public static class Tasks
     {
         private static readonly List<Task> Pool = new List<Task>();
-
-        private Tasks() {}
 
         /// <summary>
         /// Instantiate a new task with given action
@@ -28,42 +47,7 @@ namespace Essentials.Api.Task
         }
 
         /// <summary>
-        /// Internal method, called by mono
-        /// </summary>
-        internal void FixedUpdate()
-        {
-            for ( var i = 0; i < Pool.Count; i++ )
-            {
-                var task = Pool[i];
-
-                if ( task.NextExecution > DateTime.Now ) continue;
-
-                /*
-                    If any error occurs he will remove task from Pool.
-                */
-                try
-                {
-                    task.Action(task);
-
-                    if ( task.IntervalValue < 0 )
-                    {
-                        Pool.Remove(task);
-                    }
-                    else
-                    {
-                        task.NextExecution = DateTime.Now.AddMilliseconds( task.IntervalValue );
-                    }
-                }
-                catch (Exception)
-                {
-                    Pool.Remove(task);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Represents an task that will be executed after one
+        /// Represents an task that will be executed after
         /// given delay, and with(or not) an interval
         /// </summary>
         public class Task
@@ -96,7 +80,7 @@ namespace Essentials.Api.Task
             }
 
             /// <summary>
-            /// Set the task interval to given value
+            /// Set the task interval.
             /// </summary>
             /// <param name="interval">The interval, in milliseconds</param>
             /// <returns>This</returns>
@@ -107,7 +91,7 @@ namespace Essentials.Api.Task
             }
 
             /// <summary>
-            /// Set the task delay to given value
+            /// Set the task delay.
             /// </summary>
             /// <param name="delay">The interval, in milliseconds</param>
             /// <returns>This</returns>
@@ -118,7 +102,7 @@ namespace Essentials.Api.Task
             }
 
             /// <summary>
-            /// Start the task
+            /// Start the task.
             /// </summary>
             public void Go()
             {
@@ -128,11 +112,46 @@ namespace Essentials.Api.Task
             }
 
             /// <summary>
-            /// Cancel the task
+            /// Cancel the task.
             /// </summary>
             public void Cancel()
             {
                 Pool.Remove( this );
+            }
+        }
+
+        internal class TaskExecutor : MonoBehaviour
+        {
+            private void FixedUpdate()
+            {
+                for ( var i = 0; i < Pool.Count; i++ )
+                {
+                    var task = Pool[i];
+
+                    if ( task.NextExecution > DateTime.Now ) continue;
+
+                    /*
+                        If any error occurs he will remove task from Pool.
+                    */
+                    try
+                    {
+                        task.Action( task );
+
+                        if ( task.IntervalValue < 0 )
+                        {
+                            Pool.Remove( task );
+                        }
+                        else
+                        {
+                            task.NextExecution = DateTime.Now.AddMilliseconds( task.IntervalValue );
+                        }
+                    }
+                    catch ( Exception )
+                    {
+                        Pool.Remove( task );
+                        throw;
+                    }
+                }
             }
         }
     }

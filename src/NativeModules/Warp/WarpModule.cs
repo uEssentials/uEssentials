@@ -22,7 +22,7 @@
 using Essentials.Api.Module;
 using Essentials.Api.Task;
 using Essentials.NativeModules.Warp.Commands;
-using static Essentials.Api.EssProvider;
+using static Essentials.Api.UEssentials;
 
 namespace Essentials.NativeModules.Warp
 {

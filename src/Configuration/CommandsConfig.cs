@@ -112,7 +112,7 @@ namespace Essentials.Configuration
                 Search methods
             */
             Action<MethodInfo> invalidate = md => {
-                EssProvider.Logger.LogError( $"Invalid method signature in '{md}'. " +
+                UEssentials.Logger.LogError( $"Invalid method signature in '{md}'. " +
                                              "Expected 'CommandResult methodName(ICommandSource, ICommandArgs)'" );
             };
 

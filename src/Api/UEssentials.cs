@@ -28,11 +28,11 @@ using Essentials.Common;
 using Essentials.Compatibility;
 using Essentials.Configuration;
 using Essentials.Core;
-using Essentials.Core.Economy;
+using Essentials.Economy;
 
 namespace Essentials.Api
 {
-    public static class EssProvider
+    public static class UEssentials
     {
         /// <summary>
         /// Version of uEssentials
@@ -50,35 +50,38 @@ namespace Essentials.Api
         public static string ROCKET_VERSION => EssCore.ROCKET_VERSION;
 
         /// <summary>
-        /// <returns> Instance of CommandManager </returns>
+        /// Instance of CommandManager
         /// </summary>
         public static IEventManager EventManager => Core.EventManager;
 
         /// <summary>
-        /// <returns> Instance of CommandManager </returns>
+        /// Instance of CommandManager
         /// </summary>
         public static ICommandManager CommandManager => Core.CommandManager;
 
         /// <summary>
-        /// <returns> Instance of ModuleManager </returns>
+        /// Instance of ModuleManager
         /// </summary>
         public static ModuleManager ModuleManager => Core.ModuleManager;
 
         /// <summary>
-        /// <returns> Instance of HookManager </returns>
+        /// Instance of HookManager
         /// </summary>
         public static HookManager HookManager => Core.HookManager;
 
         /// <summary>
-        /// <returns> Instance of plugin configuration </returns>
+        /// Instance of plugin configuration
         /// </summary>
         public static EssConfig Config => Core.Config;
 
         /// <summary>
-        /// <returns> Instance of EssLogger </returns>
+        /// Instance of EssLogger
         /// </summary>
-        public static EssLogger Logger => Core.Logger;
+        internal static EssLogger Logger => Core.Logger;
         
+        /// <summary>
+        /// Current economy provider.
+        /// </summary>
         public static Optional<IEconomyProvider> EconomyProvider => Core.EconomyProvider;
 
         /// <summary>
@@ -87,27 +90,27 @@ namespace Essentials.Api
         public static ICommandSource ConsoleSource => Essentials.Core.Command.ConsoleSource.Instance;
 
         /// <summary>
-        /// <returns> Plugin folder path </returns>
+        /// Plugin folder path
         /// </summary>
         public static string PluginFolder => Core.Folder;
 
         /// <summary>
-        /// <returns> Data folder path </returns>
+        /// Data folder path
         /// </summary>
         public static string DataFolder => Core.DataFolder;
 
         /// <summary>
-        /// <returns> Translation folder path </returns>
+        /// Translation folder path
         /// </summary>
         public static string TranslationFolder => Core.TranslationFolder;
         
         /// <summary>
-        /// <returns> Translation folder path </returns>
+        /// Translation folder path
         /// </summary>
         public static string ModulesFolder => Core.ModulesFolder;
 
         /// <summary>
-        /// <returns> Singleton instance of Plugin </returns>
+        /// Singleton instance of Plugin
         /// </summary>
         public static EssCore Core
         {

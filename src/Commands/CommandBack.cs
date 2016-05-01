@@ -56,6 +56,6 @@ namespace Essentials.Commands
         }
         
         protected override void OnUnregistered() 
-            => EssProvider.EventManager.Unregister<EssentialsEventHandler>( "BackPlayerDeath" );
+            => UEssentials.EventManager.Unregister<EssentialsEventHandler>( "BackPlayerDeath" );
     }
 }

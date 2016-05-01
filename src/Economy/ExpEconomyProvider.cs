@@ -19,20 +19,33 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using Essentials.Api;
 using Essentials.Api.Unturned;
 
-namespace Essentials.Core.Economy
+namespace Essentials.Economy
 {
-    public interface IEconomyProvider
+    public class  ExpEconomyProvider : IEconomyProvider
     {
-        string Currency { get; }
+        public string Currency => UEssentials.Config.Economy.XpCurrency;
 
-        decimal Withdraw( UPlayer player, decimal amount );
+        public decimal Withdraw( UPlayer player, decimal amount )
+        {
+            return (player.Experience -= (uint) amount);
+        }
 
-        decimal Deposit( UPlayer player, decimal amount );
+        public decimal Deposit( UPlayer player, decimal amount )
+        {
+            return (player.Experience += (uint) amount);
+        }
 
-        decimal GetBalance( UPlayer player );
+        public decimal GetBalance( UPlayer player )
+        {
+            return player.Experience;
+        }
 
-        bool Has( UPlayer player, decimal amount );
+        public bool Has( UPlayer player, decimal amount )
+        {
+            return (player.Experience - amount) >= 0;
+        }
     }
 }

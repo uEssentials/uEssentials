@@ -56,13 +56,13 @@ namespace Essentials.Commands
             }
 
             var message = string.Format(
-                EssProvider.Config.PrivateMessageFormat,
+                UEssentials.Config.PrivateMessageFormat,
                 src.DisplayName,
                 args.Join( 1 )
             );
 
             var message2 = string.Format(
-                EssProvider.Config.PrivateMessageFormat2,
+                UEssentials.Config.PrivateMessageFormat2,
                 target.DisplayName,
                 args.Join( 1 )
             );

@@ -37,14 +37,14 @@ namespace Essentials.NativeModules.Kit.Commands
         public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             var kitConfig = EssCore.Instance.Config.Kit;
-            var hasEconomyProvider = EssProvider.EconomyProvider.IsPresent;
+            var hasEconomyProvider = UEssentials.EconomyProvider.IsPresent;
 
             var kits = KitModule.Instance.KitManager.Kits.Where( k => k.CanUse( source ) ).Select( k => {
                 if ( !hasEconomyProvider || !kitConfig.ShowCost || (k.Cost <= 0 && !kitConfig.ShowCostIfZero) )
                 {
                     return k.Name;
                 }
-                return string.Format( kitConfig.CostFormat, k.Name, k.Cost, EssProvider.EconomyProvider.Value.Currency );
+                return string.Format( kitConfig.CostFormat, k.Name, k.Cost, UEssentials.EconomyProvider.Value.Currency );
             } ).ToList();
 
 

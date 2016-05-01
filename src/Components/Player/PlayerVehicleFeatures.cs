@@ -19,18 +19,36 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using Essentials.Api.Unturned;
-using UnityEngine;
+using SDG.Unturned;
 
-namespace Essentials.Core.Components.Player
+namespace Essentials.Components.Player
 {
-    public abstract class PlayerComponent : MonoBehaviour
+    public class PlayerVehicleFeatures : PlayerComponent
     {
-        public UPlayer Player;
+        public bool AutoRefuel { get; set; }
+        public bool AutoRepair { get; set; }
 
-        protected PlayerComponent()
+        private void FixedUpdate()
         {
-            Player = UPlayer.From( GetComponent<SDG.Unturned.Player>() );
+            if ( !Player.IsInVehicle )
+            {
+                return;
+            }
+            var veh = Player.CurrentVehicle;
+
+            if ( veh.fuel < 100 && AutoRefuel )
+            {
+                VehicleManager.sendVehicleFuel( veh, veh.asset.fuel );
+                veh.fuel = veh.asset.fuel;
+            }
+
+            if ( !AutoRepair )
+            {
+                return;
+            }
+
+            VehicleManager.sendVehicleHealth( veh, veh.asset.health );
+            veh.health = veh.asset.health;
         }
     }
 }

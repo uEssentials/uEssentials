@@ -30,7 +30,7 @@ namespace Essentials.NativeModules
         protected NativeModule()
         {
             Assembly = GetType().Assembly;
-            Logger = EssProvider.Logger;
+            Logger = UEssentials.Logger;
 
             Directory.Delete( Folder, true );
         }

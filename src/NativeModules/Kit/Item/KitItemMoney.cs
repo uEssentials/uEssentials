@@ -37,7 +37,7 @@ namespace Essentials.NativeModules.Kit.Item
 
         public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
         {
-            EssProvider.EconomyProvider.IfPresent( h => h.Deposit( player, Amount ) );
+            UEssentials.EconomyProvider.IfPresent( h => h.Deposit( player, Amount ) );
             return true;
         }
 

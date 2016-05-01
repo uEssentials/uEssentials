@@ -31,8 +31,8 @@ namespace Essentials.NativeModules.Kit.Data
     {
         public override Dictionary<string, Kit> Load()
         {
-            var logger = EssProvider.Logger;
-            var url = EssProvider.Config.WebKits.Url;
+            var logger = UEssentials.Logger;
+            var url = UEssentials.Config.WebKits.Url;
             
             try
             {

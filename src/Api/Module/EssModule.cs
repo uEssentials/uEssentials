@@ -63,7 +63,7 @@ namespace Essentials.Api.Module
             Preconditions.NotNull( Info.Name, "Module name cannot be null" );
 
             Logger = new EssLogger( $"[{Info.Name}] " );
-            Folder = EssProvider.ModulesFolder + Info.Name + "/";
+            Folder = UEssentials.ModulesFolder + Info.Name + "/";
 
             if ( !Directory.Exists( Folder ) )
                 Directory.CreateDirectory( Folder );
@@ -90,12 +90,12 @@ namespace Essentials.Api.Module
 
             if ( (Info.Flags & ModuleFlags.AUTO_REGISTER_COMMANDS) == ModuleFlags.AUTO_REGISTER_COMMANDS )
             {
-                EssProvider.CommandManager.RegisterAll( Assembly );
+                UEssentials.CommandManager.RegisterAll( Assembly );
             }
 
             if ( (Info.Flags & ModuleFlags.AUTO_REGISTER_EVENTS) == ModuleFlags.AUTO_REGISTER_EVENTS )
             {
-                EssProvider.EventManager.RegisterAll( Assembly );
+                UEssentials.EventManager.RegisterAll( Assembly );
             }
         }
 
@@ -108,8 +108,8 @@ namespace Essentials.Api.Module
 
             OnUnload();
 
-            EssProvider.CommandManager.UnregisterAll( Assembly );
-            EssProvider.EventManager.UnregisterAll( Assembly );
+            UEssentials.CommandManager.UnregisterAll( Assembly );
+            UEssentials.EventManager.UnregisterAll( Assembly );
         }
     }
 

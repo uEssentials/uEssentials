@@ -47,7 +47,7 @@ namespace Essentials.Api.Command
                 "EssCommand must have 'CommandInfo' attribute" 
             );
             
-            Logger = EssProvider.Logger;
+            Logger = UEssentials.Logger;
 
             Name = _commandInfo.Name;
             Usage = _commandInfo.Usage;

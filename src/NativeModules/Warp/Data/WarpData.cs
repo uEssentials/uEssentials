@@ -29,13 +29,13 @@ using Newtonsoft.Json;
 
 namespace Essentials.NativeModules.Warp.Data
 {
-    public class WarpData : IData< Dictionary< string, Warp > >
+    public class WarpData : IData<Dictionary<string, Warp>>
     {
         private static string DataFilePath
         {
             get
             {
-                var dataFolder = EssProvider.DataFolder;
+                var dataFolder = UEssentials.DataFolder;
                 var filePath = $"{dataFolder}warps.json";
 
                 if ( !Directory.Exists( dataFolder ) )
@@ -59,8 +59,7 @@ namespace Essentials.NativeModules.Warp.Data
             var loadedWarps = new Dictionary<string, Warp>();
             var deserializedWarpArray = JsonConvert.DeserializeObject<Warp[]>( File.ReadAllText( DataFilePath ) );
 
-            deserializedWarpArray?.ToList().ForEach( kit =>
-            {
+            deserializedWarpArray?.ToList().ForEach( kit => {
                 loadedWarps.Add( kit.Name.ToLower(), kit );
             });
 

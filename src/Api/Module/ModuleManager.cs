@@ -153,8 +153,8 @@ namespace Essentials.Api.Module
             catch (Exception ex)
             {
                 var fileName = (assemblyPath.Substring( assemblyPath.LastIndexOf( "/", StringComparison.Ordinal ) + 1 ));
-                EssProvider.Logger.LogError( "An error occurred attempting to load " + fileName + ", ignoring..." );
-                EssProvider.Logger.LogError( ex.ToString() );
+                UEssentials.Logger.LogError( "An error occurred attempting to load " + fileName + ", ignoring..." );
+                UEssentials.Logger.LogError( ex.ToString() );
             }
         }
 

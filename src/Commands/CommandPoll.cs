@@ -283,9 +283,9 @@ namespace Essentials.Commands
                     }).Delay( Duration * 1000 ).Go();   
                 }
 
-                if ( !EssProvider.Config.EnablePollRunningMessage ) return;
+                if ( !UEssentials.Config.EnablePollRunningMessage ) return;
 
-                var interval = EssProvider.Config.PollRunningMessageCooldown * 1000;
+                var interval = UEssentials.Config.PollRunningMessageCooldown * 1000;
 
                 Tasks.New( task =>
                 {

@@ -63,7 +63,7 @@ namespace Essentials.Core.Command
             {
                 var commandSource = caller is UnturnedPlayer
                                     ? UPlayer.From( (UnturnedPlayer) caller )
-                                    : EssProvider.ConsoleSource;
+                                    : UEssentials.ConsoleSource;
 
                 if ( commandSource.IsConsole && Command.AllowedSource == AllowedSource.PLAYER ) 
                 {
@@ -110,7 +110,7 @@ namespace Essentials.Core.Command
                 if ( caller is UnturnedPlayer )
                     UPlayer.TryGet( (UnturnedPlayer) caller, EssLang.COMMAND_ERROR_OCURRED.SendTo );
 
-                EssProvider.Logger.LogError( e.ToString() );
+                UEssentials.Logger.LogError( e.ToString() );
             }
         }
 

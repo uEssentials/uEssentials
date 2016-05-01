@@ -62,7 +62,7 @@ namespace Essentials.NativeModules.Warp.Commands
             }
 
             var dest = WarpModule.Instance.WarpManager[parameters[0].ToString()];
-            var cooldown = EssProvider.Config.WarpCooldown;
+            var cooldown = UEssentials.Config.WarpCooldown;
 
             if ( cooldown > 0 && !player.HasPermission( "essentials.bypass.warpcooldown" ) )
             {

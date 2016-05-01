@@ -53,7 +53,7 @@ namespace Essentials.I18n
 
         public static void LoadDefault( string locale )
         {
-            LoadDefault( locale, $"{EssProvider.TranslationFolder}lang_{locale}.json" );
+            LoadDefault( locale, $"{UEssentials.TranslationFolder}lang_{locale}.json" );
         }
 
         public static void LoadDefault( string locale, string translationPath )
@@ -81,12 +81,12 @@ namespace Essentials.I18n
         {
             // Load defaults
             LANGS.ForEach( l => {
-                var lpath = $"{EssProvider.TranslationFolder}lang_{l}.json";
+                var lpath = $"{UEssentials.TranslationFolder}lang_{l}.json";
                 if ( !File.Exists( lpath ) ) LoadDefault( l );
             } );
 
-            var locale = EssProvider.Config.Locale.ToLowerInvariant();
-            var translationPath = $"{EssProvider.TranslationFolder}lang_{locale}.json";
+            var locale = UEssentials.Config.Locale.ToLowerInvariant();
+            var translationPath = $"{UEssentials.TranslationFolder}lang_{locale}.json";
 
             if ( !File.Exists( translationPath ) )
             {
@@ -131,8 +131,8 @@ namespace Essentials.I18n
             }
             catch (JsonReaderException ex)
             {
-                EssProvider.Logger.LogError( $"Invalid translation ({translationPath})" );
-                EssProvider.Logger.LogError( ex.Message );
+                UEssentials.Logger.LogError( $"Invalid translation ({translationPath})" );
+                UEssentials.Logger.LogError( ex.Message );
 
                 // Load default
                 json = JObject.Load( new JsonTextReader( new StreamReader( 

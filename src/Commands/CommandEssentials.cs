@@ -67,7 +67,7 @@ namespace Essentials.Commands
 
         private static void ReloadKits()
         {
-            EssProvider.ModuleManager.GetModule<KitModule>().IfPresent( m => {
+            UEssentials.ModuleManager.GetModule<KitModule>().IfPresent( m => {
                 m.KitManager = new KitManager();
                 m.KitManager.Load();
             } );
@@ -148,7 +148,7 @@ namespace Essentials.Commands
                             var builder = new StringBuilder( "Commands: \n" );
 
                             (
-                                from command in EssProvider.CommandManager.Commands
+                                from command in UEssentials.CommandManager.Commands
                                 where _isEssentialsCommand(command)
                                 select command
                             ).ForEach( command => {
@@ -185,7 +185,7 @@ namespace Essentials.Commands
                             var page = 0;
 
                             (
-                                from command in EssProvider.CommandManager.Commands
+                                from command in UEssentials.CommandManager.Commands
                                 where _isEssentialsCommand(command)
                                 select command
                             ).ForEach( command => {
@@ -243,7 +243,7 @@ namespace Essentials.Commands
                     }
                     else
                     {
-                        var command = EssProvider.CommandManager.GetByName( args[1].ToString() );
+                        var command = UEssentials.CommandManager.GetByName( args[1].ToString() );
 
                         if ( command == null )
                         {

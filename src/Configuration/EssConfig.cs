@@ -191,8 +191,8 @@ namespace Essentials.Configuration
             }
             catch (Exception ex)
             {
-                EssProvider.Logger.LogError( $"Invalid configuration ({filePath})" );
-                EssProvider.Logger.LogError( ex.Message );
+                UEssentials.Logger.LogError( $"Invalid configuration ({filePath})" );
+                UEssentials.Logger.LogError( ex.Message );
             }
         }
         

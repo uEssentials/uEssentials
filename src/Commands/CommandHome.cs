@@ -69,7 +69,7 @@ namespace Essentials.Commands
                 return CommandResult.Lang( EssLang.WITHOUT_BED );
             }
 
-            var homeCommand = EssProvider.Config.HomeCommand;
+            var homeCommand = UEssentials.Config.HomeCommand;
             var delay = homeCommand.Delay;
             var cooldown = homeCommand.Cooldown;
 
@@ -103,6 +103,6 @@ namespace Essentials.Commands
         }
         
          protected override void OnUnregistered()
-            => EssProvider.EventManager.Unregister<EssentialsEventHandler>( "HomePlayerMove" );
+            => UEssentials.EventManager.Unregister<EssentialsEventHandler>( "HomePlayerMove" );
     }
 }

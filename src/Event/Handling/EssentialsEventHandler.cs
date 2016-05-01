@@ -32,7 +32,7 @@ using Essentials.Api.Unturned;
 using Essentials.Commands;
 using Essentials.Common;
 using Essentials.Core;
-using Essentials.Core.Economy;
+using Essentials.Economy;
 using Essentials.I18n;
 using Essentials.NativeModules.Kit;
 using Essentials.NativeModules.Kit.Commands;
@@ -57,7 +57,7 @@ namespace Essentials.Event.Handling
             /*
             Rocket implemented this 'feature'...
             
-            if ( message.StartsWith( "/" ) && EssProvider.Config.EnableUnknownMessage )
+            if ( message.StartsWith( "/" ) && UEssentials.Config.EnableUnknownMessage )
             {
                 var command = message.Substring( 1 );
 
@@ -66,7 +66,7 @@ namespace Essentials.Event.Handling
                     command = command.Split( ' ' )[0];
                 }
 
-                if ( EssProvider.CommandManager.HasWithName( command ) )
+                if ( UEssentials.CommandManager.HasWithName( command ) )
                 {
                     return;
                 }
@@ -81,7 +81,7 @@ namespace Essentials.Event.Handling
             */
 
             if ( message.StartsWith( "/" ) || player.HasPermission( "essentials.bypass.antispam" ) ||
-                 !EssProvider.Config.AntiSpam.Enabled ) return;
+                 !UEssentials.Config.AntiSpam.Enabled ) return;
 
             var playerName = player.CharacterName;
 
@@ -91,7 +91,7 @@ namespace Essentials.Event.Handling
                 return;
             }
 
-            var interval = EssProvider.Config.AntiSpam.Interval;
+            var interval = UEssentials.Config.AntiSpam.Interval;
 
             if ( (DateTime.Now - LastChatted[playerName]).TotalSeconds < interval )
             {
@@ -259,7 +259,7 @@ namespace Essentials.Event.Handling
             CommandTell.Conversations   .Remove( displayName );
             CachedSkills                .Remove( displayName );
 
-            EssProvider.ModuleManager.GetModule<KitModule>().IfPresent( m => {
+            UEssentials.ModuleManager.GetModule<KitModule>().IfPresent( m => {
                 if ( CommandKit.Cooldowns.Count == 0 ) return;
                 if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
 
@@ -382,7 +382,7 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
         void HomePlayerMove( UnturnedPlayer player, Vector3 pos )
         {
-            if ( !EssProvider.Config.HomeCommand.CancelWhenMove ||
+            if ( !UEssentials.Config.HomeCommand.CancelWhenMove ||
                  !Commands.CommandHome.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
             {
                 return;
@@ -411,7 +411,7 @@ namespace Essentials.Event.Handling
             
             if ( _cachedEconomyProvider == null )
             {
-                _cachedEconomyProvider = EssProvider.EconomyProvider;
+                _cachedEconomyProvider = UEssentials.EconomyProvider;
             }
 
             if ( _cachedEconomyProvider.IsAbsent )

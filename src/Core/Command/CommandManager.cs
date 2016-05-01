@@ -80,7 +80,7 @@ namespace Essentials.Core.Command
 
             if ( CommandMap.ContainsKey( name ) )
             {
-                EssProvider.Logger.LogError( $"Could not register '{command.GetType().Name}' because there is already a command called '{name}'" );
+                UEssentials.Logger.LogError( $"Could not register '{command.GetType().Name}' because there is already a command called '{name}'" );
                 return;
             }
 
@@ -284,7 +284,7 @@ namespace Essentials.Core.Command
 
                     if ( method.ReturnType != typeof (CommandResult) )
                     {
-                        EssProvider.Logger.LogError( $"Invalid method signature in '{method}'. " +
+                        UEssentials.Logger.LogError( $"Invalid method signature in '{method}'. " +
                                                       "Expected 'CommandResult methodName(ICommandSource, ICommandArgs)'");
                         continue;
                     }
@@ -306,7 +306,7 @@ namespace Essentials.Core.Command
                     }
                     else
                     {
-                        EssProvider.Logger.LogError( $"Invalid method signature in '{method}'. " +
+                        UEssentials.Logger.LogError( $"Invalid method signature in '{method}'. " +
                                                       "Expected 'CommandResult methodName(ICommandSource, ICommandArgs)'");
                     }
                 }

@@ -73,9 +73,9 @@ namespace Essentials.NativeModules.Kit.Commands
                 var steamPlayerId    = player.CSteamId.m_SteamID;
                 var kitCost          = requestedKit.Cost;
 
-                if ( kitCost > 0 && EssProvider.EconomyProvider.IsPresent )
+                if ( kitCost > 0 && UEssentials.EconomyProvider.IsPresent )
                 {
-                    var ecoProvider = EssProvider.EconomyProvider.Value;
+                    var ecoProvider = UEssentials.EconomyProvider.Value;
                     
                     if ( !ecoProvider.Has( player, kitCost ) )
                     {
@@ -140,7 +140,7 @@ namespace Essentials.NativeModules.Kit.Commands
                 
                 if ( kitCost > 0 )
                 {
-                    EssProvider.EconomyProvider.IfPresent( ec => {
+                    UEssentials.EconomyProvider.IfPresent( ec => {
                         ec.Withdraw( player, kitCost );
                         EssLang.KIT_PAID.SendTo( player, kitCost, ec.Currency );
                     });
@@ -187,6 +187,6 @@ namespace Essentials.NativeModules.Kit.Commands
         }
         
         protected override void OnUnregistered() 
-            => EssProvider.EventManager.Unregister<EssentialsEventHandler>( "KitPlayerDeath" );
+            => UEssentials.EventManager.Unregister<EssentialsEventHandler>( "KitPlayerDeath" );
     }
 }

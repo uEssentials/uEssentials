@@ -53,7 +53,7 @@ namespace Essentials.Compatibility.Hooks
                 return;
             }
 
-            EssProvider.Logger.LogInfo( "Hooking with LPX..." );
+            UEssentials.Logger.LogInfo( "Hooking with LPX..." );
 
             var sqlPerm = lpx.GetType().Assembly.GetType( "LIGHT.SQLPermission" );
 
@@ -64,7 +64,7 @@ namespace Essentials.Compatibility.Hooks
             _defaultProvider = R.Permissions;
             R.Permissions = sqlPermInst;
 
-            EssProvider.Logger.LogInfo( "Successfully hooked with LPX." );
+            UEssentials.Logger.LogInfo( "Successfully hooked with LPX." );
         }
 
         public override void OnUnload()

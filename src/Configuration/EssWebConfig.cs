@@ -30,8 +30,8 @@ namespace Essentials.Configuration
     {
         public override void Load( string filePath )
         {
-            var logger = EssProvider.Logger;
-            var url = EssProvider.Config.WebConfig.Url;
+            var logger = UEssentials.Logger;
+            var url = UEssentials.Config.WebConfig.Url;
             
             try
             {
