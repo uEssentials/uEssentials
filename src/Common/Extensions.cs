@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Essentials.Common.Util;
 
 namespace Essentials.Common
@@ -68,6 +69,16 @@ namespace Essentials.Common
             {
                 act( obj );
             }   
+        }
+
+        public static IEnumerable<T> WhereNot<T>( this IEnumerable<T> enume , Func<T, bool> predicate )
+        {
+            return enume.Where( t => !predicate( t ) );
+        }
+
+        public static bool None<T>( this IEnumerable<T> enume , Func<T, bool> predicate )
+        {
+            return !enume.Any( predicate );
         }
         
         public static string ArrayToString<T>( this T[] arr )

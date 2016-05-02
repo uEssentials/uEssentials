@@ -157,11 +157,9 @@ namespace Essentials.Core
             _dataFolder = Folder + "data/";
             _modulesFolder = Folder + "modules/";
 
-            (
-                from directory in new[] { _folder, _translationFolder, _dataFolder, _modulesFolder }
-                where !System.IO.Directory.Exists( directory )
-                select directory
-            ).ForEach( dir => System.IO.Directory.CreateDirectory( dir ) );
+            new [] { _folder, _translationFolder, _dataFolder, _modulesFolder }
+                .WhereNot( System.IO.Directory.Exists )
+                .ForEach( d => System.IO.Directory.CreateDirectory(d) );
 
             var configPath = $"{Folder}config.json";
 
