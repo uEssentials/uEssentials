@@ -55,10 +55,10 @@ namespace Essentials.Event.Handling
         void OnPlayerChatted( UnturnedPlayer player, ref Color color, string message,
                               EChatMode mode, ref bool cancel )
         {
-            /*
-            Rocket implemented this 'feature'...
-            
-            if ( message.StartsWith( "/" ) && UEssentials.Config.EnableUnknownMessage )
+
+            /* Rocket does not send "Command not found" if player is admin */
+            if ( player.IsAdmin && message.StartsWith( "/" ) && 
+                 UEssentials.Config.EnableUnknownMessage )
             {
                 var command = message.Substring( 1 );
 
@@ -79,7 +79,6 @@ namespace Essentials.Event.Handling
                 cancel = true;
                 return;
             }
-            */
 
             if ( message.StartsWith( "/" ) || player.HasPermission( "essentials.bypass.antispam" ) ||
                  !UEssentials.Config.AntiSpam.Enabled ) return;
