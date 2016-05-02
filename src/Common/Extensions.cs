@@ -57,20 +57,14 @@ namespace Essentials.Common
 
         public static void ForEach<T>( this T[] array, Action<T> act )
         {
-            foreach ( var obj in array )
-            {
-                act( obj );
-            }   
+            foreach ( var obj in array ) act( obj );
         }
 
         public static void ForEach<T>( this IEnumerable<T> enume , Action<T> act )
         {
-            foreach ( var obj in enume )
-            {
-                act( obj );
-            }   
+            foreach ( var obj in enume ) act( obj );
         }
-
+        
         public static IEnumerable<T> WhereNot<T>( this IEnumerable<T> enume , Func<T, bool> predicate )
         {
             return enume.Where( t => !predicate( t ) );
