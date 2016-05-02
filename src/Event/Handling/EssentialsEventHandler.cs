@@ -31,6 +31,7 @@ using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Commands;
 using Essentials.Common;
+using Essentials.Components.Player;
 using Essentials.Core;
 using Essentials.Economy;
 using Essentials.I18n;
@@ -111,6 +112,7 @@ namespace Essentials.Event.Handling
             var uplayer = UPlayer.From( player );
             var displayName = uplayer.DisplayName;
 
+            // Keep skill
             const string KEEP_SKILL_PERM = "essentials.keepskill.";
 
             var globalPercentage = -1;
@@ -343,6 +345,26 @@ namespace Essentials.Event.Handling
             }
 
             Commands.CommandBack.BackDict.Add( displayName, player.Position );
+        }
+
+        [SubscribeEvent( EventType.PLAYER_DEATH )]
+        void FreezePlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
+        {
+            if ( !UEssentials.Config.UnfreezeOnDeath || 
+                  player.GetComponent<FrozenPlayer>() == null )
+            {
+                UnityEngine.Object.Destroy( player.GetComponent<FrozenPlayer>() );
+            }
+        }
+
+        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
+        void FreezePlayerDisconnect( UnturnedPlayer player )
+        {
+            if ( !UEssentials.Config.UnfreezeOnQuit || 
+                  player.GetComponent<FrozenPlayer>() == null )
+            {
+                UnityEngine.Object.Destroy( player.GetComponent<FrozenPlayer>() );
+            }
         }
 
         [SubscribeEvent( EventType.PLAYER_DEATH )]
