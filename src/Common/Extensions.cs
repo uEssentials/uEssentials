@@ -54,7 +54,6 @@ namespace Essentials.Common
             return string.Format( str, args );   
         }
 
-
         public static void ForEach<T>( this T[] array, Action<T> act )
         {
             foreach ( var obj in array ) act( obj );
@@ -64,7 +63,7 @@ namespace Essentials.Common
         {
             foreach ( var obj in enume ) act( obj );
         }
-        
+
         public static IEnumerable<T> WhereNot<T>( this IEnumerable<T> enume , Func<T, bool> predicate )
         {
             return enume.Where( t => !predicate( t ) );
@@ -74,7 +73,7 @@ namespace Essentials.Common
         {
             return !enume.Any( predicate );
         }
-        
+
         public static string ArrayToString<T>( this T[] arr )
         {
             return MiscUtil.ArrayToString( arr );

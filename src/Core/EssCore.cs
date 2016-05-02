@@ -165,7 +165,7 @@ namespace Essentials.Core
 
             Config = new EssConfig();
             Config.Load( configPath );
-            
+
             if ( Config.WebConfig.Enabled )
             {
                 Config = new EssWebConfig();
@@ -184,13 +184,13 @@ namespace Essentials.Core
             EssLang.Load();
 
             Logger.Log( "Plugin version: ", ConsoleColor.Green, suffix: "" );
-            
+
             #if EXPERIMENTAL
               Logger.Log( $"{PLUGIN_VERSION} (Experimental)", ConsoleColor.White, "" );
             #else
               Logger.Log( PLUGIN_VERSION, ConsoleColor.White, "" );
             #endif
-            
+
             Logger.Log( "Recommended Rocket version: ", ConsoleColor.Green, suffix: "" );
             Logger.Log( ROCKET_VERSION, ConsoleColor.White, "" );
             Logger.Log( "Recommended Unturned version: ", ConsoleColor.Green, suffix: "" );
@@ -261,16 +261,16 @@ namespace Essentials.Core
             {
                 EventManager.Unregister<EssentialsEventHandler>( "UpdaterAlert" );
             }
-            
+
             if ( Config.ServerFrameRate != -1 )
             {
                 var frameRate = Config.ServerFrameRate;
-                
+
                 if ( Config.ServerFrameRate < -1 )
                 {
                     frameRate = -1; // Set to default
                 }
-                
+
                 UnityEngine.Application.targetFrameRate = frameRate;
             }
 
@@ -294,10 +294,10 @@ namespace Essentials.Core
             if ( Config.EnableTextCommands )
             {
                 var textCommandsFile = $"{Folder}textcommands.json";
-                
+
                 TextCommands = new TextCommands();
                 TextCommands.Load( textCommandsFile );
-                
+
                 TextCommands.Commands.ForEach( txtCommand => {
                     CommandManager.Register( new TextCommand(txtCommand) ); 
                 });
@@ -307,7 +307,7 @@ namespace Essentials.Core
             {
                 EventManager.Unregister<EssentialsEventHandler>( "DeathMessages" );
             }
-            
+
             #if !DEV
               CheckUpdates();
               Analytics.Metrics.Init();
@@ -325,7 +325,7 @@ namespace Essentials.Core
                 File.Delete( $"{Folder}uEssentials.en.translation.xml" );
                 File.Delete( $"{Folder}uEssentials.configuration.xml" );
             } ).Delay( 100 ).Go();
-            
+
             Tasks.New( t => {
                 UnregisterRocketCommands( true ); // Second check, silently.
             }).Delay( 3000 ).Go();
