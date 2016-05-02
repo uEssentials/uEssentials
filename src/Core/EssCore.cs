@@ -132,8 +132,9 @@ namespace Essentials.Core
 
         protected override void Load()
         {
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            
             Instance = this;
-
             R.Permissions = new EssentialsPermissionsProvider();
 
             Provider.onServerDisconnected += PlayerDisconnectCallback;
@@ -141,6 +142,8 @@ namespace Essentials.Core
 
             Logger = new EssLogger( "[uEssentials] " );
             ConnectedPlayers = new HashSet<UPlayer>();
+
+            Logger.Log( "Enabling uEssentials.", ConsoleColor.Green );
 
             if ( Provider.Players.Count > 0 )
             {
@@ -182,7 +185,6 @@ namespace Essentials.Core
 
             EssLang.Load();
 
-            Logger.Log( "Loaded uEssentials", ConsoleColor.Green );
             Logger.Log( "Plugin version: ", ConsoleColor.Green, suffix: "" );
             
             #if EXPERIMENTAL
@@ -331,7 +333,8 @@ namespace Essentials.Core
             }).Delay( 3000 ).Go();
 
             CommandWindow.ConsoleInput.onInputText += ReloadCallback;
-            UnregisterRocketCommands(); // First check. 
+            UnregisterRocketCommands(); // First check.
+            Logger.Log( $"Enabled ({stopwatch.ElapsedMilliseconds} ms)", ConsoleColor.Green );
         }
 
         protected override void Unload()
