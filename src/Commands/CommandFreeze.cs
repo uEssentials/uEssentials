@@ -20,11 +20,13 @@
 */
 
 using System.Linq;
+using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Components.Player;
+using Essentials.Event.Handling;
 using Essentials.I18n;
 
 namespace Essentials.Commands
@@ -76,6 +78,12 @@ namespace Essentials.Commands
             }
 
             return CommandResult.Success();
+        }
+
+        protected override void OnUnregistered() 
+        {
+            UEssentials.EventManager.Unregister<EssentialsEventHandler>( "FreezePlayerDisconnect" );
+            UEssentials.EventManager.Unregister<EssentialsEventHandler>( "FreezePlayerDeath" );
         }
     }
 }

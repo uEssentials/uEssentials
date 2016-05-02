@@ -230,28 +230,6 @@ namespace Essentials.Event.Handling
         }
 
         [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
-        void TpaPlayerDisconnect( UnturnedPlayer player )
-        {
-            var playerId = player.CSteamID.m_SteamID;
-            var requests = CommandTpa.Requests;
-            
-            if ( requests.ContainsKey( playerId ) )
-            {
-                requests.Remove( playerId );
-            }
-            else if ( requests.ContainsValue(playerId) )
-            {
-                var val = requests.Keys.FirstOrDefault(k => requests[k] == playerId);
-                
-                if ( val != default(ulong) )
-                {
-                    requests.Remove( val );
-                    System.Console.WriteLine(player);
-                }
-            }
-        }
-
-        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
         void OnPlayerDisconnect( UnturnedPlayer player )
         {
             var displayName = player.CharacterName;
@@ -329,92 +307,6 @@ namespace Essentials.Event.Handling
         void LeaveMessage( UnturnedPlayer player )
         {
             EssLang.PLAYER_EXITED.Broadcast( player.CharacterName );
-        }
-
-        [SubscribeEvent( EventType.PLAYER_DEATH )]
-        void BackPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb,  CSteamID murderer )
-        {
-            if ( !player.HasPermission( "essentials.command.back" ) )
-                return;
-
-            var displayName = player.DisplayName;
-
-            if ( Commands.CommandBack.BackDict.ContainsKey( displayName ) )
-            {
-                Commands.CommandBack.BackDict.Remove( displayName );
-            }
-
-            Commands.CommandBack.BackDict.Add( displayName, player.Position );
-        }
-
-        [SubscribeEvent( EventType.PLAYER_DEATH )]
-        void FreezePlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
-        {
-            if ( !UEssentials.Config.UnfreezeOnDeath || 
-                  player.GetComponent<FrozenPlayer>() == null )
-            {
-                UnityEngine.Object.Destroy( player.GetComponent<FrozenPlayer>() );
-            }
-        }
-
-        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
-        void FreezePlayerDisconnect( UnturnedPlayer player )
-        {
-            if ( !UEssentials.Config.UnfreezeOnQuit || 
-                  player.GetComponent<FrozenPlayer>() == null )
-            {
-                UnityEngine.Object.Destroy( player.GetComponent<FrozenPlayer>() );
-            }
-        }
-
-        [SubscribeEvent( EventType.PLAYER_DEATH )]
-        void KitPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
-        {
-            var globalKitCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
-
-            if ( CommandKit.GlobalCooldown.ContainsKey( player.CSteamID.m_SteamID ) &&
-                 EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie ) 
-            {
-                CommandKit.GlobalCooldown[player.CSteamID.m_SteamID] =
-                        DateTime.Now.AddSeconds( -globalKitCooldown );
-            }
-            
-            if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
-
-            var playerCooldowns = CommandKit.Cooldowns[player.CSteamID.m_SteamID];
-            var keys = new List<string> ( playerCooldowns.Keys );
-
-            foreach ( var kitName in keys )
-            {
-                var kit = KitModule.Instance.KitManager.GetByName(kitName);
-
-                if ( kit == null )
-                {
-                    playerCooldowns.Remove( kitName );
-                    continue;
-                }
-
-                if ( kit.ResetCooldownWhenDie )
-                {
-                    playerCooldowns[kitName] = DateTime.Now.AddSeconds( -kit.Cooldown );
-                }
-            }
-        }
-
-        [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
-        void HomePlayerMove( UnturnedPlayer player, Vector3 pos )
-        {
-            if ( !UEssentials.Config.HomeCommand.CancelWhenMove ||
-                 !Commands.CommandHome.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
-            {
-                return;
-            }
-
-            Commands.CommandHome.Delay[player.CSteamID.m_SteamID].Cancel();
-            Commands.CommandHome.Delay.Remove( player.CSteamID.m_SteamID );
-            Commands.CommandHome.Cooldown.Remove( player.CSteamID );
-
-            UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
         }
 
         private static Optional<IEconomyProvider> _cachedEconomyProvider;
@@ -600,7 +492,117 @@ namespace Essentials.Event.Handling
                     break;
             }
         }
-        
+
+        /* Commands event handlers */
+
+        [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
+        void HomePlayerMove( UnturnedPlayer player, Vector3 pos )
+        {
+            if ( !UEssentials.Config.HomeCommand.CancelWhenMove ||
+                 !Commands.CommandHome.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
+            {
+                return;
+            }
+
+            Commands.CommandHome.Delay[player.CSteamID.m_SteamID].Cancel();
+            Commands.CommandHome.Delay.Remove( player.CSteamID.m_SteamID );
+            Commands.CommandHome.Cooldown.Remove( player.CSteamID );
+
+            UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
+        }
+
+        [SubscribeEvent( EventType.PLAYER_DEATH )]
+        void BackPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb,  CSteamID murderer )
+        {
+            if ( !player.HasPermission( "essentials.command.back" ) )
+                return;
+
+            var displayName = player.DisplayName;
+
+            if ( Commands.CommandBack.BackDict.ContainsKey( displayName ) )
+            {
+                Commands.CommandBack.BackDict.Remove( displayName );
+            }
+
+            Commands.CommandBack.BackDict.Add( displayName, player.Position );
+        }
+
+        [SubscribeEvent( EventType.PLAYER_DEATH )]
+        void FreezePlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
+        {
+            if ( UEssentials.Config.UnfreezeOnDeath &&
+                 player.GetComponent<FrozenPlayer>() != null )
+            {
+                UnityEngine.Object.Destroy( player.GetComponent<FrozenPlayer>() );
+            }
+        }
+
+        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
+        void FreezePlayerDisconnect( UnturnedPlayer player )
+        {
+            if ( UEssentials.Config.UnfreezeOnDeath &&
+                 player.GetComponent<FrozenPlayer>() != null )
+            {
+                UnityEngine.Object.Destroy( player.GetComponent<FrozenPlayer>() );
+            }
+        }
+
+        [SubscribeEvent( EventType.PLAYER_DEATH )]
+        void KitPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
+        {
+            var globalKitCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
+
+            if ( CommandKit.GlobalCooldown.ContainsKey( player.CSteamID.m_SteamID ) &&
+                 EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie ) 
+            {
+                CommandKit.GlobalCooldown[player.CSteamID.m_SteamID] =
+                        DateTime.Now.AddSeconds( -globalKitCooldown );
+            }
+            
+            if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
+
+            var playerCooldowns = CommandKit.Cooldowns[player.CSteamID.m_SteamID];
+            var keys = new List<string> ( playerCooldowns.Keys );
+
+            foreach ( var kitName in keys )
+            {
+                var kit = KitModule.Instance.KitManager.GetByName(kitName);
+
+                if ( kit == null )
+                {
+                    playerCooldowns.Remove( kitName );
+                    continue;
+                }
+
+                if ( kit.ResetCooldownWhenDie )
+                {
+                    playerCooldowns[kitName] = DateTime.Now.AddSeconds( -kit.Cooldown );
+                }
+            }
+        }
+
+        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
+        void TpaPlayerDisconnect( UnturnedPlayer player )
+        {
+            var playerId = player.CSteamID.m_SteamID;
+            var requests = CommandTpa.Requests;
+            
+            if ( requests.ContainsKey( playerId ) )
+            {
+                requests.Remove( playerId );
+            }
+            else if ( requests.ContainsValue(playerId) )
+            {
+                var val = requests.Keys.FirstOrDefault(k => requests[k] == playerId);
+                
+                if ( val != default(ulong) )
+                {
+                    requests.Remove( val );
+                    System.Console.WriteLine(player);
+                }
+            }
+        }
+
         private string TranslateLimb( ELimb limb )
         {
             switch (limb)
