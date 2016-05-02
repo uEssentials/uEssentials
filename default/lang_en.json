@@ -32,7 +32,7 @@
 
     "UNKNOWN_COMMAND": "<yellow>There is no '/{0}' command.",
     "INVALID_NUMBER": "<yellow>Invalid number '{0}'.",
-    "INVALID_BOOLEAN": "<yellow>Invalid value '{0}'.  Expected 'true' or 'false'.",
+    "INVALID_BOOLEAN": "<yellow>Invalid value '{0}'. Expected 'true' or 'false'.",
     "SECOND": "second",
     "DAY": "day",
     "MINUTE": "minute",
