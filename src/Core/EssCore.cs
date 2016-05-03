@@ -39,7 +39,6 @@ using Essentials.Core.Event;
 using Essentials.I18n;
 using Rocket.Core;
 using Rocket.Core.Plugins;
-using Environment = Rocket.Core.Environment;
 using Essentials.Common.Reflect;
 using Essentials.Compatibility;
 using Essentials.Core.Permission;
@@ -52,13 +51,14 @@ using Steamworks;
 using Rocket.Core.Commands;
 using Essentials.Compatibility.Hooks;
 using Essentials.Economy;
+using Environment = Rocket.Core.Environment;
 
 namespace Essentials.Core
 {
     public sealed class EssCore : RocketPlugin
     {
         internal const string                         ROCKET_VERSION              = "4.9.4.0";
-        internal const string                         UNTURNED_VERSION            = "3.14.14.1";
+        internal const string                         UNTURNED_VERSION            = "3.14.15.1";
         internal const string                         PLUGIN_VERSION              = "1.2.1.0";
         
         internal static EssCore                       Instance                    { get; set; }
