@@ -33,6 +33,10 @@ using SDG.Unturned;
 
 namespace Essentials.Commands 
 {
+    // TODO: Improve
+    // Multiple requests
+    // tpa toggle?
+
     [CommandInfo(
         Name = "tpa",
         Usage = "[player|accept|deny|cancel]",
@@ -61,6 +65,11 @@ namespace Essentials.Commands
                 case "accept":
                 case "a":
                 {
+                    if ( !player.HasPermission( $"{Permission}.accept" ) )
+                    {
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                    }
+
                     if ( !Requests.ContainsValue( senderId ) )
                     {
                         return CommandResult.Lang( EssLang.TPA_NONE );
@@ -108,6 +117,11 @@ namespace Essentials.Commands
                 case "deny":
                 case "d":
                 {
+                    if ( !player.HasPermission( $"{Permission}.deny" ) )
+                    {
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                    }
+
                     if ( !Requests.ContainsValue( senderId ) )
                     {
                         return CommandResult.Lang( EssLang.TPA_NONE ); 
@@ -129,6 +143,11 @@ namespace Essentials.Commands
                 case "cancel":
                 case "c":
                 {
+                    if ( !player.HasPermission( $"{Permission}.cancel" ) )
+                    {
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                    }
+
                     if ( !Requests.ContainsKey( senderId ) )
                     {
                         return CommandResult.Lang( EssLang.TPA_NONE );
@@ -141,6 +160,11 @@ namespace Essentials.Commands
                 
                 default:
                 {
+                    if ( !player.HasPermission( $"{Permission}.send" ) )
+                    {
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                    }
+
                     if ( !args[0].IsValidPlayerName ) 
                     {
                         return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
