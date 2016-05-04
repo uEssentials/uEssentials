@@ -32,7 +32,7 @@
 
     "UNKNOWN_COMMAND": "<yellow>There is no '/{0}' command.",
     "INVALID_NUMBER": "<yellow>Invalid number '{0}'.",
-    "INVALID_BOOLEAN": "<yellow>Invalid value '{0}'.  Expected 'true' or 'false'.",
+    "INVALID_BOOLEAN": "<yellow>Invalid value '{0}'. Expected 'true' or 'false'.",
     "SECOND": "second",
     "DAY": "day",
     "MINUTE": "minute",
@@ -111,7 +111,7 @@
     "VEHICLE_REPAIRED": "<cyan>Your vehicle has been repaired!",
     "VEHICLE_REPAIRED_ALL": "<cyan>All vehicles were repaired!",
     /* {0} is poll's name, {1} is description*/
-    "POLL_STARTED": "<cyan>A poll has been created, use /vote yes|no to vote:  {1}",
+    "POLL_STARTED": "<cyan>A poll has been created, use /vote yes|no to vote: {1}",
     /* {0} is poll's name, {1} is description, {2} yes votes, {3} no votes*/
     "POLL_STOPPED": "<magenta>The poll '{0}' has ended, votes yes: {2}, votes no: {3}",
     /* You can disable or change interval of this message in configuration */
