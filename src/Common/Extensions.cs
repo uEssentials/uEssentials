@@ -38,7 +38,7 @@ namespace Essentials.Common
         {
             return CultureInfo.InvariantCulture.CompareInfo.IndexOf( str, part, CompareOptions.IgnoreCase ) >= 0;
         }
-        
+
         public static bool IsNullOrEmpty( this string str )
         {
             return string.IsNullOrEmpty( str );
