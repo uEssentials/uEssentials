@@ -90,10 +90,10 @@ namespace Essentials.Core
 
         protected override void Load()
         {
-            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-
             try
             {
+                var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
                 Instance = this;
                 R.Permissions = new EssentialsPermissionsProvider();
 
