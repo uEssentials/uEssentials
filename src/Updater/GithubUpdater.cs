@@ -147,7 +147,7 @@ namespace Essentials.Updater
                     {
                         client.DownloadFileCompleted += ( sender, e ) =>
                         {
-                            Logger.LogInfo( "Download finished. See 'uEssentials/updates/' folder." );
+                            Logger.LogInfo( "Download finished. Check 'uEssentials/updates/' folder." );
                         };
 
                         client.DownloadProgressChanged += ( sender, e ) =>
