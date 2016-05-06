@@ -495,7 +495,7 @@ namespace Essentials.Event.Handling
         /* Commands event handlers */
 
         [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
-        void HomePlayerMove( UnturnedPlayer player, Vector3 pos )
+        void HomePlayerMove( UnturnedPlayer player, uint newSeq, Vector3 newPosition, byte newPitch, byte newYaw )
         {
             if ( !UEssentials.Config.HomeCommand.CancelWhenMove ||
                  !Commands.CommandHome.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
