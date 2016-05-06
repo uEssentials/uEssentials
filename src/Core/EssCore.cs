@@ -58,8 +58,8 @@ namespace Essentials.Core
     public sealed class EssCore : RocketPlugin
     {
         internal const string                         ROCKET_VERSION              = "4.9.4.0";
-        internal const string                         UNTURNED_VERSION            = "3.14.15.1";
-        internal const string                         PLUGIN_VERSION              = "1.2.1.0";
+        internal const string                         UNTURNED_VERSION            = "3.14.16.0";
+        internal const string                         PLUGIN_VERSION              = "1.2.2.0";
         
         internal static EssCore                       Instance                    { get; set; }
         
