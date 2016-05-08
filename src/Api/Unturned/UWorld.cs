@@ -34,12 +34,6 @@ namespace Essentials.Api.Unturned
             set { LightingManager.time = value; }
         }
 
-        public static bool IsFullMoon
-        {
-            get { return LightingManager.isFullMoon; }
-            set { LightingManager.isFullMoon = value; }
-        }
-
         public static List<Zombie> Zombies => 
             Object.FindObjectsOfType<Zombie>()?.ToList() ?? new List<Zombie>( 0 );
 
