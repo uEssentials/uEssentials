@@ -24,6 +24,7 @@ using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
+using Essentials.Common.Util;
 using Essentials.I18n;
 using UnityEngine;
 
@@ -55,24 +56,20 @@ namespace Essentials.Commands
                 return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
             }
 
-            var message = string.Format(
-                UEssentials.Config.PrivateMessageFormat,
-                src.DisplayName,
-                args.Join( 1 )
-            );
+            var rawMsg1 = UEssentials.Config.PrivateMessageFormat;
+            var rawMsg2 = UEssentials.Config.PrivateMessageFormat2;
+            var color1 = ColorUtil.GetColorFromString( ref rawMsg1 );
+            var color2 = ColorUtil.GetColorFromString( ref rawMsg2 );
 
-            var message2 = string.Format(
-                UEssentials.Config.PrivateMessageFormat2,
-                target.DisplayName,
-                args.Join( 1 )
-            );
+            var message = string.Format( rawMsg1, src.DisplayName, args.Join( 1 ) );
+            var message2 = string.Format( rawMsg2, target.DisplayName, args.Join( 1 ) );
 
-            target.SendMessage( message );
-            src.SendMessage( message2 );
+            target.SendMessage( message, color1 );
+            src.SendMessage( message2, color2 );
 
             Spies.ForEach( p => {
-                UPlayer.From( p ).SendMessage( 
-                    $"Spy: ({src.DisplayName} -> {target.CharacterName}): {args.Join( 1 )}", Color.gray );
+                UPlayer.From( p ).SendMessage( $"Spy: ({src.DisplayName} -> " +  
+                                               $"{target.CharacterName}): {args.Join( 1 )}", Color.gray );
             } );
 
             if ( Conversations.ContainsKey( src.DisplayName ) )
