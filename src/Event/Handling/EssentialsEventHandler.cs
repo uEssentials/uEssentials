@@ -492,7 +492,7 @@ namespace Essentials.Event.Handling
             }
         }
 
-        /* Commands event handlers */
+        /* Commands eventhandlers */
 
         [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
         void HomePlayerMove( UnturnedPlayer player, uint newSeq, Vector3 newPosition, byte newPitch, byte newYaw )

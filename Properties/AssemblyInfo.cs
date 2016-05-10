@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
 [assembly: AssemblyProduct( "uEssentials" )]
-[assembly: AssemblyCopyright( "2015-2016 Leonardosc (https//leonardosnt.github.io/)" )]
+[assembly: AssemblyCopyright( "2015-2016 Leonardosnt (https//leonardosnt.github.io/)" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
