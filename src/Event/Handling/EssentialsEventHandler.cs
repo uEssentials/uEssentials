@@ -597,7 +597,6 @@ namespace Essentials.Event.Handling
                 if ( val != default(ulong) )
                 {
                     requests.Remove( val );
-                    System.Console.WriteLine(player);
                 }
             }
         }
