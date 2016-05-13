@@ -102,7 +102,7 @@ namespace Essentials.Commands
         private static void Explode( Vector3 pos )
         {
             EffectManager.sendEffect( 20, EffectManager.INSANE, pos );
-            DamageTool.explode( pos, 10f, EDeathCause.GRENADE, 200, 200, 200, 200, 200, 200, 200 );
+            DamageTool.explode( pos, 10f, EDeathCause.GRENADE, 200, 200, 200, 200, 200, 200, 200, 200 );
         }
     }
 }
