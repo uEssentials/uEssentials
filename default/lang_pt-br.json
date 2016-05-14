@@ -230,5 +230,7 @@
     "LIMB_HEAD": "cabeça",
     "LIMB_LEG": "perna",
     "LIMB_TORSO": "peito",
-    "LIMB_ARM": "braço"
+    "LIMB_ARM": "braço",
+    "ITEM_LIMIT": "<red>Você não pode spawnar mais de {0} items de uma vez.",
+    "EVERYONE": "todos"
 }
