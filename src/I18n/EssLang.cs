@@ -193,6 +193,11 @@ namespace Essentials.I18n
             Broadcast( null );
         }
 
+        public override String ToString() 
+        {
+            return GetMessage();
+        }
+
         public static EssLang PLAYER_JOINED { get; private set; }
         public static EssLang PLAYER_EXITED { get; private set; }
         public static EssLang PLAYER_CANNOT_EXECUTE { get; private set; }
@@ -394,5 +399,6 @@ namespace Essentials.I18n
         public static EssLang LIMB_TORSO { get; private set; }
         public static EssLang LIMB_ARM { get; private set; }
         public static EssLang ITEM_LIMIT { get; private set; }
+        public static EssLang EVERYONE { get; private set; }
     }
 }
