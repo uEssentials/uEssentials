@@ -120,27 +120,27 @@ namespace Essentials.Event.Handling
             /*
                 Search for 'global percentage' Ex: (essentials.keepskill.50)
             */
-            foreach ( var p in playerPermissions )
+            
+            foreach ( var p in playerPermissions.Where( p => p.StartsWith( KEEP_SKILL_PERM ) ) )
             {
-                if ( !p.StartsWith( KEEP_SKILL_PERM ) )
-                {
-                    continue;
-                }
-
                 var rawAmount = p.Substring( KEEP_SKILL_PERM.Length );
 
+                if ( rawAmount.Equals( "*" ) ) 
+                {
+                    globalPercentage = 100;
+                    break;    
+                }
                 if ( int.TryParse( rawAmount, out globalPercentage ) )
                 {
                     break;
                 }
-
                 globalPercentage = -1;
             }
 
             /*
                 If player has global percentage he will keep all skills.
             */
-            var hasGlobalPercentage = (globalPercentage != -1);
+            var hasGlobalPercentage = (globalPercentage != -1 || player.IsAdmin);
             var skillValues = new Dictionary<USkill, byte>();
 
             foreach ( var skill in USkill.Skills )
@@ -494,7 +494,7 @@ namespace Essentials.Event.Handling
 
         /* Commands eventhandlers */
 
-        [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
+        /*[SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
         void HomePlayerMove( UnturnedPlayer player, uint newSeq, Vector3 newPosition, byte newPitch, byte newYaw )
         {
             if ( !player.Player.Movement.isMoving || !UEssentials.Config.HomeCommand.CancelWhenMove ||
@@ -508,7 +508,7 @@ namespace Essentials.Event.Handling
             Commands.CommandHome.Cooldown.Remove( player.CSteamID );
 
             UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
-        }
+        }*/
 
         [SubscribeEvent( EventType.PLAYER_DEATH )]
         void BackPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb,  CSteamID murderer )
