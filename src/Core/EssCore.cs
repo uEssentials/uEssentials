@@ -219,7 +219,7 @@ namespace Essentials.Core
 
                 if ( !Config.Updater.AlertOnJoin )
                 {
-                    EventManager.Unregister<EssentialsEventHandler>( "UpdaterAlert" );
+                    EventManager.Unregister<EssentialsEventHandler>( "UpdateAlert" );
                 }
 
                 if ( Config.ServerFrameRate != -1 )
