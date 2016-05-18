@@ -539,7 +539,7 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
         void FreezePlayerDisconnect( UnturnedPlayer player )
         {
-            if ( UEssentials.Config.UnfreezeOnDeath &&
+            if ( UEssentials.Config.UnfreezeOnQuit &&
                  player.GetComponent<FrozenPlayer>() != null )
             {
                 UnityEngine.Object.Destroy( player.GetComponent<FrozenPlayer>() );
