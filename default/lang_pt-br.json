@@ -189,6 +189,7 @@
     "SKILL_SET_ALL": "O nível da skill '{0}' de todos os jogadores foi definido para {1}.",
     "ANYONE_ONLINE": "Não há nenhum jogador online.",
     "KILLED_ANIMALS": "Você matou {0} animais.",
+    "ASCENDED": "You ascended {0} 'meters'",
     "DESCENDED": "Você desceu {0} 'metros'",
     "CLEAR_EMPTY_VEHICLES": "Removido {0} veículos.",
     "KIT_GLOBAL_COOLDOWN": "<yellow>Você precisa esperar {0} para usar outro kit.",
