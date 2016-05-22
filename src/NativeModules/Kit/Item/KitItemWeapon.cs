@@ -27,51 +27,27 @@ using SDG.Unturned;
 
 namespace Essentials.NativeModules.Kit.Item
 {
-    /// <summary>
-    /// Author: leonardosc
-    /// </summary>
     public class KitItemWeapon : KitItem
     {
-        /// <summary>
-        /// 
-        /// </summary>
         [JsonProperty]
         [JsonConverter(typeof(StringEnumConverter))]
         public EFiremode? FireMode { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [JsonProperty]
         public byte? Ammo { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [JsonProperty]
         public Attachment Barrel { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [JsonProperty]
         public Attachment Sight { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [JsonProperty]
         public Attachment Grip { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [JsonProperty]
         public Attachment Tactical { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         [JsonProperty]
         public Attachment Magazine { get; set; }
 
@@ -91,8 +67,7 @@ namespace Essentials.NativeModules.Kit.Item
 
                 var metadata = item.Metadata;
 
-                Action<int[], Attachment> assembleAttach = ( indexes, attach ) =>
-                {
+                Action<int[], Attachment> assembleAttach = ( indexes, attach ) => {
                     if ( attach == null || attach.AttachmentId == 0 ) return;
 
                     var attachIdBytes = BitConverter.GetBytes( attach.AttachmentId );
