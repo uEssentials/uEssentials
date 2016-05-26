@@ -25,6 +25,7 @@ using Rocket.API.Serialisation;
 using Rocket.Core;
 using Rocket.Core.Permissions;
 using Essentials.Common;
+using System;
 
 namespace Essentials.Core.Permission
 {
@@ -86,10 +87,6 @@ namespace Essentials.Core.Permission
             return _defaultProvider.GetPermissions( player );
         }
 
-        public bool SetGroup( IRocketPlayer player, string groupID )
-        {
-            return _defaultProvider.SetGroup( player, groupID );
-        }
 
         public void Reload()
         {
@@ -124,6 +121,36 @@ namespace Essentials.Core.Permission
             }
             
             return false;
+        }
+
+        public RocketPermissionsProviderResult AddPlayerToGroup(string groupId, IRocketPlayer player)
+        {
+            return _defaultProvider.AddPlayerToGroup( groupId, player );
+        }
+
+        public RocketPermissionsProviderResult RemovePlayerFromGroup(string groupId, IRocketPlayer player)
+        {
+            return _defaultProvider.RemovePlayerFromGroup( groupId, player );
+        }
+
+        public RocketPermissionsGroup GetGroup(string groupId)
+        {
+            return _defaultProvider.GetGroup( groupId );
+        }
+
+        public RocketPermissionsProviderResult AddGroup(RocketPermissionsGroup group)
+        {
+            return _defaultProvider.AddGroup( group );
+        }
+
+        public RocketPermissionsProviderResult SaveGroup(RocketPermissionsGroup group)
+        {
+            return _defaultProvider.SaveGroup( group );
+        }
+
+        public RocketPermissionsProviderResult DeleteGroup(string groupId)
+        {
+            return _defaultProvider.DeleteGroup( groupId );
         }
     }
 }
