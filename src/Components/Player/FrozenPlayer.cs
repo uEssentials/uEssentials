@@ -46,8 +46,8 @@ namespace Essentials.Components.Player
 
                 Vector3 point;
                 byte angle;
-                veh.getExit( seat, out point, out angle);
-                VehicleManager.sendExitVehicle(veh, seat, (point + (point - pos)), angle, false);
+                veh.getExit( seat, out point, out angle );
+                VehicleManager.sendExitVehicle( veh, seat, (point + (point - pos)), angle, false );
             }
         }
 
