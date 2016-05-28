@@ -25,7 +25,6 @@ using Rocket.API.Serialisation;
 using Rocket.Core;
 using Rocket.Core.Permissions;
 using Essentials.Common;
-using System;
 
 namespace Essentials.Core.Permission
 {
@@ -87,7 +86,6 @@ namespace Essentials.Core.Permission
             return _defaultProvider.GetPermissions( player );
         }
 
-
         public void Reload()
         {
             _defaultProvider.Reload();
@@ -106,49 +104,36 @@ namespace Essentials.Core.Permission
             {
                 return false;
             }
-
-            for ( var i = perm.Length - 1; i >= 0; i-- )
-            {
-                if ( perm[i] != '.' )
-                {
-                    continue;
-                }
-
-                if ( _defaultProvider.HasPermission( player, perm.Substring( 0, i + 1 ) + '*' ) )
-                {
-                    return true;
-                }
-            }
             
             return false;
         }
 
-        public RocketPermissionsProviderResult AddPlayerToGroup(string groupId, IRocketPlayer player)
+        public RocketPermissionsProviderResult AddPlayerToGroup( string groupId, IRocketPlayer player )
         {
             return _defaultProvider.AddPlayerToGroup( groupId, player );
         }
 
-        public RocketPermissionsProviderResult RemovePlayerFromGroup(string groupId, IRocketPlayer player)
+        public RocketPermissionsProviderResult RemovePlayerFromGroup( string groupId, IRocketPlayer player )
         {
             return _defaultProvider.RemovePlayerFromGroup( groupId, player );
         }
 
-        public RocketPermissionsGroup GetGroup(string groupId)
+        public RocketPermissionsGroup GetGroup( string groupId )
         {
             return _defaultProvider.GetGroup( groupId );
         }
 
-        public RocketPermissionsProviderResult AddGroup(RocketPermissionsGroup group)
+        public RocketPermissionsProviderResult AddGroup( RocketPermissionsGroup group )
         {
             return _defaultProvider.AddGroup( group );
         }
 
-        public RocketPermissionsProviderResult SaveGroup(RocketPermissionsGroup group)
+        public RocketPermissionsProviderResult SaveGroup( RocketPermissionsGroup group )
         {
             return _defaultProvider.SaveGroup( group );
         }
 
-        public RocketPermissionsProviderResult DeleteGroup(string groupId)
+        public RocketPermissionsProviderResult DeleteGroup( string groupId )
         {
             return _defaultProvider.DeleteGroup( groupId );
         }
