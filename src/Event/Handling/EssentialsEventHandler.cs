@@ -494,10 +494,10 @@ namespace Essentials.Event.Handling
 
         /* Commands eventhandlers */
 
-        /*[SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
-        void HomePlayerMove( UnturnedPlayer player, uint newSeq, Vector3 newPosition, byte newPitch, byte newYaw )
+        [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
+        void HomePlayerMove( UnturnedPlayer player, Vector3 newPosition )
         {
-            if ( !player.Player.Movement.isMoving || !UEssentials.Config.HomeCommand.CancelWhenMove ||
+            if ( !UEssentials.Config.HomeCommand.CancelWhenMove ||
                  !Commands.CommandHome.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
             {
                 return;
@@ -508,7 +508,7 @@ namespace Essentials.Event.Handling
             Commands.CommandHome.Cooldown.Remove( player.CSteamID );
 
             UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
-        }*/
+        }
 
         [SubscribeEvent( EventType.PLAYER_DEATH )]
         void BackPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb,  CSteamID murderer )

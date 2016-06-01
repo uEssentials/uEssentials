@@ -48,8 +48,7 @@ namespace Essentials.Api.Event
             {
                 case EventType.PLAYER_UPDATE_BLEEDING:
                 case EventType.PLAYER_UPDATE_BROKEN:
-                //case EventType.PLAYER_UPDATE_POSITION: // Broken by rocket, thx...
-                    break;
+                case EventType.PLAYER_UPDATE_POSITION:
                 case EventType.PLAYER_UPDATE_LIFE:
                 case EventType.PLAYER_UPDATE_FOOD:
                 case EventType.PLAYER_UPDATE_HEALTH:
@@ -92,7 +91,7 @@ namespace Essentials.Api.Event
             {
                 case EventType.PLAYER_UPDATE_BLEEDING:DelegateName = "OnPlayerUpdateBleeding"; break;
                 case EventType.PLAYER_UPDATE_BROKEN:DelegateName = "OnPlayerUpdateBroken"; break;
-                //case EventType.PLAYER_UPDATE_POSITION:DelegateName = "OnPlayerUpdatePosition"; break;
+                case EventType.PLAYER_UPDATE_POSITION:DelegateName = "OnPlayerUpdatePosition"; break;
                 case EventType.PLAYER_UPDATE_LIFE:DelegateName = "OnPlayerUpdateLife"; break;
                 case EventType.PLAYER_UPDATE_FOOD:DelegateName = "OnPlayerUpdateFood"; break;
                 case EventType.PLAYER_UPDATE_HEALTH:DelegateName = "OnPlayerUpdateHealth"; break;
@@ -143,7 +142,7 @@ namespace Essentials.Api.Event
         /// <summary>
         /// Signature: (UnturnedPlayer player, uint newSeq, Vector3 newPosition, byte newPitch, byte newYaw)
         /// </summary>
-        //PLAYER_UPDATE_POSITION,
+        PLAYER_UPDATE_POSITION,
 
         /// <summary>
         /// Signature: (UnturnedPlayer player, byte amount)
