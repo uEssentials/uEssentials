@@ -222,12 +222,18 @@ namespace Essentials.Event.Handling
             });
         }
 
+        /*
+            Generic CONNECTED
+        */
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
         void OnPlayerConnected( UnturnedPlayer player )
         {
             Analytics.Metrics.ReportPlayer( player );
         }
-
+        
+        /*
+            Generic DISCONNECTED
+        */
         [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
         void OnPlayerDisconnect( UnturnedPlayer player )
         {
@@ -526,6 +532,10 @@ namespace Essentials.Event.Handling
             Commands.CommandBack.BackDict.Add( displayName, player.Position );
         }
 
+
+        /* Freeze Command */
+        private static HashSet<ulong> DisconnectedFrozen = new HashSet<ulong>();
+
         [SubscribeEvent( EventType.PLAYER_DEATH )]
         void FreezePlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
         {
@@ -539,12 +549,24 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
         void FreezePlayerDisconnect( UnturnedPlayer player )
         {
-            if ( UEssentials.Config.UnfreezeOnQuit &&
+            if ( !UEssentials.Config.UnfreezeOnQuit &&
                  player.GetComponent<FrozenPlayer>() != null )
             {
-                UnityEngine.Object.Destroy( player.GetComponent<FrozenPlayer>() );
+                DisconnectedFrozen.Add( player.CSteamID.m_SteamID );
             }
         }
+        
+        [SubscribeEvent( EventType.PLAYER_CONNECTED )]
+        void FreezePlayerConnected( UnturnedPlayer player ) 
+        {
+            if ( !UEssentials.Config.UnfreezeOnQuit && 
+                 DisconnectedFrozen.Contains( player.CSteamID.m_SteamID ) ) 
+            {
+                UPlayer.From( player ).AddComponent<FrozenPlayer>();
+                DisconnectedFrozen.Remove( player.CSteamID.m_SteamID );
+            }
+        } 
+
 
         [SubscribeEvent( EventType.PLAYER_DEATH )]
         void KitPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )

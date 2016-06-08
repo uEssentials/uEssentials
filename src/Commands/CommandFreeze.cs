@@ -83,6 +83,7 @@ namespace Essentials.Commands
         protected override void OnUnregistered() 
         {
             UEssentials.EventManager.Unregister<EssentialsEventHandler>( "FreezePlayerDisconnect" );
+            UEssentials.EventManager.Unregister<EssentialsEventHandler>( "FreezePlayerConnected" );
             UEssentials.EventManager.Unregister<EssentialsEventHandler>( "FreezePlayerDeath" );
         }
     }
