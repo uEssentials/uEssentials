@@ -41,40 +41,38 @@ namespace Essentials.Core.Permission
         {
             this._defaultProvider = _defaultProvider;
         }
-
-        public bool HasPermission( IRocketPlayer player, string perm, bool defaultReturnValue = false )
+        
+        /*public bool HasPermission( IRocketPlayer player, string perm )
         {
-            if ( Check( player, perm, defaultReturnValue ) )
+            if ( Check( player, perm ) )
             {
                 return true;
             }
             
-            return _defaultProvider.HasPermission( player, perm.ToLowerInvariant(), defaultReturnValue );
+            return _defaultProvider.HasPermission( player, perm.ToLowerInvariant() );
         }
 
-        public bool HasPermission( IRocketPlayer player, IRocketCommand command, out uint? cooldownLeft, bool defaultReturnValue = false )
+        public bool HasPermission( IRocketPlayer player, IRocketCommand command )
         {
             if ( command == null || command.Name.EqualsIgnoreCase( "essentials" ) )
             {
-                cooldownLeft = null;
                 return true;
             }
             
             var perm = command.Permissions.Count > 0 ? command.Permissions[0] : null;
 
-            if ( perm != null && Check( player, perm, defaultReturnValue ) )
+            if ( perm != null && Check( player, perm ) )
             {
-                cooldownLeft = 0;
                 return true;
             }
             
-            return _defaultProvider.HasPermission( player, command, out cooldownLeft, defaultReturnValue );
+            return _defaultProvider.HasPermission( player, perm );
         }
 
-        public bool HasPermission( IRocketPlayer player, List<string> requestedPermissions, out uint? cooldownLeft, bool defaultReturnValue = false )
+        public bool HasPermission( IRocketPlayer player, List<string> requestedPermissions, out uint? cooldownLeft )
         {
-            return _defaultProvider.HasPermission( player, requestedPermissions, out cooldownLeft, defaultReturnValue );
-        }
+            return _defaultProvider.HasPermission( player, requestedPermissions, out cooldownLeft );
+        }*/
 
         public List<RocketPermissionsGroup> GetGroups( IRocketPlayer player, bool includeParentGroups )
         {
@@ -91,16 +89,16 @@ namespace Essentials.Core.Permission
             _defaultProvider.Reload();
         }
         
-        private bool Check( IRocketPlayer player, string perm, bool defaultReturnValue )
+        private bool Check( IRocketPlayer player, string perm )
         {
             perm = perm.ToLowerInvariant();
             
-            if ( _defaultProvider.HasPermission( player, "*", defaultReturnValue ) )
+            if ( _defaultProvider.HasPermission( player, "*" ) )
             {
                 return true;
             }
 
-            if ( _defaultProvider.HasPermission( player, $"!{perm}", defaultReturnValue ) )
+            if ( _defaultProvider.HasPermission( player, $"!{perm}" ) )
             {
                 return false;
             }
@@ -136,6 +134,20 @@ namespace Essentials.Core.Permission
         public RocketPermissionsProviderResult DeleteGroup( string groupId )
         {
             return _defaultProvider.DeleteGroup( groupId );
+        }
+
+        public bool HasPermission( IRocketPlayer player, List<string> requestedPermissions )
+        {
+            bool ret = _defaultProvider.HasPermission( player, requestedPermissions );
+            requestedPermissions.ForEach(System.Console.WriteLine);
+            System.Console.WriteLine(ret);
+            System.Console.WriteLine("------");
+            return ret;
+        }
+
+        public List<Rocket.API.Serialisation.Permission> GetPermissions( IRocketPlayer player, List<string> requestedPermissions )
+        {
+            return _defaultProvider.GetPermissions( player, requestedPermissions );
         }
     }
 }
