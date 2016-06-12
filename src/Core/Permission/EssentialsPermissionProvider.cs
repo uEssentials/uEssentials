@@ -138,11 +138,7 @@ namespace Essentials.Core.Permission
 
         public bool HasPermission( IRocketPlayer player, List<string> requestedPermissions )
         {
-            bool ret = _defaultProvider.HasPermission( player, requestedPermissions );
-            requestedPermissions.ForEach(System.Console.WriteLine);
-            System.Console.WriteLine(ret);
-            System.Console.WriteLine("------");
-            return ret;
+            return _defaultProvider.HasPermission( player, requestedPermissions );
         }
 
         public List<Rocket.API.Serialisation.Permission> GetPermissions( IRocketPlayer player, List<string> requestedPermissions )
