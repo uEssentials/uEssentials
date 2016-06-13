@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System.Linq;
 using System.Collections.Generic;
 using Rocket.API;
 using Rocket.API.Serialisation;
@@ -68,7 +69,9 @@ namespace Essentials.Core.Permission
 
         public List<Rocket.API.Serialisation.Permission> GetPermissions(IRocketPlayer player)
         {
-            return _defaultProvider.GetPermissions(player);
+            return _defaultProvider.GetPermissions( player )
+                   .Where( p => !p.Name.StartsWith("!") )
+                   .ToList();
         }
 
         public List<Rocket.API.Serialisation.Permission> GetPermissions(IRocketPlayer player, List<string> requestedPermissions)
