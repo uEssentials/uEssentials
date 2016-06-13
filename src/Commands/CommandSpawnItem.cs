@@ -25,6 +25,7 @@ using Essentials.Api.Command.Source;
 using Essentials.Common.Util;
 using SDG.Unturned;
 using UnityEngine;
+using Essentials.Api;
 
 namespace Essentials.Commands
 {
@@ -75,6 +76,12 @@ namespace Essentials.Commands
             if ( itemAsset.IsAbsent )
             {
                 return CommandResult.Lang( EssLang.INVALID_ITEM_ID, rawId );
+            }
+
+            if ( UEssentials.Config.GiveItemBlacklist.Contains( itemAsset.Value.id ) &&
+                 !src.HasPermission( "essentials.bypass.blacklist.item" ) )
+            {
+                return CommandResult.Lang( EssLang.BLACKLISTED_ITEM,  $"{itemAsset.Value.itemName} ({itemAsset.Value.Id})" );
             }
 
             var item = new Item( itemAsset.Value.id, true );
