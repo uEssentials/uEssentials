@@ -59,7 +59,7 @@ namespace Essentials.Core
     {
         internal const string                         ROCKET_VERSION              = "4.9.6.0";
         internal const string                         UNTURNED_VERSION            = "3.15.4.1";
-        internal const string                         PLUGIN_VERSION              = "1.2.3.0";
+        internal const string                         PLUGIN_VERSION              = "1.2.3.1";
         
         internal static EssCore                       Instance                    { get; set; }
         
@@ -146,9 +146,9 @@ namespace Essentials.Core
                 Logger.Log( "Plugin version: ", ConsoleColor.Green, suffix: "" );
 
                 #if EXPERIMENTAL
-                Logger.Log( $"{PLUGIN_VERSION} (Experimental)", ConsoleColor.White, "" );
+                  Logger.Log( $"{PLUGIN_VERSION} (Experimental)", ConsoleColor.White, "" );
                 #else
-                Logger.Log( PLUGIN_VERSION, ConsoleColor.White, "" );
+                  Logger.Log( PLUGIN_VERSION, ConsoleColor.White, "" );
                 #endif
 
                 Logger.Log( "Recommended Rocket version: ", ConsoleColor.Green, suffix: "" );
@@ -269,7 +269,7 @@ namespace Essentials.Core
                 }
 
                 #if EXPERIMENTAL
-                Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
+                  Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
                 #endif
                 
                 TryAddComponent<Tasks.TaskExecutor>();
