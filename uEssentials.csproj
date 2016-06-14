@@ -202,6 +202,7 @@
     <Compile Include="src\NativeModules\Kit\Item\KitItemVehicle.cs" />
     <Compile Include="src\NativeModules\Kit\Item\KitItemWeapon.cs" />
     <Compile Include="src\Core\Storage\IData.cs" />
+    <Compile Include="src\NativeModules\Kit\Data\CooldownData.cs" />
     <Compile Include="src\NativeModules\Kit\Data\KitData.cs" />
     <Compile Include="src\NativeModules\Kit\KitManager.cs" />
     <Compile Include="src\NativeModules\Kit\Data\WebKitData.cs" />
