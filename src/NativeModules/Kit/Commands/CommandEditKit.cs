@@ -291,8 +291,8 @@ namespace Essentials.NativeModules.Kit.Commands
                     return CommandResult.ShowUsage();
             }
             
-            kitManager.Save();
-            kitManager.Load();
+            kitManager.SaveKits();
+            kitManager.LoadKits();
 
             return CommandResult.Success();
         }

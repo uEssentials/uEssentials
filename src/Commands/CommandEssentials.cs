@@ -69,7 +69,7 @@ namespace Essentials.Commands
         {
             UEssentials.ModuleManager.GetModule<KitModule>().IfPresent( m => {
                 m.KitManager = new KitManager();
-                m.KitManager.Load();
+                m.KitManager.LoadKits();
             } );
         }
 
