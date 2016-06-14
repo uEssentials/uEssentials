@@ -25,12 +25,11 @@ using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Common.Util;
 using Newtonsoft.Json;
-using Rocket.Core.Assets;
 
 namespace Essentials.Misc
 {
     [JsonObject]
-    public class AutoAnnouncer : IDefaultable
+    public class AutoAnnouncer
     {
         /// <summary>
         /// Interval between the messages

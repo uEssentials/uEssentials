@@ -23,11 +23,10 @@ using System.Collections.Generic;
 using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Common;
-using Rocket.Core.Assets;
 
 namespace Essentials.Misc
 {
-    public class AutoCommands : IDefaultable
+    public class AutoCommands
     {
         public List<AutoCommand> Commands { get; set; }
 
