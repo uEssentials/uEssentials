@@ -41,6 +41,12 @@ namespace Essentials.Configuration
                     "<cyan>Have fun :D"
                 }
             });
+            Commands.Add(new TextCommandData {
+                Name = "website",
+                Text = new string[] {
+                    "<cyan>Our website: github.com/uEssentials"
+                }
+            });
         }
         
         public override void Save( string filePath )
