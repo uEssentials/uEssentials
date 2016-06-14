@@ -350,7 +350,7 @@ namespace Essentials.Core
             }
 
             Console.WriteLine();
-            UEssentials.Logger.LogError( "Rocket reload cause many issues, consider restart the server" );
+            UEssentials.Logger.LogError( "Rocket reload cause many issues, consider restarting the server" );
             UEssentials.Logger.LogError( "Or use '/essentials reload' to reload essentials correctly." );
             Console.WriteLine();
         }
