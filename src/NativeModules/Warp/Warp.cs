@@ -88,7 +88,7 @@ namespace Essentials.NativeModules.Warp
         /// <returns>If source has permission to use this warp</returns>
         public bool CanUse( ICommandSource source )
         {
-            return source.HasPermission( $"essentials.warp.{Name}" );
+            return source.HasPermission( $"essentials.warp.{Name.ToLowerInvariant()}" );
         }
 
         public override string ToString()

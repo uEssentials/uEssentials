@@ -93,7 +93,7 @@ namespace Essentials.NativeModules.Kit
         /// </summary>
         public bool CanUse( ICommandSource player )
         {
-            return player.HasPermission( $"essentials.kit.{Name}" );
+            return player.HasPermission( $"essentials.kit.{Name.ToLowerInvariant()}" );
         }
 
         /// <summary>
