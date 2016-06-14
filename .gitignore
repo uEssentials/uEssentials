@@ -6,3 +6,5 @@ Scripts/
 build.bat
 .vs/
 .vscode/
+experimental.bat
+release.bat
