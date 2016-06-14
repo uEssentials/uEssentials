@@ -79,6 +79,8 @@ namespace Essentials.Commands
                         EssLang.EXPERIENCE_GIVEN.SendTo( src, amount, player.DisplayName ); 
                     else
                         EssLang.EXPERIENCE_TAKE.SendTo( src, -amount, player.DisplayName );
+
+                    GiveExp( player, amount );
                 }
             }
             else
