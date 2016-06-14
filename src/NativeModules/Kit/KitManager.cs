@@ -28,13 +28,15 @@ namespace Essentials.NativeModules.Kit
 {
     public sealed class KitManager
     {
-        private Dictionary<string, Kit>         KitMap  { get; set; }
-        private IData<Dictionary<string, Kit>>  KitData { get; }
-        public IEnumerable<Kit>                 Kits    => KitMap.Values; 
-        public int                              Count   => KitMap.Count;
+        internal IData<Dictionary<string, Kit>> KitData { get; }
+        internal CooldownData                   CooldownData { get; }
+        private Dictionary<string, Kit>         KitMap { get; set; }
+        public IEnumerable<Kit>                 Kits => KitMap.Values; 
+        public int                              Count => KitMap.Count;
 
         internal KitManager()
         {
+            CooldownData = new CooldownData();
             KitMap = new Dictionary<string, Kit>();
             KitData = UEssentials.Config.WebKits.Enabled ? new WebKitData() : new KitData();
         }
@@ -49,21 +51,16 @@ namespace Essentials.NativeModules.Kit
             return KitMap.ContainsValue( kit );
         }
 
-        public void Load()
-        {
-            KitMap = KitData.Load();
-        }
-
         public void Add( Kit kit )
         {
             KitMap.Add( kit.Name.ToLowerInvariant(), kit );
-            Save();
+            KitData.Save( KitMap );
         }
 
         public void Remove( Kit kit )
         {
             KitMap.Remove( kit.Name.ToLowerInvariant() );
-            Save();
+            KitData.Save( KitMap );
         }
 
         public Kit GetByName( string kitName )
@@ -73,9 +70,26 @@ namespace Essentials.NativeModules.Kit
                    : null;
         }
 
-        public void Save()
+        public void LoadKits() 
+        {
+            KitMap = KitData.Load();
+        }
+
+        public void SaveKits() 
         {
             KitData.Save( KitMap );
+        }
+
+        public void Load() 
+        {
+            LoadKits();
+            CooldownData.Load();
+        }
+
+        public void Save()
+        {
+            SaveKits();
+            CooldownData.Save();
         }
     }
 }

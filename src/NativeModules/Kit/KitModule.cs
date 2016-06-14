@@ -45,6 +45,7 @@ namespace Essentials.NativeModules.Kit
         public override void OnUnload()
         {
             CommandManager.UnregisterAll( "Essentials.NativeModules.Kit.Commands" );
+            KitManager.Save();
         }
     }
 }
