@@ -77,8 +77,8 @@ namespace Essentials.Configuration
         {
             Locale                      = "en";
 
-            PMFormatFrom        = "(From {0}): {1}";
-            PMFormatTo       = "(To {0}): {1}";
+            PMFormatFrom                = "(From {0}): {1}";
+            PMFormatTo                  = "(To {0}): {1}";
 
             UnfreezeOnDeath             = true;
             UnfreezeOnQuit              = true;
