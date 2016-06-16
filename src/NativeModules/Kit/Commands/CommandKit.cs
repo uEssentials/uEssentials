@@ -112,7 +112,8 @@ namespace Essentials.NativeModules.Kit.Commands
                     {
                         var kitCooldown = requestedKit.Cooldown;
                         
-                        if ( !Cooldowns.ContainsKey( steamPlayerId ) )
+                        if ( !Cooldowns.ContainsKey( steamPlayerId ) ||
+                            CommandKit.Cooldowns[steamPlayerId] == null )
                         {
                             Cooldowns.Add( steamPlayerId, new Dictionary<string, DateTime>() );
                         }

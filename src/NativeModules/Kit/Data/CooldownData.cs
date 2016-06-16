@@ -105,9 +105,9 @@ namespace Essentials.NativeModules.Kit.Data
             {
                 var kit = km.GetByName( kitName );
 
-                if ( kit != null && playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now ) 
+                if ( kit == null || playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now ) 
                 {
-                    playerCooldowns.Remove( kitName );                        
+                    playerCooldowns.Remove( kitName );
                 }
             }
             

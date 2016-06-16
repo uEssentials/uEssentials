@@ -250,10 +250,10 @@ namespace Essentials.Event.Handling
                 var playerId = player.CSteamID.m_SteamID;
                 var playerCooldowns = CommandKit.Cooldowns[playerId];
                 var keys = new List<string> ( playerCooldowns.Keys );
-                
+
                 /*
                     Remove from list if cooldown has expired.
-                    
+
                     Global and per kit
                 */
                 if ( CommandKit.GlobalCooldown.ContainsKey( playerId ) &&
@@ -267,9 +267,9 @@ namespace Essentials.Event.Handling
                 {
                     var kit = m.KitManager.GetByName(kitName);
 
-                    if ( playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now ) 
+                    if ( kit == null || playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now ) 
                     {
-                        playerCooldowns.Remove( kitName );                        
+                        playerCooldowns.Remove( kitName );
                     }
                 }
                 
