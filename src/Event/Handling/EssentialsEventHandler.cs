@@ -57,8 +57,7 @@ namespace Essentials.Event.Handling
         {
 
             /* Rocket does not send "Command not found" if player is admin */
-            if ( player.IsAdmin && message.StartsWith( "/" ) && 
-                 UEssentials.Config.EnableUnknownMessage )
+            if ( player.IsAdmin && message.StartsWith( "/" ) )
             {
                 var command = message.Substring( 1 );
 

@@ -35,18 +35,16 @@ namespace Essentials.Configuration
     public class EssConfig : JsonConfig
     {
         public string                   Locale;
-        public string                   PrivateMessageFormat;
-        public string                   PrivateMessageFormat2;
+        public string                   PMFormatFrom;
+        public string                   PMFormatTo;
         
         public bool                     UnfreezeOnDeath;
         public bool                     UnfreezeOnQuit;
         
-        public bool                     EnableUnknownMessage;
         public bool                     EnableTextCommands;
         public bool                     EnableDeathMessages;
         public bool                     EnableJoinLeaveMessage;
         
-        public bool                     AdminBypassWarpCooldown;
         public bool                     PerWarpPermission;
         public int                      WarpCooldown;
         
@@ -79,21 +77,19 @@ namespace Essentials.Configuration
         {
             Locale                      = "en";
 
-            PrivateMessageFormat        = "(From {0}): {1}";
-            PrivateMessageFormat2       = "(To {0}): {1}";
+            PMFormatFrom        = "(From {0}): {1}";
+            PMFormatTo       = "(To {0}): {1}";
 
             UnfreezeOnDeath             = true;
             UnfreezeOnQuit              = true;
 
-            AdminBypassWarpCooldown     = true;
             PerWarpPermission           = true;
             WarpCooldown                = 5;
 
             EnableJoinLeaveMessage      = true;
-            EnableUnknownMessage        = true;
             EnableTextCommands          = true;
             EnableDeathMessages         = true;
-            
+
             EnablePollRunningMessage    = true;
             PollRunningMessageCooldown  = 20;
             ServerFrameRate             = -1; // http://docs.unity3d.com/ScriptReference/Application-targetFrameRate.html
@@ -160,8 +156,7 @@ namespace Essentials.Configuration
 
                     LoadDefaults();
 
-                    nonNullFields.ForEach( pair =>
-                    {
+                    nonNullFields.ForEach( pair => {
                         GetType().GetField( pair.Key ).SetValue( this, pair.Value );
                     } );
 

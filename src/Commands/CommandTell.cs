@@ -56,8 +56,8 @@ namespace Essentials.Commands
                 return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
             }
 
-            var rawMsg1 = UEssentials.Config.PrivateMessageFormat;
-            var rawMsg2 = UEssentials.Config.PrivateMessageFormat2;
+            var rawMsg1 = UEssentials.Config.PMFormatFrom;
+            var rawMsg2 = UEssentials.Config.PMFormatTo;
             var color1 = ColorUtil.GetColorFromString( ref rawMsg1 );
             var color2 = ColorUtil.GetColorFromString( ref rawMsg2 );
 
