@@ -42,46 +42,46 @@ namespace Essentials.Core.Permission
             this._defaultProvider = _defaultProvider;
         }
 
-        public RocketPermissionsProviderResult AddGroup(RocketPermissionsGroup group)
+        public RocketPermissionsProviderResult AddGroup( RocketPermissionsGroup group )
         {
-            return _defaultProvider.AddGroup(group);
+            return _defaultProvider.AddGroup( group );
         }
 
-        public RocketPermissionsProviderResult AddPlayerToGroup(string groupId, IRocketPlayer player)
+        public RocketPermissionsProviderResult AddPlayerToGroup( string groupId, IRocketPlayer player )
         {
-            return _defaultProvider.AddPlayerToGroup(groupId, player);
+            return _defaultProvider.AddPlayerToGroup( groupId, player );
         }
 
-        public RocketPermissionsProviderResult DeleteGroup(string groupId)
+        public RocketPermissionsProviderResult DeleteGroup( string groupId )
         {
-            return _defaultProvider.DeleteGroup(groupId);
+            return _defaultProvider.DeleteGroup( groupId );
         }
 
-        public RocketPermissionsGroup GetGroup(string groupId)
+        public RocketPermissionsGroup GetGroup( string groupId )
         {
-            return _defaultProvider.GetGroup(groupId);
+            return _defaultProvider.GetGroup( groupId );
         }
 
-        public List<RocketPermissionsGroup> GetGroups(IRocketPlayer player, bool includeParentGroups)
+        public List<RocketPermissionsGroup> GetGroups( IRocketPlayer player, bool includeParentGroups )
         {
-            return _defaultProvider.GetGroups(player, includeParentGroups);
+            return _defaultProvider.GetGroups( player, includeParentGroups );
         }
 
-        public List<Rocket.API.Serialisation.Permission> GetPermissions(IRocketPlayer player)
+        public List<Rocket.API.Serialisation.Permission> GetPermissions( IRocketPlayer player )
         {
             return _defaultProvider.GetPermissions( player )
                    .Where( p => !p.Name.StartsWith("!") )
                    .ToList();
         }
 
-        public List<Rocket.API.Serialisation.Permission> GetPermissions(IRocketPlayer player, List<string> requestedPermissions)
+        public List<Rocket.API.Serialisation.Permission> GetPermissions( IRocketPlayer player, List<string> requestedPermissions )
         {
-            return _defaultProvider.GetPermissions(player, requestedPermissions);
+            return _defaultProvider.GetPermissions( player, requestedPermissions );
         }
 
-        public bool HasPermission(IRocketPlayer player, List<string> requestedPermissions)
+        public bool HasPermission( IRocketPlayer player, List<string> requestedPermissions )
         {
-            return _defaultProvider.HasPermission(player, requestedPermissions);
+            return _defaultProvider.HasPermission( player, requestedPermissions );
         }
 
         public void Reload()
@@ -89,14 +89,14 @@ namespace Essentials.Core.Permission
             _defaultProvider.Reload();
         }
 
-        public RocketPermissionsProviderResult RemovePlayerFromGroup(string groupId, IRocketPlayer player)
+        public RocketPermissionsProviderResult RemovePlayerFromGroup( string groupId, IRocketPlayer player )
         {
-            return _defaultProvider.RemovePlayerFromGroup(groupId, player);
+            return _defaultProvider.RemovePlayerFromGroup( groupId, player );
         }
 
-        public RocketPermissionsProviderResult SaveGroup(RocketPermissionsGroup group)
+        public RocketPermissionsProviderResult SaveGroup( RocketPermissionsGroup group )
         {
-            return _defaultProvider.SaveGroup(group);
+            return _defaultProvider.SaveGroup( group );
         }
     }
 }

@@ -42,17 +42,17 @@ namespace Essentials.Commands
     public class CommandHome : EssCommand
     {
         internal static Dictionary<ulong, Tasks.Task> Delay = new Dictionary<ulong, Tasks.Task>();
-        internal static Cooldown Cooldown = new Cooldown();
+        internal static SimpleCooldown Cooldown = new SimpleCooldown();
         
         public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             var player = src.ToPlayer();
             var playerId = player.CSteamId;
 
-            if ( Cooldown.Has( playerId ) )
+            if ( Cooldown.HasEntry( playerId ) )
             {
                 return CommandResult.Lang( EssLang.USE_COOLDOWN, 
-                    TimeUtil.FormatSeconds( (uint) Cooldown.GetRemaining( playerId ) ) );
+                    TimeUtil.FormatSeconds( (uint) Cooldown.GetRemainingTime( playerId ) ) );
             }
 
             Vector3 position;
@@ -97,7 +97,7 @@ namespace Essentials.Commands
             task.Go();
 
             Delay.Add( playerId.m_SteamID, task );
-            Cooldown.Add( playerId, cooldown );
+            Cooldown.AddEntry( playerId, cooldown );
 
             return CommandResult.Success();
         }

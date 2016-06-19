@@ -56,7 +56,7 @@ namespace Essentials.Event.Handling
                               EChatMode mode, ref bool cancel )
         {
 
-            /* Rocket does not send "Command not found" if player is admin */
+            /* Rocket does not send "Command not found" if player is admin (FIXED)
             if ( player.IsAdmin && message.StartsWith( "/" ) )
             {
                 var command = message.Substring( 1 );
@@ -77,7 +77,7 @@ namespace Essentials.Event.Handling
 
                 cancel = true;
                 return;
-            }
+            }*/
 
             if ( message.StartsWith( "/" ) || player.HasPermission( "essentials.bypass.antispam" ) ||
                  !UEssentials.Config.AntiSpam.Enabled ) return;
@@ -103,14 +103,71 @@ namespace Essentials.Event.Handling
             LastChatted[playerName] = DateTime.Now;
         }
 
+        [SubscribeEvent(EventType.PLAYER_CONNECTED)]
+        void GenericPlayerConnected( UnturnedPlayer player )
+        {
+            Analytics.Metrics.ReportPlayer( player );
+        }
+        
+        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
+        void GenericPlayerDisconnected( UnturnedPlayer player )
+        {
+            var displayName = player.CharacterName;
+
+            MiscCommands.Spies.Remove( displayName );
+            CommandBack.BackDict.Remove( displayName );
+            CommandTell.Conversations.Remove( displayName );
+            CachedSkills.Remove( displayName );
+            CommandHome.Cooldown.RemoveEntry( player.CSteamID );
+
+            /* Kit Stuffs */
+            UEssentials.ModuleManager.GetModule<KitModule>().IfPresent( m => {
+                if ( CommandKit.Cooldowns.Count == 0 ) return;
+                if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
+
+                var playerId = player.CSteamID.m_SteamID;
+                var playerCooldowns = CommandKit.Cooldowns[playerId];
+                var keys = new List<string> ( playerCooldowns.Keys );
+
+                /*
+                    Remove from list if cooldown has expired.
+
+                    Global and per kit
+                */
+                if ( CommandKit.GlobalCooldown.ContainsKey( playerId ) &&
+                     CommandKit.GlobalCooldown[playerId].AddSeconds(
+                         EssCore.Instance.Config.Kit.GlobalCooldown) < DateTime.Now ) 
+                {
+                    CommandKit.GlobalCooldown.Remove( playerId );
+                }
+                
+                foreach ( var kitName in keys )
+                {
+                    var kit = m.KitManager.GetByName(kitName);
+
+                    if ( kit == null || playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now ) 
+                    {
+                        playerCooldowns.Remove( kitName );
+                    }
+                }
+                
+                if ( playerCooldowns.Count == 0 )
+                {
+                    CommandKit.Cooldowns.Remove( playerId );
+                }
+            } );
+        }
+
         [SubscribeEvent( EventType.PLAYER_DEATH )]
-        void OnPlayerDeath( UnturnedPlayer player, EDeathCause cause,
-                            ELimb limb, CSteamID murderer )
+        void GenericPlayerDeath( UnturnedPlayer player, EDeathCause cause,
+                                 ELimb limb, CSteamID murderer )
         {
             var uplayer = UPlayer.From( player );
             var displayName = uplayer.DisplayName;
 
-            // Keep skill
+            CommandHome.Cooldown.RemovedIfExpired( player.CSteamID );
+
+            /* Keep skill */
             const string KEEP_SKILL_PERM = "essentials.keepskill.";
 
             var globalPercentage = -1;
@@ -219,65 +276,6 @@ namespace Essentials.Event.Handling
             CachedSkills[ uplayer.DisplayName ].ForEach( pair => {
                 uplayer.SetSkillLevel( pair.Key, pair.Value );
             });
-        }
-
-        /*
-            Generic CONNECTED
-        */
-        [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        void OnPlayerConnected( UnturnedPlayer player )
-        {
-            Analytics.Metrics.ReportPlayer( player );
-        }
-        
-        /*
-            Generic DISCONNECTED
-        */
-        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
-        void OnPlayerDisconnect( UnturnedPlayer player )
-        {
-            var displayName = player.CharacterName;
-
-            MiscCommands.Spies          .Remove( displayName );
-            CommandBack.BackDict        .Remove( displayName );
-            CommandTell.Conversations   .Remove( displayName );
-            CachedSkills                .Remove( displayName );
-
-            UEssentials.ModuleManager.GetModule<KitModule>().IfPresent( m => {
-                if ( CommandKit.Cooldowns.Count == 0 ) return;
-                if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
-
-                var playerId = player.CSteamID.m_SteamID;
-                var playerCooldowns = CommandKit.Cooldowns[playerId];
-                var keys = new List<string> ( playerCooldowns.Keys );
-
-                /*
-                    Remove from list if cooldown has expired.
-
-                    Global and per kit
-                */
-                if ( CommandKit.GlobalCooldown.ContainsKey( playerId ) &&
-                     CommandKit.GlobalCooldown[playerId].AddSeconds(
-                         EssCore.Instance.Config.Kit.GlobalCooldown) < DateTime.Now ) 
-                {
-                    CommandKit.GlobalCooldown.Remove( playerId );
-                }
-                
-                foreach ( var kitName in keys )
-                {
-                    var kit = m.KitManager.GetByName(kitName);
-
-                    if ( kit == null || playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now ) 
-                    {
-                        playerCooldowns.Remove( kitName );
-                    }
-                }
-                
-                if ( playerCooldowns.Count == 0 )
-                {
-                    CommandKit.Cooldowns.Remove( playerId );
-                }
-            } );
         }
 
         private DateTime lastUpdateCheck = DateTime.Now;
@@ -510,7 +508,7 @@ namespace Essentials.Event.Handling
 
             Commands.CommandHome.Delay[player.CSteamID.m_SteamID].Cancel();
             Commands.CommandHome.Delay.Remove( player.CSteamID.m_SteamID );
-            Commands.CommandHome.Cooldown.Remove( player.CSteamID );
+            Commands.CommandHome.Cooldown.RemoveEntry( player.CSteamID );
 
             UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
         }
