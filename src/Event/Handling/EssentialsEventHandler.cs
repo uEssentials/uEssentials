@@ -32,6 +32,7 @@ using Essentials.Api.Unturned;
 using Essentials.Commands;
 using Essentials.Common;
 using Essentials.Components.Player;
+using Essentials.Configuration;
 using Essentials.Core;
 using Essentials.Economy;
 using Essentials.I18n;
@@ -312,7 +313,7 @@ namespace Essentials.Event.Handling
         }
 
         private static Optional<IEconomyProvider> _cachedEconomyProvider;
-        private static IDictionary<string, Configuration.Command> _cachedCommands;
+        private static IDictionary<string, CommandsConfig.CommandEntry> _cachedCommands;
 
         /*
             TODO: Cache commands & cost ??

@@ -31,7 +31,7 @@ namespace Essentials.Api.Command
     {
         private readonly CommandInfo _commandInfo;
 
-        protected string        UsageMessage    { get; set; }
+        protected string        UsageMessage    => "Use /" + Name + " " + Usage;
         protected EssLogger     Logger          { get; }
         public string           Name            { get; internal set; }
         public string           Permission      { get; set; }
@@ -54,7 +54,6 @@ namespace Essentials.Api.Command
             Description = _commandInfo.Description;
             AllowedSource = _commandInfo.AllowedSource;
             Aliases = _commandInfo.Aliases;
-            UsageMessage = "Use /" + Name + " " + Usage;
 
             Permission = GetType().Assembly.Equals( typeof (EssCore).Assembly )
                 ? $"essentials.command.{Name}"

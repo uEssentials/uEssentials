@@ -88,7 +88,18 @@ namespace Essentials.Core.Command
 
             if ( configCommands.ContainsKey( command.Name ) )
             {
-                command.Aliases = configCommands[command.Name].Aliases ?? new string[0];
+                var cmdEntry = configCommands[command.Name];
+
+                command.Aliases = cmdEntry.Aliases ?? new string[0];
+
+                if ( cmdEntry.Description != null ) 
+                {
+                    command.Description = cmdEntry.Description;
+                }
+                if ( cmdEntry.Usage != null )
+                {
+                    command.Usage = cmdEntry.Usage;
+                }
             }
 
             var adapter = new CommandAdapter( command );

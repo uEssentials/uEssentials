@@ -37,7 +37,7 @@ namespace Essentials.Configuration
 {
     public class CommandsConfig : JsonConfig
     {
-        public IDictionary<string, Command> Commands { get; private set; } = new Dictionary<string, Command>();
+        public IDictionary<string, CommandEntry> Commands { get; private set; } = new Dictionary<string, CommandEntry>();
 
         public override void Save( string filePath )
         {
@@ -60,11 +60,8 @@ namespace Essentials.Configuration
                 {
                     var keys = new List<string>( allCommands.Keys ); // Avoid out of sync.
 
-                    keys.ForEach( k  => {
-                        if ( Commands.ContainsKey( k ) )
-                        {
-                            allCommands[k] = Commands[k]; // Update existing command configurations.
-                        }   
+                    keys.Where( Commands.ContainsKey ).ForEach( k  => {
+                        allCommands[k] = Commands[k]; // Update existing command configurations.
                     } );
 
                     Commands = allCommands;
@@ -86,10 +83,10 @@ namespace Essentials.Configuration
         /*
             Search for all commands in uEssentials assembly.
         */
-        private IDictionary<string, Command> FindAllCommands()
+        private IDictionary<string, CommandEntry> FindAllCommands()
         {
             var asm = GetType().Assembly;
-            var commands = new Dictionary<string, Command>();
+            var commands = new Dictionary<string, CommandEntry>();
 
             Predicate<Type> defaultPredicate = type => {
                 return ( typeof( ICommand ).IsAssignableFrom( type ) 
@@ -104,8 +101,10 @@ namespace Essentials.Configuration
                 from type in asm.GetTypes()
                 where defaultPredicate( type )
                 select (ICommand) Activator.CreateInstance( type )
-            ).ForEach( c => commands.Add( c.Name, new Command {
-                Aliases = c.Aliases
+            ).ForEach( c => commands.Add( c.Name, new CommandEntry {
+                Aliases = c.Aliases,
+                Description = c.Description,
+                Usage = c.Usage
             } ) );
 
             /*
@@ -150,20 +149,24 @@ namespace Essentials.Configuration
 
                     var cmdInfo = ReflectionUtil.GetAttributeFrom<CommandInfo>( method );
 
-                    commands.Add( cmdInfo.Name, new Command {
-                        Aliases = cmdInfo.Aliases
+                    commands.Add( cmdInfo.Name, new CommandEntry {
+                        Aliases = cmdInfo.Aliases,
+                        Description = cmdInfo.Description,
+                        Usage = cmdInfo.Usage
                     } );
                 }
             }
 
             return commands;
         }
-    }
 
-    [JsonObject]
-    public struct Command
-    {
-        public string[] Aliases;
-        public decimal Cost;
+        [JsonObject]
+        public struct CommandEntry
+        {
+            public string[] Aliases;
+            public string Usage;
+            public string Description;
+            public decimal Cost;
+        }
     }
 }
