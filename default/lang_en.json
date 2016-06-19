@@ -163,7 +163,7 @@
     "WITHOUT_BED": "<yellow>You do not have a bed to teleport to.",
     "TELEPORTED_BED": "You were teleported to your bed.",
     "CANNOT_TELEPORT_DRIVING": "<yellow>You cannot teleport while being in a vehicle.",
-    "TELEPORT_DELAY": "<blue>You will be teleported in {0} seconds.",
+    "TELEPORT_DELAY": "<blue>You will be teleported in {0}.",
     "USE_COOLDOWN": "<yellow>Wait {0} seconds to use it again.",
     "TELEPORT_CANCELLED_MOVED": "<yellow>Teleport cancelled because you moved.",
     "KIT_ALREADY_EXIST": "<yellow>There is already a kit named '{0}'.",
