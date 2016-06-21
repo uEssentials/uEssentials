@@ -322,7 +322,7 @@ namespace Essentials.Api.Unturned
 
         public void RemoveComponent<T>() where T : Component
         {
-            UnityEngine.Object.Destroy( GetComponent<T>(  ) );
+            UnityEngine.Object.Destroy( GetComponent<T>() );
         }
 
         public void RemoveComponent( Type componentType )
@@ -413,17 +413,17 @@ namespace Essentials.Api.Unturned
         }
 
         /// <summary>
-        /// Tries to find a player, if found, it will execute the <paramref name="consumer"/>
+        /// Tries to find a player, if found, it will execute the <paramref name="callback"/>
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="consumer"></param>
-        public static bool TryGet( CSteamID id, Action<UPlayer> consumer )
+        /// <param name="callback"></param>
+        public static bool TryGet( CSteamID id, Action<UPlayer> callback )
         {
             var player = From( id );
 
             if ( player != null )
             {
-                consumer( player );
+                callback( player );
                 return true;
             }
 
@@ -431,17 +431,17 @@ namespace Essentials.Api.Unturned
         }
 
         /// <summary>
-        /// Tries to find a player, if found, it will execute the <paramref name="consumer"/>
+        /// Tries to find a player, if found, it will execute the <paramref name="callback"/>
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="consumer"></param>
-        public static bool TryGet( string name, Action<UPlayer> consumer )
+        /// <param name="callback"></param>
+        public static bool TryGet( string name, Action<UPlayer> callback )
         {
             var player = From( name );
 
             if ( player != null )
             {
-                consumer( player );
+                callback( player );
                 return true;
             }
 
@@ -449,17 +449,17 @@ namespace Essentials.Api.Unturned
         }
 
         /// <summary>
-        /// Tries to find a player, if found, it will execute the <paramref name="consumer"/>
+        /// Tries to find a player, if found, it will execute the <paramref name="callback"/>
         /// </summary>
         /// <param name="rocketPlayer"></param>
-        /// <param name="consumer"></param>
-        public static bool TryGet( UnturnedPlayer rocketPlayer, Action<UPlayer> consumer )
+        /// <param name="callback"></param>
+        public static bool TryGet( UnturnedPlayer rocketPlayer, Action<UPlayer> callback )
         {
             var player = From( rocketPlayer );
 
             if ( player != null )
             {
-                consumer( player );
+                callback( player );
                 return true;
             }
 
@@ -467,17 +467,17 @@ namespace Essentials.Api.Unturned
         }
 
         /// <summary>
-        /// Tries to find a player, if found, it will execute the <paramref name="consumer"/>
+        /// Tries to find a player, if found, it will execute the <paramref name="callback"/>
         /// </summary>
         /// <param name="unturnedPlayer"></param>
-        /// <param name="consumer"></param>
-        public static bool TryGet( Player unturnedPlayer, Action<UPlayer> consumer )
+        /// <param name="callback"></param>
+        public static bool TryGet( Player unturnedPlayer, Action<UPlayer> callback )
         {
             var player = From( unturnedPlayer );
 
             if ( player != null )
             {
-                consumer( player );
+                callback( player );
                 return true;
             }
 
@@ -485,17 +485,17 @@ namespace Essentials.Api.Unturned
         }
 
         /// <summary>
-        /// Tries to find a player, if found, it will execute the <paramref name="consumer"/>
+        /// Tries to find a player, if found, it will execute the <paramref name="callback"/>
         /// </summary>
         /// <param name="cmdArg"></param>
-        /// <param name="consumer"></param>
-        public static bool TryGet( ICommandArgument cmdArg, Action<UPlayer> consumer )
+        /// <param name="callback"></param>
+        public static bool TryGet( ICommandArgument cmdArg, Action<UPlayer> callback )
         {
             var player = From( cmdArg.ToString() );
 
             if ( player != null )
             {
-                consumer( player );
+                callback( player );
                 return true;
             }
 

@@ -490,9 +490,6 @@ namespace Essentials.Event.Handling
                 case EDeathCause.ARENA:
                     EssLang.DEATH_ARENA.Broadcast( player.CharacterName );
                     break;
-                
-                default:
-                    break;
             }
         }
 
@@ -502,14 +499,14 @@ namespace Essentials.Event.Handling
         void HomePlayerMove( UnturnedPlayer player, Vector3 newPosition )
         {
             if ( !UEssentials.Config.HomeCommand.CancelWhenMove ||
-                 !Commands.CommandHome.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
+                 !CommandHome.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
             {
                 return;
             }
 
-            Commands.CommandHome.Delay[player.CSteamID.m_SteamID].Cancel();
-            Commands.CommandHome.Delay.Remove( player.CSteamID.m_SteamID );
-            Commands.CommandHome.Cooldown.RemoveEntry( player.CSteamID );
+            CommandHome.Delay[player.CSteamID.m_SteamID].Cancel();
+            CommandHome.Delay.Remove( player.CSteamID.m_SteamID );
+            CommandHome.Cooldown.RemoveEntry( player.CSteamID );
 
             UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
         }
@@ -522,12 +519,12 @@ namespace Essentials.Event.Handling
 
             var displayName = player.DisplayName;
 
-            if ( Commands.CommandBack.BackDict.ContainsKey( displayName ) )
+            if ( CommandBack.BackDict.ContainsKey( displayName ) )
             {
-                Commands.CommandBack.BackDict.Remove( displayName );
+                CommandBack.BackDict.Remove( displayName );
             }
 
-            Commands.CommandBack.BackDict.Add( displayName, player.Position );
+            CommandBack.BackDict.Add( displayName, player.Position );
         }
 
 

@@ -20,7 +20,6 @@
 */
 
 using Essentials.Api.Command.Source;
-using Essentials.Api.Logging;
 using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.Core;
@@ -29,10 +28,7 @@ namespace Essentials.Api.Command
 {
     public abstract class EssCommand : ICommand
     {
-        private readonly CommandInfo _commandInfo;
-
         protected string        UsageMessage    => "Use /" + Name + " " + Usage;
-        protected EssLogger     Logger          { get; }
         public string           Name            { get; internal set; }
         public string           Permission      { get; set; }
         public string[]         Aliases         { get; set; }
@@ -42,42 +38,37 @@ namespace Essentials.Api.Command
 
         protected EssCommand()
         {
-            _commandInfo = Preconditions.NotNull(
+            var commandInfo = Preconditions.NotNull(
                 ReflectionUtil.GetAttributeFrom<CommandInfo>( this ),
-                "EssCommand must have 'CommandInfo' attribute" 
-            );
+                "EssCommand must have 'CommandInfo' attribute" );
             
-            Logger = UEssentials.Logger;
-
-            Name = _commandInfo.Name;
-            Usage = _commandInfo.Usage;
-            Description = _commandInfo.Description;
-            AllowedSource = _commandInfo.AllowedSource;
-            Aliases = _commandInfo.Aliases;
+            Name = commandInfo.Name;
+            Usage = commandInfo.Usage;
+            Description = commandInfo.Description;
+            AllowedSource = commandInfo.AllowedSource;
+            Aliases = commandInfo.Aliases;
 
             Permission = GetType().Assembly.Equals( typeof (EssCore).Assembly )
                 ? $"essentials.command.{Name}"
-                : _commandInfo.Permission;
+                : commandInfo.Permission;
 
             if ( Permission.IsNullOrEmpty() )
-            {
                 Permission = Name;
-            }
         }
 
         protected virtual void ShowUsage( ICommandSource source )
         {
             source.SendMessage( UsageMessage );
         }
-        
-        /*
-            For now i will add only in EssCommand, maybe i will
-            add in ICommand...
-        */
-        protected virtual void OnUnregistered() {}
-        
-        protected virtual void OnRegistered() {}
-        
+
+        protected virtual void OnUnregistered()
+        {
+        }
+
+        protected virtual void OnRegistered()
+        {
+        }
+
         public abstract CommandResult OnExecute( ICommandSource src, ICommandArgs args );
     }
 }
