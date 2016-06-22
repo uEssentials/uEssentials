@@ -32,6 +32,7 @@ using Essentials.Core;
 using Essentials.Core.Command;
 using Essentials.I18n;
 using Essentials.NativeModules.Kit;
+using Essentials.NativeModules.Warp;
 using Rocket.Core;
 using UnityEngine;
 
@@ -41,7 +42,7 @@ namespace Essentials.Commands
         Name = "essentials",
         Description = "Plugin commands",
         Aliases = new[] { "ess", "?", "uessentials" },
-        Usage = "<commands/help/info/reload>"
+        Usage = "<commands/help/info/reload/savedata>"
     )]
     public class CommandEssentials : EssCommand
     {
@@ -96,12 +97,24 @@ namespace Essentials.Commands
 
             switch ( args[0].ToLowerString )
             {
+                case "savedata":
+                    if ( !src.HasPermission( "essentials.savedata" ) )
+                    {
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                    }
+                    UEssentials.ModuleManager.GetModule<KitModule>().IfPresent( m => {
+                        m.KitManager.CooldownData.Save();
+                    });
+                    UEssentials.ModuleManager.GetModule<WarpModule>().IfPresent( m => {
+                        m.WarpManager.Save();
+                    });
+                    break;
+
                 case "reload":
                     if ( !src.HasPermission( "essentials.reload" ) )
                     {
                         return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
                     }
-
                     if ( args.Length == 1 )
                     {
                         src.SendMessage( "Reloading all..." );
