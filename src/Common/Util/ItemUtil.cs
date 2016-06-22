@@ -60,7 +60,7 @@ namespace Essentials.Common.Util
             }
 
             var lastAsset = null as ItemAsset;
-            int lastPriority = 0;
+            var lastPriority = 0;
 
             foreach ( var asset in _cachedAssets )
             {
