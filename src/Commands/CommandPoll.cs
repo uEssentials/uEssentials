@@ -214,10 +214,7 @@ namespace Essentials.Commands
             return CommandResult.Success();
         }
 
-        /// <summary>
-        /// An struct who represent an Poll
-        /// </summary>
-        public struct Poll
+        public class Poll
         {
             /// <summary>
             /// List of player who voted
@@ -266,9 +263,9 @@ namespace Essentials.Commands
             {
                 EssLang.POLL_STARTED.Broadcast( Name, Description );
 
-                lock ( Polls ) Polls.Add( Name, this );
-
                 var thiz = this;
+
+                lock ( Polls ) Polls.Add( Name, thiz );
 
                 if ( Duration > 0 )
                 {
@@ -280,7 +277,7 @@ namespace Essentials.Commands
 
                             thiz.Stop();
                         }
-                    }).Delay( Duration * 1000 ).Go();   
+                    }).Delay( Duration * 1000 ).Go();
                 }
 
                 if ( !UEssentials.Config.EnablePollRunningMessage ) return;
