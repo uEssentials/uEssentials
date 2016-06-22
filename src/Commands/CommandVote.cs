@@ -94,7 +94,7 @@ namespace Essentials.Commands
                             
                         Polls[pollName] = poll;
                             
-                        EssLang.POLL_VOTED_YES.SendTo( src, pollName );
+                        EssLang.POLL_VOTED_NO.SendTo( src, pollName );
                     }
                     break;
 
