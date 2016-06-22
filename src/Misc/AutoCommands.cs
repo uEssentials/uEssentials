@@ -52,11 +52,11 @@ namespace Essentials.Misc
         public void Start()
         {
             Commands.ForEach( cmd => {
-                var task = Tasks.New( t => 
+                var task = Tasks.New( t =>
                     cmd.Commands.ForEach( UServer.DispatchCommand )
                 ).Delay( cmd.Timer * 1000 );
 
-                if ( !cmd.RunOnce ) 
+                if ( !cmd.RunOnce )
                     task.Interval( cmd.Timer * 1000 );
 
                 task.Go();

@@ -24,8 +24,8 @@ using System;
 namespace Essentials.Common
 {
     /// <summary>
-    ///  A container object which may or may not contain a non-null value. 
-    ///  If a value is present, <see cref="IsPresent"/> will return <code>true</code> and 
+    ///  A container object which may or may not contain a non-null value.
+    ///  If a value is present, <see cref="IsPresent"/> will return <code>true</code> and
     /// <see cref="Value"/> will return the value.
     /// </summary>
     public class Optional<T>

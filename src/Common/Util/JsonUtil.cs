@@ -29,7 +29,7 @@ namespace Essentials.Common.Util
         public static void Serialize( string filePath, object obj )
         {
             File.WriteAllText( filePath, string.Empty );
-            
+
             FileStream fs = null;
             try
             {

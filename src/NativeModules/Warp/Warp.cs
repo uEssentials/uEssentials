@@ -57,15 +57,15 @@ namespace Essentials.NativeModules.Warp
         private SerializableVector3 SerializableLocation
         {
             // Used by jsonSerializer
-            get { return new SerializableVector3( Location.x, 
-                                                  Location.y, 
+            get { return new SerializableVector3( Location.x,
+                                                  Location.y,
                                                   Location.z ); }
 
             set { Location = new Vector3( value.X, value.Y, value.Z ); }
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="name">Name of warp</param>
         /// <param name="location">Location of warp</param>
@@ -76,13 +76,13 @@ namespace Essentials.NativeModules.Warp
 
             Name = name;
             Rotation = rotation;
-            SerializableLocation = new SerializableVector3( location.x, 
-                                                            location.y, 
+            SerializableLocation = new SerializableVector3( location.x,
+                                                            location.y,
                                                             location.z );
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="source">Source that you want to check if is authorized</param>
         /// <returns>If source has permission to use this warp</returns>

@@ -83,7 +83,7 @@ namespace Essentials.Updater
                             var additionalData = new JObject();
                             var body = jsonObj.GetValue( "body" )?.ToString() ?? "";
                             var assets = jsonObj.GetValue( "assets" ).Children<JObject>();
-                            
+
                             additionalData.Add( "changes", body );
                             additionalData.Add( "download_url", assets.First().GetValue( "browser_download_url" )?.ToString() ?? "null" );
 
@@ -117,7 +117,7 @@ namespace Essentials.Updater
 
         private static uint ToDecimalVersion( string version )
         {
-            return uint.Parse( version.Replace( ".", string.Empty ) );   
+            return uint.Parse( version.Replace( ".", string.Empty ) );
         }
 
         public void DownloadLatestRelease( string path )

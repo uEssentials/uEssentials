@@ -102,15 +102,15 @@ namespace Essentials.I18n
             }
 
             JObject json;
-            
+
             try
             {
                 json = JObject.Parse( File.ReadAllText( translationPath ) );
 
-                /* 
+                /*
                     Update translation
                 */
-                var defaultJson = JObject.Load( new JsonTextReader( new StreamReader( 
+                var defaultJson = JObject.Load( new JsonTextReader( new StreamReader(
                     GetDefaultStream( locale ), Encoding.UTF8, true ) ) );
 
                 if ( defaultJson.Count != json.Count )
@@ -135,16 +135,16 @@ namespace Essentials.I18n
                 UEssentials.Logger.LogError( ex.Message );
 
                 // Load default
-                json = JObject.Load( new JsonTextReader( new StreamReader( 
+                json = JObject.Load( new JsonTextReader( new StreamReader(
                     GetDefaultStream( locale ), Encoding.UTF8, true ) ) );
             }
-            
+
             Func<string, EssLang> loadFromJson = key => {
-                return new EssLang( json[key]?.ToString() 
+                return new EssLang( json[key]?.ToString()
                                     ?? string.Format( KEY_NOT_FOUND_MESSAGE, key ) );
             };
 
-            var props = typeof(EssLang).GetProperties( BindingFlags.Public | 
+            var props = typeof(EssLang).GetProperties( BindingFlags.Public |
                                                         BindingFlags.Static );
 
             foreach ( var field in props )
@@ -183,8 +183,8 @@ namespace Essentials.I18n
             var message = _message.Clone() as string;
             var color = ColorUtil.GetColorFromString( ref message );
 
-            UServer.Broadcast( replacers == null 
-                               ? message 
+            UServer.Broadcast( replacers == null
+                               ? message
                                : string.Format( message, replacers ), color );
         }
 
@@ -193,7 +193,7 @@ namespace Essentials.I18n
             Broadcast( null );
         }
 
-        public override String ToString() 
+        public override String ToString()
         {
             return GetMessage();
         }
@@ -358,7 +358,7 @@ namespace Essentials.I18n
         public static EssLang DESCENDED { get; private set; }
         public static EssLang ASCENDED { get; private set; }
         public static EssLang CLEAR_EMPTY_VEHICLES { get; private set; }
-        public static EssLang KIT_GLOBAL_COOLDOWN { get; private set; }  
+        public static EssLang KIT_GLOBAL_COOLDOWN { get; private set; }
         public static EssLang TPA_YOURSELF { get; private set; }
         public static EssLang TPA_SENT_SENDER { get; private set; }
         public static EssLang TPA_SENT { get; private set; }

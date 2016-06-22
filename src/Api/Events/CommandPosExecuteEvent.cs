@@ -31,7 +31,7 @@ namespace Essentials.Api.Events
         /// </summary>
         public CommandResult Result { get; set; }
 
-        public CommandPosExecuteEvent( ICommand command, ICommandArgs args, 
+        public CommandPosExecuteEvent( ICommand command, ICommandArgs args,
                                        ICommandSource src, CommandResult result) : base(command, args, src)
         {
             Result = result;

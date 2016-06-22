@@ -48,10 +48,10 @@ namespace Essentials.Common
         {
             return CultureInfo.InvariantCulture.TextInfo.ToTitleCase( str.ToLowerInvariant() );
         }
-        
-        public static string Format( this string str, params object[] args ) 
+
+        public static string Format( this string str, params object[] args )
         {
-            return string.Format( str, args );   
+            return string.Format( str, args );
         }
 
         public static void ForEach<T>( this T[] array, Action<T> act )

@@ -83,8 +83,8 @@ namespace Essentials.Misc
             {
                 var messagesCount = Messages.Count;
 
-                messageIndex = RandomMessages 
-                            ? rand.Next( messagesCount ) 
+                messageIndex = RandomMessages
+                            ? rand.Next( messagesCount )
                             : (++messageIndex == messagesCount ? 0 : messageIndex);
 
                 var message = (string) Messages[messageIndex].Clone();

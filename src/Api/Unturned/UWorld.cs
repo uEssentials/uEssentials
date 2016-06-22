@@ -34,7 +34,7 @@ namespace Essentials.Api.Unturned
             set { LightingManager.time = value; }
         }
 
-        public static List<Zombie> Zombies => 
+        public static List<Zombie> Zombies =>
             Object.FindObjectsOfType<Zombie>()?.ToList() ?? new List<Zombie>( 0 );
 
         public static List<Animal> Animals =>

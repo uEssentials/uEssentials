@@ -80,9 +80,9 @@ namespace Essentials.Commands
             return CommandResult.Success();
         }
 
-        private void RefuelVehicle( InteractableVehicle veh ) 
+        private void RefuelVehicle( InteractableVehicle veh )
         {
-            VehicleManager.Instance.channel.send( "tellVehicleFuel", ESteamCall.ALL, 
+            VehicleManager.Instance.channel.send( "tellVehicleFuel", ESteamCall.ALL,
                 ESteamPacket.UPDATE_UNRELIABLE_BUFFER, veh.instanceID, veh.asset.fuel );
         }
     }

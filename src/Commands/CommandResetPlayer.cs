@@ -40,7 +40,7 @@ namespace Essentials.Commands
             var sep = Path.DirectorySeparatorChar.ToString();
             var idStr = steamId.ToString();
 
-            foreach ( var dic in Directory.GetDirectories(Directory.GetParent( 
+            foreach ( var dic in Directory.GetDirectories(Directory.GetParent(
                     Directory.GetCurrentDirectory() ).ToString() + $"{sep}Players{sep}" ) )
             {
                 if ( dic.Substring( dic.LastIndexOf( sep, StringComparison.Ordinal ) + 1 ).StartsWith( idStr ) )

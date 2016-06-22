@@ -25,7 +25,7 @@ namespace Essentials.Common
 {
     public static class Preconditions
     {
-        public static T NotNull<T>( T obj, string message, 
+        public static T NotNull<T>( T obj, string message,
                                     params object[] messageArgs )
         {
             if ( obj == null )
@@ -34,18 +34,18 @@ namespace Essentials.Common
             return obj;
         }
 
-        public static void IsTrue( bool expr, 
+        public static void IsTrue( bool expr,
                                    string message,
                                    params object[] messageArgs )
         {
-            if ( expr ) 
+            if ( expr )
                 throw new ArgumentException( string.Format( message, messageArgs ) );
         }
 
         public static void IsFalse( bool expr, string message,
                                     params object[] messageArgs )
         {
-            if ( !expr ) 
+            if ( !expr )
                 throw new ArgumentException( string.Format( message, messageArgs ) );
         }
 

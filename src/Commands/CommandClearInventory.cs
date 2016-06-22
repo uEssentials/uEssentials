@@ -60,12 +60,12 @@ namespace Essentials.Commands
             // "Remove "models" of items from player "body""
             player.Channel.send( "tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, (byte) 0, (byte) 0, new byte[0] );
             player.Channel.send( "tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, (byte) 1, (byte) 0, new byte[0] );
-            
+
             // Remove items
             for ( byte page = 0; page < 8; page++ )
             {
                 var count = playerInventory.getItemCount( page );
-                
+
                 for ( byte index = 0; index < count; index++ )
                 {
                     playerInventory.removeItem( page, 0 );

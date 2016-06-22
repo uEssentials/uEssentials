@@ -32,92 +32,92 @@ namespace Essentials.Api.Command
     public interface ICommandManager
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         IEnumerable<ICommand> Commands { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="command"></param>
         void Register( ICommand command );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="TCommandType"></typeparam>
         void Register<TCommandType>() where TCommandType : ICommand;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="method"></param>
         void Register( Func<ICommandSource, ICommandArgs, CommandResult> method );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="method"></param>
         void Register( Func<ICommandSource, ICommandArgs, ICommand, CommandResult> method );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="assembly"></param>
         void RegisterAll( Assembly assembly );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="targetNamespace"></param>
         void RegisterAll( string targetNamespace );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="assembly"></param>
         void UnregisterAll( Assembly assembly );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="targetNamespace"></param>
         void UnregisterAll( string targetNamespace );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="TCommandType"></typeparam>
         void Unregister<TCommandType>() where TCommandType : ICommand;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="command"></param>
         void Unregister( ICommand command );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="commandType"></param>
         void Unregister( Type commandType );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="commandName"></param>
         /// <returns></returns>
         bool HasWithName( string commandName );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="TCommandType"></typeparam>
         /// <returns></returns>
         bool HasWithType<TCommandType>() where TCommandType : ICommand;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="name"></param>
         /// <param name="includeAliases"></param>
@@ -125,14 +125,14 @@ namespace Essentials.Api.Command
         ICommand GetByName( string name, bool includeAliases = true );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="commandType"></param>
         /// <returns></returns>
         ICommand GetByType( Type commandType );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="TCommandType"></typeparam>
         /// <returns></returns>

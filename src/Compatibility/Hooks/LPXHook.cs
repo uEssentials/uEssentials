@@ -57,8 +57,8 @@ namespace Essentials.Compatibility.Hooks
 
             var sqlPerm = lpx.GetType().Assembly.GetType( "LIGHT.SQLPermission" );
 
-            var sqlPermInst = new EssentialsPermissionsProvider( 
-                (IRocketPermissionsProvider) Activator.CreateInstance( sqlPerm ) 
+            var sqlPermInst = new EssentialsPermissionsProvider(
+                (IRocketPermissionsProvider) Activator.CreateInstance( sqlPerm )
             );
 
             _defaultProvider = R.Permissions;

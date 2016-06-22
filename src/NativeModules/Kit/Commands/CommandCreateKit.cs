@@ -220,7 +220,7 @@ namespace Essentials.NativeModules.Kit.Commands
                     Metadata = clothing.hatState
                 } );
             }
-            
+
             if ( clothing.glasses != 0 )
             {
                 items.Add( new KitItem( clothing.glasses, clothing.glassesQuality, 1 ) {
@@ -238,6 +238,6 @@ namespace Essentials.NativeModules.Kit.Commands
             EssLang.CREATED_KIT.SendTo( src, name );
 
             return CommandResult.Success();
-        } 
+        }
     }
 }

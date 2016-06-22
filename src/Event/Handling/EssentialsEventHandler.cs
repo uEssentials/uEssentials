@@ -71,7 +71,7 @@ namespace Essentials.Event.Handling
                 {
                     return;
                 }
-                
+
                 UPlayer.TryGet( player, p => {
                     EssLang.UNKNOWN_COMMAND.SendTo( p, command );
                 } );
@@ -109,7 +109,7 @@ namespace Essentials.Event.Handling
         {
             Analytics.Metrics.ReportPlayer( player );
         }
-        
+
         [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
         void GenericPlayerDisconnected( UnturnedPlayer player )
         {
@@ -137,21 +137,21 @@ namespace Essentials.Event.Handling
                 */
                 if ( CommandKit.GlobalCooldown.ContainsKey( playerId ) &&
                      CommandKit.GlobalCooldown[playerId].AddSeconds(
-                         EssCore.Instance.Config.Kit.GlobalCooldown) < DateTime.Now ) 
+                         EssCore.Instance.Config.Kit.GlobalCooldown) < DateTime.Now )
                 {
                     CommandKit.GlobalCooldown.Remove( playerId );
                 }
-                
+
                 foreach ( var kitName in keys )
                 {
                     var kit = m.KitManager.GetByName(kitName);
 
-                    if ( kit == null || playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now ) 
+                    if ( kit == null || playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now )
                     {
                         playerCooldowns.Remove( kitName );
                     }
                 }
-                
+
                 if ( playerCooldowns.Count == 0 )
                 {
                     CommandKit.Cooldowns.Remove( playerId );
@@ -177,15 +177,15 @@ namespace Essentials.Event.Handling
             /*
                 Search for 'global percentage' Ex: (essentials.keepskill.50)
             */
-            
+
             foreach ( var p in playerPermissions.Where( p => p.StartsWith( KEEP_SKILL_PERM ) ) )
             {
                 var rawAmount = p.Substring( KEEP_SKILL_PERM.Length );
 
-                if ( rawAmount.Equals( "*" ) ) 
+                if ( rawAmount.Equals( "*" ) )
                 {
                     globalPercentage = 100;
-                    break;    
+                    break;
                 }
                 if ( int.TryParse( rawAmount, out globalPercentage ) )
                 {
@@ -204,7 +204,7 @@ namespace Essentials.Event.Handling
             {
                 var currentLevel = uplayer.GetSkillLevel( skill );
                 var newLevel = (byte?) null;
-                
+
                 if ( hasGlobalPercentage )
                 {
                     newLevel = (byte) Math.Round((currentLevel * globalPercentage) / 100.0);
@@ -239,7 +239,7 @@ namespace Essentials.Event.Handling
                 {
                     newLevel =  (byte) Math.Round( (currentLevel * skillPercentage) / 100.0 );
                 }
-                
+
                 /*
                     Ccheck for 'essentials.keepskill.SKILL'
                 */
@@ -247,7 +247,7 @@ namespace Essentials.Event.Handling
                 {
                     newLevel = currentLevel;
                 }
-                
+
                 add:
                 if ( newLevel.HasValue )
                 {
@@ -256,7 +256,7 @@ namespace Essentials.Event.Handling
             }
 
             if ( skillValues.Count == 0 ) return;
-            
+
             if ( CachedSkills.ContainsKey( displayName ) )
             {
                 CachedSkills[displayName] = skillValues;
@@ -283,7 +283,7 @@ namespace Essentials.Event.Handling
 
         [SubscribeEvent( EventType.PLAYER_CONNECTED )]
         void UpdateAlert( UnturnedPlayer player )
-        { 
+        {
             if ( !player.IsAdmin || lastUpdateCheck > DateTime.Now ) return;
 
             var updater = EssCore.Instance.Updater;
@@ -325,7 +325,7 @@ namespace Essentials.Event.Handling
             {
                 return;
             }
-            
+
             if ( _cachedEconomyProvider == null )
             {
                 _cachedEconomyProvider = UEssentials.EconomyProvider;
@@ -372,7 +372,7 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.ESSENTIALS_COMMAND_POS_EXECUTED )]
         void OnCommandPosExecuted( CommandPosExecuteEvent e )
         {
-            if ( _cachedEconomyProvider == null || 
+            if ( _cachedEconomyProvider == null ||
                  e.Source.IsConsole || e.Source.HasPermission( "essentials.bypass.commandcost" ) )
             {
                 return;
@@ -397,7 +397,7 @@ namespace Essentials.Event.Handling
             _cachedEconomyProvider.Value.Withdraw( e.Source.ToPlayer(), cost );
             EssLang.COMMAND_PAID.SendTo( e.Source, cost );
         }
-        
+
         [SubscribeEvent( EventType.PLAYER_DEATH )]
         void DeathMessages( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer )
         {
@@ -550,17 +550,17 @@ namespace Essentials.Event.Handling
                 DisconnectedFrozen.Add( player.CSteamID.m_SteamID );
             }
         }
-        
+
         [SubscribeEvent( EventType.PLAYER_CONNECTED )]
-        void FreezePlayerConnected( UnturnedPlayer player ) 
+        void FreezePlayerConnected( UnturnedPlayer player )
         {
-            if ( !UEssentials.Config.UnfreezeOnQuit && 
-                 DisconnectedFrozen.Contains( player.CSteamID.m_SteamID ) ) 
+            if ( !UEssentials.Config.UnfreezeOnQuit &&
+                 DisconnectedFrozen.Contains( player.CSteamID.m_SteamID ) )
             {
                 UPlayer.From( player ).AddComponent<FrozenPlayer>();
                 DisconnectedFrozen.Remove( player.CSteamID.m_SteamID );
             }
-        } 
+        }
 
 
         [SubscribeEvent( EventType.PLAYER_DEATH )]
@@ -569,12 +569,12 @@ namespace Essentials.Event.Handling
             var globalKitCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
 
             if ( CommandKit.GlobalCooldown.ContainsKey( player.CSteamID.m_SteamID ) &&
-                 EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie ) 
+                 EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie )
             {
                 CommandKit.GlobalCooldown[player.CSteamID.m_SteamID] =
                         DateTime.Now.AddSeconds( -globalKitCooldown );
             }
-            
+
             if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
 
             var playerCooldowns = CommandKit.Cooldowns[player.CSteamID.m_SteamID];
@@ -602,7 +602,7 @@ namespace Essentials.Event.Handling
         {
             var playerId = player.CSteamID.m_SteamID;
             var requests = CommandTpa.Requests;
-            
+
             if ( requests.ContainsKey( playerId ) )
             {
                 requests.Remove( playerId );
@@ -610,7 +610,7 @@ namespace Essentials.Event.Handling
             else if ( requests.ContainsValue(playerId) )
             {
                 var val = requests.Keys.FirstOrDefault(k => requests[k] == playerId);
-                
+
                 if ( val != default(ulong) )
                 {
                     requests.Remove( val );
@@ -622,7 +622,7 @@ namespace Essentials.Event.Handling
         {
             switch (limb)
             {
-                case ELimb.SKULL: 
+                case ELimb.SKULL:
                     return EssLang.LIMB_HEAD.GetMessage();
 
                 case ELimb.LEFT_HAND:
@@ -635,7 +635,7 @@ namespace Essentials.Event.Handling
                 case ELimb.RIGHT_FOOT:
                 case ELimb.LEFT_LEG:
                 case ELimb.RIGHT_LEG:
-                    return EssLang.LIMB_LEG.GetMessage(); 
+                    return EssLang.LIMB_LEG.GetMessage();
 
                 case ELimb.SPINE:
                     return EssLang.LIMB_TORSO.GetMessage();

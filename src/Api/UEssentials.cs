@@ -78,7 +78,7 @@ namespace Essentials.Api
         /// Instance of EssLogger
         /// </summary>
         internal static EssLogger Logger => Core.Logger;
-        
+
         /// <summary>
         /// Current economy provider.
         /// </summary>
@@ -103,7 +103,7 @@ namespace Essentials.Api
         /// Translation folder path
         /// </summary>
         public static string TranslationFolder => Core.TranslationFolder;
-        
+
         /// <summary>
         /// Translation folder path
         /// </summary>

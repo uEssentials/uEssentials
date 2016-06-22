@@ -30,8 +30,8 @@ namespace Essentials.Api.Events
         /// Define if this event will be cancelled.
         /// </summary>
         public bool Cancelled { get; set; }
-        
-        public CommandPreExecuteEvent( ICommand command, ICommandArgs args, 
+
+        public CommandPreExecuteEvent( ICommand command, ICommandArgs args,
                                        ICommandSource src ) : base(command, args, src)
         {}
     }

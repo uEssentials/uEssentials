@@ -25,7 +25,7 @@ namespace Essentials.Updater
     {
         /// <summary>
         /// Get last result or null if <see cref="CheckUpdate"/> isn't called.
-        /// 
+        ///
         /// LastResult is set when <see cref="CheckUpdate"/> is called.
         /// </summary>
         UpdateResult LastResult { get; }

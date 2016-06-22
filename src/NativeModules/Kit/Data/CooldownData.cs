@@ -29,48 +29,48 @@ using Essentials.NativeModules.Kit.Commands;
 
 namespace Essentials.NativeModules.Kit.Data
 {
-    public class CooldownData 
+    public class CooldownData
     {
         public string FilePath => UEssentials.DataFolder + Path.DirectorySeparatorChar + "kit_cooldowns.json";
-        
-        public void Load() 
+
+        public void Load()
         {
-            if ( !File.Exists( FilePath ) ) 
+            if ( !File.Exists( FilePath ) )
             {
                 return;
             }
-            
+
             var saved = JsonUtil.DeserializeFile<Dictionary<ulong, PlayerCooldown>>( FilePath );
             saved.ForEach(kv => {
                 CommandKit.Cooldowns.Clear();
                 CommandKit.GlobalCooldown.Clear();
                 CommandKit.Cooldowns.Add( kv.Key, kv.Value.Kits );
                 if ( !kv.Value.Global.Equals( default(DateTime) ) )
-                    CommandKit.GlobalCooldown.Add( kv.Key, kv.Value.Global );   
+                    CommandKit.GlobalCooldown.Add( kv.Key, kv.Value.Global );
                 ClearCooldowns( kv.Key );
             });
         }
-        
-        public void Save() 
+
+        public void Save()
         {
             var toSave = new Dictionary<ulong, PlayerCooldown>();
             var playerIds = new HashSet<ulong>();
             var kitCooldowns = CommandKit.Cooldowns;
             var globalCooldowns = CommandKit.GlobalCooldown;
-            
+
             kitCooldowns.ForEach( k => playerIds.Add(k.Key) );
             globalCooldowns.ForEach( k => playerIds.Add(k.Key) );
-            
+
             playerIds.ForEach(p => {
                 ClearCooldowns( p );
-                
+
                 var pc = new PlayerCooldown();
                 Dictionary<string, DateTime> kits;
                 DateTime global;
-                if ( kitCooldowns.TryGetValue( p, out kits ) ) 
+                if ( kitCooldowns.TryGetValue( p, out kits ) )
                 {
                     pc.Kits = kits;
-                } 
+                }
                 if ( globalCooldowns.TryGetValue( p, out global ) )
                 {
                     pc.Global = global;
@@ -84,41 +84,41 @@ namespace Essentials.NativeModules.Kit.Data
         private void ClearCooldowns( ulong playerId )
         {
             var km = KitModule.Instance.KitManager;
-       
+
            if ( CommandKit.GlobalCooldown.ContainsKey( playerId ) &&
                     CommandKit.GlobalCooldown[playerId].AddSeconds(
-                        UEssentials.Config.Kit.GlobalCooldown ) < DateTime.Now ) 
+                        UEssentials.Config.Kit.GlobalCooldown ) < DateTime.Now )
             {
                 CommandKit.GlobalCooldown.Remove( playerId );
-            } 
+            }
 
             if ( !CommandKit.Cooldowns.ContainsKey( playerId ) ||
-                  CommandKit.Cooldowns[playerId] == null ) 
+                  CommandKit.Cooldowns[playerId] == null )
             {
                 return;
             }
 
             var playerCooldowns = CommandKit.Cooldowns[playerId];
             var keys = new List<string> ( playerCooldowns.Keys );
-            
+
             foreach ( var kitName in keys )
             {
                 var kit = km.GetByName( kitName );
 
-                if ( kit == null || playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now ) 
+                if ( kit == null || playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now )
                 {
                     playerCooldowns.Remove( kitName );
                 }
             }
-            
+
             if ( playerCooldowns.Count == 0 )
             {
                 CommandKit.Cooldowns.Remove( playerId );
             }
         }
     }
-    
-    internal struct PlayerCooldown 
+
+    internal struct PlayerCooldown
     {
         public Dictionary<string, DateTime> Kits;
         public DateTime Global;

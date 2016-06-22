@@ -32,8 +32,8 @@ namespace Essentials.Api.Unturned
     {
         public static IEnumerable<UPlayer> Players => EssCore.Instance.ConnectedPlayers;
 
-        public static byte MaxPlayers 
-        { 
+        public static byte MaxPlayers
+        {
             get { return Provider.MaxPlayers; }
             set { Provider.MaxPlayers = value; }
         }
@@ -48,7 +48,7 @@ namespace Essentials.Api.Unturned
         {
             Broadcast( message, Color.yellow );
         }
-        
+
         public static void Broadcast( object message, Color color )
         {
             UnturnedChat.Say( message?.ToString() ?? "null", color );

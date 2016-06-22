@@ -32,11 +32,11 @@ namespace Essentials.Configuration
         {
             var logger = UEssentials.Logger;
             var url = UEssentials.Config.WebConfig.Url;
-            
+
             try
             {
                 logger.LogInfo( $"Loading web configuration from '{url}'" );
-                
+
                 using ( var wc = new WebClient() )
                 {
                     var resp = wc.DownloadString( url );
@@ -48,7 +48,7 @@ namespace Essentials.Configuration
                 logger.LogError( "Could not load webconfig." );
                 logger.LogError( ex.ToString() );
             }
-            
+
             base.Load( filePath );
         }
     }

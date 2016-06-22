@@ -80,7 +80,7 @@ namespace Essentials.NativeModules.Kit.Commands
                     }
                     else
                     {
-                        return CommandResult.Lang( EssLang.INVALID_COORDS, args[1], args[2], args[3] );    
+                        return CommandResult.Lang( EssLang.INVALID_COORDS, args[1], args[2], args[3] );
                     }
                     break;
 

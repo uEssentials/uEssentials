@@ -34,7 +34,7 @@ namespace Essentials.Commands
         Name = "poll",
         Description = "Start/Stop an poll",
         Usage = "[start/stop/list/info]"
-    )]  
+    )]
     public class CommandPoll : EssCommand
     {
         /// <summary>
@@ -87,10 +87,10 @@ namespace Essentials.Commands
 
                             if ( args[2].IsInt )
                             {
-                                var poll = new Poll( 
-                                    pollName, 
+                                var poll = new Poll(
+                                    pollName,
                                     pollDescription,
-                                    args[2].ToInt 
+                                    args[2].ToInt
                                 );
 
                                 poll.Start();
@@ -148,10 +148,10 @@ namespace Essentials.Commands
 
                                     foreach ( var poll in Polls.Values )
                                     {
-                                        EssLang.POLL_LIST_ENTRY.SendTo( 
+                                        EssLang.POLL_LIST_ENTRY.SendTo(
                                             src,
                                             poll.Name,
-                                            poll.Description, 
+                                            poll.Description,
                                             poll.YesVotes,
                                             poll.NoVotes
                                         );
@@ -162,7 +162,7 @@ namespace Essentials.Commands
                         else
                         {
                             return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
-                        }                        
+                        }
                         break;
 
                     case "info":
@@ -191,12 +191,12 @@ namespace Essentials.Commands
 
                                 EssLang.POLL_INFO.SendTo( src, pollName );
 
-                                EssLang.POLL_LIST_ENTRY.SendTo( 
-                                    src, 
-                                    pollName, 
-                                    poll.Description, 
-                                    poll.YesVotes, 
-                                    poll.NoVotes 
+                                EssLang.POLL_LIST_ENTRY.SendTo(
+                                    src,
+                                    pollName,
+                                    poll.Description,
+                                    poll.YesVotes,
+                                    poll.NoVotes
                                 );
                             }
                         }
@@ -294,11 +294,11 @@ namespace Essentials.Commands
                             return;
                         }
 
-                        EssLang.POLL_RUNNING.Broadcast( 
+                        EssLang.POLL_RUNNING.Broadcast(
                             thiz.Name,
-                            thiz.Description, 
-                            thiz.YesVotes, 
-                            thiz.NoVotes 
+                            thiz.Description,
+                            thiz.YesVotes,
+                            thiz.NoVotes
                         );
                     }
 

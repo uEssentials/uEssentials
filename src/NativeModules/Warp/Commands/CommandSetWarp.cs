@@ -41,7 +41,7 @@ namespace Essentials.NativeModules.Warp.Commands
                     {
                         return CommandResult.ShowUsage();
                     }
-                    
+
                     if ( WarpModule.Instance.WarpManager.Contains( args[0].ToString() ) )
                     {
                         return CommandResult.Lang( EssLang.WARP_ALREADY_EXISTS );

@@ -38,7 +38,7 @@ namespace Essentials.NativeModules.Warp
 
             WarpManager = new WarpManager();
             WarpManager.Load();
-            
+
             Logger.LogInfo( $"Loaded {WarpManager.Count} warps" );
 
             CommandManager.Register<CommandWarp>();

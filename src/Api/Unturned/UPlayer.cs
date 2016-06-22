@@ -41,7 +41,7 @@ namespace Essentials.Api.Unturned
     //TODO: Remove totally Rocketplayer dependency.
 
     public class UPlayer : ICommandSource
-    {   
+    {
         public UnturnedPlayer       RocketPlayer    { get; }
         public bool                 IsConsole       => false;
         public string               DisplayName     => CharacterName;
@@ -368,35 +368,35 @@ namespace Essentials.Api.Unturned
         {
             var connectedPlayers = EssCore.Instance.ConnectedPlayers;
             var lastPlayer = null as UPlayer;
-            
+
             /*
                 Equals -> StartWith -> Contains
             */
-            
+
             foreach ( var player in connectedPlayers )
             {
                 var pCharName = player.CharacterName;
                 var pSteamName = player.SteamName;
-                
+
                 if ( pCharName.EqualsIgnoreCase( name ) ||
                      pSteamName.EqualsIgnoreCase( name )  )
                 {
                     return player;
                 }
-                
+
                 if ( pCharName.ToLowerInvariant().StartsWith( name.ToLowerInvariant() ) ||
                      pSteamName.ToLowerInvariant().StartsWith( name.ToLowerInvariant() ) )
                 {
                     return player;
                 }
-                
+
                 if ( pCharName.ContainsIgnoreCase( name ) ||
                      pSteamName.ContainsIgnoreCase( name ) )
                 {
                     lastPlayer = player;
                 }
             }
-            
+
             return lastPlayer;
         }
 

@@ -44,17 +44,17 @@ namespace Essentials.NativeModules.Kit.Commands
             {
                 return CommandResult.ShowUsage();
             }
-            
+
             var kitManager = KitModule.Instance.KitManager;
             var kitName = args[0].ToString();
-            
+
             if ( !kitManager.Contains( kitName ) )
             {
                 return CommandResult.Lang( EssLang.KIT_NOT_EXIST, kitName );
             }
-            
+
             var kit = kitManager.GetByName( kitName );
-            
+
             switch ( args[1].ToLowerString )
             {
                 case "see":
@@ -64,9 +64,9 @@ namespace Essentials.NativeModules.Kit.Commands
                         {
                             return CommandResult.InvalidArgs( "Use '/ekit see items' to see items" );
                         }
-                        
+
                         var index = 0;
-                        
+
                         kit.Items.ForEach( i => {
                             src.SendMessage( i.ToString().Insert( 0, $"[{(index++) + 1}] " ) );
                         });
@@ -80,51 +80,51 @@ namespace Essentials.NativeModules.Kit.Commands
                         src.SendMessage( "Use '/ekit see items' to see items" );
                     }
                     break;
-                
+
                 // /ekit xp additem normal id amount durability
                 case "additem":
-                    if ( args.Length < 3 ) 
+                    if ( args.Length < 3 )
                     {
                         return CommandResult.InvalidArgs( "Use /ekit [kit] additem [type] [id] [amount] [durability]" );
                     }
-                    
+
                     byte durability = 100;
                     byte amount = 1;
-                    
+
                     if ( args.Length >= 5 )
                     {
                         if ( !args[4].IsInt )
                         {
                             return CommandResult.Lang( EssLang.INVALID_NUMBER, args[4] );
                         }
-                        
+
                         var argAsInt = args[4].ToInt;
-                        
+
                         if ( argAsInt < 0 || argAsInt > 255 )
                         {
                             return CommandResult.Lang( EssLang.NEGATIVE_OR_LARGE );
                         }
-                        
+
                         amount = (byte) args[4].ToInt;
                     }
-                    
+
                     if ( args.Length >= 6 )
                     {
                         if ( !args[5].IsInt )
                         {
                             return CommandResult.Lang( EssLang.INVALID_NUMBER, args[5] );
                         }
-                        
+
                         var argAsInt = args[5].ToInt;
-                        
+
                         if ( argAsInt < 0 || argAsInt > 255 )
                         {
                             return CommandResult.Lang( EssLang.NEGATIVE_OR_LARGE );
                         }
-                        
+
                         durability = (byte) args[5].ToInt;
                     }
-                    
+
                     switch (args[2].ToLowerString)
                     {
                         case "normal":
@@ -132,18 +132,18 @@ namespace Essentials.NativeModules.Kit.Commands
                             {
                                 return CommandResult.InvalidArgs( "Use /ekit [kit] additem [type] <id> [amount] [durability]" );
                             }
-                            
+
                             var optAsset = ItemUtil.GetItem( args[3].ToString() );
-                            
+
                             if ( optAsset.IsAbsent )
                             {
                                 return CommandResult.Lang( EssLang.INVALID_ITEM_ID_NAME, args[3] );
                             }
-                            
+
                             kit.Items.Add( new KitItem( optAsset.Value.id, durability, amount ) );
                             src.SendMessage( $"Added Id: {optAsset.Value.id}, Amount: {amount}, Durability: {durability}" );
                             break;
-                        
+
                         case "vehicle":
                             if ( args.Length != 4 )
                             {
@@ -154,25 +154,25 @@ namespace Essentials.NativeModules.Kit.Commands
                             {
                                 return CommandResult.Lang( EssLang.INVALID_NUMBER, args[3] );
                             }
-                                
+
                             var argAsInt = args[3].ToInt;
-                                
+
                             if ( argAsInt < 0 || argAsInt > ushort.MaxValue )
                             {
                                 return CommandResult.Lang( EssLang.NEGATIVE_OR_LARGE );
                             }
-                                
+
                             var vehicleAsset = Assets.find( EAssetType.VEHICLE, (ushort) argAsInt );
-                                
+
                             if ( vehicleAsset == null )
                             {
                                 return CommandResult.Lang( EssLang.INVALID_VEHICLE_ID, argAsInt );
                             }
-                                
+
                             kit.Items.Add( new KitItemVehicle( (ushort) argAsInt ) );
                             src.SendMessage( $"Added Vehicle item. Id: {argAsInt}" );
                             break;
-                        
+
                         case "xp":
                             if ( args.Length != 4 )
                             {
@@ -183,21 +183,21 @@ namespace Essentials.NativeModules.Kit.Commands
                             {
                                 return CommandResult.Lang( EssLang.INVALID_NUMBER, args[3] );
                             }
-                                
+
                             if ( args[3].ToInt < 0 )
                             {
                                 return CommandResult.Lang( EssLang.MUST_POSITIVE );
                             }
-                                
+
                             kit.Items.Add( new KitItemExperience( args[3].ToUint ) );
                             src.SendMessage( $"Added Xp item. Amount: {amount}" );
                             break;
-                        
+
                         default:
                             return CommandResult.Error( "Invalid type '{args[2]}'. Valid types are: normal, vehicle or xp." );
                     }
                     break;
-                
+
                 // /ekit kit delitem [itemindex]
                 case "delitem":
                     if ( args.Length != 3 )
@@ -212,16 +212,16 @@ namespace Essentials.NativeModules.Kit.Commands
                     {
                         return CommandResult.Lang( EssLang.INVALID_NUMBER, args[2] );
                     }
-                    
+
                     var argAsInt2 = args[2].ToInt;
-                        
+
                     if ( argAsInt2 <= 0 )
                     {
                         return CommandResult.Lang( EssLang.MUST_POSITIVE );
                     }
-                        
+
                     /* 1 to kitItems.Count */
-                    if ( (argAsInt2 - 1) > kit.Items.Count ) 
+                    if ( (argAsInt2 - 1) > kit.Items.Count )
                     {
                         src.SendMessage( $"Invalid index, index must be between 1 and {kit.Items.Count}" );
                         src.SendMessage( "Use /ekit [kit] see [items] to view valid indexes." );
@@ -229,10 +229,10 @@ namespace Essentials.NativeModules.Kit.Commands
                         return CommandResult.InvalidArgs();
                     }
 
-                    kit.Items.RemoveAt( argAsInt2 - 1 ); 
+                    kit.Items.RemoveAt( argAsInt2 - 1 );
                     src.SendMessage( $"Removed item at index {argAsInt2}" );
                     break;
-                    
+
                 case "set":
                     if ( args.Length != 3 )
                     {
@@ -243,7 +243,7 @@ namespace Essentials.NativeModules.Kit.Commands
 
                         return CommandResult.InvalidArgs();
                     }
-                    
+
                     switch ( args[2].ToLowerString )
                     {
                         case "name":
@@ -251,7 +251,7 @@ namespace Essentials.NativeModules.Kit.Commands
                             kit.Name = args[3].ToString();
                             src.SendMessage( "Name set to " + kit.Name );
                             break;
-                        
+
                         case "cooldown":
                         case "cd":
                             if ( !args[3].IsInt )
@@ -267,7 +267,7 @@ namespace Essentials.NativeModules.Kit.Commands
                             kit.Cooldown = args[3].ToUint;
                             src.SendMessage( "Cooldown set to " + kit.Cooldown );
                             break;
-                        
+
                         case "resetcooldownwhendie":
                         case "rwd":
                             if ( !args[3].IsBool )
@@ -278,7 +278,7 @@ namespace Essentials.NativeModules.Kit.Commands
                             kit.ResetCooldownWhenDie = args[3].ToBool;
                             src.SendMessage( "ResetCooldownWhenDie set to " + kit.ResetCooldownWhenDie );
                             break;
-                        
+
                         default:
                             src.SendMessage( "nm  = Name" );
                             src.SendMessage( "cd  = Cooldown" );
@@ -286,11 +286,11 @@ namespace Essentials.NativeModules.Kit.Commands
                             return CommandResult.InvalidArgs();
                     }
                     break;
-                
+
                 default:
                     return CommandResult.ShowUsage();
             }
-            
+
             kitManager.SaveKits();
             kitManager.LoadKits();
 

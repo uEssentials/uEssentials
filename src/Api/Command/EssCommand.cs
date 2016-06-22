@@ -41,7 +41,7 @@ namespace Essentials.Api.Command
             var commandInfo = Preconditions.NotNull(
                 ReflectionUtil.GetAttributeFrom<CommandInfo>( this ),
                 "EssCommand must have 'CommandInfo' attribute" );
-            
+
             Name = commandInfo.Name;
             Usage = commandInfo.Usage;
             Description = commandInfo.Description;

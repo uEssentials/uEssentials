@@ -121,7 +121,7 @@ namespace Essentials.Commands
                                 ReloadKits();
                                 src.SendMessage( "Reload finished..." );
                                 break;
-                            
+
                             case "config":
                                 src.SendMessage( "Reloading config..." );
                                 ReloadConfig();
@@ -133,13 +133,13 @@ namespace Essentials.Commands
                                 ReloadLang();
                                 src.SendMessage( "Reload finished..." );
                                 break;
-                            
+
                             default:
                                 return CommandResult.InvalidArgs( "Use /ess reload <kits/config/lang>" );
                         }
                     }
                     break;
-                
+
                 case "commands":
                     if ( src.IsConsole )
                     {

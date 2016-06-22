@@ -47,7 +47,7 @@ namespace Essentials.Api.Logging
             Log( message, ConsoleColor.Green );
         }
 
-        public void Log( string message, ConsoleColor color, string prefix = "default", 
+        public void Log( string message, ConsoleColor color, string prefix = "default",
                          string suffix = "\n" )
         {
             if ( prefix.Equals( "default" ) ) prefix = Prefix;

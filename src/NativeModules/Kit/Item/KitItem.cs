@@ -57,7 +57,7 @@ namespace Essentials.NativeModules.Kit.Item
         /// <summary>
         /// Metadata of item
         /// </summary>
-        [JsonIgnore] 
+        [JsonIgnore]
         public byte[] Metadata { get; set; }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Essentials.NativeModules.Kit.Item
         /// Give this item to an specified player
         /// </summary>
         /// <param name="player"> player that you should give this item </param>
-        /// <param name="dropIfInventoryFull"> determine if this item should be dropped 
+        /// <param name="dropIfInventoryFull"> determine if this item should be dropped
         /// on ground if inventory is full </param>
         /// <returns> False if could not be added(full inventory) otherwise true </returns>
         public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )

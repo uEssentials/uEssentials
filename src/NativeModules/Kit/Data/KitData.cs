@@ -54,7 +54,7 @@ namespace Essentials.NativeModules.Kit.Data
                 File.Create( DataFilePath ).Close();
                 LoadDefault();
             }
-            
+
             JArray kitArr;
 
             try
@@ -84,7 +84,7 @@ namespace Essentials.NativeModules.Kit.Data
                 {
                     kit.Cost = rawCost.Value<decimal>();
                 }
-                
+
                 var itemIndex = 0;
                 var economyHook = EssCore.Instance.HookManager.GetActiveByType<UconomyHook>();
 
@@ -123,7 +123,7 @@ namespace Essentials.NativeModules.Kit.Data
                     var tokKitItemAmount     = itemObj.GetValue( "Amount", strCmp );
                     var tokAmmo              = itemObj.GetValue( "Ammo", strCmp );
 
-                    var itemAsset = (ItemAsset) Assets.find( EAssetType.ITEM, 
+                    var itemAsset = (ItemAsset) Assets.find( EAssetType.ITEM,
                         tokKitItemId?.Value<ushort>() ?? 0 );
 
                     if ( tokKitItemId == null || itemAsset == null )
@@ -133,7 +133,7 @@ namespace Essentials.NativeModules.Kit.Data
                     }
 
                     var kitItemId = tokKitItemId.Value<ushort>();
-                    var kitItemAmount = tokKitItemAmount?.Value<byte>() ?? 1; 
+                    var kitItemAmount = tokKitItemAmount?.Value<byte>() ?? 1;
                     var kitItemDurability = tokKitItemDurability?.Value<byte>() ?? 100;
 
                     if ( itemAsset.UseableType == EUseableType.GUN )
@@ -146,14 +146,14 @@ namespace Essentials.NativeModules.Kit.Data
                     else
                     {
                         kitItem = new KitItem( kitItemId, kitItemDurability, kitItemAmount );
-                        
+
                         if ( itemAsset is ItemFuelAsset )
                         {
                             ((KitItem) kitItem).Metadata[0] = 1;
                         }
                     }
-                    goto add;     
-                    
+                    goto add;
+
                     weaponItem:
                     var tokFireMode    = itemObj.GetValue( "FireMode", strCmp );
                     var tokBarrel      = itemObj.GetValue( "Barrel", strCmp );
@@ -190,7 +190,7 @@ namespace Essentials.NativeModules.Kit.Data
                     Func<JToken, Attachment> deserializeAttach = json => {
                         return json == null ? null : JsonConvert.DeserializeObject<Attachment>( json.ToString() );
                     };
-           
+
                     weaponItem.Barrel    = deserializeAttach( tokBarrel );
                     weaponItem.Sight     = deserializeAttach( tokSight );
                     weaponItem.Tactical  = deserializeAttach( tokTactical );

@@ -52,21 +52,21 @@ namespace Essentials.Commands
                     {
                         return CommandResult.Empty();
                     }
-                        
+
                     lock ( Polls )
                     {
                         var poll = Polls[pollName];
-                            
+
                         if ( poll.Voted.Contains( src.DisplayName ) )
                         {
                             return CommandResult.Lang( EssLang.POLL_ALREADY_VOTED );
                         }
-                            
+
                         poll.YesVotes += 1;
                         poll.Voted.Add( src.DisplayName );
-                            
+
                         Polls[pollName] = poll;
-                            
+
                         EssLang.POLL_VOTED_YES.SendTo( src, pollName );
                     }
                     break;
@@ -79,21 +79,21 @@ namespace Essentials.Commands
                     {
                         return CommandResult.Empty();
                     }
-                        
+
                     lock ( Polls )
                     {
                         var poll = Polls[pollName];
-                            
+
                         if ( poll.Voted.Contains( src.DisplayName ) )
                         {
                             return CommandResult.Lang( EssLang.POLL_ALREADY_VOTED );
                         }
-                            
+
                         poll.NoVotes += 1;
                         poll.Voted.Add( src.DisplayName );
-                            
+
                         Polls[pollName] = poll;
-                            
+
                         EssLang.POLL_VOTED_NO.SendTo( src, pollName );
                     }
                     break;

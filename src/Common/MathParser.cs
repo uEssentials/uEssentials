@@ -7,10 +7,10 @@ namespace Essentials.Common
 {
     #region License agreement
 
-    // This is light, fast and simple to understand mathematical parser 
-    // designed in one class, which receives as input a mathematical 
-    // expression (System.String) and returns the output value (System.Double). 
-    // For example, if you input string is "√(625)+25*(3/3)" then parser return double value — 50. 
+    // This is light, fast and simple to understand mathematical parser
+    // designed in one class, which receives as input a mathematical
+    // expression (System.String) and returns the output value (System.Double).
+    // For example, if you input string is "√(625)+25*(3/3)" then parser return double value — 50.
     // Copyright (C) 2012-2013 Yerzhan Kalzhani, kirnbas@gmail.com
 
     // This program is free software: you can redistribute it and/or modify
@@ -24,14 +24,14 @@ namespace Essentials.Common
     // GNU General Public License for more details.
 
     // You should have received a copy of the GNU General Public License
-    // along with this program.  If not, see <http://www.gnu.org/licenses/> 
+    // along with this program.  If not, see <http://www.gnu.org/licenses/>
 
     #endregion
 
     #region Example usage
 
     // public static void Main()
-    // {     
+    // {
     //     MathParser parser = new MathParser();
     //     string s1 = "pi+5*5+5*3-5*5-5*3+1E1";
     //     string s2 = "sin(cos(tg(sh(ch(th(100))))))";
@@ -41,8 +41,8 @@ namespace Essentials.Common
     //
     //     Console.WriteLine(d1); // 13.141592...
     //     Console.WriteLine(d2); // 0.0174524023974442
-    //     Console.ReadKey(true); 
-    // }   
+    //     Console.ReadKey(true);
+    // }
 
     #endregion
 
@@ -54,7 +54,7 @@ namespace Essentials.Common
     //
     // If you want to add new function, then add new item to supportedFunctions
     // dictionary and check next above methods: (2), (3), (4).
-    // 
+    //
     // if you want to add new constant, then add new item to supportedConstants
 
     #endregion
@@ -107,7 +107,7 @@ namespace Essentials.Common
         private readonly Dictionary<string, string> supportedOperators =
             new Dictionary<string, string>
             {
-                { "+", Plus },                
+                { "+", Plus },
                 { "-", Minus },
                 { "*", Multiply },
                 { "/", Divide },
@@ -294,7 +294,7 @@ namespace Essentials.Common
                 outputString = SyntaxAnalysisInfixNotation(token, outputString, stack);
             }
 
-            // Pop all elements from stack to output string            
+            // Pop all elements from stack to output string
             while (stack.Count > 0)
             {
                 // There should be only operators
@@ -442,7 +442,7 @@ namespace Essentials.Common
         /// <returns>Output string (math expression in RPN)</returns>
         private StringBuilder SyntaxAnalysisInfixNotation(string token, StringBuilder outputString, Stack<string> stack)
         {
-            // If it's a number just put to string            
+            // If it's a number just put to string
             if (token[0] == NumberMaker[0])
             {
                 outputString.Append(token);
@@ -644,23 +644,23 @@ namespace Essentials.Common
                     case Ctg:
                         rst = 1 / ApplyTrigFunction(Math.Tan, arg);
                         break;
-                    case Sh: 
-                        rst = Math.Sinh(arg); 
+                    case Sh:
+                        rst = Math.Sinh(arg);
                         break;
-                    case Ch:rst = 
-                        rst = Math.Cosh(arg); 
+                    case Ch:rst =
+                        rst = Math.Cosh(arg);
                         break;
                     case Th:
-                        rst = Math.Tanh(arg); 
+                        rst = Math.Tanh(arg);
                         break;
-                    case Ln: 
-                        rst = Math.Log(arg); 
+                    case Ln:
+                        rst = Math.Log(arg);
                         break;
-                    case Exp: 
-                        rst = Math.Exp(arg); 
+                    case Exp:
+                        rst = Math.Exp(arg);
                         break;
-                    case Abs: 
-                        rst = Math.Abs(arg); 
+                    case Abs:
+                        rst = Math.Abs(arg);
                         break;
                     default:
                         throw new ArgumentException("Unknown operator");

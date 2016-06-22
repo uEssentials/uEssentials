@@ -69,7 +69,7 @@ namespace Essentials.NativeModules.Kit
         /// <summary>
         /// <param name="name"> name of kit </param>
         /// <param name="cooldown"> Cooldown in seconds of kit </param>
-        /// <param name="resetCooldownWhenDie"> 
+        /// <param name="resetCooldownWhenDie">
         ///     Flag that determines if cooldown will be reseted when player die
         /// </param>
         /// </summary>

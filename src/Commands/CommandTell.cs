@@ -68,7 +68,7 @@ namespace Essentials.Commands
             src.SendMessage( message2, color2 );
 
             Spies.ForEach( p => {
-                UPlayer.From( p ).SendMessage( $"Spy: ({src.DisplayName} -> " +  
+                UPlayer.From( p ).SendMessage( $"Spy: ({src.DisplayName} -> " +
                                                $"{target.CharacterName}): {args.Join( 1 )}", Color.gray );
             } );
 

@@ -35,9 +35,9 @@ namespace Essentials.Core.Command
         public string           Description      { get; set; }
         public string           Permission       { get; set; }
         public AllowedSource    AllowedSource    { get; set; }
-        
+
         private TextCommands.TextCommandData Data;
-        
+
         public TextCommand( TextCommands.TextCommandData data )
         {
             Data = data;

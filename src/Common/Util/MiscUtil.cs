@@ -30,19 +30,19 @@ namespace Essentials.Common.Util
         {
             var sb = new StringBuilder( start );
             var arrLength = array.Length;
-            
+
             for (int i = 0; i < arrLength; i++)
             {
                 sb.Append( array[i] );
-                
+
                 if ( (i + 1) != arrLength )
                 {
                     sb.Append( separator );
                 }
             }
-            
+
             sb.Append( end );
-            
+
             return sb.ToString();
         }
     }

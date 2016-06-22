@@ -100,14 +100,14 @@ namespace Essentials.NativeModules.Kit.Item
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="id"></param>
         /// <param name="durability"></param>
         /// <param name="amount"></param>
         /// <param name="ammo"></param>
         /// <param name="fireMode"></param>
-        public KitItemWeapon( ushort id, byte durability,  byte amount, byte? ammo, 
+        public KitItemWeapon( ushort id, byte durability,  byte amount, byte? ammo,
                               EFiremode? fireMode = EFiremode.SAFETY )  : base( id, durability, amount )
         {
             FireMode = fireMode;

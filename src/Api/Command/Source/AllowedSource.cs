@@ -29,7 +29,7 @@ namespace Essentials.Api.Command.Source
         CONSOLE,
 
         /// <summary>
-        /// Represents an Unturned player 
+        /// Represents an Unturned player
         /// </summary>
         PLAYER,
 

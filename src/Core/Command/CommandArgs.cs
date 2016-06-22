@@ -106,7 +106,7 @@ namespace Essentials.Core.Command
             get
             {
                 return Arguments[argumentIndex];
-            }   
+            }
         }
 
         public string Join( int initialIndex )
@@ -115,7 +115,7 @@ namespace Essentials.Core.Command
                                               .Select( arg => arg.ToString() )
                                               .ToArray() );
         }
-        
+
         public string Join( int startIndex, int endIndex, string separator )
         {
             return string.Join( separator, Arguments.Skip( startIndex )
@@ -274,10 +274,10 @@ namespace Essentials.Core.Command
 
         public bool Is( string other, bool ignoreCase = true )
         {
-            return string.Compare( 
+            return string.Compare(
                 ToString(),
-                other, 
-                StringComparison.OrdinalIgnoreCase 
+                other,
+                StringComparison.OrdinalIgnoreCase
             ) == 0;
         }
 

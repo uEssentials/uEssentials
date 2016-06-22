@@ -89,25 +89,25 @@ namespace Essentials.Api.Command
     public interface ICommandArgument
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         int Index { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         string RawValue { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         bool IsBool { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         bool IsString { get; }
-        
+
         /// <summary>
         /// Check if argument in determined index is an valid player name
         /// </summary>
@@ -121,17 +121,17 @@ namespace Essentials.Api.Command
         bool IsInt { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         bool IsUint { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         bool IsShort { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         bool IsUshort { get; }
 
@@ -142,77 +142,77 @@ namespace Essentials.Api.Command
         bool IsDouble { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns> Return is argument is double </returns>
         bool IsFloat { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         int ToInt { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         uint ToUint { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         short ToShort { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         ushort ToUshort { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         string ToLowerString { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         string ToUpperString { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         bool ToBool { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         double ToDouble { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         float ToFloat { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         UPlayer ToPlayer { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         bool Is( int other );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         bool Is( double other );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="other"></param>
         /// <param name="ignoreCase"></param>
@@ -220,14 +220,14 @@ namespace Essentials.Api.Command
         bool Is( string other, bool ignoreCase = true );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         bool Is( UPlayer other );
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="ignoreCase"></param>
         /// <param name="others"></param>

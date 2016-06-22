@@ -25,7 +25,7 @@ using UnityEngine;
 namespace Essentials.Api.Command.Source
 {
     /// <summary>
-    /// This classe represents a source of <see cref="ICommand"/>, 
+    /// This classe represents a source of <see cref="ICommand"/>,
     /// that executed the command.
     /// </summary>
     public interface ICommandSource : IPermissible
@@ -39,7 +39,7 @@ namespace Essentials.Api.Command.Source
         /// Returns the display name
         /// </summary>
         string DisplayName { get; }
-        
+
         /// <summary>
         /// Returns if this is Console
         /// </summary>

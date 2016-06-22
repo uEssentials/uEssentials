@@ -43,7 +43,7 @@ namespace Essentials.Commands
     {
         internal static Dictionary<ulong, Tasks.Task> Delay = new Dictionary<ulong, Tasks.Task>();
         internal static SimpleCooldown Cooldown = new SimpleCooldown();
-        
+
         public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
             var player = src.ToPlayer();
@@ -51,14 +51,14 @@ namespace Essentials.Commands
 
             if ( Cooldown.HasEntry( playerId ) )
             {
-                return CommandResult.Lang( EssLang.USE_COOLDOWN, 
+                return CommandResult.Lang( EssLang.USE_COOLDOWN,
                     TimeUtil.FormatSeconds( (uint) Cooldown.GetRemainingTime( playerId ) ) );
             }
 
             Vector3 position;
             byte angle;
 
-            if ( player.RocketPlayer.Stance == EPlayerStance.DRIVING || 
+            if ( player.RocketPlayer.Stance == EPlayerStance.DRIVING ||
                  player.RocketPlayer.Stance == EPlayerStance.SITTING )
             {
                 return CommandResult.Lang( EssLang.CANNOT_TELEPORT_DRIVING );
@@ -101,7 +101,7 @@ namespace Essentials.Commands
 
             return CommandResult.Success();
         }
-        
+
          protected override void OnUnregistered()
             => UEssentials.EventManager.Unregister<EssentialsEventHandler>( "HomePlayerMove" );
     }

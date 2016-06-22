@@ -33,11 +33,11 @@ namespace Essentials.NativeModules.Kit.Data
         {
             var logger = UEssentials.Logger;
             var url = UEssentials.Config.WebKits.Url;
-            
+
             try
             {
                 logger.LogInfo( $"Loading web kits from '{url}'" );
-                
+
                 using ( var wc = new WebClient() )
                 {
                     var resp = wc.DownloadString( url );

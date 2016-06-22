@@ -69,8 +69,8 @@ namespace Essentials.Api.Module
                 moduleInstance.Assembly = moduleAssembly;
             }
 
-            Preconditions.NotNull( moduleInstance, "Could load module from assembly " +  
-                moduleAssembly.FullName + 
+            Preconditions.NotNull( moduleInstance, "Could load module from assembly " +
+                moduleAssembly.FullName +
                 $" because it does not contains any class that extends '{typeof (EssModule)}" );
 
             LoadModule( moduleInstance );
@@ -79,7 +79,7 @@ namespace Essentials.Api.Module
         }
 
         /// <summary>
-        /// Load an module 
+        /// Load an module
         /// </summary>
         /// <param name="module">Module that you want to load</param>
         public void LoadModule( EssModule module )
@@ -92,7 +92,7 @@ namespace Essentials.Api.Module
         }
 
         /// <summary>
-        /// Unload ab module 
+        /// Unload ab module
         /// </summary>
         /// <param name="module">Module that you want to unload</param>
         public void UnloadModule( EssModule module )
@@ -162,7 +162,7 @@ namespace Essentials.Api.Module
         {
             return Optional<T>.OfNullable( RunningModules.FirstOrDefault(m => m.GetType() == typeof (T)) as T );
         }
-        
+
         public Optional<EssModule> GetModule( Type type )
         {
             return Optional<EssModule>.OfNullable( RunningModules.FirstOrDefault(m => m.GetType() == type ) );

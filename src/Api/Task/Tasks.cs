@@ -60,7 +60,7 @@ namespace Essentials.Api.Task
             /// <summary>
             /// Action who will be executed
             /// </summary>
-            internal Action<Task> Action; 
+            internal Action<Task> Action;
 
             /// <summary>
             /// Interval between executions

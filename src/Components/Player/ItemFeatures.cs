@@ -27,7 +27,7 @@ namespace Essentials.Components.Player
     public class ItemFeatures : PlayerComponent
     {
         private readonly PlayerEquipment _equip;
-        
+
         /*
             Used by autoreload for bows.
         */
@@ -67,7 +67,7 @@ namespace Essentials.Components.Player
                             break;
                     }
                 }
-                
+
                 if ( _equip.state[10] == 0 )
                 {
                     var id = BitConverter.ToUInt16(
@@ -90,7 +90,7 @@ namespace Essentials.Components.Player
                             _equip.state[9] = 1;
                             _equip.state[10] = 1;
                             goto update;
-                        
+
                         case 346:
                         case 353:
                         case 355:
@@ -102,13 +102,13 @@ namespace Essentials.Components.Player
                             _equip.state[17] = 100; // Durability (for arrows)
                             goto update;
                     }
-                    
+
                     var maga = Assets.find( EAssetType.ITEM, id ) as ItemMagazineAsset;
-                    
+
                     _equip.state[10] = maga?.amount ?? 0;
-                    
+
                     update:
-                    _equip.sendUpdateState();   
+                    _equip.sendUpdateState();
                 }
             }
 

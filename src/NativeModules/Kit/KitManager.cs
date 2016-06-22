@@ -31,7 +31,7 @@ namespace Essentials.NativeModules.Kit
         internal IData<Dictionary<string, Kit>> KitData { get; }
         internal CooldownData                   CooldownData { get; }
         private Dictionary<string, Kit>         KitMap { get; set; }
-        public IEnumerable<Kit>                 Kits => KitMap.Values; 
+        public IEnumerable<Kit>                 Kits => KitMap.Values;
         public int                              Count => KitMap.Count;
 
         internal KitManager()
@@ -65,22 +65,22 @@ namespace Essentials.NativeModules.Kit
 
         public Kit GetByName( string kitName )
         {
-            return Contains( kitName ) 
-                   ? KitMap[kitName.ToLowerInvariant()] 
+            return Contains( kitName )
+                   ? KitMap[kitName.ToLowerInvariant()]
                    : null;
         }
 
-        public void LoadKits() 
+        public void LoadKits()
         {
             KitMap = KitData.Load();
         }
 
-        public void SaveKits() 
+        public void SaveKits()
         {
             KitData.Save( KitMap );
         }
 
-        public void Load() 
+        public void Load()
         {
             LoadKits();
             CooldownData.Load();

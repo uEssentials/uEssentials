@@ -52,10 +52,10 @@ namespace Essentials.Compatibility
 
         public void RegisterAll( Assembly asm )
         {
-            ( 
+            (
                 from type in asm.GetTypes()
                 where typeof(Hook).IsAssignableFrom( type )
-                where !type.IsAbstract 
+                where !type.IsAbstract
                 select type
              ).ForEach( RegisterHook );
         }
@@ -103,8 +103,8 @@ namespace Essentials.Compatibility
         public Optional<THookType> GetActiveByType<THookType>() where THookType : Hook
         {
             var hook = Optional<THookType>.OfNullable(
-                (THookType) _hooks.FirstOrDefault( h => h.Value is THookType && 
-                                                         h.Value.IsLoaded ).Value
+                (THookType) _hooks.FirstOrDefault( h => h.Value is THookType &&
+                                                   h.Value.IsLoaded ).Value
             );
 
             return hook;

@@ -41,7 +41,7 @@ namespace Essentials.Core.Command
         private Dictionary<string, ICommand> CommandMap { get; }
         private List<RocketCommandManager.RegisteredRocketCommand> _rocketCommands;
 
-        public IEnumerable<ICommand> Commands => CommandMap.Values; 
+        public IEnumerable<ICommand> Commands => CommandMap.Values;
 
         internal CommandManager()
         {
@@ -53,7 +53,7 @@ namespace Essentials.Core.Command
         {
             Preconditions.NotNull( name, "name cannot be null" );
 
-            return GetWhere( command => 
+            return GetWhere( command =>
             {
                 if ( command is CommandAdapter && !includeAliases ) return false;
 
@@ -92,7 +92,7 @@ namespace Essentials.Core.Command
 
                 command.Aliases = cmdEntry.Aliases ?? new string[0];
 
-                if ( cmdEntry.Description != null ) 
+                if ( cmdEntry.Description != null )
                 {
                     command.Description = cmdEntry.Description;
                 }
@@ -106,19 +106,19 @@ namespace Essentials.Core.Command
 
             _rocketCommands.Add( new RocketCommandManager.RegisteredRocketCommand( name, adapter ) );
             CommandMap.Add( name, command );
-            
+
             if ( command is EssCommand )
             {
                 AccessorFactory.AccessMethod<EssCommand>( command, "OnRegistered" ).Invoke();
             }
-            
+
             var aliases = command.Aliases;
 
             if ( aliases == null || aliases.Length == 0 ) return;
 
             foreach ( var alias in aliases )
             {
-                _rocketCommands.Add( new RocketCommandManager.RegisteredRocketCommand( 
+                _rocketCommands.Add( new RocketCommandManager.RegisteredRocketCommand(
                     alias.ToLowerInvariant(), new CommandAdapter.CommandAliasAdapter( command, alias )) );
             }
         }
@@ -165,7 +165,7 @@ namespace Essentials.Core.Command
         public bool HasWithName( string commandName )
         {
             Preconditions.NotNull( commandName, "commandName cannot be null" );
-            
+
             return HasWith( command =>
             {
                 var rocketCommand = command as IRocketCommand;
@@ -202,12 +202,12 @@ namespace Essentials.Core.Command
         {
             Preconditions.NotNull( assembly, "Assembly cannot be null" );
 
-            UnregisterWhere( command => Equals( command.GetType().Assembly, assembly ) ); 
+            UnregisterWhere( command => Equals( command.GetType().Assembly, assembly ) );
         }
 
         public void UnregisterAll( string targetNamespace )
         {
-            UnregisterWhere( command => 
+            UnregisterWhere( command =>
                 command.GetType().Namespace.EqualsIgnoreCase( targetNamespace ) );
         }
 
@@ -221,13 +221,13 @@ namespace Essentials.Core.Command
             UnregisterWhere( command => command.Command == targetCommand );
         }
 
-        /* 
-            Utility methods 
+        /*
+            Utility methods
         */
 
         private static bool HasWith( Func<object, bool> predicate )
         {
-            return 
+            return
                 R.Commands.Commands.ToList().Any( command => predicate( command ) ) ||
                 Commander.commands.Any( command => predicate( command ) );
         }
@@ -244,7 +244,7 @@ namespace Essentials.Core.Command
                     }
                     return true;
                 }
-                return false; 
+                return false;
             });
         }
 
@@ -258,7 +258,7 @@ namespace Essentials.Core.Command
                 Register classes
             */
 
-            ( 
+            (
                 from type in asm.GetTypes()
                 where defaultPredicate(type)
                 where filter(type)
@@ -269,11 +269,11 @@ namespace Essentials.Core.Command
                 Register methods
             */
             Func<Type, object> createInstance = type => {
-                if ( !type.IsClass || type.IsAbstract ) 
+                if ( !type.IsClass || type.IsAbstract )
                 {
                     throw new Exception($"{type} isn't an class or is abstract.");
                 }
-                  
+
                 return Activator.CreateInstance( type );
             };
 

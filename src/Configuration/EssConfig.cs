@@ -37,17 +37,17 @@ namespace Essentials.Configuration
         public string                   Locale;
         public string                   PMFormatFrom;
         public string                   PMFormatTo;
-        
+
         public bool                     UnfreezeOnDeath;
         public bool                     UnfreezeOnQuit;
-        
+
         public bool                     EnableTextCommands;
         public bool                     EnableDeathMessages;
         public bool                     EnableJoinLeaveMessage;
-        
+
         public bool                     PerWarpPermission;
         public int                      WarpCooldown;
-        
+
         public bool                     EnablePollRunningMessage;
         public int                      PollRunningMessageCooldown;
         public int                      ServerFrameRate;
@@ -65,11 +65,11 @@ namespace Essentials.Configuration
 
         public AutoAnnouncer            AutoAnnouncer;
         public AutoCommands             AutoCommands;
-        
+
         public List<ushort>             GiveItemBlacklist;
         public List<ushort>             VehicleBlacklist;
-        public List<string>             EnabledSystems; 
-        public List<string>             DisabledCommands; 
+        public List<string>             EnabledSystems;
+        public List<string>             DisabledCommands;
 
         internal EssConfig() { }
 
@@ -111,16 +111,16 @@ namespace Essentials.Configuration
                                                             CancelWhenMove = true };
 
             WebKits                     = new WebKitsSettings { Enabled = false, Url = "" };
-            
+
             WebConfig                   = new WebConfigSettings { Enabled = false, Url = "" };
 
-            Kit                         = new KitSettings { ShowCost = true, ShowCostIfZero = false, 
+            Kit                         = new KitSettings { ShowCost = true, ShowCostIfZero = false,
                                                     CostFormat = "{0}({1}{2})", GlobalCooldown = 0,
                                                     ResetGlobalCooldownWhenDie = false };
 
             Tpa                          = new TpaSettings { ExpireDelay = 10, TeleportDelay = 5 };
 
-            Economy                     = new EconomySettings { UseXp =  false, UconomyCurrency = "$", 
+            Economy                     = new EconomySettings { UseXp =  false, UconomyCurrency = "$",
                                                                 XpCurrency = "Xp" };
 
             GiveItemBlacklist           = new List<ushort>();
@@ -171,13 +171,13 @@ namespace Essentials.Configuration
                     Updater.AlertOnJoin = true;
                     Save( filePath );
                 }
-                
+
                 if ( json["Kit"]["GlobalCooldown"] == null )
                 {
                     Kit.GlobalCooldown = 0;
                     Save( filePath );
                 }
-                
+
                 if ( json["Kit"]["ResetGlobalCooldownWhenDie"] == null )
                 {
                     Kit.ResetGlobalCooldownWhenDie = false;
@@ -190,7 +190,7 @@ namespace Essentials.Configuration
                 UEssentials.Logger.LogError( ex.Message );
             }
         }
-        
+
         [JsonObject]
         public struct AntiSpamSettings
         {
@@ -220,7 +220,7 @@ namespace Essentials.Configuration
             public string Url;
             public bool Enabled;
         }
-        
+
         [JsonObject]
         public struct WebConfigSettings
         {
@@ -237,7 +237,7 @@ namespace Essentials.Configuration
             public uint GlobalCooldown;
             public bool ResetGlobalCooldownWhenDie;
         }
-        
+
         [JsonObject]
         public struct TpaSettings
         {

@@ -73,13 +73,13 @@ namespace Essentials.Api.Command
             => new CommandResult( string.Format( message, args ), ResultType.INVALID_ARGS );
 
         /// <summary>
-        /// Commonly indicate that sender given an invalid argument 
+        /// Commonly indicate that sender given an invalid argument
         /// or something does not match the required.
         /// </summary>
         /// <param name="message">message for sender</param>
         /// <param name="args">Arguments of message</param>
         /// <returns></returns>
-        public static CommandResult Error( string message, params object[] args ) 
+        public static CommandResult Error( string message, params object[] args )
             => new CommandResult( string.Format( message, args ), ResultType.ERROR );
 
         /// <summary>

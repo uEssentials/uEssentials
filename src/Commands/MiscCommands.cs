@@ -138,17 +138,17 @@ namespace Essentials.Commands
                     -b = barricades
                     -s = structures
                     -a = ALL
-                
+
                 /clear -i -z -v = items, zombies, vehicles
             */
-            
+
             var distance = -1;
-            
+
             if ( args.Length > 1 )
             {
                 if ( src.IsConsole )
                 {
-                    return CommandResult.ShowUsage();                                        
+                    return CommandResult.ShowUsage();
                 }
 
                 if ( !args[1].IsInt )
@@ -156,11 +156,11 @@ namespace Essentials.Commands
                     return CommandResult.Lang( EssLang.INVALID_NUMBER, args[1] );
                 }
 
-                if ( args[1].ToInt < 1 ) 
+                if ( args[1].ToInt < 1 )
                 {
                     return CommandResult.Lang( EssLang.NUMBER_BETWEEN, 1, int.MaxValue );
                 }
-                
+
                 distance = args[1].ToInt;
             }
 
@@ -186,7 +186,7 @@ namespace Essentials.Commands
                               .ForEach( toRemove.Add );
 
                         toRemove.ForEach( id => {
-                            VehicleManager.Instance.SteamChannel.send( "tellVehicleDestroy", 
+                            VehicleManager.Instance.SteamChannel.send( "tellVehicleDestroy",
                                 ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id );
                         });
 
@@ -232,7 +232,7 @@ namespace Essentials.Commands
                     ItemManager.askClearAllItems();
                     EssLang.CLEAR_ITEMS.SendTo( src );
                     break;
-                
+
                 default:
                     return CommandResult.ShowUsage();
             }
@@ -261,7 +261,7 @@ namespace Essentials.Commands
                     }
                     GiveItem( src, src.ToPlayer(), args[0], One );
                     break;
-                
+
                 /*
                     /i [item] [amount]
                     /i [player] [item]
@@ -289,7 +289,7 @@ namespace Essentials.Commands
                         GiveItem( src, UPlayer.From( args[0].ToString() ), args[1], One );
                     }
                     break;
-                
+
                 /*
                     /i [player] [item] [amount]
                     /i all [item] [amount]
@@ -297,7 +297,7 @@ namespace Essentials.Commands
                 case 3:
                     if ( args[0].Is( "*" ) )
                     {
-                        GiveItem( src, null, args[1], args[2], true );   
+                        GiveItem( src, null, args[1], args[2], true );
                     }
                     else if ( !args[0].IsValidPlayerName )
                     {
@@ -356,7 +356,7 @@ namespace Essentials.Commands
             var name        = WrapMessage( src, asset.name );
             var description = WrapMessage( src, asset.Description );
             var type        = WrapMessage( src, asset.ItemType.ToString() );
-            
+
             src.SendMessage( $"Name: {name}", color );
             src.SendMessage( $"Description: {description}", color );
             src.SendMessage( $"Id: {asset.id}", color );
@@ -433,11 +433,11 @@ namespace Essentials.Commands
                         EssLang.AUTO_REPAIR_DISABLED.SendTo( src );
                     }
                     break;
-                
+
                 default:
                     return CommandResult.ShowUsage();
             }
-            
+
             return CommandResult.Success();
         }
 
@@ -470,7 +470,7 @@ namespace Essentials.Commands
             {
                 return CommandResult.ShowUsage();
             }
-            
+
             var player = src.ToPlayer();
             var component = player.GetComponent<PlayerVehicleFeatures>() ?? player.AddComponent<PlayerVehicleFeatures>();
 
@@ -501,11 +501,11 @@ namespace Essentials.Commands
                         EssLang.AUTO_REPAIR_DISABLED.SendTo( src );
                     }
                     break;
-                
+
                 default:
                     return CommandResult.ShowUsage();
             }
-            
+
             return CommandResult.Success();
         }
 
@@ -565,9 +565,9 @@ namespace Essentials.Commands
                 {
                     var player = src.ToPlayer();
 
-                    EssLang.POSITION.SendTo( player, 
+                    EssLang.POSITION.SendTo( player,
                                             player.Position.x,
-                                            player.Position.y, 
+                                            player.Position.y,
                                             player.Position.z );
                 }
             }
@@ -580,7 +580,7 @@ namespace Essentials.Commands
                 if ( !found )
                 {
                     return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
-                } 
+                }
             }
 
             return CommandResult.Success();
@@ -668,12 +668,12 @@ namespace Essentials.Commands
             {
                 Commander.execute( CSteamID.Nil, "kickall " + args.Join(0) );
             }
-            
+
             Provider.shutdown();
 
             return CommandResult.Success();
         }
-        
+
 
         // TODO: Wrap in spawned? (GTA STYLE)
         [CommandInfo(
@@ -713,9 +713,9 @@ namespace Essentials.Commands
                     break;
 
                 case 2:
-                    if ( !src.HasPermission( $"{cmd.Permission}.other") ) 
+                    if ( !src.HasPermission( $"{cmd.Permission}.other") )
                     {
-                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );  
+                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
                     }
 
                     optAsset = VehicleUtil.GetVehicle( args[1].ToString() );
@@ -730,7 +730,7 @@ namespace Essentials.Commands
                     if ( args[0].Is("*") )
                     {
                         UServer.Players.ForEach( p => {
-                            VehicleTool.giveVehicle( p.UnturnedPlayer, vehAsset.id );  
+                            VehicleTool.giveVehicle( p.UnturnedPlayer, vehAsset.id );
                         });
 
                         EssLang.GIVEN_VEHICLE_ALL.SendTo( src, vehAsset.Name, vehAsset.Id );
@@ -914,7 +914,7 @@ namespace Essentials.Commands
             {
                 return CommandResult.ShowUsage();
             }
-            
+
             switch (args[0].ToLowerString)
             {
                 case "on":
@@ -923,22 +923,22 @@ namespace Essentials.Commands
                     Provider.PvP = true;
                     EssLang.PVP_ENABLED.SendTo( src );
                     break;
-                
+
                 case "off":
                 case "false":
                 case "no":
                     Provider.PvP = false;
                     EssLang.PVP_DISABLED.SendTo( src );
                     break;
-                
+
                 default:
                     return CommandResult.ShowUsage();
             }
-            
+
             return CommandResult.Success();
         }
-        
-        
+
+
         #region HELPER METHODS
 
         private static string WrapMessage( ICommandSource src, string str )
@@ -952,7 +952,7 @@ namespace Essentials.Commands
             return str.Substring(0, 90 - 3) + "...";
         }
 
-        private static void GiveItem( ICommandSource src, UPlayer target, ICommandArgument itemArg, 
+        private static void GiveItem( ICommandSource src, UPlayer target, ICommandArgument itemArg,
                                       ICommandArgument amountArg, bool allPlayers = false )
         {
             if ( !src.HasPermission("essentials.command.item.other") && target != src )
@@ -968,7 +968,7 @@ namespace Essentials.Commands
                 EssLang.ITEM_NOT_FOUND.SendTo( src, itemArg );
                 return;
             }
-            
+
             if ( UEssentials.Config.GiveItemBlacklist.Contains( optAsset.Value.id ) &&
                  !src.HasPermission( "essentials.bypass.blacklist.item" )            )
             {
@@ -1020,8 +1020,8 @@ namespace Essentials.Commands
             else
             {
                 playersToReceive.Add( target );
-                
-                if ( !src.IsConsole && src.ToPlayer() == target ) 
+
+                if ( !src.IsConsole && src.ToPlayer() == target )
                 {
                     goto give2;
                 }

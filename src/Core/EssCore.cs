@@ -60,9 +60,9 @@ namespace Essentials.Core
         internal const string                         ROCKET_VERSION              = "4.9.7.0";
         internal const string                         UNTURNED_VERSION            = "3.15.5.0";
         internal const string                         PLUGIN_VERSION              = "1.2.4.0";
-        
+
         internal static EssCore                       Instance                    { get; set; }
-        
+
         internal Optional<IEconomyProvider>           EconomyProvider             { get; set; }
         internal ModuleManager                        ModuleManager               { get; set; }
         internal CommandManager                       CommandManager              { get; set; }
@@ -172,14 +172,14 @@ namespace Essentials.Core
 
                 HookManager.RegisterAll();
                 HookManager.LoadAll();
-                
+
                 if ( Config.Economy.UseXp )
                 {
                     EconomyProvider = Optional<IEconomyProvider>.Of( new ExpEconomyProvider() );
                 }
                 else if ( HookManager.GetActiveByType<UconomyHook>().IsPresent )
                 {
-                    EconomyProvider = Optional<IEconomyProvider>.Of( 
+                    EconomyProvider = Optional<IEconomyProvider>.Of(
                             HookManager.GetActiveByType<UconomyHook>().Value );
                 }
                 else
@@ -250,7 +250,7 @@ namespace Essentials.Core
                         }
                     } );
                 }
-                
+
                 if ( Config.EnableTextCommands )
                 {
                     var textCommandsFile = $"{Folder}textcommands.json";
@@ -259,10 +259,10 @@ namespace Essentials.Core
                     TextCommands.Load( textCommandsFile );
 
                     TextCommands.Commands.ForEach( txtCommand => {
-                        CommandManager.Register( new TextCommand(txtCommand) ); 
+                        CommandManager.Register( new TextCommand(txtCommand) );
                     });
                 }
-                
+
                 if ( !Config.EnableDeathMessages )
                 {
                     EventManager.Unregister<EssentialsEventHandler>( "DeathMessages" );
@@ -271,7 +271,7 @@ namespace Essentials.Core
                 #if EXPERIMENTAL
                   Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
                 #endif
-                
+
                 TryAddComponent<Tasks.TaskExecutor>();
 
                 Tasks.New( t => {
@@ -291,18 +291,18 @@ namespace Essentials.Core
             {
                 var msg = new List<string>() {
                     "An error occurred while enabling uEssentials.",
-                    "If this error is not related with wrong configuration please report",  
+                    "If this error is not related with wrong configuration please report",
                     "immediatly here https://github.com/uEssentials/uEssentials/issues",
                     "Error: " + e.ToString()
                 };
-                
-                if ( !Provider.Version.EqualsIgnoreCase( UNTURNED_VERSION ) ) 
+
+                if ( !Provider.Version.EqualsIgnoreCase( UNTURNED_VERSION ) )
                 {
-                    msg.Add( "I detected that you are using an different version of the recommended, " + 
+                    msg.Add( "I detected that you are using an different version of the recommended, " +
                              "please update your uEssentials." );
                     msg.Add( "If you are using the latest uEssentials release, please wait for update." );
                 }
-                
+
                 if ( Logger == null )
                 {
                     Console.BackgroundColor = ConsoleColor.Red;
@@ -332,11 +332,11 @@ namespace Essentials.Core
             TryRemoveComponent<Tasks.TaskExecutor>();
 
             var executingAssembly = GetType().Assembly;
-            
+
             HookManager.UnloadAll();
             HookManager.UnregisterAll();
             CommandManager.UnregisterAll( executingAssembly );
-            EventManager.UnregisterAll( executingAssembly ); 
+            EventManager.UnregisterAll( executingAssembly );
             ModuleManager.UnloadAll();
 
             Tasks.CancelAll();
@@ -364,7 +364,7 @@ namespace Essentials.Core
         {
             ConnectedPlayers.RemoveWhere( connectedPlayer => connectedPlayer.CSteamId == id );
         }
-        
+
         private void CheckUpdates()
         {
             if ( !Config.Updater.CheckUpdates )
@@ -374,7 +374,7 @@ namespace Essentials.Core
 
             var worker = new BackgroundWorker();
 
-            worker.DoWork += ( sender, args ) => 
+            worker.DoWork += ( sender, args ) =>
             {
                 Logger.LogInfo( "Checking updates." );
 
@@ -425,17 +425,17 @@ namespace Essentials.Core
 
             worker.RunWorkerAsync();
         }
-        
+
         private void UnregisterRocketCommands( bool silent = false )
         {
             var _rocketCommands = AccessorFactory.AccessField<List<RocketCommandManager.RegisteredRocketCommand>>( R.Commands, "commands" ).Value;
-            
+
             /* All names & aliases of uEssentials command */
             var essCommands = _rocketCommands
                                .Where( c => c.Command is CommandAdapter )
                                .Select( c => c.Name.ToLowerInvariant() )
                                .ToList();
-            
+
             _rocketCommands.RemoveAll( c => {
                 if ( essCommands.Contains( c.Name.ToLowerInvariant() ) && !(c.Command is CommandAdapter) )
                 {

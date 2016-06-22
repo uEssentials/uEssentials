@@ -30,7 +30,7 @@ namespace Essentials.Configuration
     public class TextCommands : JsonConfig
     {
         public List<TextCommandData> Commands { get; } = new List<TextCommandData>();
-        
+
         public override void LoadDefaults()
         {
             Commands.Add(new TextCommandData {
@@ -48,13 +48,13 @@ namespace Essentials.Configuration
                 }
             });
         }
-        
+
         public override void Save( string filePath )
         {
             File.WriteAllText( filePath, string.Empty );
             JsonUtil.Serialize( filePath, Commands );
         }
-        
+
         public override void Load( string filePath )
         {
             if ( File.Exists( filePath ) )
@@ -67,7 +67,7 @@ namespace Essentials.Configuration
                 Save( filePath );
             }
         }
-        
+
         public struct TextCommandData
         {
             public string Name;

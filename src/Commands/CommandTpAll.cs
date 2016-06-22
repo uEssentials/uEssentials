@@ -39,8 +39,8 @@ namespace Essentials.Commands
     {
         private static readonly Action<Vector3, List<UPlayer>> TeleportAll = ( pos, players ) =>
         {
-            players.ForEach( 
-                player => player.UnturnedPlayer.sendTeleport( pos, 0 ) 
+            players.ForEach(
+                player => player.UnturnedPlayer.sendTeleport( pos, 0 )
             );
         };
 

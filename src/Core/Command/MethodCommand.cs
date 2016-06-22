@@ -65,7 +65,7 @@ namespace Essentials.Core.Command
         {
             _info = Preconditions.NotNull(
                 ReflectionUtil.GetAttributeFrom<CommandInfo>( method ),
-                "methodAction must have 'CommandInfo' attribute." 
+                "methodAction must have 'CommandInfo' attribute."
             );
 
             Owner = hasCmdParam ? _methodFuncWithCommand.Method.DeclaringType
@@ -86,8 +86,8 @@ namespace Essentials.Core.Command
 
         public CommandResult OnExecute( ICommandSource source, ICommandArgs args )
         {
-            var result = _hasCommandParameter 
-                    ? _methodFuncWithCommand( source, args, this ) 
+            var result = _hasCommandParameter
+                    ? _methodFuncWithCommand( source, args, this )
                     : _methodFunc( source, args );
 
             return result;

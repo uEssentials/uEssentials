@@ -31,7 +31,7 @@ using Essentials.Event.Handling;
 using Essentials.I18n;
 using SDG.Unturned;
 
-namespace Essentials.Commands 
+namespace Essentials.Commands
 {
     // TODO: Improve
     // Multiple requests
@@ -49,18 +49,18 @@ namespace Essentials.Commands
             Value   -> receiver
         */
         public static Dictionary<ulong, ulong> Requests = new Dictionary<ulong, ulong>();
-        
+
         public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            if (args.Length < 1 ) 
+            if (args.Length < 1 )
             {
                 return CommandResult.ShowUsage();
             }
-            
+
             var player = src.ToPlayer();
             var senderId = player.CSteamId.m_SteamID;
-                        
-            switch ( args[0].ToLowerString ) 
+
+            switch ( args[0].ToLowerString )
             {
                 case "accept":
                 case "a":
@@ -77,24 +77,24 @@ namespace Essentials.Commands
 
                     var whoSentId = new List<ulong>( Requests.Keys ).FirstOrDefault( k => Requests[k] == senderId );
                     var whoSent = UPlayer.From( new Steamworks.CSteamID( whoSentId ) );
-                    
+
                     /* Should never happen */
                     if ( whoSent == null )
                     {
                         return CommandResult.Lang( EssLang.TPA_NONE );
                     }
-                    
+
                     if ( whoSent.Stance == EPlayerStance.DRIVING ||
-                         whoSent.Stance == EPlayerStance.SITTING  ) 
+                         whoSent.Stance == EPlayerStance.SITTING  )
                     {
                         EssLang.CANNOT_TELEPORT_DRIVING.SendTo( whoSent );
                         return CommandResult.Lang( EssLang.TPA_CANNOT_TELEPORT, whoSent.DisplayName );
                     }
-                    
+
                     EssLang.TPA_ACCEPTED_SENDER.SendTo( src, whoSent.DisplayName );
                     EssLang.TPA_ACCEPTED.SendTo( whoSent, src.DisplayName );
                     Requests.Remove( whoSentId );
-                    
+
                     var tpaSettings = EssCore.Instance.Config.Tpa;
 
                     if ( tpaSettings.TeleportDelay > 0 )
@@ -113,7 +113,7 @@ namespace Essentials.Commands
                     }
                     break;
                 }
-                
+
                 case "deny":
                 case "d":
                 {
@@ -124,7 +124,7 @@ namespace Essentials.Commands
 
                     if ( !Requests.ContainsValue( senderId ) )
                     {
-                        return CommandResult.Lang( EssLang.TPA_NONE ); 
+                        return CommandResult.Lang( EssLang.TPA_NONE );
                     }
 
                     var whoSentId = new List<ulong>( Requests.Keys ).FirstOrDefault( k => Requests[k] == senderId );
@@ -134,12 +134,12 @@ namespace Essentials.Commands
                     {
                         EssLang.TPA_DENIED.SendTo( whoSent, src.DisplayName );
                     }
-                    
+
                     EssLang.TPA_DENIED_SENDER.SendTo( src, whoSent == null ? "Unknown" : whoSent.DisplayName );
                     Requests.Remove( whoSentId );
                     break;
                 }
-                
+
                 case "cancel":
                 case "c":
                 {
@@ -157,7 +157,7 @@ namespace Essentials.Commands
                     EssLang.TPA_CANCELLED.SendTo( src );
                     break;
                 }
-                
+
                 default:
                 {
                     if ( !player.HasPermission( $"{Permission}.send" ) )
@@ -165,11 +165,11 @@ namespace Essentials.Commands
                         return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
                     }
 
-                    if ( !args[0].IsValidPlayerName ) 
+                    if ( !args[0].IsValidPlayerName )
                     {
                         return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
                     }
-                    
+
                     /*
                         Cancel current request
                     */
@@ -177,14 +177,14 @@ namespace Essentials.Commands
                     {
                         Requests.Remove( senderId );
                     }
-                    
+
                     var target = args[0].ToPlayer;
-                    
+
                     if ( target == player )
                     {
                         return CommandResult.Lang( EssLang.TPA_YOURSELF );
                     }
-                    
+
                     Requests.Add( senderId, target.CSteamId.m_SteamID );
                     EssLang.TPA_SENT_SENDER.SendTo( src, target.DisplayName );
                     EssLang.TPA_SENT.SendTo( target, src.DisplayName );
@@ -204,10 +204,10 @@ namespace Essentials.Commands
                     break;
                 }
             }
-            
+
             return CommandResult.Success();
         }
-        
+
         protected override void OnUnregistered()
             => UEssentials.EventManager.Unregister<EssentialsEventHandler>( "TpaPlayerDisconnect" );
     }

@@ -50,7 +50,7 @@ namespace Essentials.Commands
                     .Where( player => !player.HasComponent<FrozenPlayer>() )
                     .ForEach( player => {
                         player.AddComponent<FrozenPlayer>();
-                        EssLang.FROZEN_PLAYER.SendTo( player, src.DisplayName );    
+                        EssLang.FROZEN_PLAYER.SendTo( player, src.DisplayName );
                     });
 
                 EssLang.FROZEN_ALL.SendTo( src );
@@ -80,7 +80,7 @@ namespace Essentials.Commands
             return CommandResult.Success();
         }
 
-        protected override void OnUnregistered() 
+        protected override void OnUnregistered()
         {
             UEssentials.EventManager.Unregister<EssentialsEventHandler>( "FreezePlayerDisconnect" );
             UEssentials.EventManager.Unregister<EssentialsEventHandler>( "FreezePlayerConnected" );

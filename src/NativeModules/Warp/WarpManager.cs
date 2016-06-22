@@ -29,7 +29,7 @@ namespace Essentials.NativeModules.Warp
     {
         private Dictionary<string, Warp>        WarpMap     { get; set; }
         private IData<Dictionary<string, Warp>> WarpData    { get; }
-        public IEnumerable<Warp>                Warps       => WarpMap.Values; 
+        public IEnumerable<Warp>                Warps       => WarpMap.Values;
         public int                              Count       => WarpMap.Count;
 
         internal WarpManager()
@@ -68,8 +68,8 @@ namespace Essentials.NativeModules.Warp
 
         public Warp GetByName( string warpName )
         {
-            return Contains( warpName ) 
-                ? WarpMap[warpName.ToLower()] 
+            return Contains( warpName )
+                ? WarpMap[warpName.ToLower()]
                 : null;
         }
 

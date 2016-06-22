@@ -43,7 +43,7 @@ namespace Essentials.Core.Command
         public string           Name            { get; private set; }
         public List<string>     Permissions     { get; }
         public string           Syntax          { get; }
-        
+
         internal readonly ICommand Command;
 
         internal CommandAdapter( ICommand command )
@@ -55,7 +55,7 @@ namespace Essentials.Core.Command
             Syntax          = command.Usage;
             Permissions     = new List<string>(1) { command.Permission };
             AllowedCaller   = AllowedCaller.Both;
-        } 
+        }
 
         public void Execute( IRocketPlayer caller, string[] args )
         {
@@ -65,11 +65,11 @@ namespace Essentials.Core.Command
                                     ? UPlayer.From( (UnturnedPlayer) caller )
                                     : UEssentials.ConsoleSource;
 
-                if ( commandSource.IsConsole && Command.AllowedSource == AllowedSource.PLAYER ) 
+                if ( commandSource.IsConsole && Command.AllowedSource == AllowedSource.PLAYER )
                 {
                     EssLang.CONSOLE_CANNOT_EXECUTE.SendTo( commandSource );
                 }
-                else if ( !commandSource.IsConsole && Command.AllowedSource == AllowedSource.CONSOLE ) 
+                else if ( !commandSource.IsConsole && Command.AllowedSource == AllowedSource.CONSOLE )
                 {
                     EssLang.PLAYER_CANNOT_EXECUTE.SendTo( commandSource );
                 }

@@ -36,7 +36,7 @@ namespace Essentials.NativeModules.Kit
 
             KitManager = new KitManager();
             KitManager.Load();
-            
+
             Logger.LogInfo( $"Loaded {KitManager.Count} kits" );
 
             CommandManager.RegisterAll( "Essentials.NativeModules.Kit.Commands" );

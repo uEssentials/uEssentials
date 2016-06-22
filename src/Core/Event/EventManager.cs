@@ -200,7 +200,7 @@ namespace Essentials.Core.Event
         {
             lock ( HandlerMap )
             {
-                return HandlerMap.Keys.FirstOrDefault( holder => holder.Target.Equals( target ) && 
+                return HandlerMap.Keys.FirstOrDefault( holder => holder.Target.Equals( target ) &&
                     holder.EventInfo.Name.Equals( fieldName ) );
             }
         }

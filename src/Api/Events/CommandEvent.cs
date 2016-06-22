@@ -30,7 +30,7 @@ namespace Essentials.Api.Events
         /// Command that was/will be executed.
         /// </summary>
         public ICommand Command { get; set; }
-        
+
         /// <summary>
         /// Arguments
         /// </summary>

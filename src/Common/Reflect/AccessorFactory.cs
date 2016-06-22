@@ -26,7 +26,7 @@ namespace Essentials.Common.Reflect
 {
     public static class AccessorFactory
     {
-        public static FieldAccessor<TFieldType> AccessField<TFieldType>( 
+        public static FieldAccessor<TFieldType> AccessField<TFieldType>(
             object obj, string fieldName )
         {
             Preconditions.NotNull( obj, "obj cannot be null" );
@@ -41,13 +41,13 @@ namespace Essentials.Common.Reflect
                  informedFieldType = typeof (TFieldType);
 
             Preconditions.IsFalse( informedFieldType == fieldType,
-                "Inconsistent given type {0} and field type {1}", 
+                "Inconsistent given type {0} and field type {1}",
                 informedFieldType, fieldType );
 
             return new FieldAccessor<TFieldType>( obj, fieldInfo );
         }
 
-        public static FieldAccessor<TFieldType> AccessProperty<TFieldType>( 
+        public static FieldAccessor<TFieldType> AccessProperty<TFieldType>(
             object obj, string fieldName )
         {
             return AccessField<TFieldType>( obj, $"<{fieldName}>k__BackingField" );

@@ -39,15 +39,15 @@ namespace Essentials.Commands
             var count = 0;
 
             UWorld.Zombies.ForEach( zombie => {
-                ZombieManager.sendZombieAlive( 
-                    zombie, 
-                    zombie.type, 
-                    (byte) zombie.speciality, 
-                    zombie.shirt, 
+                ZombieManager.sendZombieAlive(
+                    zombie,
+                    zombie.type,
+                    (byte) zombie.speciality,
+                    zombie.shirt,
                     zombie.pants,
-                    zombie.hat, 
-                    zombie.gear, 
-                    zombie.transform.position, 
+                    zombie.hat,
+                    zombie.gear,
+                    zombie.transform.position,
                     0
                 );
                 count++;

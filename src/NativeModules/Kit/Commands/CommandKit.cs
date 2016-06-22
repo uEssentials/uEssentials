@@ -61,7 +61,7 @@ namespace Essentials.NativeModules.Kit.Commands
                 {
                     return CommandResult.Lang( EssLang.KIT_NOT_EXIST, args[0] );
                 }
-                
+
                 var kitName = args[0].ToLowerString;
                 var requestedKit = KitModule.Instance.KitManager.GetByName(kitName);
 
@@ -76,31 +76,31 @@ namespace Essentials.NativeModules.Kit.Commands
                 if ( kitCost > 0 && UEssentials.EconomyProvider.IsPresent )
                 {
                     var ecoProvider = UEssentials.EconomyProvider.Value;
-                    
+
                     if ( !ecoProvider.Has( player, kitCost ) )
                     {
                         return CommandResult.Lang( EssLang.KIT_NO_MONEY, kitCost, ecoProvider.Currency );
                     }
-                } 
+                }
 
                 if ( !src.HasPermission("essentials.bypass.kitcooldown") )
                 {
                     var globalCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
-                    
+
                     if (  globalCooldown > 0 )
                     {
                         if ( GlobalCooldown.ContainsKey( steamPlayerId ) )
                         {
                             var remainingTime = DateTime.Now - GlobalCooldown[steamPlayerId];
-                            
-                            if ( (remainingTime.TotalSeconds + 1) > globalCooldown ) 
+
+                            if ( (remainingTime.TotalSeconds + 1) > globalCooldown )
                             {
                                 GlobalCooldown[steamPlayerId] = DateTime.Now;
                             }
                             else
                             {
-                                return CommandResult.Lang( EssLang.KIT_GLOBAL_COOLDOWN, 
-                                    TimeUtil.FormatSeconds( (uint) (globalCooldown - remainingTime.TotalSeconds)) );    
+                                return CommandResult.Lang( EssLang.KIT_GLOBAL_COOLDOWN,
+                                    TimeUtil.FormatSeconds( (uint) (globalCooldown - remainingTime.TotalSeconds)) );
                             }
                         }
                         else
@@ -111,7 +111,7 @@ namespace Essentials.NativeModules.Kit.Commands
                     else
                     {
                         var kitCooldown = requestedKit.Cooldown;
-                        
+
                         if ( !Cooldowns.ContainsKey( steamPlayerId ) ||
                             CommandKit.Cooldowns[steamPlayerId] == null )
                         {
@@ -138,14 +138,14 @@ namespace Essentials.NativeModules.Kit.Commands
                         }
                     }
                 }
-                
+
                 if ( kitCost > 0 )
                 {
                     UEssentials.EconomyProvider.IfPresent( ec => {
                         ec.Withdraw( player, kitCost );
                         EssLang.KIT_PAID.SendTo( player, kitCost, ec.Currency );
                     });
-                } 
+                }
 
                 KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( player );
             }
@@ -157,15 +157,15 @@ namespace Essentials.NativeModules.Kit.Commands
                 {
                     return CommandResult.Empty();
                 }
-                
+
                 if ( !KitModule.Instance.KitManager.Contains( kitName ) )
                 {
                     return CommandResult.Lang( EssLang.KIT_NOT_EXIST, kitName );
                 }
-                
+
                 var kit = KitModule.Instance.KitManager.GetByName( kitName );
 
-                if ( args[1].Is( "*" ) ) 
+                if ( args[1].Is( "*" ) )
                 {
                     UServer.Players.ForEach( kit.GiveTo );
                     EssLang.KIT_GIVEN_SENDER_ALL.SendTo( src, kitName );
@@ -178,7 +178,7 @@ namespace Essentials.NativeModules.Kit.Commands
                     {
                         return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[1] ) ;
                     }
-                    
+
                     kit.GiveTo( target );
                     EssLang.KIT_GIVEN_SENDER.SendTo( src, kitName, target );
                 }
@@ -186,8 +186,8 @@ namespace Essentials.NativeModules.Kit.Commands
 
             return CommandResult.Success();
         }
-        
-        protected override void OnUnregistered() 
+
+        protected override void OnUnregistered()
             => UEssentials.EventManager.Unregister<EssentialsEventHandler>( "KitPlayerDeath" );
     }
 }

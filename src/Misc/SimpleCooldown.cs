@@ -31,7 +31,7 @@ namespace Essentials.Misc
 
         public bool HasEntry( CSteamID playerId )
         {
-            if ( GetRemainingTime( playerId) < 0 ) 
+            if ( GetRemainingTime( playerId) < 0 )
             {
                 RemoveEntry( playerId );
                 return false;
@@ -44,7 +44,7 @@ namespace Essentials.Misc
             AddEntry( playerId, TimeSpan.FromSeconds( seconds ) );
         }
 
-        public void AddEntry( CSteamID playerId, TimeSpan cooldown ) 
+        public void AddEntry( CSteamID playerId, TimeSpan cooldown )
         {
             Cooldowns.Add( playerId.m_SteamID, DateTime.Now.Add( cooldown ) );
         }
@@ -64,9 +64,9 @@ namespace Essentials.Misc
             return 0;
         }
 
-        public void RemovedIfExpired( CSteamID playerId ) 
+        public void RemovedIfExpired( CSteamID playerId )
         {
-            if ( GetRemainingTime( playerId) < 0 ) 
+            if ( GetRemainingTime( playerId) < 0 )
                 RemoveEntry( playerId );
         }
     }

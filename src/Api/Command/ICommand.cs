@@ -64,6 +64,6 @@ namespace Essentials.Api.Command
         /// </summary>
         /// <param name="src">Source who is calling this command, can be console or player</param>
         /// <param name="args">Arguments passed when this command is called</param>
-        CommandResult OnExecute( ICommandSource src, ICommandArgs args ); 
+        CommandResult OnExecute( ICommandSource src, ICommandArgs args );
     }
 }

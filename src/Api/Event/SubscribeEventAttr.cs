@@ -76,14 +76,14 @@ namespace Essentials.Api.Event
                 case EventType.SERVER_SHUTDOWN:
                     DelegateOwner = U.Events;
                     break;
-                
+
                 case EventType.ESSENTIALS_COMMAND_POS_EXECUTED:
                 case EventType.ESSENTIALS_COMMAND_PRE_EXECUTED:
                     DelegateOwner = typeof (EssentialsEvents);
                     break;
-                
+
                 default:
-                    throw new ArgumentOutOfRangeException( nameof( eventType ), 
+                    throw new ArgumentOutOfRangeException( nameof( eventType ),
                                                            eventType, null );
             }
 

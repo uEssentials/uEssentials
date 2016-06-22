@@ -87,7 +87,7 @@ namespace Essentials.Commands
 
             return CommandResult.Success();
         }
-        
+
         private static void SpawnVehicle( Vector3 pos, ushort id )
         {
             RaycastHit raycastHit;
