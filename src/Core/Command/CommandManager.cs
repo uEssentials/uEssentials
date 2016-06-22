@@ -135,7 +135,7 @@ namespace Essentials.Core.Command
             Register( new MethodCommand( method ) );
         }
 
-                public void Register( Func<ICommandSource, ICommandArgs, ICommand, CommandResult> method )
+        public void Register( Func<ICommandSource, ICommandArgs, ICommand, CommandResult> method )
         {
             Preconditions.NotNull( method, "method cannot be null" );
 
