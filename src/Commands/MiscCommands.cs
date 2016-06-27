@@ -472,7 +472,7 @@ namespace Essentials.Commands
             }
 
             var player = src.ToPlayer();
-            var component = player.GetComponent<PlayerVehicleFeatures>() ?? player.AddComponent<PlayerVehicleFeatures>();
+            var component = player.GetComponent<VehicleFeatures>() ?? player.AddComponent<VehicleFeatures>();
 
             switch (args[0].ToLowerString)
             {

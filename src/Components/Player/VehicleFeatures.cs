@@ -23,7 +23,7 @@ using SDG.Unturned;
 
 namespace Essentials.Components.Player
 {
-    public class PlayerVehicleFeatures : PlayerComponent
+    public class VehicleFeatures : PlayerComponent
     {
         public bool AutoRefuel { get; set; }
         public bool AutoRepair { get; set; }
@@ -35,21 +35,19 @@ namespace Essentials.Components.Player
                 return;
             }
 
-            var veh = Player.CurrentVehicle;
+            var vehicle = Player.CurrentVehicle;
 
-            if ( veh.fuel < 100 && AutoRefuel )
+            if ( AutoRefuel && vehicle.fuel < 100 )
             {
-                VehicleManager.sendVehicleFuel( veh, veh.asset.fuel );
-                veh.fuel = veh.asset.fuel;
+                VehicleManager.sendVehicleFuel( vehicle, vehicle.asset.fuel );
+                vehicle.fuel = vehicle.asset.fuel;
             }
 
-            if ( !AutoRepair )
+            if ( AutoRepair && vehicle.health != vehicle.asset.health )
             {
-                return;
+                VehicleManager.sendVehicleHealth( vehicle, vehicle.asset.health );
+                vehicle.health = vehicle.asset.health;
             }
-
-            VehicleManager.sendVehicleHealth( veh, veh.asset.health );
-            veh.health = veh.asset.health;
         }
     }
 }
