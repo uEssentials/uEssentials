@@ -34,6 +34,7 @@ namespace Essentials.Components.Player
             {
                 return;
             }
+
             var veh = Player.CurrentVehicle;
 
             if ( veh.fuel < 100 && AutoRefuel )
