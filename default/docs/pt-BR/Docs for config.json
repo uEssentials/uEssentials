@@ -1,0 +1,360 @@
+{
+  /* 
+	A "localidade" que será usada para as traduções.
+	
+	As traduções podem ser encontradas em "uEssentials\translations\"
+  */
+  "Locale": "en",
+  
+  /*
+	Formato da mensagem do /tell.
+	
+	No primeiro
+	 É enviado para quem recebeu a mensagem.
+	 {0} é quem enviou a mensagem, {1} é a mensagem
+	No segundo
+	 É enviado para quem enviou a mensagem.
+	 {0} é quem recebeu a mensagem, {1} é a mensagem.
+  */
+  "PMFormatFrom": "(From {0}): {1}",
+  "PMFormatTo": "(To {0}): {1}",
+  
+  /*
+	Determina se o jogador que foi anteriormente "congelado" será descongelado quando morrer.
+  */
+  "UnfreezeOnDeath": true,
+  
+  /*
+	Determina se o jogador que foi anteriormente "congelado" será descongelado quando morrer.
+  */
+  "UnfreezeOnQuit": false,
+  
+  /*
+	TODO: Isso será removido.
+  */
+  "EnableUnknownMessage": true,
+  
+  /*
+	Determina se os "Comandos de texto" serão ativados.
+	Caso esteja ativado você pode configurar os comandos
+	no arquivo "uEssentials\text_commands.json"
+  */
+  "EnableTextCommands": true,
+  
+  /*
+	Determina se as mensagens de morte estaram ativadas.
+	
+	As mesmas podem ser alteradas no arquivo de tradução que
+	da localidade que você está utilizando.
+  */
+  "EnableDeathMessages": true,
+  
+  /*
+	Determina se as mensagens que aparecem quando um jogador
+	entra ou sai do servidor estaram ativadas.
+	
+	As mesmas podem ser alteradas no arquivo de tradução que
+	da localidade que você está utilizando.
+  */
+  "EnableJoinLeaveMessage": true,
+  
+  /*
+	TODO: Isso será removido. (Utilizar permissão)
+  */
+  "AdminBypassWarpCooldown": true,
+  
+  /*
+	Determina se cada warp terá sua determinada permissão.
+	
+	Isso é util caso queira liberar uma determinada warp 
+	apenas para um determinado grupo.
+  */
+  "PerWarpPermission": true,
+  
+  /*
+	Tempo de espera até o jogador ser teleportado até a warp.
+  */
+  "WarpCooldown": 5,
+  
+  /*
+	Determina se as mensagens informando que há uma "Votação" em
+	andamento será ativada. (POLL_RUNNING)
+  */
+  "EnablePollRunningMessage": true,
+  
+  /*
+	Determina o intervalo (Em segundos) entre as mensagens informando que há
+	uma votação em andamento.
+	
+	Só funcionará caso "EnablePollRunningMessage" seja 'true'
+  */
+  "PollRunningMessageCooldown": 20,
+  
+  /*
+	Determina o Frame Rate do servidor.
+	
+	-1 é igual ao padrão que é 60 fps.
+  */
+  "ServerFrameRate": -1,
+  
+  /*
+	Determina o limite de items que podem ser spawnados
+	de uma só vez usando o comando "/item" ou "/spawnitem"
+  */
+  "ItemSpawnLimit": 10,
+  
+  /*
+	Configurações do Anti Spam
+	
+	Esse sistema é usado para previnir Spam/Flood no chat do servidor.
+  */
+  "AntiSpam": {
+	/*
+	  Determina se o Anti Spam será ativado ou não.
+	*/
+    "Enabled": true,
+	
+	/*
+	  Determina o intervalo do spam (Em segundos). Caso o intervalo
+	  da mensagem que o jogador enviou for menor do que o informado aqui
+	  a mesma será considerada como Spam e não será enviada e o jogador receberá
+	  uma mensagem de aviso (Pode ser configurada no arquivo de tradução).
+	*/
+    "Interval": 3
+  },
+  
+  /*
+	Configurações do "Atualizador" do plugin.
+  */
+  "Updater": {
+    /*
+	  Determina se o plugin deverá procurar por atualizações.
+	*/
+    "CheckUpdates": true,
+	/*
+	  Determina se o plugin deverá baixar a atualização, caso disponível.
+	*/
+    "DownloadLatest": true,
+	/*
+	  Determina se o plugin deverá aletar um administrador quando ele entrar
+	  caso haja uma atualização disponível.
+	*/
+    "AlertOnJoin": true
+  },
+  /*
+	Configurações do comando /home
+  */
+  "HomeCommand": {
+    /*
+	  Tempo que o jogador deverá esperar pra usar o comando novamente.
+	*/
+    "Cooldown": 30,
+	/*
+	  Tempo que o jogador deve esperar pra ser teleportado até sua cama.
+	*/
+    "Delay": 5,
+	/*
+	  Determina se o teleporte será cancelado caso o jogador se mova.
+	*/
+    "CancelWhenMove": true
+  },
+  /*
+	Configurações do WebKits.
+	
+	Esse sistema faz com que você possa usar um arquivo remoto
+	para os kits.
+  */
+  "WebKits": {
+    /*
+	  URL do arquivo (O arquivo deve ser do mesmo formato do 'kits.json').
+	*/
+    "Url": "",
+	/*
+	  Determina se esse sistema será ativado.
+	*/
+    "Enabled": false
+  },
+  /*
+	Configurações do WebConfig.
+	
+	Esse sistema faz com que você possa usar um arquivo remoto
+	para as configurações.
+  */
+  "WebConfig": {
+  /*
+	  URL do arquivo (O arquivo deve ser do mesmo formato do 'config.json').
+	*/
+    "Url": "",
+	/*
+	  Determina se esse sistema será ativado.
+	*/
+    "Enabled": false
+  },
+  /*
+    Configurações dos kits.
+  */
+  "Kit": {
+    /*
+	  Determina se o preço do kit será mostrado quando na lista
+	  de kits (quando jogador digitar /kits).
+	*/
+    "ShowCost": true,
+	/*
+	  Determina se deve mostrar o preço caso ele seja igual a zero.
+	*/
+    "ShowCostIfZero": false,
+	/*
+	  Formato do preço que será mostrado.
+	*/
+    "CostFormat": "{0}({1}{2})",
+	/*
+	  Cooldown global dos kits. (Em segundos)
+	  
+	  Isso faz com que o jogador só possa pegar um kit até que o
+	  cooldown global expire.
+	*/
+    "GlobalCooldown": 0,
+	/*
+	  Determina se o cooldown global será resetado quando o jogador morrer.
+	*/
+    "ResetGlobalCooldownWhenDie": false
+  },
+  /*
+    Configurações do comando /tpa.
+  */
+  "Tpa": {
+    /*
+	  Determina o delay que o pedido de Tpa expirará. (Em segundos)
+	*/
+    "ExpireDelay": 10,
+	/*
+	  Determina o tempo até que o jogador seja teleportado até o outro jogador.
+	*/
+    "TeleportDelay": 5
+  },
+  /*
+    Configurações do hook de economia.
+  */
+  "Economy": {
+    /*
+	  Determina se o sistema de economia usará a experiência do jogador
+	  como moeda.
+	*/
+    "UseXp": false,
+	/*
+	  Simbolo da moeda que será usada caso o sistema use a experiência do jogador.
+	*/
+    "XpCurrency": "Xp",
+	/*
+	  Simbolo da moeda que será usada caso o sistema use o Uconomy.
+	*/
+    "UconomyCurrency": "$"
+  },
+  /*
+    Configurações do AutoAnnouncer.
+  */
+  "AutoAnnouncer": {
+    /*
+	  Determina o intervalo dos anúncios.
+	*/
+    "MessageInterval": 30,
+	/*
+	  Determina se os anúncios serão aleatórios.
+	*/
+    "RandomMessages": false,
+	/*
+	  Determina se esse sistema será ativado.
+	*/
+    "Enabled": false,
+	/*
+	  Lista de mensagens.
+	  
+	  Você pode ver a lista de cores no arquivo "translations/lang_en.json"
+	*/
+    "Messages": [
+      "<cyan>You can see kits by typing /kits, and to get a kit by typing /kit <name>",
+      "<red>Messaage 1",
+      "<green>Message 2",
+      "<blue>Message 3",
+      "<yellow>Message 4",
+      "<purple>Message 5"
+    ]
+  },
+  /*
+    Configurações do AutoCommands.
+  */
+  "AutoCommands": {
+    /*
+	  Lista de "Auto Comandos".
+	*/
+    "Commands": [
+      {
+	    /*
+		  Determina se os comandos serão executados apenas uma vez.
+		*/
+        "RunOnce": false,
+		/*
+		  Determina o tempo entre cada execução. (Em segundos)
+		*/
+        "Timer": 120,
+		/*
+		  Lista de comandos que serão executados cada vez.
+		*/
+        "Commands": [
+          "say \"Be sure to drink your Ovaltine!\" 0 255 255",
+          "item * glue"
+        ]
+      },
+      {
+        "RunOnce": false,
+        "Timer": 900,
+        "Commands": [
+          "clear v",
+          "respawnvehicles"
+        ]
+      }
+    ],
+	/*
+	  Determina se esse sistema será ativado.
+	*/
+    "Enabled": false
+  },
+  /*
+    Lista de items que não podem ser adquiridos usando /item ou /dropitem
+  */
+  "GiveItemBlacklist": [],
+  /*
+    Lista de items que não podem ser adquiridos usando /vehicle
+  */
+  "VehicleBlacklist": [],
+  /*
+    Lista de "sistemas" ativados. Isso possibilita que você 
+	desativa completamente um sistema.
+	
+	Atualmente há apenas 2 "sistemas" que podem ser desativados completamente,
+	o de 'kits' e o de 'warps'.
+	
+	Para remover basta retira-lo da lista.
+	
+	Quando um desses "sistemas" é desativado, tudo relacionado a ele é desativado,
+	por exemplo, caso você remova o "kits", todos os comandos relacionados a ele serão
+	desativados (/kit, /kits, /editkit e etc)
+  */
+  "EnabledSystems": [
+    "kits",
+    "warps"
+  ],
+  /*
+	Lista de comandos que serão desativados. 
+	
+	É o contrario do EnabledSystems, caso você queira desativar um comando 
+	basta adicinar o nome dele nessa lista. Por exemplo:
+	
+	"DisabledCommands": [
+	   "item",
+	   "vehicle",
+	   "boom"
+	]
+  */
+  "DisabledCommands": []
+}
