@@ -70,14 +70,14 @@ namespace Essentials.Api.Module
         }
 
         /// <summary>
-        /// Called when module load
+        /// Called when module loads
         /// </summary>
-        public abstract void OnLoad();
+        public virtual void OnLoad() {}
 
         /// <summary>
-        /// Called when module unload
+        /// Called when module Unloads
         /// </summary>
-        public abstract void OnUnload();
+        public virtual void OnUnload() {}
 
         /// <summary>
         /// Load this module
