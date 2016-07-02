@@ -20,10 +20,12 @@
 */
 
 
+using System.Collections.Generic;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Task;
+using Essentials.Event.Handling;
 using Essentials.I18n;
 using SDG.Unturned;
 
@@ -37,6 +39,8 @@ namespace Essentials.NativeModules.Warp.Commands
     )]
     public class CommandWarp : EssCommand
     {
+        internal static Dictionary<ulong, Tasks.Task> Delay = new Dictionary<ulong, Tasks.Task>();
+
         public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
             var player = source.ToPlayer();
@@ -62,23 +66,27 @@ namespace Essentials.NativeModules.Warp.Commands
             }
 
             var dest = WarpModule.Instance.WarpManager[parameters[0].ToString()];
-            var cooldown = UEssentials.Config.WarpCooldown;
+            var cooldown = UEssentials.Config.WarpCommand.Cooldown;
 
             if ( cooldown > 0 && !player.HasPermission( "essentials.bypass.warpcooldown" ) )
             {
                 EssLang.WARP_COOLDOWN.SendTo( source, cooldown );
             }
 
-            Tasks.New( t => {
-                if ( !player.IsOnline )
-                {
+            var task = Tasks.New( t => {
+                if ( !player.IsOnline || player.IsDead )
                     return;
-                }
                 player.Teleport( dest.Location, dest.Rotation );
                 EssLang.WARP_TELEPORTED.SendTo( source, parameters[0] );
-            }).Delay( player.HasPermission( "essentials.bypass.warpcooldown" ) ? 0 : cooldown * 1000 ).Go();
+            } );
+
+            task.Delay( player.HasPermission( "essentials.bypass.warpcooldown" ) ? 0 : cooldown * 1000 ).Go();
+            Delay.Add( player.CSteamId.m_SteamID, task );
 
             return CommandResult.Success();
         }
+
+        protected override void OnUnregistered()
+            => UEssentials.EventManager.Unregister<EssentialsEventHandler>( "WarpPlayerMove" );
     }
 }

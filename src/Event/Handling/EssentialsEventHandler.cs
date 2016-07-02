@@ -38,6 +38,7 @@ using Essentials.Economy;
 using Essentials.I18n;
 using Essentials.NativeModules.Kit;
 using Essentials.NativeModules.Kit.Commands;
+using Essentials.NativeModules.Warp.Commands;
 using Rocket.API;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -120,6 +121,8 @@ namespace Essentials.Event.Handling
             CommandTell.Conversations.Remove( displayName );
             CachedSkills.Remove( displayName );
             CommandHome.Cooldown.RemoveEntry( player.CSteamID );
+            CommandHome.Delay.Remove( player.CSteamID.m_SteamID );
+            CommandWarp.Delay.Remove( player.CSteamID.m_SteamID );
 
             /* Kit Stuffs */
             UEssentials.ModuleManager.GetModule<KitModule>().IfPresent( m => {
@@ -498,7 +501,7 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
         void HomePlayerMove( UnturnedPlayer player, Vector3 newPosition )
         {
-            if ( !UEssentials.Config.HomeCommand.CancelWhenMove ||
+            if ( !UEssentials.Config.HomeCommand.CancelTeleportWhenMove ||
                  !CommandHome.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
             {
                 return;
@@ -507,6 +510,24 @@ namespace Essentials.Event.Handling
             CommandHome.Delay[player.CSteamID.m_SteamID].Cancel();
             CommandHome.Delay.Remove( player.CSteamID.m_SteamID );
             CommandHome.Cooldown.RemoveEntry( player.CSteamID );
+
+            UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
+        }
+
+        [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
+        void WarpPlayerMove( UnturnedPlayer player, Vector3 newPosition )
+        {
+            System.Console.WriteLine( UEssentials.Config.WarpCommand.CancelTeleportWhenMove );
+            System.Console.WriteLine( CommandWarp.Delay.ContainsKey( player.CSteamID.m_SteamID )  );
+
+            if ( !UEssentials.Config.WarpCommand.CancelTeleportWhenMove ||
+                 !CommandWarp.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
+            {
+                return;
+            }
+
+            CommandWarp.Delay[player.CSteamID.m_SteamID].Cancel();
+            CommandWarp.Delay.Remove( player.CSteamID.m_SteamID );
 
             UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
         }

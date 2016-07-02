@@ -45,9 +45,6 @@ namespace Essentials.Configuration
         public bool                     EnableDeathMessages;
         public bool                     EnableJoinLeaveMessage;
 
-        public bool                     PerWarpPermission;
-        public int                      WarpCooldown;
-
         public bool                     EnablePollRunningMessage;
         public int                      PollRunningMessageCooldown;
         public int                      ServerFrameRate;
@@ -57,6 +54,7 @@ namespace Essentials.Configuration
         public AntiSpamSettings         AntiSpam;
         public UpdaterSettings          Updater;
         public HomeCommandSettings      HomeCommand;
+        public WarpCommandSettings      WarpCommand;
         public WebKitsSettings          WebKits;
         public WebConfigSettings        WebConfig;
         public KitSettings              Kit;
@@ -83,9 +81,6 @@ namespace Essentials.Configuration
             UnfreezeOnDeath             = true;
             UnfreezeOnQuit              = true;
 
-            PerWarpPermission           = true;
-            WarpCooldown                = 5;
-
             EnableJoinLeaveMessage      = true;
             EnableTextCommands          = true;
             EnableDeathMessages         = true;
@@ -108,7 +103,10 @@ namespace Essentials.Configuration
                                                         AlertOnJoin = true };
 
             HomeCommand                 = new HomeCommandSettings { Cooldown = 30, Delay = 5,
-                                                            CancelWhenMove = true };
+                                                            CancelTeleportWhenMove = true };
+
+            WarpCommand                 = new WarpCommandSettings { Cooldown = 5, PerWarpPermission = true,
+                                                                    CancelTeleportWhenMove = false };
 
             WebKits                     = new WebKitsSettings { Enabled = false, Url = "" };
 
@@ -166,21 +164,10 @@ namespace Essentials.Configuration
                 /*
                     Update old configs
                 */
-                if ( json["Updater"]["AlertOnJoin"] == null )
+                if ( json["HomeCommand"]["CancelTeleportWhenMove"] == null &&
+                     json["HomeCommand"]["CancelWhenMove"] != null )
                 {
-                    Updater.AlertOnJoin = true;
-                    Save( filePath );
-                }
-
-                if ( json["Kit"]["GlobalCooldown"] == null )
-                {
-                    Kit.GlobalCooldown = 0;
-                    Save( filePath );
-                }
-
-                if ( json["Kit"]["ResetGlobalCooldownWhenDie"] == null )
-                {
-                    Kit.ResetGlobalCooldownWhenDie = false;
+                    HomeCommand.CancelTeleportWhenMove = (bool) json["HomeCommand"]["CancelWhenMove"];
                     Save( filePath );
                 }
             }
@@ -211,7 +198,15 @@ namespace Essentials.Configuration
         {
             public int Cooldown;
             public int Delay;
-            public bool CancelWhenMove;
+            public bool CancelTeleportWhenMove;
+        }
+
+        [JsonObject]
+        public struct WarpCommandSettings
+        {
+            public int Cooldown;
+            public bool CancelTeleportWhenMove;
+            public bool PerWarpPermission;
         }
 
         [JsonObject]
