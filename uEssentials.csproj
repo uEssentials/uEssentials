@@ -239,7 +239,12 @@
   <ItemGroup>
     <EmbeddedResource Include="default\lang_ru.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="default\docs\docs_version" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="default\docs\pt-BR\Docs for config.json" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
