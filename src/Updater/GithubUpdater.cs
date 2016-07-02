@@ -99,6 +99,8 @@ namespace Essentials.Updater
                 {
                     Logger.LogWarning( "Could not check update!" );
                     Logger.LogWarning( ex.Message );
+                    Logger.LogWarning( string.Empty );
+                    Logger.LogWarning( "Try downloading manually here https://github.com/uEssentials/uEssentials/releases" );
                 }
 
                 return LastResult = result;
