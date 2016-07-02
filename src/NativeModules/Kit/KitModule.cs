@@ -24,7 +24,7 @@ using static Essentials.Api.UEssentials;
 
 namespace Essentials.NativeModules.Kit
 {
-    [ModuleInfo( Name = "Kits", Flags = ModuleFlags.NONE )]
+    [ModuleInfo( Name = "Kits" )]
     public class KitModule : NativeModule
     {
         public KitManager       KitManager  { get; internal set; }

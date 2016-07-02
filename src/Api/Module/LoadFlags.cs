@@ -24,17 +24,17 @@ using System;
 namespace Essentials.Api.Module
 {
     [Flags]
-    public enum ModuleFlags
+    public enum LoadFlags
     {
         /// <summary>
         /// Nothing
         /// </summary>
-        NONE                   = 0 << 0,
+        NONE                   = 0,
 
         /// <summary>
         /// Dynamically register all commands in Module.
         /// </summary>
-        AUTO_REGISTER_COMMANDS = 1 << 0,
+        AUTO_REGISTER_COMMANDS = 1,
 
         /// <summary>
         /// Dynamically register all events (handlers) in Module.

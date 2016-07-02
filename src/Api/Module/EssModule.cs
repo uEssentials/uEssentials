@@ -88,12 +88,12 @@ namespace Essentials.Api.Module
 
             OnLoad();
 
-            if ( (Info.Flags & ModuleFlags.AUTO_REGISTER_COMMANDS) == ModuleFlags.AUTO_REGISTER_COMMANDS )
+            if ( (Info.Flags & LoadFlags.AUTO_REGISTER_COMMANDS) == LoadFlags.AUTO_REGISTER_COMMANDS )
             {
                 UEssentials.CommandManager.RegisterAll( Assembly );
             }
 
-            if ( (Info.Flags & ModuleFlags.AUTO_REGISTER_EVENTS) == ModuleFlags.AUTO_REGISTER_EVENTS )
+            if ( (Info.Flags & LoadFlags.AUTO_REGISTER_EVENTS) == LoadFlags.AUTO_REGISTER_EVENTS )
             {
                 UEssentials.EventManager.RegisterAll( Assembly );
             }

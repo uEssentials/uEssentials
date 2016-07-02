@@ -44,6 +44,6 @@ namespace Essentials.Api.Module
         /// <summary>
         /// Flags of module
         /// </summary>
-        public ModuleFlags Flags { get; set; } = ModuleFlags.AUTO_REGISTER_COMMANDS | ModuleFlags.AUTO_REGISTER_EVENTS;
+        public LoadFlags Flags { get; set; } = LoadFlags.NONE;
     }
 }

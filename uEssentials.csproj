@@ -96,7 +96,7 @@
     <Compile Include="src\Api\Event\ICancellable.cs" />
     <Compile Include="src\Api\Event\IEventManager.cs" />
     <Compile Include="src\Api\Configuration\IConfig.cs" />
-    <Compile Include="src\Api\Module\ModuleFlags.cs" />
+    <Compile Include="src\Api\Module\LoadFlags.cs" />
     <Compile Include="src\Api\Task\Tasks.cs" />
     <Compile Include="src\Commands\CommandHome.cs" />
     <Compile Include="src\Commands\CommandJump.cs" />

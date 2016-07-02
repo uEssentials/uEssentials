@@ -26,7 +26,7 @@ using static Essentials.Api.UEssentials;
 
 namespace Essentials.NativeModules.Warp
 {
-    [ModuleInfo( Name = "Warps", Flags = ModuleFlags.NONE )]
+    [ModuleInfo( Name = "Warps" )]
     public class WarpModule : NativeModule
     {
         public WarpManager          WarpManager { get; private set; }
