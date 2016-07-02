@@ -146,7 +146,13 @@ namespace Essentials.Core
                 Logger.Log( "Plugin version: ", ConsoleColor.Green, suffix: "" );
 
                 #if EXPERIMENTAL
-                  Logger.Log( $"{PLUGIN_VERSION} (Experimental)", ConsoleColor.White, "" );
+                  var label = "experimental"
+                  #if EXPERIMENTAL_HASH
+                    + "-commit-$COMMIT_HASH$"
+                  #endif
+                  ;
+
+                  Logger.Log( $"{PLUGIN_VERSION} {label}", ConsoleColor.White, "" );
                 #else
                   Logger.Log( PLUGIN_VERSION, ConsoleColor.White, "" );
                 #endif
