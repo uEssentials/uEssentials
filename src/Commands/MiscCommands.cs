@@ -511,8 +511,8 @@ namespace Essentials.Commands
 
 
         [CommandInfo(
-            Name = "spy",
-            Description = "Toggle spy mode",
+            Name = "spypm",
+            Description = "Allows you to see private messages.",
             AllowedSource = AllowedSource.PLAYER
         )]
         CommandResult SpyCommand( ICommandSource src, ICommandArgs args )
