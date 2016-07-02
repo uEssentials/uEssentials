@@ -43,6 +43,8 @@ namespace Essentials.Commands
     {
         private static readonly Action<UPlayer, Items> Repair = ( player, item ) =>
         {
+            if ( item == null ) return;
+
             var field = AccessorFactory.AccessField<List<ItemJar>>( item, "items" );
             var items = field.Value;
             byte index = 0;
