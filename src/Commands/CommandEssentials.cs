@@ -241,8 +241,8 @@ namespace Essentials.Commands
                         Console.ForegroundColor = ConsoleColor.Green;
 
                     src.SendMessage( "Author:  leonardosc", Color.yellow );
-                    src.SendMessage( "Skype:   devleeo", Color.yellow );
                     src.SendMessage( "Github:  github.com/leonardosnt", Color.yellow );
+                    src.SendMessage( "uEssentials Github:  github.com/uEssentials", Color.yellow );
                     src.SendMessage( "Version: " + EssCore.PLUGIN_VERSION, Color.yellow );
                     break;
 
