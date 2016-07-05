@@ -19,7 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System.Collections.Generic;
+using System;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -41,8 +41,14 @@ namespace Essentials.Commands
     )]
     public class CommandHome : EssCommand
     {
-        internal static Dictionary<ulong, Tasks.Task> Delay = new Dictionary<ulong, Tasks.Task>();
         internal static SimpleCooldown Cooldown = new SimpleCooldown();
+
+        internal static PlayerDictionary<Tasks.Task> Delay = new PlayerDictionary<Tasks.Task>(
+            PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS |
+            PlayerDictionaryCharacteristics.REMOVE_ON_DEATH |
+            PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT,
+            task => task.Cancel()
+        );
 
         public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
@@ -86,10 +92,6 @@ namespace Essentials.Commands
 
             var task = Tasks.New( t =>  {
                 Delay.Remove( playerId.m_SteamID );
-                if ( !player.IsOnline )
-                {
-                    return;
-                }
                 player.Teleport( position, angle );
                 EssLang.TELEPORTED_BED.SendTo( src );
             } ).Delay( delay * 1000 );

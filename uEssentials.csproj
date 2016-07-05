@@ -108,9 +108,11 @@
     <Compile Include="src\Common\MathParser.cs" />
     <Compile Include="src\Common\Optional.cs" />
     <Compile Include="src\Common\Util\ItemUtil.cs" />
+    <Compile Include="src\Common\Util\PlayerDictionary.cs" />
     <Compile Include="src\Common\Util\VehicleUtil.cs" />
     <Compile Include="src\Common\Util\TimeUtil.cs" />
     <Compile Include="src\Common\Util\MiscUtil.cs" />
+    <Compile Include="src\Common\Util\DebugUtil.cs" />
     <Compile Include="src\Compatibility\Hook.cs" />
     <Compile Include="src\Compatibility\HookManager.cs" />
     <Compile Include="src\Economy\IEconomyProvider.cs" />

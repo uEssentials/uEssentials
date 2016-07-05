@@ -25,6 +25,7 @@ using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Task;
+using Essentials.Common.Util;
 using Essentials.Event.Handling;
 using Essentials.I18n;
 using SDG.Unturned;
@@ -39,7 +40,12 @@ namespace Essentials.NativeModules.Warp.Commands
     )]
     public class CommandWarp : EssCommand
     {
-        internal static Dictionary<ulong, Tasks.Task> Delay = new Dictionary<ulong, Tasks.Task>();
+        internal static PlayerDictionary<Tasks.Task> Delay = new PlayerDictionary<Tasks.Task>(
+            PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS |
+            PlayerDictionaryCharacteristics.REMOVE_ON_DEATH |
+            PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT,
+            task => task.Cancel()
+        );
 
         public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
         {
@@ -74,8 +80,7 @@ namespace Essentials.NativeModules.Warp.Commands
             }
 
             var task = Tasks.New( t => {
-                if ( !player.IsOnline || player.IsDead )
-                    return;
+                Delay.Remove( player.CSteamId.m_SteamID );
                 player.Teleport( dest.Location, dest.Rotation );
                 EssLang.WARP_TELEPORTED.SendTo( source, parameters[0] );
             } );

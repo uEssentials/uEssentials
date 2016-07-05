@@ -121,8 +121,6 @@ namespace Essentials.Event.Handling
             CommandTell.Conversations.Remove( displayName );
             CachedSkills.Remove( displayName );
             CommandHome.Cooldown.RemoveEntry( player.CSteamID );
-            CommandHome.Delay.Remove( player.CSteamID.m_SteamID );
-            CommandWarp.Delay.Remove( player.CSteamID.m_SteamID );
 
             /* Kit Stuffs */
             UEssentials.ModuleManager.GetModule<KitModule>().IfPresent( m => {
@@ -517,9 +515,6 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
         void WarpPlayerMove( UnturnedPlayer player, Vector3 newPosition )
         {
-            System.Console.WriteLine( UEssentials.Config.WarpCommand.CancelTeleportWhenMove );
-            System.Console.WriteLine( CommandWarp.Delay.ContainsKey( player.CSteamID.m_SteamID )  );
-
             if ( !UEssentials.Config.WarpCommand.CancelTeleportWhenMove ||
                  !CommandWarp.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
             {
