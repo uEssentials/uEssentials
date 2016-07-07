@@ -34,12 +34,8 @@ using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
 
-// ReSharper disable ForCanBeConvertedToForeach
-
 namespace Essentials.Api.Unturned
 {
-    //TODO: Remove totally Rocketplayer dependency.
-
     public class UPlayer : ICommandSource
     {
         public UnturnedPlayer       RocketPlayer    { get; }
