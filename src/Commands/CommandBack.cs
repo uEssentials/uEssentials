@@ -37,19 +37,17 @@ namespace Essentials.Commands
     )]
     public class CommandBack : EssCommand
     {
-        internal static readonly Dictionary<string, Vector3> BackDict = new Dictionary<string, Vector3>();
-
         public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
         {
-            var displayName = src.DisplayName;
+            var player = src.ToPlayer();
 
-            if ( !BackDict.ContainsKey( displayName ) )
+            if ( !player.HasMetadata( "back_pos" ) )
             {
                 return CommandResult.Lang( EssLang.NOT_DIED_YET );
             }
 
-            src.ToPlayer().Teleport( BackDict[displayName] );
-            BackDict.Remove( displayName );
+            var pos = player.GetMetadata<Vector3>( "back_pos" );
+            src.ToPlayer().Teleport( pos );
             EssLang.RETURNED.SendTo( src );
 
             return CommandResult.Success();

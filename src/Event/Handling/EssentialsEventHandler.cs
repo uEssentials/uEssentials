@@ -117,7 +117,6 @@ namespace Essentials.Event.Handling
             var displayName = player.CharacterName;
 
             MiscCommands.Spies.Remove( displayName );
-            CommandBack.BackDict.Remove( displayName );
             CommandTell.Conversations.Remove( displayName );
             CachedSkills.Remove( displayName );
             CommandHome.Cooldown.RemoveEntry( player.CSteamID );
@@ -531,21 +530,15 @@ namespace Essentials.Event.Handling
         void BackPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb,  CSteamID murderer )
         {
             if ( !player.HasPermission( "essentials.command.back" ) )
-                return;
-
-            var displayName = player.DisplayName;
-
-            if ( CommandBack.BackDict.ContainsKey( displayName ) )
             {
-                CommandBack.BackDict.Remove( displayName );
+                return;
             }
 
-            CommandBack.BackDict.Add( displayName, player.Position );
+            UPlayer.TryGet( player, p => p.SetMetadata( "back_pos", player.Position ) );
         }
 
 
         /* Freeze Command */
-        private static HashSet<ulong> DisconnectedFrozen = new HashSet<ulong>();
 
         [SubscribeEvent( EventType.PLAYER_DEATH )]
         void FreezePlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )

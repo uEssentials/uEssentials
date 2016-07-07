@@ -67,6 +67,8 @@ namespace Essentials.Api.Unturned
         public EPlayerStance        Stance          => UnturnedPlayer.Stance.Stance;
         public bool                 IsOnline        => RocketPlayer != null && UnturnedPlayer != null;
 
+        private readonly Dictionary<string, object> _metadataStore = new Dictionary<string, object>(); 
+
         internal UPlayer( UnturnedPlayer player )
         {
             RocketPlayer = player;
@@ -344,6 +346,33 @@ namespace Essentials.Api.Unturned
         public Component GetComponent( Type componentType )
         {
             return UnturnedPlayer.gameObject.GetComponent( componentType );
+        }
+
+        public bool RemoveMetadata( string key )
+        {
+            return _metadataStore.Remove( key );
+        }
+
+        public bool HasMetadata( string key )
+        {
+            return _metadataStore.ContainsKey( key );
+        }
+
+        public object GetMetadata( string key )
+        {
+            return _metadataStore[key];
+        }
+
+        public T GetMetadata<T>( string key )
+        {
+            return (T) GetMetadata( key );
+        }
+
+        public void SetMetadata( string key, object value )
+        {
+            if ( HasMetadata( key ) )
+                _metadataStore[key] = value;
+            _metadataStore.Add( key, value );
         }
 
         public static UPlayer From( UnturnedPlayer player )
