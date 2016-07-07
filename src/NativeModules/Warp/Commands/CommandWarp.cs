@@ -20,7 +20,6 @@
 */
 
 
-using System.Collections.Generic;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
