@@ -75,7 +75,7 @@ namespace Essentials.Core
         internal EssConfig                            Config                      { get; set; }
         internal EssLogger                            Logger                      { get; set; }
 
-        internal HashSet<UPlayer>                     ConnectedPlayers            { get; set; }
+        internal Dictionary<ulong, UPlayer>           ConnectedPlayers            { get; set; }
 
         private string _folder;
         private string _translationFolder;
@@ -101,14 +101,14 @@ namespace Essentials.Core
                 Provider.onServerConnected += PlayerConnectCallback;
 
                 Logger = new EssLogger( "[uEssentials] " );
-                ConnectedPlayers = new HashSet<UPlayer>();
+                ConnectedPlayers = new Dictionary<ulong, UPlayer>();
 
                 Logger.Log( "Enabling uEssentials.", ConsoleColor.Green );
 
                 if ( Provider.Players.Count > 0 )
                 {
                     Provider.Players.ForEach( p => {
-                        ConnectedPlayers.Add( new UPlayer( UnturnedPlayer.FromSteamPlayer( p ) ) );
+                        ConnectedPlayers.Add( p.SteamPlayerID.CSteamID.m_SteamID, new UPlayer( UnturnedPlayer.FromSteamPlayer( p ) ) );
                     } );
                 }
 
@@ -360,12 +360,12 @@ namespace Essentials.Core
 
         private void PlayerConnectCallback( CSteamID id )
         {
-            ConnectedPlayers.Add( new UPlayer( UnturnedPlayer.FromCSteamID( id ) ) );
+            ConnectedPlayers.Add( id.m_SteamID, new UPlayer( UnturnedPlayer.FromCSteamID( id ) ) );
         }
 
         private void PlayerDisconnectCallback( CSteamID id )
         {
-            ConnectedPlayers.RemoveWhere( connectedPlayer => connectedPlayer.CSteamId == id );
+            ConnectedPlayers.Remove( id.m_SteamID );
         }
 
         private void CheckUpdates()

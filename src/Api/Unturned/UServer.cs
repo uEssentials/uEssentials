@@ -30,7 +30,7 @@ namespace Essentials.Api.Unturned
 {
     public class UServer
     {
-        public static IEnumerable<UPlayer> Players => EssCore.Instance.ConnectedPlayers;
+        public static IEnumerable<UPlayer> Players => EssCore.Instance.ConnectedPlayers.Values;
 
         public static byte MaxPlayers
         {

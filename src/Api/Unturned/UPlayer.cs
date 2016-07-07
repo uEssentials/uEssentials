@@ -354,62 +354,98 @@ namespace Essentials.Api.Unturned
         {
             return player == null
                 ? null
-                : From( player.Player );
+                : From( player.CSteamID );
         }
 
         public static UPlayer From( Player player )
         {
             return player == null
                 ? null
-                : From( player.SteamChannel.SteamPlayer.SteamPlayerID.CharacterName );
+                : From( player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID );
         }
 
-        public static UPlayer From( string name )
+        /// <summary>
+        /// Character name has more priority than steam name.
+        /// 
+        /// Order: Equals > Starts With > Contains
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        public static UPlayer From( string name, bool ignoreCase = true )
         {
-            var connectedPlayers = EssCore.Instance.ConnectedPlayers;
-            var lastPlayer = null as UPlayer;
-
             /*
-                Equals -> StartWith -> Contains
+                - equals > startwith > contains
+                - characterName > steamName
             */
 
-            foreach ( var player in connectedPlayers )
+            var players = EssCore.Instance.ConnectedPlayers;
+
+            var cmpFlags = ignoreCase ? 0 : StringComparison.OrdinalIgnoreCase;
+            var bestMatch = new LinkedList<UPlayer>();
+            var score = 0;
+            var reverseCount = players.Count;
+
+            foreach ( var entry in players )
             {
-                var pCharName = player.CharacterName;
-                var pSteamName = player.SteamName;
+                var current = entry.Value;
+                var steamName = entry.Value.SteamName;
+                var charName = entry.Value.CharacterName;
 
-                if ( pCharName.EqualsIgnoreCase( name ) ||
-                     pSteamName.EqualsIgnoreCase( name )  )
+                if ( string.Compare( name, charName, cmpFlags ) == 0 ||
+                     string.Compare( name, steamName, cmpFlags ) == 0 )
                 {
-                    return player;
+                    return entry.Value;
                 }
 
-                if ( pCharName.ToLowerInvariant().StartsWith( name.ToLowerInvariant() ) ||
-                     pSteamName.ToLowerInvariant().StartsWith( name.ToLowerInvariant() ) )
+                if ( charName.StartsWith( name, cmpFlags ) ||
+                     steamName.StartsWith( name, cmpFlags ) )
                 {
-                    return player;
+                    var curScore = 2*reverseCount;
+                    if ( curScore > score )
+                    {
+                        bestMatch.AddFirst( current );
+                        score = curScore;
+                    }
+                    else
+                    {
+                        bestMatch.AddLast( current );
+                    }
                 }
 
-                if ( pCharName.ContainsIgnoreCase( name ) ||
-                     pSteamName.ContainsIgnoreCase( name ) )
+                if ( ( ignoreCase && charName.ContainsIgnoreCase( name ) ) || charName.Contains( name ) ||
+                     ( ignoreCase && steamName.ContainsIgnoreCase( name ) ) || steamName.Contains( name ) )
                 {
-                    lastPlayer = player;
+                    var curScore = 1*reverseCount;
+                    if ( curScore > score )
+                    {
+                        bestMatch.AddFirst( current );
+                        score = curScore;
+                    }
+                    else
+                    {
+                        bestMatch.AddLast( current );
+                    }
                 }
+
+                reverseCount--;
             }
 
-            return lastPlayer;
+            return bestMatch.Count == 0 ? null : bestMatch.First.Value;
         }
-
+        
         public static UPlayer From( CSteamID csteamId )
         {
-            return csteamId == CSteamID.Nil
-                ? null
-                : From( PlayerTool.getPlayer( csteamId ) );
+            return csteamId == CSteamID.Nil 
+                ? null 
+                : EssCore.Instance.ConnectedPlayers[csteamId.m_SteamID];
         }
 
         public static UPlayer From( SteamPlayer player )
         {
-            return player == null ? null : From( player.SteamPlayerID.CSteamID );
+            return player == null 
+                ? null 
+                : From( player.SteamPlayerID.CSteamID );
         }
 
         /// <summary>
