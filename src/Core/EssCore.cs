@@ -26,6 +26,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Essentials.Api;
+using Essentials.Api.Command;
 using Essentials.Api.Event;
 using Essentials.Api.Logging;
 using Essentials.Api.Module;
@@ -65,7 +66,7 @@ namespace Essentials.Core
 
         internal Optional<IEconomyProvider>           EconomyProvider             { get; set; }
         internal ModuleManager                        ModuleManager               { get; set; }
-        internal CommandManager                       CommandManager              { get; set; }
+        internal ICommandManager                      CommandManager              { get; set; }
         internal IEventManager                        EventManager                { get; set; }
         internal HookManager                          HookManager                 { get; set; }
         internal IUpdater                             Updater                     { get; set; }
@@ -450,7 +451,7 @@ namespace Essentials.Core
             });
         }
 
-        private string MkDirIfNotExists( string dir )
+        private static string MkDirIfNotExists( string dir )
         {
             if ( !System.IO.Directory.Exists( dir ) )
                 System.IO.Directory.CreateDirectory( dir );
