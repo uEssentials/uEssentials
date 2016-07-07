@@ -27,10 +27,18 @@ namespace Essentials.Event
     {
         public delegate void CommandPreExecute( CommandPreExecuteEvent e );
         public static event CommandPreExecute OnCommandPreExecute;
-        internal static CommandPreExecute _OnCommandPreExecute => OnCommandPreExecute;
 
         public delegate void CommandPosExecute( CommandPosExecuteEvent e );
         public static event CommandPosExecute OnCommandPosExecute;
-        internal static CommandPosExecute _OnCommandPosExecute => OnCommandPosExecute;
+
+        internal static void CallCommandPreExecute( CommandPreExecuteEvent e )
+        {
+            OnCommandPreExecute?.Invoke( e );
+        }
+
+        internal static void CallCommandPosExecute( CommandPosExecuteEvent e )
+        {
+            OnCommandPosExecute?.Invoke( e );
+        }
     }
 }

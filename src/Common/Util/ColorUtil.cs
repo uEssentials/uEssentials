@@ -59,6 +59,7 @@ namespace Essentials.Common.Util
 
             var rawColor = message.Split( '<' )[1].Split( '>' )[0];
 
+            // Try get color from name
             switch (rawColor.Trim().ToLower())
             {
                 case "black": color =  Color.black; break;
@@ -74,11 +75,13 @@ namespace Essentials.Common.Util
                 case "yellow": color = Color.yellow; break;
             }
 
+            // Try get color from hex
             if ( !color.HasValue )
             {
                 color = UnturnedChat.GetColorFromHex(rawColor);
             }
 
+            // Remove <color>
             if ( color.HasValue )
             {
                 message = message.Replace( $"<{rawColor}>", "" );

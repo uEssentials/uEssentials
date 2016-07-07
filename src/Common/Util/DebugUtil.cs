@@ -22,6 +22,8 @@
 using System;
 using System.Text;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Essentials.Common.Util
 {
@@ -46,15 +48,27 @@ namespace Essentials.Common.Util
             if ( obj is IEnumerable && !(obj is string) )
             {
                 var en = obj as IEnumerable;
+                var enumerable = en as IList<object> ?? en.Cast<object>().ToList();
 
-                if ( !en.GetEnumerator().MoveNext() )
+                if ( enumerable.Count == 0 )
+                {
                     sb.Append( "Empty" );
+                }
                 else
-                    AppendCollection( sb, en );
+                {
+                    sb.Append( "[" );
+                    foreach ( var val in enumerable )
+                    {
+                        sb.Append( val );
+                        sb.Append( ", " );
+                    }
+                    sb.Remove( sb.Length - 2, 2 );
+                    sb.Append( "]" );
+                }
             }
             else
             {
-                sb.Append( obj.ToString() );
+                sb.Append( obj );
             }
 
             sb.Append( " (" );
@@ -62,18 +76,6 @@ namespace Essentials.Common.Util
             sb.Append( ") " );
 
             return sb.ToString();
-        }
-
-        private static void AppendCollection( StringBuilder sb, IEnumerable array )
-        {
-            sb.Append( "[" );
-            foreach ( var val in array )
-            {
-                sb.Append( val );
-                sb.Append( ", " );
-            }
-            sb.Remove( sb.Length - 2, 2 );
-            sb.Append( "]" );
         }
     }
 }

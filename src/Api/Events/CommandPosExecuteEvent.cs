@@ -28,6 +28,8 @@ namespace Essentials.Api.Events
     {
         /// <summary>
         /// Result of execution.
+        /// 
+        /// Can be null.
         /// </summary>
         public CommandResult Result { get; set; }
 

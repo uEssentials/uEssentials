@@ -59,6 +59,10 @@ namespace Essentials.Core.Command
 
         public void Execute( IRocketPlayer caller, string[] args )
         {
+            #if PERF
+              var sw = System.Diagnostics.Stopwatch.StartNew();
+            #endif
+
             try
             {
                 var commandSource = caller is UnturnedPlayer
@@ -77,7 +81,7 @@ namespace Essentials.Core.Command
                 {
                     var cmdArgs  = new CommandArgs( args );
                     var preExec = new CommandPreExecuteEvent( Command, cmdArgs, commandSource );
-                    EssentialsEvents._OnCommandPreExecute?.Invoke( preExec );
+                    EssentialsEvents.CallCommandPreExecute( preExec );
 
                     if ( preExec.Cancelled )
                     {
@@ -86,23 +90,24 @@ namespace Essentials.Core.Command
 
                     var result = Command.OnExecute( commandSource , cmdArgs );
 
-                    if ( result == null ) return;
-
-                    if ( result.Type == CommandResult.ResultType.SHOW_USAGE )
+                    if ( result != null )
                     {
-                        commandSource.SendMessage( $"Use /{Command.Name} {Command.Usage}" );
-                    }
-                    else if ( result.Message != null )
-                    {
-                        var message = result.Message;
+                        if ( result.Type == CommandResult.ResultType.SHOW_USAGE )
+                        {
+                            commandSource.SendMessage( $"Use /{Command.Name} {Command.Usage}" );
+                        }
+                        else if ( result.Message != null )
+                        {
+                            var message = result.Message;
 
-                        var color = ColorUtil.GetColorFromString( ref message );
+                            var color = ColorUtil.GetColorFromString( ref message );
 
-                        commandSource.SendMessage( message, color );
+                            commandSource.SendMessage( message, color );
+                        }
                     }
 
                     var posExec = new CommandPosExecuteEvent( Command, cmdArgs, commandSource, result );
-                    EssentialsEvents._OnCommandPosExecute?.Invoke( posExec );
+                    EssentialsEvents.CallCommandPosExecute( posExec );
                 }
             }
             catch ( Exception e )
@@ -112,6 +117,10 @@ namespace Essentials.Core.Command
 
                 UEssentials.Logger.LogError( e.ToString() );
             }
+
+            #if PERF
+              UEssentials.Logger.LogDebug( $"Executed command '{Command.Name}', Took: {sw.ElapsedTicks} ticks | {sw.ElapsedMilliseconds} ms");
+            #endif
         }
 
         internal class CommandAliasAdapter : CommandAdapter

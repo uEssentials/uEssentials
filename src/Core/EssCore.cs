@@ -117,10 +117,6 @@ namespace Essentials.Core
                 _dataFolder = Folder + "data/";
                 _modulesFolder = Folder + "modules/";
 
-                new [] { _folder, _translationFolder, _dataFolder, _modulesFolder }
-                    .WhereNot( System.IO.Directory.Exists )
-                    .ForEach( d => System.IO.Directory.CreateDirectory(d) );
-
                 var configPath = $"{Folder}config.json";
 
                 Config = new EssConfig();

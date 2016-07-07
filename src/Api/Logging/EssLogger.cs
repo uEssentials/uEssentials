@@ -47,6 +47,11 @@ namespace Essentials.Api.Logging
             Log( message, ConsoleColor.Green );
         }
 
+        public void LogDebug( string message )
+        {
+            Log( message, ConsoleColor.DarkGray, Prefix + "[DEBUG] " );
+        }
+
         public void Log( string message, ConsoleColor color, string prefix = "default",
                          string suffix = "\n" )
         {
