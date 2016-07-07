@@ -115,6 +115,7 @@
     <Compile Include="src\Common\Util\DebugUtil.cs" />
     <Compile Include="src\Compatibility\Hook.cs" />
     <Compile Include="src\Compatibility\HookManager.cs" />
+    <Compile Include="src\Core\Event\InstancePool.cs" />
     <Compile Include="src\Economy\IEconomyProvider.cs" />
     <Compile Include="src\Economy\ExpEconomyProvider.cs" />
     <Compile Include="src\Compatibility\Hooks\UconomyHook.cs" />
