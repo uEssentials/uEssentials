@@ -96,7 +96,6 @@ namespace Essentials.Core.Event
             if ( type.GetMethods( (BindingFlags) 0x3C )
                  .Any( md => md.GetCustomAttributes( typeof( SubscribeEvent ), false ).Length > 0 ) )
             {
-                Console.WriteLine( type );
                 RegisterAll( _instancePool.GetOrCreate( type ) );
             }
         }
