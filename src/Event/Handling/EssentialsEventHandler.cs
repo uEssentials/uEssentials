@@ -280,18 +280,18 @@ namespace Essentials.Event.Handling
             });
         }
 
-        private DateTime lastUpdateCheck = DateTime.Now;
+        private DateTime _lastUpdateCheck = DateTime.Now;
 
         [SubscribeEvent( EventType.PLAYER_CONNECTED )]
         void UpdateAlert( UnturnedPlayer player )
         {
-            if ( !player.IsAdmin || lastUpdateCheck > DateTime.Now ) return;
+            if ( !player.IsAdmin || _lastUpdateCheck > DateTime.Now ) return;
 
             var updater = EssCore.Instance.Updater;
 
             if ( !updater.IsUpdated() )
             {
-                lastUpdateCheck = DateTime.Now.AddMinutes( 10 );
+                _lastUpdateCheck = DateTime.Now.AddMinutes( 10 );
 
                 Tasks.New( t => {
                     UPlayer.From( player ).SendMessage( "[uEssentials] New version avalaible " +
@@ -550,8 +550,7 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.PLAYER_DEATH )]
         void FreezePlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
         {
-            if ( UEssentials.Config.UnfreezeOnDeath &&
-                 player.GetComponent<FrozenPlayer>() != null )
+            if ( UEssentials.Config.UnfreezeOnDeath && player.GetComponent<FrozenPlayer>() != null )
             {
                 UnityEngine.Object.Destroy( player.GetComponent<FrozenPlayer>() );
             }
@@ -560,8 +559,7 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
         void FreezePlayerDisconnect( UnturnedPlayer player )
         {
-            if ( !UEssentials.Config.UnfreezeOnQuit &&
-                 player.GetComponent<FrozenPlayer>() != null )
+            if ( !UEssentials.Config.UnfreezeOnQuit && player.GetComponent<FrozenPlayer>() != null )
             {
                 DisconnectedFrozen.Add( player.CSteamID.m_SteamID );
             }
@@ -570,8 +568,7 @@ namespace Essentials.Event.Handling
         [SubscribeEvent( EventType.PLAYER_CONNECTED )]
         void FreezePlayerConnected( UnturnedPlayer player )
         {
-            if ( !UEssentials.Config.UnfreezeOnQuit &&
-                 DisconnectedFrozen.Contains( player.CSteamID.m_SteamID ) )
+            if ( !UEssentials.Config.UnfreezeOnQuit && DisconnectedFrozen.Contains( player.CSteamID.m_SteamID ) )
             {
                 UPlayer.From( player ).AddComponent<FrozenPlayer>();
                 DisconnectedFrozen.Remove( player.CSteamID.m_SteamID );
