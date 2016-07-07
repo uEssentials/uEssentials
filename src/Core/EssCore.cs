@@ -300,7 +300,7 @@ namespace Essentials.Core
                     "An error occurred while enabling uEssentials.",
                     "If this error is not related with wrong configuration please report",
                     "immediatly here https://github.com/uEssentials/uEssentials/issues",
-                    "Error: " + e.ToString()
+                    "Error: " + e
                 };
 
                 if ( !Provider.Version.EqualsIgnoreCase( UNTURNED_VERSION ) )
