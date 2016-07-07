@@ -41,15 +41,13 @@ namespace Essentials.Common.Util
             const uint HOUR = MIN * MIN;
             const uint DAY  = HOUR * 24;
 
-            uint days, hours, minutes;
-
-            days = seconds / DAY;
+            var days = seconds / DAY;
             seconds -= days * DAY;
 
-            hours = seconds / HOUR;
+            var hours = seconds / HOUR;
             seconds -= hours * HOUR;
 
-            minutes = seconds / MIN;
+            var minutes = seconds / MIN;
             seconds -= minutes * MIN;
 
             var sb = new StringBuilder();
