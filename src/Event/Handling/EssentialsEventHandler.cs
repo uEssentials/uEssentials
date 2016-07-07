@@ -116,7 +116,7 @@ namespace Essentials.Event.Handling
         {
             var displayName = player.CharacterName;
 
-            MiscCommands.Spies.Remove( displayName );
+            MiscCommands.Spies.Remove( player.CSteamID.m_SteamID );
             CommandTell.Conversations.Remove( displayName );
             CachedSkills.Remove( displayName );
             CommandHome.Cooldown.RemoveEntry( player.CSteamID );

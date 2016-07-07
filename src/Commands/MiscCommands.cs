@@ -42,7 +42,7 @@ namespace Essentials.Commands
     public class MiscCommands
     {
         private static readonly ICommandArgument One = new CommandArgument( 0, "1" );
-        public static readonly List<string> Spies = new List<string>();
+        public static readonly HashSet<ulong> Spies = new HashSet<ulong>();
 
         [CommandInfo(
             Name = "ascend",
@@ -517,16 +517,17 @@ namespace Essentials.Commands
         )]
         CommandResult SpyCommand( ICommandSource src, ICommandArgs args )
         {
-            var displayName = src.DisplayName;
+            var player = src.ToPlayer();
+            var playerId = player.CSteamId.m_SteamID;
 
-            if ( Spies.Contains( displayName ) )
+            if ( Spies.Contains( playerId ) )
             {
-                Spies.Remove( displayName );
+                Spies.Remove( playerId );
                 EssLang.SPY_MODE_OFF.SendTo( src );
             }
             else
             {
-                Spies.Add( displayName );
+                Spies.Add( playerId );
                 EssLang.SPY_MODE_ON.SendTo( src );
             }
 

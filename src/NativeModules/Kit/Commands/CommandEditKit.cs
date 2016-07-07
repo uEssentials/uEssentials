@@ -34,7 +34,7 @@ namespace Essentials.NativeModules.Kit.Commands
         Name = "editkit",
         Aliases = new [] {"ekit"},
         Description = "Edit an kit",
-        Usage = "[kit] [see | additem | delitem | set]"
+        Usage = "[kit] [view | additem | delitem | set]"
     )]
     public class CommandEditKit : EssCommand
     {
@@ -57,28 +57,18 @@ namespace Essentials.NativeModules.Kit.Commands
 
             switch ( args[1].ToLowerString )
             {
-                case "see":
-                    if ( args.Length == 3 )
-                    {
-                        if ( !args[2].Is( "items" ) )
-                        {
-                            return CommandResult.InvalidArgs( "Use '/ekit see items' to see items" );
-                        }
+                case "view":
+                    src.SendMessage( $"Name: {kit.Name}" );
+                    src.SendMessage( $"Cooldown: {kit.Cooldown}" );
+                    src.SendMessage( $"ResetCooldownWhenDie: {kit.ResetCooldownWhenDie}" );
+                    src.SendMessage( string.Empty );
+                    src.SendMessage( "Items:" );
 
-                        var index = 0;
+                    var index = 0;
 
-                        kit.Items.ForEach( i => {
-                            src.SendMessage( i.ToString().Insert( 0, $"[{(index++) + 1}] " ) );
-                        });
-                    }
-                    else
-                    {
-                        src.SendMessage( $"Name: {kit.Name}" );
-                        src.SendMessage( $"Cooldown: {kit.Cooldown}" );
-                        src.SendMessage( $"ResetCooldownWhenDie: {kit.ResetCooldownWhenDie}" );
-                        src.SendMessage( string.Empty );
-                        src.SendMessage( "Use '/ekit see items' to see items" );
-                    }
+                    kit.Items.ForEach( i => {
+                        src.SendMessage( i.ToString().Insert( 0, $" [{(index++) + 1}] " ) );
+                    } );
                     break;
 
                 // /ekit xp additem normal id amount durability
@@ -130,7 +120,7 @@ namespace Essentials.NativeModules.Kit.Commands
                         case "normal":
                             if ( args.Length < 4 )
                             {
-                                return CommandResult.InvalidArgs( "Use /ekit [kit] additem [type] <id> [amount] [durability]" );
+                                return CommandResult.InvalidArgs( "Use /ekit [kit] additem [type] [id] [amount] [durability]" );
                             }
 
                             var optAsset = ItemUtil.GetItem( args[3].ToString() );
@@ -202,8 +192,8 @@ namespace Essentials.NativeModules.Kit.Commands
                 case "delitem":
                     if ( args.Length != 3 )
                     {
-                        src.SendMessage( "Use /ekit [kit] delitem [itemIndex]" );
-                        src.SendMessage( "Use /ekit [kit] see [items] to view valid indexes." );
+                        src.SendMessage( "Use '/ekit [kit] delitem [itemIndex]'" );
+                        src.SendMessage( "Use '/ekit [kit] view' to view valid indexes." );
 
                         return CommandResult.InvalidArgs();
                     }
@@ -224,7 +214,7 @@ namespace Essentials.NativeModules.Kit.Commands
                     if ( (argAsInt2 - 1) > kit.Items.Count )
                     {
                         src.SendMessage( $"Invalid index, index must be between 1 and {kit.Items.Count}" );
-                        src.SendMessage( "Use /ekit [kit] see [items] to view valid indexes." );
+                        src.SendMessage( "Use '/ekit [kit] view' to view valid indexes." );
 
                         return CommandResult.InvalidArgs();
                     }

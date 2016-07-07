@@ -458,12 +458,20 @@ namespace Essentials.Api.Unturned
 
             return bestMatch.Count == 0 ? null : bestMatch.First.Value;
         }
-        
+
+        public static UPlayer From( ulong rawCSteamId )
+        {
+            var players = EssCore.Instance.ConnectedPlayers;
+            return players.ContainsKey( rawCSteamId ) 
+                ? null
+                : players[rawCSteamId];
+        }
+
         public static UPlayer From( CSteamID csteamId )
         {
-            return csteamId == CSteamID.Nil 
-                ? null 
-                : EssCore.Instance.ConnectedPlayers[csteamId.m_SteamID];
+            return csteamId == CSteamID.Nil
+                ? null
+                : From( csteamId.m_SteamID );
         }
 
         public static UPlayer From( SteamPlayer player )

@@ -99,14 +99,6 @@ namespace Essentials.NativeModules.Kit.Item
             }
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="durability"></param>
-        /// <param name="amount"></param>
-        /// <param name="ammo"></param>
-        /// <param name="fireMode"></param>
         public KitItemWeapon( ushort id, byte durability,  byte amount, byte? ammo,
                               EFiremode? fireMode = EFiremode.SAFETY )  : base( id, durability, amount )
         {
@@ -116,9 +108,9 @@ namespace Essentials.NativeModules.Kit.Item
 
         public override string ToString()
         {
-            return $"{base.ToString()}, Barrel: {Barrel}, Sight: {Sight}, " +
-                   $"Grip: {Grip}, Tactical: {Tactical}, Magazine: {Magazine}, " +
-                   $"FireMode: {FireMode}, Ammo: {Ammo}";
+            return $"{base.ToString()}, Barrel: {Barrel?.AttachmentId ?? 0}, Sight: {Sight?.AttachmentId ?? 0}, " +
+                   $"Grip: {Grip?.AttachmentId ?? 0}, Tactical: {Tactical?.AttachmentId ?? 0}, Magazine: {Magazine?.AttachmentId ?? 0}, " +
+                   $"FireMode: {FireMode?.ToString() ?? "None"}, Ammo: {Ammo?.ToString() ?? "None"}";
         }
     }
 }
