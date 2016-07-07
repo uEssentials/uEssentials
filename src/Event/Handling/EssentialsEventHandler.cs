@@ -539,6 +539,7 @@ namespace Essentials.Event.Handling
 
 
         /* Freeze Command */
+        private static readonly HashSet<ulong> DisconnectedFrozen = new HashSet<ulong>();
 
         [SubscribeEvent( EventType.PLAYER_DEATH )]
         void FreezePlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
@@ -624,7 +625,7 @@ namespace Essentials.Event.Handling
             }
         }
 
-        private string TranslateLimb( ELimb limb )
+        private static string TranslateLimb( ELimb limb )
         {
             switch (limb)
             {
