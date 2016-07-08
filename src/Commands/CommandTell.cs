@@ -28,64 +28,58 @@ using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.I18n;
 using UnityEngine;
-
 using static Essentials.Commands.MiscCommands;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "tell",
-        Aliases = new[] {"msg", "pm"},
+        Aliases = new[] { "msg", "pm" },
         Description = "Send private message to an player",
         Usage = "[player] [message]"
     )]
-    public class CommandTell : EssCommand
-    {
+    public class CommandTell : EssCommand {
+
         internal static readonly Dictionary<string, string> Conversations = new Dictionary<string, string>();
 
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.Length < 2 )
-            {
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.Length < 2) {
                 return CommandResult.ShowUsage();
             }
 
             var target = args[0].ToPlayer;
 
-            if ( target == null )
-            {
-                return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
+            if (target == null) {
+                return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
             }
 
             var rawMsg1 = UEssentials.Config.PMFormatFrom;
             var rawMsg2 = UEssentials.Config.PMFormatTo;
-            var color1 = ColorUtil.GetColorFromString( ref rawMsg1 );
-            var color2 = ColorUtil.GetColorFromString( ref rawMsg2 );
+            var color1 = ColorUtil.GetColorFromString(ref rawMsg1);
+            var color2 = ColorUtil.GetColorFromString(ref rawMsg2);
 
-            var message = string.Format( rawMsg1, src.DisplayName, args.Join( 1 ) );
-            var message2 = string.Format( rawMsg2, target.DisplayName, args.Join( 1 ) );
+            var message = string.Format(rawMsg1, src.DisplayName, args.Join(1));
+            var message2 = string.Format(rawMsg2, target.DisplayName, args.Join(1));
 
-            target.SendMessage( message, color1 );
-            src.SendMessage( message2, color2 );
+            target.SendMessage(message, color1);
+            src.SendMessage(message2, color2);
 
-            Spies.ForEach( p => {
-                UPlayer.From( p ).SendMessage( $"Spy: ({src.DisplayName} -> " +
-                                               $"{target.CharacterName}): {args.Join( 1 )}", Color.gray );
-            } );
+            Spies.ForEach(p => {
+                UPlayer.From(p).SendMessage($"Spy: ({src.DisplayName} -> " +
+                                            $"{target.CharacterName}): {args.Join(1)}", Color.gray);
+            });
 
-            if ( Conversations.ContainsKey( src.DisplayName ) )
-            {
-                if ( !Conversations[ src.DisplayName ].Equals( target.DisplayName ) )
-                {
-                    Conversations[ src.DisplayName ] = target.CharacterName;
+            if (Conversations.ContainsKey(src.DisplayName)) {
+                if (!Conversations[src.DisplayName].Equals(target.DisplayName)) {
+                    Conversations[src.DisplayName] = target.CharacterName;
                 }
-            }
-            else
-            {
-                Conversations.Add( src.DisplayName, target.DisplayName );
+            } else {
+                Conversations.Add(src.DisplayName, target.DisplayName);
             }
 
             return CommandResult.Success();
         }
+
     }
+
 }

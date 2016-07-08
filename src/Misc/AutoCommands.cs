@@ -24,50 +24,50 @@ using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 
-namespace Essentials.Misc
-{
-    public class AutoCommands
-    {
+namespace Essentials.Misc {
+
+    public class AutoCommands {
+
         public List<AutoCommand> Commands { get; set; }
 
         public bool Enabled { get; set; }
 
-        public void LoadDefaults()
-        {
+        public void LoadDefaults() {
             Enabled = false;
 
             Commands = new List<AutoCommand> {
                 new AutoCommand {
                     Timer = 120,
-                    Commands = new [] { "say \"Be sure to drink your Ovaltine!\" 0 255 255", "item * glue" }
+                    Commands = new[] { "say \"Be sure to drink your Ovaltine!\" 0 255 255", "item * glue" }
                 },
                 new AutoCommand {
                     Timer = 900,
                     Commands = new[] { "clear v", "respawnvehicles" }
                 }
             };
-
         }
 
-        public void Start()
-        {
-            Commands.ForEach( cmd => {
-                var task = Tasks.New( t =>
-                    cmd.Commands.ForEach( UServer.DispatchCommand )
-                ).Delay( cmd.Timer * 1000 );
+        public void Start() {
+            Commands.ForEach(cmd => {
+                var task = Tasks.New(t =>
+                    cmd.Commands.ForEach(UServer.DispatchCommand)
+                    ).Delay(cmd.Timer*1000);
 
-                if ( !cmd.RunOnce )
-                    task.Interval( cmd.Timer * 1000 );
+                if (!cmd.RunOnce)
+                    task.Interval(cmd.Timer*1000);
 
                 task.Go();
-            } );
+            });
         }
 
-        public struct AutoCommand
-        {
+        public struct AutoCommand {
+
             public bool RunOnce;
             public int Timer;
             public string[] Commands;
+
         }
+
     }
+
 }

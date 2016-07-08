@@ -26,53 +26,47 @@ using Essentials.Common;
 using SDG.Unturned;
 using Essentials.I18n;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "sudo",
         Description = "Make player or console execute an command",
         Usage = "[player/*console*/* = all]"
     )]
-    public class CommandSudo : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.Length < 2 )
-            {
+    public class CommandSudo : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.Length < 2) {
                 return CommandResult.ShowUsage();
             }
 
             string name;
 
-            if ( args[0].Is( name = "*console*" ) )
-            {
-                CommandWindow.ConsoleInput.onInputText( args.Join( 1 ) );
-            }
-            else if ( args[0].Is( "*" ) )
-            {
-                UServer.Players.ForEach( p => {
-                    ChatManager.Instance.askChat( p.CSteamId, (byte) EChatMode.GLOBAL, args.Join( 1 ) );
-                } );
+            if (args[0].Is(name = "*console*")) {
+                CommandWindow.ConsoleInput.onInputText(args.Join(1));
+            } else if (args[0].Is("*")) {
+                UServer.Players.ForEach(p => {
+                    ChatManager.Instance.askChat(p.CSteamId, (byte) EChatMode.GLOBAL, args.Join(1));
+                });
 
                 name = "Everyone";
-            }
-            else
-            {
-                if ( !args[0].IsValidPlayerName )
-                {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
+            } else {
+                if (!args[0].IsValidPlayerName) {
+                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
                 }
 
                 var targetPlayer = args[0].ToPlayer;
 
-                ChatManager.Instance.askChat( targetPlayer.CSteamId, (byte) EChatMode.GLOBAL, args.Join( 1 ) );
+                ChatManager.Instance.askChat(targetPlayer.CSteamId, (byte) EChatMode.GLOBAL, args.Join(1));
 
                 name = targetPlayer.CharacterName;
             }
 
-            EssLang.SUDO_EXECUTED.SendTo( src, name, args.Join( 1 ) );
+            EssLang.SUDO_EXECUTED.SendTo(src, name, args.Join(1));
 
             return CommandResult.Success();
         }
+
     }
+
 }

@@ -31,156 +31,126 @@ using Essentials.Event.Handling;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 
-namespace Essentials.NativeModules.Kit.Commands
-{
+namespace Essentials.NativeModules.Kit.Commands {
+
     [CommandInfo(
         Name = "kit",
         Description = "Get an kit",
         Usage = "[kit_name] <player | *>"
     )]
-    public class CommandKit : EssCommand
-    {
+    public class CommandKit : EssCommand {
+
         /*
             player_id -> [kit_name, time]
         */
-        internal static Dictionary<ulong, Dictionary<string, DateTime>> Cooldowns = new Dictionary<ulong, Dictionary<string, DateTime>>();
+
+        internal static Dictionary<ulong, Dictionary<string, DateTime>> Cooldowns =
+            new Dictionary<ulong, Dictionary<string, DateTime>>();
+
         internal static Dictionary<ulong, DateTime> GlobalCooldown = new Dictionary<ulong, DateTime>();
 
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.Length == 0 || ( args.Length == 1 && src.IsConsole ) )
-            {
-                return CommandResult.InvalidArgs( src.IsAdmin ? UsageMessage : "Use /kit [kit_name]" );
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.Length == 0 || (args.Length == 1 && src.IsConsole)) {
+                return CommandResult.InvalidArgs(src.IsAdmin ? UsageMessage : "Use /kit [kit_name]");
             }
 
-            if ( args.Length == 1 )
-            {
+            if (args.Length == 1) {
                 var player = src.ToPlayer();
 
-                if ( !KitModule.Instance.KitManager.Contains( args[0].ToString() ) )
-                {
-                    return CommandResult.Lang( EssLang.KIT_NOT_EXIST, args[0] );
+                if (!KitModule.Instance.KitManager.Contains(args[0].ToString())) {
+                    return CommandResult.Lang(EssLang.KIT_NOT_EXIST, args[0]);
                 }
 
                 var kitName = args[0].ToLowerString;
                 var requestedKit = KitModule.Instance.KitManager.GetByName(kitName);
 
-                if ( !requestedKit.CanUse( player ) )
-                {
-                    return CommandResult.Lang( EssLang.KIT_NO_PERMISSION );
+                if (!requestedKit.CanUse(player)) {
+                    return CommandResult.Lang(EssLang.KIT_NO_PERMISSION);
                 }
 
-                var steamPlayerId    = player.CSteamId.m_SteamID;
-                var kitCost          = requestedKit.Cost;
+                var steamPlayerId = player.CSteamId.m_SteamID;
+                var kitCost = requestedKit.Cost;
 
-                if ( kitCost > 0 && UEssentials.EconomyProvider.IsPresent )
-                {
+                if (kitCost > 0 && UEssentials.EconomyProvider.IsPresent) {
                     var ecoProvider = UEssentials.EconomyProvider.Value;
 
-                    if ( !ecoProvider.Has( player, kitCost ) )
-                    {
-                        return CommandResult.Lang( EssLang.KIT_NO_MONEY, kitCost, ecoProvider.Currency );
+                    if (!ecoProvider.Has(player, kitCost)) {
+                        return CommandResult.Lang(EssLang.KIT_NO_MONEY, kitCost, ecoProvider.Currency);
                     }
                 }
 
-                if ( !src.HasPermission("essentials.bypass.kitcooldown") )
-                {
+                if (!src.HasPermission("essentials.bypass.kitcooldown")) {
                     var globalCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
 
-                    if (  globalCooldown > 0 )
-                    {
-                        if ( GlobalCooldown.ContainsKey( steamPlayerId ) )
-                        {
+                    if (globalCooldown > 0) {
+                        if (GlobalCooldown.ContainsKey(steamPlayerId)) {
                             var remainingTime = DateTime.Now - GlobalCooldown[steamPlayerId];
 
-                            if ( (remainingTime.TotalSeconds + 1) > globalCooldown )
-                            {
+                            if ((remainingTime.TotalSeconds + 1) > globalCooldown) {
                                 GlobalCooldown[steamPlayerId] = DateTime.Now;
+                            } else {
+                                return CommandResult.Lang(EssLang.KIT_GLOBAL_COOLDOWN,
+                                    TimeUtil.FormatSeconds((uint) (globalCooldown - remainingTime.TotalSeconds)));
                             }
-                            else
-                            {
-                                return CommandResult.Lang( EssLang.KIT_GLOBAL_COOLDOWN,
-                                    TimeUtil.FormatSeconds( (uint) (globalCooldown - remainingTime.TotalSeconds)) );
-                            }
+                        } else {
+                            GlobalCooldown.Add(steamPlayerId, DateTime.Now);
                         }
-                        else
-                        {
-                            GlobalCooldown.Add( steamPlayerId, DateTime.Now );
-                        }
-                    }
-                    else
-                    {
+                    } else {
                         var kitCooldown = requestedKit.Cooldown;
 
-                        if ( !Cooldowns.ContainsKey( steamPlayerId ) ||
-                            CommandKit.Cooldowns[steamPlayerId] == null )
-                        {
-                            Cooldowns.Add( steamPlayerId, new Dictionary<string, DateTime>() );
+                        if (!Cooldowns.ContainsKey(steamPlayerId) ||
+                            CommandKit.Cooldowns[steamPlayerId] == null) {
+                            Cooldowns.Add(steamPlayerId, new Dictionary<string, DateTime>());
                         }
 
-                        if ( Cooldowns[steamPlayerId].ContainsKey( kitName ) )
-                        {
+                        if (Cooldowns[steamPlayerId].ContainsKey(kitName)) {
                             var remainingTime = DateTime.Now - Cooldowns[steamPlayerId][kitName];
 
-                            if ( (remainingTime.TotalSeconds + 1) > kitCooldown )
-                            {
+                            if ((remainingTime.TotalSeconds + 1) > kitCooldown) {
                                 Cooldowns[steamPlayerId][kitName] = DateTime.Now;
+                            } else {
+                                return CommandResult.Lang(EssLang.KIT_COOLDOWN, TimeUtil.FormatSeconds(
+                                    (uint) (kitCooldown - remainingTime.TotalSeconds)));
                             }
-                            else
-                            {
-                                return CommandResult.Lang( EssLang.KIT_COOLDOWN, TimeUtil.FormatSeconds(
-                                    (uint) (kitCooldown - remainingTime.TotalSeconds) ) );
-                            }
-                        }
-                        else
-                        {
-                            Cooldowns[steamPlayerId].Add( kitName, DateTime.Now );
+                        } else {
+                            Cooldowns[steamPlayerId].Add(kitName, DateTime.Now);
                         }
                     }
                 }
 
-                if ( kitCost > 0 )
-                {
-                    UEssentials.EconomyProvider.IfPresent( ec => {
-                        ec.Withdraw( player, kitCost );
-                        EssLang.KIT_PAID.SendTo( player, kitCost, ec.Currency );
+                if (kitCost > 0) {
+                    UEssentials.EconomyProvider.IfPresent(ec => {
+                        ec.Withdraw(player, kitCost);
+                        EssLang.KIT_PAID.SendTo(player, kitCost, ec.Currency);
                     });
                 }
 
-                KitModule.Instance.KitManager.GetByName( kitName ).GiveTo( player );
-            }
-            else if ( args.Length == 2 )
-            {
+                KitModule.Instance.KitManager.GetByName(kitName).GiveTo(player);
+            } else if (args.Length == 2) {
                 var kitName = args[0].ToLowerString;
 
-                if ( !src.HasPermission( $"essentials.kit.{kitName}.other" ) )
-                {
+                if (!src.HasPermission($"essentials.kit.{kitName}.other")) {
                     return CommandResult.Empty();
                 }
 
-                if ( !KitModule.Instance.KitManager.Contains( kitName ) )
-                {
-                    return CommandResult.Lang( EssLang.KIT_NOT_EXIST, kitName );
+                if (!KitModule.Instance.KitManager.Contains(kitName)) {
+                    return CommandResult.Lang(EssLang.KIT_NOT_EXIST, kitName);
                 }
 
-                var kit = KitModule.Instance.KitManager.GetByName( kitName );
+                var kit = KitModule.Instance.KitManager.GetByName(kitName);
 
-                if ( args[1].Is( "*" ) )
-                {
-                    UServer.Players.ForEach( kit.GiveTo );
-                    EssLang.KIT_GIVEN_SENDER_ALL.SendTo( src, kitName );
-                }
-                else
-                {
+                if (args[1].Is("*")) {
+                    UServer.Players.ForEach(kit.GiveTo);
+                    EssLang.KIT_GIVEN_SENDER_ALL.SendTo(src, kitName);
+                } else {
                     var target = args[1].ToPlayer;
 
-                    if ( target == null )
-                    {
-                        return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[1] ) ;
+                    if (target == null) {
+                        return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[1]);
                     }
 
-                    kit.GiveTo( target );
-                    EssLang.KIT_GIVEN_SENDER.SendTo( src, kitName, target );
+                    kit.GiveTo(target);
+                    EssLang.KIT_GIVEN_SENDER.SendTo(src, kitName, target);
                 }
             }
 
@@ -188,6 +158,8 @@ namespace Essentials.NativeModules.Kit.Commands
         }
 
         protected override void OnUnregistered()
-            => UEssentials.EventManager.Unregister<EssentialsEventHandler>( "KitPlayerDeath" );
+            => UEssentials.EventManager.Unregister<EssentialsEventHandler>("KitPlayerDeath");
+
     }
+
 }

@@ -25,14 +25,13 @@ using Essentials.Api.Configuration;
 using Essentials.Common.Util;
 using Newtonsoft.Json;
 
-namespace Essentials.Configuration
-{
-    public class TextCommands : JsonConfig
-    {
+namespace Essentials.Configuration {
+
+    public class TextCommands : JsonConfig {
+
         public List<TextCommandData> Commands { get; } = new List<TextCommandData>();
 
-        public override void LoadDefaults()
-        {
+        public override void LoadDefaults() {
             Commands.Add(new TextCommandData {
                 Name = "rules",
                 Text = new string[] {
@@ -49,29 +48,27 @@ namespace Essentials.Configuration
             });
         }
 
-        public override void Save( string filePath )
-        {
-            File.WriteAllText( filePath, string.Empty );
-            JsonUtil.Serialize( filePath, Commands );
+        public override void Save(string filePath) {
+            File.WriteAllText(filePath, string.Empty);
+            JsonUtil.Serialize(filePath, Commands);
         }
 
-        public override void Load( string filePath )
-        {
-            if ( File.Exists( filePath ) )
-            {
-                JsonConvert.PopulateObject( File.ReadAllText( filePath ), Commands );
-            }
-            else
-            {
+        public override void Load(string filePath) {
+            if (File.Exists(filePath)) {
+                JsonConvert.PopulateObject(File.ReadAllText(filePath), Commands);
+            } else {
                 LoadDefaults();
-                Save( filePath );
+                Save(filePath);
             }
         }
 
-        public struct TextCommandData
-        {
+        public struct TextCommandData {
+
             public string Name;
             public string[] Text;
+
         }
+
     }
+
 }

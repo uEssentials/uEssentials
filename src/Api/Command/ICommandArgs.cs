@@ -22,14 +22,14 @@
 using Essentials.Api.Unturned;
 using UnityEngine;
 
-namespace Essentials.Api.Command
-{
+namespace Essentials.Api.Command {
+
     /// <summary>
     /// The purpose of this is help the manipulation
     /// of arguments given when an command is executed.
     /// </summary>
-    public interface ICommandArgs
-    {
+    public interface ICommandArgs {
+
         /// <summary>
         /// Array containing the raw arguments.
         /// </summary>
@@ -47,7 +47,7 @@ namespace Essentials.Api.Command
         /// </summary>
         /// <param name="argIndex"></param>
         /// <returns></returns>
-        ICommandArgument this[ int argIndex ] { get; }
+        ICommandArgument this[int argIndex] { get; }
 
         /// <summary>
         /// </summary>
@@ -64,7 +64,7 @@ namespace Essentials.Api.Command
         /// </summary>
         /// <param name="initialIndex">Initial join index</param>
         /// <returns>String containing the 'joined arguments'</returns>
-        string Join( int initialIndex );
+        string Join(int initialIndex);
 
         /// <summary>
         /// Join all arguments between <paramref name="startIndex"/> and <paramref name="endIndex"/>
@@ -73,21 +73,22 @@ namespace Essentials.Api.Command
         /// <param name="endIndex">End index</param>
         /// <param name="separator">Argument separator</param>
         /// <returns>String containing the 'joined arguments'</returns>
-        string Join( int startIndex, int endIndex, string separator );
+        string Join(int startIndex, int endIndex, string separator);
 
         /// <summary>
         /// Try get an vector3 from 3 arguments, starting in <paramref name="initialIndex"/>
         /// </summary>
         /// <param name="initialIndex"> Initial index </param>
         /// <returns>New vector3 with given positions.</returns>
-        Vector3? GetVector3( int initialIndex );
+        Vector3? GetVector3(int initialIndex);
+
     }
 
     /// <summary>
     /// Represent an command argument
     /// </summary>
-    public interface ICommandArgument
-    {
+    public interface ICommandArgument {
+
         /// <summary>
         ///
         /// </summary>
@@ -202,14 +203,14 @@ namespace Essentials.Api.Command
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        bool Is( int other );
+        bool Is(int other);
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        bool Is( double other );
+        bool Is(double other);
 
         /// <summary>
         ///
@@ -217,14 +218,14 @@ namespace Essentials.Api.Command
         /// <param name="other"></param>
         /// <param name="ignoreCase"></param>
         /// <returns></returns>
-        bool Is( string other, bool ignoreCase = true );
+        bool Is(string other, bool ignoreCase = true);
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        bool Is( UPlayer other );
+        bool Is(UPlayer other);
 
         /// <summary>
         ///
@@ -232,6 +233,8 @@ namespace Essentials.Api.Command
         /// <param name="ignoreCase"></param>
         /// <param name="others"></param>
         /// <returns></returns>
-        bool IsOneOf( string[] others,  bool ignoreCase = true );
+        bool IsOneOf(string[] others, bool ignoreCase = true);
+
     }
+
 }

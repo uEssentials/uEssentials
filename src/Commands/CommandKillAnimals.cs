@@ -29,27 +29,28 @@ using SDG.Unturned;
 using UnityEngine;
 using Essentials.I18n;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "killanimals",
         Aliases = new[] { "clearanimals" },
         Description = "Kill all animals"
     )]
-    public class CommandKillAnimals : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
+    public class CommandKillAnimals : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var killedCount = 0;
 
-            UWorld.Animals.Where( animal => !animal.isDead ).ForEach( animal => {
-                AnimalManager.sendAnimalDead( animal, Vector3.zero );
+            UWorld.Animals.Where(animal => !animal.isDead).ForEach(animal => {
+                AnimalManager.sendAnimalDead(animal, Vector3.zero);
                 killedCount++;
             });
 
-            EssLang.KILLED_ANIMALS.SendTo( src, killedCount );
+            EssLang.KILLED_ANIMALS.SendTo(src, killedCount);
 
             return CommandResult.Success();
         }
+
     }
+
 }

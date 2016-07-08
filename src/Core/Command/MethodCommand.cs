@@ -26,10 +26,10 @@ using Essentials.Api.Command.Source;
 using Essentials.Common;
 using Essentials.Common.Util;
 
-namespace Essentials.Core.Command
-{
-    internal class MethodCommand : ICommand
-    {
+namespace Essentials.Core.Command {
+
+    internal class MethodCommand : ICommand {
+
         private readonly Func<ICommandSource, ICommandArgs, CommandResult> _methodFunc;
         private readonly Func<ICommandSource, ICommandArgs, ICommand, CommandResult> _methodFuncWithCommand;
         private CommandInfo _info;
@@ -49,27 +49,25 @@ namespace Essentials.Core.Command
 
         public AllowedSource AllowedSource { get; set; }
 
-        internal MethodCommand( Func<ICommandSource, ICommandArgs, CommandResult> methodFunc )
-        {
+        internal MethodCommand(Func<ICommandSource, ICommandArgs, CommandResult> methodFunc) {
             _methodFunc = methodFunc;
-            Init( false, methodFunc.Method );
+            Init(false, methodFunc.Method);
         }
 
-        internal MethodCommand( Func<ICommandSource, ICommandArgs, ICommand, CommandResult> methodFunc )
-        {
+        internal MethodCommand(Func<ICommandSource, ICommandArgs, ICommand, CommandResult> methodFunc) {
             _methodFuncWithCommand = methodFunc;
-            Init( true, methodFunc.Method );
+            Init(true, methodFunc.Method);
         }
 
-        private void Init( bool hasCmdParam, MethodInfo method )
-        {
+        private void Init(bool hasCmdParam, MethodInfo method) {
             _info = Preconditions.NotNull(
-                ReflectionUtil.GetAttributeFrom<CommandInfo>( method ),
+                ReflectionUtil.GetAttributeFrom<CommandInfo>(method),
                 "methodAction must have 'CommandInfo' attribute."
-            );
+                );
 
-            Owner = hasCmdParam ? _methodFuncWithCommand.Method.DeclaringType
-                                : _methodFunc.Method.DeclaringType;
+            Owner = hasCmdParam
+                ? _methodFuncWithCommand.Method.DeclaringType
+                : _methodFunc.Method.DeclaringType;
 
             _hasCommandParameter = hasCmdParam;
 
@@ -79,18 +77,19 @@ namespace Essentials.Core.Command
             AllowedSource = _info.AllowedSource;
             Aliases = _info.Aliases;
 
-            Permission = GetType().Assembly.Equals( typeof (EssCore).Assembly )
-                        ? $"essentials.command.{Name}"
-                        : _info.Permission;
+            Permission = GetType().Assembly.Equals(typeof(EssCore).Assembly)
+                ? $"essentials.command.{Name}"
+                : _info.Permission;
         }
 
-        public CommandResult OnExecute( ICommandSource source, ICommandArgs args )
-        {
+        public CommandResult OnExecute(ICommandSource source, ICommandArgs args) {
             var result = _hasCommandParameter
-                    ? _methodFuncWithCommand( source, args, this )
-                    : _methodFunc( source, args );
+                ? _methodFuncWithCommand(source, args, this)
+                : _methodFunc(source, args);
 
             return result;
         }
+
     }
+
 }

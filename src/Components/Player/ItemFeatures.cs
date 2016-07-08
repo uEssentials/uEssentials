@@ -22,10 +22,10 @@
 using System;
 using SDG.Unturned;
 
-namespace Essentials.Components.Player
-{
-    public class ItemFeatures : PlayerComponent
-    {
+namespace Essentials.Components.Player {
+
+    public class ItemFeatures : PlayerComponent {
+
         private readonly PlayerEquipment _equip;
 
         /*
@@ -36,24 +36,19 @@ namespace Essentials.Components.Player
         public bool AutoRepair { get; set; }
         public bool AutoReload { get; set; }
 
-        public ItemFeatures()
-        {
+        public ItemFeatures() {
             _equip = Player.Equipment;
         }
 
-        private void FixedUpdate()
-        {
-            if ( _equip.HoldingItemID == 0 ) return;
+        private void FixedUpdate() {
+            if (_equip.HoldingItemID == 0) return;
 
             /*
                 Weapon feature (Auto reload)
             */
-            if ( AutoReload && _equip.state.Length >= 18 )
-            {
-                if ( _equip.state[10] == 1 )
-                {
-                    switch ( _equip.HoldingItemID )
-                    {
+            if (AutoReload && _equip.state.Length >= 18) {
+                if (_equip.state[10] == 1) {
+                    switch (_equip.HoldingItemID) {
                         /*
                             Bows
                         */
@@ -68,17 +63,15 @@ namespace Essentials.Components.Player
                     }
                 }
 
-                if ( _equip.state[10] == 0 )
-                {
+                if (_equip.state[10] == 0) {
                     var id = BitConverter.ToUInt16(
                         new[] { _equip.state[8], _equip.state[9] },
                         0
-                    );
+                        );
 
                     var holdId = _equip.HoldingItemID;
 
-                    switch ( holdId )
-                    {
+                    switch (holdId) {
                         case 519:
                             _equip.state[8] = 8;
                             _equip.state[9] = 2;
@@ -103,7 +96,7 @@ namespace Essentials.Components.Player
                             goto update;
                     }
 
-                    var maga = Assets.find( EAssetType.ITEM, id ) as ItemMagazineAsset;
+                    var maga = Assets.find(EAssetType.ITEM, id) as ItemMagazineAsset;
 
                     _equip.state[10] = maga?.amount ?? 0;
 
@@ -115,20 +108,19 @@ namespace Essentials.Components.Player
             /*
                 Item feature (Auto repair)
             */
-            if ( AutoRepair )
-            {
-                if ( _equip.quality < 90 )
-                {
+            if (AutoRepair) {
+                if (_equip.quality < 90) {
                     _equip.quality = 100;
                     _equip.sendUpdateQuality();
                 }
 
-                if ( _equip.state.Length > 16 && _equip.state[16] < 10 )
-                {
+                if (_equip.state.Length > 16 && _equip.state[16] < 10) {
                     _equip.state[16] = 100;
                     _equip.sendUpdateState();
                 }
             }
         }
+
     }
+
 }

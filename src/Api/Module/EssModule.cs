@@ -26,13 +26,13 @@ using Essentials.Api.Logging;
 using Essentials.Common;
 using Essentials.Common.Util;
 
-namespace Essentials.Api.Module
-{
+namespace Essentials.Api.Module {
+
     /// <summary>
     /// Author: Leonardosc
     /// </summary>
-    public abstract class EssModule
-    {
+    public abstract class EssModule {
+
         /// <summary>
         /// The assembly that is running this module
         /// </summary>
@@ -56,17 +56,16 @@ namespace Essentials.Api.Module
         /// <summary>
         /// Constructor :D
         /// </summary>
-        protected EssModule()
-        {
-            Info = ReflectionUtil.GetAttributeFrom<ModuleInfo>( this );
-            Preconditions.NotNull( Info, "Module must have 'ModuleInfo' attribute" );
-            Preconditions.NotNull( Info.Name, "Module name cannot be null" );
+        protected EssModule() {
+            Info = ReflectionUtil.GetAttributeFrom<ModuleInfo>(this);
+            Preconditions.NotNull(Info, "Module must have 'ModuleInfo' attribute");
+            Preconditions.NotNull(Info.Name, "Module name cannot be null");
 
-            Logger = new EssLogger( $"[{Info.Name}] " );
+            Logger = new EssLogger($"[{Info.Name}] ");
             Folder = UEssentials.ModulesFolder + Info.Name + "/";
 
-            if ( !Directory.Exists( Folder ) )
-                Directory.CreateDirectory( Folder );
+            if (!Directory.Exists(Folder))
+                Directory.CreateDirectory(Folder);
         }
 
         /// <summary>
@@ -82,53 +81,50 @@ namespace Essentials.Api.Module
         /// <summary>
         /// Load this module
         /// </summary>
-        internal virtual void Load()
-        {
-            Preconditions.CheckState( Assembly != null, "module assembly null" );
+        internal virtual void Load() {
+            Preconditions.CheckState(Assembly != null, "module assembly null");
 
             OnLoad();
 
-            if ( (Info.Flags & LoadFlags.AUTO_REGISTER_COMMANDS) == LoadFlags.AUTO_REGISTER_COMMANDS )
-            {
-                UEssentials.CommandManager.RegisterAll( Assembly );
+            if ((Info.Flags & LoadFlags.AUTO_REGISTER_COMMANDS) == LoadFlags.AUTO_REGISTER_COMMANDS) {
+                UEssentials.CommandManager.RegisterAll(Assembly);
             }
 
-            if ( (Info.Flags & LoadFlags.AUTO_REGISTER_EVENTS) == LoadFlags.AUTO_REGISTER_EVENTS )
-            {
-                UEssentials.EventManager.RegisterAll( Assembly );
+            if ((Info.Flags & LoadFlags.AUTO_REGISTER_EVENTS) == LoadFlags.AUTO_REGISTER_EVENTS) {
+                UEssentials.EventManager.RegisterAll(Assembly);
             }
         }
 
         /// <summary>
         /// Unload this module
         /// </summary>
-        internal virtual void Unload()
-        {
-            Preconditions.CheckState( Assembly != null, "module assembly null" );
+        internal virtual void Unload() {
+            Preconditions.CheckState(Assembly != null, "module assembly null");
 
             OnUnload();
 
-            UEssentials.CommandManager.UnregisterAll( Assembly );
-            UEssentials.EventManager.UnregisterAll( Assembly );
+            UEssentials.CommandManager.UnregisterAll(Assembly);
+            UEssentials.EventManager.UnregisterAll(Assembly);
         }
+
     }
 
-    public abstract class EssModule<TConfigType> : EssModule where TConfigType : IConfig, new()
-    {
+    public abstract class EssModule<TConfigType> : EssModule where TConfigType : IConfig, new() {
+
         public TConfigType Configuration { get; private set; }
 
-        internal override void Load()
-        {
+        internal override void Load() {
             Configuration = new TConfigType();
-            Configuration.Load( Folder + Configuration.FileName );
+            Configuration.Load(Folder + Configuration.FileName);
 
             base.Load();
         }
 
-        internal override void Unload()
-        {
-            Configuration?.Save( Folder + Configuration.FileName  );
+        internal override void Unload() {
+            Configuration?.Save(Folder + Configuration.FileName);
             base.Load();
         }
+
     }
+
 }

@@ -29,62 +29,54 @@ using Essentials.Components.Player;
 using Essentials.Event.Handling;
 using Essentials.I18n;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "freeze",
         Usage = "[player/*]",
         Description = "Freeze a player/everyone"
     )]
-    public class CommandFreeze : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.Length == 0 )
-            {
+    public class CommandFreeze : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.Length == 0) {
                 return CommandResult.ShowUsage();
             }
-            if ( args[0].Is( "*" ) )
-            {
+            if (args[0].Is("*")) {
                 UServer.Players
-                    .Where( player => !player.HasComponent<FrozenPlayer>() )
-                    .ForEach( player => {
+                    .Where(player => !player.HasComponent<FrozenPlayer>())
+                    .ForEach(player => {
                         player.AddComponent<FrozenPlayer>();
-                        EssLang.FROZEN_PLAYER.SendTo( player, src.DisplayName );
+                        EssLang.FROZEN_PLAYER.SendTo(player, src.DisplayName);
                     });
 
-                EssLang.FROZEN_ALL.SendTo( src );
-            }
-            else
-            {
-                var found = UPlayer.TryGet( args[0], player => {
-                    if ( player.HasComponent<FrozenPlayer>() )
-                    {
-                        EssLang.ALREADY_FROZEN.SendTo( src, player.DisplayName );
-                    }
-                    else
-                    {
+                EssLang.FROZEN_ALL.SendTo(src);
+            } else {
+                var found = UPlayer.TryGet(args[0], player => {
+                    if (player.HasComponent<FrozenPlayer>()) {
+                        EssLang.ALREADY_FROZEN.SendTo(src, player.DisplayName);
+                    } else {
                         player.AddComponent<FrozenPlayer>();
 
-                        EssLang.FROZEN_SENDER.SendTo( src, player.DisplayName );
-                        EssLang.FROZEN_PLAYER.SendTo( player, src.DisplayName );
+                        EssLang.FROZEN_SENDER.SendTo(src, player.DisplayName);
+                        EssLang.FROZEN_PLAYER.SendTo(player, src.DisplayName);
                     }
-                } );
+                });
 
-                if ( !found )
-                {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
+                if (!found) {
+                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
                 }
             }
 
             return CommandResult.Success();
         }
 
-        protected override void OnUnregistered()
-        {
-            UEssentials.EventManager.Unregister<EssentialsEventHandler>( "FreezePlayerDisconnect" );
-            UEssentials.EventManager.Unregister<EssentialsEventHandler>( "FreezePlayerConnected" );
-            UEssentials.EventManager.Unregister<EssentialsEventHandler>( "FreezePlayerDeath" );
+        protected override void OnUnregistered() {
+            UEssentials.EventManager.Unregister<EssentialsEventHandler>("FreezePlayerDisconnect");
+            UEssentials.EventManager.Unregister<EssentialsEventHandler>("FreezePlayerConnected");
+            UEssentials.EventManager.Unregister<EssentialsEventHandler>("FreezePlayerDeath");
         }
+
     }
+
 }

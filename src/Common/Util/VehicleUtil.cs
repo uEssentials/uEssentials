@@ -23,75 +23,64 @@ using System.Globalization;
 using System.Linq;
 using SDG.Unturned;
 
-namespace Essentials.Common.Util
-{
-    public static class VehicleUtil
-    {
+namespace Essentials.Common.Util {
+
+    public static class VehicleUtil {
+
         private static IOrderedEnumerable<VehicleAsset> _cachedAssets;
 
-        public static Optional<VehicleAsset> GetVehicle( ushort id )
-        {
-            return Optional<VehicleAsset>.OfNullable( (VehicleAsset) Assets.find( EAssetType.VEHICLE, id ) );
+        public static Optional<VehicleAsset> GetVehicle(ushort id) {
+            return Optional<VehicleAsset>.OfNullable((VehicleAsset) Assets.find(EAssetType.VEHICLE, id));
         }
 
-        public static Optional<VehicleAsset> GetVehicle( string name )
-        {
-            if ( name == null )
-            {
+        public static Optional<VehicleAsset> GetVehicle(string name) {
+            if (name == null) {
                 return Optional<VehicleAsset>.Empty();
             }
 
             ushort id;
 
-            if ( ushort.TryParse( name, out id ) )
-            {
-                return GetVehicle( id );
+            if (ushort.TryParse(name, out id)) {
+                return GetVehicle(id);
             }
 
-            if ( _cachedAssets == null )
-            {
-                _cachedAssets = Assets.find( EAssetType.VEHICLE )
-                                  .Cast<VehicleAsset>()
-                                  .Where( i => i.Name != null )
-                                  .OrderBy( i => i.Id );
+            if (_cachedAssets == null) {
+                _cachedAssets = Assets.find(EAssetType.VEHICLE)
+                    .Cast<VehicleAsset>()
+                    .Where(i => i.Name != null)
+                    .OrderBy(i => i.Id);
             }
 
             var lastAsset = null as VehicleAsset;
             int lastPriority = 0;
 
-            foreach ( var asset in _cachedAssets )
-            {
+            foreach (var asset in _cachedAssets) {
                 var itemPriority = 0;
                 var itemName = asset.Name;
 
-                if ( itemName.EqualsIgnoreCase( name ) )
-                {
+                if (itemName.EqualsIgnoreCase(name)) {
                     lastAsset = asset;
                     break;
                 }
 
-                if ( itemName.StartsWith( name, true, CultureInfo.InvariantCulture ) )
-                {
+                if (itemName.StartsWith(name, true, CultureInfo.InvariantCulture)) {
                     itemPriority = 3;
-                }
-                else if ( itemName.ContainsIgnoreCase( name ) )
-                {
+                } else if (itemName.ContainsIgnoreCase(name)) {
                     itemPriority = 2;
-                }
-                else if ( name.Contains( " " ) &&
-                          name.Split( ' ' ).All( p => itemName.ContainsIgnoreCase( p ) ) )
-                {
+                } else if (name.Contains(" ") &&
+                           name.Split(' ').All(p => itemName.ContainsIgnoreCase(p))) {
                     itemPriority = 1;
                 }
 
-                if ( itemPriority > lastPriority )
-                {
+                if (itemPriority > lastPriority) {
                     lastAsset = asset;
                     lastPriority = itemPriority;
                 }
             }
 
-            return Optional<VehicleAsset>.OfNullable( lastAsset );
+            return Optional<VehicleAsset>.OfNullable(lastAsset);
         }
+
     }
+
 }

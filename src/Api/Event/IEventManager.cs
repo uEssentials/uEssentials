@@ -22,28 +22,30 @@
 using System;
 using System.Reflection;
 
-namespace Essentials.Api.Event
-{
-    public interface IEventManager
-    {
-        void RegisterAll( Type type );
+namespace Essentials.Api.Event {
+
+    public interface IEventManager {
+
+        void RegisterAll(Type type);
 
         void RegisterAll<T>();
 
-        void RegisterAll( Assembly asm );
+        void RegisterAll(Assembly asm);
 
-        void RegisterAll( string targetNamespace );
+        void RegisterAll(string targetNamespace);
 
-        void Unregister( Type type, string methodName );
+        void Unregister(Type type, string methodName);
 
-        void Unregister<T>( string methodName );
+        void Unregister<T>(string methodName);
 
-        void UnregisterAll( Type type );
+        void UnregisterAll(Type type);
 
         void UnregisterAll<T>();
 
-        void UnregisterAll( Assembly asm );
+        void UnregisterAll(Assembly asm);
 
-        void UnregisterAll( string targetNamespace );
+        void UnregisterAll(string targetNamespace);
+
     }
+
 }

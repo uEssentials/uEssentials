@@ -23,16 +23,17 @@ using System.IO;
 using Essentials.Api;
 using Essentials.Api.Module;
 
-namespace Essentials.NativeModules
-{
-    public abstract class NativeModule : EssModule
-    {
-        protected NativeModule()
-        {
+namespace Essentials.NativeModules {
+
+    public abstract class NativeModule : EssModule {
+
+        protected NativeModule() {
             Assembly = GetType().Assembly;
             Logger = UEssentials.Logger;
 
-            Directory.Delete( Folder, true );
+            Directory.Delete(Folder, true);
         }
+
     }
+
 }

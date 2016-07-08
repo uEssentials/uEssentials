@@ -26,73 +26,63 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "maxskills",
         Description = "Set to max level all of your/player skills",
         Usage = "<overpower[true|false]> <player>"
     )]
-    public class CommandMaxSkills : EssCommand
-    {
-        private static readonly Action<UPlayer, bool> GiveMaxSkills = ( player, overpower ) =>
-        {
+    public class CommandMaxSkills : EssCommand {
+
+        private static readonly Action<UPlayer, bool> GiveMaxSkills = (player, overpower) => {
             var pSkills = player.UnturnedPlayer.skills;
 
-            foreach ( var skill in pSkills.skills.SelectMany( skArr => skArr ) )
-            {
+            foreach (var skill in pSkills.skills.SelectMany(skArr => skArr)) {
                 skill.level = overpower ? byte.MaxValue : skill.max;
             }
 
-            pSkills.askSkills( player.CSteamId );
+            pSkills.askSkills(player.CSteamId);
             EssLang.MAX_SKILLS.SendTo(player);
         };
 
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.IsEmpty )
-            {
-                if ( src.IsConsole )
-                {
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.IsEmpty) {
+                if (src.IsConsole) {
                     return CommandResult.ShowUsage();
                 }
 
-                GiveMaxSkills( src.ToPlayer(), false );
-            }
-            else
-            {
-                if ( args.Length < 2 && src.IsConsole )
-                {
+                GiveMaxSkills(src.ToPlayer(), false);
+            } else {
+                if (args.Length < 2 && src.IsConsole) {
                     return CommandResult.ShowUsage();
                 }
 
-                if ( !args[0].IsBool )
-                {
-                    return CommandResult.Lang( EssLang.INVALID_BOOLEAN, args[0] );
+                if (!args[0].IsBool) {
+                    return CommandResult.Lang(EssLang.INVALID_BOOLEAN, args[0]);
                 }
 
-                if ( args.Length == 2 && !src.HasPermission( Permission + ".other" ) )
-                {
-                    return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                if (args.Length == 2 && !src.HasPermission(Permission + ".other")) {
+                    return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
                 }
 
                 var overpower = args[0].ToBool;
                 var targetPlayer = args.Length == 2 ? args[1].ToPlayer : src.ToPlayer();
 
-                if ( targetPlayer == null )
-                {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[1] );
+                if (targetPlayer == null) {
+                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[1]);
                 }
 
-                GiveMaxSkills( targetPlayer, overpower );
+                GiveMaxSkills(targetPlayer, overpower);
 
-                if ( src.IsConsole || src.ToPlayer() != targetPlayer )
-                {
-                    EssLang.MAX_SKILLS_TARGET.SendTo( src, targetPlayer.DisplayName );
+                if (src.IsConsole || src.ToPlayer() != targetPlayer) {
+                    EssLang.MAX_SKILLS_TARGET.SendTo(src, targetPlayer.DisplayName);
                 }
             }
 
             return CommandResult.Success();
         }
+
     }
+
 }

@@ -28,67 +28,55 @@ using SDG.Unturned;
 using Essentials.Common;
 using System.Linq;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "boom",
         Aliases = new[] { "explode" },
         Description = "Create an explosion on player's/given position",
         Usage = "[player | * | x, y, z]"
     )]
-    public class CommandBoom : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            switch ( args.Length )
-            {
+    public class CommandBoom : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            switch (args.Length) {
                 case 0:
-                    if ( src.IsConsole )
-                    {
+                    if (src.IsConsole) {
                         return CommandResult.ShowUsage();
                     }
 
-                    var eyePos = src.ToPlayer().GetEyePosition( 3000 );
+                    var eyePos = src.ToPlayer().GetEyePosition(3000);
 
-                    if ( eyePos.HasValue )
-                    {
-                        Explode( eyePos.Value );
+                    if (eyePos.HasValue) {
+                        Explode(eyePos.Value);
                     }
                     break;
 
                 case 1:
-                    if ( args[0].Is("*") )
-                    {
+                    if (args[0].Is("*")) {
                         UPlayer caller = null;
 
-                        if ( !src.IsConsole )
-                        {
+                        if (!src.IsConsole) {
                             caller = src.ToPlayer();
                         }
 
-                        UServer.Players.Where( p => p != caller ).ForEach( p => Explode( p.Position ) );
-                    }
-                    else
-                    {
-                        var found = UPlayer.TryGet( args[0], player => Explode(player.Position) );
+                        UServer.Players.Where(p => p != caller).ForEach(p => Explode(p.Position));
+                    } else {
+                        var found = UPlayer.TryGet(args[0], player => Explode(player.Position));
 
-                        if (!found)
-                        {
-                            return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
+                        if (!found) {
+                            return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
                         }
                     }
                     break;
 
                 case 3:
-                    var pos = args.GetVector3( 0 );
+                    var pos = args.GetVector3(0);
 
-                    if ( pos.HasValue )
-                    {
-                        Explode( pos.Value );
-                    }
-                    else
-                    {
-                        return CommandResult.Lang( EssLang.INVALID_COORDS, args[0], args[1], args[2] );
+                    if (pos.HasValue) {
+                        Explode(pos.Value);
+                    } else {
+                        return CommandResult.Lang(EssLang.INVALID_COORDS, args[0], args[1], args[2]);
                     }
                     break;
 
@@ -99,10 +87,11 @@ namespace Essentials.Commands
             return CommandResult.Success();
         }
 
-        private static void Explode( Vector3 pos )
-        {
-            EffectManager.sendEffect( 20, EffectManager.INSANE, pos );
-            DamageTool.explode( pos, 10f, EDeathCause.GRENADE, 200, 200, 200, 200, 200, 200, 200, 200 );
+        private static void Explode(Vector3 pos) {
+            EffectManager.sendEffect(20, EffectManager.INSANE, pos);
+            DamageTool.explode(pos, 10f, EDeathCause.GRENADE, 200, 200, 200, 200, 200, 200, 200, 200);
         }
+
     }
+
 }

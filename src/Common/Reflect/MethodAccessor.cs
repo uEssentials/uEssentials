@@ -24,43 +24,42 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Essentials.Common.Reflect
-{
-    public class MethodAccessor<TReturnType> : AbstractAccessor
-    {
+namespace Essentials.Common.Reflect {
+
+    public class MethodAccessor<TReturnType> : AbstractAccessor {
+
         public MethodInfo Info { get; }
 
-        public MethodAccessor( object obj, MethodInfo methodInfo ) : base( obj )
-        {
-            Info = Preconditions.NotNull( methodInfo, "methodInfo cannot be null" );
+        public MethodAccessor(object obj, MethodInfo methodInfo) : base(obj) {
+            Info = Preconditions.NotNull(methodInfo, "methodInfo cannot be null");
         }
 
-        public TReturnType Invoke( params object[] parameters )
-        {
-            var argList = Info.GetParameters().Where( pi =>!pi.IsOptional ).ToList();
+        public TReturnType Invoke(params object[] parameters) {
+            var argList = Info.GetParameters().Where(pi => !pi.IsOptional).ToList();
 
-            if ( parameters.Length == argList.Count )
-                return (TReturnType) Info.Invoke( Owner, parameters );
+            if (parameters.Length == argList.Count)
+                return (TReturnType) Info.Invoke(Owner, parameters);
 
             var argBuilder = new StringBuilder();
 
-            argList.ForEach( pi =>
-            {
-                if ( pi.IsOut )
-                    argBuilder.Append( "out " );
+            argList.ForEach(pi => {
+                if (pi.IsOut)
+                    argBuilder.Append("out ");
 
-                argBuilder.Append( pi.ParameterType );
-                argBuilder.Append( " " );
-                argBuilder.Append( pi.Name );
-                argBuilder.Append( ", " );
-                argBuilder.Replace( "&", "" );
+                argBuilder.Append(pi.ParameterType);
+                argBuilder.Append(" ");
+                argBuilder.Append(pi.Name);
+                argBuilder.Append(", ");
+                argBuilder.Replace("&", "");
             });
 
             var argSign = argBuilder.ToString();
-            argSign = argSign.Substring( 0, argSign.Length - 2 );
+            argSign = argSign.Substring(0, argSign.Length - 2);
 
             var methodSign = $"{Info.Name}({argSign})";
-            throw new ArgumentException( $"Arguments does not match signature, expected {methodSign}");
+            throw new ArgumentException($"Arguments does not match signature, expected {methodSign}");
         }
+
     }
+
 }

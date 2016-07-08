@@ -22,40 +22,39 @@
 using SDG.Unturned;
 using UnityEngine;
 
-namespace Essentials.Components.Player
-{
-    public class FrozenPlayer : PlayerComponent
-    {
+namespace Essentials.Components.Player {
+
+    public class FrozenPlayer : PlayerComponent {
+
         private readonly Vector3 _frozenPos;
         private Vector3 _lastPos;
 
-        private FrozenPlayer()
-        {
+        private FrozenPlayer() {
             _frozenPos = _lastPos = Player.Position;
 
-            if ( !Player.IsInVehicle ) return;
+            if (!Player.IsInVehicle) return;
             var veh = Player.CurrentVehicle;
             var passagers = veh.passengers;
 
-            for ( var i = 0; i < passagers.Length; i++ )
-            {
-                if ( passagers[i].player != Player.SteamPlayer ) continue;
+            for (var i = 0; i < passagers.Length; i++) {
+                if (passagers[i].player != Player.SteamPlayer) continue;
 
                 var pos = Player.Position;
                 var seat = (byte) i;
 
                 Vector3 point;
                 byte angle;
-                veh.getExit( seat, out point, out angle );
-                VehicleManager.sendExitVehicle( veh, seat, (point + (point - pos)), angle, false );
+                veh.getExit(seat, out point, out angle);
+                VehicleManager.sendExitVehicle(veh, seat, (point + (point - pos)), angle, false);
             }
         }
 
-        private void FixedUpdate()
-        {
-            if ( Player.Position == _lastPos ) return;
-            Player.Teleport( _frozenPos );
+        private void FixedUpdate() {
+            if (Player.Position == _lastPos) return;
+            Player.Teleport(_frozenPos);
             _lastPos = Player.Position;
         }
+
     }
+
 }

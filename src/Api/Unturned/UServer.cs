@@ -26,37 +26,34 @@ using Rocket.Unturned.Chat;
 using SDG.Unturned;
 using UnityEngine;
 
-namespace Essentials.Api.Unturned
-{
-    public class UServer
-    {
+namespace Essentials.Api.Unturned {
+
+    public class UServer {
+
         public static IEnumerable<UPlayer> Players => EssCore.Instance.ConnectedPlayers.Values;
 
-        public static byte MaxPlayers
-        {
+        public static byte MaxPlayers {
             get { return Provider.MaxPlayers; }
             set { Provider.MaxPlayers = value; }
         }
 
-        public static string ServerName
-        {
+        public static string ServerName {
             get { return Provider.serverName; }
             set { Provider.serverName = value; }
         }
 
-        public static void Broadcast( object message )
-        {
-            Broadcast( message, Color.yellow );
+        public static void Broadcast(object message) {
+            Broadcast(message, Color.yellow);
         }
 
-        public static void Broadcast( object message, Color color )
-        {
-            UnturnedChat.Say( message?.ToString() ?? "null", color );
+        public static void Broadcast(object message, Color color) {
+            UnturnedChat.Say(message?.ToString() ?? "null", color);
         }
 
-        public static void DispatchCommand( string command )
-        {
-            ConsoleSource.Instance.DispatchCommand( command );
+        public static void DispatchCommand(string command) {
+            ConsoleSource.Instance.DispatchCommand(command);
         }
+
     }
+
 }

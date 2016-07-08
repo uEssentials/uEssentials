@@ -24,72 +24,64 @@ using Essentials.Api;
 using Essentials.Core.Storage;
 using Essentials.NativeModules.Kit.Data;
 
-namespace Essentials.NativeModules.Kit
-{
-    public sealed class KitManager
-    {
-        internal IData<Dictionary<string, Kit>> KitData { get; }
-        internal CooldownData                   CooldownData { get; }
-        private Dictionary<string, Kit>         KitMap { get; set; }
-        public IEnumerable<Kit>                 Kits => KitMap.Values;
-        public int                              Count => KitMap.Count;
+namespace Essentials.NativeModules.Kit {
 
-        internal KitManager()
-        {
+    public sealed class KitManager {
+
+        internal IData<Dictionary<string, Kit>> KitData { get; }
+        internal CooldownData CooldownData { get; }
+        private Dictionary<string, Kit> KitMap { get; set; }
+        public IEnumerable<Kit> Kits => KitMap.Values;
+        public int Count => KitMap.Count;
+
+        internal KitManager() {
             CooldownData = new CooldownData();
             KitMap = new Dictionary<string, Kit>();
             KitData = UEssentials.Config.WebKits.Enabled ? new WebKitData() : new KitData();
         }
 
-        public bool Contains( string kitName )
-        {
-            return KitMap.ContainsKey( kitName.ToLowerInvariant() );
+        public bool Contains(string kitName) {
+            return KitMap.ContainsKey(kitName.ToLowerInvariant());
         }
 
-        public bool Contains( Kit kit )
-        {
-            return KitMap.ContainsValue( kit );
+        public bool Contains(Kit kit) {
+            return KitMap.ContainsValue(kit);
         }
 
-        public void Add( Kit kit )
-        {
-            KitMap.Add( kit.Name.ToLowerInvariant(), kit );
-            KitData.Save( KitMap );
+        public void Add(Kit kit) {
+            KitMap.Add(kit.Name.ToLowerInvariant(), kit);
+            KitData.Save(KitMap);
         }
 
-        public void Remove( Kit kit )
-        {
-            KitMap.Remove( kit.Name.ToLowerInvariant() );
-            KitData.Save( KitMap );
+        public void Remove(Kit kit) {
+            KitMap.Remove(kit.Name.ToLowerInvariant());
+            KitData.Save(KitMap);
         }
 
-        public Kit GetByName( string kitName )
-        {
-            return Contains( kitName )
-                   ? KitMap[kitName.ToLowerInvariant()]
-                   : null;
+        public Kit GetByName(string kitName) {
+            return Contains(kitName)
+                ? KitMap[kitName.ToLowerInvariant()]
+                : null;
         }
 
-        public void LoadKits()
-        {
+        public void LoadKits() {
             KitMap = KitData.Load();
         }
 
-        public void SaveKits()
-        {
-            KitData.Save( KitMap );
+        public void SaveKits() {
+            KitData.Save(KitMap);
         }
 
-        public void Load()
-        {
+        public void Load() {
             LoadKits();
             CooldownData.Load();
         }
 
-        public void Save()
-        {
+        public void Save() {
             SaveKits();
             CooldownData.Save();
         }
+
     }
+
 }

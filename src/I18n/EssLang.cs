@@ -32,169 +32,146 @@ using Essentials.Common;
 using Essentials.Common.Util;
 using Newtonsoft.Json;
 
-namespace Essentials.I18n
-{
-    public sealed class EssLang
-    {
+namespace Essentials.I18n {
+
+    public sealed class EssLang {
+
         private static readonly string[] LANGS = { "en", "pt-br", "es", "ru" };
         private const string KEY_NOT_FOUND_MESSAGE = "<red>Lang: Key not found '{0}', report to an adminstrator.";
         private readonly string _message;
 
-        private EssLang( string message )
-        {
+        private EssLang(string message) {
             _message = message;
         }
 
-        private static Stream GetDefaultStream( string locale )
-        {
+        private static Stream GetDefaultStream(string locale) {
             var path = $"Essentials.default.lang_{locale}.json";
-            return Assembly.GetExecutingAssembly().GetManifestResourceStream( path );
+            return Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
         }
 
-        public static void LoadDefault( string locale )
-        {
-            LoadDefault( locale, $"{UEssentials.TranslationFolder}lang_{locale}.json" );
+        public static void LoadDefault(string locale) {
+            LoadDefault(locale, $"{UEssentials.TranslationFolder}lang_{locale}.json");
         }
 
-        public static void LoadDefault( string locale, string translationPath )
-        {
-            if ( File.Exists( translationPath ) )
-                File.WriteAllText( translationPath, "" );
+        public static void LoadDefault(string locale, string translationPath) {
+            if (File.Exists(translationPath))
+                File.WriteAllText(translationPath, "");
             else
-                File.Create( translationPath ).Close();
+                File.Create(translationPath).Close();
 
-            var sw = new StreamWriter( translationPath );
-            var defaultLangStream = GetDefaultStream( locale );
+            var sw = new StreamWriter(translationPath);
+            var defaultLangStream = GetDefaultStream(locale);
 
-            using (var sr = new StreamReader( defaultLangStream, Encoding.UTF8, true ))
-            {
-                for ( string line; (line = sr.ReadLine()) != null; )
-                {
-                    sw.WriteLine( line );
+            using (var sr = new StreamReader(defaultLangStream, Encoding.UTF8, true)) {
+                for (string line; (line = sr.ReadLine()) != null;) {
+                    sw.WriteLine(line);
                 }
             }
 
             sw.Close();
         }
 
-        public static void Load()
-        {
+        public static void Load() {
             // Load defaults
-            LANGS.ForEach( l => {
+            LANGS.ForEach(l => {
                 var lpath = $"{UEssentials.TranslationFolder}lang_{l}.json";
-                if ( !File.Exists( lpath ) ) LoadDefault( l );
-            } );
+                if (!File.Exists(lpath)) LoadDefault(l);
+            });
 
             var locale = UEssentials.Config.Locale.ToLowerInvariant();
             var translationPath = $"{UEssentials.TranslationFolder}lang_{locale}.json";
 
-            if ( !File.Exists( translationPath ) )
-            {
-                if ( LANGS.Contains( locale ) )
-                {
-                    LoadDefault( locale );
-                }
-                else
-                {
-                    throw new ArgumentException( $"Invalid locale '{locale}', " +
-                                                 $"File not found '{translationPath}'" );
+            if (!File.Exists(translationPath)) {
+                if (LANGS.Contains(locale)) {
+                    LoadDefault(locale);
+                } else {
+                    throw new ArgumentException($"Invalid locale '{locale}', " +
+                                                $"File not found '{translationPath}'");
                 }
             }
 
             JObject json;
 
-            try
-            {
-                json = JObject.Parse( File.ReadAllText( translationPath ) );
+            try {
+                json = JObject.Parse(File.ReadAllText(translationPath));
 
                 /*
                     Update translation
                 */
-                var defaultJson = JObject.Load( new JsonTextReader( new StreamReader(
-                    GetDefaultStream( locale ), Encoding.UTF8, true ) ) );
+                var defaultJson = JObject.Load(new JsonTextReader(new StreamReader(
+                    GetDefaultStream(locale), Encoding.UTF8, true)));
 
-                if ( defaultJson.Count != json.Count )
-                {
-                    foreach ( var key in  defaultJson )
-                    {
+                if (defaultJson.Count != json.Count) {
+                    foreach (var key in  defaultJson) {
                         JToken outVal;
-                        if ( json.TryGetValue( key.Key, out outVal ) )
-                        {
+                        if (json.TryGetValue(key.Key, out outVal)) {
                             defaultJson[key.Key] = outVal;
                         }
                     }
 
-                    File.WriteAllText( translationPath, string.Empty );
-                    JsonUtil.Serialize( translationPath, defaultJson );
+                    File.WriteAllText(translationPath, string.Empty);
+                    JsonUtil.Serialize(translationPath, defaultJson);
                     json = defaultJson;
                 }
-            }
-            catch (JsonReaderException ex)
-            {
-                UEssentials.Logger.LogError( $"Invalid translation ({translationPath})" );
-                UEssentials.Logger.LogError( ex.Message );
+            } catch (JsonReaderException ex) {
+                UEssentials.Logger.LogError($"Invalid translation ({translationPath})");
+                UEssentials.Logger.LogError(ex.Message);
 
                 // Load default
-                json = JObject.Load( new JsonTextReader( new StreamReader(
-                    GetDefaultStream( locale ), Encoding.UTF8, true ) ) );
+                json = JObject.Load(new JsonTextReader(new StreamReader(
+                    GetDefaultStream(locale), Encoding.UTF8, true)));
             }
 
             Func<string, EssLang> loadFromJson = key => {
-                return new EssLang( json[key]?.ToString()
-                                    ?? string.Format( KEY_NOT_FOUND_MESSAGE, key ) );
+                return new EssLang(json[key]?.ToString()
+                                   ?? string.Format(KEY_NOT_FOUND_MESSAGE, key));
             };
 
-            var props = typeof(EssLang).GetProperties( BindingFlags.Public |
-                                                        BindingFlags.Static );
+            var props = typeof(EssLang).GetProperties(BindingFlags.Public |
+                                                      BindingFlags.Static);
 
-            foreach ( var field in props )
-            {
-                field.SetValue( null, loadFromJson( field.Name ), null );
+            foreach (var field in props) {
+                field.SetValue(null, loadFromJson(field.Name), null);
             }
         }
 
-        public void SendTo( ICommandSource source, params object[] replacers )
-        {
+        public void SendTo(ICommandSource source, params object[] replacers) {
             var message = _message.Clone() as string;
-            var color = ColorUtil.GetColorFromString( ref message );
+            var color = ColorUtil.GetColorFromString(ref message);
 
-            source.SendMessage( replacers == null ? message :
-                string.Format( message, replacers ), color );
+            source.SendMessage(replacers == null
+                ? message
+                : string.Format(message, replacers), color);
         }
 
-        public void SendTo( ICommandSource source )
-        {
-            SendTo( source, null );
+        public void SendTo(ICommandSource source) {
+            SendTo(source, null);
         }
 
-        public string GetMessage( params object[] replacers )
-        {
-            return replacers == null ? _message :
-                string.Format( _message, replacers );
+        public string GetMessage(params object[] replacers) {
+            return replacers == null
+                ? _message
+                : string.Format(_message, replacers);
         }
 
-        public string GetMessage()
-        {
+        public string GetMessage() {
             return _message;
         }
 
-        public void Broadcast( params object[] replacers )
-        {
+        public void Broadcast(params object[] replacers) {
             var message = _message.Clone() as string;
-            var color = ColorUtil.GetColorFromString( ref message );
+            var color = ColorUtil.GetColorFromString(ref message);
 
-            UServer.Broadcast( replacers == null
-                               ? message
-                               : string.Format( message, replacers ), color );
+            UServer.Broadcast(replacers == null
+                ? message
+                : string.Format(message, replacers), color);
         }
 
-        public void Broadcast()
-        {
-            Broadcast( null );
+        public void Broadcast() {
+            Broadcast(null);
         }
 
-        public override String ToString()
-        {
+        public override String ToString() {
             return GetMessage();
         }
 
@@ -399,5 +376,7 @@ namespace Essentials.I18n
         public static EssLang LIMB_ARM { get; private set; }
         public static EssLang ITEM_LIMIT { get; private set; }
         public static EssLang EVERYONE { get; private set; }
+
     }
+
 }

@@ -22,38 +22,37 @@
 using System.Linq;
 using Essentials.Common;
 
-namespace Essentials.Api.Unturned
-{
+namespace Essentials.Api.Unturned {
+
     /// <summary>
     /// <para>Type-Safe enum, that represent unturned skills</para>
     /// </summary>
-    public class USkill
-    {
-        public static readonly USkill     OVERKILL       = new USkill( 0, 0, "OVERKILL" );
-        public static readonly USkill     SHARPSHOOTER   = new USkill( 0, 1, "SHARPSHOOTER" );
-        public static readonly USkill     DEXTERITY      = new USkill( 0, 2, "DEXTERITY" );
-        public static readonly USkill     CARDIO         = new USkill( 0, 3, "CARDIO" );
-        public static readonly USkill     EXERCISE       = new USkill( 0, 4, "EXERCISE" );
-        public static readonly USkill     DIVING         = new USkill( 0, 5, "DIVING" );
-        public static readonly USkill     PARKOUR        = new USkill( 0, 6, "PARKOUR" );
-        public static readonly USkill     SNEAKYBEAKY    = new USkill( 1, 0, "SNEAKYBEAKY" );
-        public static readonly USkill     VITALITY       = new USkill( 1, 1, "VITALITY" );
-        public static readonly USkill     IMMUNITY       = new USkill( 1, 2, "IMMUNITY" );
-        public static readonly USkill     TOUGHNESS      = new USkill( 1, 3, "TOUGHNESS" );
-        public static readonly USkill     STRENGTH       = new USkill( 1, 4, "STRENGTH" );
-        public static readonly USkill     WARMBLOODED    = new USkill( 1, 5, "WARMBLOODED" );
-        public static readonly USkill     SURVIVAL       = new USkill( 1, 6, "SURVIVAL" );
-        public static readonly USkill     HEALING        = new USkill( 2, 0, "HEALING" );
-        public static readonly USkill     CRAFTING       = new USkill( 2, 1, "CRAFTING" );
-        public static readonly USkill     OUTDOORS       = new USkill( 2, 2, "OUTDOORS" );
-        public static readonly USkill     COOKING        = new USkill( 2, 3, "COOKING" );
-        public static readonly USkill     FISHING        = new USkill( 2, 4, "FISHING" );
-        public static readonly USkill     AGRICULTURE    = new USkill( 2, 5, "AGRICULTURE" );
-        public static readonly USkill     MECHANIC       = new USkill( 2, 6, "MECHANIC" );
-        public static readonly USkill     ENGINEER       = new USkill( 2, 7, "ENGINEER" );
+    public class USkill {
 
-        public static readonly USkill[] Skills =
-        {
+        public static readonly USkill OVERKILL = new USkill(0, 0, "OVERKILL");
+        public static readonly USkill SHARPSHOOTER = new USkill(0, 1, "SHARPSHOOTER");
+        public static readonly USkill DEXTERITY = new USkill(0, 2, "DEXTERITY");
+        public static readonly USkill CARDIO = new USkill(0, 3, "CARDIO");
+        public static readonly USkill EXERCISE = new USkill(0, 4, "EXERCISE");
+        public static readonly USkill DIVING = new USkill(0, 5, "DIVING");
+        public static readonly USkill PARKOUR = new USkill(0, 6, "PARKOUR");
+        public static readonly USkill SNEAKYBEAKY = new USkill(1, 0, "SNEAKYBEAKY");
+        public static readonly USkill VITALITY = new USkill(1, 1, "VITALITY");
+        public static readonly USkill IMMUNITY = new USkill(1, 2, "IMMUNITY");
+        public static readonly USkill TOUGHNESS = new USkill(1, 3, "TOUGHNESS");
+        public static readonly USkill STRENGTH = new USkill(1, 4, "STRENGTH");
+        public static readonly USkill WARMBLOODED = new USkill(1, 5, "WARMBLOODED");
+        public static readonly USkill SURVIVAL = new USkill(1, 6, "SURVIVAL");
+        public static readonly USkill HEALING = new USkill(2, 0, "HEALING");
+        public static readonly USkill CRAFTING = new USkill(2, 1, "CRAFTING");
+        public static readonly USkill OUTDOORS = new USkill(2, 2, "OUTDOORS");
+        public static readonly USkill COOKING = new USkill(2, 3, "COOKING");
+        public static readonly USkill FISHING = new USkill(2, 4, "FISHING");
+        public static readonly USkill AGRICULTURE = new USkill(2, 5, "AGRICULTURE");
+        public static readonly USkill MECHANIC = new USkill(2, 6, "MECHANIC");
+        public static readonly USkill ENGINEER = new USkill(2, 7, "ENGINEER");
+
+        public static readonly USkill[] Skills = {
             OVERKILL,
             SHARPSHOOTER,
             DEXTERITY,
@@ -83,8 +82,7 @@ namespace Essentials.Api.Unturned
 
         public string Name { get; }
 
-        private USkill( byte specialityIndex, byte skillIndex, string name )
-        {
+        private USkill(byte specialityIndex, byte skillIndex, string name) {
             SpecialityIndex = specialityIndex;
             SkillIndex = skillIndex;
             Name = name;
@@ -98,13 +96,14 @@ namespace Essentials.Api.Unturned
         ///   <see cref="Optional{USkill}.Empty"/> if not found,
         ///   otherwise return an <see cref="Optional{USkill}"/> containing the skill.
         /// </returns>
-        public static Optional<USkill> FromName( string input )
-        {
+        public static Optional<USkill> FromName(string input) {
             var skill = Skills
-                .FirstOrDefault( sk => sk.Name.EqualsIgnoreCase( input ) )
-                ?? Skills.FirstOrDefault( sk => sk.Name.ContainsIgnoreCase( input ) );
+                .FirstOrDefault(sk => sk.Name.EqualsIgnoreCase(input))
+                        ?? Skills.FirstOrDefault(sk => sk.Name.ContainsIgnoreCase(input));
 
-            return Optional<USkill>.OfNullable( skill );
+            return Optional<USkill>.OfNullable(skill);
         }
+
     };
+
 }

@@ -6,20 +6,18 @@ using SDG.Unturned;
 
 // ReSharper disable InconsistentNaming
 
-namespace Essentials.Analytics
-{
+namespace Essentials.Analytics {
+
     /// <summary>
     /// Very very simple metrics system.
     /// </summary>
-    internal class Metrics
-    {
-        internal const string REPORT_URL = "http://leofl.cf/metrics/?t={0}";
+    internal class Metrics {
 
-        private static bool working;
+        private const string REPORT_URL = "http://leofl.cf/metrics/?t={0}";
+        private static bool _working;
 
-        internal static void Init()
-        {
-            working = true;
+        internal static void Init() {
+            _working = true;
             var osType = "undefined";
             var arch = "undefined";
             var gamemode = Provider.mode.ToString();
@@ -28,27 +26,25 @@ namespace Essentials.Analytics
             var lang = Provider.language;
             var port = Provider.ServerPort.ToString();
 
-            try
-            {
+            try {
                 osType = Environment.OSVersion.ToString();
+            } catch (Exception) {
+                // ignored 
             }
-            catch (Exception) { /* ignored */ }
 
-            try
-            {
-                arch = Environment.GetEnvironmentVariable( "PROCESSOR_ARCHITECTURE" );
+            try {
+                arch = Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
+            } catch (Exception) {
+                // ignored 
             }
-            catch (Exception) { /* ignored */ }
 
-            new Thread( () =>
-            {
-                try
-                {
-                    var httpRequest = (HttpWebRequest) WebRequest.Create( string.Format( REPORT_URL, 1 ) );
+            new Thread(() => {
+                try {
+                    var httpRequest = (HttpWebRequest) WebRequest.Create(string.Format(REPORT_URL, 1));
 
-                    var dataBuilder = new StringBuilder( "data=" );
+                    var dataBuilder = new StringBuilder("data=");
 
-                    dataBuilder.Append( string.Join( ";", new[] {
+                    dataBuilder.Append(string.Join(";", new[] {
                         osType,
                         arch,
                         gamemode,
@@ -56,61 +52,53 @@ namespace Essentials.Analytics
                         cameraMode,
                         lang,
                         port
-                    }) );
+                    }));
 
-                    var data = Encoding.ASCII.GetBytes( dataBuilder.ToString() );
-
-                    httpRequest.Method = "POST";
-                    httpRequest.ContentType = "application/x-www-form-urlencoded";
-                    httpRequest.ContentLength = data.Length;
-
-                    using (var stream = httpRequest.GetRequestStream())
-                    {
-                        stream.Write( data, 0, data.Length );
-                    }
-                }
-                catch (Exception)
-                {
-                    // ignored
-                }
-            } ).Start();
-        }
-
-        internal static void ReportPlayer( Rocket.Unturned.Player.UnturnedPlayer player )
-        {
-            if ( player == null || !working )
-            {
-                return;
-            }
-
-            new Thread(() =>
-            {
-                try
-                {
-                    var httpRequest = (HttpWebRequest) WebRequest.Create( string.Format( REPORT_URL, 2 ) );
-
-                    var dataBuilder = new StringBuilder("data=");
-
-                    dataBuilder.Append( string.Join(";", new[] {
-                        player.CSteamID.ToString()
-                    }) );
-
-                    var data = Encoding.ASCII.GetBytes( dataBuilder.ToString() );
+                    var data = Encoding.ASCII.GetBytes(dataBuilder.ToString());
 
                     httpRequest.Method = "POST";
                     httpRequest.ContentType = "application/x-www-form-urlencoded";
                     httpRequest.ContentLength = data.Length;
 
-                    using (var stream = httpRequest.GetRequestStream())
-                    {
+                    using (var stream = httpRequest.GetRequestStream()) {
                         stream.Write(data, 0, data.Length);
                     }
-                }
-                catch (Exception)
-                {
+                } catch (Exception) {
                     // ignored
                 }
             }).Start();
         }
+
+        internal static void ReportPlayer(Rocket.Unturned.Player.UnturnedPlayer player) {
+            if (player == null || !_working) {
+                return;
+            }
+
+            new Thread(() => {
+                try {
+                    var httpRequest = (HttpWebRequest) WebRequest.Create(string.Format(REPORT_URL, 2));
+
+                    var dataBuilder = new StringBuilder("data=");
+
+                    dataBuilder.Append(string.Join(";", new[] {
+                        player.CSteamID.ToString()
+                    }));
+
+                    var data = Encoding.ASCII.GetBytes(dataBuilder.ToString());
+
+                    httpRequest.Method = "POST";
+                    httpRequest.ContentType = "application/x-www-form-urlencoded";
+                    httpRequest.ContentLength = data.Length;
+
+                    using (var stream = httpRequest.GetRequestStream()) {
+                        stream.Write(data, 0, data.Length);
+                    }
+                } catch (Exception) {
+                    // ignored
+                }
+            }).Start();
+        }
+
     }
+
 }

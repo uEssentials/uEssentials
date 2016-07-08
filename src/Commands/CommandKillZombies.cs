@@ -29,27 +29,28 @@ using UnityEngine;
 using Essentials.I18n;
 using Essentials.Common;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "killzombies",
         Aliases = new[] { "clearzombies" },
         Description = "Kill all zombies"
     )]
-    public class CommandKillZombies : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
+    public class CommandKillZombies : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var killedCount = 0;
 
-            UWorld.Zombies.Where( zombie => !zombie.isDead ).ForEach( zombie => {
-                ZombieManager.sendZombieDead( zombie, Vector3.zero );
+            UWorld.Zombies.Where(zombie => !zombie.isDead).ForEach(zombie => {
+                ZombieManager.sendZombieDead(zombie, Vector3.zero);
                 killedCount++;
             });
 
-            EssLang.KILLED_ZOMBIES.SendTo( src, killedCount );
+            EssLang.KILLED_ZOMBIES.SendTo(src, killedCount);
 
             return CommandResult.Success();
         }
+
     }
+
 }

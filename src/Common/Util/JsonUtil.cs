@@ -22,44 +22,40 @@
 using System.IO;
 using Newtonsoft.Json;
 
-namespace Essentials.Common.Util
-{
-    public static class JsonUtil
-    {
-        public static void Serialize( string filePath, object obj )
-        {
-            File.WriteAllText( filePath, string.Empty );
+namespace Essentials.Common.Util {
+
+    public static class JsonUtil {
+
+        public static void Serialize(string filePath, object obj) {
+            File.WriteAllText(filePath, string.Empty);
 
             FileStream fs = null;
-            try
-            {
-                fs = new FileStream( filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite );
+            try {
+                fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
 
-                using (TextWriter writer = new StreamWriter( fs ))
-                {
+                using (TextWriter writer = new StreamWriter(fs)) {
                     fs = null;
-                    var jsonWriter = new JsonTextWriter( writer );
+                    var jsonWriter = new JsonTextWriter(writer);
                     var serializer = JsonSerializer.Create();
 
                     serializer.Formatting = Formatting.Indented;
                     serializer.NullValueHandling = NullValueHandling.Ignore;
-                    serializer.Serialize( jsonWriter, obj );
+                    serializer.Serialize(jsonWriter, obj);
 
                     jsonWriter.Close();
                     writer.Close();
                 }
-            }
-            finally
-            {
+            } finally {
                 fs?.Dispose();
             }
         }
 
-        public static T DeserializeFile<T>( string configPath )
-        {
-            var allText = File.ReadAllText( configPath );
+        public static T DeserializeFile<T>(string configPath) {
+            var allText = File.ReadAllText(configPath);
 
-            return JsonConvert.DeserializeObject<T>( allText );
+            return JsonConvert.DeserializeObject<T>(allText);
         }
+
     }
+
 }

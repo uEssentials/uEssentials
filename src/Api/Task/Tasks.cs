@@ -23,26 +23,24 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Essentials.Api.Task
-{
-    public static class Tasks
-    {
+namespace Essentials.Api.Task {
+
+    public static class Tasks {
+
         private static readonly List<Task> Pool = new List<Task>();
 
         /// <summary>
         /// Instantiate a new task with given action
         /// </summary>
         /// <param name="action">New task</param>
-        public static Task New( Action<Task> action )
-        {
-            return new Task( action );
+        public static Task New(Action<Task> action) {
+            return new Task(action);
         }
 
         /// <summary>
         /// Cancel all tasks
         /// </summary>
-        public static void CancelAll()
-        {
+        public static void CancelAll() {
             Pool.Clear();
         }
 
@@ -50,8 +48,8 @@ namespace Essentials.Api.Task
         /// Represents an task that will be executed after
         /// given delay, and with(or not) an interval
         /// </summary>
-        public class Task
-        {
+        public class Task {
+
             /// <summary>
             /// Time who will be executed
             /// </summary>
@@ -72,8 +70,7 @@ namespace Essentials.Api.Task
             /// </summary>
             internal int DelayValue;
 
-            internal Task( Action<Task> action )
-            {
+            internal Task(Action<Task> action) {
                 Action = action;
                 IntervalValue = -1;
                 DelayValue = 0;
@@ -84,8 +81,7 @@ namespace Essentials.Api.Task
             /// </summary>
             /// <param name="interval">The interval, in milliseconds</param>
             /// <returns>This</returns>
-            public Task Interval( int interval )
-            {
+            public Task Interval(int interval) {
                 IntervalValue = interval;
                 return this;
             }
@@ -95,8 +91,7 @@ namespace Essentials.Api.Task
             /// </summary>
             /// <param name="delay">The interval, in milliseconds</param>
             /// <returns>This</returns>
-            public Task Delay( int delay )
-            {
+            public Task Delay(int delay) {
                 DelayValue = delay;
                 return this;
             }
@@ -104,55 +99,49 @@ namespace Essentials.Api.Task
             /// <summary>
             /// Start the task.
             /// </summary>
-            public void Go()
-            {
-                NextExecution = DateTime.Now.AddMilliseconds( DelayValue );
+            public void Go() {
+                NextExecution = DateTime.Now.AddMilliseconds(DelayValue);
 
-                Pool.Add( this );
+                Pool.Add(this);
             }
 
             /// <summary>
             /// Cancel the task.
             /// </summary>
-            public void Cancel()
-            {
-                Pool.Remove( this );
+            public void Cancel() {
+                Pool.Remove(this);
             }
+
         }
 
-        internal class TaskExecutor : MonoBehaviour
-        {
-            private void FixedUpdate()
-            {
-                for ( var i = 0; i < Pool.Count; i++ )
-                {
+        internal class TaskExecutor : MonoBehaviour {
+
+            private void FixedUpdate() {
+                for (var i = 0; i < Pool.Count; i++) {
                     var task = Pool[i];
 
-                    if ( task.NextExecution > DateTime.Now ) continue;
+                    if (task.NextExecution > DateTime.Now) continue;
 
                     /*
                         If any error occurs he will remove task from Pool.
                     */
-                    try
-                    {
-                        task.Action( task );
+                    try {
+                        task.Action(task);
 
-                        if ( task.IntervalValue < 0 )
-                        {
-                            Pool.Remove( task );
+                        if (task.IntervalValue < 0) {
+                            Pool.Remove(task);
+                        } else {
+                            task.NextExecution = DateTime.Now.AddMilliseconds(task.IntervalValue);
                         }
-                        else
-                        {
-                            task.NextExecution = DateTime.Now.AddMilliseconds( task.IntervalValue );
-                        }
-                    }
-                    catch ( Exception )
-                    {
-                        Pool.Remove( task );
+                    } catch (Exception) {
+                        Pool.Remove(task);
                         throw;
                     }
                 }
             }
+
         }
+
     }
+
 }

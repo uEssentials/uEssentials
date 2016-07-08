@@ -22,30 +22,28 @@
 using Essentials.Api;
 using Essentials.Api.Unturned;
 
-namespace Essentials.Economy
-{
-    public class  ExpEconomyProvider : IEconomyProvider
-    {
+namespace Essentials.Economy {
+
+    public class ExpEconomyProvider : IEconomyProvider {
+
         public string Currency => UEssentials.Config.Economy.XpCurrency;
 
-        public decimal Withdraw( UPlayer player, decimal amount )
-        {
+        public decimal Withdraw(UPlayer player, decimal amount) {
             return (player.Experience -= (uint) amount);
         }
 
-        public decimal Deposit( UPlayer player, decimal amount )
-        {
+        public decimal Deposit(UPlayer player, decimal amount) {
             return (player.Experience += (uint) amount);
         }
 
-        public decimal GetBalance( UPlayer player )
-        {
+        public decimal GetBalance(UPlayer player) {
             return player.Experience;
         }
 
-        public bool Has( UPlayer player, decimal amount )
-        {
+        public bool Has(UPlayer player, decimal amount) {
             return (player.Experience - amount) >= 0;
         }
+
     }
+
 }

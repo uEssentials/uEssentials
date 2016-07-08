@@ -25,57 +25,50 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Essentials.Common.Util
-{
-    public static class DebugUtil
-    {
-        public static void DebugObject( object obj, string objName = null )
-        {
-            Console.Write( "[DEBUG] " );
-            if ( objName != null ) Console.Write( objName + " = " );
-            Console.Write( ObjectToString( obj ) );
+namespace Essentials.Common.Util {
+
+    public static class DebugUtil {
+
+        public static void DebugObject(object obj, string objName = null) {
+            Console.Write("[DEBUG] ");
+            if (objName != null) Console.Write(objName + " = ");
+            Console.Write(ObjectToString(obj));
             Console.WriteLine();
             Console.WriteLine();
         }
 
-        public static string ObjectToString( object obj )
-        {
+        public static string ObjectToString(object obj) {
             if (obj == null)
                 return "Null";
 
             var sb = new StringBuilder();
 
-            if ( obj is IEnumerable && !(obj is string) )
-            {
+            if (obj is IEnumerable && !(obj is string)) {
                 var en = obj as IEnumerable;
                 var enumerable = en as IList<object> ?? en.Cast<object>().ToList();
 
-                if ( enumerable.Count == 0 )
-                {
-                    sb.Append( "Empty" );
-                }
-                else
-                {
-                    sb.Append( "[" );
-                    foreach ( var val in enumerable )
-                    {
-                        sb.Append( val );
-                        sb.Append( ", " );
+                if (enumerable.Count == 0) {
+                    sb.Append("Empty");
+                } else {
+                    sb.Append("[");
+                    foreach (var val in enumerable) {
+                        sb.Append(val);
+                        sb.Append(", ");
                     }
-                    sb.Remove( sb.Length - 2, 2 );
-                    sb.Append( "]" );
+                    sb.Remove(sb.Length - 2, 2);
+                    sb.Append("]");
                 }
-            }
-            else
-            {
-                sb.Append( obj );
+            } else {
+                sb.Append(obj);
             }
 
-            sb.Append( " (" );
-            sb.Append( obj.GetType() );
-            sb.Append( ") " );
+            sb.Append(" (");
+            sb.Append(obj.GetType());
+            sb.Append(") ");
 
             return sb.ToString();
         }
+
     }
+
 }

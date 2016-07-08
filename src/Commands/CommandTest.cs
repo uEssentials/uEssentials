@@ -22,16 +22,17 @@
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "test"
-     )]
-    public class CommandTest : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
+    )]
+    public class CommandTest : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             return CommandResult.Success();
         }
+
     }
+
 }

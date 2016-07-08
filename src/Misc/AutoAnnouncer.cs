@@ -26,11 +26,11 @@ using Essentials.Api.Unturned;
 using Essentials.Common.Util;
 using Newtonsoft.Json;
 
-namespace Essentials.Misc
-{
+namespace Essentials.Misc {
+
     [JsonObject]
-    public class AutoAnnouncer
-    {
+    public class AutoAnnouncer {
+
         /// <summary>
         /// Interval between the messages
         /// </summary>
@@ -54,14 +54,12 @@ namespace Essentials.Misc
         /// <summary>
         /// Load default values
         /// </summary>
-        public void LoadDefaults()
-        {
+        public void LoadDefaults() {
             MessageInterval = 30;
             RandomMessages = false;
             Enabled = false;
 
-            Messages = new List<string>
-            {
+            Messages = new List<string> {
                 "<cyan>You can see kits by typing /kits, and to get a kit by typing /kit <name>",
                 "<red>Messaage 1",
                 "<green>Message 2",
@@ -74,24 +72,24 @@ namespace Essentials.Misc
         /// <summary>
         /// Start broadcasting
         /// </summary>
-        public void Start()
-        {
+        public void Start() {
             var messageIndex = 0;
             var rand = new Random();
 
-            Tasks.New( t =>
-            {
+            Tasks.New(t => {
                 var messagesCount = Messages.Count;
 
                 messageIndex = RandomMessages
-                            ? rand.Next( messagesCount )
-                            : (++messageIndex == messagesCount ? 0 : messageIndex);
+                    ? rand.Next(messagesCount)
+                    : (++messageIndex == messagesCount ? 0 : messageIndex);
 
                 var message = (string) Messages[messageIndex].Clone();
-                var messageColor = ColorUtil.GetColorFromString( ref message );
+                var messageColor = ColorUtil.GetColorFromString(ref message);
 
-                UServer.Broadcast( message, messageColor );
-            } ).Delay( MessageInterval*1000 ).Interval( MessageInterval*1000 ).Go();
+                UServer.Broadcast(message, messageColor);
+            }).Delay(MessageInterval*1000).Interval(MessageInterval*1000).Go();
         }
+
     }
+
 }

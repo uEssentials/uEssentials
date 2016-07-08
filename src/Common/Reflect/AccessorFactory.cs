@@ -22,49 +22,48 @@
 using System;
 using System.Reflection;
 
-namespace Essentials.Common.Reflect
-{
-    public static class AccessorFactory
-    {
+namespace Essentials.Common.Reflect {
+
+    public static class AccessorFactory {
+
         public static FieldAccessor<TFieldType> AccessField<TFieldType>(
-            object obj, string fieldName )
-        {
-            Preconditions.NotNull( obj, "obj cannot be null" );
-            Preconditions.NotNull( fieldName, "fieldName cannot be null" );
+            object obj, string fieldName) {
+            Preconditions.NotNull(obj, "obj cannot be null");
+            Preconditions.NotNull(fieldName, "fieldName cannot be null");
 
             var objType = obj is Type ? (Type) obj : obj.GetType();
-            var fieldInfo = objType.GetField( fieldName, (BindingFlags) 60 );
+            var fieldInfo = objType.GetField(fieldName, (BindingFlags) 60);
 
-            if ( fieldInfo == null ) return null;
+            if (fieldInfo == null) return null;
 
             Type fieldType = fieldInfo.FieldType,
-                 informedFieldType = typeof (TFieldType);
+                informedFieldType = typeof(TFieldType);
 
-            Preconditions.IsFalse( informedFieldType == fieldType,
+            Preconditions.IsFalse(informedFieldType == fieldType,
                 "Inconsistent given type {0} and field type {1}",
-                informedFieldType, fieldType );
+                informedFieldType, fieldType);
 
-            return new FieldAccessor<TFieldType>( obj, fieldInfo );
+            return new FieldAccessor<TFieldType>(obj, fieldInfo);
         }
 
         public static FieldAccessor<TFieldType> AccessProperty<TFieldType>(
-            object obj, string fieldName )
-        {
-            return AccessField<TFieldType>( obj, $"<{fieldName}>k__BackingField" );
+            object obj, string fieldName) {
+            return AccessField<TFieldType>(obj, $"<{fieldName}>k__BackingField");
         }
 
         public static MethodAccessor<TReturnType> AccessMethod<TReturnType>(
-            object obj, string methodName )
-        {
-            Preconditions.NotNull( obj, "obj cannot be null" );
-            Preconditions.NotNull( methodName, "methodName cannot be null" );
+            object obj, string methodName) {
+            Preconditions.NotNull(obj, "obj cannot be null");
+            Preconditions.NotNull(methodName, "methodName cannot be null");
 
-           var objType = obj is Type ? (Type) obj : obj.GetType();
-           var methodInfo = objType.GetMethod( methodName, (BindingFlags) 60 );
+            var objType = obj is Type ? (Type) obj : obj.GetType();
+            var methodInfo = objType.GetMethod(methodName, (BindingFlags) 60);
 
-           if ( methodInfo == null ) return null;
+            if (methodInfo == null) return null;
 
-           return new MethodAccessor<TReturnType>( obj, methodInfo );
+            return new MethodAccessor<TReturnType>(obj, methodInfo);
         }
+
     }
+
 }

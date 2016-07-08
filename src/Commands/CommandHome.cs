@@ -30,16 +30,16 @@ using UnityEngine;
 using SDG.Unturned;
 using Essentials.Event.Handling;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "home",
         Aliases = new[] { "h" },
         Description = "Teleport to your bed.",
         AllowedSource = AllowedSource.PLAYER
     )]
-    public class CommandHome : EssCommand
-    {
+    public class CommandHome : EssCommand {
+
         internal static SimpleCooldown Cooldown = new SimpleCooldown();
 
         internal static PlayerDictionary<Tasks.Task> Delay = new PlayerDictionary<Tasks.Task>(
@@ -47,63 +47,59 @@ namespace Essentials.Commands
             PlayerDictionaryCharacteristics.REMOVE_ON_DEATH |
             PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT,
             task => task.Cancel()
-        );
+            );
 
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
             var playerId = player.CSteamId;
 
-            if ( Cooldown.HasEntry( playerId ) )
-            {
-                return CommandResult.Lang( EssLang.USE_COOLDOWN,
-                    TimeUtil.FormatSeconds( (uint) Cooldown.GetRemainingTime( playerId ) ) );
+            if (Cooldown.HasEntry(playerId)) {
+                return CommandResult.Lang(EssLang.USE_COOLDOWN,
+                    TimeUtil.FormatSeconds((uint) Cooldown.GetRemainingTime(playerId)));
             }
 
             Vector3 position;
             byte angle;
 
-            if ( player.RocketPlayer.Stance == EPlayerStance.DRIVING ||
-                 player.RocketPlayer.Stance == EPlayerStance.SITTING )
-            {
-                return CommandResult.Lang( EssLang.CANNOT_TELEPORT_DRIVING );
+            if (player.RocketPlayer.Stance == EPlayerStance.DRIVING ||
+                player.RocketPlayer.Stance == EPlayerStance.SITTING) {
+                return CommandResult.Lang(EssLang.CANNOT_TELEPORT_DRIVING);
             }
 
-            if ( !BarricadeManager.tryGetBed( player.CSteamId, out position, out angle ) )
-            {
-                return CommandResult.Lang( EssLang.WITHOUT_BED );
+            if (!BarricadeManager.tryGetBed(player.CSteamId, out position, out angle)) {
+                return CommandResult.Lang(EssLang.WITHOUT_BED);
             }
 
             var homeCommand = UEssentials.Config.HomeCommand;
             var delay = homeCommand.Delay;
             var cooldown = homeCommand.Cooldown;
 
-            if ( player.HasPermission( "essentials.bypass.homecooldown" ) )
-            {
+            if (player.HasPermission("essentials.bypass.homecooldown")) {
                 delay = 0;
                 cooldown = 0;
             }
 
-            if ( delay > 0 )
-            {
-                EssLang.TELEPORT_DELAY.SendTo( src, TimeUtil.FormatSeconds( (uint) delay ));
+            if (delay > 0) {
+                EssLang.TELEPORT_DELAY.SendTo(src, TimeUtil.FormatSeconds((uint) delay));
             }
 
-            var task = Tasks.New( t =>  {
-                Delay.Remove( playerId.m_SteamID );
-                player.Teleport( position, angle );
-                EssLang.TELEPORTED_BED.SendTo( src );
-            } ).Delay( delay * 1000 );
+            var task = Tasks.New(t => {
+                Delay.Remove(playerId.m_SteamID);
+                player.Teleport(position, angle);
+                EssLang.TELEPORTED_BED.SendTo(src);
+            }).Delay(delay*1000);
 
             task.Go();
 
-            Delay.Add( playerId.m_SteamID, task );
-            Cooldown.AddEntry( playerId, cooldown );
+            Delay.Add(playerId.m_SteamID, task);
+            Cooldown.AddEntry(playerId, cooldown);
 
             return CommandResult.Success();
         }
 
-         protected override void OnUnregistered()
-            => UEssentials.EventManager.Unregister<EssentialsEventHandler>( "HomePlayerMove" );
+        protected override void OnUnregistered()
+            => UEssentials.EventManager.Unregister<EssentialsEventHandler>("HomePlayerMove");
+
     }
+
 }

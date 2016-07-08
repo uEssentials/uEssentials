@@ -19,10 +19,12 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-namespace Essentials.Api.Event
-{
-    public interface ICancellable
-    {
+namespace Essentials.Api.Event {
+
+    public interface ICancellable {
+
         bool Cancelled { get; set; }
+
     }
+
 }

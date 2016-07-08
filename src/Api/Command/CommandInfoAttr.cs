@@ -22,16 +22,18 @@
 using System;
 using Essentials.Api.Command.Source;
 
-namespace Essentials.Api.Command
-{
+namespace Essentials.Api.Command {
+
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class CommandInfo : Attribute
-    {
-        public AllowedSource    AllowedSource        = AllowedSource.BOTH;
-        public string[]         Aliases              = new string[0];
-        public string           Description          = "None";
-        public string           Permission           = "";
-        public string           Usage                = "";
-        public string           Name;
+    public class CommandInfo : Attribute {
+
+        public AllowedSource AllowedSource = AllowedSource.BOTH;
+        public string[] Aliases = new string[0];
+        public string Description = "None";
+        public string Permission = "";
+        public string Usage = "";
+        public string Name;
+
     }
+
 }

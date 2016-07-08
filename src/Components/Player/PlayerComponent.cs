@@ -22,15 +22,16 @@
 using Essentials.Api.Unturned;
 using UnityEngine;
 
-namespace Essentials.Components.Player
-{
-    public abstract class PlayerComponent : MonoBehaviour
-    {
+namespace Essentials.Components.Player {
+
+    public abstract class PlayerComponent : MonoBehaviour {
+
         public UPlayer Player;
 
-        protected PlayerComponent()
-        {
-            Player = UPlayer.From( GetComponent<SDG.Unturned.Player>() );
+        protected PlayerComponent() {
+            Player = UPlayer.From(GetComponent<SDG.Unturned.Player>());
         }
+
     }
+
 }

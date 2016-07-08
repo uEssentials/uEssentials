@@ -23,32 +23,29 @@ using System.IO;
 using Essentials.Common.Util;
 using Newtonsoft.Json;
 
-namespace Essentials.Api.Configuration
-{
-    public abstract class JsonConfig : IConfig
-    {
+namespace Essentials.Api.Configuration {
+
+    public abstract class JsonConfig : IConfig {
+
         [JsonIgnore]
         public virtual string FileName => "config.json";
 
-        public virtual void Load( string filePath )
-        {
-            if ( File.Exists( filePath ) )
-            {
-                JsonConvert.PopulateObject( File.ReadAllText( filePath ), this );
-            }
-            else
-            {
+        public virtual void Load(string filePath) {
+            if (File.Exists(filePath)) {
+                JsonConvert.PopulateObject(File.ReadAllText(filePath), this);
+            } else {
                 LoadDefaults();
-                Save( filePath );
+                Save(filePath);
             }
         }
 
-        public virtual void Save( string filePath )
-        {
-            File.WriteAllText( filePath, string.Empty );
-            JsonUtil.Serialize( filePath, this );
+        public virtual void Save(string filePath) {
+            File.WriteAllText(filePath, string.Empty);
+            JsonUtil.Serialize(filePath, this);
         }
 
         public virtual void LoadDefaults() {}
+
     }
+
 }

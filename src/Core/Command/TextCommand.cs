@@ -25,21 +25,20 @@ using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.Configuration;
 
-namespace Essentials.Core.Command
-{
-    internal class TextCommand : ICommand
-    {
-        public string           Name             { get; internal set; }
-        public string           Usage            { get; set; }
-        public string[]         Aliases          { get; set; }
-        public string           Description      { get; set; }
-        public string           Permission       { get; set; }
-        public AllowedSource    AllowedSource    { get; set; }
+namespace Essentials.Core.Command {
+
+    internal class TextCommand : ICommand {
+
+        public string Name { get; internal set; }
+        public string Usage { get; set; }
+        public string[] Aliases { get; set; }
+        public string Description { get; set; }
+        public string Permission { get; set; }
+        public AllowedSource AllowedSource { get; set; }
 
         private TextCommands.TextCommandData Data;
 
-        public TextCommand( TextCommands.TextCommandData data )
-        {
+        public TextCommand(TextCommands.TextCommandData data) {
             Data = data;
             Name = data.Name;
             Usage = string.Empty;
@@ -49,13 +48,14 @@ namespace Essentials.Core.Command
             Permission = $"essentials.textcommand.{Name}";
         }
 
-        public CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            Data.Text.ForEach( txt => {
-                var color = ColorUtil.GetColorFromString( ref txt );
-                src.SendMessage( txt, color );
+        public CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            Data.Text.ForEach(txt => {
+                var color = ColorUtil.GetColorFromString(ref txt);
+                src.SendMessage(txt, color);
             });
             return CommandResult.Success();
         }
+
     }
+
 }

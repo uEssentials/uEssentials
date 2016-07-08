@@ -22,27 +22,21 @@
 using System;
 using System.Reflection;
 
-namespace Essentials.Common.Reflect
-{
-    public class FieldAccessor<TFieldType> : AbstractAccessor
-    {
+namespace Essentials.Common.Reflect {
+
+    public class FieldAccessor<TFieldType> : AbstractAccessor {
+
         public FieldInfo Info { get; }
 
-        public FieldAccessor( object obj, FieldInfo fieldInfo ) : base( obj )
-        {
-            Info = Preconditions.NotNull( fieldInfo, "fieldInfo cannot be null" );
+        public FieldAccessor(object obj, FieldInfo fieldInfo) : base(obj) {
+            Info = Preconditions.NotNull(fieldInfo, "fieldInfo cannot be null");
         }
 
-        public TFieldType Value
-        {
-            get
-            {
-                return (TFieldType) Info.GetValue( Owner is Type ? null : Owner );
-            }
-            set
-            {
-                Info.SetValue( Owner is Type ? null : Owner, value );
-            }
+        public TFieldType Value {
+            get { return (TFieldType) Info.GetValue(Owner is Type ? null : Owner); }
+            set { Info.SetValue(Owner is Type ? null : Owner, value); }
         }
+
     }
+
 }

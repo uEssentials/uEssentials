@@ -28,14 +28,14 @@ using SDG.Unturned;
 
 // ReSharper disable InconsistentNaming
 
-namespace Essentials.NativeModules.Kit.Item
-{
+namespace Essentials.NativeModules.Kit.Item {
+
     /// <summary>
     /// Author: leonardosc
     /// </summary>
-    [JsonObject( Id = "Item" )]
-    public class KitItem : AbstractKitItem
-    {
+    [JsonObject(Id = "Item")]
+    public class KitItem : AbstractKitItem {
+
         /// <summary>
         /// Id of item
         /// </summary>
@@ -65,20 +65,19 @@ namespace Essentials.NativeModules.Kit.Item
         /// </summary>
         /// <returns> Instance of SDG.Unturned.Item of this item </returns>>
         [JsonIgnore]
-        public virtual SDG.Unturned.Item UnturnedItem => new SDG.Unturned.Item( Id, Amount, Durability, Metadata );
+        public virtual SDG.Unturned.Item UnturnedItem => new SDG.Unturned.Item(Id, Amount, Durability, Metadata);
 
-        public KitItem( ushort id, byte durability, byte amount )
-        {
+        public KitItem(ushort id, byte durability, byte amount) {
             Preconditions.CheckState(
                 Assets.find(EAssetType.ITEM, id) != null,
-                EssLang.INVALID_ITEM_ID.GetMessage( id )
-            );
+                EssLang.INVALID_ITEM_ID.GetMessage(id)
+                );
 
             Id = id;
             Durability = durability;
             Amount = amount;
 
-            ItemUtil.GetItem( id ).IfPresent( ass => Metadata = ass.getState() );
+            ItemUtil.GetItem(id).IfPresent(ass => Metadata = ass.getState());
         }
 
         /// <summary>
@@ -88,14 +87,14 @@ namespace Essentials.NativeModules.Kit.Item
         /// <param name="dropIfInventoryFull"> determine if this item should be dropped
         /// on ground if inventory is full </param>
         /// <returns> False if could not be added(full inventory) otherwise true </returns>
-        public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
-        {
-            return player.GiveItem( UnturnedItem, dropIfInventoryFull );
+        public override bool GiveTo(UPlayer player, bool dropIfInventoryFull = true) {
+            return player.GiveItem(UnturnedItem, dropIfInventoryFull);
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"Id: {Id}, Durability: {Durability}, Amount: {Amount}";
         }
+
     }
+
 }

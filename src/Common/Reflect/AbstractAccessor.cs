@@ -19,15 +19,16 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-namespace Essentials.Common.Reflect
-{
-    public abstract class AbstractAccessor
-    {
+namespace Essentials.Common.Reflect {
+
+    public abstract class AbstractAccessor {
+
         protected object Owner { get; }
 
-        protected AbstractAccessor( object owner )
-        {
-            Owner = Preconditions.NotNull( owner, "Owner cannot be null" );
+        protected AbstractAccessor(object owner) {
+            Owner = Preconditions.NotNull(owner, "Owner cannot be null");
         }
+
     }
+
 }

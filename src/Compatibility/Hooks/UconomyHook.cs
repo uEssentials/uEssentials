@@ -28,10 +28,10 @@ using Essentials.Api;
 using Essentials.Api.Unturned;
 using Essentials.Economy;
 
-namespace Essentials.Compatibility.Hooks
-{
-    public class UconomyHook : Hook, IEconomyProvider
-    {
+namespace Essentials.Compatibility.Hooks {
+
+    public class UconomyHook : Hook, IEconomyProvider {
+
         public string Currency => UEssentials.Config.Economy.UconomyCurrency;
 
         private MethodAccessor<decimal> _getBalanceMethod;
@@ -39,42 +39,39 @@ namespace Essentials.Compatibility.Hooks
 
         public UconomyHook() : base("economy") {}
 
-        public override void OnLoad()
-        {
-            var uconomyPlugin = R.Plugins.GetPlugins().FirstOrDefault( c => c.Name.EqualsIgnoreCase( "uconomy" ) );
-            var uconomyType = uconomyPlugin.GetType().Assembly.GetType( "fr34kyn01535.Uconomy.Uconomy" );
-            var uconomyInstance = uconomyType.GetField( "Instance", BindingFlags.Static | BindingFlags.Public ).GetValue( uconomyPlugin );
+        public override void OnLoad() {
+            var uconomyPlugin = R.Plugins.GetPlugins().FirstOrDefault(c => c.Name.EqualsIgnoreCase("uconomy"));
+            var uconomyType = uconomyPlugin.GetType().Assembly.GetType("fr34kyn01535.Uconomy.Uconomy");
+            var uconomyInstance =
+                uconomyType.GetField("Instance", BindingFlags.Static | BindingFlags.Public).GetValue(uconomyPlugin);
 
-            var databaseInstance = uconomyInstance.GetType().GetField( "Database" ).GetValue( uconomyInstance );
-            _getBalanceMethod = AccessorFactory.AccessMethod<decimal>( databaseInstance, "GetBalance" );
-            _increaseBalanceMethod = AccessorFactory.AccessMethod<decimal>( databaseInstance, "IncreaseBalance" );
+            var databaseInstance = uconomyInstance.GetType().GetField("Database").GetValue(uconomyInstance);
+            _getBalanceMethod = AccessorFactory.AccessMethod<decimal>(databaseInstance, "GetBalance");
+            _increaseBalanceMethod = AccessorFactory.AccessMethod<decimal>(databaseInstance, "IncreaseBalance");
         }
 
-        public override void OnUnload() { }
+        public override void OnUnload() {}
 
-        public override bool CanBeLoaded()
-        {
-            return R.Plugins.GetPlugins().Any( c => c.Name.EqualsIgnoreCase( "uconomy" ) );
+        public override bool CanBeLoaded() {
+            return R.Plugins.GetPlugins().Any(c => c.Name.EqualsIgnoreCase("uconomy"));
         }
 
-        public decimal Withdraw( UPlayer player, decimal amount )
-        {
-            return _increaseBalanceMethod.Invoke( player.CSteamId.m_SteamID.ToString(), -amount );
+        public decimal Withdraw(UPlayer player, decimal amount) {
+            return _increaseBalanceMethod.Invoke(player.CSteamId.m_SteamID.ToString(), -amount);
         }
 
-        public decimal Deposit( UPlayer player, decimal amount )
-        {
-            return _increaseBalanceMethod.Invoke( player.CSteamId.m_SteamID.ToString(), amount );
+        public decimal Deposit(UPlayer player, decimal amount) {
+            return _increaseBalanceMethod.Invoke(player.CSteamId.m_SteamID.ToString(), amount);
         }
 
-        public decimal GetBalance( UPlayer player )
-        {
-            return _getBalanceMethod.Invoke( player.CSteamId.m_SteamID.ToString() );
+        public decimal GetBalance(UPlayer player) {
+            return _getBalanceMethod.Invoke(player.CSteamId.m_SteamID.ToString());
         }
 
-        public bool Has( UPlayer player, decimal amount )
-        {
-            return (GetBalance( player ) - amount) >= 0;
+        public bool Has(UPlayer player, decimal amount) {
+            return (GetBalance(player) - amount) >= 0;
         }
+
     }
+
 }

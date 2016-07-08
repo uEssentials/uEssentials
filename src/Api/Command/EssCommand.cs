@@ -24,23 +24,22 @@ using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.Core;
 
-namespace Essentials.Api.Command
-{
-    public abstract class EssCommand : ICommand
-    {
-        protected string        UsageMessage    => "Use /" + Name + " " + Usage;
-        public string           Name            { get; internal set; }
-        public string           Permission      { get; set; }
-        public string[]         Aliases         { get; set; }
-        public string           Usage           { get; set; }
-        public AllowedSource    AllowedSource   { get; set; }
-        public string           Description     { get; set; }
+namespace Essentials.Api.Command {
 
-        protected EssCommand()
-        {
+    public abstract class EssCommand : ICommand {
+
+        protected string UsageMessage => "Use /" + Name + " " + Usage;
+        public string Name { get; internal set; }
+        public string Permission { get; set; }
+        public string[] Aliases { get; set; }
+        public string Usage { get; set; }
+        public AllowedSource AllowedSource { get; set; }
+        public string Description { get; set; }
+
+        protected EssCommand() {
             var commandInfo = Preconditions.NotNull(
-                ReflectionUtil.GetAttributeFrom<CommandInfo>( this ),
-                "EssCommand must have 'CommandInfo' attribute" );
+                ReflectionUtil.GetAttributeFrom<CommandInfo>(this),
+                "EssCommand must have 'CommandInfo' attribute");
 
             Name = commandInfo.Name;
             Usage = commandInfo.Usage;
@@ -48,27 +47,24 @@ namespace Essentials.Api.Command
             AllowedSource = commandInfo.AllowedSource;
             Aliases = commandInfo.Aliases;
 
-            Permission = GetType().Assembly.Equals( typeof (EssCore).Assembly )
+            Permission = GetType().Assembly.Equals(typeof(EssCore).Assembly)
                 ? $"essentials.command.{Name}"
                 : commandInfo.Permission;
 
-            if ( Permission.IsNullOrEmpty() )
+            if (Permission.IsNullOrEmpty())
                 Permission = Name;
         }
 
-        protected virtual void ShowUsage( ICommandSource source )
-        {
-            source.SendMessage( UsageMessage );
+        protected virtual void ShowUsage(ICommandSource source) {
+            source.SendMessage(UsageMessage);
         }
 
-        protected virtual void OnUnregistered()
-        {
-        }
+        protected virtual void OnUnregistered() {}
 
-        protected virtual void OnRegistered()
-        {
-        }
+        protected virtual void OnRegistered() {}
 
-        public abstract CommandResult OnExecute( ICommandSource src, ICommandArgs args );
+        public abstract CommandResult OnExecute(ICommandSource src, ICommandArgs args);
+
     }
+
 }

@@ -21,11 +21,11 @@
 
 using System;
 
-namespace Essentials.Api.Module
-{
-    [AttributeUsage( AttributeTargets.Class, Inherited = false )]
-    public sealed class ModuleInfo : Attribute
-    {
+namespace Essentials.Api.Module {
+
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
+    public sealed class ModuleInfo : Attribute {
+
         /// <summary>
         /// Name of module
         /// </summary>
@@ -45,5 +45,7 @@ namespace Essentials.Api.Module
         /// Flags of module
         /// </summary>
         public LoadFlags Flags { get; set; } = LoadFlags.NONE;
+
     }
+
 }

@@ -22,30 +22,30 @@
 using Essentials.Api.Module;
 using static Essentials.Api.UEssentials;
 
-namespace Essentials.NativeModules.Kit
-{
-    [ModuleInfo( Name = "Kits" )]
-    public class KitModule : NativeModule
-    {
-        public KitManager       KitManager  { get; internal set; }
-        public static KitModule Instance    { get; internal set; }
+namespace Essentials.NativeModules.Kit {
 
-        public override void OnLoad()
-        {
+    [ModuleInfo(Name = "Kits")]
+    public class KitModule : NativeModule {
+
+        public KitManager KitManager { get; internal set; }
+        public static KitModule Instance { get; internal set; }
+
+        public override void OnLoad() {
             Instance = this;
 
             KitManager = new KitManager();
             KitManager.Load();
 
-            Logger.LogInfo( $"Loaded {KitManager.Count} kits" );
+            Logger.LogInfo($"Loaded {KitManager.Count} kits");
 
-            CommandManager.RegisterAll( "Essentials.NativeModules.Kit.Commands" );
+            CommandManager.RegisterAll("Essentials.NativeModules.Kit.Commands");
         }
 
-        public override void OnUnload()
-        {
-            CommandManager.UnregisterAll( "Essentials.NativeModules.Kit.Commands" );
+        public override void OnUnload() {
+            CommandManager.UnregisterAll("Essentials.NativeModules.Kit.Commands");
             KitManager.Save();
         }
+
     }
+
 }

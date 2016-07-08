@@ -19,10 +19,10 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-namespace Essentials.Api.Command.Source
-{
-    public enum AllowedSource
-    {
+namespace Essentials.Api.Command.Source {
+
+    public enum AllowedSource {
+
         /// <summary>
         /// Represents the server Console
         /// </summary>
@@ -37,5 +37,7 @@ namespace Essentials.Api.Command.Source
         /// Represents both ( console | player )
         /// </summary>
         BOTH
+
     }
+
 }

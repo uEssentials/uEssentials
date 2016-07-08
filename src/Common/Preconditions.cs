@@ -21,39 +21,37 @@
 
 using System;
 
-namespace Essentials.Common
-{
-    public static class Preconditions
-    {
-        public static T NotNull<T>( T obj, string message,
-                                    params object[] messageArgs )
-        {
-            if ( obj == null )
-                throw new ArgumentException( string.Format( message, messageArgs ) );
+namespace Essentials.Common {
+
+    public static class Preconditions {
+
+        public static T NotNull<T>(T obj, string message,
+            params object[] messageArgs) {
+            if (obj == null)
+                throw new ArgumentException(string.Format(message, messageArgs));
 
             return obj;
         }
 
-        public static void IsTrue( bool expr,
-                                   string message,
-                                   params object[] messageArgs )
-        {
-            if ( expr )
-                throw new ArgumentException( string.Format( message, messageArgs ) );
+        public static void IsTrue(bool expr,
+            string message,
+            params object[] messageArgs) {
+            if (expr)
+                throw new ArgumentException(string.Format(message, messageArgs));
         }
 
-        public static void IsFalse( bool expr, string message,
-                                    params object[] messageArgs )
-        {
-            if ( !expr )
-                throw new ArgumentException( string.Format( message, messageArgs ) );
+        public static void IsFalse(bool expr, string message,
+            params object[] messageArgs) {
+            if (!expr)
+                throw new ArgumentException(string.Format(message, messageArgs));
         }
 
-        public static void CheckState( bool expr, string message,
-                                       params object[] messageArgs )
-        {
-            if ( !expr )
-                throw new InvalidOperationException( string.Format( message, messageArgs ) );
+        public static void CheckState(bool expr, string message,
+            params object[] messageArgs) {
+            if (!expr)
+                throw new InvalidOperationException(string.Format(message, messageArgs));
         }
+
     }
+
 }

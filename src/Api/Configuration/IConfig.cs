@@ -19,16 +19,18 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-namespace Essentials.Api.Configuration
-{
-    public interface IConfig
-    {
+namespace Essentials.Api.Configuration {
+
+    public interface IConfig {
+
         string FileName { get; }
 
         void LoadDefaults();
 
-        void Load( string filePath );
+        void Load(string filePath);
 
-        void Save( string filePath );
+        void Save(string filePath);
+
     }
+
 }

@@ -26,34 +26,34 @@ using Essentials.Api.Command.Source;
 using Essentials.Core;
 using Essentials.I18n;
 
-namespace Essentials.NativeModules.Kit.Commands
-{
+namespace Essentials.NativeModules.Kit.Commands {
+
     [CommandInfo(
         Name = "kits",
         Description = "View available kits"
     )]
-    public class CommandKits : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
-        {
+    public class CommandKits : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource source, ICommandArgs parameters) {
             var kitConfig = EssCore.Instance.Config.Kit;
             var hasEconomyProvider = UEssentials.EconomyProvider.IsPresent;
 
-            var kits = KitModule.Instance.KitManager.Kits.Where( k => k.CanUse( source ) ).Select( k => {
-                if ( !hasEconomyProvider || !kitConfig.ShowCost || (k.Cost <= 0 && !kitConfig.ShowCostIfZero) )
-                {
+            var kits = KitModule.Instance.KitManager.Kits.Where(k => k.CanUse(source)).Select(k => {
+                if (!hasEconomyProvider || !kitConfig.ShowCost || (k.Cost <= 0 && !kitConfig.ShowCostIfZero)) {
                     return k.Name;
                 }
-                return string.Format( kitConfig.CostFormat, k.Name, k.Cost, UEssentials.EconomyProvider.Value.Currency );
-            } ).ToList();
+                return string.Format(kitConfig.CostFormat, k.Name, k.Cost, UEssentials.EconomyProvider.Value.Currency);
+            }).ToList();
 
 
-            if ( kits.Count == 0 )
-                EssLang.KIT_NONE.SendTo( source );
+            if (kits.Count == 0)
+                EssLang.KIT_NONE.SendTo(source);
             else
-                EssLang.KIT_LIST.SendTo( source, string.Join( ", ", kits.ToArray() ) );
+                EssLang.KIT_LIST.SendTo(source, string.Join(", ", kits.ToArray()));
 
             return CommandResult.Success();
         }
+
     }
+
 }

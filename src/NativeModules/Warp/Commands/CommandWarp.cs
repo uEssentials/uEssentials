@@ -29,68 +29,65 @@ using Essentials.Event.Handling;
 using Essentials.I18n;
 using SDG.Unturned;
 
-namespace Essentials.NativeModules.Warp.Commands
-{
+namespace Essentials.NativeModules.Warp.Commands {
+
     [CommandInfo(
         Name = "warp",
         Description = "Teleport you to given warp.",
         AllowedSource = AllowedSource.PLAYER,
         Usage = "[warp_name]"
     )]
-    public class CommandWarp : EssCommand
-    {
+    public class CommandWarp : EssCommand {
+
         internal static PlayerDictionary<Tasks.Task> Delay = new PlayerDictionary<Tasks.Task>(
             PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS |
             PlayerDictionaryCharacteristics.REMOVE_ON_DEATH |
             PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT,
             task => task.Cancel()
-        );
+            );
 
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
-        {
+        public override CommandResult OnExecute(ICommandSource source, ICommandArgs parameters) {
             var player = source.ToPlayer();
 
-            if ( parameters.Length == 0 || parameters.Length > 1 )
-            {
+            if (parameters.Length == 0 || parameters.Length > 1) {
                 return CommandResult.ShowUsage();
             }
 
-            if ( !WarpModule.Instance.WarpManager.Contains( parameters[0].ToString() ) )
-            {
-                return CommandResult.Lang( EssLang.WARP_NOT_EXIST, parameters[0] );
+            if (!WarpModule.Instance.WarpManager.Contains(parameters[0].ToString())) {
+                return CommandResult.Lang(EssLang.WARP_NOT_EXIST, parameters[0]);
             }
 
-            if ( !player.HasPermission( $"essentials.warp.{parameters[0]}" ) )
-            {
-                return CommandResult.Lang( EssLang.WARP_NO_PERMISSION, parameters[0] );
+            if (!player.HasPermission($"essentials.warp.{parameters[0]}")) {
+                return CommandResult.Lang(EssLang.WARP_NO_PERMISSION, parameters[0]);
             }
 
-            if ( player.RocketPlayer.Stance == EPlayerStance.DRIVING || player.RocketPlayer.Stance == EPlayerStance.SITTING )
-            {
-                return CommandResult.Lang( EssLang.CANNOT_TELEPORT_DRIVING );
+            if (player.RocketPlayer.Stance == EPlayerStance.DRIVING ||
+                player.RocketPlayer.Stance == EPlayerStance.SITTING) {
+                return CommandResult.Lang(EssLang.CANNOT_TELEPORT_DRIVING);
             }
 
             var dest = WarpModule.Instance.WarpManager[parameters[0].ToString()];
             var cooldown = UEssentials.Config.WarpCommand.Cooldown;
 
-            if ( cooldown > 0 && !player.HasPermission( "essentials.bypass.warpcooldown" ) )
-            {
-                EssLang.WARP_COOLDOWN.SendTo( source, cooldown );
+            if (cooldown > 0 && !player.HasPermission("essentials.bypass.warpcooldown")) {
+                EssLang.WARP_COOLDOWN.SendTo(source, cooldown);
             }
 
-            var task = Tasks.New( t => {
-                Delay.Remove( player.CSteamId.m_SteamID );
-                player.Teleport( dest.Location, dest.Rotation );
-                EssLang.WARP_TELEPORTED.SendTo( source, parameters[0] );
-            } );
+            var task = Tasks.New(t => {
+                Delay.Remove(player.CSteamId.m_SteamID);
+                player.Teleport(dest.Location, dest.Rotation);
+                EssLang.WARP_TELEPORTED.SendTo(source, parameters[0]);
+            });
 
-            task.Delay( player.HasPermission( "essentials.bypass.warpcooldown" ) ? 0 : cooldown * 1000 ).Go();
-            Delay.Add( player.CSteamId.m_SteamID, task );
+            task.Delay(player.HasPermission("essentials.bypass.warpcooldown") ? 0 : cooldown*1000).Go();
+            Delay.Add(player.CSteamId.m_SteamID, task);
 
             return CommandResult.Success();
         }
 
         protected override void OnUnregistered()
-            => UEssentials.EventManager.Unregister<EssentialsEventHandler>( "WarpPlayerMove" );
+            => UEssentials.EventManager.Unregister<EssentialsEventHandler>("WarpPlayerMove");
+
     }
+
 }

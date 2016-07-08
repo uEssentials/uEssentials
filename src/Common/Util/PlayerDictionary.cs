@@ -27,80 +27,75 @@ using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 
-namespace Essentials.Common.Util
-{
-    public class PlayerDictionary<TValue> : Dictionary<ulong, TValue>
-    {
+namespace Essentials.Common.Util {
+
+    public class PlayerDictionary<TValue> : Dictionary<ulong, TValue> {
+
         public PlayerDictionaryCharacteristics Characteristics { get; }
         private bool _registeredEventHandlers;
         private readonly Action<TValue> _removalCallback;
 
-        public PlayerDictionary() : this( PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT, null ) {}
+        public PlayerDictionary() : this(PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT, null) {}
 
-        public PlayerDictionary( PlayerDictionaryCharacteristics characteristics, Action<TValue> removalCallback )
-        {
+        public PlayerDictionary(PlayerDictionaryCharacteristics characteristics, Action<TValue> removalCallback) {
             Characteristics = characteristics;
             _removalCallback = removalCallback;
 
-            if ( (Characteristics & PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS) != 
-                  PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS )
+            if ((Characteristics & PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS) !=
+                PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS)
                 RegisterEventHandlers();
         }
 
-        public TValue this[UnturnedPlayer player]
-        {
+        public TValue this[UnturnedPlayer player] {
             get { return this[player.CSteamID.m_SteamID]; }
             set { this[player.CSteamID.m_SteamID] = value; }
         }
 
-        public TValue this[UPlayer player]
-        {
+        public TValue this[UPlayer player] {
             get { return this[player.CSteamId.m_SteamID]; }
             set { this[player.CSteamId.m_SteamID] = value; }
         }
 
-        public new void Add( ulong key, TValue value )
-        {
-            if ( (Characteristics & PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS) ==
-                  PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS && !_registeredEventHandlers)
+        public new void Add(ulong key, TValue value) {
+            if ((Characteristics & PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS) ==
+                PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS && !_registeredEventHandlers)
                 RegisterEventHandlers();
-            base.Add( key, value );
+            base.Add(key, value);
         }
 
-        public new bool Remove( ulong key )
-        {
+        public new bool Remove(ulong key) {
             TValue val;
-            if ( _removalCallback != null && TryGetValue( key, out val ) )
-                _removalCallback( val );
-            return base.Remove( key );
+            if (_removalCallback != null && TryGetValue(key, out val))
+                _removalCallback(val);
+            return base.Remove(key);
         }
 
-        private void RegisterEventHandlers()
-        {
+        private void RegisterEventHandlers() {
             _registeredEventHandlers = true;
 
-            if ( (Characteristics & PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT) == PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT )
+            if ((Characteristics & PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT) ==
+                PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT)
                 Provider.onServerDisconnected += OnPlayerDisconnected;
 
-            if ( (Characteristics & PlayerDictionaryCharacteristics.REMOVE_ON_DEATH) == PlayerDictionaryCharacteristics.REMOVE_ON_DEATH )
+            if ((Characteristics & PlayerDictionaryCharacteristics.REMOVE_ON_DEATH) ==
+                PlayerDictionaryCharacteristics.REMOVE_ON_DEATH)
                 UnturnedPlayerEvents.OnPlayerDeath += OnPlayerDeath;
         }
 
-        private void OnPlayerDisconnected( CSteamID steamId )
-        {
-            Remove( steamId.m_SteamID );
+        private void OnPlayerDisconnected(CSteamID steamId) {
+            Remove(steamId.m_SteamID);
         }
 
 
-        private void OnPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
-        {
-            Remove( player.CSteamID.m_SteamID );
+        private void OnPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+            Remove(player.CSteamID.m_SteamID);
         }
+
     }
 
     [Flags]
-    public enum PlayerDictionaryCharacteristics
-    {
+    public enum PlayerDictionaryCharacteristics {
+
         /// Remove when player dies.
         REMOVE_ON_DEATH = 1,
 
@@ -109,5 +104,7 @@ namespace Essentials.Common.Util
 
         /// Event handlers will only be registered when something is added.
         LAZY_REGISTER_HANDLERS = 1 << 2
+
     }
+
 }

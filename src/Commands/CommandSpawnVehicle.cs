@@ -26,84 +26,69 @@ using Essentials.I18n;
 using SDG.Unturned;
 using UnityEngine;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "spawnvehicle",
-        Aliases = new [] {"spawnveh"},
+        Aliases = new[] { "spawnveh" },
         Usage = "[id] [player] or [x] [y] [z]",
         Description = "Spawn a vehicle on player's/given position"
     )]
-    public class CommandSpawnVehicle : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.Length == 2 )
-            {
-                var target = UPlayer.From( args[1].ToString() );
+    public class CommandSpawnVehicle : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.Length == 2) {
+                var target = UPlayer.From(args[1].ToString());
                 var vehId = args[0];
 
-                if ( target == null )
-                {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[1] );
+                if (target == null) {
+                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[1]);
                 }
 
-                if ( !vehId.IsUshort || !IsValidVehicleId( vehId.ToUshort ) )
-                {
-                    EssLang.INVALID_VEHICLE_ID.SendTo( src, vehId );
+                if (!vehId.IsUshort || !IsValidVehicleId(vehId.ToUshort)) {
+                    EssLang.INVALID_VEHICLE_ID.SendTo(src, vehId);
+                } else {
+                    VehicleTool.giveVehicle(target.UnturnedPlayer, vehId.ToUshort);
+                    EssLang.SPAWNED_VEHICLE_AT_PLAYER.SendTo(src, args[1]);
                 }
-                else
-                {
-                    VehicleTool.giveVehicle( target.UnturnedPlayer, vehId.ToUshort );
-                    EssLang.SPAWNED_VEHICLE_AT_PLAYER.SendTo( src, args[1] );
-                }
-            }
-            else if ( args.Length == 4 )
-            {
-                var pos = args.GetVector3( 1 );
+            } else if (args.Length == 4) {
+                var pos = args.GetVector3(1);
                 var vehId = args[0];
 
-                if ( pos.HasValue )
-                {
+                if (pos.HasValue) {
                     var pVal = pos.Value;
 
-                    if ( !vehId.IsUshort || !IsValidVehicleId( vehId.ToUshort ) )
-                    {
-                        return CommandResult.Lang( EssLang.INVALID_VEHICLE_ID, vehId );
+                    if (!vehId.IsUshort || !IsValidVehicleId(vehId.ToUshort)) {
+                        return CommandResult.Lang(EssLang.INVALID_VEHICLE_ID, vehId);
                     }
 
-                    SpawnVehicle( pVal, vehId.ToUshort );
-                    EssLang.SPAWNED_VEHICLE_AT_POSITION.SendTo( src, pVal.x, pVal.y, pVal.z );
+                    SpawnVehicle(pVal, vehId.ToUshort);
+                    EssLang.SPAWNED_VEHICLE_AT_POSITION.SendTo(src, pVal.x, pVal.y, pVal.z);
+                } else {
+                    return CommandResult.Lang(EssLang.INVALID_COORDS, args[1], args[2], args[3]);
                 }
-                else
-                {
-                    return CommandResult.Lang( EssLang.INVALID_COORDS, args[1], args[2], args[3] );
-                }
-            }
-            else
-            {
+            } else {
                 return CommandResult.ShowUsage();
             }
 
             return CommandResult.Success();
         }
 
-        private static void SpawnVehicle( Vector3 pos, ushort id )
-        {
+        private static void SpawnVehicle(Vector3 pos, ushort id) {
             RaycastHit raycastHit;
-            Physics.Raycast( pos + Vector3.up*16f, Vector3.down, out raycastHit, 32f, RayMasks.BLOCK_VEHICLE );
+            Physics.Raycast(pos + Vector3.up*16f, Vector3.down, out raycastHit, 32f, RayMasks.BLOCK_VEHICLE);
 
-            if ( raycastHit.collider != null )
-            {
+            if (raycastHit.collider != null) {
                 pos.y = raycastHit.point.y + 16f;
             }
 
-            VehicleManager.spawnVehicle( id, pos, Quaternion.identity );
+            VehicleManager.spawnVehicle(id, pos, Quaternion.identity);
         }
 
-        private static bool IsValidVehicleId( ushort id )
-        {
-            return Assets.find( EAssetType.VEHICLE, id ) is VehicleAsset;
+        private static bool IsValidVehicleId(ushort id) {
+            return Assets.find(EAssetType.VEHICLE, id) is VehicleAsset;
         }
+
     }
+
 }

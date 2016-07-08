@@ -24,28 +24,29 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.NativeModules.Warp.Commands
-{
+namespace Essentials.NativeModules.Warp.Commands {
+
     [CommandInfo(
         Name = "warps",
         Description = "View available warps"
     )]
-    public class CommandWarps : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
-        {
-            var warps = ( 
-                from warp in WarpModule.Instance.WarpManager.Warps
-                where warp.CanUse( source )
-                select warp.Name 
-            ).ToArray();
+    public class CommandWarps : EssCommand {
 
-            if ( warps.Length == 0 )
-                EssLang.WARP_NONE.SendTo( source );
+        public override CommandResult OnExecute(ICommandSource source, ICommandArgs parameters) {
+            var warps = (
+                from warp in WarpModule.Instance.WarpManager.Warps
+                where warp.CanUse(source)
+                select warp.Name
+                ).ToArray();
+
+            if (warps.Length == 0)
+                EssLang.WARP_NONE.SendTo(source);
             else
-                EssLang.WARP_LIST.SendTo( source, string.Join( ", ", warps ) );
+                EssLang.WARP_LIST.SendTo(source, string.Join(", ", warps));
 
             return CommandResult.Success();
         }
+
     }
+
 }

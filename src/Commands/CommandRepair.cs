@@ -30,8 +30,8 @@ using Essentials.Common.Util;
 using SDG.Unturned;
 using Essentials.I18n;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "repair",
         Aliases = new[] { "fix" },
@@ -39,65 +39,59 @@ namespace Essentials.Commands
         AllowedSource = AllowedSource.PLAYER,
         Usage = "[all/hand]"
     )]
-    public class CommandRepair : EssCommand
-    {
-        private static readonly Action<UPlayer, Items> Repair = ( player, item ) =>
-        {
-            if ( item == null ) return;
+    public class CommandRepair : EssCommand {
 
-            var field = AccessorFactory.AccessField<List<ItemJar>>( item, "items" );
+        private static readonly Action<UPlayer, Items> Repair = (player, item) => {
+            if (item == null) return;
+
+            var field = AccessorFactory.AccessField<List<ItemJar>>(item, "items");
             var items = field.Value;
             byte index = 0;
 
-            items.ForEach( itemJar => {
+            items.ForEach(itemJar => {
+                item.updateQuality(index, 100);
 
-                item.updateQuality( index, 100 );
+                player.UnturnedPlayer.inventory.channel.send("tellUpdateQuality", ESteamCall.OWNER,
+                    ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[] {
+                        item.page,
+                        player.UnturnedPlayer.inventory.getIndex(item.page, itemJar.PositionX, itemJar.PositionY),
+                        100
+                    });
 
-                player.UnturnedPlayer.inventory.channel.send("tellUpdateQuality", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[]
-                {
-                    item.page,
-                    player.UnturnedPlayer.inventory.getIndex(item.page, itemJar.PositionX, itemJar.PositionY),
-                    100
-                });
+                var optAttach = ItemUtil.GetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL);
 
-                var optAttach = ItemUtil.GetWeaponAttachment( itemJar.item, ItemUtil.AttachmentType.BARREL );
-
-                optAttach.IfPresent( attach => {
+                optAttach.IfPresent(attach => {
                     attach.Durability = 100;
-                    ItemUtil.SetWeaponAttachment( itemJar.item, ItemUtil.AttachmentType.BARREL, attach );
+                    ItemUtil.SetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL, attach);
                 });
 
                 index++;
             });
         };
 
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
 
-            if ( args.IsEmpty )
-            {
+            if (args.IsEmpty) {
                 return CommandResult.ShowUsage();
             }
-            if ( args[0].Is( "all" ) )
-            {
-                player.RocketPlayer.Inventory.Items.ToList().ForEach( item => Repair( player, item ) );
-                EssLang.ALL_REPAIRED.SendTo( src );
-            }
-            else if ( args[0].Is( "hand" ) )
-            {
-                Repair( player, player.Inventory.Items[0] );
-                Repair( player, player.Inventory.Items[1] );
+            if (args[0].Is("all")) {
+                player.RocketPlayer.Inventory.Items.ToList().ForEach(item => Repair(player, item));
+                EssLang.ALL_REPAIRED.SendTo(src);
+            } else if (args[0].Is("hand")) {
+                Repair(player, player.Inventory.Items[0]);
+                Repair(player, player.Inventory.Items[1]);
 
-                if ( player.Equipment.HoldingItemID != 0 )
-                {
+                if (player.Equipment.HoldingItemID != 0) {
                     player.Equipment.sendUpdateState();
                 }
 
-                EssLang.HAND_REPAIRED.SendTo( src );
+                EssLang.HAND_REPAIRED.SendTo(src);
             }
 
             return CommandResult.Success();
         }
+
     }
+
 }

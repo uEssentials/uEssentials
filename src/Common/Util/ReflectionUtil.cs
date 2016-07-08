@@ -22,29 +22,31 @@
 using System;
 using System.Reflection;
 
-namespace Essentials.Common.Util
-{
-    public static class ReflectionUtil
-    {
-        public static object[] EMPTY_ARGS = new object[0];
-        public static BindingFlags INSTANCE_FLAGS => BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+namespace Essentials.Common.Util {
 
-        public static TAttribute GetAttributeFrom<TAttribute>( object instance ) where TAttribute : Attribute
-        {
+    public static class ReflectionUtil {
+
+        public static object[] EMPTY_ARGS = new object[0];
+
+        public static BindingFlags INSTANCE_FLAGS
+            => BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
+        public static TAttribute GetAttributeFrom<TAttribute>(object instance) where TAttribute : Attribute {
             object[] attrs;
 
-            if ( instance is MethodInfo )
-            {
+            if (instance is MethodInfo) {
                 var methodInfo = (MethodInfo) instance;
 
-                attrs = methodInfo.GetCustomAttributes( typeof (TAttribute), false );
+                attrs = methodInfo.GetCustomAttributes(typeof(TAttribute), false);
 
-                return attrs.Length == 0 ? default(TAttribute) : (TAttribute) attrs.GetValue( 0 );
+                return attrs.Length == 0 ? default(TAttribute) : (TAttribute) attrs.GetValue(0);
             }
 
-            attrs = instance.GetType().GetCustomAttributes( typeof (TAttribute), true );
+            attrs = instance.GetType().GetCustomAttributes(typeof(TAttribute), true);
 
-            return attrs.Length == 0 ? default(TAttribute) : (TAttribute) attrs.GetValue( 0 );
+            return attrs.Length == 0 ? default(TAttribute) : (TAttribute) attrs.GetValue(0);
         }
+
     }
+
 }

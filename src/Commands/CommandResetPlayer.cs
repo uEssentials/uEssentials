@@ -26,65 +26,57 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "resetplayer",
         Description = "Reset all player data.",
         Usage = "[player/playerid]"
     )]
-    public class CommandResetPlayer : EssCommand
-    {
-        private static readonly Action<ulong> ResetPlayer = steamId =>
-        {
+    public class CommandResetPlayer : EssCommand {
+
+        private static readonly Action<ulong> ResetPlayer = steamId => {
             var sep = Path.DirectorySeparatorChar.ToString();
             var idStr = steamId.ToString();
 
-            foreach ( var dic in Directory.GetDirectories(Directory.GetParent(
-                    Directory.GetCurrentDirectory() ).ToString() + $"{sep}Players{sep}" ) )
-            {
-                if ( dic.Substring( dic.LastIndexOf( sep, StringComparison.Ordinal ) + 1 ).StartsWith( idStr ) )
-                {
-                    Directory.Delete( dic, true );
+            foreach (var dic in Directory.GetDirectories(Directory.GetParent(
+                Directory.GetCurrentDirectory()).ToString() + $"{sep}Players{sep}")) {
+                if (dic.Substring(dic.LastIndexOf(sep, StringComparison.Ordinal) + 1).StartsWith(idStr)) {
+                    Directory.Delete(dic, true);
                 }
             }
         };
 
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.IsEmpty || args.Length > 1 )
-            {
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.IsEmpty || args.Length > 1) {
                 return CommandResult.ShowUsage();
             }
 
-            try
-            {
-                var steamId = new CSteamID( ulong.Parse( args[0].ToString() ) );
+            try {
+                var steamId = new CSteamID(ulong.Parse(args[0].ToString()));
 
-                if ( !steamId.IsValid() )
-                {
-                    return CommandResult.Lang( EssLang.INVALID_STEAMID, steamId.m_SteamID );
+                if (!steamId.IsValid()) {
+                    return CommandResult.Lang(EssLang.INVALID_STEAMID, steamId.m_SteamID);
                 }
 
-                ResetPlayer( steamId.m_SteamID );
-                EssLang.PLAYER_RESET.SendTo( src );
-            }
-            catch (FormatException)
-            {
+                ResetPlayer(steamId.m_SteamID);
+                EssLang.PLAYER_RESET.SendTo(src);
+            } catch (FormatException) {
                 var target = args[0].ToPlayer;
 
-                if ( target == null )
-                {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
+                if (target == null) {
+                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
                 }
 
-                target.Kick( EssLang.PLAYER_RESET_KICK.GetMessage() );
-                ResetPlayer( target.CSteamId.m_SteamID );
+                target.Kick(EssLang.PLAYER_RESET_KICK.GetMessage());
+                ResetPlayer(target.CSteamId.m_SteamID);
 
-                EssLang.PLAYER_RESET.SendTo( src );
+                EssLang.PLAYER_RESET.SendTo(src);
             }
 
             return CommandResult.Success();
         }
+
     }
+
 }

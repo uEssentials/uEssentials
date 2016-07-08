@@ -23,66 +23,59 @@ using System.Collections.Generic;
 using Essentials.Core.Storage;
 using Essentials.NativeModules.Warp.Data;
 
-namespace Essentials.NativeModules.Warp
-{
-    public sealed class WarpManager
-    {
-        private Dictionary<string, Warp>        WarpMap     { get; set; }
-        private IData<Dictionary<string, Warp>> WarpData    { get; }
-        public IEnumerable<Warp>                Warps       => WarpMap.Values;
-        public int                              Count       => WarpMap.Count;
+namespace Essentials.NativeModules.Warp {
 
-        internal WarpManager()
-        {
+    public sealed class WarpManager {
+
+        private Dictionary<string, Warp> WarpMap { get; set; }
+        private IData<Dictionary<string, Warp>> WarpData { get; }
+        public IEnumerable<Warp> Warps => WarpMap.Values;
+        public int Count => WarpMap.Count;
+
+        internal WarpManager() {
             WarpMap = new Dictionary<string, Warp>();
             WarpData = new WarpData();
         }
 
-        public Warp this[ string warpName ] => GetByName( warpName );
+        public Warp this[string warpName] => GetByName(warpName);
 
-        public bool Contains( string warpName )
-        {
-            return WarpMap.ContainsKey( warpName.ToLower() );
+        public bool Contains(string warpName) {
+            return WarpMap.ContainsKey(warpName.ToLower());
         }
 
-        public bool Contains( Warp warp )
-        {
-            return WarpMap.ContainsValue( warp );
+        public bool Contains(Warp warp) {
+            return WarpMap.ContainsValue(warp);
         }
 
-        public void Load()
-        {
+        public void Load() {
             WarpMap = WarpData.Load();
         }
 
-        public void Save()
-        {
-            WarpData.Save( WarpMap );
+        public void Save() {
+            WarpData.Save(WarpMap);
         }
 
-        public void Add( Warp warp )
-        {
-            WarpMap.Add( warp.Name, warp );
+        public void Add(Warp warp) {
+            WarpMap.Add(warp.Name, warp);
             Save();
         }
 
-        public Warp GetByName( string warpName )
-        {
-            return Contains( warpName )
+        public Warp GetByName(string warpName) {
+            return Contains(warpName)
                 ? WarpMap[warpName.ToLower()]
                 : null;
         }
 
-        public void Delete( string warpName )
-        {
-            if ( !Contains( warpName ) ) return;
-            WarpMap.Remove( warpName.ToLower() );
+        public void Delete(string warpName) {
+            if (!Contains(warpName)) return;
+            WarpMap.Remove(warpName.ToLower());
             Save();
         }
 
-        public void Delete( Warp warp )
-        {
-            Delete( warp.Name );
+        public void Delete(Warp warp) {
+            Delete(warp.Name);
         }
+
     }
+
 }

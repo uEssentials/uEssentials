@@ -22,17 +22,18 @@
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 
-namespace Essentials.Api.Events
-{
-    public class CommandPreExecuteEvent : CommandEvent
-    {
+namespace Essentials.Api.Events {
+
+    public class CommandPreExecuteEvent : CommandEvent {
+
         /// <summary>
         /// Define if this event will be cancelled.
         /// </summary>
         public bool Cancelled { get; set; }
 
-        public CommandPreExecuteEvent( ICommand command, ICommandArgs args,
-                                       ICommandSource src ) : base(command, args, src)
-        {}
+        public CommandPreExecuteEvent(ICommand command, ICommandArgs args,
+            ICommandSource src) : base(command, args, src) {}
+
     }
+
 }

@@ -24,22 +24,23 @@ using System.Linq;
 using SDG.Unturned;
 using Object = UnityEngine.Object;
 
-namespace Essentials.Api.Unturned
-{
-    public class UWorld
-    {
-        public static uint Time
-        {
+namespace Essentials.Api.Unturned {
+
+    public class UWorld {
+
+        public static uint Time {
             get { return LightingManager.time; }
             set { LightingManager.time = value; }
         }
 
         public static List<Zombie> Zombies =>
-            Object.FindObjectsOfType<Zombie>()?.ToList() ?? new List<Zombie>( 0 );
+            Object.FindObjectsOfType<Zombie>()?.ToList() ?? new List<Zombie>(0);
 
         public static List<Animal> Animals =>
-            Object.FindObjectsOfType<Animal>()?.ToList() ?? new List<Animal>( 0 );
+            Object.FindObjectsOfType<Animal>()?.ToList() ?? new List<Animal>(0);
 
         public static List<InteractableVehicle> Vehicles => VehicleManager.vehicles;
+
     }
+
 }

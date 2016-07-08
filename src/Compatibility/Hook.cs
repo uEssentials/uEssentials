@@ -22,50 +22,40 @@
 using System;
 using Essentials.Api;
 
-namespace Essentials.Compatibility
-{
-    public abstract class Hook
-    {
+namespace Essentials.Compatibility {
+
+    public abstract class Hook {
+
         public string Name { get; }
         public bool IsLoaded { get; private set; }
 
-        protected Hook( string name )
-        {
+        protected Hook(string name) {
             Name = name;
         }
 
-        internal void Load()
-        {
-            if ( !CanBeLoaded() )
-            {
+        internal void Load() {
+            if (!CanBeLoaded()) {
                 return;
             }
 
             IsLoaded = true;
 
-            try
-            {
+            try {
                 OnLoad();
-            }
-            catch ( Exception ex )
-            {
-                UEssentials.Logger.LogError( $"Failed to load '{Name}' hook." );
-                UEssentials.Logger.LogError( ex.Message );
+            } catch (Exception ex) {
+                UEssentials.Logger.LogError($"Failed to load '{Name}' hook.");
+                UEssentials.Logger.LogError(ex.Message);
             }
         }
 
-        internal void Unload()
-        {
+        internal void Unload() {
             IsLoaded = false;
 
-            try
-            {
+            try {
                 OnUnload();
-            }
-            catch ( Exception ex )
-            {
-                UEssentials.Logger.LogError( $"Failed to unload '{Name}' hook." );
-                UEssentials.Logger.LogError( ex.Message );
+            } catch (Exception ex) {
+                UEssentials.Logger.LogError($"Failed to unload '{Name}' hook.");
+                UEssentials.Logger.LogError(ex.Message);
             }
         }
 
@@ -74,5 +64,7 @@ namespace Essentials.Compatibility
         public abstract void OnUnload();
 
         public abstract bool CanBeLoaded();
+
     }
+
 }

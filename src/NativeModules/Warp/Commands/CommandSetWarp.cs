@@ -23,56 +23,48 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.NativeModules.Warp.Commands
-{
+namespace Essentials.NativeModules.Warp.Commands {
+
     [CommandInfo(
         Name = "setwarp",
         Description = "Set an warp.",
         Usage = "[warp_name] <x> <y> <z>"
     )]
-    public class CommandSetWarp : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            switch ( args.Length )
-            {
+    public class CommandSetWarp : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            switch (args.Length) {
                 case 1:
-                    if ( src.IsConsole )
-                    {
+                    if (src.IsConsole) {
                         return CommandResult.ShowUsage();
                     }
 
-                    if ( WarpModule.Instance.WarpManager.Contains( args[0].ToString() ) )
-                    {
-                        return CommandResult.Lang( EssLang.WARP_ALREADY_EXISTS );
+                    if (WarpModule.Instance.WarpManager.Contains(args[0].ToString())) {
+                        return CommandResult.Lang(EssLang.WARP_ALREADY_EXISTS);
                     }
 
                     var player = src.ToPlayer();
-                    var warp = new Warp( args[0].ToString(),  player.Position, player.Rotation );
+                    var warp = new Warp(args[0].ToString(), player.Position, player.Rotation);
 
-                    WarpModule.Instance.WarpManager.Add( warp );
-                    EssLang.WARP_SET.SendTo( src, args[0] );
+                    WarpModule.Instance.WarpManager.Add(warp);
+                    EssLang.WARP_SET.SendTo(src, args[0]);
                     break;
 
                 case 4:
-                    var pos = args.GetVector3( 1 );
+                    var pos = args.GetVector3(1);
 
-                    if ( pos.HasValue )
-                    {
-                        warp = new Warp( args[0].ToString(), pos.Value, 0.0F );
+                    if (pos.HasValue) {
+                        warp = new Warp(args[0].ToString(), pos.Value, 0.0F);
 
-                        if ( WarpModule.Instance.WarpManager.Contains( args[0].ToString() ) )
-                        {
-                            return CommandResult.Lang( EssLang.WARP_ALREADY_EXISTS );
+                        if (WarpModule.Instance.WarpManager.Contains(args[0].ToString())) {
+                            return CommandResult.Lang(EssLang.WARP_ALREADY_EXISTS);
                         }
 
-                        WarpModule.Instance.WarpManager.Add( warp );
+                        WarpModule.Instance.WarpManager.Add(warp);
 
-                        EssLang.WARP_SET.SendTo( src, args[0] );
-                    }
-                    else
-                    {
-                        return CommandResult.Lang( EssLang.INVALID_COORDS, args[1], args[2], args[3] );
+                        EssLang.WARP_SET.SendTo(src, args[0]);
+                    } else {
+                        return CommandResult.Lang(EssLang.INVALID_COORDS, args[1], args[2], args[3]);
                     }
                     break;
 
@@ -82,5 +74,7 @@ namespace Essentials.NativeModules.Warp.Commands
 
             return CommandResult.Success();
         }
+
     }
+
 }

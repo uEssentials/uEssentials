@@ -24,32 +24,29 @@ using System.IO;
 using Essentials.Api;
 using System.Net;
 
-namespace Essentials.Configuration
-{
-    internal class EssWebConfig : EssConfig
-    {
-        public override void Load( string filePath )
-        {
+namespace Essentials.Configuration {
+
+    internal class EssWebConfig : EssConfig {
+
+        public override void Load(string filePath) {
             var logger = UEssentials.Logger;
             var url = UEssentials.Config.WebConfig.Url;
 
-            try
-            {
-                logger.LogInfo( $"Loading web configuration from '{url}'" );
+            try {
+                logger.LogInfo($"Loading web configuration from '{url}'");
 
-                using ( var wc = new WebClient() )
-                {
-                    var resp = wc.DownloadString( url );
-                    File.WriteAllText( filePath, resp );
+                using (var wc = new WebClient()) {
+                    var resp = wc.DownloadString(url);
+                    File.WriteAllText(filePath, resp);
                 }
-            }
-            catch(Exception ex)
-            {
-                logger.LogError( "Could not load webconfig." );
-                logger.LogError( ex.ToString() );
+            } catch (Exception ex) {
+                logger.LogError("Could not load webconfig.");
+                logger.LogError(ex.ToString());
             }
 
-            base.Load( filePath );
+            base.Load(filePath);
         }
+
     }
+
 }

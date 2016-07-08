@@ -29,59 +29,51 @@ using Essentials.Api.Unturned;
 
 // ReSharper disable InconsistentNaming
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "repairvehicle",
-        Aliases = new[] {"repairveh", "repv"},
+        Aliases = new[] { "repairveh", "repv" },
         Description = "Repair current/all vehicle",
         Usage = "<all>"
     )]
-    public class CommandRepairVehicle : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.IsEmpty )
-            {
-                if ( src.IsConsole )
-                {
+    public class CommandRepairVehicle : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.IsEmpty) {
+                if (src.IsConsole) {
                     return CommandResult.ShowUsage();
                 }
 
                 var currentVeh = src.ToPlayer().CurrentVehicle;
 
-                if ( currentVeh != null )
-                {
-                    VehicleManager.sendVehicleHealth( currentVeh, currentVeh.asset.health );
+                if (currentVeh != null) {
+                    VehicleManager.sendVehicleHealth(currentVeh, currentVeh.asset.health);
 
-                    EssLang.VEHICLE_REPAIRED.SendTo( src );
+                    EssLang.VEHICLE_REPAIRED.SendTo(src);
+                } else {
+                    return CommandResult.Lang(EssLang.NOT_IN_VEHICLE);
                 }
-                else
-                {
-                    return CommandResult.Lang( EssLang.NOT_IN_VEHICLE );
-                }
-            }
-            else if ( args[0].Is( "all" ) )
-            {
-                if ( !src.HasPermission( Permission + ".all" ) )
-                {
-                    return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+            } else if (args[0].Is("all")) {
+                if (!src.HasPermission(Permission + ".all")) {
+                    return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
                 }
 
-                lock ( UWorld.Vehicles )
-                {
+                lock (UWorld.Vehicles) {
                     UWorld.Vehicles
-                        .Where( veh => !veh.isExploded && !veh.isUnderwater )
+                        .Where(veh => !veh.isExploded && !veh.isUnderwater)
                         .ToList()
-                        .ForEach( vehicle => {
-                            VehicleManager.sendVehicleHealth( vehicle, vehicle.asset.health );
-                        } );
+                        .ForEach(vehicle => {
+                            VehicleManager.sendVehicleHealth(vehicle, vehicle.asset.health);
+                        });
 
-                    EssLang.VEHICLE_REPAIRED_ALL.SendTo( src );
+                    EssLang.VEHICLE_REPAIRED_ALL.SendTo(src);
                 }
             }
 
             return CommandResult.Success();
         }
+
     }
+
 }

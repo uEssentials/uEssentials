@@ -27,43 +27,41 @@ using Essentials.Common.Util;
 using Essentials.Core.Storage;
 using Newtonsoft.Json;
 
-namespace Essentials.NativeModules.Warp.Data
-{
-    public class WarpData : IData<Dictionary<string, Warp>>
-    {
-        private static string DataFilePath
-        {
-            get
-            {
+namespace Essentials.NativeModules.Warp.Data {
+
+    public class WarpData : IData<Dictionary<string, Warp>> {
+
+        private static string DataFilePath {
+            get {
                 var dataFolder = UEssentials.DataFolder;
                 var filePath = $"{dataFolder}warps.json";
 
-                if ( !Directory.Exists( dataFolder ) )
-                    Directory.CreateDirectory( dataFolder );
+                if (!Directory.Exists(dataFolder))
+                    Directory.CreateDirectory(dataFolder);
 
-                if ( !File.Exists( filePath ) )
-                    File.Create( filePath ).Close();
+                if (!File.Exists(filePath))
+                    File.Create(filePath).Close();
 
                 return filePath;
             }
         }
 
-        public void Save( Dictionary<string, Warp> type )
-        {
-            File.WriteAllText( DataFilePath, string.Empty );
-            JsonUtil.Serialize( DataFilePath, type.Values.ToArray() );
+        public void Save(Dictionary<string, Warp> type) {
+            File.WriteAllText(DataFilePath, string.Empty);
+            JsonUtil.Serialize(DataFilePath, type.Values.ToArray());
         }
 
-        public Dictionary<string, Warp> Load()
-        {
+        public Dictionary<string, Warp> Load() {
             var loadedWarps = new Dictionary<string, Warp>();
-            var deserializedWarpArray = JsonConvert.DeserializeObject<Warp[]>( File.ReadAllText( DataFilePath ) );
+            var deserializedWarpArray = JsonConvert.DeserializeObject<Warp[]>(File.ReadAllText(DataFilePath));
 
-            deserializedWarpArray?.ToList().ForEach( kit => {
-                loadedWarps.Add( kit.Name.ToLower(), kit );
+            deserializedWarpArray?.ToList().ForEach(kit => {
+                loadedWarps.Add(kit.Name.ToLower(), kit);
             });
 
             return loadedWarps;
         }
+
     }
+
 }

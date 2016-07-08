@@ -26,19 +26,18 @@ using Essentials.Api.Unturned;
 using SDG.Unturned;
 using Essentials.I18n;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "respawnzombies",
         Description = "Respawn all zombies"
     )]
-    public class CommandRespawnZombies : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
+    public class CommandRespawnZombies : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var count = 0;
 
-            UWorld.Zombies.ForEach( zombie => {
+            UWorld.Zombies.ForEach(zombie => {
                 ZombieManager.sendZombieAlive(
                     zombie,
                     zombie.type,
@@ -49,13 +48,15 @@ namespace Essentials.Commands
                     zombie.gear,
                     zombie.transform.position,
                     0
-                );
+                    );
                 count++;
             });
 
-            EssLang.RESPAWNED_ZOMBIES.SendTo( src, count );
+            EssLang.RESPAWNED_ZOMBIES.SendTo(src, count);
 
             return CommandResult.Success();
         }
+
     }
+
 }

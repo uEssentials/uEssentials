@@ -26,77 +26,67 @@ using Rocket.API.Serialisation;
 using Rocket.Core;
 using Rocket.Core.Permissions;
 
-namespace Essentials.Core.Permission
-{
-    internal class EssentialsPermissionsProvider : IRocketPermissionsProvider
-    {
+namespace Essentials.Core.Permission {
+
+    internal class EssentialsPermissionsProvider : IRocketPermissionsProvider {
+
         private readonly IRocketPermissionsProvider _defaultProvider;
 
-        internal EssentialsPermissionsProvider()
-        {
+        internal EssentialsPermissionsProvider() {
             _defaultProvider = R.Instance.GetComponent<RocketPermissionsManager>();
         }
 
-        internal EssentialsPermissionsProvider( IRocketPermissionsProvider _defaultProvider )
-        {
+        internal EssentialsPermissionsProvider(IRocketPermissionsProvider _defaultProvider) {
             this._defaultProvider = _defaultProvider;
         }
 
-        public RocketPermissionsProviderResult AddGroup( RocketPermissionsGroup group )
-        {
-            return _defaultProvider.AddGroup( group );
+        public RocketPermissionsProviderResult AddGroup(RocketPermissionsGroup group) {
+            return _defaultProvider.AddGroup(group);
         }
 
-        public RocketPermissionsProviderResult AddPlayerToGroup( string groupId, IRocketPlayer player )
-        {
-            return _defaultProvider.AddPlayerToGroup( groupId, player );
+        public RocketPermissionsProviderResult AddPlayerToGroup(string groupId, IRocketPlayer player) {
+            return _defaultProvider.AddPlayerToGroup(groupId, player);
         }
 
-        public RocketPermissionsProviderResult DeleteGroup( string groupId )
-        {
-            return _defaultProvider.DeleteGroup( groupId );
+        public RocketPermissionsProviderResult DeleteGroup(string groupId) {
+            return _defaultProvider.DeleteGroup(groupId);
         }
 
-        public RocketPermissionsGroup GetGroup( string groupId )
-        {
-            return _defaultProvider.GetGroup( groupId );
+        public RocketPermissionsGroup GetGroup(string groupId) {
+            return _defaultProvider.GetGroup(groupId);
         }
 
-        public List<RocketPermissionsGroup> GetGroups( IRocketPlayer player, bool includeParentGroups )
-        {
-            return _defaultProvider.GetGroups( player, includeParentGroups );
+        public List<RocketPermissionsGroup> GetGroups(IRocketPlayer player, bool includeParentGroups) {
+            return _defaultProvider.GetGroups(player, includeParentGroups);
         }
 
-        public List<Rocket.API.Serialisation.Permission> GetPermissions( IRocketPlayer player )
-        {
-            return _defaultProvider.GetPermissions( player )
-                   .Where( p => !p.Name.StartsWith("!") )
-                   .ToList();
+        public List<Rocket.API.Serialisation.Permission> GetPermissions(IRocketPlayer player) {
+            return _defaultProvider.GetPermissions(player)
+                .Where(p => !p.Name.StartsWith("!"))
+                .ToList();
         }
 
-        public List<Rocket.API.Serialisation.Permission> GetPermissions( IRocketPlayer player, List<string> requestedPermissions )
-        {
-            return _defaultProvider.GetPermissions( player, requestedPermissions );
+        public List<Rocket.API.Serialisation.Permission> GetPermissions(IRocketPlayer player,
+            List<string> requestedPermissions) {
+            return _defaultProvider.GetPermissions(player, requestedPermissions);
         }
 
-        public bool HasPermission( IRocketPlayer player, List<string> requestedPermissions )
-        {
-            return _defaultProvider.HasPermission( player, requestedPermissions );
+        public bool HasPermission(IRocketPlayer player, List<string> requestedPermissions) {
+            return _defaultProvider.HasPermission(player, requestedPermissions);
         }
 
-        public void Reload()
-        {
+        public void Reload() {
             _defaultProvider.Reload();
         }
 
-        public RocketPermissionsProviderResult RemovePlayerFromGroup( string groupId, IRocketPlayer player )
-        {
-            return _defaultProvider.RemovePlayerFromGroup( groupId, player );
+        public RocketPermissionsProviderResult RemovePlayerFromGroup(string groupId, IRocketPlayer player) {
+            return _defaultProvider.RemovePlayerFromGroup(groupId, player);
         }
 
-        public RocketPermissionsProviderResult SaveGroup( RocketPermissionsGroup group )
-        {
-            return _defaultProvider.SaveGroup( group );
+        public RocketPermissionsProviderResult SaveGroup(RocketPermissionsGroup group) {
+            return _defaultProvider.SaveGroup(group);
         }
+
     }
+
 }

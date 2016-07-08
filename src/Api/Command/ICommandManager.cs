@@ -24,13 +24,13 @@ using System.Collections.Generic;
 using System.Reflection;
 using Essentials.Api.Command.Source;
 
-namespace Essentials.Api.Command
-{
+namespace Essentials.Api.Command {
+
     /// <summary>
     /// Author: leonardosc
     /// </summary>
-    public interface ICommandManager
-    {
+    public interface ICommandManager {
+
         /// <summary>
         ///
         /// </summary>
@@ -40,7 +40,7 @@ namespace Essentials.Api.Command
         ///
         /// </summary>
         /// <param name="command"></param>
-        void Register( ICommand command );
+        void Register(ICommand command);
 
         /// <summary>
         ///
@@ -52,37 +52,37 @@ namespace Essentials.Api.Command
         ///
         /// </summary>
         /// <param name="method"></param>
-        void Register( Func<ICommandSource, ICommandArgs, CommandResult> method );
+        void Register(Func<ICommandSource, ICommandArgs, CommandResult> method);
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="method"></param>
-        void Register( Func<ICommandSource, ICommandArgs, ICommand, CommandResult> method );
+        void Register(Func<ICommandSource, ICommandArgs, ICommand, CommandResult> method);
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="assembly"></param>
-        void RegisterAll( Assembly assembly );
+        void RegisterAll(Assembly assembly);
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="targetNamespace"></param>
-        void RegisterAll( string targetNamespace );
+        void RegisterAll(string targetNamespace);
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="assembly"></param>
-        void UnregisterAll( Assembly assembly );
+        void UnregisterAll(Assembly assembly);
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="targetNamespace"></param>
-        void UnregisterAll( string targetNamespace );
+        void UnregisterAll(string targetNamespace);
 
         /// <summary>
         ///
@@ -94,20 +94,20 @@ namespace Essentials.Api.Command
         ///
         /// </summary>
         /// <param name="command"></param>
-        void Unregister( ICommand command );
+        void Unregister(ICommand command);
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="commandType"></param>
-        void Unregister( Type commandType );
+        void Unregister(Type commandType);
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="commandName"></param>
         /// <returns></returns>
-        bool HasWithName( string commandName );
+        bool HasWithName(string commandName);
 
         /// <summary>
         ///
@@ -122,14 +122,14 @@ namespace Essentials.Api.Command
         /// <param name="name"></param>
         /// <param name="includeAliases"></param>
         /// <returns></returns>
-        ICommand GetByName( string name, bool includeAliases = true );
+        ICommand GetByName(string name, bool includeAliases = true);
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="commandType"></param>
         /// <returns></returns>
-        ICommand GetByType( Type commandType );
+        ICommand GetByType(Type commandType);
 
         /// <summary>
         ///
@@ -137,5 +137,7 @@ namespace Essentials.Api.Command
         /// <typeparam name="TCommandType"></typeparam>
         /// <returns></returns>
         TCommandType GetByType<TCommandType>() where TCommandType : ICommand;
+
     }
+
 }

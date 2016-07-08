@@ -22,60 +22,61 @@
 using System.Text;
 using Essentials.I18n;
 
-namespace Essentials.Common.Util
-{
-    public static class TimeUtil
-    {
-        public static string FormatSeconds( uint seconds )
-        {
-            var msgDay       = EssLang.DAY.GetMessage();
-            var msgDays      = EssLang.DAYS.GetMessage();
-            var msgSecond    = EssLang.SECOND.GetMessage();
-            var msgSeconds   = EssLang.SECONDS.GetMessage();
-            var msgMinute    = EssLang.MINUTE.GetMessage();
-            var msgMinutes   = EssLang.MINUTES.GetMessage();
-            var msgHour      = EssLang.HOUR.GetMessage();
-            var msgHours     = EssLang.HOURS.GetMessage();
+namespace Essentials.Common.Util {
 
-            const uint MIN  = 60;
-            const uint HOUR = MIN * MIN;
-            const uint DAY  = HOUR * 24;
+    public static class TimeUtil {
 
-            var days = seconds / DAY;
-            seconds -= days * DAY;
+        public static string FormatSeconds(uint seconds) {
+            var msgDay = EssLang.DAY.GetMessage();
+            var msgDays = EssLang.DAYS.GetMessage();
+            var msgSecond = EssLang.SECOND.GetMessage();
+            var msgSeconds = EssLang.SECONDS.GetMessage();
+            var msgMinute = EssLang.MINUTE.GetMessage();
+            var msgMinutes = EssLang.MINUTES.GetMessage();
+            var msgHour = EssLang.HOUR.GetMessage();
+            var msgHours = EssLang.HOURS.GetMessage();
 
-            var hours = seconds / HOUR;
-            seconds -= hours * HOUR;
+            const uint MIN = 60;
+            const uint HOUR = MIN*MIN;
+            const uint DAY = HOUR*24;
 
-            var minutes = seconds / MIN;
-            seconds -= minutes * MIN;
+            var days = seconds/DAY;
+            seconds -= days*DAY;
+
+            var hours = seconds/HOUR;
+            seconds -= hours*HOUR;
+
+            var minutes = seconds/MIN;
+            seconds -= minutes*MIN;
 
             var sb = new StringBuilder();
 
-            if ( days > 0 )
-                sb.Append( days )
-                  .Append( " " )
-                  .Append( days > 1 ? msgDays : msgDay )
-                  .Append(", ");
+            if (days > 0)
+                sb.Append(days)
+                    .Append(" ")
+                    .Append(days > 1 ? msgDays : msgDay)
+                    .Append(", ");
 
-            if ( hours > 0 )
-                sb.Append( hours )
-                  .Append( " " )
-                  .Append( hours > 1 ? msgHours : msgHour )
-                  .Append(", ");
+            if (hours > 0)
+                sb.Append(hours)
+                    .Append(" ")
+                    .Append(hours > 1 ? msgHours : msgHour)
+                    .Append(", ");
 
-            if ( minutes > 0 )
-                sb.Append( minutes )
-                  .Append( " " )
-                  .Append( minutes > 1 ? msgMinutes : msgMinute )
-                  .Append(", ");
+            if (minutes > 0)
+                sb.Append(minutes)
+                    .Append(" ")
+                    .Append(minutes > 1 ? msgMinutes : msgMinute)
+                    .Append(", ");
 
-            sb.Append( seconds )
-                .Append( " " )
-                .Append( seconds > 1 ? msgSeconds : msgSecond )
+            sb.Append(seconds)
+                .Append(" ")
+                .Append(seconds > 1 ? msgSeconds : msgSecond)
                 .Append(", ");
 
-            return sb.ToString().Substring( 0, sb.Length - 2 );
+            return sb.ToString().Substring(0, sb.Length - 2);
         }
+
     }
+
 }

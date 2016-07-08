@@ -25,10 +25,10 @@ using Newtonsoft.Json.Converters;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
 
-namespace Essentials.NativeModules.Kit.Item
-{
-    public class KitItemWeapon : KitItem
-    {
+namespace Essentials.NativeModules.Kit.Item {
+
+    public class KitItemWeapon : KitItem {
+
         [JsonProperty]
         [JsonConverter(typeof(StringEnumConverter))]
         public EFiremode? FireMode { get; set; }
@@ -56,40 +56,36 @@ namespace Essentials.NativeModules.Kit.Item
         /// </summary>
         /// <returns> Instance of SDG.Unturned.Item of this item </returns>>
         [JsonIgnore]
-        public override SDG.Unturned.Item UnturnedItem
-        {
-            get
-            {
+        public override SDG.Unturned.Item UnturnedItem {
+            get {
                 var item = base.UnturnedItem;
 
-                if ( item.Metadata.Length != 18 )
+                if (item.Metadata.Length != 18)
                     return item;
 
                 var metadata = item.Metadata;
 
-                Action<int[], Attachment> assembleAttach = ( indexes, attach ) => {
-                    if ( attach == null || attach.AttachmentId == 0 ) return;
+                Action<int[], Attachment> assembleAttach = (indexes, attach) => {
+                    if (attach == null || attach.AttachmentId == 0) return;
 
-                    var attachIdBytes = BitConverter.GetBytes( attach.AttachmentId );
+                    var attachIdBytes = BitConverter.GetBytes(attach.AttachmentId);
 
                     metadata[indexes[0]] = attachIdBytes[0];
                     metadata[indexes[1]] = attachIdBytes[1];
                     metadata[indexes[2]] = attach.Durability;
                 };
 
-                assembleAttach( new[] { 0x0, 0x1, 0xD }, Sight );
-                assembleAttach( new[] { 0x2, 0x3, 0xE }, Tactical );
-                assembleAttach( new[] { 0x4, 0x5, 0xF }, Grip );
-                assembleAttach( new[] { 0x6, 0x7, 0x10 }, Barrel );
-                assembleAttach( new[] { 0x8, 0x9, 0x11 }, Magazine );
+                assembleAttach(new[] { 0x0, 0x1, 0xD }, Sight);
+                assembleAttach(new[] { 0x2, 0x3, 0xE }, Tactical);
+                assembleAttach(new[] { 0x4, 0x5, 0xF }, Grip);
+                assembleAttach(new[] { 0x6, 0x7, 0x10 }, Barrel);
+                assembleAttach(new[] { 0x8, 0x9, 0x11 }, Magazine);
 
-                if ( Ammo.HasValue )
-                {
+                if (Ammo.HasValue) {
                     metadata[0xA] = Ammo.Value;
                 }
 
-                if ( FireMode.HasValue )
-                {
+                if (FireMode.HasValue) {
                     metadata[0xB] = (byte) FireMode;
                 }
 
@@ -99,18 +95,18 @@ namespace Essentials.NativeModules.Kit.Item
             }
         }
 
-        public KitItemWeapon( ushort id, byte durability,  byte amount, byte? ammo,
-                              EFiremode? fireMode = EFiremode.SAFETY )  : base( id, durability, amount )
-        {
+        public KitItemWeapon(ushort id, byte durability, byte amount, byte? ammo,
+            EFiremode? fireMode = EFiremode.SAFETY) : base(id, durability, amount) {
             FireMode = fireMode;
             Ammo = ammo;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"{base.ToString()}, Barrel: {Barrel?.AttachmentId ?? 0}, Sight: {Sight?.AttachmentId ?? 0}, " +
                    $"Grip: {Grip?.AttachmentId ?? 0}, Tactical: {Tactical?.AttachmentId ?? 0}, Magazine: {Magazine?.AttachmentId ?? 0}, " +
                    $"FireMode: {FireMode?.ToString() ?? "None"}, Ammo: {Ammo?.ToString() ?? "None"}";
         }
+
     }
+
 }

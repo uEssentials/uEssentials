@@ -27,14 +27,13 @@ using Essentials.I18n;
 using Essentials.NativeModules.Kit.Item;
 using Newtonsoft.Json;
 
-namespace Essentials.NativeModules.Kit
-{
+namespace Essentials.NativeModules.Kit {
+
     /// <summary>
     /// Author: leonardosc
     /// </summary>
     [JsonObject]
-    public class Kit
-    {
+    public class Kit {
 
         /// <summary>
         /// Name of kit (obviously)
@@ -73,9 +72,8 @@ namespace Essentials.NativeModules.Kit
         ///     Flag that determines if cooldown will be reseted when player die
         /// </param>
         /// </summary>
-        public Kit(string name, uint cooldown, bool resetCooldownWhenDie)
-        {
-            Preconditions.NotNull( name, "Kit Name cannot be null" );
+        public Kit(string name, uint cooldown, bool resetCooldownWhenDie) {
+            Preconditions.NotNull(name, "Kit Name cannot be null");
 
             Name = name;
             Cooldown = cooldown;
@@ -83,37 +81,36 @@ namespace Essentials.NativeModules.Kit
             Items = new List<AbstractKitItem>();
         }
 
-        public Kit( string name, uint cooldown, decimal cost, bool resetCooldownWhenDie ) : this(name, cooldown, resetCooldownWhenDie)
-        {
+        public Kit(string name, uint cooldown, decimal cost, bool resetCooldownWhenDie)
+            : this(name, cooldown, resetCooldownWhenDie) {
             Cost = cost;
         }
 
         /// <summary>
         /// <returns> If determinated player has permission for this kit </returns>
         /// </summary>
-        public bool CanUse( ICommandSource player )
-        {
-            return player.HasPermission( $"essentials.kit.{Name.ToLowerInvariant()}" );
+        public bool CanUse(ICommandSource player) {
+            return player.HasPermission($"essentials.kit.{Name.ToLowerInvariant()}");
         }
 
         /// <summary>
         /// Give this kit to player
         /// </summary>
-        public void GiveTo( UPlayer player )
-        {
+        public void GiveTo(UPlayer player) {
             var onetime = false;
 
-            foreach ( var kitItem in Items )
-            {
-                var added = kitItem.GiveTo( player );
+            foreach (var kitItem in Items) {
+                var added = kitItem.GiveTo(player);
 
-                if ( added || onetime ) continue;
+                if (added || onetime) continue;
 
-                EssLang.INVENTORY_FULL.SendTo( player );
+                EssLang.INVENTORY_FULL.SendTo(player);
                 onetime = true;
             }
 
-            EssLang.KIT_GIVEN_RECEIVER.SendTo( player, Name );
+            EssLang.KIT_GIVEN_RECEIVER.SendTo(player, Name);
         }
+
     }
+
 }

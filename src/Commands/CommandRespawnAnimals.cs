@@ -26,26 +26,27 @@ using Essentials.Api.Unturned;
 using SDG.Unturned;
 using Essentials.I18n;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "respawnanimals",
         Description = "Respawn all animals"
     )]
-    public class CommandRespawnAnimal : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
+    public class CommandRespawnAnimal : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var respawnedCount = 0;
 
-            UWorld.Animals.ForEach( animal => {
-                AnimalManager.sendAnimalAlive( animal, animal.transform.position, 0 );
+            UWorld.Animals.ForEach(animal => {
+                AnimalManager.sendAnimalAlive(animal, animal.transform.position, 0);
                 respawnedCount++;
             });
 
-            EssLang.RESPAWNED_ANIMALS.SendTo( src, respawnedCount );
+            EssLang.RESPAWNED_ANIMALS.SendTo(src, respawnedCount);
 
             return CommandResult.Success();
         }
+
     }
+
 }

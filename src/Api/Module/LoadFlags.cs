@@ -21,15 +21,15 @@
 
 using System;
 
-namespace Essentials.Api.Module
-{
+namespace Essentials.Api.Module {
+
     [Flags]
-    public enum LoadFlags
-    {
+    public enum LoadFlags {
+
         /// <summary>
         /// Nothing
         /// </summary>
-        NONE                   = 0,
+        NONE = 0,
 
         /// <summary>
         /// Dynamically register all commands in Module.
@@ -39,6 +39,8 @@ namespace Essentials.Api.Module
         /// <summary>
         /// Dynamically register all events (handlers) in Module.
         /// </summary>
-        AUTO_REGISTER_EVENTS   = 1 << 1
+        AUTO_REGISTER_EVENTS = 1 << 1
+
     }
+
 }

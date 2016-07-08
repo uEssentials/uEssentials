@@ -23,27 +23,26 @@ using Essentials.Api.Unturned;
 using Newtonsoft.Json;
 using SDG.Unturned;
 
-namespace Essentials.NativeModules.Kit.Item
-{
-    public class KitItemVehicle : AbstractKitItem
-    {
+namespace Essentials.NativeModules.Kit.Item {
+
+    public class KitItemVehicle : AbstractKitItem {
+
         [JsonProperty("Vehicle")]
         public ushort Id { get; set; }
 
-        public KitItemVehicle( ushort id )
-        {
+        public KitItemVehicle(ushort id) {
             Id = id;
         }
 
-        public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
-        {
-            VehicleTool.giveVehicle( player.UnturnedPlayer, Id );
+        public override bool GiveTo(UPlayer player, bool dropIfInventoryFull = true) {
+            VehicleTool.giveVehicle(player.UnturnedPlayer, Id);
             return true;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"Vehicle: {Id}";
         }
+
     }
+
 }

@@ -21,18 +21,20 @@
 
 using Essentials.Api.Unturned;
 
-namespace Essentials.Economy
-{
-    public interface IEconomyProvider
-    {
+namespace Essentials.Economy {
+
+    public interface IEconomyProvider {
+
         string Currency { get; }
 
-        decimal Withdraw( UPlayer player, decimal amount );
+        decimal Withdraw(UPlayer player, decimal amount);
 
-        decimal Deposit( UPlayer player, decimal amount );
+        decimal Deposit(UPlayer player, decimal amount);
 
-        decimal GetBalance( UPlayer player );
+        decimal GetBalance(UPlayer player);
 
-        bool Has( UPlayer player, decimal amount );
+        bool Has(UPlayer player, decimal amount);
+
     }
+
 }

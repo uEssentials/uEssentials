@@ -22,10 +22,10 @@
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 
-namespace Essentials.Api.Events
-{
-    public class CommandEvent
-    {
+namespace Essentials.Api.Events {
+
+    public class CommandEvent {
+
         /// <summary>
         /// Command that was/will be executed.
         /// </summary>
@@ -41,11 +41,12 @@ namespace Essentials.Api.Events
         /// </summary>
         public ICommandSource Source { get; set; }
 
-        public CommandEvent( ICommand command, ICommandArgs args, ICommandSource src )
-        {
+        public CommandEvent(ICommand command, ICommandArgs args, ICommandSource src) {
             Command = command;
             Arguments = args;
             Source = src;
         }
+
     }
+
 }

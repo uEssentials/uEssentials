@@ -21,29 +21,28 @@
 
 using System.Text;
 
-namespace Essentials.Common.Util
-{
-    public static class MiscUtil
-    {
-        public static string ArrayToString<T>( T[] array, string separator = ", ",
-                                               string start = "[", string end = "]"  )
-        {
-            var sb = new StringBuilder( start );
+namespace Essentials.Common.Util {
+
+    public static class MiscUtil {
+
+        public static string ArrayToString<T>(T[] array, string separator = ", ",
+            string start = "[", string end = "]") {
+            var sb = new StringBuilder(start);
             var arrLength = array.Length;
 
-            for (int i = 0; i < arrLength; i++)
-            {
-                sb.Append( array[i] );
+            for (int i = 0; i < arrLength; i++) {
+                sb.Append(array[i]);
 
-                if ( (i + 1) != arrLength )
-                {
-                    sb.Append( separator );
+                if ((i + 1) != arrLength) {
+                    sb.Append(separator);
                 }
             }
 
-            sb.Append( end );
+            sb.Append(end);
 
             return sb.ToString();
         }
+
     }
+
 }

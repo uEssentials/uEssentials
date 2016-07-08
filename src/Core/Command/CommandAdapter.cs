@@ -33,102 +33,89 @@ using System.Collections.Generic;
 using System.Linq;
 using Rocket.Unturned.Player;
 
-namespace Essentials.Core.Command
-{
-    internal class CommandAdapter : Rocket.API.IRocketCommand
-    {
-        public List<string>     Aliases         { get; }
-        public AllowedCaller    AllowedCaller   { get; }
-        public string           Help            { get; }
-        public string           Name            { get; private set; }
-        public List<string>     Permissions     { get; }
-        public string           Syntax          { get; }
+namespace Essentials.Core.Command {
+
+    internal class CommandAdapter : IRocketCommand {
+
+        public List<string> Aliases { get; }
+        public AllowedCaller AllowedCaller { get; }
+        public string Help { get; }
+        public string Name { get; private set; }
+        public List<string> Permissions { get; }
+        public string Syntax { get; }
 
         internal readonly ICommand Command;
 
-        internal CommandAdapter( ICommand command )
-        {
-            Command         = command;
-            Name            = command.Name;
-            Aliases         = command.Aliases.ToList();
-            Help            = command.Description;
-            Syntax          = command.Usage;
-            Permissions     = new List<string>(1) { command.Permission };
-            AllowedCaller   = AllowedCaller.Both;
+        internal CommandAdapter(ICommand command) {
+            Command = command;
+            Name = command.Name;
+            Aliases = command.Aliases.ToList();
+            Help = command.Description;
+            Syntax = command.Usage;
+            Permissions = new List<string>(1) { command.Permission };
+            AllowedCaller = AllowedCaller.Both;
         }
 
-        public void Execute( IRocketPlayer caller, string[] args )
-        {
-            #if PERF
+        public void Execute(IRocketPlayer caller, string[] args) {
+#if PERF
               var sw = System.Diagnostics.Stopwatch.StartNew();
             #endif
 
-            try
-            {
+            try {
                 var commandSource = caller is UnturnedPlayer
-                                    ? UPlayer.From( (UnturnedPlayer) caller )
-                                    : UEssentials.ConsoleSource;
+                    ? UPlayer.From((UnturnedPlayer) caller)
+                    : UEssentials.ConsoleSource;
 
-                if ( commandSource.IsConsole && Command.AllowedSource == AllowedSource.PLAYER )
-                {
-                    EssLang.CONSOLE_CANNOT_EXECUTE.SendTo( commandSource );
-                }
-                else if ( !commandSource.IsConsole && Command.AllowedSource == AllowedSource.CONSOLE )
-                {
-                    EssLang.PLAYER_CANNOT_EXECUTE.SendTo( commandSource );
-                }
-                else
-                {
-                    var cmdArgs  = new CommandArgs( args );
-                    var preExec = new CommandPreExecuteEvent( Command, cmdArgs, commandSource );
-                    EssentialsEvents.CallCommandPreExecute( preExec );
+                if (commandSource.IsConsole && Command.AllowedSource == AllowedSource.PLAYER) {
+                    EssLang.CONSOLE_CANNOT_EXECUTE.SendTo(commandSource);
+                } else if (!commandSource.IsConsole && Command.AllowedSource == AllowedSource.CONSOLE) {
+                    EssLang.PLAYER_CANNOT_EXECUTE.SendTo(commandSource);
+                } else {
+                    var cmdArgs = new CommandArgs(args);
+                    var preExec = new CommandPreExecuteEvent(Command, cmdArgs, commandSource);
+                    EssentialsEvents.CallCommandPreExecute(preExec);
 
-                    if ( preExec.Cancelled )
-                    {
+                    if (preExec.Cancelled) {
                         return;
                     }
 
-                    var result = Command.OnExecute( commandSource , cmdArgs );
+                    var result = Command.OnExecute(commandSource, cmdArgs);
 
-                    if ( result != null )
-                    {
-                        if ( result.Type == CommandResult.ResultType.SHOW_USAGE )
-                        {
-                            commandSource.SendMessage( $"Use /{Command.Name} {Command.Usage}" );
-                        }
-                        else if ( result.Message != null )
-                        {
+                    if (result != null) {
+                        if (result.Type == CommandResult.ResultType.SHOW_USAGE) {
+                            commandSource.SendMessage($"Use /{Command.Name} {Command.Usage}");
+                        } else if (result.Message != null) {
                             var message = result.Message;
 
-                            var color = ColorUtil.GetColorFromString( ref message );
+                            var color = ColorUtil.GetColorFromString(ref message);
 
-                            commandSource.SendMessage( message, color );
+                            commandSource.SendMessage(message, color);
                         }
                     }
 
-                    var posExec = new CommandPosExecuteEvent( Command, cmdArgs, commandSource, result );
-                    EssentialsEvents.CallCommandPosExecute( posExec );
+                    var posExec = new CommandPosExecuteEvent(Command, cmdArgs, commandSource, result);
+                    EssentialsEvents.CallCommandPosExecute(posExec);
                 }
-            }
-            catch ( Exception e )
-            {
-                if ( caller is UnturnedPlayer )
-                    UPlayer.TryGet( (UnturnedPlayer) caller, EssLang.COMMAND_ERROR_OCURRED.SendTo );
+            } catch (Exception e) {
+                if (caller is UnturnedPlayer)
+                    UPlayer.TryGet((UnturnedPlayer) caller, EssLang.COMMAND_ERROR_OCURRED.SendTo);
 
-                UEssentials.Logger.LogError( e.ToString() );
+                UEssentials.Logger.LogError(e.ToString());
             }
 
-            #if PERF
+#if PERF
               UEssentials.Logger.LogDebug( $"Executed command '{Command.Name}', Took: {sw.ElapsedTicks} ticks | {sw.ElapsedMilliseconds} ms");
             #endif
         }
 
-        internal class CommandAliasAdapter : CommandAdapter
-        {
-            internal CommandAliasAdapter( ICommand command, string alias ) : base(command)
-            {
-                base.Name = alias;
+        internal class CommandAliasAdapter : CommandAdapter {
+
+            internal CommandAliasAdapter(ICommand command, string alias) : base(command) {
+                Name = alias;
             }
+
         }
+
     }
+
 }

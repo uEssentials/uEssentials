@@ -23,32 +23,31 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.NativeModules.Warp.Commands
-{
+namespace Essentials.NativeModules.Warp.Commands {
+
     [CommandInfo(
         Name = "delwarp",
         Aliases = new[] { "deletewarp" },
         Usage = "[warp_name]",
         Description = "Delete an existing warp"
     )]
-    public class CommandDelWarp : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource source, ICommandArgs parameters )
-        {
-            if ( parameters.IsEmpty || parameters.Length > 1 )
-            {
+    public class CommandDelWarp : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource source, ICommandArgs parameters) {
+            if (parameters.IsEmpty || parameters.Length > 1) {
                 return CommandResult.ShowUsage();
             }
 
-            if ( !WarpModule.Instance.WarpManager.Contains( parameters[0].ToString() ) )
-            {
-                return CommandResult.Lang( EssLang.WARP_NOT_EXIST, parameters[0] );
+            if (!WarpModule.Instance.WarpManager.Contains(parameters[0].ToString())) {
+                return CommandResult.Lang(EssLang.WARP_NOT_EXIST, parameters[0]);
             }
 
-            WarpModule.Instance.WarpManager.Delete( parameters[0].ToString() );
-            EssLang.WARP_REMOVED.SendTo( source, parameters[0] );
+            WarpModule.Instance.WarpManager.Delete(parameters[0].ToString());
+            EssLang.WARP_REMOVED.SendTo(source, parameters[0]);
 
             return CommandResult.Success();
         }
+
     }
+
 }

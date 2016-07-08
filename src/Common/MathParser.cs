@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace Essentials.Common
-{
+namespace Essentials.Common {
+
     #region License agreement
 
     // This is light, fast and simple to understand mathematical parser
@@ -59,8 +59,7 @@ namespace Essentials.Common
 
     #endregion
 
-    public class MathParser
-    {
+    public class MathParser {
         #region Fields
 
         #region Markers (each marker should have length equals to 1)
@@ -105,8 +104,7 @@ namespace Essentials.Common
         /// Contains supported operators
         /// </summary>
         private readonly Dictionary<string, string> supportedOperators =
-            new Dictionary<string, string>
-            {
+            new Dictionary<string, string> {
                 { "+", Plus },
                 { "-", Minus },
                 { "*", Multiply },
@@ -120,8 +118,7 @@ namespace Essentials.Common
         /// Contains supported functions
         /// </summary>
         private readonly Dictionary<string, string> supportedFunctions =
-            new Dictionary<string, string>
-            {
+            new Dictionary<string, string> {
                 { "sqrt", Sqrt },
                 { "√", Sqrt },
                 { "sin", Sin },
@@ -137,10 +134,9 @@ namespace Essentials.Common
             };
 
         private readonly Dictionary<string, string> supportedConstants =
-            new Dictionary<string, string>
-            {
-                {"pi", NumberMaker +  Math.PI.ToString() },
-                {"e", NumberMaker + Math.E.ToString() }
+            new Dictionary<string, string> {
+                { "pi", NumberMaker + Math.PI.ToString() },
+                { "e", NumberMaker + Math.E.ToString() }
             };
 
         #endregion
@@ -157,15 +153,13 @@ namespace Essentials.Common
         /// (symbol of decimal separator is read
         /// from regional settings in system)
         /// </summary>
-        public MathParser()
-        {
-            try
-            {
-                decimalSeparator = Char.Parse(System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-            }
-            catch (FormatException ex)
-            {
-                throw new FormatException("Error: can't read char decimal separator from system, check your regional settings.", ex);
+        public MathParser() {
+            try {
+                decimalSeparator =
+                    Char.Parse(System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+            } catch (FormatException ex) {
+                throw new FormatException(
+                    "Error: can't read char decimal separator from system, check your regional settings.", ex);
             }
         }
 
@@ -173,8 +167,7 @@ namespace Essentials.Common
         /// Initialize new instance of MathParser
         /// </summary>
         /// <param name="decimalSeparator">Set decimal separator</param>
-        public MathParser(char decimalSeparator)
-        {
+        public MathParser(char decimalSeparator) {
             this.decimalSeparator = decimalSeparator;
         }
 
@@ -185,39 +178,24 @@ namespace Essentials.Common
         /// </summary>
         /// <param name="expression">Math expression (infix/standard notation)</param>
         /// <returns>Result</returns>
-        public double Parse(string expression, bool isRadians = true)
-        {
+        public double Parse(string expression, bool isRadians = true) {
             this.isRadians = isRadians;
 
-            try
-            {
+            try {
                 return Calculate(ConvertToRPN(FormatString(expression)));
-            }
-            catch (DivideByZeroException e)
-            {
+            } catch (DivideByZeroException e) {
+                throw e;
+            } catch (FormatException e) {
+                throw e;
+            } catch (InvalidOperationException e) {
+                throw e;
+            } catch (ArgumentOutOfRangeException e) {
+                throw e;
+            } catch (ArgumentException e) {
+                throw e;
+            } catch (Exception e) {
                 throw e;
             }
-            catch (FormatException e)
-            {
-                throw e;
-            }
-            catch (InvalidOperationException e)
-            {
-                throw e;
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-                throw e;
-            }
-            catch (ArgumentException e)
-            {
-                throw e;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
         }
 
         /// <summary>
@@ -225,10 +203,8 @@ namespace Essentials.Common
         /// </summary>
         /// <param name="expression">Unformatted math expression</param>
         /// <returns>Formatted math expression</returns>
-        private string FormatString(string expression)
-        {
-            if (string.IsNullOrEmpty(expression))
-            {
+        private string FormatString(string expression) {
+            if (string.IsNullOrEmpty(expression)) {
                 throw new ArgumentNullException("Expression is null or empty");
             }
 
@@ -237,35 +213,25 @@ namespace Essentials.Common
 
             // Format string in one iteration and check number of parenthesis
             // (this function do 2 tasks because performance priority)
-            for (var i = 0; i < expression.Length; i++)
-            {
+            for (var i = 0; i < expression.Length; i++) {
                 var ch = expression[i];
 
-                if (ch == '(')
-                {
+                if (ch == '(') {
                     balanceOfParenth++;
-                }
-                else if (ch == ')')
-                {
+                } else if (ch == ')') {
                     balanceOfParenth--;
                 }
 
-                if (Char.IsWhiteSpace(ch))
-                {
+                if (Char.IsWhiteSpace(ch)) {
                     continue;
-                }
-                else if (Char.IsUpper(ch))
-                {
+                } else if (Char.IsUpper(ch)) {
                     formattedString.Append(Char.ToLower(ch));
-                }
-                else
-                {
+                } else {
                     formattedString.Append(ch);
                 }
             }
 
-            if (balanceOfParenth != 0)
-            {
+            if (balanceOfParenth != 0) {
                 throw new FormatException("Number of left and right parenthesis is not equal");
             }
 
@@ -280,32 +246,26 @@ namespace Essentials.Common
         /// </summary>
         /// <param name="expression">Math expression in infix notation</param>
         /// <returns>Math expression in postfix notation (RPN)</returns>
-        private string ConvertToRPN(string expression)
-        {
+        private string ConvertToRPN(string expression) {
             var pos = 0; // Current position of lexical analysis
             var outputString = new StringBuilder();
             var stack = new Stack<string>();
 
             // While there is unhandled char in expression
-            while (pos < expression.Length)
-            {
+            while (pos < expression.Length) {
                 var token = LexicalAnalysisInfixNotation(expression, ref pos);
 
                 outputString = SyntaxAnalysisInfixNotation(token, outputString, stack);
             }
 
             // Pop all elements from stack to output string
-            while (stack.Count > 0)
-            {
+            while (stack.Count > 0) {
                 // There should be only operators
-                if (stack.Peek()[0] == OperatorMarker[0])
-                {
+                if (stack.Peek()[0] == OperatorMarker[0]) {
                     outputString.Append(stack.Pop());
-                }
-                else
-                {
+                } else {
                     throw new FormatException("Format exception,"
-                    + " there is function without parenthesis");
+                                              + " there is function without parenthesis");
                 }
             }
 
@@ -318,21 +278,18 @@ namespace Essentials.Common
         /// <param name="expression">Math expression in infix notation</param>
         /// <param name="pos">Current position in string for lexical analysis</param>
         /// <returns>Token</returns>
-        private string LexicalAnalysisInfixNotation(string expression, ref int pos)
-        {
+        private string LexicalAnalysisInfixNotation(string expression, ref int pos) {
             // Receive first char
             var token = new StringBuilder();
             token.Append(expression[pos]);
 
             // If it is a operator
-            if (supportedOperators.ContainsKey(token.ToString()))
-            {
+            if (supportedOperators.ContainsKey(token.ToString())) {
                 // Determine it is unary or binary operator
                 var isUnary = pos == 0 || expression[pos - 1] == '(';
                 pos++;
 
-                switch (token.ToString())
-                {
+                switch (token.ToString()) {
                     case "+":
                         return isUnary ? UnPlus : Plus;
                     case "-":
@@ -340,48 +297,33 @@ namespace Essentials.Common
                     default:
                         return supportedOperators[token.ToString()];
                 }
-            }
-            else if (Char.IsLetter(token[0])
-                || supportedFunctions.ContainsKey(token.ToString())
-                || supportedConstants.ContainsKey(token.ToString()))
-            {
+            } else if (Char.IsLetter(token[0])
+                       || supportedFunctions.ContainsKey(token.ToString())
+                       || supportedConstants.ContainsKey(token.ToString())) {
                 // Read function or constant name
 
                 while (++pos < expression.Length
-                    && Char.IsLetter(expression[pos]))
-                {
+                       && Char.IsLetter(expression[pos])) {
                     token.Append(expression[pos]);
                 }
 
-                if (supportedFunctions.ContainsKey(token.ToString()))
-                {
+                if (supportedFunctions.ContainsKey(token.ToString())) {
                     return supportedFunctions[token.ToString()];
-                }
-                else if (supportedConstants.ContainsKey(token.ToString()))
-                {
+                } else if (supportedConstants.ContainsKey(token.ToString())) {
                     return supportedConstants[token.ToString()];
-                }
-                else
-                {
+                } else {
                     throw new ArgumentException("Unknown token");
                 }
-
-            }
-            else if (Char.IsDigit(token[0]) || token[0] == decimalSeparator)
-            {
+            } else if (Char.IsDigit(token[0]) || token[0] == decimalSeparator) {
                 // Read number
 
                 // Read the whole part of number
-                if (Char.IsDigit(token[0]))
-                {
+                if (Char.IsDigit(token[0])) {
                     while (++pos < expression.Length
-                    && Char.IsDigit(expression[pos]))
-                    {
+                           && Char.IsDigit(expression[pos])) {
                         token.Append(expression[pos]);
                     }
-                }
-                else
-                {
+                } else {
                     // Because system decimal separator
                     // will be added below
                     token.Length = 0;
@@ -389,15 +331,13 @@ namespace Essentials.Common
 
                 // Read the fractional part of number
                 if (pos < expression.Length
-                    && expression[pos] == decimalSeparator)
-                {
+                    && expression[pos] == decimalSeparator) {
                     // Add current system specific decimal separator
                     token.Append(CultureInfo.CurrentCulture
                         .NumberFormat.NumberDecimalSeparator);
 
                     while (++pos < expression.Length
-                    && Char.IsDigit(expression[pos]))
-                    {
+                           && Char.IsDigit(expression[pos])) {
                         token.Append(expression[pos]);
                     }
                 }
@@ -408,16 +348,14 @@ namespace Essentials.Common
                         || (pos + 2 < expression.Length
                             && (expression[pos + 1] == '+'
                                 || expression[pos + 1] == '-')
-                            && Char.IsDigit(expression[pos + 2]))))
-                {
+                            && Char.IsDigit(expression[pos + 2])))) {
                     token.Append(expression[pos++]); // e
 
                     if (expression[pos] == '+' || expression[pos] == '-')
                         token.Append(expression[pos++]); // sign
 
                     while (pos < expression.Length
-                        && Char.IsDigit(expression[pos]))
-                    {
+                           && Char.IsDigit(expression[pos])) {
                         token.Append(expression[pos++]); // power
                     }
 
@@ -426,9 +364,7 @@ namespace Essentials.Common
                 }
 
                 return NumberMaker + token.ToString();
-            }
-            else
-            {
+            } else {
                 throw new ArgumentException("Unknown token in expression");
             }
         }
@@ -440,48 +376,35 @@ namespace Essentials.Common
         /// <param name="outputString">Output string (math expression in RPN)</param>
         /// <param name="stack">Stack which contains operators (or functions)</param>
         /// <returns>Output string (math expression in RPN)</returns>
-        private StringBuilder SyntaxAnalysisInfixNotation(string token, StringBuilder outputString, Stack<string> stack)
-        {
+        private StringBuilder SyntaxAnalysisInfixNotation(string token, StringBuilder outputString, Stack<string> stack) {
             // If it's a number just put to string
-            if (token[0] == NumberMaker[0])
-            {
+            if (token[0] == NumberMaker[0]) {
                 outputString.Append(token);
-            }
-            else if (token[0] == FunctionMarker[0])
-            {
+            } else if (token[0] == FunctionMarker[0]) {
                 // if it's a function push to stack
                 stack.Push(token);
-            }
-            else if (token == LeftParent)
-            {
+            } else if (token == LeftParent) {
                 // If its '(' push to stack
                 stack.Push(token);
-            }
-            else if (token == RightParent)
-            {
+            } else if (token == RightParent) {
                 // If its ')' pop elements from stack to output string
                 // until find the ')'
 
                 string elem;
-                while ((elem = stack.Pop()) != LeftParent)
-                {
+                while ((elem = stack.Pop()) != LeftParent) {
                     outputString.Append(elem);
                 }
 
                 // if after this a function is in the peek of stack then put it to string
                 if (stack.Count > 0 &&
-                    stack.Peek()[0] == FunctionMarker[0])
-                {
+                    stack.Peek()[0] == FunctionMarker[0]) {
                     outputString.Append(stack.Pop());
                 }
-            }
-            else
-            {
+            } else {
                 // While priority of elements at peek of stack >= (>) token's priority
                 // put these elements to output string
                 while (stack.Count > 0 &&
-                    Priority(token, stack.Peek()))
-                {
+                       Priority(token, stack.Peek())) {
                     outputString.Append(stack.Pop());
                 }
 
@@ -494,28 +417,24 @@ namespace Essentials.Common
         /// <summary>
         /// Is priority of token less (or equal) to priority of p
         /// </summary>
-        private bool Priority(string token, string p)
-        {
-            return IsRightAssociated(token) ?
-                GetPriority(token) < GetPriority(p) :
-                GetPriority(token) <= GetPriority(p);
+        private bool Priority(string token, string p) {
+            return IsRightAssociated(token)
+                ? GetPriority(token) < GetPriority(p)
+                : GetPriority(token) <= GetPriority(p);
         }
 
         /// <summary>
         /// Is right associated operator
         /// </summary>
-        private bool IsRightAssociated(string token)
-        {
+        private bool IsRightAssociated(string token) {
             return token == Degree;
         }
 
         /// <summary>
         /// Get priority of operator
         /// </summary>
-        private int GetPriority(string token)
-        {
-            switch (token)
-            {
+        private int GetPriority(string token) {
+            switch (token) {
                 case LeftParent:
                     return 0;
                 case Plus:
@@ -556,22 +475,19 @@ namespace Essentials.Common
         /// </summary>
         /// <param name="expression">Math expression in reverse-polish notation</param>
         /// <returns>Result</returns>
-        private double Calculate(string expression)
-        {
+        private double Calculate(string expression) {
             var pos = 0; // Current position of lexical analysis
             var stack = new Stack<double>(); // Contains operands
 
             // Analyse entire expression
-            while (pos < expression.Length)
-            {
+            while (pos < expression.Length) {
                 var token = LexicalAnalysisRPN(expression, ref pos);
 
                 stack = SyntaxAnalysisRPN(stack, token);
             }
 
             // At end of analysis in stack should be only one operand (result)
-            if (stack.Count > 1)
-            {
+            if (stack.Count > 1) {
                 throw new ArgumentException("Excess operand");
             }
 
@@ -584,8 +500,7 @@ namespace Essentials.Common
         /// <param name="expression">Math expression in reverse-polish notation</param>
         /// <param name="pos">Current position of lexical analysis</param>
         /// <returns>Token</returns>
-        private string LexicalAnalysisRPN(string expression, ref int pos)
-        {
+        private string LexicalAnalysisRPN(string expression, ref int pos) {
             var token = new StringBuilder();
 
             // Read token from marker to next marker
@@ -593,9 +508,8 @@ namespace Essentials.Common
             token.Append(expression[pos++]);
 
             while (pos < expression.Length && expression[pos] != NumberMaker[0]
-                && expression[pos] != OperatorMarker[0]
-                && expression[pos] != FunctionMarker[0])
-            {
+                   && expression[pos] != OperatorMarker[0]
+                   && expression[pos] != FunctionMarker[0]) {
                 token.Append(expression[pos++]);
             }
 
@@ -608,21 +522,17 @@ namespace Essentials.Common
         /// <param name="stack">Stack which contains operands</param>
         /// <param name="token">Token</param>
         /// <returns>Stack which contains operands</returns>
-        private Stack<double> SyntaxAnalysisRPN(Stack<double> stack, string token)
-        {
+        private Stack<double> SyntaxAnalysisRPN(Stack<double> stack, string token) {
             // if it's operand then just push it to stack
-            if (token[0] == NumberMaker[0])
-            {
+            if (token[0] == NumberMaker[0]) {
                 stack.Push(double.Parse(token.Remove(0, 1)));
             }
             // Otherwise apply operator or function to elements in stack
-            else if (NumberOfArguments(token) == 1)
-            {
+            else if (NumberOfArguments(token) == 1) {
                 var arg = stack.Pop();
                 double rst;
 
-                switch (token)
-                {
+                switch (token) {
                     case UnPlus:
                         rst = arg;
                         break;
@@ -642,13 +552,14 @@ namespace Essentials.Common
                         rst = ApplyTrigFunction(Math.Tan, arg);
                         break;
                     case Ctg:
-                        rst = 1 / ApplyTrigFunction(Math.Tan, arg);
+                        rst = 1/ApplyTrigFunction(Math.Tan, arg);
                         break;
                     case Sh:
                         rst = Math.Sinh(arg);
                         break;
-                    case Ch:rst =
-                        rst = Math.Cosh(arg);
+                    case Ch:
+                        rst =
+                            rst = Math.Cosh(arg);
                         break;
                     case Th:
                         rst = Math.Tanh(arg);
@@ -667,9 +578,7 @@ namespace Essentials.Common
                 }
 
                 stack.Push(rst);
-            }
-            else
-            {
+            } else {
                 // otherwise operator's number of arguments equals to 2
 
                 var arg2 = stack.Pop();
@@ -677,8 +586,7 @@ namespace Essentials.Common
 
                 double rst;
 
-                switch (token)
-                {
+                switch (token) {
                     case Plus:
                         rst = arg1 + arg2;
                         break;
@@ -686,14 +594,13 @@ namespace Essentials.Common
                         rst = arg1 - arg2;
                         break;
                     case Multiply:
-                        rst = arg1 * arg2;
+                        rst = arg1*arg2;
                         break;
                     case Divide:
-                        if (arg2 == 0)
-                        {
+                        if (arg2 == 0) {
                             throw new DivideByZeroException("Second argument is zero");
                         }
-                        rst = arg1 / arg2;
+                        rst = arg1/arg2;
                         break;
                     case Degree:
                         rst = Math.Pow(arg1, arg2);
@@ -717,11 +624,9 @@ namespace Essentials.Common
         /// <param name="func">Trigonometric function</param>
         /// <param name="arg">Argument</param>
         /// <returns>Result of function</returns>
-        private double ApplyTrigFunction(Func<double, double> func, double arg)
-        {
-            if (!isRadians)
-            {
-                arg = arg * Math.PI / 180; // Convert value to degree
+        private double ApplyTrigFunction(Func<double, double> func, double arg) {
+            if (!isRadians) {
+                arg = arg*Math.PI/180; // Convert value to degree
             }
 
             return func(arg);
@@ -730,10 +635,8 @@ namespace Essentials.Common
         /// <summary>
         /// Produce number of arguments for the given operator
         /// </summary>
-        private int NumberOfArguments(string token)
-        {
-            switch (token)
-            {
+        private int NumberOfArguments(string token) {
+            switch (token) {
                 case UnPlus:
                 case UnMinus:
                 case Sqrt:
@@ -762,4 +665,5 @@ namespace Essentials.Common
 
         #endregion
     }
+
 }

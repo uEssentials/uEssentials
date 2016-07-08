@@ -26,51 +26,47 @@ using System.Reflection;
 using Essentials.Api.Event;
 using Essentials.Common;
 
-namespace Essentials.Core.Event
-{
-    public class EventManager : IEventManager
-    {
-        private readonly Dictionary<EventHolder, List<Delegate>> _handlerMap = new Dictionary<EventHolder, List<Delegate>>();
+namespace Essentials.Core.Event {
+
+    public class EventManager : IEventManager {
+
+        private readonly Dictionary<EventHolder, List<Delegate>> _handlerMap =
+            new Dictionary<EventHolder, List<Delegate>>();
+
         private readonly InstancePool _instancePool = new InstancePool();
 
-        public void RegisterAll( object obj )
-        {
+        public void RegisterAll(object obj) {
             var type = obj.GetType();
 
-            foreach ( var listenerMethod in type.GetMethods( (BindingFlags) 0x3C ) )
-            {
-                var eventHandlerAttrs = listenerMethod.GetCustomAttributes( typeof( SubscribeEvent ), false );
-                if ( eventHandlerAttrs.Length < 1 )
+            foreach (var listenerMethod in type.GetMethods((BindingFlags) 0x3C)) {
+                var eventHandlerAttrs = listenerMethod.GetCustomAttributes(typeof(SubscribeEvent), false);
+                if (eventHandlerAttrs.Length < 1)
                     continue;
 
                 var eventHandlerAttr = (SubscribeEvent) eventHandlerAttrs[0];
                 var eventTarget = eventHandlerAttr.DelegateOwner;
                 var targetFieldName = eventHandlerAttr.DelegateName;
 
-                lock ( _handlerMap )
-                {
-                    var holder = GetHolder( eventTarget, targetFieldName );
+                lock (_handlerMap) {
+                    var holder = GetHolder(eventTarget, targetFieldName);
 
                     EventInfo eventInfo;
                     List<Delegate> methodDelegates;
 
-                    if ( holder == null )
-                    {
-                        var eventTargetType = (Type) (eventTarget is Type ?
-                            eventTarget : eventTarget.GetType());
+                    if (holder == null) {
+                        var eventTargetType = (Type) (eventTarget is Type
+                            ? eventTarget
+                            : eventTarget.GetType());
 
-                        eventInfo = eventTargetType.GetEvent( targetFieldName );
+                        eventInfo = eventTargetType.GetEvent(targetFieldName);
 
-                        holder = new EventHolder()
-                        {
+                        holder = new EventHolder() {
                             EventInfo = eventInfo,
                             Target = eventTarget
                         };
 
                         methodDelegates = new List<Delegate>();
-                    }
-                    else
-                    {
+                    } else {
                         eventTarget = holder.Target;
                         eventInfo = holder.EventInfo;
 
@@ -81,149 +77,130 @@ namespace Essentials.Core.Event
                         eventInfo.EventHandlerType,
                         obj,
                         listenerMethod
-                     );
+                        );
 
-                    eventInfo.AddEventHandler( eventTarget, methodDelegate );
+                    eventInfo.AddEventHandler(eventTarget, methodDelegate);
 
-                    methodDelegates.Add( methodDelegate );
+                    methodDelegates.Add(methodDelegate);
                     _handlerMap[holder] = methodDelegates;
                 }
             }
         }
 
-        public void RegisterAll( Type type )
-        {
-            if ( type.GetMethods( (BindingFlags) 0x3C )
-                 .Any( md => md.GetCustomAttributes( typeof( SubscribeEvent ), false ).Length > 0 ) )
-            {
-                RegisterAll( _instancePool.GetOrCreate( type ) );
+        public void RegisterAll(Type type) {
+            if (type.GetMethods((BindingFlags) 0x3C)
+                .Any(md => md.GetCustomAttributes(typeof(SubscribeEvent), false).Length > 0)) {
+                RegisterAll(_instancePool.GetOrCreate(type));
             }
         }
 
-        public void RegisterAll<TEventType>()
-        {
-            RegisterAll( typeof (TEventType) );
+        public void RegisterAll<TEventType>() {
+            RegisterAll(typeof(TEventType));
         }
 
-        public void RegisterAll( Assembly asm )
-        {
-            asm.GetTypes().Where( CanHoldEvents ).ForEach( RegisterAll );
+        public void RegisterAll(Assembly asm) {
+            asm.GetTypes().Where(CanHoldEvents).ForEach(RegisterAll);
         }
 
-        public void RegisterAll( string targetNamespace )
-        {
+        public void RegisterAll(string targetNamespace) {
             GetType().Assembly.GetTypes()
-                .Where( CanHoldEvents )
-                .Where( t => t.Namespace.EqualsIgnoreCase( targetNamespace ) )
-                .ForEach( RegisterAll );
+                .Where(CanHoldEvents)
+                .Where(t => t.Namespace.EqualsIgnoreCase(targetNamespace))
+                .ForEach(RegisterAll);
         }
 
-        public void UnregisterAll<TEventType>()
-        {
-            UnregisterAll( typeof(TEventType) );
+        public void UnregisterAll<TEventType>() {
+            UnregisterAll(typeof(TEventType));
         }
 
-        public void UnregisterAll( Type type )
-        {
-            lock ( _handlerMap )
-            {
+        public void UnregisterAll(Type type) {
+            lock (_handlerMap) {
                 var unregisteredDelegates = new List<Delegate>();
                 var unregisteredHolders = new List<EventHolder>();
                 var handlerMapAsList = _handlerMap.ToList();
 
-                for ( var j = 0; j < handlerMapAsList.Count; j++ )
-                {
+                for (var j = 0; j < handlerMapAsList.Count; j++) {
                     var handler = handlerMapAsList[j];
 
-                    foreach ( var delegateMethod in handler.Value )
-                    {
-                        if ( delegateMethod.Method.ReflectedType != type ) continue;
+                    foreach (var delegateMethod in handler.Value) {
+                        if (delegateMethod.Method.ReflectedType != type) continue;
 
-                        handler.Key.EventInfo.RemoveEventHandler( handler.Key.Target, delegateMethod );
-                        unregisteredDelegates.Add( delegateMethod );
+                        handler.Key.EventInfo.RemoveEventHandler(handler.Key.Target, delegateMethod);
+                        unregisteredDelegates.Add(delegateMethod);
                     }
 
-                    handler.Value.RemoveAll( @delegate => unregisteredDelegates.Contains( @delegate ) );
+                    handler.Value.RemoveAll(@delegate => unregisteredDelegates.Contains(@delegate));
 
-                    if ( handler.Value.Count == 0 ) unregisteredHolders.Add( handler.Key );
+                    if (handler.Value.Count == 0) unregisteredHolders.Add(handler.Key);
                 }
 
-                foreach ( var holder in unregisteredHolders )
-                {
-                    _handlerMap.Remove( holder );
+                foreach (var holder in unregisteredHolders) {
+                    _handlerMap.Remove(holder);
                 }
             }
         }
 
-        public void Unregister<T>( string methodName )
-        {
-            Unregister( typeof(T), methodName );
+        public void Unregister<T>(string methodName) {
+            Unregister(typeof(T), methodName);
         }
 
-        public void Unregister( Type type, string methodName )
-        {
-            lock ( _handlerMap )
-            {
+        public void Unregister(Type type, string methodName) {
+            lock (_handlerMap) {
                 var unregisteredDelegates = new List<Delegate>();
                 var unregisteredHolders = new List<EventHolder>();
                 var handlerMapAsList = _handlerMap.ToList();
 
-                for ( var j = 0; j < handlerMapAsList.Count; j++ )
-                {
+                for (var j = 0; j < handlerMapAsList.Count; j++) {
                     var handler = handlerMapAsList[j];
 
-                    foreach ( var delegateMethod in handler.Value )
-                    {
-                        if ( delegateMethod.Method.ReflectedType != type ||
-                            !delegateMethod.Method.Name.EqualsIgnoreCase( methodName ) ) continue;
+                    foreach (var delegateMethod in handler.Value) {
+                        if (delegateMethod.Method.ReflectedType != type ||
+                            !delegateMethod.Method.Name.EqualsIgnoreCase(methodName)) continue;
 
-                        handler.Key.EventInfo.RemoveEventHandler( handler.Key.Target, delegateMethod );
-                        unregisteredDelegates.Add( delegateMethod );
+                        handler.Key.EventInfo.RemoveEventHandler(handler.Key.Target, delegateMethod);
+                        unregisteredDelegates.Add(delegateMethod);
                     }
 
-                    handler.Value.RemoveAll( @delegate => unregisteredDelegates.Contains( @delegate ) );
+                    handler.Value.RemoveAll(@delegate => unregisteredDelegates.Contains(@delegate));
 
-                    if ( handler.Value.Count == 0 ) unregisteredHolders.Add( handler.Key );
+                    if (handler.Value.Count == 0) unregisteredHolders.Add(handler.Key);
                 }
 
-                foreach ( var holder in unregisteredHolders )
-                {
-                    _handlerMap.Remove( holder );
+                foreach (var holder in unregisteredHolders) {
+                    _handlerMap.Remove(holder);
                 }
             }
         }
 
-        public void UnregisterAll( Assembly asm )
-        {
-            asm.GetTypes().ForEach( UnregisterAll );
+        public void UnregisterAll(Assembly asm) {
+            asm.GetTypes().ForEach(UnregisterAll);
         }
 
-        public void UnregisterAll( string targetNamespace )
-        {
+        public void UnregisterAll(string targetNamespace) {
             GetType().Assembly.GetTypes()
-                .Where( CanHoldEvents )
-                .Where( t => t.Namespace.EqualsIgnoreCase( targetNamespace ) )
-                .ForEach( RegisterAll );
+                .Where(CanHoldEvents)
+                .Where(t => t.Namespace.EqualsIgnoreCase(targetNamespace))
+                .ForEach(RegisterAll);
         }
 
-        private EventHolder GetHolder( object target, string fieldName )
-        {
-            lock ( _handlerMap )
-            {
-                return _handlerMap.Keys.FirstOrDefault( holder => holder.Target.Equals( target ) &&
-                    holder.EventInfo.Name.Equals( fieldName ) );
+        private EventHolder GetHolder(object target, string fieldName) {
+            lock (_handlerMap) {
+                return _handlerMap.Keys.FirstOrDefault(holder => holder.Target.Equals(target) &&
+                                                                 holder.EventInfo.Name.Equals(fieldName));
             }
         }
 
-        private static bool CanHoldEvents( Type type )
-        {
+        private static bool CanHoldEvents(Type type) {
             return !type.IsAbstract && !type.ContainsGenericParameters;
         }
 
-        public sealed class EventHolder
-        {
+        public sealed class EventHolder {
+
             public object Target;
             public EventInfo EventInfo;
+
         }
+
     }
+
 }

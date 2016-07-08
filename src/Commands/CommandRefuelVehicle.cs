@@ -28,62 +28,53 @@ using SDG.Unturned;
 
 // ReSharper disable InconsistentNaming
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "refuelvehicle",
-        Aliases = new [] { "refuel" },
+        Aliases = new[] { "refuel" },
         Description = "Refuel current/all vehicles",
         Usage = "<all>"
-     )]
-    public class CommandRefuelVehicle : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.IsEmpty )
-            {
-                if ( src.IsConsole )
-                {
+    )]
+    public class CommandRefuelVehicle : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.IsEmpty) {
+                if (src.IsConsole) {
                     return CommandResult.ShowUsage();
                 }
 
                 var currentVeh = src.ToPlayer().CurrentVehicle;
 
-                if ( currentVeh != null )
-                {
-                    RefuelVehicle( currentVeh );
-                    EssLang.VEHICLE_REFUELED.SendTo( src );
+                if (currentVeh != null) {
+                    RefuelVehicle(currentVeh);
+                    EssLang.VEHICLE_REFUELED.SendTo(src);
+                } else {
+                    return CommandResult.Lang(EssLang.NOT_IN_VEHICLE);
                 }
-                else
-                {
-                    return CommandResult.Lang( EssLang.NOT_IN_VEHICLE );
-                }
-            }
-            else if ( args[0].Is( "all" ) )
-            {
-                if ( !src.HasPermission( Permission + ".all" ) )
-                {
-                    return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+            } else if (args[0].Is("all")) {
+                if (!src.HasPermission(Permission + ".all")) {
+                    return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
                 }
 
-                lock ( UWorld.Vehicles )
-                {
+                lock (UWorld.Vehicles) {
                     UWorld.Vehicles
-                        .Where( veh => !veh.isExploded && !veh.isUnderwater)
+                        .Where(veh => !veh.isExploded && !veh.isUnderwater)
                         .ToList()
-                        .ForEach( RefuelVehicle );
+                        .ForEach(RefuelVehicle);
 
-                    EssLang.VEHICLE_REFUELED_ALL.SendTo( src );
+                    EssLang.VEHICLE_REFUELED_ALL.SendTo(src);
                 }
             }
 
             return CommandResult.Success();
         }
 
-        private void RefuelVehicle( InteractableVehicle veh )
-        {
-            VehicleManager.Instance.channel.send( "tellVehicleFuel", ESteamCall.ALL,
-                ESteamPacket.UPDATE_UNRELIABLE_BUFFER, veh.instanceID, veh.asset.fuel );
+        private void RefuelVehicle(InteractableVehicle veh) {
+            VehicleManager.Instance.channel.send("tellVehicleFuel", ESteamCall.ALL,
+                ESteamPacket.UPDATE_UNRELIABLE_BUFFER, veh.instanceID, veh.asset.fuel);
         }
+
     }
+
 }

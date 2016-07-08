@@ -21,24 +21,26 @@
 
 using Essentials.Api.Events;
 
-namespace Essentials.Event
-{
-    public class EssentialsEvents
-    {
-        public delegate void CommandPreExecute( CommandPreExecuteEvent e );
+namespace Essentials.Event {
+
+    public class EssentialsEvents {
+
+        public delegate void CommandPreExecute(CommandPreExecuteEvent e);
+
         public static event CommandPreExecute OnCommandPreExecute;
 
-        public delegate void CommandPosExecute( CommandPosExecuteEvent e );
+        public delegate void CommandPosExecute(CommandPosExecuteEvent e);
+
         public static event CommandPosExecute OnCommandPosExecute;
 
-        internal static void CallCommandPreExecute( CommandPreExecuteEvent e )
-        {
-            OnCommandPreExecute?.Invoke( e );
+        internal static void CallCommandPreExecute(CommandPreExecuteEvent e) {
+            OnCommandPreExecute?.Invoke(e);
         }
 
-        internal static void CallCommandPosExecute( CommandPosExecuteEvent e )
-        {
-            OnCommandPosExecute?.Invoke( e );
+        internal static void CallCommandPosExecute(CommandPosExecuteEvent e) {
+            OnCommandPosExecute?.Invoke(e);
         }
+
     }
+
 }

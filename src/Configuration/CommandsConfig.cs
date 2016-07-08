@@ -33,65 +33,59 @@ using Essentials.Common.Util;
 using Essentials.Core.Command;
 using Newtonsoft.Json;
 
-namespace Essentials.Configuration
-{
-    public class CommandsConfig : JsonConfig
-    {
-        public IDictionary<string, CommandEntry> Commands { get; private set; } = new Dictionary<string, CommandEntry>();
+namespace Essentials.Configuration {
 
-        public override void Save( string filePath )
-        {
-            File.WriteAllText( filePath, string.Empty );
-            JsonUtil.Serialize( filePath, Commands );
+    public class CommandsConfig : JsonConfig {
+
+        public IDictionary<string, CommandEntry> Commands { get; private set; } = new Dictionary<string, CommandEntry>()
+            ;
+
+        public override void Save(string filePath) {
+            File.WriteAllText(filePath, string.Empty);
+            JsonUtil.Serialize(filePath, Commands);
         }
 
-        public override void Load( string filePath )
-        {
-            if ( File.Exists( filePath ) )
-            {
-                JsonConvert.PopulateObject( File.ReadAllText( filePath ), Commands );
+        public override void Load(string filePath) {
+            if (File.Exists(filePath)) {
+                JsonConvert.PopulateObject(File.ReadAllText(filePath), Commands);
 
                 var allCommands = FindAllCommands();
 
                 /*
                     Add new commands, if necessary.
                 */
-                if ( Commands.Count != allCommands.Count )
-                {
-                    var keys = new List<string>( allCommands.Keys ); // Avoid out of sync.
+                if (Commands.Count != allCommands.Count) {
+                    var keys = new List<string>(allCommands.Keys); // Avoid out of sync.
 
-                    keys.Where( Commands.ContainsKey ).ForEach( k  => {
+                    keys.Where(Commands.ContainsKey).ForEach(k => {
                         allCommands[k] = Commands[k]; // Update existing command configurations.
-                    } );
+                    });
 
                     Commands = allCommands;
-                    Save( filePath );
+                    Save(filePath);
                 }
-            }
-            else
-            {
+            } else {
                 LoadDefaults();
-                Save( filePath );
+                Save(filePath);
             }
         }
 
-        public override void LoadDefaults()
-        {
+        public override void LoadDefaults() {
             Commands = FindAllCommands();
         }
 
         /*
             Search for all commands in uEssentials assembly.
         */
-        private IDictionary<string, CommandEntry> FindAllCommands()
-        {
+
+        private IDictionary<string, CommandEntry> FindAllCommands() {
             var asm = GetType().Assembly;
             var commands = new Dictionary<string, CommandEntry>();
 
             Predicate<Type> defaultPredicate = type => {
-                return ( typeof( ICommand ).IsAssignableFrom( type )
-                         && !type.IsAbstract && type != typeof( MethodCommand )
-                         && type != typeof( TextCommand ) );
+                return (typeof(ICommand).IsAssignableFrom(type)
+                        && !type.IsAbstract && type != typeof(MethodCommand)
+                        && type != typeof(TextCommand));
             };
 
             /*
@@ -99,61 +93,56 @@ namespace Essentials.Configuration
             */
             (
                 from type in asm.GetTypes()
-                where defaultPredicate( type )
-                select (ICommand) Activator.CreateInstance( type )
-            ).ForEach( c => commands.Add( c.Name, new CommandEntry {
-                Aliases = c.Aliases,
-                Description = c.Description,
-                Usage = c.Usage
-            } ) );
+                where defaultPredicate(type)
+                select (ICommand) Activator.CreateInstance(type)
+                ).ForEach(c => commands.Add(c.Name, new CommandEntry {
+                    Aliases = c.Aliases,
+                    Description = c.Description,
+                    Usage = c.Usage
+                }));
 
             /*
                 Search methods
             */
             Action<MethodInfo> invalidate = md => {
-                UEssentials.Logger.LogError( $"Invalid method signature in '{md}'. " +
-                                             "Expected 'CommandResult methodName(ICommandSource, ICommandArgs)'" );
+                UEssentials.Logger.LogError($"Invalid method signature in '{md}'. " +
+                                            "Expected 'CommandResult methodName(ICommandSource, ICommandArgs)'");
             };
 
-            foreach ( var type in asm.GetTypes() )
-            {
-                foreach ( var method in type.GetMethods( (BindingFlags) 0x3C ) )
-                {
-                    if ( ReflectionUtil.GetAttributeFrom<CommandInfo>( method ) == null )
+            foreach (var type in asm.GetTypes()) {
+                foreach (var method in type.GetMethods((BindingFlags) 0x3C)) {
+                    if (ReflectionUtil.GetAttributeFrom<CommandInfo>(method) == null)
                         continue;
 
                     var paramz = method.GetParameters();
 
-                    if ( method.ReturnType != typeof( CommandResult ) )
-                    {
-                        invalidate( method );
+                    if (method.ReturnType != typeof(CommandResult)) {
+                        invalidate(method);
                         continue;
                     }
 
-                    if ( paramz.Length >= 2 &&
-                        (paramz[0].ParameterType != typeof( ICommandSource ) ||
-                        paramz[1].ParameterType != typeof( ICommandArgs )) )
-                    {
-                        if ( paramz.Length == 3 &&
-                            (paramz[0].ParameterType != typeof( ICommandSource ) ||
-                             paramz[1].ParameterType != typeof( ICommandArgs ) ||
-                             paramz[2].ParameterType != typeof( ICommand )) )
-                        {
-                            invalidate( method );
+                    if (paramz.Length >= 2 &&
+                        (paramz[0].ParameterType != typeof(ICommandSource) ||
+                         paramz[1].ParameterType != typeof(ICommandArgs))) {
+                        if (paramz.Length == 3 &&
+                            (paramz[0].ParameterType != typeof(ICommandSource) ||
+                             paramz[1].ParameterType != typeof(ICommandArgs) ||
+                             paramz[2].ParameterType != typeof(ICommand))) {
+                            invalidate(method);
                             continue;
                         }
 
-                        invalidate( method );
+                        invalidate(method);
                         continue;
                     }
 
-                    var cmdInfo = ReflectionUtil.GetAttributeFrom<CommandInfo>( method );
+                    var cmdInfo = ReflectionUtil.GetAttributeFrom<CommandInfo>(method);
 
-                    commands.Add( cmdInfo.Name, new CommandEntry {
+                    commands.Add(cmdInfo.Name, new CommandEntry {
                         Aliases = cmdInfo.Aliases,
                         Description = cmdInfo.Description,
                         Usage = cmdInfo.Usage
-                    } );
+                    });
                 }
             }
 
@@ -161,12 +150,15 @@ namespace Essentials.Configuration
         }
 
         [JsonObject]
-        public struct CommandEntry
-        {
+        public struct CommandEntry {
+
             public string[] Aliases;
             public string Usage;
             public string Description;
             public decimal Cost;
+
         }
+
     }
+
 }

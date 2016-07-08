@@ -26,56 +26,48 @@ using Essentials.Api.Unturned;
 using Essentials.Components.Player;
 using Essentials.I18n;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "unfreeze",
         Usage = "[player/*]",
         Description = "Unfreeze a player/everyone"
     )]
-    public class CommandUnfreeze : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.Length == 0 )
-            {
+    public class CommandUnfreeze : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.Length == 0) {
                 return CommandResult.ShowUsage();
             }
 
-            if ( args[0].Is( "*" ) )
-            {
-                foreach ( var player in UServer.Players.Where( player => player.HasComponent<FrozenPlayer>() ) )
-                {
+            if (args[0].Is("*")) {
+                foreach (var player in UServer.Players.Where(player => player.HasComponent<FrozenPlayer>())) {
                     player.RemoveComponent<FrozenPlayer>();
 
-                    EssLang.UNFROZEN_PLAYER.SendTo( player, src.DisplayName );
+                    EssLang.UNFROZEN_PLAYER.SendTo(player, src.DisplayName);
                 }
 
-                EssLang.UNFROZEN_ALL.SendTo( src );
-            }
-            else
-            {
-                var target = UPlayer.From( args[0].ToString() );
+                EssLang.UNFROZEN_ALL.SendTo(src);
+            } else {
+                var target = UPlayer.From(args[0].ToString());
 
-                if ( target == null )
-                {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
+                if (target == null) {
+                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
                 }
 
-                if ( !target.HasComponent<FrozenPlayer>() )
-                {
-                    return CommandResult.Lang( EssLang.NOT_FROZEN, target.DisplayName );
-                }
-                else
-                {
+                if (!target.HasComponent<FrozenPlayer>()) {
+                    return CommandResult.Lang(EssLang.NOT_FROZEN, target.DisplayName);
+                } else {
                     target.RemoveComponent<FrozenPlayer>();
 
-                    EssLang.UNFROZEN_SENDER.SendTo( src, target.DisplayName );
-                    EssLang.UNFROZEN_PLAYER.SendTo( target, src.DisplayName );
+                    EssLang.UNFROZEN_SENDER.SendTo(src, target.DisplayName);
+                    EssLang.UNFROZEN_PLAYER.SendTo(target, src.DisplayName);
                 }
             }
 
             return CommandResult.Success();
         }
+
     }
+
 }

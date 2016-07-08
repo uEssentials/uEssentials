@@ -21,46 +21,42 @@
 
 using System;
 
-namespace Essentials.Api.Logging
-{
-    public class EssLogger
-    {
+namespace Essentials.Api.Logging {
+
+    public class EssLogger {
+
         private string Prefix { get; }
 
-        public EssLogger( string prefix )
-        {
+        public EssLogger(string prefix) {
             Prefix = prefix;
         }
 
-        public void LogError( string message )
-        {
-            Log( message, ConsoleColor.Red );
+        public void LogError(string message) {
+            Log(message, ConsoleColor.Red);
         }
 
-        public void LogWarning( string message )
-        {
-            Log( message, ConsoleColor.Yellow );
+        public void LogWarning(string message) {
+            Log(message, ConsoleColor.Yellow);
         }
 
-        public void LogInfo( string message )
-        {
-            Log( message, ConsoleColor.Green );
+        public void LogInfo(string message) {
+            Log(message, ConsoleColor.Green);
         }
 
-        public void LogDebug( string message )
-        {
-            Log( message, ConsoleColor.DarkGray, Prefix + "[DEBUG] " );
+        public void LogDebug(string message) {
+            Log(message, ConsoleColor.DarkGray, Prefix + "[DEBUG] ");
         }
 
-        public void Log( string message, ConsoleColor color, string prefix = "default",
-                         string suffix = "\n" )
-        {
-            if ( prefix.Equals( "default" ) ) prefix = Prefix;
+        public void Log(string message, ConsoleColor color, string prefix = "default",
+            string suffix = "\n") {
+            if (prefix.Equals("default")) prefix = Prefix;
 
             var lastColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
-            Console.Write( prefix + message + suffix );
+            Console.Write(prefix + message + suffix);
             Console.ForegroundColor = lastColor;
         }
+
     }
+
 }

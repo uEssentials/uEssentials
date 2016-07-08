@@ -22,17 +22,18 @@
 
 using System.Reflection;
 
-namespace Essentials.Common.Reflect
-{
-    public struct MethodReference
-    {
+namespace Essentials.Common.Reflect {
+
+    public struct MethodReference {
+
         public object Owner;
         public MethodInfo Method;
 
-        public MethodReference( object owner, MethodInfo method )
-        {
+        public MethodReference(object owner, MethodInfo method) {
             Owner = owner;
             Method = method;
         }
+
     }
+
 }

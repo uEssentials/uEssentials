@@ -22,36 +22,34 @@
 using Essentials.Api.Unturned;
 using SDG.Unturned;
 
-namespace Essentials.NativeModules.Kit.Item
-{
-    public class KitItemMagazine : KitItem
-    {
+namespace Essentials.NativeModules.Kit.Item {
+
+    public class KitItemMagazine : KitItem {
+
         public byte Ammo { get; set; }
 
-        public override SDG.Unturned.Item UnturnedItem => new SDG.Unturned.Item( Id, Ammo, Durability );
+        public override SDG.Unturned.Item UnturnedItem => new SDG.Unturned.Item(Id, Ammo, Durability);
 
-        public KitItemMagazine( ushort id, byte durability, byte amount, byte ammo ) : base( id, durability, amount )
-        {
+        public KitItemMagazine(ushort id, byte durability, byte amount, byte ammo) : base(id, durability, amount) {
             Amount = amount;
             Ammo = ammo;
         }
 
-        public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
-        {
+        public override bool GiveTo(UPlayer player, bool dropIfInventoryFull = true) {
             var added = false;
             var item = UnturnedItem;
 
-            for ( var i = 0; i < Amount; i++ )
-            {
-                added = player.Inventory.tryAddItem( item, true );
+            for (var i = 0; i < Amount; i++) {
+                added = player.Inventory.tryAddItem(item, true);
 
-                if ( !added && dropIfInventoryFull )
-                {
-                    ItemManager.dropItem( item, player.Position, true, Dedicator.isDedicated, true );
+                if (!added && dropIfInventoryFull) {
+                    ItemManager.dropItem(item, player.Position, true, Dedicator.isDedicated, true);
                 }
             }
 
             return added;
         }
+
     }
+
 }

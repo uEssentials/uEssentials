@@ -25,32 +25,29 @@ using System.IO;
 using System.Net;
 using Essentials.Api;
 
-namespace Essentials.NativeModules.Kit.Data
-{
-    internal class WebKitData : KitData
-    {
-        public override Dictionary<string, Kit> Load()
-        {
+namespace Essentials.NativeModules.Kit.Data {
+
+    internal class WebKitData : KitData {
+
+        public override Dictionary<string, Kit> Load() {
             var logger = UEssentials.Logger;
             var url = UEssentials.Config.WebKits.Url;
 
-            try
-            {
-                logger.LogInfo( $"Loading web kits from '{url}'" );
+            try {
+                logger.LogInfo($"Loading web kits from '{url}'");
 
-                using ( var wc = new WebClient() )
-                {
-                    var resp = wc.DownloadString( url );
-                    File.WriteAllText( DataFilePath, resp );
+                using (var wc = new WebClient()) {
+                    var resp = wc.DownloadString(url);
+                    File.WriteAllText(DataFilePath, resp);
                 }
-            }
-            catch(Exception ex)
-            {
-                logger.LogError( "Could not load webkits." );
-                logger.LogError( ex.ToString() );
+            } catch (Exception ex) {
+                logger.LogError("Could not load webkits.");
+                logger.LogError(ex.ToString());
             }
 
             return base.Load();
         }
+
     }
+
 }

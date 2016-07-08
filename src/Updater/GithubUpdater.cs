@@ -29,138 +29,121 @@ using Essentials.Common;
 using Essentials.Core;
 using Newtonsoft.Json.Linq;
 
-namespace Essentials.Updater
-{
-    internal class GithubUpdater : IUpdater
-    {
+namespace Essentials.Updater {
+
+    internal class GithubUpdater : IUpdater {
+
         private const string ReleasesUrl = @"https://api.github.com/repos/uEssentials/uEssentials/releases/latest";
         private static readonly EssLogger Logger = UEssentials.Logger;
 
         public UpdateResult LastResult { get; private set; }
 
-        internal GithubUpdater()
-        {
+        internal GithubUpdater() {
             ServicePointManager.ServerCertificateValidationCallback += (o, certificate, chain, errors) => true;
         }
 
-        public UpdateResult CheckUpdate()
-        {
-            lock ( this )
-            {
-                var result = new UpdateResult (
+        public UpdateResult CheckUpdate() {
+            lock (this) {
+                var result = new UpdateResult(
                     EssCore.PLUGIN_VERSION,
-                    ToDecimalVersion( EssCore.PLUGIN_VERSION ),
+                    ToDecimalVersion(EssCore.PLUGIN_VERSION),
                     string.Empty
-                );
+                    );
 
-                try
-                {
-                    var httpRequest = (HttpWebRequest) WebRequest.Create( ReleasesUrl );
-                    httpRequest.UserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
+                try {
+                    var httpRequest = (HttpWebRequest) WebRequest.Create(ReleasesUrl);
+                    httpRequest.UserAgent =
+                        "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
                     var respStream = httpRequest.GetResponse().GetResponseStream();
 
-                    if ( respStream == null )
-                    {
-                        throw new Exception( "request returned null response" );
+                    if (respStream == null) {
+                        throw new Exception("request returned null response");
                     }
 
-                    using (var reader = new StreamReader( respStream ))
-                    {
+                    using (var reader = new StreamReader(respStream)) {
                         var jsonData = reader.ReadToEnd();
-                        var jsonObj = JObject.Parse( jsonData );
-                        var latestVersion = jsonObj.GetValue( "tag_name" );
+                        var jsonObj = JObject.Parse(jsonData);
+                        var latestVersion = jsonObj.GetValue("tag_name");
 
-                        if ( latestVersion == null )
-                        {
-                            throw new Exception( "latest version not found." );
+                        if (latestVersion == null) {
+                            throw new Exception("latest version not found.");
                         }
 
-                        var latestVersionDecimal = ToDecimalVersion( latestVersion.ToString() );
-                        var currentVersionDecimal = ToDecimalVersion( EssCore.PLUGIN_VERSION );
+                        var latestVersionDecimal = ToDecimalVersion(latestVersion.ToString());
+                        var currentVersionDecimal = ToDecimalVersion(EssCore.PLUGIN_VERSION);
 
-                        if ( currentVersionDecimal < latestVersionDecimal )
-                        {
+                        if (currentVersionDecimal < latestVersionDecimal) {
                             var additionalData = new JObject();
-                            var body = jsonObj.GetValue( "body" )?.ToString() ?? "";
-                            var assets = jsonObj.GetValue( "assets" ).Children<JObject>();
+                            var body = jsonObj.GetValue("body")?.ToString() ?? "";
+                            var assets = jsonObj.GetValue("assets").Children<JObject>();
 
-                            additionalData.Add( "changes", body );
-                            additionalData.Add( "download_url", assets.First().GetValue( "browser_download_url" )?.ToString() ?? "null" );
+                            additionalData.Add("changes", body);
+                            additionalData.Add("download_url",
+                                assets.First().GetValue("browser_download_url")?.ToString() ?? "null");
 
-                            result = new UpdateResult (
+                            result = new UpdateResult(
                                 latestVersion.ToString(),
                                 latestVersionDecimal,
                                 additionalData.ToString()
-                            );
+                                );
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogWarning( "Could not check update!" );
-                    Logger.LogWarning( ex.Message );
-                    Logger.LogWarning( string.Empty );
-                    Logger.LogWarning( "Try downloading manually here https://github.com/uEssentials/uEssentials/releases" );
+                } catch (Exception ex) {
+                    Logger.LogWarning("Could not check update!");
+                    Logger.LogWarning(ex.Message);
+                    Logger.LogWarning(string.Empty);
+                    Logger.LogWarning(
+                        "Try downloading manually here https://github.com/uEssentials/uEssentials/releases");
                 }
 
                 return LastResult = result;
             }
         }
 
-        public bool IsUpdated()
-        {
-            lock ( this )
-            {
+        public bool IsUpdated() {
+            lock (this) {
                 var updateResult = LastResult ?? CheckUpdate();
 
-                return ToDecimalVersion( EssCore.PLUGIN_VERSION ) >= updateResult.LatestVersionDecimal;
+                return ToDecimalVersion(EssCore.PLUGIN_VERSION) >= updateResult.LatestVersionDecimal;
             }
         }
 
-        private static uint ToDecimalVersion( string version )
-        {
-            return uint.Parse( version.Replace( ".", string.Empty ) );
+        private static uint ToDecimalVersion(string version) {
+            return uint.Parse(version.Replace(".", string.Empty));
         }
 
-        public void DownloadLatestRelease( string path )
-        {
-            lock ( this )
-            {
-                if ( !Directory.Exists( path ) )
-                    Directory.CreateDirectory( path );
+        public void DownloadLatestRelease(string path) {
+            lock (this) {
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
 
                 var result = LastResult ?? CheckUpdate();
-                var downloadUrl = JObject.Parse( result.AdditionalData ).GetValue( "download_url" ).ToString();
-                var filePath = $"{path}/{downloadUrl.Substring( downloadUrl.LastIndexOf( '/' ) + 1 )}";
+                var downloadUrl = JObject.Parse(result.AdditionalData).GetValue("download_url").ToString();
+                var filePath = $"{path}/{downloadUrl.Substring(downloadUrl.LastIndexOf('/') + 1)}";
 
-                if ( File.Exists( filePath ) )
-                {
-                    Logger.LogInfo( "Latest release is already downloaded. See 'uEssentials/updates/' folder." );
-                }
-                else if ( downloadUrl.EqualsIgnoreCase( "null" ) )
-                {
-                    Logger.LogWarning( "Could not download latestRelease because 'download_url' is 'null'." );
-                }
-                else
-                {
-                    Logger.LogInfo( "Downloading latest release..." );
+                if (File.Exists(filePath)) {
+                    Logger.LogInfo("Latest release is already downloaded. See 'uEssentials/updates/' folder.");
+                } else if (downloadUrl.EqualsIgnoreCase("null")) {
+                    Logger.LogWarning("Could not download latestRelease because 'download_url' is 'null'.");
+                } else {
+                    Logger.LogInfo("Downloading latest release...");
 
-                    using (var client = new WebClient())
-                    {
-                        client.DownloadFileCompleted += ( sender, e ) =>
-                        {
-                            Logger.LogInfo( "Download finished. Check 'uEssentials/updates/' folder." );
+                    using (var client = new WebClient()) {
+                        client.DownloadFileCompleted += (sender, e) => {
+                            Logger.LogInfo("Download finished. Check 'uEssentials/updates/' folder.");
                         };
 
-                        client.DownloadProgressChanged += ( sender, e ) =>
-                        {
-                            Logger.LogInfo( $"Downloading {e.BytesReceived} of {e.TotalBytesToReceive} bytes. ({e.ProgressPercentage} %)" );
+                        client.DownloadProgressChanged += (sender, e) => {
+                            Logger.LogInfo(
+                                $"Downloading {e.BytesReceived} of {e.TotalBytesToReceive} bytes. ({e.ProgressPercentage} %)");
                         };
 
-                        client.DownloadFileAsync( new Uri(downloadUrl), filePath );
+                        client.DownloadFileAsync(new Uri(downloadUrl), filePath);
                     }
                 }
             }
         }
+
     }
+
 }

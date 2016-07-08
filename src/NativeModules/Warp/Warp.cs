@@ -24,14 +24,14 @@ using Essentials.Common;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Essentials.NativeModules.Warp
-{
+namespace Essentials.NativeModules.Warp {
+
     /// <summary>
     /// Author: Leonardosc
     /// </summary>
     [JsonObject]
-    public sealed class Warp
-    {
+    public sealed class Warp {
+
         /// <summary>
         /// Location in the world of warp
         /// </summary>
@@ -53,15 +53,16 @@ namespace Essentials.NativeModules.Warp
         /// <summary>
         /// Serializeble Vector3, used by JsonSerializer
         /// </summary>
-        [JsonProperty( PropertyName = "Location" )]
-        private SerializableVector3 SerializableLocation
-        {
+        [JsonProperty(PropertyName = "Location")]
+        private SerializableVector3 SerializableLocation {
             // Used by jsonSerializer
-            get { return new SerializableVector3( Location.x,
-                                                  Location.y,
-                                                  Location.z ); }
+            get {
+                return new SerializableVector3(Location.x,
+                    Location.y,
+                    Location.z);
+            }
 
-            set { Location = new Vector3( value.X, value.Y, value.Z ); }
+            set { Location = new Vector3(value.X, value.Y, value.Z); }
         }
 
         /// <summary>
@@ -70,15 +71,14 @@ namespace Essentials.NativeModules.Warp
         /// <param name="name">Name of warp</param>
         /// <param name="location">Location of warp</param>
         /// <param name="rotation">Rotation of warp</param>
-        public Warp( string name, Vector3 location, float rotation )
-        {
-            Preconditions.NotNull( name, "Warp name connot be null" );
+        public Warp(string name, Vector3 location, float rotation) {
+            Preconditions.NotNull(name, "Warp name connot be null");
 
             Name = name;
             Rotation = rotation;
-            SerializableLocation = new SerializableVector3( location.x,
-                                                            location.y,
-                                                            location.z );
+            SerializableLocation = new SerializableVector3(location.x,
+                location.y,
+                location.z);
         }
 
         /// <summary>
@@ -86,36 +86,36 @@ namespace Essentials.NativeModules.Warp
         /// </summary>
         /// <param name="source">Source that you want to check if is authorized</param>
         /// <returns>If source has permission to use this warp</returns>
-        public bool CanUse( ICommandSource source )
-        {
-            return source.HasPermission( $"essentials.warp.{Name.ToLowerInvariant()}" );
+        public bool CanUse(ICommandSource source) {
+            return source.HasPermission($"essentials.warp.{Name.ToLowerInvariant()}");
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return "Warp{Name= " + Name + ", " +
                    "Location= " + Location + ", " +
                    "Rotation= " + Rotation + "}";
         }
+
     }
 
     /// <summary>
     /// Serializeble Vector3, used by JsonSerializer
     /// </summary>
     [JsonObject]
-    internal struct SerializableVector3
-    {
+    internal struct SerializableVector3 {
+
         public float X { get; set; }
 
         public float Y { get; set; }
 
         public float Z { get; set; }
 
-        public SerializableVector3( float x, float y, float z )
-        {
+        public SerializableVector3(float x, float y, float z) {
             X = x;
             Y = y;
             Z = z;
         }
+
     }
+
 }

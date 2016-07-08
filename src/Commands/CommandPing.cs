@@ -23,39 +23,35 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "ping",
         Description = "View your/player ping",
         Usage = "<player>"
     )]
-    public class CommandPing : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.IsEmpty || args.Length > 1 )
-            {
-                if ( src.IsConsole )
-                {
+    public class CommandPing : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.IsEmpty || args.Length > 1) {
+                if (src.IsConsole) {
                     return CommandResult.ShowUsage();
                 }
 
-                EssLang.PING.SendTo( src, src.ToPlayer().Ping );
-            }
-            else
-            {
+                EssLang.PING.SendTo(src, src.ToPlayer().Ping);
+            } else {
                 var target = args[0].ToPlayer;
 
-                if ( target == null )
-                {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[0] );
+                if (target == null) {
+                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
                 }
 
-                EssLang.PING_OTHER.SendTo( src, target.DisplayName, target.Ping );
+                EssLang.PING_OTHER.SendTo(src, target.DisplayName, target.Ping);
             }
 
             return CommandResult.Success();
         }
+
     }
+
 }

@@ -25,41 +25,36 @@ using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.I18n;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "kill",
         Description = "Kill an player",
         Usage = "[player/*]"
     )]
-    public class CommandKill : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.IsEmpty )
-            {
+    public class CommandKill : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.IsEmpty) {
                 return CommandResult.ShowUsage();
             }
 
-            if ( args[0].Is( "*" ) )
-            {
-                UServer.Players.ForEach( p => p.Kill() );
+            if (args[0].Is("*")) {
+                UServer.Players.ForEach(p => p.Kill());
 
-                EssLang.KILL_ALL.SendTo( src );
-            }
-            else if ( args[0].IsValidPlayerName )
-            {
+                EssLang.KILL_ALL.SendTo(src);
+            } else if (args[0].IsValidPlayerName) {
                 var target = args[0].ToPlayer;
                 target.Kill();
 
-                EssLang.KILL_PLAYER.SendTo( src, target.DisplayName );
-            }
-            else
-            {
-                 EssLang.PLAYER_NOT_FOUND.SendTo( src, args[0] );
+                EssLang.KILL_PLAYER.SendTo(src, target.DisplayName);
+            } else {
+                EssLang.PLAYER_NOT_FOUND.SendTo(src, args[0]);
             }
 
             return CommandResult.Success();
         }
+
     }
+
 }

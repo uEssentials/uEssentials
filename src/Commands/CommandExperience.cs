@@ -25,95 +25,81 @@ using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.I18n;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "experience",
         Aliases = new[] { "exp" },
         Description = "Give experience to you/player",
         Usage = "[amount] <target>"
     )]
-    public class CommandExperience : EssCommand
-    {
+    public class CommandExperience : EssCommand {
+
         private const int MAX = 10000000;
 
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.Length == 0 || (args.Length == 1 && src.IsConsole))
-            {
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.Length == 0 || (args.Length == 1 && src.IsConsole)) {
                 return CommandResult.ShowUsage();
             }
 
-            if ( !args[0].IsInt )
-            {
+            if (!args[0].IsInt) {
                 return CommandResult.Lang(EssLang.INVALID_NUMBER, args[0]);
             }
 
             var amount = args[0].ToInt;
 
-            if ( amount > MAX || amount < -MAX )
-            {
-                return CommandResult.Lang(EssLang.NUMBER_BETWEEN, -MAX, MAX );
+            if (amount > MAX || amount < -MAX) {
+                return CommandResult.Lang(EssLang.NUMBER_BETWEEN, -MAX, MAX);
             }
 
-            if ( args.Length == 2 )
-            {
-                if ( args[1].Is( "*" ) )
-                {
-                    UServer.Players.ForEach( p => GiveExp( p, amount ) );
+            if (args.Length == 2) {
+                if (args[1].Is("*")) {
+                    UServer.Players.ForEach(p => GiveExp(p, amount));
 
                     if (amount >= 0)
-                        EssLang.EXPERIENCE_GIVEN.SendTo( src, amount, EssLang.EVERYONE );
+                        EssLang.EXPERIENCE_GIVEN.SendTo(src, amount, EssLang.EVERYONE);
                     else
-                        EssLang.EXPERIENCE_TAKE.SendTo( src, -amount, EssLang.EVERYONE );
-                }
-                else if ( !args[1].IsValidPlayerName )
-                {
-                    return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[1] );
-                }
-                else
-                {
+                        EssLang.EXPERIENCE_TAKE.SendTo(src, -amount, EssLang.EVERYONE);
+                } else if (!args[1].IsValidPlayerName) {
+                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[1]);
+                } else {
                     var player = args[1].ToPlayer;
 
                     if (amount >= 0)
-                        EssLang.EXPERIENCE_GIVEN.SendTo( src, amount, player.DisplayName );
+                        EssLang.EXPERIENCE_GIVEN.SendTo(src, amount, player.DisplayName);
                     else
-                        EssLang.EXPERIENCE_TAKE.SendTo( src, -amount, player.DisplayName );
+                        EssLang.EXPERIENCE_TAKE.SendTo(src, -amount, player.DisplayName);
 
-                    GiveExp( player, amount );
+                    GiveExp(player, amount);
                 }
-            }
-            else
-            {
-                GiveExp( src.ToPlayer(), amount );
+            } else {
+                GiveExp(src.ToPlayer(), amount);
             }
 
             return CommandResult.Success();
         }
 
-        private void GiveExp( UPlayer player, int amount )
-        {
+        private void GiveExp(UPlayer player, int amount) {
             var playerExp = player.UnturnedPlayer.skills.Experience;
 
-            if ( amount < 0 )
-            {
-                if ( (playerExp - amount) < 0 )
+            if (amount < 0) {
+                if ((playerExp - amount) < 0)
                     playerExp = 0;
                 else
                     playerExp += (uint) amount;
-            }
-            else
-            {
+            } else {
                 playerExp += (uint) amount;
             }
 
             if (amount >= 0)
-                EssLang.EXPERIENCE_RECEIVED.SendTo( player, amount );
+                EssLang.EXPERIENCE_RECEIVED.SendTo(player, amount);
             else
-                EssLang.EXPERIENCE_LOST.SendTo( player, -amount );
+                EssLang.EXPERIENCE_LOST.SendTo(player, -amount);
 
             player.UnturnedPlayer.skills.Experience = playerExp;
-            player.UnturnedPlayer.skills.askSkills( player.CSteamId );
+            player.UnturnedPlayer.skills.askSkills(player.CSteamId);
         }
+
     }
+
 }

@@ -25,36 +25,35 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.I18n;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "kickall",
         Description = "Kick all players",
         Usage = "<reason>"
     )]
-    public class CommandKickAll : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            var players = new List<UPlayer>( UServer.Players );
+    public class CommandKickAll : EssCommand {
 
-            if ( players.Count == 0 )
-            {
-                return CommandResult.Lang( EssLang.NO_PLAYERS_FOR_KICK );
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            var players = new List<UPlayer>(UServer.Players);
+
+            if (players.Count == 0) {
+                return CommandResult.Lang(EssLang.NO_PLAYERS_FOR_KICK);
             }
 
             var noReasonMessage = EssLang.KICK_NO_SPECIFIED_REASON.GetMessage();
 
-            players.ForEach( player =>
-            {
-                player.Kick( args.IsEmpty
+            players.ForEach(player => {
+                player.Kick(args.IsEmpty
                     ? noReasonMessage
-                    : args.Join( 0 ) );
-            } );
+                    : args.Join(0));
+            });
 
-            EssLang.KICKED_ALL.SendTo( src, players.Count );
+            EssLang.KICKED_ALL.SendTo(src, players.Count);
 
             return CommandResult.Success();
         }
+
     }
+
 }

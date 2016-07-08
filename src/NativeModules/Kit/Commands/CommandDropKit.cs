@@ -29,58 +29,50 @@ using Essentials.Common;
 using Essentials.NativeModules.Kit.Item;
 using SDG.Unturned;
 
-namespace Essentials.NativeModules.Kit.Commands
-{
+namespace Essentials.NativeModules.Kit.Commands {
+
     [CommandInfo(
         Name = "dropkit",
-        Aliases = new [] {"dk"},
+        Aliases = new[] { "dk" },
         Description = "Drop an kit at given player/position",
         Usage = "[kit] <player | x y z>"
     )]
-    public class CommandDropKit : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            switch (args.Length)
-            {
+    public class CommandDropKit : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            switch (args.Length) {
                 case 1:
-                    if ( src.IsConsole )
-                    {
+                    if (src.IsConsole) {
                         return CommandResult.ShowUsage();
                     }
 
-                    DropKit( src, args[0], src.ToPlayer().Position );
-                    EssLang.DROPKIT_SENDER.SendTo( src, args[0] );
+                    DropKit(src, args[0], src.ToPlayer().Position);
+                    EssLang.DROPKIT_SENDER.SendTo(src, args[0]);
                     break;
 
                 case 2:
-                    if ( !src.HasPermission( $"{Permission}.other" ) )
-                    {
+                    if (!src.HasPermission($"{Permission}.other")) {
                         return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
                     }
 
-                    var found = UPlayer.TryGet( args[1], player => {
-                        DropKit( src, args[0], player.Position );
-                        EssLang.DROPKIT_PLAYER.SendTo( src, args[0], player.DisplayName );
-                    } );
+                    var found = UPlayer.TryGet(args[1], player => {
+                        DropKit(src, args[0], player.Position);
+                        EssLang.DROPKIT_PLAYER.SendTo(src, args[0], player.DisplayName);
+                    });
 
-                    if ( !found )
-                    {
-                        return CommandResult.Lang( EssLang.PLAYER_NOT_FOUND, args[1] );
+                    if (!found) {
+                        return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[1]);
                     }
                     break;
 
                 case 4:
-                    var pos = args.GetVector3( 1 );
+                    var pos = args.GetVector3(1);
 
-                    if ( pos.HasValue )
-                    {
-                        DropKit( src, args[0], pos.Value );
-                        EssLang.DROPKIT_LOCATION.SendTo( src, args[1], args[2], args[3] );
-                    }
-                    else
-                    {
-                        return CommandResult.Lang( EssLang.INVALID_COORDS, args[1], args[2], args[3] );
+                    if (pos.HasValue) {
+                        DropKit(src, args[0], pos.Value);
+                        EssLang.DROPKIT_LOCATION.SendTo(src, args[1], args[2], args[3]);
+                    } else {
+                        return CommandResult.Lang(EssLang.INVALID_COORDS, args[1], args[2], args[3]);
                     }
                     break;
 
@@ -91,23 +83,21 @@ namespace Essentials.NativeModules.Kit.Commands
             return CommandResult.Success();
         }
 
-        public static void DropKit( ICommandSource src, ICommandArgument kitArg, Vector3 pos )
-        {
+        public static void DropKit(ICommandSource src, ICommandArgument kitArg, Vector3 pos) {
             var kitManager = KitModule.Instance.KitManager;
             var kitName = kitArg.ToString();
 
-            if ( !kitManager.Contains( kitName ) )
-            {
-                EssLang.KIT_NOT_EXIST.SendTo( src, kitName );
-            }
-            else
-            {
-                var kitItems = kitManager.GetByName( kitName ).Items;
+            if (!kitManager.Contains(kitName)) {
+                EssLang.KIT_NOT_EXIST.SendTo(src, kitName);
+            } else {
+                var kitItems = kitManager.GetByName(kitName).Items;
 
-                kitItems.Where( i => i is KitItem ).Cast<KitItem>().ForEach( i =>
-                    ItemManager.dropItem( i.UnturnedItem, pos, true, true, true )
-                );
+                kitItems.Where(i => i is KitItem).Cast<KitItem>().ForEach(i =>
+                    ItemManager.dropItem(i.UnturnedItem, pos, true, true, true)
+                    );
             }
         }
+
     }
+
 }

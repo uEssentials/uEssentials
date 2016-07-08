@@ -25,58 +25,50 @@ using System.Globalization;
 using System.Linq;
 using Essentials.Common.Util;
 
-namespace Essentials.Common
-{
-    public static class Extensions
-    {
-        public static bool EqualsIgnoreCase( this string str1, string str2 )
-        {
-            return string.Compare( str1, str2, StringComparison.OrdinalIgnoreCase ) == 0;
+namespace Essentials.Common {
+
+    public static class Extensions {
+
+        public static bool EqualsIgnoreCase(this string str1, string str2) {
+            return string.Compare(str1, str2, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
-        public static bool ContainsIgnoreCase( this string str, string part )
-        {
-            return CultureInfo.InvariantCulture.CompareInfo.IndexOf( str, part, CompareOptions.IgnoreCase ) >= 0;
+        public static bool ContainsIgnoreCase(this string str, string part) {
+            return CultureInfo.InvariantCulture.CompareInfo.IndexOf(str, part, CompareOptions.IgnoreCase) >= 0;
         }
 
-        public static bool IsNullOrEmpty( this string str )
-        {
-            return string.IsNullOrEmpty( str );
+        public static bool IsNullOrEmpty(this string str) {
+            return string.IsNullOrEmpty(str);
         }
 
-        public static string Capitalize( this string str )
-        {
-            return CultureInfo.InvariantCulture.TextInfo.ToTitleCase( str.ToLowerInvariant() );
+        public static string Capitalize(this string str) {
+            return CultureInfo.InvariantCulture.TextInfo.ToTitleCase(str.ToLowerInvariant());
         }
 
-        public static string Format( this string str, params object[] args )
-        {
-            return string.Format( str, args );
+        public static string Format(this string str, params object[] args) {
+            return string.Format(str, args);
         }
 
-        public static void ForEach<T>( this T[] array, Action<T> act )
-        {
-            foreach ( var obj in array ) act( obj );
+        public static void ForEach<T>(this T[] array, Action<T> act) {
+            foreach (var obj in array) act(obj);
         }
 
-        public static void ForEach<T>( this IEnumerable<T> enume , Action<T> act )
-        {
-            foreach ( var obj in enume ) act( obj );
+        public static void ForEach<T>(this IEnumerable<T> enume, Action<T> act) {
+            foreach (var obj in enume) act(obj);
         }
 
-        public static IEnumerable<T> WhereNot<T>( this IEnumerable<T> enume , Func<T, bool> predicate )
-        {
-            return enume.Where( t => !predicate( t ) );
+        public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> enume, Func<T, bool> predicate) {
+            return enume.Where(t => !predicate(t));
         }
 
-        public static bool None<T>( this IEnumerable<T> enume , Func<T, bool> predicate )
-        {
-            return !enume.Any( predicate );
+        public static bool None<T>(this IEnumerable<T> enume, Func<T, bool> predicate) {
+            return !enume.Any(predicate);
         }
 
-        public static string ArrayToString<T>( this T[] arr )
-        {
-            return MiscUtil.ArrayToString( arr );
+        public static string ArrayToString<T>(this T[] arr) {
+            return MiscUtil.ArrayToString(arr);
         }
+
     }
+
 }

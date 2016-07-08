@@ -24,35 +24,33 @@ using Essentials.Api.Task;
 using Essentials.NativeModules.Warp.Commands;
 using static Essentials.Api.UEssentials;
 
-namespace Essentials.NativeModules.Warp
-{
-    [ModuleInfo( Name = "Warps" )]
-    public class WarpModule : NativeModule
-    {
-        public WarpManager          WarpManager { get; private set; }
-        public static WarpModule    Instance    { get; private set; }
+namespace Essentials.NativeModules.Warp {
 
-        public override void OnLoad()
-        {
+    [ModuleInfo(Name = "Warps")]
+    public class WarpModule : NativeModule {
+
+        public WarpManager WarpManager { get; private set; }
+        public static WarpModule Instance { get; private set; }
+
+        public override void OnLoad() {
             Instance = this;
 
             WarpManager = new WarpManager();
             WarpManager.Load();
 
-            Logger.LogInfo( $"Loaded {WarpManager.Count} warps" );
+            Logger.LogInfo($"Loaded {WarpManager.Count} warps");
 
             CommandManager.Register<CommandWarp>();
             CommandManager.Register<CommandWarps>();
             CommandManager.Register<CommandSetWarp>();
             CommandManager.Register<CommandDelWarp>();
 
-            Tasks.New( t => {
+            Tasks.New(t => {
                 WarpManager.Save();
-            }).Delay( 60 * 1000 ).Interval( 60 * 1000 ).Go();
+            }).Delay(60*1000).Interval(60*1000).Go();
         }
 
-        public override void OnUnload()
-        {
+        public override void OnUnload() {
             WarpManager.Save();
 
             CommandManager.Unregister<CommandWarp>();
@@ -60,5 +58,7 @@ namespace Essentials.NativeModules.Warp
             CommandManager.Unregister<CommandSetWarp>();
             CommandManager.Unregister<CommandDelWarp>();
         }
+
     }
+
 }

@@ -26,55 +26,52 @@ using Rocket.API;
 using Rocket.Core;
 using Essentials.Core.Permission;
 
-namespace Essentials.Compatibility.Hooks
-{
-    internal class LPXHook : Hook
-    {
+namespace Essentials.Compatibility.Hooks {
+
+    internal class LPXHook : Hook {
+
         private IRocketPermissionsProvider _defaultProvider;
 
-        public LPXHook() : base( "lpx" ) {}
+        public LPXHook() : base("lpx") {}
 
-        public override void OnLoad()
-        {
-            var lpx = R.Plugins.GetPlugins().First( c => c.Name.Equals( "LPX" ) );
+        public override void OnLoad() {
+            var lpx = R.Plugins.GetPlugins().First(c => c.Name.Equals("LPX"));
 
-            if ( lpx == null )
-            {
+            if (lpx == null) {
                 return;
             }
 
             var lpxBaseType = lpx.GetType().BaseType;
-            var configProp = lpxBaseType?.GetProperty( "Configuration" )?.GetValue( lpx, new object[0] );
-            var configInst = configProp?.GetType().GetProperty( "Instance" )?.GetValue( configProp, new object[0] );
-            var lpxEnabledField = configInst?.GetType().GetField( "LPXEnabled" )?.GetValue( configInst );
+            var configProp = lpxBaseType?.GetProperty("Configuration")?.GetValue(lpx, new object[0]);
+            var configInst = configProp?.GetType().GetProperty("Instance")?.GetValue(configProp, new object[0]);
+            var lpxEnabledField = configInst?.GetType().GetField("LPXEnabled")?.GetValue(configInst);
 
-            if ( lpxEnabledField is bool && !(bool) lpxEnabledField )
-            {
+            if (lpxEnabledField is bool && !(bool) lpxEnabledField) {
                 return;
             }
 
-            UEssentials.Logger.LogInfo( "Hooking with LPX..." );
+            UEssentials.Logger.LogInfo("Hooking with LPX...");
 
-            var sqlPerm = lpx.GetType().Assembly.GetType( "LIGHT.SQLPermission" );
+            var sqlPerm = lpx.GetType().Assembly.GetType("LIGHT.SQLPermission");
 
             var sqlPermInst = new EssentialsPermissionsProvider(
-                (IRocketPermissionsProvider) Activator.CreateInstance( sqlPerm )
-            );
+                (IRocketPermissionsProvider) Activator.CreateInstance(sqlPerm)
+                );
 
             _defaultProvider = R.Permissions;
             R.Permissions = sqlPermInst;
 
-            UEssentials.Logger.LogInfo( "Successfully hooked with LPX." );
+            UEssentials.Logger.LogInfo("Successfully hooked with LPX.");
         }
 
-        public override void OnUnload()
-        {
+        public override void OnUnload() {
             R.Permissions = _defaultProvider;
         }
 
-        public override bool CanBeLoaded()
-        {
-            return R.Plugins.GetPlugins().Any( p => p.Name.Equals( "LPX" ) );
+        public override bool CanBeLoaded() {
+            return R.Plugins.GetPlugins().Any(p => p.Name.Equals("LPX"));
         }
+
     }
+
 }

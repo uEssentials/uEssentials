@@ -22,14 +22,14 @@
 using Essentials.Api.Permission;
 using UnityEngine;
 
-namespace Essentials.Api.Command.Source
-{
+namespace Essentials.Api.Command.Source {
+
     /// <summary>
     /// This classe represents a source of <see cref="ICommand"/>,
     /// that executed the command.
     /// </summary>
-    public interface ICommandSource : IPermissible
-    {
+    public interface ICommandSource : IPermissible {
+
         /// <summary>
         /// Returns the CSteamID of source ( as string )
         /// </summary>
@@ -53,17 +53,19 @@ namespace Essentials.Api.Command.Source
         /// <summary>
         /// Send an message to player/console
         /// </summary>
-        void SendMessage( object message );
+        void SendMessage(object message);
 
         /// <summary>
         /// Send an message to player/console
         /// </summary>
-        void SendMessage( object message, Color color );
+        void SendMessage(object message, Color color);
 
         /// <summary>
         /// Dispatch an command
         /// </summary>
         /// <param name="command"> Command that you want to dispatch </param>
-        void DispatchCommand( string command );
+        void DispatchCommand(string command);
+
     }
+
 }

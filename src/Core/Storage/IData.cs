@@ -19,10 +19,10 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-namespace Essentials.Core.Storage
-{
-    public interface IData<T>
-    {
+namespace Essentials.Core.Storage {
+
+    public interface IData<T> {
+
         /// <summary>
         /// Save given data
         /// </summary>
@@ -34,5 +34,7 @@ namespace Essentials.Core.Storage
         /// </summary>
         /// <returns>Loaded data</returns>
         T Load();
+
     }
+
 }

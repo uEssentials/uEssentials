@@ -36,164 +36,142 @@ using Essentials.NativeModules.Warp;
 using Rocket.Core;
 using UnityEngine;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "essentials",
         Description = "Plugin commands",
         Aliases = new[] { "ess", "?", "uessentials" },
         Usage = "<commands/help/info/reload/savedata>"
     )]
-    public class CommandEssentials : EssCommand
-    {
+    public class CommandEssentials : EssCommand {
+
         private string _cachedCommands;
         private List<List<string>> _ingameCommandPages;
 
-        private static readonly Func<ICommand, bool> _isEssentialsCommand = cmd =>
-        {
+        private static readonly Func<ICommand, bool> _isEssentialsCommand = cmd => {
             var asm = cmd.GetType().Assembly;
 
-            if ( cmd is CommandTest )
-            {
+            if (cmd is CommandTest) {
                 return false;
             }
 
-            if ( cmd.GetType() == typeof(MethodCommand) )
-            {
+            if (cmd.GetType() == typeof(MethodCommand)) {
                 asm = ((MethodCommand) cmd).Owner.Assembly;
             }
 
-            return asm.Equals( typeof(EssCore).Assembly );
+            return asm.Equals(typeof(EssCore).Assembly);
         };
 
-        private static void ReloadKits()
-        {
-            UEssentials.ModuleManager.GetModule<KitModule>().IfPresent( m => {
+        private static void ReloadKits() {
+            UEssentials.ModuleManager.GetModule<KitModule>().IfPresent(m => {
                 m.KitManager = new KitManager();
                 m.KitManager.LoadKits();
-            } );
+            });
         }
 
-        private static void ReloadLang()
-        {
+        private static void ReloadLang() {
             EssLang.Load();
         }
 
-        private static void ReloadConfig()
-        {
+        private static void ReloadConfig() {
             var core = EssCore.Instance;
             var configPath = $"{core.Folder}config.json";
 
             core.Config = new EssConfig();
-            core.Config.Load( configPath );
+            core.Config.Load(configPath);
         }
 
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
-            if ( args.IsEmpty )
-            {
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            if (args.IsEmpty) {
                 return CommandResult.ShowUsage();
             }
 
-            switch ( args[0].ToLowerString )
-            {
+            switch (args[0].ToLowerString) {
                 case "savedata":
-                    if ( !src.HasPermission( "essentials.savedata" ) )
-                    {
-                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                    if (!src.HasPermission("essentials.savedata")) {
+                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
                     }
-                    UEssentials.ModuleManager.GetModule<KitModule>().IfPresent( m => {
+                    UEssentials.ModuleManager.GetModule<KitModule>().IfPresent(m => {
                         m.KitManager.CooldownData.Save();
                     });
-                    UEssentials.ModuleManager.GetModule<WarpModule>().IfPresent( m => {
+                    UEssentials.ModuleManager.GetModule<WarpModule>().IfPresent(m => {
                         m.WarpManager.Save();
                     });
                     break;
 
                 case "reload":
-                    if ( !src.HasPermission( "essentials.reload" ) )
-                    {
-                        return CommandResult.Lang( EssLang.COMMAND_NO_PERMISSION );
+                    if (!src.HasPermission("essentials.reload")) {
+                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
                     }
-                    if ( args.Length == 1 )
-                    {
-                        src.SendMessage( "Reloading all..." );
+                    if (args.Length == 1) {
+                        src.SendMessage("Reloading all...");
                         ReloadConfig();
                         ReloadKits();
                         ReloadLang();
                         R.Permissions.Reload();
-                        src.SendMessage( "Reload finished..." );
-                    }
-                    else
-                    {
-                        switch ( args[1].ToLowerString )
-                        {
+                        src.SendMessage("Reload finished...");
+                    } else {
+                        switch (args[1].ToLowerString) {
                             case "kits":
                             case "kit":
-                                src.SendMessage( "Reloading kits..." );
+                                src.SendMessage("Reloading kits...");
                                 ReloadKits();
-                                src.SendMessage( "Reload finished..." );
+                                src.SendMessage("Reload finished...");
                                 break;
 
                             case "config":
-                                src.SendMessage( "Reloading config..." );
+                                src.SendMessage("Reloading config...");
                                 ReloadConfig();
-                                src.SendMessage( "Reload finished..." );
+                                src.SendMessage("Reload finished...");
                                 break;
 
                             case "lang":
-                                src.SendMessage( "Reloading translations..." );
+                                src.SendMessage("Reloading translations...");
                                 ReloadLang();
-                                src.SendMessage( "Reload finished..." );
+                                src.SendMessage("Reload finished...");
                                 break;
 
                             default:
-                                return CommandResult.InvalidArgs( "Use /ess reload <kits/config/lang>" );
+                                return CommandResult.InvalidArgs("Use /ess reload <kits/config/lang>");
                         }
                     }
                     break;
 
                 case "commands":
-                    if ( src.IsConsole )
-                    {
-                        if ( _cachedCommands == null )
-                        {
-                            var builder = new StringBuilder( "Commands: \n" );
+                    if (src.IsConsole) {
+                        if (_cachedCommands == null) {
+                            var builder = new StringBuilder("Commands: \n");
 
                             (
                                 from command in UEssentials.CommandManager.Commands
                                 where _isEssentialsCommand(command)
                                 select command
-                            ).ForEach( command => {
-                                builder.Append( "  /" )
-                                       .Append( command.Name.ToLower() )
-                                       .Append( command.Usage == "" ? "" : " " + command.Usage )
-                                       .Append( " - " ).Append( command.Description )
-                                       .AppendLine();
-                            } );
+                                ).ForEach(command => {
+                                    builder.Append("  /")
+                                        .Append(command.Name.ToLower())
+                                        .Append(command.Usage == "" ? "" : " " + command.Usage)
+                                        .Append(" - ").Append(command.Description)
+                                        .AppendLine();
+                                });
 
                             _cachedCommands = builder.ToString();
                         }
 
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine( _cachedCommands );
-                        Console.WriteLine( "Use /ess help <command> to view help page." );
-                    }
-                    else if ( args.Length != 2 || !args[1].IsInt )
-                    {
-                        src.SendMessage( "Use /ess commands [page]" );
-                    }
-                    else
-                    {
-                        if ( _ingameCommandPages == null )
-                        {
+                        Console.WriteLine(_cachedCommands);
+                        Console.WriteLine("Use /ess help <command> to view help page.");
+                    } else if (args.Length != 2 || !args[1].IsInt) {
+                        src.SendMessage("Use /ess commands [page]");
+                    } else {
+                        if (_ingameCommandPages == null) {
                             const int PAGE_SIZE = 16;
 
                             _ingameCommandPages = new List<List<string>>(50) {
                                 new List<string>(PAGE_SIZE)
                             };
 
-                            var builder = new StringBuilder( "Commands: \n" );
+                            var builder = new StringBuilder("Commands: \n");
                             var count = 0;
                             var page = 0;
 
@@ -201,75 +179,65 @@ namespace Essentials.Commands
                                 from command in UEssentials.CommandManager.Commands
                                 where _isEssentialsCommand(command)
                                 select command
-                            ).ForEach( command => {
-                                if ( count >= (PAGE_SIZE - 1) )
-                                {
-                                    _ingameCommandPages[page++].Add( "Use /ess help <command> to view help page." );
-                                    _ingameCommandPages.Add( new List<string>(PAGE_SIZE) );
-                                    count = 0;
-                                }
+                                ).ForEach(command => {
+                                    if (count >= (PAGE_SIZE - 1)) {
+                                        _ingameCommandPages[page++].Add("Use /ess help <command> to view help page.");
+                                        _ingameCommandPages.Add(new List<string>(PAGE_SIZE));
+                                        count = 0;
+                                    }
 
-                                builder.Append( "  /" )
-                                       .Append( command.Name.ToLower() )
-                                       .Append( command.Usage == "" ? "" : " " + command.Usage )
-                                       .Append( " - " ).Append( command.Description )
-                                       .AppendLine();
+                                    builder.Append("  /")
+                                        .Append(command.Name.ToLower())
+                                        .Append(command.Usage == "" ? "" : " " + command.Usage)
+                                        .Append(" - ").Append(command.Description)
+                                        .AppendLine();
 
-                                _ingameCommandPages[page].Add( builder.ToString() );
-                                builder.Length = 0;
-                                count++;
-                            } );
+                                    _ingameCommandPages[page].Add(builder.ToString());
+                                    builder.Length = 0;
+                                    count++;
+                                });
                         }
 
                         var pageArg = args[1].ToInt;
 
-                        if ( pageArg < 1 || pageArg > _ingameCommandPages.Count - 1 )
-                        {
-                            src.SendMessage( $"Page must be between 1 and {_ingameCommandPages.Count - 1}", Color.red );
-                        }
-                        else
-                        {
-                            _ingameCommandPages[pageArg - 1].ForEach( s => {
-                                src.SendMessage( s, Color.cyan );
-                            } );
+                        if (pageArg < 1 || pageArg > _ingameCommandPages.Count - 1) {
+                            src.SendMessage($"Page must be between 1 and {_ingameCommandPages.Count - 1}", Color.red);
+                        } else {
+                            _ingameCommandPages[pageArg - 1].ForEach(s => {
+                                src.SendMessage(s, Color.cyan);
+                            });
                         }
                     }
                     break;
 
                 case "info":
-                    if ( src.IsConsole )
+                    if (src.IsConsole)
                         Console.ForegroundColor = ConsoleColor.Green;
 
-                    src.SendMessage( "Author:  leonardosc", Color.yellow );
-                    src.SendMessage( "Github:  github.com/leonardosnt", Color.yellow );
-                    src.SendMessage( "uEssentials Github:  github.com/uEssentials", Color.yellow );
-                    src.SendMessage( "Version: " + EssCore.PLUGIN_VERSION, Color.yellow );
+                    src.SendMessage("Author:  leonardosc", Color.yellow);
+                    src.SendMessage("Github:  github.com/leonardosnt", Color.yellow);
+                    src.SendMessage("uEssentials Github:  github.com/uEssentials", Color.yellow);
+                    src.SendMessage("Version: " + EssCore.PLUGIN_VERSION, Color.yellow);
                     break;
 
                 case "help":
-                    if ( src.IsConsole )
+                    if (src.IsConsole)
                         Console.ForegroundColor = ConsoleColor.Green;
 
-                    if ( args.Length == 1 )
-                    {
-                        src.SendMessage( "Use /ess help <command>" );
-                    }
-                    else
-                    {
-                        var command = UEssentials.CommandManager.GetByName( args[1].ToString() );
+                    if (args.Length == 1) {
+                        src.SendMessage("Use /ess help <command>");
+                    } else {
+                        var command = UEssentials.CommandManager.GetByName(args[1].ToString());
 
-                        if ( command == null )
-                        {
-                            src.SendMessage( $"Command {args[1]} does not exists", Color.red );
-                        }
-                        else
-                        {
-                            src.SendMessage( "Command: " + command.Name , Color.cyan);
-                            src.SendMessage( "  Arguments: <optional> [required]", Color.cyan );
-                            src.SendMessage( "  Help: " + command.Description, Color.cyan );
-                            src.SendMessage( "  Usage: /" + command.Name + " " + command.Usage, Color.cyan );
-                            if ( command.Aliases.Any() )
-                                src.SendMessage( "  Aliases: " + string.Join( ", ", command.Aliases ), Color.cyan );
+                        if (command == null) {
+                            src.SendMessage($"Command {args[1]} does not exists", Color.red);
+                        } else {
+                            src.SendMessage("Command: " + command.Name, Color.cyan);
+                            src.SendMessage("  Arguments: <optional> [required]", Color.cyan);
+                            src.SendMessage("  Help: " + command.Description, Color.cyan);
+                            src.SendMessage("  Usage: /" + command.Name + " " + command.Usage, Color.cyan);
+                            if (command.Aliases.Any())
+                                src.SendMessage("  Aliases: " + string.Join(", ", command.Aliases), Color.cyan);
                         }
                     }
                     break;
@@ -280,5 +248,7 @@ namespace Essentials.Commands
 
             return CommandResult.Success();
         }
+
     }
+
 }

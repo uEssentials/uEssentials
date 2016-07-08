@@ -27,10 +27,10 @@ using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
 
-namespace Essentials.Core.Command
-{
-    internal class ConsoleSource : ICommandSource
-    {
+namespace Essentials.Core.Command {
+
+    internal class ConsoleSource : ICommandSource {
+
         private static ConsoleSource _instance;
         private static readonly object LockObj = new object();
 
@@ -42,47 +42,41 @@ namespace Essentials.Core.Command
 
         public bool IsAdmin => true;
 
-        public List<string> Permissions => new List<string> {"*"};
+        public List<string> Permissions => new List<string> { "*" };
 
-        internal static ConsoleSource Instance
-        {
-            get
-            {
-                lock ( LockObj )
-                {
+        internal static ConsoleSource Instance {
+            get {
+                lock (LockObj) {
                     return _instance ?? (_instance = new ConsoleSource());
                 }
             }
         }
 
-        public bool HasPermission( string permission ) => true;
+        public bool HasPermission(string permission) => true;
 
-        public void SendMessage( object message )
-        {
-            SendMessage( message, Color.green );
+        public void SendMessage(object message) {
+            SendMessage(message, Color.green);
         }
 
-        public void SendMessage( object message, Color color )
-        {
+        public void SendMessage(object message, Color color) {
             var oldColor = Console.ForegroundColor;
-            Console.ForegroundColor = ColorUtil.UnityColorToConsoleColor( color );
-            Console.WriteLine( message );
+            Console.ForegroundColor = ColorUtil.UnityColorToConsoleColor(color);
+            Console.WriteLine(message);
             Console.ForegroundColor = oldColor;
         }
 
-        public void DispatchCommand( string command )
-        {
-            if ( command.StartsWith( "/" ) )
-            {
-                command = command.Remove( 0 );
+        public void DispatchCommand(string command) {
+            if (command.StartsWith("/")) {
+                command = command.Remove(0);
             }
 
-            CommandWindow.ConsoleInput.onInputText?.Invoke( command );
+            CommandWindow.ConsoleInput.onInputText?.Invoke(command);
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return DisplayName;
         }
+
     }
+
 }

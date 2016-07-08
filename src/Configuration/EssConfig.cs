@@ -30,222 +30,241 @@ using Essentials.Misc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Essentials.Configuration
-{
-    public class EssConfig : JsonConfig
-    {
-        public string                   Locale;
-        public string                   PMFormatFrom;
-        public string                   PMFormatTo;
+namespace Essentials.Configuration {
 
-        public bool                     UnfreezeOnDeath;
-        public bool                     UnfreezeOnQuit;
+    public class EssConfig : JsonConfig {
 
-        public bool                     EnableTextCommands;
-        public bool                     EnableDeathMessages;
-        public bool                     EnableJoinLeaveMessage;
+        public string Locale;
+        public string PMFormatFrom;
+        public string PMFormatTo;
 
-        public bool                     EnablePollRunningMessage;
-        public int                      PollRunningMessageCooldown;
-        public int                      ServerFrameRate;
+        public bool UnfreezeOnDeath;
+        public bool UnfreezeOnQuit;
 
-        public ushort                   ItemSpawnLimit;
+        public bool EnableTextCommands;
+        public bool EnableDeathMessages;
+        public bool EnableJoinLeaveMessage;
 
-        public AntiSpamSettings         AntiSpam;
-        public UpdaterSettings          Updater;
-        public HomeCommandSettings      HomeCommand;
-        public WarpCommandSettings      WarpCommand;
-        public WebKitsSettings          WebKits;
-        public WebConfigSettings        WebConfig;
-        public KitSettings              Kit;
-        public TpaSettings              Tpa;
-        public EconomySettings          Economy;
+        public bool EnablePollRunningMessage;
+        public int PollRunningMessageCooldown;
+        public int ServerFrameRate;
 
-        public AutoAnnouncer            AutoAnnouncer;
-        public AutoCommands             AutoCommands;
+        public ushort ItemSpawnLimit;
 
-        public List<ushort>             GiveItemBlacklist;
-        public List<ushort>             VehicleBlacklist;
-        public List<string>             EnabledSystems;
-        public List<string>             DisabledCommands;
+        public AntiSpamSettings AntiSpam;
+        public UpdaterSettings Updater;
+        public HomeCommandSettings HomeCommand;
+        public WarpCommandSettings WarpCommand;
+        public WebKitsSettings WebKits;
+        public WebConfigSettings WebConfig;
+        public KitSettings Kit;
+        public TpaSettings Tpa;
+        public EconomySettings Economy;
 
-        internal EssConfig() { }
+        public AutoAnnouncer AutoAnnouncer;
+        public AutoCommands AutoCommands;
 
-        public override void LoadDefaults()
-        {
-            Locale                      = "en";
+        public List<ushort> GiveItemBlacklist;
+        public List<ushort> VehicleBlacklist;
+        public List<string> EnabledSystems;
+        public List<string> DisabledCommands;
 
-            PMFormatFrom                = "(From {0}): {1}";
-            PMFormatTo                  = "(To {0}): {1}";
+        internal EssConfig() {}
 
-            UnfreezeOnDeath             = true;
-            UnfreezeOnQuit              = true;
+        public override void LoadDefaults() {
+            Locale = "en";
 
-            EnableJoinLeaveMessage      = true;
-            EnableTextCommands          = true;
-            EnableDeathMessages         = true;
+            PMFormatFrom = "(From {0}): {1}";
+            PMFormatTo = "(To {0}): {1}";
 
-            EnablePollRunningMessage    = true;
-            PollRunningMessageCooldown  = 20;
-            ServerFrameRate             = -1; // http://docs.unity3d.com/ScriptReference/Application-targetFrameRate.html
+            UnfreezeOnDeath = true;
+            UnfreezeOnQuit = true;
 
-            AutoAnnouncer               = new AutoAnnouncer();
-            AutoAnnouncer               .LoadDefaults();
+            EnableJoinLeaveMessage = true;
+            EnableTextCommands = true;
+            EnableDeathMessages = true;
 
-            AutoCommands                = new AutoCommands();
-            AutoCommands                .LoadDefaults();
+            EnablePollRunningMessage = true;
+            PollRunningMessageCooldown = 20;
+            ServerFrameRate = -1; // http://docs.unity3d.com/ScriptReference/Application-targetFrameRate.html
 
-            AntiSpam                    = new AntiSpamSettings { Enabled = true,
-                                                         Interval = 3 };
+            AutoAnnouncer = new AutoAnnouncer();
+            AutoAnnouncer.LoadDefaults();
 
-            Updater                     = new UpdaterSettings { CheckUpdates = true,
-                                                        DownloadLatest = true,
-                                                        AlertOnJoin = true };
+            AutoCommands = new AutoCommands();
+            AutoCommands.LoadDefaults();
 
-            HomeCommand                 = new HomeCommandSettings { Cooldown = 30, Delay = 5,
-                                                            CancelTeleportWhenMove = true };
+            AntiSpam = new AntiSpamSettings {
+                Enabled = true,
+                Interval = 3
+            };
 
-            WarpCommand                 = new WarpCommandSettings { Cooldown = 5, PerWarpPermission = true,
-                                                                    CancelTeleportWhenMove = false };
+            Updater = new UpdaterSettings {
+                CheckUpdates = true,
+                DownloadLatest = true,
+                AlertOnJoin = true
+            };
 
-            WebKits                     = new WebKitsSettings { Enabled = false, Url = "" };
+            HomeCommand = new HomeCommandSettings {
+                Cooldown = 30,
+                Delay = 5,
+                CancelTeleportWhenMove = true
+            };
 
-            WebConfig                   = new WebConfigSettings { Enabled = false, Url = "" };
+            WarpCommand = new WarpCommandSettings {
+                Cooldown = 5,
+                PerWarpPermission = true,
+                CancelTeleportWhenMove = false
+            };
 
-            Kit                         = new KitSettings { ShowCost = true, ShowCostIfZero = false,
-                                                    CostFormat = "{0}({1}{2})", GlobalCooldown = 0,
-                                                    ResetGlobalCooldownWhenDie = false };
+            WebKits = new WebKitsSettings { Enabled = false, Url = "" };
 
-            Tpa                          = new TpaSettings { ExpireDelay = 10, TeleportDelay = 5 };
+            WebConfig = new WebConfigSettings { Enabled = false, Url = "" };
 
-            Economy                     = new EconomySettings { UseXp =  false, UconomyCurrency = "$",
-                                                                XpCurrency = "Xp" };
+            Kit = new KitSettings {
+                ShowCost = true,
+                ShowCostIfZero = false,
+                CostFormat = "{0}({1}{2})",
+                GlobalCooldown = 0,
+                ResetGlobalCooldownWhenDie = false
+            };
 
-            GiveItemBlacklist           = new List<ushort>();
-            VehicleBlacklist            = new List<ushort>();
-            DisabledCommands            = new List<string>();
-            EnabledSystems              = new List<string> { "kits", "warps" };
+            Tpa = new TpaSettings { ExpireDelay = 10, TeleportDelay = 5 };
 
-            ItemSpawnLimit              = 10;
+            Economy = new EconomySettings {
+                UseXp = false,
+                UconomyCurrency = "$",
+                XpCurrency = "Xp"
+            };
+
+            GiveItemBlacklist = new List<ushort>();
+            VehicleBlacklist = new List<ushort>();
+            DisabledCommands = new List<string>();
+            EnabledSystems = new List<string> { "kits", "warps" };
+
+            ItemSpawnLimit = 10;
         }
 
-        public override void Load( string filePath )
-        {
-            if ( !File.Exists( filePath ) )
-            {
-                base.Load( filePath );
+        public override void Load(string filePath) {
+            if (!File.Exists(filePath)) {
+                base.Load(filePath);
             }
 
-            try
-            {
-                var json = JObject.Parse( File.ReadAllText( filePath ) );
-                base.Load( filePath );
+            try {
+                var json = JObject.Parse(File.ReadAllText(filePath));
+                base.Load(filePath);
 
                 var configFiels = GetType().GetFields();
                 var needUpdate = configFiels.Length != json.Count;
                 var nonNullFields = new Dictionary<string, object>();
 
-                if ( needUpdate )
-                {
-                    configFiels.Where( f => json[f.Name] != null ).ForEach( f =>
-                    {
-                        nonNullFields.Add( f.Name, f.GetValue( this ) );
-                    } );
+                if (needUpdate) {
+                    configFiels.Where(f => json[f.Name] != null).ForEach(f => {
+                        nonNullFields.Add(f.Name, f.GetValue(this));
+                    });
 
                     LoadDefaults();
 
-                    nonNullFields.ForEach( pair => {
-                        GetType().GetField( pair.Key ).SetValue( this, pair.Value );
-                    } );
+                    nonNullFields.ForEach(pair => {
+                        GetType().GetField(pair.Key).SetValue(this, pair.Value);
+                    });
 
-                    Save( filePath );
+                    Save(filePath);
                 }
 
                 /*
                     Update old configs
                 */
-                if ( json["HomeCommand"]["CancelTeleportWhenMove"] == null &&
-                     json["HomeCommand"]["CancelWhenMove"] != null )
-                {
+                if (json["HomeCommand"]["CancelTeleportWhenMove"] == null &&
+                    json["HomeCommand"]["CancelWhenMove"] != null) {
                     HomeCommand.CancelTeleportWhenMove = (bool) json["HomeCommand"]["CancelWhenMove"];
-                    Save( filePath );
+                    Save(filePath);
                 }
-            }
-            catch (Exception ex)
-            {
-                UEssentials.Logger.LogError( $"Invalid configuration ({filePath})" );
-                UEssentials.Logger.LogError( ex.Message );
+            } catch (Exception ex) {
+                UEssentials.Logger.LogError($"Invalid configuration ({filePath})");
+                UEssentials.Logger.LogError(ex.Message);
             }
         }
 
         [JsonObject]
-        public struct AntiSpamSettings
-        {
+        public struct AntiSpamSettings {
+
             public bool Enabled;
             public int Interval;
+
         }
 
         [JsonObject]
-        public struct UpdaterSettings
-        {
+        public struct UpdaterSettings {
+
             public bool CheckUpdates;
             public bool DownloadLatest;
             public bool AlertOnJoin;
+
         }
 
         [JsonObject]
-        public struct HomeCommandSettings
-        {
+        public struct HomeCommandSettings {
+
             public int Cooldown;
             public int Delay;
             public bool CancelTeleportWhenMove;
+
         }
 
         [JsonObject]
-        public struct WarpCommandSettings
-        {
+        public struct WarpCommandSettings {
+
             public int Cooldown;
             public bool CancelTeleportWhenMove;
             public bool PerWarpPermission;
+
         }
 
         [JsonObject]
-        public struct WebKitsSettings
-        {
+        public struct WebKitsSettings {
+
             public string Url;
             public bool Enabled;
+
         }
 
         [JsonObject]
-        public struct WebConfigSettings
-        {
+        public struct WebConfigSettings {
+
             public string Url;
             public bool Enabled;
+
         }
 
         [JsonObject]
-        public struct KitSettings
-        {
+        public struct KitSettings {
+
             public bool ShowCost;
             public bool ShowCostIfZero;
             public string CostFormat;
             public uint GlobalCooldown;
             public bool ResetGlobalCooldownWhenDie;
+
         }
 
         [JsonObject]
-        public struct TpaSettings
-        {
+        public struct TpaSettings {
+
             public int ExpireDelay;
             public int TeleportDelay;
+
         }
 
         [JsonObject]
-        public struct EconomySettings
-        {
+        public struct EconomySettings {
+
             public bool UseXp;
             public string XpCurrency;
             public string UconomyCurrency;
+
         }
+
     }
+
 }

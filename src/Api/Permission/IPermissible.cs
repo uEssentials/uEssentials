@@ -21,12 +21,14 @@
 
 using System.Collections.Generic;
 
-namespace Essentials.Api.Permission
-{
-    public interface IPermissible
-    {
+namespace Essentials.Api.Permission {
+
+    public interface IPermissible {
+
         bool HasPermission(string permission);
 
         List<string> Permissions { get; }
+
     }
+
 }

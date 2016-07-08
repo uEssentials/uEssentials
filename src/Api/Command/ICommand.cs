@@ -21,13 +21,13 @@
 
 using Essentials.Api.Command.Source;
 
-namespace Essentials.Api.Command
-{
+namespace Essentials.Api.Command {
+
     /// <summary>
     /// This class represents an command
     /// </summary>
-    public interface ICommand
-    {
+    public interface ICommand {
+
         /// <summary>
         /// Name of this command
         /// </summary>
@@ -64,6 +64,8 @@ namespace Essentials.Api.Command
         /// </summary>
         /// <param name="src">Source who is calling this command, can be console or player</param>
         /// <param name="args">Arguments passed when this command is called</param>
-        CommandResult OnExecute( ICommandSource src, ICommandArgs args );
+        CommandResult OnExecute(ICommandSource src, ICommandArgs args);
+
     }
+
 }

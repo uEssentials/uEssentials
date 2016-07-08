@@ -21,14 +21,14 @@
 
 using Essentials.I18n;
 
-namespace Essentials.Api.Command
-{
-    public class CommandResult
-    {
-        private static readonly CommandResult SUCCESS  = new CommandResult( null, ResultType.SUCCESS );
-        private static readonly CommandResult SHOW_USAGE  = new CommandResult( null, ResultType.SHOW_USAGE );
-        private static readonly CommandResult EMPTY  = new CommandResult( null, ResultType.EMPTY );
-        private static readonly CommandResult INVALID_ARGS  = new CommandResult( null, ResultType.INVALID_ARGS );
+namespace Essentials.Api.Command {
+
+    public class CommandResult {
+
+        private static readonly CommandResult SUCCESS = new CommandResult(null, ResultType.SUCCESS);
+        private static readonly CommandResult SHOW_USAGE = new CommandResult(null, ResultType.SHOW_USAGE);
+        private static readonly CommandResult EMPTY = new CommandResult(null, ResultType.EMPTY);
+        private static readonly CommandResult INVALID_ARGS = new CommandResult(null, ResultType.INVALID_ARGS);
 
         public string Message { get; }
         public ResultType Type { get; }
@@ -69,8 +69,8 @@ namespace Essentials.Api.Command
         /// <param name="message">message for sender</param>
         /// <param name="args">Arguments of message</param>
         /// <returns></returns>
-        public static CommandResult InvalidArgs( string message, params object[] args )
-            => new CommandResult( string.Format( message, args ), ResultType.INVALID_ARGS );
+        public static CommandResult InvalidArgs(string message, params object[] args)
+            => new CommandResult(string.Format(message, args), ResultType.INVALID_ARGS);
 
         /// <summary>
         /// Commonly indicate that sender given an invalid argument
@@ -79,8 +79,8 @@ namespace Essentials.Api.Command
         /// <param name="message">message for sender</param>
         /// <param name="args">Arguments of message</param>
         /// <returns></returns>
-        public static CommandResult Error( string message, params object[] args )
-            => new CommandResult( string.Format( message, args ), ResultType.ERROR );
+        public static CommandResult Error(string message, params object[] args)
+            => new CommandResult(string.Format(message, args), ResultType.ERROR);
 
         /// <summary>
         /// Commonly indicate that an given argument is invalid, and send the
@@ -89,8 +89,8 @@ namespace Essentials.Api.Command
         /// <param name="lang">Translation entry</param>
         /// <param name="args">Arguments of translation entry</param>
         /// <returns></returns>
-        public static CommandResult Lang( EssLang lang, params object[] args )
-            => new CommandResult( lang.GetMessage( args ), ResultType.LANG );
+        public static CommandResult Lang(EssLang lang, params object[] args)
+            => new CommandResult(lang.GetMessage(args), ResultType.LANG);
 
         /// <summary>
         /// Indicate that given arguments are invalid, and send <paramref name="message"/>
@@ -99,18 +99,17 @@ namespace Essentials.Api.Command
         /// <param name="message">message for sender</param>
         /// <param name="args">Arguments of message</param>
         /// <returns></returns>
-        public static CommandResult Generic( string message, params object[] args )
-            => new CommandResult( string.Format( message, args ), ResultType.GENERIC );
+        public static CommandResult Generic(string message, params object[] args)
+            => new CommandResult(string.Format(message, args), ResultType.GENERIC);
 
 
-        public CommandResult( string message, ResultType type )
-        {
+        public CommandResult(string message, ResultType type) {
             Message = message;
             Type = type;
         }
 
-        public enum ResultType
-        {
+        public enum ResultType {
+
             SUCCESS,
             ERROR,
             SHOW_USAGE,
@@ -118,6 +117,9 @@ namespace Essentials.Api.Command
             GENERIC,
             EMPTY,
             INVALID_ARGS
+
         }
+
     }
+
 }

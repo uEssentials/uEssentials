@@ -23,51 +23,45 @@ using System;
 using System.Collections.Generic;
 using Steamworks;
 
-namespace Essentials.Misc
-{
-    public class SimpleCooldown
-    {
+namespace Essentials.Misc {
+
+    public class SimpleCooldown {
+
         private readonly Dictionary<ulong, DateTime> Cooldowns = new Dictionary<ulong, DateTime>();
 
-        public bool HasEntry( CSteamID playerId )
-        {
-            if ( GetRemainingTime( playerId) < 0 )
-            {
-                RemoveEntry( playerId );
+        public bool HasEntry(CSteamID playerId) {
+            if (GetRemainingTime(playerId) < 0) {
+                RemoveEntry(playerId);
                 return false;
             }
-            return Cooldowns.ContainsKey( playerId.m_SteamID );
+            return Cooldowns.ContainsKey(playerId.m_SteamID);
         }
 
-        public void AddEntry( CSteamID playerId, int seconds )
-        {
-            AddEntry( playerId, TimeSpan.FromSeconds( seconds ) );
+        public void AddEntry(CSteamID playerId, int seconds) {
+            AddEntry(playerId, TimeSpan.FromSeconds(seconds));
         }
 
-        public void AddEntry( CSteamID playerId, TimeSpan cooldown )
-        {
-            Cooldowns.Add( playerId.m_SteamID, DateTime.Now.Add( cooldown ) );
+        public void AddEntry(CSteamID playerId, TimeSpan cooldown) {
+            Cooldowns.Add(playerId.m_SteamID, DateTime.Now.Add(cooldown));
         }
 
-        public bool RemoveEntry( CSteamID playerId )
-        {
-            return Cooldowns.Remove( playerId.m_SteamID );
+        public bool RemoveEntry(CSteamID playerId) {
+            return Cooldowns.Remove(playerId.m_SteamID);
         }
 
-        public double GetRemainingTime( CSteamID playerId )
-        {
+        public double GetRemainingTime(CSteamID playerId) {
             DateTime val;
-            if ( Cooldowns.TryGetValue( playerId.m_SteamID, out val ) )
-            {
+            if (Cooldowns.TryGetValue(playerId.m_SteamID, out val)) {
                 return (val - DateTime.Now).TotalSeconds;
             }
             return 0;
         }
 
-        public void RemovedIfExpired( CSteamID playerId )
-        {
-            if ( GetRemainingTime( playerId) < 0 )
-                RemoveEntry( playerId );
+        public void RemovedIfExpired(CSteamID playerId) {
+            if (GetRemainingTime(playerId) < 0)
+                RemoveEntry(playerId);
         }
+
     }
+
 }

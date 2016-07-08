@@ -27,20 +27,19 @@ using UnityEngine;
 
 // ReSharper disable ConvertPropertyToExpressionBody
 
-namespace Essentials.Core.Command
-{
+namespace Essentials.Core.Command {
+
     ///<summary>
     /// Default implementation of ICommandArgs
     ///</summary>
-    internal class CommandArgs : ICommandArgs
-    {
-        public string[]             RawArguments    { get; }
-        public ICommandArgument[]   Arguments       { get; }
-        public int                  Length          => RawArguments.Length;
-        public bool                 IsEmpty         => Length == 0;
+    internal class CommandArgs : ICommandArgs {
 
-        public CommandArgs( string[] rawArgs )
-        {
+        public string[] RawArguments { get; }
+        public ICommandArgument[] Arguments { get; }
+        public int Length => RawArguments.Length;
+        public bool IsEmpty => Length == 0;
+
+        public CommandArgs(string[] rawArgs) {
             /*RawArguments = new string[0];
 
             if ( rawArgs.Length < 0 )
@@ -91,212 +90,177 @@ namespace Essentials.Core.Command
             }*/
 
             RawArguments = rawArgs;
-            var arguments = new ICommandArgument[ Length ];
+            var arguments = new ICommandArgument[Length];
 
-            for ( var i = 0; i < RawArguments.Length; i++ )
-            {
-                arguments[i] = new CommandArgument( i, RawArguments[i] );
+            for (var i = 0; i < RawArguments.Length; i++) {
+                arguments[i] = new CommandArgument(i, RawArguments[i]);
             }
 
             Arguments = arguments;
         }
 
-        public ICommandArgument this[ int argumentIndex ]
-        {
-            get
-            {
-                return Arguments[argumentIndex];
-            }
+        public ICommandArgument this[int argumentIndex] {
+            get { return Arguments[argumentIndex]; }
         }
 
-        public string Join( int initialIndex )
-        {
-            return string.Join( " ", Arguments.Skip( initialIndex )
-                                              .Select( arg => arg.ToString() )
-                                              .ToArray() );
+        public string Join(int initialIndex) {
+            return string.Join(" ", Arguments.Skip(initialIndex)
+                .Select(arg => arg.ToString())
+                .ToArray());
         }
 
-        public string Join( int startIndex, int endIndex, string separator )
-        {
-            return string.Join( separator, Arguments.Skip( startIndex )
-                                                    .Select( arg => arg.ToString() )
-                                                    .ToArray() );
+        public string Join(int startIndex, int endIndex, string separator) {
+            return string.Join(separator, Arguments.Skip(startIndex)
+                .Select(arg => arg.ToString())
+                .ToArray());
         }
 
-        public Vector3? GetVector3( int initialIndex )
-        {
-            if ( initialIndex + 3 > Length )
+        public Vector3? GetVector3(int initialIndex) {
+            if (initialIndex + 3 > Length)
                 return null;
 
             var x = Arguments[initialIndex + 0];
             var y = Arguments[initialIndex + 1];
             var z = Arguments[initialIndex + 2];
 
-            if ( x.IsFloat && y.IsFloat && z.IsFloat )
-            {
-                return new Vector3( x.ToFloat, y.ToFloat, z.ToFloat );
+            if (x.IsFloat && y.IsFloat && z.IsFloat) {
+                return new Vector3(x.ToFloat, y.ToFloat, z.ToFloat);
             }
 
             return null;
         }
+
     }
 
     ///<summary>
     /// Default implementation of ICommandArgument
     /// Author: Leonardosc
     ///</summary>
-    internal class CommandArgument : ICommandArgument
-    {
+    internal class CommandArgument : ICommandArgument {
+
         public int Index { get; }
 
         public string RawValue { get; }
 
-        public int ToInt => int.Parse( RawValue );
+        public int ToInt => int.Parse(RawValue);
 
-        public bool ToBool => bool.Parse( RawValue );
+        public bool ToBool => bool.Parse(RawValue);
 
-        public double ToDouble => double.Parse( RawValue );
+        public double ToDouble => double.Parse(RawValue);
 
-        public float ToFloat => float.Parse( RawValue );
+        public float ToFloat => float.Parse(RawValue);
 
-        public UPlayer ToPlayer => UPlayer.From( RawValue );
+        public UPlayer ToPlayer => UPlayer.From(RawValue);
 
         public string ToLowerString => ToString().ToLowerInvariant();
 
         public string ToUpperString => ToString().ToUpperInvariant();
 
-        public uint ToUint => uint.Parse( RawValue );
+        public uint ToUint => uint.Parse(RawValue);
 
-        public short ToShort => short.Parse( RawValue );
+        public short ToShort => short.Parse(RawValue);
 
-        public ushort ToUshort => ushort.Parse( RawValue );
+        public ushort ToUshort => ushort.Parse(RawValue);
 
-        public bool IsBool
-        {
-            get
-            {
+        public bool IsBool {
+            get {
                 bool unused;
-                return bool.TryParse( RawValue, out unused );
+                return bool.TryParse(RawValue, out unused);
             }
         }
 
-        public bool IsString
-        {
-            get
-            {
-                return !IsBool && !IsDouble && !IsInt && !IsFloat;
-            }
+        public bool IsString {
+            get { return !IsBool && !IsDouble && !IsInt && !IsFloat; }
         }
 
-        public bool IsValidPlayerName
-        {
-            get
-            {
-                return UPlayer.From( RawValue ) != null;
-            }
+        public bool IsValidPlayerName {
+            get { return UPlayer.From(RawValue) != null; }
         }
 
-        public bool IsInt
-        {
-            get
-            {
+        public bool IsInt {
+            get {
                 int unused;
-                return int.TryParse( RawValue, out unused );
+                return int.TryParse(RawValue, out unused);
             }
         }
 
-        public bool IsDouble
-        {
-            get
-            {
+        public bool IsDouble {
+            get {
                 double unused;
-                return double.TryParse( RawValue, out unused );
+                return double.TryParse(RawValue, out unused);
             }
         }
 
-        public bool IsFloat
-        {
-            get
-            {
+        public bool IsFloat {
+            get {
                 float unused;
-                return float.TryParse( RawValue, out unused );
+                return float.TryParse(RawValue, out unused);
             }
         }
 
-        public bool IsUint
-        {
-            get
-            {
+        public bool IsUint {
+            get {
                 uint unused;
-                return uint.TryParse( RawValue, out unused );
+                return uint.TryParse(RawValue, out unused);
             }
         }
 
-        public bool IsShort
-        {
-            get
-            {
+        public bool IsShort {
+            get {
                 short unused;
-                return short.TryParse( RawValue, out unused );
+                return short.TryParse(RawValue, out unused);
             }
         }
 
-        public bool IsUshort
-        {
-            get
-            {
+        public bool IsUshort {
+            get {
                 ushort unused;
-                return ushort.TryParse( RawValue, out unused );
+                return ushort.TryParse(RawValue, out unused);
             }
         }
 
-        public CommandArgument( int index, string rawValue )
-        {
+        public CommandArgument(int index, string rawValue) {
             Index = index;
             RawValue = rawValue;
         }
 
-        public bool Is( int other )
-        {
-            if ( !IsInt )
+        public bool Is(int other) {
+            if (!IsInt)
                 return false;
 
             return ToInt == other;
         }
 
-        public bool Is( double other )
-        {
-            if ( !IsDouble )
+        public bool Is(double other) {
+            if (!IsDouble)
                 return false;
 
-            return Math.Abs( ToDouble - other ) < 0.05;
+            return Math.Abs(ToDouble - other) < 0.05;
         }
 
-        public bool Is( string other, bool ignoreCase = true )
-        {
+        public bool Is(string other, bool ignoreCase = true) {
             return string.Compare(
                 ToString(),
                 other,
                 StringComparison.OrdinalIgnoreCase
-            ) == 0;
+                ) == 0;
         }
 
-        public bool Is( UPlayer other )
-        {
-            if ( !IsValidPlayerName )
+        public bool Is(UPlayer other) {
+            if (!IsValidPlayerName)
                 return false;
 
             return ToPlayer == other;
         }
 
-        public bool IsOneOf( string[] others, bool ignoreCase = true )
-        {
-            return others.Any( other => Is( other, ignoreCase ) );
+        public bool IsOneOf(string[] others, bool ignoreCase = true) {
+            return others.Any(other => Is(other, ignoreCase));
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return RawValue;
         }
+
     }
+
 }

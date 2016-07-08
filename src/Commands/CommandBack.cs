@@ -26,33 +26,33 @@ using Essentials.I18n;
 using Essentials.Api;
 using Essentials.Event.Handling;
 
-namespace Essentials.Commands
-{
+namespace Essentials.Commands {
+
     [CommandInfo(
         Name = "back",
         Aliases = new[] { "ret" },
         Description = "Return to position of your death.",
         AllowedSource = AllowedSource.PLAYER
     )]
-    public class CommandBack : EssCommand
-    {
-        public override CommandResult OnExecute( ICommandSource src, ICommandArgs args )
-        {
+    public class CommandBack : EssCommand {
+
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
 
-            if ( !player.HasMetadata( "back_pos" ) )
-            {
-                return CommandResult.Lang( EssLang.NOT_DIED_YET );
+            if (!player.HasMetadata("back_pos")) {
+                return CommandResult.Lang(EssLang.NOT_DIED_YET);
             }
 
-            var backPosition = player.GetMetadata<Vector3>( "back_pos" );
-            src.ToPlayer().Teleport( backPosition );
-            EssLang.RETURNED.SendTo( src );
+            var backPosition = player.GetMetadata<Vector3>("back_pos");
+            src.ToPlayer().Teleport(backPosition);
+            EssLang.RETURNED.SendTo(src);
 
             return CommandResult.Success();
         }
 
         protected override void OnUnregistered()
-            => UEssentials.EventManager.Unregister<EssentialsEventHandler>( "BackPlayerDeath" );
+            => UEssentials.EventManager.Unregister<EssentialsEventHandler>("BackPlayerDeath");
+
     }
+
 }

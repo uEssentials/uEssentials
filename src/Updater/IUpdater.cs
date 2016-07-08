@@ -19,10 +19,10 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-namespace Essentials.Updater
-{
-    public interface IUpdater
-    {
+namespace Essentials.Updater {
+
+    public interface IUpdater {
+
         /// <summary>
         /// Get last result or null if <see cref="CheckUpdate"/> isn't called.
         ///
@@ -46,6 +46,8 @@ namespace Essentials.Updater
         /// Downloads latest version of plugin and put in <paramref name="path"/>
         /// </summary>
         /// <param name="path">Path that the downloaded file will be stored</param>
-        void DownloadLatestRelease( string path );
+        void DownloadLatestRelease(string path);
+
     }
+
 }

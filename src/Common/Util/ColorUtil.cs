@@ -23,71 +23,89 @@ using System;
 using Rocket.Unturned.Chat;
 using UnityEngine;
 
-namespace Essentials.Common.Util
-{
-    public static class ColorUtil
-    {
-        public static ConsoleColor UnityColorToConsoleColor( Color color )
-        {
-            if ( color == Color.black )
+namespace Essentials.Common.Util {
+
+    public static class ColorUtil {
+
+        public static ConsoleColor UnityColorToConsoleColor(Color color) {
+            if (color == Color.black)
                 return ConsoleColor.Black;
-            if ( color == Color.green )
+            if (color == Color.green)
                 return ConsoleColor.Green;
-            if ( color == Color.blue )
+            if (color == Color.blue)
                 return ConsoleColor.Blue;
-            if ( color == Color.cyan )
+            if (color == Color.cyan)
                 return ConsoleColor.Cyan;
-            if ( color == Color.yellow )
+            if (color == Color.yellow)
                 return ConsoleColor.Yellow;
-            if ( color == Color.gray )
+            if (color == Color.gray)
                 return ConsoleColor.Gray;
-            if ( color == Color.magenta )
+            if (color == Color.magenta)
                 return ConsoleColor.Magenta;
-            if ( color == Color.red )
+            if (color == Color.red)
                 return ConsoleColor.Red;
             return ConsoleColor.White;
         }
 
-        public static Color GetColorFromString( ref string message )
-        {
+        public static Color GetColorFromString(ref string message) {
             Color? color = null;
 
-            if ( message.IndexOfAny( new[] {'<', '>'} ) == -1 )
-            {
+            if (message.IndexOfAny(new[] { '<', '>' }) == -1) {
                 return Color.green;
             }
 
-            var rawColor = message.Split( '<' )[1].Split( '>' )[0];
+            var rawColor = message.Split('<')[1].Split('>')[0];
 
             // Try get color from name
-            switch (rawColor.Trim().ToLower())
-            {
-                case "black": color =  Color.black; break;
-                case "blue": color = Color.blue; break;
-                case "clear": color = Color.clear; break;
-                case "cyan": color = Color.cyan; break;
-                case "gray": color = Color.gray; break;
-                case "green": color = Color.green; break;
-                case "grey": color = Color.grey; break;
-                case "magenta": color = Color.magenta; break;
-                case "red": color = Color.red; break;
-                case "white": color = Color.white; break;
-                case "yellow": color = Color.yellow; break;
+            switch (rawColor.Trim().ToLower()) {
+                case "black":
+                    color = Color.black;
+                    break;
+                case "blue":
+                    color = Color.blue;
+                    break;
+                case "clear":
+                    color = Color.clear;
+                    break;
+                case "cyan":
+                    color = Color.cyan;
+                    break;
+                case "gray":
+                    color = Color.gray;
+                    break;
+                case "green":
+                    color = Color.green;
+                    break;
+                case "grey":
+                    color = Color.grey;
+                    break;
+                case "magenta":
+                    color = Color.magenta;
+                    break;
+                case "red":
+                    color = Color.red;
+                    break;
+                case "white":
+                    color = Color.white;
+                    break;
+                case "yellow":
+                    color = Color.yellow;
+                    break;
             }
 
             // Try get color from hex
-            if ( !color.HasValue )
-            {
+            if (!color.HasValue) {
                 color = UnturnedChat.GetColorFromHex(rawColor);
             }
 
             // Remove <color>
-            if ( color.HasValue )
-            {
-                message = message.Replace( $"<{rawColor}>", "" );
+            if (color.HasValue) {
+                message = message.Replace($"<{rawColor}>", "");
             }
 
             return color ?? Color.green;
         }
+
     }
+
 }

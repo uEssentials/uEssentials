@@ -23,27 +23,26 @@ using Essentials.Api;
 using Essentials.Api.Unturned;
 using Newtonsoft.Json;
 
-namespace Essentials.NativeModules.Kit.Item
-{
-    public class KitItemMoney : AbstractKitItem
-    {
-        [JsonProperty( "Money" )]
+namespace Essentials.NativeModules.Kit.Item {
+
+    public class KitItemMoney : AbstractKitItem {
+
+        [JsonProperty("Money")]
         public decimal Amount { get; set; }
 
-        public KitItemMoney( decimal amount )
-        {
+        public KitItemMoney(decimal amount) {
             Amount = amount;
         }
 
-        public override bool GiveTo( UPlayer player, bool dropIfInventoryFull = true )
-        {
-            UEssentials.EconomyProvider.IfPresent( h => h.Deposit( player, Amount ) );
+        public override bool GiveTo(UPlayer player, bool dropIfInventoryFull = true) {
+            UEssentials.EconomyProvider.IfPresent(h => h.Deposit(player, Amount));
             return true;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"Money: {Amount}";
         }
+
     }
+
 }

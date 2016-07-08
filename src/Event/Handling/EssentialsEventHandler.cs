@@ -46,33 +46,32 @@ using Steamworks;
 using UnityEngine;
 using EventType = Essentials.Api.Event.EventType;
 
-namespace Essentials.Event.Handling
-{
-    internal class EssentialsEventHandler
-    {
-        internal static readonly Dictionary<ulong, DateTime>                    LastChatted     = new Dictionary<ulong, DateTime>();
-        internal static readonly Dictionary<string, Dictionary<USkill, byte>>   CachedSkills    = new Dictionary<string, Dictionary<USkill, byte>>();
+namespace Essentials.Event.Handling {
 
-        [SubscribeEvent( EventType.PLAYER_CHATTED )]
-        void OnPlayerChatted( UnturnedPlayer player, ref Color color, string message,
-                              EChatMode mode, ref bool cancel )
-        {
-            if ( !UEssentials.Config.AntiSpam.Enabled || message.StartsWith( "/" ) ||
-                 player.HasPermission( "essentials.bypass.antispam" ) ) return;
+    internal class EssentialsEventHandler {
+
+        internal static readonly Dictionary<ulong, DateTime> LastChatted = new Dictionary<ulong, DateTime>();
+
+        internal static readonly Dictionary<string, Dictionary<USkill, byte>> CachedSkills =
+            new Dictionary<string, Dictionary<USkill, byte>>();
+
+        [SubscribeEvent(EventType.PLAYER_CHATTED)]
+        private void OnPlayerChatted(UnturnedPlayer player, ref Color color, string message,
+            EChatMode mode, ref bool cancel) {
+            if (!UEssentials.Config.AntiSpam.Enabled || message.StartsWith("/") ||
+                player.HasPermission("essentials.bypass.antispam")) return;
 
             var playerId = player.CSteamID.m_SteamID;
 
-            if ( !LastChatted.ContainsKey( playerId ) )
-            {
-                LastChatted.Add( playerId, DateTime.Now );
+            if (!LastChatted.ContainsKey(playerId)) {
+                LastChatted.Add(playerId, DateTime.Now);
                 return;
             }
 
             var interval = UEssentials.Config.AntiSpam.Interval;
 
-            if ( (DateTime.Now - LastChatted[playerId]).TotalSeconds < interval )
-            {
-                EssLang.CHAT_ANTI_SPAM.SendTo( UPlayer.From( playerId ) );
+            if ((DateTime.Now - LastChatted[playerId]).TotalSeconds < interval) {
+                EssLang.CHAT_ANTI_SPAM.SendTo(UPlayer.From(playerId));
 
                 cancel = true;
                 return;
@@ -82,89 +81,79 @@ namespace Essentials.Event.Handling
         }
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        void GenericPlayerConnected( UnturnedPlayer player )
-        {
-            Analytics.Metrics.ReportPlayer( player );
+        private void GenericPlayerConnected(UnturnedPlayer player) {
+            Analytics.Metrics.ReportPlayer(player);
         }
 
-        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
-        void GenericPlayerDisconnected( UnturnedPlayer player )
-        {
+        [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
+        private void GenericPlayerDisconnected(UnturnedPlayer player) {
             var displayName = player.CharacterName;
 
-            MiscCommands.Spies.Remove( player.CSteamID.m_SteamID );
-            CommandTell.Conversations.Remove( displayName );
-            CachedSkills.Remove( displayName );
-            CommandHome.Cooldown.RemoveEntry( player.CSteamID );
+            MiscCommands.Spies.Remove(player.CSteamID.m_SteamID);
+            CommandTell.Conversations.Remove(displayName);
+            CachedSkills.Remove(displayName);
+            CommandHome.Cooldown.RemoveEntry(player.CSteamID);
 
             /* Kit Stuffs */
-            UEssentials.ModuleManager.GetModule<KitModule>().IfPresent( m => {
-                if ( CommandKit.Cooldowns.Count == 0 ) return;
-                if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
+            UEssentials.ModuleManager.GetModule<KitModule>().IfPresent(m => {
+                if (CommandKit.Cooldowns.Count == 0) return;
+                if (!CommandKit.Cooldowns.ContainsKey(player.CSteamID.m_SteamID)) return;
 
                 var playerId = player.CSteamID.m_SteamID;
                 var playerCooldowns = CommandKit.Cooldowns[playerId];
-                var keys = new List<string> ( playerCooldowns.Keys );
+                var keys = new List<string>(playerCooldowns.Keys);
 
                 /*
                     Remove from list if cooldown has expired.
 
                     Global and per kit
                 */
-                if ( CommandKit.GlobalCooldown.ContainsKey( playerId ) &&
-                     CommandKit.GlobalCooldown[playerId].AddSeconds(
-                         EssCore.Instance.Config.Kit.GlobalCooldown) < DateTime.Now )
-                {
-                    CommandKit.GlobalCooldown.Remove( playerId );
+                if (CommandKit.GlobalCooldown.ContainsKey(playerId) &&
+                    CommandKit.GlobalCooldown[playerId].AddSeconds(
+                        EssCore.Instance.Config.Kit.GlobalCooldown) < DateTime.Now) {
+                    CommandKit.GlobalCooldown.Remove(playerId);
                 }
 
-                foreach ( var kitName in keys )
-                {
+                foreach (var kitName in keys) {
                     var kit = m.KitManager.GetByName(kitName);
 
-                    if ( kit == null || playerCooldowns[kitName].AddSeconds( kit.Cooldown ) < DateTime.Now )
-                    {
-                        playerCooldowns.Remove( kitName );
+                    if (kit == null || playerCooldowns[kitName].AddSeconds(kit.Cooldown) < DateTime.Now) {
+                        playerCooldowns.Remove(kitName);
                     }
                 }
 
-                if ( playerCooldowns.Count == 0 )
-                {
-                    CommandKit.Cooldowns.Remove( playerId );
+                if (playerCooldowns.Count == 0) {
+                    CommandKit.Cooldowns.Remove(playerId);
                 }
-            } );
+            });
         }
 
-        [SubscribeEvent( EventType.PLAYER_DEATH )]
-        void GenericPlayerDeath( UnturnedPlayer player, EDeathCause cause,
-                                 ELimb limb, CSteamID murderer )
-        {
-            var uplayer = UPlayer.From( player );
+        [SubscribeEvent(EventType.PLAYER_DEATH)]
+        private void GenericPlayerDeath(UnturnedPlayer player, EDeathCause cause,
+            ELimb limb, CSteamID murderer) {
+            var uplayer = UPlayer.From(player);
             var displayName = uplayer.DisplayName;
 
-            CommandHome.Cooldown.RemovedIfExpired( player.CSteamID );
+            CommandHome.Cooldown.RemovedIfExpired(player.CSteamID);
 
             /* Keep skill */
             const string KEEP_SKILL_PERM = "essentials.keepskill.";
 
             var globalPercentage = -1;
-            var playerPermissions = player.GetPermissions().Select( p => p.Name ).ToList();
+            var playerPermissions = player.GetPermissions().Select(p => p.Name).ToList();
 
             /*
                 Search for 'global percentage' Ex: (essentials.keepskill.50)
             */
 
-            foreach ( var p in playerPermissions.Where( p => p.StartsWith( KEEP_SKILL_PERM ) ) )
-            {
-                var rawAmount = p.Substring( KEEP_SKILL_PERM.Length );
+            foreach (var p in playerPermissions.Where(p => p.StartsWith(KEEP_SKILL_PERM))) {
+                var rawAmount = p.Substring(KEEP_SKILL_PERM.Length);
 
-                if ( rawAmount.Equals( "*" ) )
-                {
+                if (rawAmount.Equals("*")) {
                     globalPercentage = 100;
                     break;
                 }
-                if ( int.TryParse( rawAmount, out globalPercentage ) )
-                {
+                if (int.TryParse(rawAmount, out globalPercentage)) {
                     break;
                 }
                 globalPercentage = -1;
@@ -176,14 +165,12 @@ namespace Essentials.Event.Handling
             var hasGlobalPercentage = (globalPercentage != -1 || player.IsAdmin);
             var skillValues = new Dictionary<USkill, byte>();
 
-            foreach ( var skill in USkill.Skills )
-            {
-                var currentLevel = uplayer.GetSkillLevel( skill );
+            foreach (var skill in USkill.Skills) {
+                var currentLevel = uplayer.GetSkillLevel(skill);
                 var newLevel = (byte?) null;
 
-                if ( hasGlobalPercentage )
-                {
-                    newLevel = (byte) Math.Round((currentLevel * globalPercentage) / 100.0);
+                if (hasGlobalPercentage) {
+                    newLevel = (byte) Math.Round((currentLevel*globalPercentage)/100.0);
                     goto add;
                 }
 
@@ -194,98 +181,83 @@ namespace Essentials.Event.Handling
                 var skillPermission2 = KEEP_SKILL_PERM + skill.Name.ToLowerInvariant();
                 var skillPercentage = -1;
 
-                foreach ( var p in playerPermissions )
-                {
-                    if ( !p.StartsWith( skillPermission ) )
-                    {
+                foreach (var p in playerPermissions) {
+                    if (!p.StartsWith(skillPermission)) {
                         continue;
                     }
 
-                    var rawAmount = p.Substring( skillPermission.Length );
+                    var rawAmount = p.Substring(skillPermission.Length);
 
-                    if ( int.TryParse( rawAmount, out skillPercentage ) )
-                    {
+                    if (int.TryParse(rawAmount, out skillPercentage)) {
                         break;
                     }
 
                     skillPercentage = -1;
                 }
 
-                if ( skillPercentage != -1 )
-                {
-                    newLevel =  (byte) Math.Round( (currentLevel * skillPercentage) / 100.0 );
+                if (skillPercentage != -1) {
+                    newLevel = (byte) Math.Round((currentLevel*skillPercentage)/100.0);
                 }
 
                 /*
                     Ccheck for 'essentials.keepskill.SKILL'
                 */
-                if ( !newLevel.HasValue && player.HasPermission( skillPermission2 ) )
-                {
+                if (!newLevel.HasValue && player.HasPermission(skillPermission2)) {
                     newLevel = currentLevel;
                 }
 
                 add:
-                if ( newLevel.HasValue )
-                {
-                    skillValues.Add( skill, newLevel.Value );
+                if (newLevel.HasValue) {
+                    skillValues.Add(skill, newLevel.Value);
                 }
             }
 
-            if ( skillValues.Count == 0 ) return;
+            if (skillValues.Count == 0) return;
 
-            if ( CachedSkills.ContainsKey( displayName ) )
-            {
+            if (CachedSkills.ContainsKey(displayName)) {
                 CachedSkills[displayName] = skillValues;
-            }
-            else
-            {
+            } else {
                 CachedSkills.Add(displayName, skillValues);
             }
         }
 
-        [SubscribeEvent( EventType.PLAYER_REVIVE )]
-        void OnPlayerRespawn( UnturnedPlayer player, Vector3 vect, byte angle )
-        {
-            if ( !CachedSkills.ContainsKey( player.CharacterName ) ) return;
+        [SubscribeEvent(EventType.PLAYER_REVIVE)]
+        private void OnPlayerRespawn(UnturnedPlayer player, Vector3 vect, byte angle) {
+            if (!CachedSkills.ContainsKey(player.CharacterName)) return;
 
-            var uplayer = UPlayer.From( player );
+            var uplayer = UPlayer.From(player);
 
-            CachedSkills[ uplayer.DisplayName ].ForEach( pair => {
-                uplayer.SetSkillLevel( pair.Key, pair.Value );
+            CachedSkills[uplayer.DisplayName].ForEach(pair => {
+                uplayer.SetSkillLevel(pair.Key, pair.Value);
             });
         }
 
         private DateTime _lastUpdateCheck = DateTime.Now;
 
-        [SubscribeEvent( EventType.PLAYER_CONNECTED )]
-        void UpdateAlert( UnturnedPlayer player )
-        {
-            if ( !player.IsAdmin || _lastUpdateCheck > DateTime.Now ) return;
+        [SubscribeEvent(EventType.PLAYER_CONNECTED)]
+        private void UpdateAlert(UnturnedPlayer player) {
+            if (!player.IsAdmin || _lastUpdateCheck > DateTime.Now) return;
 
             var updater = EssCore.Instance.Updater;
 
-            if ( !updater.IsUpdated() )
-            {
-                _lastUpdateCheck = DateTime.Now.AddMinutes( 10 );
+            if (!updater.IsUpdated()) {
+                _lastUpdateCheck = DateTime.Now.AddMinutes(10);
 
-                Tasks.New( t => {
-                    UPlayer.From( player ).SendMessage( "[uEssentials] New version avalaible " +
-                                                        $"{updater.LastResult.LatestVersion}!", Color.cyan );
-                } ).Delay( 1000 ).Go();
-
+                Tasks.New(t => {
+                    UPlayer.From(player).SendMessage("[uEssentials] New version avalaible " +
+                                                     $"{updater.LastResult.LatestVersion}!", Color.cyan);
+                }).Delay(1000).Go();
             }
         }
 
-        [SubscribeEvent( EventType.PLAYER_CONNECTED )]
-        void JoinMessage( UnturnedPlayer player )
-        {
-            EssLang.PLAYER_JOINED.Broadcast( player.CharacterName );
+        [SubscribeEvent(EventType.PLAYER_CONNECTED)]
+        private void JoinMessage(UnturnedPlayer player) {
+            EssLang.PLAYER_JOINED.Broadcast(player.CharacterName);
         }
 
-        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
-        void LeaveMessage( UnturnedPlayer player )
-        {
-            EssLang.PLAYER_EXITED.Broadcast( player.CharacterName );
+        [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
+        private void LeaveMessage(UnturnedPlayer player) {
+            EssLang.PLAYER_EXITED.Broadcast(player.CharacterName);
         }
 
         private static Optional<IEconomyProvider> _cachedEconomyProvider;
@@ -294,317 +266,280 @@ namespace Essentials.Event.Handling
         /*
             TODO: Cache commands & cost ??
         */
-        [SubscribeEvent( EventType.ESSENTIALS_COMMAND_PRE_EXECUTED )]
-        void OnCommandPreExecuted( CommandPreExecuteEvent e )
-        {
-            if ( e.Source.IsConsole || e.Source.HasPermission( "essentials.bypass.commandcost" ) )
-            {
+
+        [SubscribeEvent(EventType.ESSENTIALS_COMMAND_PRE_EXECUTED)]
+        private void OnCommandPreExecuted(CommandPreExecuteEvent e) {
+            if (e.Source.IsConsole || e.Source.HasPermission("essentials.bypass.commandcost")) {
                 return;
             }
 
-            if ( _cachedEconomyProvider == null )
-            {
+            if (_cachedEconomyProvider == null) {
                 _cachedEconomyProvider = UEssentials.EconomyProvider;
             }
 
-            if ( _cachedEconomyProvider.IsAbsent )
-            {
+            if (_cachedEconomyProvider.IsAbsent) {
                 /*
                     If economy hook is not present, this "handler" will be unregistered.
                 */
-                EssCore.Instance.EventManager.Unregister( GetType(), "OnCommandPreExecuted" );
-                EssCore.Instance.EventManager.Unregister( GetType(), "OnCommandPosExecuted" );
+                EssCore.Instance.EventManager.Unregister(GetType(), "OnCommandPreExecuted");
+                EssCore.Instance.EventManager.Unregister(GetType(), "OnCommandPosExecuted");
             }
 
-            if ( _cachedCommands == null )
-            {
+            if (_cachedCommands == null) {
                 _cachedCommands = EssCore.Instance.CommandsConfig.Commands;
             }
 
-            if ( !_cachedCommands.ContainsKey( e.Command.Name ) )
-            {
+            if (!_cachedCommands.ContainsKey(e.Command.Name)) {
                 return;
             }
 
             var cost = _cachedCommands[e.Command.Name].Cost;
 
-            if ( cost <= 0 )
-            {
+            if (cost <= 0) {
                 return;
             }
 
             /*
                 Check if player has sufficient money to use this command.
             */
-            if ( _cachedEconomyProvider.Value.Has( e.Source.ToPlayer(), cost ) )
-            {
+            if (_cachedEconomyProvider.Value.Has(e.Source.ToPlayer(), cost)) {
                 return;
             }
 
-            EssLang.COMMAND_NO_MONEY.SendTo( e.Source, cost );
+            EssLang.COMMAND_NO_MONEY.SendTo(e.Source, cost);
             e.Cancelled = true;
         }
 
-        [SubscribeEvent( EventType.ESSENTIALS_COMMAND_POS_EXECUTED )]
-        void OnCommandPosExecuted( CommandPosExecuteEvent e )
-        {
-            if ( _cachedEconomyProvider == null ||
-                 e.Source.IsConsole || e.Source.HasPermission( "essentials.bypass.commandcost" ) )
-            {
+        [SubscribeEvent(EventType.ESSENTIALS_COMMAND_POS_EXECUTED)]
+        private void OnCommandPosExecuted(CommandPosExecuteEvent e) {
+            if (_cachedEconomyProvider == null ||
+                e.Source.IsConsole || e.Source.HasPermission("essentials.bypass.commandcost")) {
                 return;
             }
 
             /*
                He will not charge if command was not successfully executed.
             */
-            if ( e.Result?.Type != CommandResult.ResultType.SUCCESS ||
-                 !_cachedCommands.ContainsKey( e.Command.Name ) )
-            {
+            if (e.Result?.Type != CommandResult.ResultType.SUCCESS ||
+                !_cachedCommands.ContainsKey(e.Command.Name)) {
                 return;
             }
 
             var cost = _cachedCommands[e.Command.Name].Cost;
 
-            if ( cost <= 0 )
-            {
+            if (cost <= 0) {
                 return;
             }
 
-            _cachedEconomyProvider.Value.Withdraw( e.Source.ToPlayer(), cost );
-            EssLang.COMMAND_PAID.SendTo( e.Source, cost );
+            _cachedEconomyProvider.Value.Withdraw(e.Source.ToPlayer(), cost);
+            EssLang.COMMAND_PAID.SendTo(e.Source, cost);
         }
 
-        [SubscribeEvent( EventType.PLAYER_DEATH )]
-        void DeathMessages( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer )
-        {
-            switch (cause)
-            {
+        [SubscribeEvent(EventType.PLAYER_DEATH)]
+        private void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer) {
+            switch (cause) {
                 case EDeathCause.BLEEDING:
-                    EssLang.DEATH_BLEEDING.Broadcast( player.CharacterName );
+                    EssLang.DEATH_BLEEDING.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.BONES:
-                    EssLang.DEATH_BONES.Broadcast( player.CharacterName );
+                    EssLang.DEATH_BONES.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.FREEZING:
-                    EssLang.DEATH_FREEZING.Broadcast( player.CharacterName );
+                    EssLang.DEATH_FREEZING.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.BURNING:
-                    EssLang.DEATH_BURNING.Broadcast( player.CharacterName );
+                    EssLang.DEATH_BURNING.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.FOOD:
-                    EssLang.DEATH_FOOD.Broadcast( player.CharacterName );
+                    EssLang.DEATH_FOOD.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.WATER:
-                    EssLang.DEATH_WATER.Broadcast( player.CharacterName );
+                    EssLang.DEATH_WATER.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.GUN:
-                    var pKiller = UPlayer.From( killer )?.CharacterName ?? "?";
-                    EssLang.DEATH_GUN.Broadcast( player.CharacterName, TranslateLimb( limb ), pKiller );
+                    var pKiller = UPlayer.From(killer)?.CharacterName ?? "?";
+                    EssLang.DEATH_GUN.Broadcast(player.CharacterName, TranslateLimb(limb), pKiller);
                     break;
 
                 case EDeathCause.MELEE:
-                    pKiller = UPlayer.From( killer )?.CharacterName ?? "?";
-                    EssLang.DEATH_MELEE.Broadcast( player.CharacterName, TranslateLimb( limb ), pKiller );
+                    pKiller = UPlayer.From(killer)?.CharacterName ?? "?";
+                    EssLang.DEATH_MELEE.Broadcast(player.CharacterName, TranslateLimb(limb), pKiller);
                     break;
 
                 case EDeathCause.ZOMBIE:
-                    EssLang.DEATH_ZOMBIE.Broadcast( player.CharacterName );
+                    EssLang.DEATH_ZOMBIE.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.ANIMAL:
-                    EssLang.DEATH_ANIMAL.Broadcast( player.CharacterName );
+                    EssLang.DEATH_ANIMAL.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.SUICIDE:
-                    EssLang.DEATH_SUICIDE.Broadcast( player.CharacterName );
+                    EssLang.DEATH_SUICIDE.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.KILL:
-                    EssLang.DEATH_KILL.Broadcast( player.CharacterName );
+                    EssLang.DEATH_KILL.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.INFECTION:
-                    EssLang.DEATH_INFECTION.Broadcast( player.CharacterName );
+                    EssLang.DEATH_INFECTION.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.PUNCH:
-                    pKiller = UPlayer.From( killer )?.CharacterName ?? "?";
-                    EssLang.DEATH_PUNCH.Broadcast( player.CharacterName, TranslateLimb( limb ), pKiller );
+                    pKiller = UPlayer.From(killer)?.CharacterName ?? "?";
+                    EssLang.DEATH_PUNCH.Broadcast(player.CharacterName, TranslateLimb(limb), pKiller);
                     break;
 
                 case EDeathCause.BREATH:
-                    EssLang.DEATH_BREATH.Broadcast( player.CharacterName );
+                    EssLang.DEATH_BREATH.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.ROADKILL:
-                    pKiller = UPlayer.From( killer )?.CharacterName ?? "?";
-                    EssLang.DEATH_ROADKILL.Broadcast( pKiller, player.CharacterName );
+                    pKiller = UPlayer.From(killer)?.CharacterName ?? "?";
+                    EssLang.DEATH_ROADKILL.Broadcast(pKiller, player.CharacterName);
                     break;
 
                 case EDeathCause.VEHICLE:
-                    EssLang.DEATH_VEHICLE.Broadcast( player.CharacterName );
+                    EssLang.DEATH_VEHICLE.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.GRENADE:
-                    EssLang.DEATH_GRENADE.Broadcast( player.CharacterName );
+                    EssLang.DEATH_GRENADE.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.SHRED:
-                    EssLang.DEATH_SHRED.Broadcast( player.CharacterName );
+                    EssLang.DEATH_SHRED.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.LANDMINE:
-                    EssLang.DEATH_LANDMINE.Broadcast( player.CharacterName );
+                    EssLang.DEATH_LANDMINE.Broadcast(player.CharacterName);
                     break;
 
                 case EDeathCause.ARENA:
-                    EssLang.DEATH_ARENA.Broadcast( player.CharacterName );
+                    EssLang.DEATH_ARENA.Broadcast(player.CharacterName);
                     break;
             }
         }
 
         /* Commands eventhandlers */
 
-        [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
-        void HomePlayerMove( UnturnedPlayer player, Vector3 newPosition )
-        {
-            if ( !UEssentials.Config.HomeCommand.CancelTeleportWhenMove ||
-                 !CommandHome.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
-            {
+        [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
+        private void HomePlayerMove(UnturnedPlayer player, Vector3 newPosition) {
+            if (!UEssentials.Config.HomeCommand.CancelTeleportWhenMove ||
+                !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
 
             CommandHome.Delay[player.CSteamID.m_SteamID].Cancel();
-            CommandHome.Delay.Remove( player.CSteamID.m_SteamID );
-            CommandHome.Cooldown.RemoveEntry( player.CSteamID );
+            CommandHome.Delay.Remove(player.CSteamID.m_SteamID);
+            CommandHome.Cooldown.RemoveEntry(player.CSteamID);
 
-            UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
+            UPlayer.TryGet(player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo);
         }
 
-        [SubscribeEvent( EventType.PLAYER_UPDATE_POSITION )]
-        void WarpPlayerMove( UnturnedPlayer player, Vector3 newPosition )
-        {
-            if ( !UEssentials.Config.WarpCommand.CancelTeleportWhenMove ||
-                 !CommandWarp.Delay.ContainsKey( player.CSteamID.m_SteamID ) )
-            {
+        [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
+        private void WarpPlayerMove(UnturnedPlayer player, Vector3 newPosition) {
+            if (!UEssentials.Config.WarpCommand.CancelTeleportWhenMove ||
+                !CommandWarp.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
 
             CommandWarp.Delay[player.CSteamID.m_SteamID].Cancel();
-            CommandWarp.Delay.Remove( player.CSteamID.m_SteamID );
+            CommandWarp.Delay.Remove(player.CSteamID.m_SteamID);
 
-            UPlayer.TryGet( player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo );
+            UPlayer.TryGet(player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo);
         }
 
-        [SubscribeEvent( EventType.PLAYER_DEATH )]
-        void BackPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb,  CSteamID murderer )
-        {
-            if ( !player.HasPermission( "essentials.command.back" ) )
-            {
+        [SubscribeEvent(EventType.PLAYER_DEATH)]
+        private void BackPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+            if (!player.HasPermission("essentials.command.back")) {
                 return;
             }
 
-            UPlayer.TryGet( player, p => p.SetMetadata( "back_pos", player.Position ) );
+            UPlayer.TryGet(player, p => p.SetMetadata("back_pos", player.Position));
         }
 
 
         /* Freeze Command */
         private static readonly HashSet<ulong> DisconnectedFrozen = new HashSet<ulong>();
 
-        [SubscribeEvent( EventType.PLAYER_DEATH )]
-        void FreezePlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
-        {
-            if ( UEssentials.Config.UnfreezeOnDeath && player.GetComponent<FrozenPlayer>() != null )
-            {
-                UnityEngine.Object.Destroy( player.GetComponent<FrozenPlayer>() );
+        [SubscribeEvent(EventType.PLAYER_DEATH)]
+        private void FreezePlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+            if (UEssentials.Config.UnfreezeOnDeath && player.GetComponent<FrozenPlayer>() != null) {
+                UnityEngine.Object.Destroy(player.GetComponent<FrozenPlayer>());
             }
         }
 
-        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
-        void FreezePlayerDisconnect( UnturnedPlayer player )
-        {
-            if ( !UEssentials.Config.UnfreezeOnQuit && player.GetComponent<FrozenPlayer>() != null )
-            {
-                DisconnectedFrozen.Add( player.CSteamID.m_SteamID );
+        [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
+        private void FreezePlayerDisconnect(UnturnedPlayer player) {
+            if (!UEssentials.Config.UnfreezeOnQuit && player.GetComponent<FrozenPlayer>() != null) {
+                DisconnectedFrozen.Add(player.CSteamID.m_SteamID);
             }
         }
 
-        [SubscribeEvent( EventType.PLAYER_CONNECTED )]
-        void FreezePlayerConnected( UnturnedPlayer player )
-        {
-            if ( !UEssentials.Config.UnfreezeOnQuit && DisconnectedFrozen.Contains( player.CSteamID.m_SteamID ) )
-            {
-                UPlayer.From( player ).AddComponent<FrozenPlayer>();
-                DisconnectedFrozen.Remove( player.CSteamID.m_SteamID );
+        [SubscribeEvent(EventType.PLAYER_CONNECTED)]
+        private void FreezePlayerConnected(UnturnedPlayer player) {
+            if (!UEssentials.Config.UnfreezeOnQuit && DisconnectedFrozen.Contains(player.CSteamID.m_SteamID)) {
+                UPlayer.From(player).AddComponent<FrozenPlayer>();
+                DisconnectedFrozen.Remove(player.CSteamID.m_SteamID);
             }
         }
 
 
-        [SubscribeEvent( EventType.PLAYER_DEATH )]
-        void KitPlayerDeath( UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer )
-        {
+        [SubscribeEvent(EventType.PLAYER_DEATH)]
+        private void KitPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
             var globalKitCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
 
-            if ( CommandKit.GlobalCooldown.ContainsKey( player.CSteamID.m_SteamID ) &&
-                 EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie )
-            {
+            if (CommandKit.GlobalCooldown.ContainsKey(player.CSteamID.m_SteamID) &&
+                EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie) {
                 CommandKit.GlobalCooldown[player.CSteamID.m_SteamID] =
-                        DateTime.Now.AddSeconds( -globalKitCooldown );
+                    DateTime.Now.AddSeconds(-globalKitCooldown);
             }
 
-            if ( !CommandKit.Cooldowns.ContainsKey( player.CSteamID.m_SteamID ) ) return;
+            if (!CommandKit.Cooldowns.ContainsKey(player.CSteamID.m_SteamID)) return;
 
             var playerCooldowns = CommandKit.Cooldowns[player.CSteamID.m_SteamID];
-            var keys = new List<string> ( playerCooldowns.Keys );
+            var keys = new List<string>(playerCooldowns.Keys);
 
-            foreach ( var kitName in keys )
-            {
+            foreach (var kitName in keys) {
                 var kit = KitModule.Instance.KitManager.GetByName(kitName);
 
-                if ( kit == null )
-                {
-                    playerCooldowns.Remove( kitName );
+                if (kit == null) {
+                    playerCooldowns.Remove(kitName);
                     continue;
                 }
 
-                if ( kit.ResetCooldownWhenDie )
-                {
-                    playerCooldowns[kitName] = DateTime.Now.AddSeconds( -kit.Cooldown );
+                if (kit.ResetCooldownWhenDie) {
+                    playerCooldowns[kitName] = DateTime.Now.AddSeconds(-kit.Cooldown);
                 }
             }
         }
 
-        [SubscribeEvent( EventType.PLAYER_DISCONNECTED )]
-        void TpaPlayerDisconnect( UnturnedPlayer player )
-        {
+        [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
+        private void TpaPlayerDisconnect(UnturnedPlayer player) {
             var playerId = player.CSteamID.m_SteamID;
             var requests = CommandTpa.Requests;
 
-            if ( requests.ContainsKey( playerId ) )
-            {
-                requests.Remove( playerId );
-            }
-            else if ( requests.ContainsValue(playerId) )
-            {
+            if (requests.ContainsKey(playerId)) {
+                requests.Remove(playerId);
+            } else if (requests.ContainsValue(playerId)) {
                 var val = requests.Keys.FirstOrDefault(k => requests[k] == playerId);
 
-                if ( val != default(ulong) )
-                {
-                    requests.Remove( val );
+                if (val != default(ulong)) {
+                    requests.Remove(val);
                 }
             }
         }
 
-        private static string TranslateLimb( ELimb limb )
-        {
-            switch (limb)
-            {
+        private static string TranslateLimb(ELimb limb) {
+            switch (limb) {
                 case ELimb.SKULL:
                     return EssLang.LIMB_HEAD.GetMessage();
 
@@ -627,5 +562,7 @@ namespace Essentials.Event.Handling
                     return "?";
             }
         }
+
     }
+
 }

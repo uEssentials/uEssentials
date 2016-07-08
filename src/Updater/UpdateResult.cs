@@ -19,26 +19,26 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-namespace Essentials.Updater
-{
-    public class UpdateResult
-    {
+namespace Essentials.Updater {
+
+    public class UpdateResult {
+
         public string LatestVersion;
         public uint LatestVersionDecimal;
         public string AdditionalData;
 
-        public UpdateResult( string latestVersion, uint latestVersionDecimal, string additionalData )
-        {
+        public UpdateResult(string latestVersion, uint latestVersionDecimal, string additionalData) {
             LatestVersion = latestVersion;
             LatestVersionDecimal = latestVersionDecimal;
             AdditionalData = additionalData;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"LatestVersion: {LatestVersion}, " +
                    $"LatestVersionDecimal: {LatestVersionDecimal}, " +
                    $"AdditionalData: {AdditionalData}";
         }
+
     }
+
 }
