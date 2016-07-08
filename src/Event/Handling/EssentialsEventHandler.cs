@@ -50,59 +50,35 @@ namespace Essentials.Event.Handling
 {
     internal class EssentialsEventHandler
     {
-        internal static readonly Dictionary<string, DateTime>                   LastChatted     = new Dictionary<string, DateTime>();
+        internal static readonly Dictionary<ulong, DateTime>                    LastChatted     = new Dictionary<ulong, DateTime>();
         internal static readonly Dictionary<string, Dictionary<USkill, byte>>   CachedSkills    = new Dictionary<string, Dictionary<USkill, byte>>();
 
         [SubscribeEvent( EventType.PLAYER_CHATTED )]
         void OnPlayerChatted( UnturnedPlayer player, ref Color color, string message,
                               EChatMode mode, ref bool cancel )
         {
+            if ( !UEssentials.Config.AntiSpam.Enabled || message.StartsWith( "/" ) ||
+                 player.HasPermission( "essentials.bypass.antispam" ) ) return;
 
-            /* Rocket does not send "Command not found" if player is admin (FIXED)
-            if ( player.IsAdmin && message.StartsWith( "/" ) )
+            var playerId = player.CSteamID.m_SteamID;
+
+            if ( !LastChatted.ContainsKey( playerId ) )
             {
-                var command = message.Substring( 1 );
-
-                if ( command.IndexOf( " ", StringComparison.Ordinal ) > -1 )
-                {
-                    command = command.Split( ' ' )[0];
-                }
-
-                if ( UEssentials.CommandManager.HasWithName( command ) )
-                {
-                    return;
-                }
-
-                UPlayer.TryGet( player, p => {
-                    EssLang.UNKNOWN_COMMAND.SendTo( p, command );
-                } );
-
-                cancel = true;
-                return;
-            }*/
-
-            if ( message.StartsWith( "/" ) || player.HasPermission( "essentials.bypass.antispam" ) ||
-                 !UEssentials.Config.AntiSpam.Enabled ) return;
-
-            var playerName = player.CharacterName;
-
-            if ( !LastChatted.ContainsKey( playerName ) )
-            {
-                LastChatted.Add( playerName, DateTime.Now );
+                LastChatted.Add( playerId, DateTime.Now );
                 return;
             }
 
             var interval = UEssentials.Config.AntiSpam.Interval;
 
-            if ( (DateTime.Now - LastChatted[playerName]).TotalSeconds < interval )
+            if ( (DateTime.Now - LastChatted[playerId]).TotalSeconds < interval )
             {
-                EssLang.CHAT_ANTI_SPAM.SendTo( UPlayer.From( player ) );
+                EssLang.CHAT_ANTI_SPAM.SendTo( UPlayer.From( playerId ) );
 
                 cancel = true;
                 return;
             }
 
-            LastChatted[playerName] = DateTime.Now;
+            LastChatted[playerId] = DateTime.Now;
         }
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
