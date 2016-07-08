@@ -45,8 +45,8 @@ namespace Essentials.Commands
                 return CommandResult.Lang( EssLang.NOT_DIED_YET );
             }
 
-            var pos = player.GetMetadata<Vector3>( "back_pos" );
-            src.ToPlayer().Teleport( pos );
+            var backPosition = player.GetMetadata<Vector3>( "back_pos" );
+            src.ToPlayer().Teleport( backPosition );
             EssLang.RETURNED.SendTo( src );
 
             return CommandResult.Success();

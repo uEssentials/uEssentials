@@ -40,6 +40,8 @@ namespace Essentials.Core.Command
     {
         private Dictionary<string, ICommand> CommandMap { get; }
         private List<RocketCommandManager.RegisteredRocketCommand> _rocketCommands;
+        private MethodInfo _onRegisteredMethod = typeof(EssCommand).GetMethod( "OnRegistered", ReflectionUtil.INSTANCE_FLAGS );
+        private MethodInfo _onUnregisteredMethod = typeof(EssCommand).GetMethod( "OnUnregisted", ReflectionUtil.INSTANCE_FLAGS );
 
         public IEnumerable<ICommand> Commands => CommandMap.Values;
 
@@ -109,7 +111,7 @@ namespace Essentials.Core.Command
 
             if ( command is EssCommand )
             {
-                AccessorFactory.AccessMethod<EssCommand>( command, "OnRegistered" ).Invoke();
+                _onRegisteredMethod.Invoke( command, ReflectionUtil.EMPTY_ARGS );
             }
 
             var aliases = command.Aliases;
@@ -240,7 +242,7 @@ namespace Essentials.Core.Command
                     var command = ((CommandAdapter) cmd.Command).Command;
                     if ( command  is EssCommand )
                     {
-                        AccessorFactory.AccessMethod<EssCommand>( command, "OnUnregistered" ).Invoke();
+                        _onUnregisteredMethod.Invoke( command, ReflectionUtil.EMPTY_ARGS );
                     }
                     return true;
                 }

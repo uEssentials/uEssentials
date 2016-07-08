@@ -26,6 +26,9 @@ namespace Essentials.Common.Util
 {
     public static class ReflectionUtil
     {
+        public static object[] EMPTY_ARGS = new object[0];
+        public static BindingFlags INSTANCE_FLAGS => BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
         public static TAttribute GetAttributeFrom<TAttribute>( object instance ) where TAttribute : Attribute
         {
             object[] attrs;
