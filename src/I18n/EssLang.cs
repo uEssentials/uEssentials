@@ -171,7 +171,7 @@ namespace Essentials.I18n {
             Broadcast(null);
         }
 
-        public override String ToString() {
+        public override string ToString() {
             return GetMessage();
         }
 

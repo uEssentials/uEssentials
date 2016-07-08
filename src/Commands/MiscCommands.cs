@@ -548,11 +548,11 @@ namespace Essentials.Commands {
         private CommandResult RespawnVehiclesCommand(ICommandSource src, ICommandArgs args) {
             var spawns = LevelVehicles.spawns;
 
-            for (var j = 0; j < spawns.Count; j++) {
-                var vehicleSpawnpoint = spawns[j];
+            foreach (var vehicleSpawnpoint in spawns) {
                 var vehicle = LevelVehicles.getVehicle(vehicleSpawnpoint);
 
-                if (vehicle == 0) continue;
+                if (vehicle == 0)
+                    continue;
 
                 var point = vehicleSpawnpoint.point;
                 point.y += 1f;

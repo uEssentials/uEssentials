@@ -124,8 +124,10 @@ namespace Essentials.Api.Module {
                 throw new FileNotFoundException($"File not found '{assemblyPath}'");
             }
 
-            if (!Path.HasExtension(assemblyPath) || Path.GetExtension(assemblyPath).Equals("dll")) {
-                throw new ArgumentException($"Invalid file '{assemblyPath}', it isn't a valid assembly file.");
+            var fileExtension = Path.GetExtension(assemblyPath);
+
+            if ("dll".Equals(fileExtension)) {
+                throw new ArgumentException($"Invalid file '{assemblyPath}', file must be '.dll'");
             }
 
             var rawAssembly = File.ReadAllBytes(assemblyPath);

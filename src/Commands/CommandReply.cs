@@ -45,14 +45,14 @@ namespace Essentials.Commands {
 
             if (!Conversations.ContainsKey(src.DisplayName)) {
                 return CommandResult.Lang(EssLang.NOBODY_TO_REPLY);
-                ;
             }
 
-            var target = (from conversation
+            var target = (
+                from conversation
                 in Conversations
                 where conversation.Value.Equals(src.DisplayName)
-                select UPlayer.From(conversation.Key)
-                ).FirstOrDefault();
+                select UPlayer.From(conversation.Key)//TODO IMPROVE, change to ulong
+            ).FirstOrDefault();
 
             if (target == null) {
                 return CommandResult.Lang(EssLang.NO_LONGER_ONLINE);

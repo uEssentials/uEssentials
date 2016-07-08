@@ -135,8 +135,8 @@ namespace Essentials.Common {
 
         private readonly Dictionary<string, string> supportedConstants =
             new Dictionary<string, string> {
-                { "pi", NumberMaker + Math.PI.ToString() },
-                { "e", NumberMaker + Math.E.ToString() }
+                { "pi", NumberMaker + Math.PI },
+                { "e", NumberMaker + Math.E }
             };
 
         #endregion
@@ -156,7 +156,7 @@ namespace Essentials.Common {
         public MathParser() {
             try {
                 decimalSeparator =
-                    Char.Parse(System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                    char.Parse(System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
             } catch (FormatException ex) {
                 throw new FormatException(
                     "Error: can't read char decimal separator from system, check your regional settings.", ex);
@@ -181,21 +181,7 @@ namespace Essentials.Common {
         public double Parse(string expression, bool isRadians = true) {
             this.isRadians = isRadians;
 
-            try {
-                return Calculate(ConvertToRPN(FormatString(expression)));
-            } catch (DivideByZeroException e) {
-                throw e;
-            } catch (FormatException e) {
-                throw e;
-            } catch (InvalidOperationException e) {
-                throw e;
-            } catch (ArgumentOutOfRangeException e) {
-                throw e;
-            } catch (ArgumentException e) {
-                throw e;
-            } catch (Exception e) {
-                throw e;
-            }
+            return Calculate(ConvertToRPN(FormatString(expression)));
         }
 
         /// <summary>
@@ -222,10 +208,10 @@ namespace Essentials.Common {
                     balanceOfParenth--;
                 }
 
-                if (Char.IsWhiteSpace(ch)) {
+                if (char.IsWhiteSpace(ch)) {
                     continue;
-                } else if (Char.IsUpper(ch)) {
-                    formattedString.Append(Char.ToLower(ch));
+                } else if (char.IsUpper(ch)) {
+                    formattedString.Append(char.ToLower(ch));
                 } else {
                     formattedString.Append(ch);
                 }
@@ -297,13 +283,13 @@ namespace Essentials.Common {
                     default:
                         return supportedOperators[token.ToString()];
                 }
-            } else if (Char.IsLetter(token[0])
+            } else if (char.IsLetter(token[0])
                        || supportedFunctions.ContainsKey(token.ToString())
                        || supportedConstants.ContainsKey(token.ToString())) {
                 // Read function or constant name
 
                 while (++pos < expression.Length
-                       && Char.IsLetter(expression[pos])) {
+                       && char.IsLetter(expression[pos])) {
                     token.Append(expression[pos]);
                 }
 
@@ -314,13 +300,13 @@ namespace Essentials.Common {
                 } else {
                     throw new ArgumentException("Unknown token");
                 }
-            } else if (Char.IsDigit(token[0]) || token[0] == decimalSeparator) {
+            } else if (char.IsDigit(token[0]) || token[0] == decimalSeparator) {
                 // Read number
 
                 // Read the whole part of number
-                if (Char.IsDigit(token[0])) {
+                if (char.IsDigit(token[0])) {
                     while (++pos < expression.Length
-                           && Char.IsDigit(expression[pos])) {
+                           && char.IsDigit(expression[pos])) {
                         token.Append(expression[pos]);
                     }
                 } else {
@@ -337,25 +323,25 @@ namespace Essentials.Common {
                         .NumberFormat.NumberDecimalSeparator);
 
                     while (++pos < expression.Length
-                           && Char.IsDigit(expression[pos])) {
+                           && char.IsDigit(expression[pos])) {
                         token.Append(expression[pos]);
                     }
                 }
 
                 // Read scientific notation (suffix)
                 if (pos + 1 < expression.Length && expression[pos] == 'e'
-                    && (Char.IsDigit(expression[pos + 1])
+                    && (char.IsDigit(expression[pos + 1])
                         || (pos + 2 < expression.Length
                             && (expression[pos + 1] == '+'
                                 || expression[pos + 1] == '-')
-                            && Char.IsDigit(expression[pos + 2])))) {
+                            && char.IsDigit(expression[pos + 2])))) {
                     token.Append(expression[pos++]); // e
 
                     if (expression[pos] == '+' || expression[pos] == '-')
                         token.Append(expression[pos++]); // sign
 
                     while (pos < expression.Length
-                           && Char.IsDigit(expression[pos])) {
+                           && char.IsDigit(expression[pos])) {
                         token.Append(expression[pos++]); // power
                     }
 

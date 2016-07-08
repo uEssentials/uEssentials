@@ -39,13 +39,10 @@ namespace Essentials.Core.Command {
     internal class CommandManager : ICommandManager {
 
         private Dictionary<string, ICommand> CommandMap { get; }
-        private List<RocketCommandManager.RegisteredRocketCommand> _rocketCommands;
 
-        private MethodInfo _onRegisteredMethod = typeof(EssCommand).GetMethod("OnRegistered",
-            ReflectionUtil.INSTANCE_FLAGS);
-
-        private MethodInfo _onUnregisteredMethod = typeof(EssCommand).GetMethod("OnUnregisted",
-            ReflectionUtil.INSTANCE_FLAGS);
+        private readonly List<RocketCommandManager.RegisteredRocketCommand> _rocketCommands;
+        private readonly MethodInfo _onRegisteredMethod = typeof(EssCommand).GetMethod("OnRegistered", ReflectionUtil.INSTANCE_FLAGS);
+        private readonly MethodInfo _onUnregisteredMethod = typeof(EssCommand).GetMethod("OnUnregisted", ReflectionUtil.INSTANCE_FLAGS);
 
         public IEnumerable<ICommand> Commands => CommandMap.Values;
 
@@ -59,11 +56,7 @@ namespace Essentials.Core.Command {
         public ICommand GetByName(string name, bool includeAliases = true) {
             Preconditions.NotNull(name, "name cannot be null");
 
-            return GetWhere(command => {
-                if (command is CommandAdapter && !includeAliases) return false;
-
-                return command.Name.EqualsIgnoreCase(name);
-            });
+            return GetWhere(command => command.Name.EqualsIgnoreCase(name));
         }
 
         public ICommand GetByType(Type commandType) {

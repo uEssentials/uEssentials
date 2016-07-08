@@ -44,7 +44,7 @@ namespace Essentials.Common.Util {
             var sb = new StringBuilder();
 
             if (obj is IEnumerable && !(obj is string)) {
-                var en = obj as IEnumerable;
+                var en = (IEnumerable) obj;
                 var enumerable = en as IList<object> ?? en.Cast<object>().ToList();
 
                 if (enumerable.Count == 0) {
