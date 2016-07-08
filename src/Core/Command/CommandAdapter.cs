@@ -57,8 +57,8 @@ namespace Essentials.Core.Command {
         }
 
         public void Execute(IRocketPlayer caller, string[] args) {
-#if PERF
-              var sw = System.Diagnostics.Stopwatch.StartNew();
+            #if DEBUG_PERF
+                var sw = System.Diagnostics.Stopwatch.StartNew();
             #endif
 
             try {
@@ -86,7 +86,6 @@ namespace Essentials.Core.Command {
                             commandSource.SendMessage($"Use /{Command.Name} {Command.Usage}");
                         } else if (result.Message != null) {
                             var message = result.Message;
-
                             var color = ColorUtil.GetColorFromString(ref message);
 
                             commandSource.SendMessage(message, color);
@@ -97,23 +96,24 @@ namespace Essentials.Core.Command {
                     EssentialsEvents.CallCommandPosExecute(posExec);
                 }
             } catch (Exception e) {
-                if (caller is UnturnedPlayer)
-                    UPlayer.TryGet((UnturnedPlayer) caller, EssLang.COMMAND_ERROR_OCURRED.SendTo);
+                // Check if is player...
+                var player = caller as UnturnedPlayer;
+                if (player != null) {
+                    UPlayer.TryGet(player, EssLang.COMMAND_ERROR_OCURRED.SendTo);
+                }
 
                 UEssentials.Logger.LogError(e.ToString());
             }
 
-#if PERF
-              UEssentials.Logger.LogDebug( $"Executed command '{Command.Name}', Took: {sw.ElapsedTicks} ticks | {sw.ElapsedMilliseconds} ms");
+            #if DEBUG_PERF
+                UEssentials.Logger.LogDebug( $"Executed command '{Command.Name}', Took: {sw.ElapsedTicks} ticks | {sw.ElapsedMilliseconds} ms");
             #endif
         }
 
         internal class CommandAliasAdapter : CommandAdapter {
-
             internal CommandAliasAdapter(ICommand command, string alias) : base(command) {
                 Name = alias;
             }
-
         }
 
     }

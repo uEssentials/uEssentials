@@ -20,6 +20,7 @@
 */
 
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -52,6 +53,7 @@ using Steamworks;
 using Rocket.Core.Commands;
 using Essentials.Compatibility.Hooks;
 using Essentials.Economy;
+using Microsoft.CSharp;
 using Environment = Rocket.Core.Environment;
 
 namespace Essentials.Core {
@@ -139,17 +141,17 @@ namespace Essentials.Core {
 
                 Logger.Log("Plugin version: ", ConsoleColor.Green, suffix: "");
 
-#if EXPERIMENTAL
-                  var label = "experimental"
-                  #if EXPERIMENTAL_HASH
-                    + "-commit-$COMMIT_HASH$"
-                  #endif
-                  ;
+                #if EXPERIMENTAL
+                    var label = "experimental"
+                    #if EXPERIMENTAL_HASH
+                        + "-commit-$COMMIT_HASH$"
+                    #endif
+                    ;
 
-                  Logger.Log( $"{PLUGIN_VERSION} {label}", ConsoleColor.White, "" );
+                    Logger.Log( $"{PLUGIN_VERSION} {label}", ConsoleColor.White, "" );
                 #else
-                Logger.Log(PLUGIN_VERSION, ConsoleColor.White, "");
-#endif
+                    Logger.Log(PLUGIN_VERSION, ConsoleColor.White, "");
+                #endif
 
                 Logger.Log("Recommended Rocket version: ", ConsoleColor.Green, suffix: "");
                 Logger.Log(ROCKET_VERSION, ConsoleColor.White, "");
@@ -251,9 +253,9 @@ namespace Essentials.Core {
                     EventManager.Unregister<EssentialsEventHandler>("DeathMessages");
                 }
 
-#if EXPERIMENTAL
-                  Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
-                  Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
+                #if EXPERIMENTAL
+                    Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
+                    Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
                 #endif
 
                 TryAddComponent<Tasks.TaskExecutor>();
@@ -293,12 +295,12 @@ namespace Essentials.Core {
                 }
             }
 
-#if !DEV
-              CheckUpdates();
-              Analytics.Metrics.Init();
+            #if !DEV
+                CheckUpdates();
+                Analytics.Metrics.Init();
             #else
-            CommandWindow.ConsoleOutput.title = "Unturned Server";
-#endif
+                CommandWindow.ConsoleOutput.title = "Unturned Server";
+            #endif
         }
 
         protected override void Unload() {

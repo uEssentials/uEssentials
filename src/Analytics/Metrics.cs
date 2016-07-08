@@ -4,8 +4,6 @@ using System.Text;
 using System.Threading;
 using SDG.Unturned;
 
-// ReSharper disable InconsistentNaming
-
 namespace Essentials.Analytics {
 
     /// <summary>

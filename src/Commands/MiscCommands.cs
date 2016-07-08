@@ -28,7 +28,6 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
-using static Essentials.Common.Util.ItemUtil;
 using Essentials.Core.Command;
 using Essentials.I18n;
 using SDG.Unturned;
@@ -181,6 +180,7 @@ namespace Essentials.Commands {
                 case "v":
                 case "vehicle":
                     return CommandResult.Generic("This option is currently disabled, use /clear ev instead");
+                    /*
                     if (!src.HasPermission(cmd.Permission + ".vehicles")) {
                         return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
                     }
@@ -202,7 +202,7 @@ namespace Essentials.Commands {
                         VehicleManager.askVehicleDestroyAll();
                         EssLang.CLEAR_VEHICLES.SendTo(src);
                     }).Start();
-                    break;
+                    break;*/
 
                 case "i":
                 case "items":
@@ -822,7 +822,7 @@ namespace Essentials.Commands {
                 return;
             }
 
-            var optAsset = GetItem(itemArg.ToString());
+            var optAsset = ItemUtil.GetItem(itemArg.ToString());
 
             if (optAsset.IsAbsent) {
                 EssLang.ITEM_NOT_FOUND.SendTo(src, itemArg);

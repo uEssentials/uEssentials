@@ -38,8 +38,7 @@ namespace Essentials.Api.Unturned {
 
     public class UPlayer : ICommandSource {
 
-        public UnturnedPlayer RocketPlayer { get; }
-        public bool IsConsole => false;
+        public UnturnedPlayer RocketPlayer { get; } 
         public string DisplayName => CharacterName;
         public string Id => CSteamId.m_SteamID.ToString();
         public string CharacterName => RocketPlayer.CharacterName;
@@ -66,6 +65,8 @@ namespace Essentials.Api.Unturned {
         public PlayerEquipment Equipment => UnturnedPlayer.equipment;
         public EPlayerStance Stance => UnturnedPlayer.Stance.Stance;
         public bool IsOnline => RocketPlayer != null && UnturnedPlayer != null;
+
+        bool ICommandSource.IsConsole => false;
 
         private readonly Dictionary<string, object> _metadataStore = new Dictionary<string, object>();
 
