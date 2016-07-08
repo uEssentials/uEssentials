@@ -290,7 +290,6 @@ namespace Essentials.I18n
         public static EssLang POLL_ALREADY_VOTED { get; private set; }
         public static EssLang POLL_INFO { get; private set; }
         public static EssLang POLL_NONE { get; private set; }
-        public static EssLang UNKNOWN_COMMAND { get; private set; }
         public static EssLang SPAWNED_ITEM { get; private set; }
         public static EssLang SPAWNED_ITEM_AT { get; private set; }
         public static EssLang SPAWNED_VEHICLE_AT_POSITION { get; private set; }

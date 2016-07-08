@@ -31,7 +31,6 @@
         A cor padrão é Verde.
     */
 
-    "UNKNOWN_COMMAND": "<white>Não existe um comando chamado '/{0}'",
     "INVALID_NUMBER": "<red>Número inválido '{0}'",
     "SECOND": "segundo",
     "DAY": "dia",

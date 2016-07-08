@@ -19,7 +19,7 @@
                 <yellow>
 
         The unturned chat only suports ONE color.
-        The algorithm will check if text contains an determined color, 
+        The algorithm will check if text contains an determined color,
         and will use it, doesn't matter a position in the message.
 
         For example:
@@ -29,8 +29,7 @@
 
         The default color is Green.
     */
-    
-    "UNKNOWN_COMMAND": "<yellow>Нет такой команды '/{0}'.",
+
     "INVALID_NUMBER": "<yellow>Неверное число '{0}'.",
     "INVALID_BOOLEAN": "<yellow>Неверное значение '{0}'.  Ожидается 'true' или 'false'.",
     "SECOND": "second",

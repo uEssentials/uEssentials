@@ -143,7 +143,6 @@
     "UNFROZEN_ALL": "Has descongelado a todos los jugadores",
     "UNFROZEN_PLAYER": "Has sido descongelado por {0}",
     "UNFROZEN_SENDER": "jugador {0} descongelado",
-    "UNKNOWN_COMMAND": "<white>Este comando NO existe.",
     "VEHICLE_REFUELED": "Tu vehiculo esta recargado",
     "VEHICLE_REFUELED_ALL": "Todos los vehiculos han sido recargados",
     "VEHICLE_REPAIRED": "Tu vehiculo ha sido reparado",
