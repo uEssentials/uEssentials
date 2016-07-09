@@ -59,11 +59,16 @@ namespace Essentials.Api.Module {
 
             EssModule moduleInstance = null;
 
-            foreach (var type in moduleAssembly.GetTypes()) {
-                if (!type.IsSubclassOf(typeof(EssModule))) continue;
-
+            foreach (var type in moduleAssembly.GetTypes().Where(type => type.IsSubclassOf(typeof(EssModule)))) {
                 moduleInstance = (EssModule) Activator.CreateInstance(type);
                 moduleInstance.Assembly = moduleAssembly;
+
+                if (moduleInstance.Info.Version.EqualsIgnoreCase("$asmVersion")) {
+                    moduleInstance.Info.Version = moduleAssembly.GetCustomAttributes(false)
+                        .Cast<AssemblyFileVersionAttribute>()
+                        .Select(c => c.Version)
+                        .FirstOrDefault();
+                }
             }
 
             Preconditions.NotNull(moduleInstance, "Could load module from assembly " +
