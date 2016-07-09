@@ -309,7 +309,6 @@ namespace Essentials.Core {
                         .Where(cmd => cmd is EssCommand || cmd is MethodCommand)
                         .OrderBy(cmd => cmd.Name)
                         .ForEach(cmd => {
-                            System.Console.WriteLine(cmd);
                             var usage = cmd.Usage;
                             var desc = cmd.Description;
                             string aliases;
