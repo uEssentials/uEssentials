@@ -38,21 +38,20 @@ using Essentials.Configuration;
 using Essentials.Core.Command;
 using Essentials.Core.Event;
 using Essentials.I18n;
-using Rocket.Core;
-using Rocket.Core.Plugins;
 using Essentials.Common.Reflect;
 using Essentials.Compatibility;
 using Essentials.Core.Permission;
 using Essentials.Event.Handling;
 using Essentials.NativeModules;
 using Essentials.Updater;
+using Essentials.Compatibility.Hooks;
+using Essentials.Economy;
+using Rocket.Core;
+using Rocket.Core.Plugins;
+using Rocket.Core.Commands;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
-using Rocket.Core.Commands;
-using Essentials.Compatibility.Hooks;
-using Essentials.Economy;
-using Environment = Rocket.Core.Environment;
 
 namespace Essentials.Core {
 
@@ -111,7 +110,7 @@ namespace Essentials.Core {
                     });
                 }
 
-                _folder = Environment.PluginsDirectory + "/uEssentials/";
+                _folder = Rocket.Core.Environment.PluginsDirectory + "/uEssentials/";
                 _translationFolder = Folder + "translations/";
                 _dataFolder = Folder + "data/";
                 _modulesFolder = Folder + "modules/";

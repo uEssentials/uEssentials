@@ -24,8 +24,8 @@ using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
-using static Essentials.Commands.CommandTell;
 using Essentials.I18n;
+using static Essentials.Commands.CommandTell;
 
 namespace Essentials.Commands {
 
@@ -33,8 +33,8 @@ namespace Essentials.Commands {
         Name = "reply",
         Aliases = new[] { "r" },
         Description = "Reply to the most recent private message",
-        AllowedSource = AllowedSource.PLAYER,
-        Usage = "[message]"
+        Usage = "[message]",
+        AllowedSource = AllowedSource.PLAYER
     )]
     public class CommandReply : EssCommand {
 
@@ -43,15 +43,17 @@ namespace Essentials.Commands {
                 return CommandResult.ShowUsage();
             }
 
-            if (!Conversations.ContainsKey(src.DisplayName)) {
+            var playerId = src.ToPlayer().CSteamId.m_SteamID;
+
+            if (!Conversations.ContainsKey(playerId)) {
                 return CommandResult.Lang(EssLang.NOBODY_TO_REPLY);
             }
 
             var target = (
                 from conversation
                 in Conversations
-                where conversation.Value.Equals(src.DisplayName)
-                select UPlayer.From(conversation.Key)//TODO IMPROVE, change to ulong
+                where conversation.Value.Equals(playerId)
+                select UPlayer.From(conversation.Key)
             ).FirstOrDefault();
 
             if (target == null) {

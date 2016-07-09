@@ -327,7 +327,7 @@ namespace Essentials.Commands {
         [CommandInfo(
             Name = "itemfeatures",
             Aliases = new[] { "if" },
-            Usage = "[autoreload | autorepair] [on|off]",
+            Usage = "[autoreload | autorepair] [on | off]",
             Description = "Item features",
             AllowedSource = AllowedSource.PLAYER
         )]

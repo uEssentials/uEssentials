@@ -27,6 +27,7 @@ using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.I18n;
+using Steamworks;
 using UnityEngine;
 using static Essentials.Commands.MiscCommands;
 
@@ -40,7 +41,7 @@ namespace Essentials.Commands {
     )]
     public class CommandTell : EssCommand {
 
-        internal static readonly Dictionary<string, string> Conversations = new Dictionary<string, string>();
+        internal static readonly Dictionary<ulong, ulong> Conversations = new Dictionary<ulong, ulong>();
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             if (args.Length < 2) {
@@ -53,28 +54,35 @@ namespace Essentials.Commands {
                 return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
             }
 
-            var rawMsg1 = UEssentials.Config.PMFormatFrom;
-            var rawMsg2 = UEssentials.Config.PMFormatTo;
-            var color1 = ColorUtil.GetColorFromString(ref rawMsg1);
-            var color2 = ColorUtil.GetColorFromString(ref rawMsg2);
+            var formatFrom = UEssentials.Config.PMFormatFrom;
+            var formatTo = UEssentials.Config.PMFormatTo;
+            var formatFromColor = ColorUtil.GetColorFromString(ref formatFrom);
+            var formatToColor = ColorUtil.GetColorFromString(ref formatTo);
 
-            var message = string.Format(rawMsg1, src.DisplayName, args.Join(1));
-            var message2 = string.Format(rawMsg2, target.DisplayName, args.Join(1));
+            var message = string.Format(formatFrom, src.DisplayName, args.Join(1));
+            var message2 = string.Format(formatTo, target.DisplayName, args.Join(1));
 
-            target.SendMessage(message, color1);
-            src.SendMessage(message2, color2);
+            target.SendMessage(message, formatFromColor);
+            src.SendMessage(message2, formatToColor);
 
             Spies.ForEach(p => {
                 UPlayer.From(p).SendMessage($"Spy: ({src.DisplayName} -> " +
                                             $"{target.CharacterName}): {args.Join(1)}", Color.gray);
             });
 
-            if (Conversations.ContainsKey(src.DisplayName)) {
-                if (!Conversations[src.DisplayName].Equals(target.DisplayName)) {
-                    Conversations[src.DisplayName] = target.CharacterName;
+            if (src.IsConsole) {
+                return CommandResult.Success();
+            }
+
+            var srcPlayer = src.ToPlayer();
+            var srcId = srcPlayer.CSteamId.m_SteamID;
+
+            if (Conversations.ContainsKey(srcId)) {
+                if (!Conversations[srcId].Equals(target.CSteamId.m_SteamID)) {
+                    Conversations[srcId] = target.CSteamId.m_SteamID;
                 }
             } else {
-                Conversations.Add(src.DisplayName, target.DisplayName);
+                Conversations.Add(srcId, target.CSteamId.m_SteamID);
             }
 
             return CommandResult.Success();
