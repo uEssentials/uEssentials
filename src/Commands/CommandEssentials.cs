@@ -198,8 +198,11 @@ namespace Essentials.Commands {
                             src.SendMessage($"Command {args[1]} does not exists", Color.red);
                         } else {
                             src.SendMessage("Command: " + command.Name, Color.cyan);
-                            src.SendMessage("  Arguments: <optional> [required]", Color.cyan);
-                            src.SendMessage("  Help: " + command.Description, Color.cyan);
+                            src.SendMessage("  Usage Syntax: ", Color.cyan);
+                            src.SendMessage("    - [arg] = required argument.", Color.cyan);
+                            src.SendMessage("    - <arg> = optional argument.", Color.cyan);
+                            src.SendMessage("    - | = means 'Or'.", Color.cyan);
+                            src.SendMessage("  Description: " + command.Description, Color.cyan);
                             src.SendMessage("  Usage: /" + command.Name + " " + command.Usage, Color.cyan);
                             if (command.Aliases.Any())
                                 src.SendMessage("  Aliases: " + string.Join(", ", command.Aliases), Color.cyan);

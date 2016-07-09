@@ -20,7 +20,6 @@
 */
 
 using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -53,7 +52,6 @@ using Steamworks;
 using Rocket.Core.Commands;
 using Essentials.Compatibility.Hooks;
 using Essentials.Economy;
-using Microsoft.CSharp;
 using Environment = Rocket.Core.Environment;
 
 namespace Essentials.Core {
@@ -300,6 +298,47 @@ namespace Essentials.Core {
                 Analytics.Metrics.Init();
             #else
                 CommandWindow.ConsoleOutput.title = "Unturned Server";
+            #endif
+
+            #if DUMP_COMMANDS
+                var userProfile = System.Environment.GetEnvironmentVariable("USERPROFILE");
+                if (userProfile != null && System.IO.Directory.Exists(Path.Combine(userProfile, "Desktop"))) {
+                    var buffer = new System.Text.StringBuilder();
+
+                    CommandManager.Commands
+                        .Where(cmd => cmd is EssCommand || cmd is MethodCommand)
+                        .OrderBy(cmd => cmd.Name)
+                        .ForEach(cmd => {
+                            System.Console.WriteLine(cmd);
+                            var usage = cmd.Usage;
+                            var desc = cmd.Description;
+                            string aliases;
+
+                            if (cmd.Aliases == null || cmd.Aliases.Length == 0) {
+                                aliases = "None";
+                            } else {
+                                aliases = Common.Util.MiscUtil.ValuesToString(cmd.Aliases);
+                            }
+
+                            if (string.IsNullOrEmpty(usage.Trim())) {
+                                usage = "None";
+                            }
+                            if (string.IsNullOrEmpty(desc.Trim())) {
+                                desc = "None";
+                            }
+
+                            buffer.Append(cmd.Name);
+                            buffer.Append(" ## ");
+                            buffer.Append(aliases);
+                            buffer.Append(" ## ");
+                            buffer.Append(desc);
+                            buffer.Append(" ## ");
+                            buffer.Append(usage);
+                            buffer.AppendLine();
+                        });
+
+                    File.WriteAllText(Path.Combine(userProfile, "Desktop" + Path.PathSeparator + "commands.txt"), buffer.ToString());
+                }
             #endif
         }
 
