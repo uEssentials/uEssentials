@@ -108,6 +108,8 @@
     <Compile Include="src\Common\MathParser.cs" />
     <Compile Include="src\Common\Optional.cs" />
     <Compile Include="src\Common\Util\ItemUtil.cs" />
+    <Compile Include="src\Common\Util\LazyInitValue.cs" />
+    <Compile Include="src\Common\Util\LazyInitVar.cs" />
     <Compile Include="src\Common\Util\PlayerDictionary.cs" />
     <Compile Include="src\Common\Util\VehicleUtil.cs" />
     <Compile Include="src\Common\Util\TimeUtil.cs" />
@@ -210,6 +212,7 @@
     <Compile Include="src\NativeModules\Kit\KitManager.cs" />
     <Compile Include="src\NativeModules\Kit\Data\WebKitData.cs" />
     <Compile Include="src\NativeModules\Kit\KitModule.cs" />
+    <Compile Include="src\NativeModules\Warp\Data\BinaryWarpData.cs" />
     <Compile Include="src\NativeModules\Warp\WarpModule.cs" />
     <Compile Include="src\Misc\AutoAnnouncer.cs" />
     <Compile Include="src\I18n\EssLang.cs" />
