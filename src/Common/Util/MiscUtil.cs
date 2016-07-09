@@ -19,23 +19,25 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System.Collections.Generic;
 using System.Text;
 
 namespace Essentials.Common.Util {
 
     public static class MiscUtil {
 
-        public static string ArrayToString<T>(T[] array, string separator = ", ",
-            string start = "[", string end = "]") {
+        public static string ValuesToString<T>(IEnumerable<T> enumarable, string separator = ", ",
+                                              string start = "[", string end = "]") {
             var sb = new StringBuilder(start);
-            var arrLength = array.Length;
+            var enumerator = enumarable.GetEnumerator();
 
-            for (int i = 0; i < arrLength; i++) {
-                sb.Append(array[i]);
+            while (enumerator.MoveNext()) {
+                sb.Append(enumerator.Current?.ToString() ?? "null");
+                sb.Append(separator);
+            }
 
-                if ((i + 1) != arrLength) {
-                    sb.Append(separator);
-                }
+            if (sb.Length > 1) {
+                sb.Remove(sb.Length - separator.Length, separator.Length);
             }
 
             sb.Append(end);

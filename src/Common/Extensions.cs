@@ -65,8 +65,8 @@ namespace Essentials.Common {
             return !enume.Any(predicate);
         }
 
-        public static string ArrayToString<T>(this T[] arr) {
-            return MiscUtil.ArrayToString(arr);
+        public static string ValuesToString<T>(this T[] arr) {
+            return MiscUtil.ValuesToString(arr);
         }
 
     }
