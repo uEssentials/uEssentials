@@ -40,7 +40,7 @@ namespace Essentials.Commands {
                     return CommandResult.ShowUsage();
                 }
             } else if (!src.HasPermission(Permission + ".other")) {
-                return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                return CommandResult.NoPermission($"{Permission}.other");
             }
 
             var player = args.Length > 0 ? args[0].ToPlayer : src.ToPlayer();

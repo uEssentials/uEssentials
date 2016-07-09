@@ -80,7 +80,7 @@
     "KIT_GIVEN_SENDER_ALL": "<cyan>Kit '{0}' given to everyone!",
     "KIT_LIST": "Kits disponibles: {0}",
     "KIT_NO_PERMISSION": "No tienes acceso a este kit.",
-    "KIT_NONE": "<yellow>No hay kits disponibles.",
+    "KIT_NONE": "<yellow>You don't have access to any kit.",
     "KIT_NOT_EXIST": "<yellow>El Kit '{0}' no existe, usa /kits para ver los kits disponibles.",
     "MAX_SKILLS": "Todas sus habilidades han sido subidas al maximo",
     "MAX_SKILLS_TARGET": "Todas las habilidades de {0} han sido subidas al maximo",

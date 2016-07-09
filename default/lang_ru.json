@@ -101,7 +101,7 @@
     "KIT_GIVEN_SENDER_ALL": "<cyan>Kit '{0}' given to everyone!",
     "KIT_LIST": "<blue>Доступные киты: {0}",
     "KIT_NO_PERMISSION": "<yellow>У Вас нет доступа к этому киту.",
-    "KIT_NONE": "<yellow>Нет доступных китов.",
+    "KIT_NONE": "<yellow>You don't have access to any kit.",
     "INVENTORY_FULL": "<yellow>Ваш инвентарь полон. Предметы выпали на землю.",
     "KIT_COOLDOWN": "<yellow>Вы должны ждать {0} секунд чтобы использовать кит снова.",
     "NOT_IN_VEHICLE": "<yellow>Вы не в машине.",

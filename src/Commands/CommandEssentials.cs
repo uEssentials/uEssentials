@@ -105,7 +105,7 @@ namespace Essentials.Commands {
             switch (args[0].ToLowerString) {
                 case "savedata":
                     if (!src.HasPermission("essentials.savedata")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.NoPermission($"essentials.savedata");//TODO change to essentials.command.essentials.savedata?
                     }
                     UEssentials.ModuleManager.GetModule<KitModule>().IfPresent(m => {
                         m.KitManager.CooldownData.Save();
@@ -117,7 +117,7 @@ namespace Essentials.Commands {
 
                 case "reload":
                     if (!src.HasPermission("essentials.reload")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.NoPermission("essentials.reload");
                     }
                     if (args.Length == 1) {
                         src.SendMessage("Reloading all...");

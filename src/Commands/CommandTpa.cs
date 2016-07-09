@@ -39,15 +39,11 @@ namespace Essentials.Commands {
 
     [CommandInfo(
         Name = "tpa",
-        Usage = "[player|accept|deny|cancel]",
+        Usage = "[player | accept | deny | cancel]",
         AllowedSource = AllowedSource.PLAYER
     )]
     public class CommandTpa : EssCommand {
 
-        /*
-            Key     -> sender
-            Value   -> receiver
-        */
         public static Dictionary<ulong, ulong> Requests = new Dictionary<ulong, ulong>();
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
@@ -62,7 +58,7 @@ namespace Essentials.Commands {
                 case "accept":
                 case "a": {
                     if (!player.HasPermission($"{Permission}.accept")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.NoPermission($"{Permission}.accept");
                     }
 
                     if (!Requests.ContainsValue(senderId)) {
@@ -105,7 +101,7 @@ namespace Essentials.Commands {
                 case "deny":
                 case "d": {
                     if (!player.HasPermission($"{Permission}.deny")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.NoPermission($"{Permission}.deny");
                     }
 
                     if (!Requests.ContainsValue(senderId)) {
@@ -127,7 +123,7 @@ namespace Essentials.Commands {
                 case "cancel":
                 case "c": {
                     if (!player.HasPermission($"{Permission}.cancel")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.NoPermission($"{Permission}.cancel");
                     }
 
                     if (!Requests.ContainsKey(senderId)) {
@@ -141,7 +137,7 @@ namespace Essentials.Commands {
 
                 default: {
                     if (!player.HasPermission($"{Permission}.send")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.NoPermission($"{Permission}.send");
                     }
 
                     if (!args[0].IsValidPlayerName) {

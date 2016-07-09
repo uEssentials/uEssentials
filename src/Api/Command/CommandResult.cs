@@ -102,9 +102,17 @@ namespace Essentials.Api.Command {
         /// <param name="message">message for sender</param>
         /// <param name="args">Arguments of message</param>
         /// <returns></returns>
-        public static CommandResult Generic(string message, params object[] args)
-            => new CommandResult(string.Format(message, args), ResultType.GENERIC);
+        public static CommandResult Generic(string message, params object[] args) {
+            return new CommandResult(string.Format(message, args), ResultType.GENERIC);
+        }
 
+        /* COMMON UTIL RESULTS */
+
+        public static CommandResult NoPermission(string permission) {
+            return UEssentials.Config.ShowPermissionOnErrorMessage 
+                ? Lang("COMMAND_NO_PERMISSION_WITH_PERM", permission) 
+                : Lang("COMMAND_NO_PERMISSION");
+        }
 
         public CommandResult(string message, ResultType type) {
             Message = message;

@@ -27,13 +27,14 @@ using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Task;
+using Essentials.Common;
 
 namespace Essentials.Commands {
 
     [CommandInfo(
         Name = "poll",
         Description = "Start/Stop an poll",
-        Usage = "[start/stop/list/info]"
+        Usage = "[start | stop | list | info]"
     )]
     public class CommandPoll : EssCommand {
 
@@ -53,126 +54,113 @@ namespace Essentials.Commands {
             }
         };
 
+        private static readonly string[] _validInputs = { "start", "stop", "list", "info" }; 
+
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (args.IsEmpty) {
+            if (args.IsEmpty || _validInputs.None(i => i.EqualsIgnoreCase(args[0].ToString())) ) {
                 return CommandResult.ShowUsage();
-            } else {
-                switch (args[0].ToString().ToLower()) {
-                    case "start":
-                        if (src.HasPermission("essentials.command.poll.start")) {
-                            if (args.Length < 4) {
-                                return CommandResult.InvalidArgs("/poll start [name] [duration] [description]");
-                            }
+            }
+            if (!src.HasPermission($"{Permission}.{args[0]}")) {
+                return CommandResult.NoPermission($"{Permission}.{args[0]}");
+            }
+            switch (args[0].ToString().ToLower()) {
+                case "start": {
+                    if (args.Length < 4) {
+                        return CommandResult.InvalidArgs("/poll start [name] [duration] [description]");
+                    }
 
-                            var pollName = args[1].ToString();
+                    var pollName = args[1].ToString();
 
-                            lock (Polls) {
-                                if (Polls.ContainsKey(pollName)) {
-                                    return CommandResult.Lang("POLL_NAME_IN_USE");
-                                }
-                            }
-
-                            var pollDescription = args.Join(3);
-
-                            if (args[2].IsInt) {
-                                var poll = new Poll(
-                                    pollName,
-                                    pollDescription,
-                                    args[2].ToInt
-                                    );
-
-                                poll.Start();
-                            } else {
-                                return CommandResult.Lang("INVALID_NUMBER", args[2]);
-                            }
-                        } else {
-                            return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                    lock (Polls) {
+                        if (Polls.ContainsKey(pollName)) {
+                            return CommandResult.Lang("POLL_NAME_IN_USE");
                         }
-                        break;
+                    }
 
-                    case "stop":
-                        if (src.HasPermission("essentials.command.poll.stop")) {
-                            if (args.Length < 2) {
-                                return CommandResult.InvalidArgs("/poll stop [name]");
-                            }
+                    var pollDescription = args.Join(3);
 
-                            var pollName = args[1].ToString();
+                    if (args[2].IsInt) {
+                        var poll = new Poll(
+                            pollName,
+                            pollDescription,
+                            args[2].ToInt
+                            );
 
-                            if (!PollExists(pollName, src)) {
-                                return CommandResult.Empty();
-                            }
+                        poll.Start();
+                    } else {
+                        return CommandResult.Lang("INVALID_NUMBER", args[2]);
+                    }
+                    break;
+                }
 
-                            lock (Polls) {
-                                Polls[pollName].Stop();
-                            }
-                        } else {
-                            return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                case "stop": {
+                    if (args.Length < 2) {
+                        return CommandResult.InvalidArgs("/poll stop [name]");
+                    }
+
+                    var pollName = args[1].ToString();
+
+                    if (!PollExists(pollName, src)) {
+                        return CommandResult.Empty();
+                    }
+
+                    lock (Polls) {
+                        Polls[pollName].Stop();
+                    }
+                    break;
+                }
+
+                case "list": {
+                    lock (Polls) {
+                        if (!Polls.Any()) {
+                            return CommandResult.Lang("POLL_NONE");
                         }
-                        break;
 
-                    case "list":
-                        if (src.HasPermission("essentials.command.poll.info")) {
-                            lock (Polls) {
-                                if (!Polls.Any()) {
-                                    return CommandResult.Lang("POLL_NONE");
-                                }
+                        EssLang.Send(src, "POLL_LIST");
 
-                                lock (Polls) {
-                                    EssLang.Send(src, "POLL_LIST");
-
-                                    foreach (var poll in Polls.Values) {
-                                        EssLang.Send(src,
-                                            "POLL_LIST_ENTRY",
-                                            poll.Name,
-                                            poll.Description,
-                                            poll.YesVotes,
-                                            poll.NoVotes
-                                        );
-                                    }
-                                }
-                            }
-                        } else {
-                            return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        foreach (var poll in Polls.Values) {
+                            EssLang.Send(src,
+                                "POLL_LIST_ENTRY",
+                                poll.Name,
+                                poll.Description,
+                                poll.YesVotes,
+                                poll.NoVotes
+                             );
                         }
-                        break;
+                    }
+                    break;
+                }
 
-                    case "info":
-                        if (src.HasPermission("essentials.command.poll.info")) {
-                            lock (Polls) {
-                                if (!Polls.Any()) {
-                                    return CommandResult.Lang("POLL_NONE");
-                                }
-
-                                if (args.Length < 2) {
-                                    return CommandResult.InvalidArgs("Use /poll info [poll_name]");
-                                }
-
-                                var pollName = args[1].ToString();
-
-                                if (!PollExists(pollName, src)) {
-                                    return CommandResult.Empty();
-                                }
-
-                                var poll = Polls[pollName];
-
-                                EssLang.Send(src, "POLL_INFO", pollName);
-
-                                EssLang.Send(
-                                    src,
-                                    "POLL_LIST_ENTRY",
-                                    pollName,
-                                    poll.Description,
-                                    poll.YesVotes,
-                                    poll.NoVotes
-                                 );
-                            }
-                        } else {
-                            return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                case "info": {
+                    lock (Polls) {
+                        if (!Polls.Any()) {
+                            return CommandResult.Lang("POLL_NONE");
                         }
-                        break;
 
-                    default:
-                        return CommandResult.ShowUsage();
+                        if (args.Length < 2) {
+                            return CommandResult.InvalidArgs("Use /poll info [poll_name]");
+                        }
+
+                        var pollName = args[1].ToString();
+
+                        if (!PollExists(pollName, src)) {
+                            return CommandResult.Empty();
+                        }
+
+                        var poll = Polls[pollName];
+
+                        EssLang.Send(src, "POLL_INFO", pollName);
+
+                        EssLang.Send(
+                            src,
+                            "POLL_LIST_ENTRY",
+                            pollName,
+                            poll.Description,
+                            poll.YesVotes,
+                            poll.NoVotes
+                         );
+                    }
+                    break;
                 }
             }
 
