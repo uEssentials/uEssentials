@@ -58,14 +58,14 @@ namespace Essentials.NativeModules.Kit.Commands {
                 var player = src.ToPlayer();
 
                 if (!KitModule.Instance.KitManager.Contains(args[0].ToString())) {
-                    return CommandResult.Lang(EssLang.KIT_NOT_EXIST, args[0]);
+                    return CommandResult.Lang("KIT_NOT_EXIST", args[0]);
                 }
 
                 var kitName = args[0].ToLowerString;
                 var requestedKit = KitModule.Instance.KitManager.GetByName(kitName);
 
                 if (!requestedKit.CanUse(player)) {
-                    return CommandResult.Lang(EssLang.KIT_NO_PERMISSION);
+                    return CommandResult.Lang("KIT_NO_PERMISSION");
                 }
 
                 var steamPlayerId = player.CSteamId.m_SteamID;
@@ -75,7 +75,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                     var ecoProvider = UEssentials.EconomyProvider.Value;
 
                     if (!ecoProvider.Has(player, kitCost)) {
-                        return CommandResult.Lang(EssLang.KIT_NO_MONEY, kitCost, ecoProvider.Currency);
+                        return CommandResult.Lang("KIT_NO_MONEY", kitCost, ecoProvider.Currency);
                     }
                 }
 
@@ -89,7 +89,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                             if ((remainingTime.TotalSeconds + 1) > globalCooldown) {
                                 GlobalCooldown[steamPlayerId] = DateTime.Now;
                             } else {
-                                return CommandResult.Lang(EssLang.KIT_GLOBAL_COOLDOWN,
+                                return CommandResult.Lang("KIT_GLOBAL_COOLDOWN",
                                     TimeUtil.FormatSeconds((uint) (globalCooldown - remainingTime.TotalSeconds)));
                             }
                         } else {
@@ -109,7 +109,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                             if ((remainingTime.TotalSeconds + 1) > kitCooldown) {
                                 Cooldowns[steamPlayerId][kitName] = DateTime.Now;
                             } else {
-                                return CommandResult.Lang(EssLang.KIT_COOLDOWN, TimeUtil.FormatSeconds(
+                                return CommandResult.Lang("KIT_COOLDOWN", TimeUtil.FormatSeconds(
                                     (uint) (kitCooldown - remainingTime.TotalSeconds)));
                             }
                         } else {
@@ -121,7 +121,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                 if (kitCost > 0) {
                     UEssentials.EconomyProvider.IfPresent(ec => {
                         ec.Withdraw(player, kitCost);
-                        EssLang.KIT_PAID.SendTo(player, kitCost, ec.Currency);
+                        EssLang.Send(player, "KIT_PAID", kitCost, ec.Currency);
                     });
                 }
 
@@ -134,23 +134,23 @@ namespace Essentials.NativeModules.Kit.Commands {
                 }
 
                 if (!KitModule.Instance.KitManager.Contains(kitName)) {
-                    return CommandResult.Lang(EssLang.KIT_NOT_EXIST, kitName);
+                    return CommandResult.Lang("KIT_NOT_EXIST", kitName);
                 }
 
                 var kit = KitModule.Instance.KitManager.GetByName(kitName);
 
                 if (args[1].Is("*")) {
                     UServer.Players.ForEach(kit.GiveTo);
-                    EssLang.KIT_GIVEN_SENDER_ALL.SendTo(src, kitName);
+                    EssLang.Send(src, "KIT_GIVEN_SENDER_ALL", kitName);
                 } else {
                     var target = args[1].ToPlayer;
 
                     if (target == null) {
-                        return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[1]);
+                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
                     }
 
                     kit.GiveTo(target);
-                    EssLang.KIT_GIVEN_SENDER.SendTo(src, kitName, target);
+                    EssLang.Send(src, "KIT_GIVEN_SENDER", kitName, target);
                 }
             }
 

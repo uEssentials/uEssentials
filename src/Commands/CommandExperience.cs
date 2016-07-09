@@ -43,13 +43,13 @@ namespace Essentials.Commands {
             }
 
             if (!args[0].IsInt) {
-                return CommandResult.Lang(EssLang.INVALID_NUMBER, args[0]);
+                return CommandResult.Lang("INVALID_NUMBER", args[0]);
             }
 
             var amount = args[0].ToInt;
 
             if (amount > MAX_INPUT_VALUE || amount < -MAX_INPUT_VALUE) {
-                return CommandResult.Lang(EssLang.NUMBER_BETWEEN, -MAX_INPUT_VALUE, MAX_INPUT_VALUE);
+                return CommandResult.Lang("NUMBER_BETWEEN", -MAX_INPUT_VALUE, MAX_INPUT_VALUE);
             }
 
             if (args.Length == 2) {
@@ -57,19 +57,19 @@ namespace Essentials.Commands {
                     UServer.Players.ForEach(p => GiveExp(p, amount));
 
                     if (amount >= 0) {
-                        EssLang.EXPERIENCE_GIVEN.SendTo(src, amount, EssLang.EVERYONE);
+                        EssLang.Send(src, "EXPERIENCE_GIVEN", amount, EssLang.Translate("EVERYONE"));
                     } else {
-                        EssLang.EXPERIENCE_TAKE.SendTo(src, -amount, EssLang.EVERYONE);
+                        EssLang.Send(src, "EXPERIENCE_TAKE", -amount, EssLang.Translate("EVERYONE"));
                     }
                 } else if (!args[1].IsValidPlayerName) {
-                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[1]);
+                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
                 } else {
                     var player = args[1].ToPlayer;
 
                     if (amount >= 0) {
-                        EssLang.EXPERIENCE_GIVEN.SendTo(src, amount, player.DisplayName);
+                        EssLang.Send(src, "EXPERIENCE_GIVEN", amount, player.DisplayName);
                     } else {
-                        EssLang.EXPERIENCE_TAKE.SendTo(src, -amount, player.DisplayName);
+                        EssLang.Send(src, "EXPERIENCE_TAKE", -amount, player.DisplayName);
                     }
 
                     GiveExp(player, amount);
@@ -94,9 +94,9 @@ namespace Essentials.Commands {
             }
 
             if (amount >= 0)
-                EssLang.EXPERIENCE_RECEIVED.SendTo(player, amount);
+                EssLang.Send(player, "EXPERIENCE_RECEIVED", amount);
             else
-                EssLang.EXPERIENCE_LOST.SendTo(player, -amount);
+                EssLang.Send(player, "EXPERIENCE_LOST", -amount);
 
             player.UnturnedPlayer.skills.Experience = playerExp;
             player.UnturnedPlayer.skills.askSkills(player.CSteamId);

@@ -54,29 +54,29 @@ namespace Essentials.NativeModules.Warp.Commands {
             }
 
             if (!WarpModule.Instance.WarpManager.Contains(parameters[0].ToString())) {
-                return CommandResult.Lang(EssLang.WARP_NOT_EXIST, parameters[0]);
+                return CommandResult.Lang("WARP_NOT_EXIST", parameters[0]);
             }
 
             if (!player.HasPermission($"essentials.warp.{parameters[0]}")) {
-                return CommandResult.Lang(EssLang.WARP_NO_PERMISSION, parameters[0]);
+                return CommandResult.Lang("WARP_NO_PERMISSION", parameters[0]);
             }
 
             if (player.RocketPlayer.Stance == EPlayerStance.DRIVING ||
                 player.RocketPlayer.Stance == EPlayerStance.SITTING) {
-                return CommandResult.Lang(EssLang.CANNOT_TELEPORT_DRIVING);
+                return CommandResult.Lang("CANNOT_TELEPORT_DRIVING");
             }
 
             var dest = WarpModule.Instance.WarpManager[parameters[0].ToString()];
             var cooldown = UEssentials.Config.WarpCommand.Cooldown;
 
             if (cooldown > 0 && !player.HasPermission("essentials.bypass.warpcooldown")) {
-                EssLang.WARP_COOLDOWN.SendTo(source, cooldown);
+                EssLang.Send(source, "WARP_COOLDOWN", cooldown);
             }
 
             var task = Tasks.New(t => {
                 Delay.Remove(player.CSteamId.m_SteamID);
                 player.Teleport(dest.Location, dest.Rotation);
-                EssLang.WARP_TELEPORTED.SendTo(source, parameters[0]);
+                EssLang.Send(source, "WARP_TELEPORTED", parameters[0]);
             });
 
             task.Delay(player.HasPermission("essentials.bypass.warpcooldown") ? 0 : cooldown*1000).Go();

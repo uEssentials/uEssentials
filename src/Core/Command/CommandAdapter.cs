@@ -67,9 +67,9 @@ namespace Essentials.Core.Command {
                     : UEssentials.ConsoleSource;
 
                 if (commandSource.IsConsole && Command.AllowedSource == AllowedSource.PLAYER) {
-                    EssLang.CONSOLE_CANNOT_EXECUTE.SendTo(commandSource);
+                    EssLang.Send(commandSource, "CONSOLE_CANNOT_EXECUTE");
                 } else if (!commandSource.IsConsole && Command.AllowedSource == AllowedSource.CONSOLE) {
-                    EssLang.PLAYER_CANNOT_EXECUTE.SendTo(commandSource);
+                    EssLang.Send(commandSource, "PLAYER_CANNOT_EXECUTE");
                 } else {
                     var cmdArgs = new CommandArgs(args);
                     var preExec = new CommandPreExecuteEvent(Command, cmdArgs, commandSource);
@@ -99,7 +99,7 @@ namespace Essentials.Core.Command {
                 // Check if is player...
                 var player = caller as UnturnedPlayer;
                 if (player != null) {
-                    UPlayer.TryGet(player, EssLang.COMMAND_ERROR_OCURRED.SendTo);
+                    UPlayer.TryGet(player, p => EssLang.Send(p, "COMMAND_ERROR_OCURRED"));
                 }
 
                 UEssentials.Logger.LogError(e.ToString());

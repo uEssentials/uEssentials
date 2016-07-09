@@ -62,11 +62,11 @@ namespace Essentials.Commands {
                 case "accept":
                 case "a": {
                     if (!player.HasPermission($"{Permission}.accept")) {
-                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
                     if (!Requests.ContainsValue(senderId)) {
-                        return CommandResult.Lang(EssLang.TPA_NONE);
+                        return CommandResult.Lang("TPA_NONE");
                     }
 
                     var whoSentId = new List<ulong>(Requests.Keys).FirstOrDefault(k => Requests[k] == senderId);
@@ -74,17 +74,17 @@ namespace Essentials.Commands {
 
                     /* Should never happen */
                     if (whoSent == null) {
-                        return CommandResult.Lang(EssLang.TPA_NONE);
+                        return CommandResult.Lang("TPA_NONE");
                     }
 
                     if (whoSent.Stance == EPlayerStance.DRIVING ||
                         whoSent.Stance == EPlayerStance.SITTING) {
-                        EssLang.CANNOT_TELEPORT_DRIVING.SendTo(whoSent);
-                        return CommandResult.Lang(EssLang.TPA_CANNOT_TELEPORT, whoSent.DisplayName);
+                        EssLang.Send(whoSent, "CANNOT_TELEPORT_DRIVING");
+                        return CommandResult.Lang("TPA_CANNOT_TELEPORT", whoSent.DisplayName);
                     }
 
-                    EssLang.TPA_ACCEPTED_SENDER.SendTo(src, whoSent.DisplayName);
-                    EssLang.TPA_ACCEPTED.SendTo(whoSent, src.DisplayName);
+                    EssLang.Send(src, "TPA_ACCEPTED_SENDER", whoSent.DisplayName);
+                    EssLang.Send(whoSent, "TPA_ACCEPTED", src.DisplayName);
                     Requests.Remove(whoSentId);
 
                     var tpaSettings = EssCore.Instance.Config.Tpa;
@@ -105,21 +105,21 @@ namespace Essentials.Commands {
                 case "deny":
                 case "d": {
                     if (!player.HasPermission($"{Permission}.deny")) {
-                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
                     if (!Requests.ContainsValue(senderId)) {
-                        return CommandResult.Lang(EssLang.TPA_NONE);
+                        return CommandResult.Lang("TPA_NONE");
                     }
 
                     var whoSentId = new List<ulong>(Requests.Keys).FirstOrDefault(k => Requests[k] == senderId);
                     var whoSent = UPlayer.From(new Steamworks.CSteamID(whoSentId));
 
                     if (whoSent != null) {
-                        EssLang.TPA_DENIED.SendTo(whoSent, src.DisplayName);
+                        EssLang.Send(whoSent, "TPA_DENIED", src.DisplayName);
                     }
 
-                    EssLang.TPA_DENIED_SENDER.SendTo(src, whoSent == null ? "Unknown" : whoSent.DisplayName);
+                    EssLang.Send(src, "TPA_DENIED_SENDER", whoSent == null ? "Unknown" : whoSent.DisplayName);
                     Requests.Remove(whoSentId);
                     break;
                 }
@@ -127,25 +127,25 @@ namespace Essentials.Commands {
                 case "cancel":
                 case "c": {
                     if (!player.HasPermission($"{Permission}.cancel")) {
-                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
                     if (!Requests.ContainsKey(senderId)) {
-                        return CommandResult.Lang(EssLang.TPA_NONE);
+                        return CommandResult.Lang("TPA_NONE");
                     }
 
                     Requests.Remove(senderId);
-                    EssLang.TPA_CANCELLED.SendTo(src);
+                    EssLang.Send(src, "TPA_CANCELLED");
                     break;
                 }
 
                 default: {
                     if (!player.HasPermission($"{Permission}.send")) {
-                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
                     if (!args[0].IsValidPlayerName) {
-                        return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     }
 
                     /*
@@ -158,12 +158,12 @@ namespace Essentials.Commands {
                     var target = args[0].ToPlayer;
 
                     if (target == player) {
-                        return CommandResult.Lang(EssLang.TPA_YOURSELF);
+                        return CommandResult.Lang("TPA_YOURSELF");
                     }
 
                     Requests.Add(senderId, target.CSteamId.m_SteamID);
-                    EssLang.TPA_SENT_SENDER.SendTo(src, target.DisplayName);
-                    EssLang.TPA_SENT.SendTo(target, src.DisplayName);
+                    EssLang.Send(src, "TPA_SENT_SENDER", target.DisplayName);
+                    EssLang.Send(target, "TPA_SENT", src.DisplayName);
 
                     var tpaSettings = EssCore.Instance.Config.Tpa;
 

@@ -53,7 +53,7 @@ namespace Essentials.Commands {
                         var poll = Polls[pollName];
 
                         if (poll.Voted.Contains(src.DisplayName)) {
-                            return CommandResult.Lang(EssLang.POLL_ALREADY_VOTED);
+                            return CommandResult.Lang("POLL_ALREADY_VOTED");
                         }
 
                         poll.YesVotes += 1;
@@ -61,7 +61,7 @@ namespace Essentials.Commands {
 
                         Polls[pollName] = poll;
 
-                        EssLang.POLL_VOTED_YES.SendTo(src, pollName);
+                        EssLang.Send(src, "POLL_VOTED_YES", pollName);
                     }
                     break;
 
@@ -77,7 +77,7 @@ namespace Essentials.Commands {
                         var poll = Polls[pollName];
 
                         if (poll.Voted.Contains(src.DisplayName)) {
-                            return CommandResult.Lang(EssLang.POLL_ALREADY_VOTED);
+                            return CommandResult.Lang("POLL_ALREADY_VOTED");
                         }
 
                         poll.NoVotes += 1;
@@ -85,7 +85,7 @@ namespace Essentials.Commands {
 
                         Polls[pollName] = poll;
 
-                        EssLang.POLL_VOTED_NO.SendTo(src, pollName);
+                        EssLang.Send(src, "POLL_VOTED_NO", pollName);
                     }
                     break;
 

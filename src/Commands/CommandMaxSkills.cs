@@ -43,7 +43,7 @@ namespace Essentials.Commands {
             }
 
             pSkills.askSkills(player.CSteamId);
-            EssLang.MAX_SKILLS.SendTo(player);
+            EssLang.Send(player, "MAX_SKILLS");
         };
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
@@ -59,24 +59,24 @@ namespace Essentials.Commands {
                 }
 
                 if (!args[0].IsBool) {
-                    return CommandResult.Lang(EssLang.INVALID_BOOLEAN, args[0]);
+                    return CommandResult.Lang("INVALID_BOOLEAN", args[0]);
                 }
 
                 if (args.Length == 2 && !src.HasPermission(Permission + ".other")) {
-                    return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                    return CommandResult.Lang("COMMAND_NO_PERMISSION");
                 }
 
                 var overpower = args[0].ToBool;
                 var targetPlayer = args.Length == 2 ? args[1].ToPlayer : src.ToPlayer();
 
                 if (targetPlayer == null) {
-                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[1]);
+                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
                 }
 
                 GiveMaxSkills(targetPlayer, overpower);
 
                 if (src.IsConsole || src.ToPlayer() != targetPlayer) {
-                    EssLang.MAX_SKILLS_TARGET.SendTo(src, targetPlayer.DisplayName);
+                    EssLang.Send(src, "MAX_SKILLS_TARGET", targetPlayer.DisplayName);
                 }
             }
 

@@ -51,7 +51,7 @@ namespace Essentials.Commands {
             var target = args[0].ToPlayer;
 
             if (target == null) {
-                return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
             }
 
             var formatFrom = UEssentials.Config.PMFormatFrom;

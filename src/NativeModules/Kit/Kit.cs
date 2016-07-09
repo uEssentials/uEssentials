@@ -104,11 +104,11 @@ namespace Essentials.NativeModules.Kit {
 
                 if (added || onetime) continue;
 
-                EssLang.INVENTORY_FULL.SendTo(player);
+                EssLang.Send(player, "INVENTORY_FULL");
                 onetime = true;
             }
 
-            EssLang.KIT_GIVEN_RECEIVER.SendTo(player, Name);
+            EssLang.Send(player, "KIT_GIVEN_RECEIVER", Name);
         }
 
     }

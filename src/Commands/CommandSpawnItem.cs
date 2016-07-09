@@ -50,7 +50,7 @@ namespace Essentials.Commands {
                 var argPos = args.GetVector3(2);
 
                 if (!argPos.HasValue) {
-                    return CommandResult.Lang(EssLang.INVALID_COORDS, args[2], args[3], args[4]);
+                    return CommandResult.Lang("INVALID_COORDS", args[2], args[3], args[4]);
                 }
 
                 pos = argPos.Value;
@@ -61,18 +61,18 @@ namespace Essentials.Commands {
             ushort amount;
 
             if (!ushort.TryParse(rawAmount, out amount)) {
-                return CommandResult.Lang(EssLang.INVALID_NUMBER, rawAmount);
+                return CommandResult.Lang("INVALID_NUMBER", rawAmount);
             }
 
             var itemAsset = ItemUtil.GetItem(rawId);
 
             if (itemAsset.IsAbsent) {
-                return CommandResult.Lang(EssLang.INVALID_ITEM_ID, rawId);
+                return CommandResult.Lang("INVALID_ITEM_ID", rawId);
             }
 
             if (UEssentials.Config.GiveItemBlacklist.Contains(itemAsset.Value.id) &&
                 !src.HasPermission("essentials.bypass.blacklist.item")) {
-                return CommandResult.Lang(EssLang.BLACKLISTED_ITEM, $"{itemAsset.Value.itemName} ({itemAsset.Value.Id})");
+                return CommandResult.Lang("BLACKLISTED_ITEM", $"{itemAsset.Value.itemName} ({itemAsset.Value.Id})");
             }
 
             var item = new Item(itemAsset.Value.id, true);
@@ -86,9 +86,9 @@ namespace Essentials.Commands {
             }
 
             if (args.Length == 5)
-                EssLang.SPAWNED_ITEM_AT.SendTo(src, amount, itemAsset.Value.Name, pos.x, pos.y, pos.z);
+                EssLang.Send(src, "SPAWNED_ITEM_AT", amount, itemAsset.Value.Name, pos.x, pos.y, pos.z);
             else
-                EssLang.SPAWNED_ITEM.SendTo(src, amount, itemAsset.Value.Name);
+                EssLang.Send(src, "SPAWNED_ITEM", amount, itemAsset.Value.Name);
 
             return CommandResult.Success();
         }

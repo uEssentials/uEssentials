@@ -42,7 +42,7 @@ namespace Essentials.Commands {
                 respawnedCount++;
             });
 
-            EssLang.RESPAWNED_ANIMALS.SendTo(src, respawnedCount);
+            EssLang.Send(src, "RESPAWNED_ANIMALS", respawnedCount);
 
             return CommandResult.Success();
         }

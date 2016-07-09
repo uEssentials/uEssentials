@@ -52,7 +52,7 @@ namespace Essentials.Commands {
                 name = "Everyone";
             } else {
                 if (!args[0].IsValidPlayerName) {
-                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                 }
 
                 var targetPlayer = args[0].ToPlayer;
@@ -62,7 +62,7 @@ namespace Essentials.Commands {
                 name = targetPlayer.CharacterName;
             }
 
-            EssLang.SUDO_EXECUTED.SendTo(src, name, args.Join(1));
+            EssLang.Send(src, "SUDO_EXECUTED", name, args.Join(1));
 
             return CommandResult.Success();
         }

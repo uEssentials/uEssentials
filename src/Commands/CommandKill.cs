@@ -42,14 +42,14 @@ namespace Essentials.Commands {
             if (args[0].Is("*")) {
                 UServer.Players.ForEach(p => p.Kill());
 
-                EssLang.KILL_ALL.SendTo(src);
+                EssLang.Send(src, "KILL_ALL");
             } else if (args[0].IsValidPlayerName) {
                 var target = args[0].ToPlayer;
                 target.Kill();
 
-                EssLang.KILL_PLAYER.SendTo(src, target.DisplayName);
+                EssLang.Send(src, "KILL_PLAYER", target.DisplayName);
             } else {
-                EssLang.PLAYER_NOT_FOUND.SendTo(src, args[0]);
+                EssLang.Send(src, "PLAYER_NOT_FOUND", args[0]);
             }
 
             return CommandResult.Success();

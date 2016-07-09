@@ -52,16 +52,16 @@ namespace Essentials.NativeModules.Kit.Commands {
             var cost = 0d;
 
             if (KitModule.Instance.KitManager.Contains(name)) {
-                return CommandResult.Lang(EssLang.KIT_ALREADY_EXIST, name);
+                return CommandResult.Lang("KIT_ALREADY_EXIST", name);
             }
 
             if (args.Length > 1) {
                 if (!args[1].IsInt) {
-                    return CommandResult.Lang(EssLang.INVALID_NUMBER, args[1]);
+                    return CommandResult.Lang("INVALID_NUMBER", args[1]);
                 }
 
                 if (args[1].ToInt < 0) {
-                    return CommandResult.Lang(EssLang.MUST_POSITIVE);
+                    return CommandResult.Lang("MUST_POSITIVE");
                 }
 
                 cooldown = args[1].ToUint;
@@ -69,7 +69,7 @@ namespace Essentials.NativeModules.Kit.Commands {
 
             if (args.Length > 2) {
                 if (!args[2].IsBool) {
-                    return CommandResult.Lang(EssLang.INVALID_BOOLEAN, args[2]);
+                    return CommandResult.Lang("INVALID_BOOLEAN", args[2]);
                 }
 
                 resetCooldownWhenDie = args[2].ToBool;
@@ -77,11 +77,11 @@ namespace Essentials.NativeModules.Kit.Commands {
 
             if (args.Length > 3) {
                 if (!args[3].IsDouble) {
-                    return CommandResult.Lang(EssLang.INVALID_NUMBER, args[3]);
+                    return CommandResult.Lang("INVALID_NUMBER", args[3]);
                 }
 
                 if (args[3].ToDouble < 0) {
-                    return CommandResult.Lang(EssLang.MUST_POSITIVE);
+                    return CommandResult.Lang("MUST_POSITIVE");
                 }
 
                 cost = args[3].ToDouble;
@@ -208,7 +208,7 @@ namespace Essentials.NativeModules.Kit.Commands {
             };
 
             KitModule.Instance.KitManager.Add(kit);
-            EssLang.CREATED_KIT.SendTo(src, name);
+            EssLang.Send(src, "CREATED_KIT", name);
 
             return CommandResult.Success();
         }

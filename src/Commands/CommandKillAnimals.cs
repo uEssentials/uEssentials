@@ -46,7 +46,7 @@ namespace Essentials.Commands {
                 killedCount++;
             });
 
-            EssLang.KILLED_ANIMALS.SendTo(src, killedCount);
+            EssLang.Send(src, "KILLED_ANIMALS", killedCount);
 
             return CommandResult.Success();
         }

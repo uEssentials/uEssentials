@@ -27,14 +27,14 @@ namespace Essentials.Common.Util {
     public static class TimeUtil {
 
         public static string FormatSeconds(uint seconds) {
-            var msgDay = EssLang.DAY.GetMessage();
-            var msgDays = EssLang.DAYS.GetMessage();
-            var msgSecond = EssLang.SECOND.GetMessage();
-            var msgSeconds = EssLang.SECONDS.GetMessage();
-            var msgMinute = EssLang.MINUTE.GetMessage();
-            var msgMinutes = EssLang.MINUTES.GetMessage();
-            var msgHour = EssLang.HOUR.GetMessage();
-            var msgHours = EssLang.HOURS.GetMessage();
+            var msgDay = EssLang.Translate("DAY");
+            var msgDays = EssLang.Translate("DAYS");
+            var msgSecond = EssLang.Translate("SECOND");
+            var msgSeconds = EssLang.Translate("SECONDS");
+            var msgMinute = EssLang.Translate("MINUTE");
+            var msgMinutes = EssLang.Translate("MINUTES");
+            var msgHour = EssLang.Translate("HOUR");
+            var msgHours = EssLang.Translate("HOURS");
 
             const uint MIN = 60;
             const uint HOUR = MIN*MIN;

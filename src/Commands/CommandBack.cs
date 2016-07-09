@@ -40,12 +40,12 @@ namespace Essentials.Commands {
             var player = src.ToPlayer();
 
             if (!player.HasMetadata("back_pos")) {
-                return CommandResult.Lang(EssLang.NOT_DIED_YET);
+                return CommandResult.Lang("NOT_DIED_YET");
             }
 
             var backPosition = player.GetMetadata<Vector3>("back_pos");
             src.ToPlayer().Teleport(backPosition);
-            EssLang.RETURNED.SendTo(src);
+            EssLang.Send(src, "RETURNED");
 
             return CommandResult.Success();
         }

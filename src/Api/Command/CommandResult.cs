@@ -86,13 +86,13 @@ namespace Essentials.Api.Command {
 
         /// <summary>
         /// Commonly indicate that an given argument is invalid, and send the
-        /// give <paramref name="lang"/> to sender.
+        /// give <paramref name="key"/> to sender.
         /// </summary>
-        /// <param name="lang">Translation entry</param>
+        /// <param name="key">Translation entry</param>
         /// <param name="args">Arguments of translation entry</param>
         /// <returns></returns>
-        public static CommandResult Lang(EssLang lang, params object[] args) {
-            return new CommandResult(lang.GetMessage(args), ResultType.LANG);
+        public static CommandResult Lang(string key, params object[] args) {
+            return new CommandResult(EssLang.Translate(key, args), ResultType.LANG);
         }
 
         /// <summary>

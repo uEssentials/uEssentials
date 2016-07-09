@@ -40,9 +40,9 @@ namespace Essentials.NativeModules.Warp.Commands {
                 ).ToArray();
 
             if (warps.Length == 0)
-                EssLang.WARP_NONE.SendTo(source);
+                EssLang.Send(source, "WARP_NONE");
             else
-                EssLang.WARP_LIST.SendTo(source, string.Join(", ", warps));
+                EssLang.Send(source, "WARP_LIST", string.Join(", ", warps));
 
             return CommandResult.Success();
         }

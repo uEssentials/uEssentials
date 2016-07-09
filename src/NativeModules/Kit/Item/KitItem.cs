@@ -69,9 +69,7 @@ namespace Essentials.NativeModules.Kit.Item {
 
         public KitItem(ushort id, byte durability, byte amount) {
             Preconditions.CheckState(
-                Assets.find(EAssetType.ITEM, id) != null,
-                EssLang.INVALID_ITEM_ID.GetMessage(id)
-                );
+                Assets.find(EAssetType.ITEM, id) != null, EssLang.Translate("INVALID_ITEM_ID", id));
 
             Id = id;
             Durability = durability;

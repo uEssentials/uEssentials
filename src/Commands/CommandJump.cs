@@ -48,14 +48,14 @@ namespace Essentials.Commands {
             var eyePos = player.GetEyePosition(dist);
 
             if (!eyePos.HasValue) {
-                return CommandResult.Lang(EssLang.JUMP_NO_POSITION);
+                return CommandResult.Lang("JUMP_NO_POSITION");
             }
 
             var point = eyePos.Value;
             point.y += 6;
 
             player.Teleport(point);
-            EssLang.JUMPED.SendTo(src, point.x, point.y, point.z);
+            EssLang.Send(src, "JUMPED", point.x, point.y, point.z);
 
             return CommandResult.Success();
         }

@@ -50,13 +50,13 @@ namespace Essentials.Commands {
                 if (currentVeh != null) {
                     VehicleManager.sendVehicleHealth(currentVeh, currentVeh.asset.health);
 
-                    EssLang.VEHICLE_REPAIRED.SendTo(src);
+                    EssLang.Send(src, "VEHICLE_REPAIRED");
                 } else {
-                    return CommandResult.Lang(EssLang.NOT_IN_VEHICLE);
+                    return CommandResult.Lang("NOT_IN_VEHICLE");
                 }
             } else if (args[0].Is("all")) {
                 if (!src.HasPermission(Permission + ".all")) {
-                    return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                    return CommandResult.Lang("COMMAND_NO_PERMISSION");
                 }
 
                 lock (UWorld.Vehicles) {
@@ -67,7 +67,7 @@ namespace Essentials.Commands {
                             VehicleManager.sendVehicleHealth(vehicle, vehicle.asset.health);
                         });
 
-                    EssLang.VEHICLE_REPAIRED_ALL.SendTo(src);
+                    EssLang.Send(src, "VEHICLE_REPAIRED_ALL");
                 }
             }
 

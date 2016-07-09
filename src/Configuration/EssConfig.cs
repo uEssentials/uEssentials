@@ -44,6 +44,7 @@ namespace Essentials.Configuration {
         public bool EnableTextCommands;
         public bool EnableDeathMessages;
         public bool EnableJoinLeaveMessage;
+        public bool ShowPermissionOnErrorMessage;
 
         public bool EnablePollRunningMessage;
         public int PollRunningMessageCooldown;
@@ -83,6 +84,7 @@ namespace Essentials.Configuration {
             EnableJoinLeaveMessage = true;
             EnableTextCommands = true;
             EnableDeathMessages = true;
+            ShowPermissionOnErrorMessage = true;
 
             EnablePollRunningMessage = true;
             PollRunningMessageCooldown = 20;

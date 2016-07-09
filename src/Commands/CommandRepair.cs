@@ -77,7 +77,7 @@ namespace Essentials.Commands {
             }
             if (args[0].Is("all")) {
                 player.RocketPlayer.Inventory.Items.ToList().ForEach(item => Repair(player, item));
-                EssLang.ALL_REPAIRED.SendTo(src);
+                EssLang.Send(src, "ALL_REPAIRED");
             } else if (args[0].Is("hand")) {
                 Repair(player, player.Inventory.Items[0]);
                 Repair(player, player.Inventory.Items[1]);
@@ -86,7 +86,7 @@ namespace Essentials.Commands {
                     player.Equipment.sendUpdateState();
                 }
 
-                EssLang.HAND_REPAIRED.SendTo(src);
+                EssLang.Send(src, "HAND_REPAIRED");
             }
 
             return CommandResult.Success();

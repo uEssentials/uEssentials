@@ -54,7 +54,7 @@ namespace Essentials.Commands {
             var playerId = player.CSteamId;
 
             if (Cooldown.HasEntry(playerId)) {
-                return CommandResult.Lang(EssLang.USE_COOLDOWN,
+                return CommandResult.Lang("USE_COOLDOWN",
                     TimeUtil.FormatSeconds((uint) Cooldown.GetRemainingTime(playerId)));
             }
 
@@ -63,11 +63,11 @@ namespace Essentials.Commands {
 
             if (player.RocketPlayer.Stance == EPlayerStance.DRIVING ||
                 player.RocketPlayer.Stance == EPlayerStance.SITTING) {
-                return CommandResult.Lang(EssLang.CANNOT_TELEPORT_DRIVING);
+                return CommandResult.Lang("CANNOT_TELEPORT_DRIVING");
             }
 
             if (!BarricadeManager.tryGetBed(player.CSteamId, out position, out angle)) {
-                return CommandResult.Lang(EssLang.WITHOUT_BED);
+                return CommandResult.Lang("WITHOUT_BED");
             }
 
             var homeCommand = UEssentials.Config.HomeCommand;
@@ -80,13 +80,13 @@ namespace Essentials.Commands {
             }
 
             if (delay > 0) {
-                EssLang.TELEPORT_DELAY.SendTo(src, TimeUtil.FormatSeconds((uint) delay));
+                EssLang.Send(src, "TELEPORT_DELAY", TimeUtil.FormatSeconds((uint) delay));
             }
 
             var task = Tasks.New(t => {
                 Delay.Remove(playerId.m_SteamID);
                 player.Teleport(position, angle);
-                EssLang.TELEPORTED_BED.SendTo(src);
+                EssLang.Send(src, "TELEPORTED_BED");
             }).Delay(delay*1000);
 
             task.Go();

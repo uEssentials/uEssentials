@@ -56,22 +56,22 @@ namespace Essentials.Commands {
                 var steamId = new CSteamID(ulong.Parse(args[0].ToString()));
 
                 if (!steamId.IsValid()) {
-                    return CommandResult.Lang(EssLang.INVALID_STEAMID, steamId.m_SteamID);
+                    return CommandResult.Lang("INVALID_STEAMID", steamId.m_SteamID);
                 }
 
                 ResetPlayer(steamId.m_SteamID);
-                EssLang.PLAYER_RESET.SendTo(src);
+                EssLang.Send(src, "PLAYER_RESET");
             } catch (FormatException) {
                 var target = args[0].ToPlayer;
 
                 if (target == null) {
-                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                 }
 
-                target.Kick(EssLang.PLAYER_RESET_KICK.GetMessage());
+                target.Kick(EssLang.Translate("PLAYER_RESET_KICK"));
                 ResetPlayer(target.CSteamId.m_SteamID);
 
-                EssLang.PLAYER_RESET.SendTo(src);
+                EssLang.Send(src, "PLAYER_RESET");
             }
 
             return CommandResult.Success();

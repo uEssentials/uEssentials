@@ -40,14 +40,14 @@ namespace Essentials.NativeModules.Warp.Commands {
                     }
 
                     if (WarpModule.Instance.WarpManager.Contains(args[0].ToString())) {
-                        return CommandResult.Lang(EssLang.WARP_ALREADY_EXISTS);
+                        return CommandResult.Lang("WARP_ALREADY_EXISTS");
                     }
 
                     var player = src.ToPlayer();
                     var warp = new Warp(args[0].ToString(), player.Position, player.Rotation);
 
                     WarpModule.Instance.WarpManager.Add(warp);
-                    EssLang.WARP_SET.SendTo(src, args[0]);
+                    EssLang.Send(src, "WARP_SET", args[0]);
                     break;
 
                 case 4:
@@ -57,14 +57,14 @@ namespace Essentials.NativeModules.Warp.Commands {
                         warp = new Warp(args[0].ToString(), pos.Value, 0.0F);
 
                         if (WarpModule.Instance.WarpManager.Contains(args[0].ToString())) {
-                            return CommandResult.Lang(EssLang.WARP_ALREADY_EXISTS);
+                            return CommandResult.Lang("WARP_ALREADY_EXISTS");
                         }
 
                         WarpModule.Instance.WarpManager.Add(warp);
 
-                        EssLang.WARP_SET.SendTo(src, args[0]);
+                        EssLang.Send(src, "WARP_SET", args[0]);
                     } else {
-                        return CommandResult.Lang(EssLang.INVALID_COORDS, args[1], args[2], args[3]);
+                        return CommandResult.Lang("INVALID_COORDS", args[1], args[2], args[3]);
                     }
                     break;
 

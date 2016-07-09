@@ -42,14 +42,14 @@ namespace Essentials.Commands {
                 var vehId = args[0];
 
                 if (target == null) {
-                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[1]);
+                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
                 }
 
                 if (!vehId.IsUshort || !IsValidVehicleId(vehId.ToUshort)) {
-                    EssLang.INVALID_VEHICLE_ID.SendTo(src, vehId);
+                    EssLang.Send(src, "INVALID_VEHICLE_ID", vehId);
                 } else {
                     VehicleTool.giveVehicle(target.UnturnedPlayer, vehId.ToUshort);
-                    EssLang.SPAWNED_VEHICLE_AT_PLAYER.SendTo(src, args[1]);
+                    EssLang.Send(src, "SPAWNED_VEHICLE_AT_PLAYER", args[1]);
                 }
             } else if (args.Length == 4) {
                 var pos = args.GetVector3(1);
@@ -59,13 +59,13 @@ namespace Essentials.Commands {
                     var pVal = pos.Value;
 
                     if (!vehId.IsUshort || !IsValidVehicleId(vehId.ToUshort)) {
-                        return CommandResult.Lang(EssLang.INVALID_VEHICLE_ID, vehId);
+                        return CommandResult.Lang("INVALID_VEHICLE_ID", vehId);
                     }
 
                     SpawnVehicle(pVal, vehId.ToUshort);
-                    EssLang.SPAWNED_VEHICLE_AT_POSITION.SendTo(src, pVal.x, pVal.y, pVal.z);
+                    EssLang.Send(src, "SPAWNED_VEHICLE_AT_POSITION", pVal.x, pVal.y, pVal.z);
                 } else {
-                    return CommandResult.Lang(EssLang.INVALID_COORDS, args[1], args[2], args[3]);
+                    return CommandResult.Lang("INVALID_COORDS", args[1], args[2], args[3]);
                 }
             } else {
                 return CommandResult.ShowUsage();

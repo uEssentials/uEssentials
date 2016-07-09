@@ -47,9 +47,9 @@ namespace Essentials.NativeModules.Kit.Commands {
 
 
             if (kits.Count == 0)
-                EssLang.KIT_NONE.SendTo(source);
+                EssLang.Send(source, "KIT_NONE");
             else
-                EssLang.KIT_LIST.SendTo(source, string.Join(", ", kits.ToArray()));
+                EssLang.Send(source, "KIT_LIST", string.Join(", ", kits.ToArray()));
 
             return CommandResult.Success();
         }

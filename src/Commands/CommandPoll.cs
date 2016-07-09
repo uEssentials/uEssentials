@@ -48,7 +48,7 @@ namespace Essentials.Commands {
         internal static readonly Func<string, ICommandSource, bool> PollExists = (pollName, source) => {
             lock (Polls) {
                 if (Polls.ContainsKey(pollName)) return true;
-                EssLang.POLL_NOT_EXIST.SendTo(source);
+                EssLang.Send(source, "POLL_NOT_EXIST");
                 return false;
             }
         };
@@ -68,7 +68,7 @@ namespace Essentials.Commands {
 
                             lock (Polls) {
                                 if (Polls.ContainsKey(pollName)) {
-                                    return CommandResult.Lang(EssLang.POLL_NAME_IN_USE);
+                                    return CommandResult.Lang("POLL_NAME_IN_USE");
                                 }
                             }
 
@@ -83,10 +83,10 @@ namespace Essentials.Commands {
 
                                 poll.Start();
                             } else {
-                                return CommandResult.Lang(EssLang.INVALID_NUMBER, args[2]);
+                                return CommandResult.Lang("INVALID_NUMBER", args[2]);
                             }
                         } else {
-                            return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                            return CommandResult.Lang("COMMAND_NO_PERMISSION");
                         }
                         break;
 
@@ -106,7 +106,7 @@ namespace Essentials.Commands {
                                 Polls[pollName].Stop();
                             }
                         } else {
-                            return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                            return CommandResult.Lang("COMMAND_NO_PERMISSION");
                         }
                         break;
 
@@ -114,25 +114,25 @@ namespace Essentials.Commands {
                         if (src.HasPermission("essentials.command.poll.info")) {
                             lock (Polls) {
                                 if (!Polls.Any()) {
-                                    return CommandResult.Lang(EssLang.POLL_NONE);
+                                    return CommandResult.Lang("POLL_NONE");
                                 }
 
                                 lock (Polls) {
-                                    EssLang.POLL_LIST.SendTo(src);
+                                    EssLang.Send(src, "POLL_LIST");
 
                                     foreach (var poll in Polls.Values) {
-                                        EssLang.POLL_LIST_ENTRY.SendTo(
-                                            src,
+                                        EssLang.Send(src,
+                                            "POLL_LIST_ENTRY",
                                             poll.Name,
                                             poll.Description,
                                             poll.YesVotes,
                                             poll.NoVotes
-                                            );
+                                        );
                                     }
                                 }
                             }
                         } else {
-                            return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                            return CommandResult.Lang("COMMAND_NO_PERMISSION");
                         }
                         break;
 
@@ -140,7 +140,7 @@ namespace Essentials.Commands {
                         if (src.HasPermission("essentials.command.poll.info")) {
                             lock (Polls) {
                                 if (!Polls.Any()) {
-                                    return CommandResult.Lang(EssLang.POLL_NONE);
+                                    return CommandResult.Lang("POLL_NONE");
                                 }
 
                                 if (args.Length < 2) {
@@ -155,18 +155,19 @@ namespace Essentials.Commands {
 
                                 var poll = Polls[pollName];
 
-                                EssLang.POLL_INFO.SendTo(src, pollName);
+                                EssLang.Send(src, "POLL_INFO", pollName);
 
-                                EssLang.POLL_LIST_ENTRY.SendTo(
+                                EssLang.Send(
                                     src,
+                                    "POLL_LIST_ENTRY",
                                     pollName,
                                     poll.Description,
                                     poll.YesVotes,
                                     poll.NoVotes
-                                    );
+                                 );
                             }
                         } else {
-                            return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                            return CommandResult.Lang("COMMAND_NO_PERMISSION");
                         }
                         break;
 
@@ -223,7 +224,7 @@ namespace Essentials.Commands {
             /// Start the poll
             /// </summary>
             public void Start() {
-                EssLang.POLL_STARTED.Broadcast(Name, Description);
+                EssLang.Broadcast("POLL_STARTED", Name, Description);
 
                 var thiz = this;
 
@@ -250,12 +251,13 @@ namespace Essentials.Commands {
                             return;
                         }
 
-                        EssLang.POLL_RUNNING.Broadcast(
+                        EssLang.Broadcast(
+                            "POLL_RUNNING",
                             thiz.Name,
                             thiz.Description,
                             thiz.YesVotes,
                             thiz.NoVotes
-                            );
+                        );
                     }
                 }).Interval(interval).Delay(interval).Go();
             }
@@ -264,7 +266,7 @@ namespace Essentials.Commands {
             /// Stop the poll
             /// </summary>
             public void Stop() {
-                EssLang.POLL_STOPPED.Broadcast(Name, Description, YesVotes, NoVotes);
+                EssLang.Broadcast("POLL_STOPPED", Name, Description, YesVotes, NoVotes);
 
                 lock (Polls) Polls.Remove(Name);
             }

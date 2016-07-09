@@ -40,13 +40,13 @@ namespace Essentials.Commands {
                     return CommandResult.ShowUsage();
                 }
             } else if (!src.HasPermission(Permission + ".other")) {
-                return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                return CommandResult.Lang("COMMAND_NO_PERMISSION");
             }
 
             var player = args.Length > 0 ? args[0].ToPlayer : src.ToPlayer();
 
             if (player == null) {
-                return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
             }
 
             var playerInventory = player.Inventory;
@@ -97,7 +97,7 @@ namespace Essentials.Commands {
             player.UnturnedPlayer.clothing.askWearVest(0, 0, new byte[0], true);
             removeUnequipped();
 
-            EssLang.INVENTORY_CLEAN.SendTo(player);
+            EssLang.Send(player, "INVENTORY_CLEAN");
 
             return CommandResult.Success();
         }

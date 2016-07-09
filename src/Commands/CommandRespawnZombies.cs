@@ -52,7 +52,7 @@ namespace Essentials.Commands {
                 count++;
             });
 
-            EssLang.RESPAWNED_ZOMBIES.SendTo(src, count);
+            EssLang.Send(src, "RESPAWNED_ZOMBIES", count);
 
             return CommandResult.Success();
         }

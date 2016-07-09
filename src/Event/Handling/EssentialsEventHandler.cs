@@ -71,8 +71,7 @@ namespace Essentials.Event.Handling {
             var interval = UEssentials.Config.AntiSpam.Interval;
 
             if ((DateTime.Now - LastChatted[playerId]).TotalSeconds < interval) {
-                EssLang.CHAT_ANTI_SPAM.SendTo(UPlayer.From(playerId));
-
+                EssLang.Send(UPlayer.From(playerId), "CHAT_ANTI_SPAM");
                 cancel = true;
                 return;
             }
@@ -90,7 +89,7 @@ namespace Essentials.Event.Handling {
             var displayName = player.CharacterName;
 
             MiscCommands.Spies.Remove(player.CSteamID.m_SteamID);
-            CommandTell.Conversations.Remove(displayName);
+            CommandTell.Conversations.Remove(player.CSteamID.m_SteamID);
             CachedSkills.Remove(displayName);
             CommandHome.Cooldown.RemoveEntry(player.CSteamID);
 
@@ -129,8 +128,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void GenericPlayerDeath(UnturnedPlayer player, EDeathCause cause,
-            ELimb limb, CSteamID murderer) {
+        private void GenericPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
             var uplayer = UPlayer.From(player);
             var displayName = uplayer.DisplayName;
 
@@ -252,12 +250,12 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
         private void JoinMessage(UnturnedPlayer player) {
-            EssLang.PLAYER_JOINED.Broadcast(player.CharacterName);
+            EssLang.Broadcast("PLAYER_JOINED", player.CharacterName);
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
         private void LeaveMessage(UnturnedPlayer player) {
-            EssLang.PLAYER_EXITED.Broadcast(player.CharacterName);
+            EssLang.Broadcast("PLAYER_EXITED", player.CharacterName);
         }
 
         private static Optional<IEconomyProvider> _cachedEconomyProvider;
@@ -306,7 +304,7 @@ namespace Essentials.Event.Handling {
                 return;
             }
 
-            EssLang.COMMAND_NO_MONEY.SendTo(e.Source, cost);
+            EssLang.Send(e.Source, "COMMAND_NO_MONEY", cost);
             e.Cancelled = true;
         }
 
@@ -332,98 +330,98 @@ namespace Essentials.Event.Handling {
             }
 
             _cachedEconomyProvider.Value.Withdraw(e.Source.ToPlayer(), cost);
-            EssLang.COMMAND_PAID.SendTo(e.Source, cost);
+            EssLang.Send(e.Source, "COMMAND_PAID", cost);
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
         private void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer) {
             switch (cause) {
                 case EDeathCause.BLEEDING:
-                    EssLang.DEATH_BLEEDING.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_BLEEDING", player.CharacterName);
                     break;
 
                 case EDeathCause.BONES:
-                    EssLang.DEATH_BONES.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_BONES", player.CharacterName);
                     break;
 
                 case EDeathCause.FREEZING:
-                    EssLang.DEATH_FREEZING.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_FREEZING", player.CharacterName);
                     break;
 
                 case EDeathCause.BURNING:
-                    EssLang.DEATH_BURNING.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_BURNING", player.CharacterName);
                     break;
 
                 case EDeathCause.FOOD:
-                    EssLang.DEATH_FOOD.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_FOOD", player.CharacterName);
                     break;
 
                 case EDeathCause.WATER:
-                    EssLang.DEATH_WATER.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_WATER", player.CharacterName);
                     break;
 
                 case EDeathCause.GUN:
                     var pKiller = UPlayer.From(killer)?.CharacterName ?? "?";
-                    EssLang.DEATH_GUN.Broadcast(player.CharacterName, TranslateLimb(limb), pKiller);
+                    EssLang.Broadcast("DEATH_GUN", player.CharacterName, TranslateLimb(limb), pKiller);
                     break;
 
                 case EDeathCause.MELEE:
                     pKiller = UPlayer.From(killer)?.CharacterName ?? "?";
-                    EssLang.DEATH_MELEE.Broadcast(player.CharacterName, TranslateLimb(limb), pKiller);
+                    EssLang.Broadcast("DEATH_MELEE", player.CharacterName, TranslateLimb(limb), pKiller);
                     break;
 
                 case EDeathCause.ZOMBIE:
-                    EssLang.DEATH_ZOMBIE.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_ZOMBIE", player.CharacterName);
                     break;
 
                 case EDeathCause.ANIMAL:
-                    EssLang.DEATH_ANIMAL.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_ANIMAL", player.CharacterName);
                     break;
 
                 case EDeathCause.SUICIDE:
-                    EssLang.DEATH_SUICIDE.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_SUICIDE", player.CharacterName);
                     break;
 
                 case EDeathCause.KILL:
-                    EssLang.DEATH_KILL.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_KILL", player.CharacterName);
                     break;
 
                 case EDeathCause.INFECTION:
-                    EssLang.DEATH_INFECTION.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_INFECTION", player.CharacterName);
                     break;
 
                 case EDeathCause.PUNCH:
                     pKiller = UPlayer.From(killer)?.CharacterName ?? "?";
-                    EssLang.DEATH_PUNCH.Broadcast(player.CharacterName, TranslateLimb(limb), pKiller);
+                    EssLang.Broadcast("DEATH_PUNCH", player.CharacterName, TranslateLimb(limb), pKiller);
                     break;
 
                 case EDeathCause.BREATH:
-                    EssLang.DEATH_BREATH.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_BREATH", player.CharacterName);
                     break;
 
                 case EDeathCause.ROADKILL:
                     pKiller = UPlayer.From(killer)?.CharacterName ?? "?";
-                    EssLang.DEATH_ROADKILL.Broadcast(pKiller, player.CharacterName);
+                    EssLang.Broadcast("DEATH_ROADKILL", pKiller, player.CharacterName);
                     break;
 
                 case EDeathCause.VEHICLE:
-                    EssLang.DEATH_VEHICLE.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_VEHICLE", player.CharacterName);
                     break;
 
                 case EDeathCause.GRENADE:
-                    EssLang.DEATH_GRENADE.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_GRENADE", player.CharacterName);
                     break;
 
                 case EDeathCause.SHRED:
-                    EssLang.DEATH_SHRED.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_SHRED", player.CharacterName);
                     break;
 
                 case EDeathCause.LANDMINE:
-                    EssLang.DEATH_LANDMINE.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_LANDMINE", player.CharacterName);
                     break;
 
                 case EDeathCause.ARENA:
-                    EssLang.DEATH_ARENA.Broadcast(player.CharacterName);
+                    EssLang.Broadcast("DEATH_ARENA", player.CharacterName);
                     break;
             }
         }
@@ -441,7 +439,9 @@ namespace Essentials.Event.Handling {
             CommandHome.Delay.Remove(player.CSteamID.m_SteamID);
             CommandHome.Cooldown.RemoveEntry(player.CSteamID);
 
-            UPlayer.TryGet(player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo);
+            UPlayer.TryGet(player, p => {
+                EssLang.Send(p, "TELEPORT_CANCELLED_MOVED");
+            });
         }
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
@@ -454,7 +454,9 @@ namespace Essentials.Event.Handling {
             CommandWarp.Delay[player.CSteamID.m_SteamID].Cancel();
             CommandWarp.Delay.Remove(player.CSteamID.m_SteamID);
 
-            UPlayer.TryGet(player, EssLang.TELEPORT_CANCELLED_MOVED.SendTo);
+            UPlayer.TryGet(player, p => {
+                EssLang.Send(p, "TELEPORT_CANCELLED_MOVED");
+            });
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
@@ -541,22 +543,22 @@ namespace Essentials.Event.Handling {
         private static string TranslateLimb(ELimb limb) {
             switch (limb) {
                 case ELimb.SKULL:
-                    return EssLang.LIMB_HEAD.GetMessage();
+                    return EssLang.Translate("LIMB_HEAD");
 
                 case ELimb.LEFT_HAND:
                 case ELimb.RIGHT_HAND:
                 case ELimb.LEFT_ARM:
                 case ELimb.RIGHT_ARM:
-                    return EssLang.LIMB_ARM.GetMessage();
+                    return EssLang.Translate("LIMB_ARM");
 
                 case ELimb.LEFT_FOOT:
                 case ELimb.RIGHT_FOOT:
                 case ELimb.LEFT_LEG:
                 case ELimb.RIGHT_LEG:
-                    return EssLang.LIMB_LEG.GetMessage();
+                    return EssLang.Translate("LIMB_LEG");
 
                 case ELimb.SPINE:
-                    return EssLang.LIMB_TORSO.GetMessage();
+                    return EssLang.Translate("LIMB_TORSO");
 
                 default:
                     return "?";

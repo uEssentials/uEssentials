@@ -38,15 +38,15 @@ namespace Essentials.Commands {
                     return CommandResult.ShowUsage();
                 }
 
-                EssLang.PING.SendTo(src, src.ToPlayer().Ping);
+                EssLang.Send(src, "PING", src.ToPlayer().Ping);
             } else {
                 var target = args[0].ToPlayer;
 
                 if (target == null) {
-                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                 }
 
-                EssLang.PING_OTHER.SendTo(src, target.DisplayName, target.Ping);
+                EssLang.Send(src, "PING_OTHER", target.DisplayName, target.Ping);
             }
 
             return CommandResult.Success();

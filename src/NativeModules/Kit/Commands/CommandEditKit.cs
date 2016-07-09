@@ -47,7 +47,7 @@ namespace Essentials.NativeModules.Kit.Commands {
             var kitName = args[0].ToString();
 
             if (!kitManager.Contains(kitName)) {
-                return CommandResult.Lang(EssLang.KIT_NOT_EXIST, kitName);
+                return CommandResult.Lang("KIT_NOT_EXIST", kitName);
             }
 
             var kit = kitManager.GetByName(kitName);
@@ -78,13 +78,13 @@ namespace Essentials.NativeModules.Kit.Commands {
 
                     if (args.Length >= 5) {
                         if (!args[4].IsInt) {
-                            return CommandResult.Lang(EssLang.INVALID_NUMBER, args[4]);
+                            return CommandResult.Lang("INVALID_NUMBER", args[4]);
                         }
 
                         var argAsInt = args[4].ToInt;
 
                         if (argAsInt < 0 || argAsInt > 255) {
-                            return CommandResult.Lang(EssLang.NEGATIVE_OR_LARGE);
+                            return CommandResult.Lang("NEGATIVE_OR_LARGE");
                         }
 
                         amount = (byte) args[4].ToInt;
@@ -92,13 +92,13 @@ namespace Essentials.NativeModules.Kit.Commands {
 
                     if (args.Length >= 6) {
                         if (!args[5].IsInt) {
-                            return CommandResult.Lang(EssLang.INVALID_NUMBER, args[5]);
+                            return CommandResult.Lang("INVALID_NUMBER", args[5]);
                         }
 
                         var argAsInt = args[5].ToInt;
 
                         if (argAsInt < 0 || argAsInt > 255) {
-                            return CommandResult.Lang(EssLang.NEGATIVE_OR_LARGE);
+                            return CommandResult.Lang("NEGATIVE_OR_LARGE");
                         }
 
                         durability = (byte) args[5].ToInt;
@@ -115,7 +115,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                             var optAsset = ItemUtil.GetItem(args[3].ToString());
 
                             if (optAsset.IsAbsent) {
-                                return CommandResult.Lang(EssLang.INVALID_ITEM_ID_NAME, args[3]);
+                                return CommandResult.Lang("INVALID_ITEM_ID_NAME", args[3]);
                             }
 
                             kit.Items.Add(new KitItem(optAsset.Value.id, durability, amount));
@@ -128,19 +128,19 @@ namespace Essentials.NativeModules.Kit.Commands {
                             }
 
                             if (!args[3].IsInt) {
-                                return CommandResult.Lang(EssLang.INVALID_NUMBER, args[3]);
+                                return CommandResult.Lang("INVALID_NUMBER", args[3]);
                             }
 
                             var argAsInt = args[3].ToInt;
 
                             if (argAsInt < 0 || argAsInt > ushort.MaxValue) {
-                                return CommandResult.Lang(EssLang.NEGATIVE_OR_LARGE);
+                                return CommandResult.Lang("NEGATIVE_OR_LARGE");
                             }
 
                             var vehicleAsset = Assets.find(EAssetType.VEHICLE, (ushort) argAsInt);
 
                             if (vehicleAsset == null) {
-                                return CommandResult.Lang(EssLang.INVALID_VEHICLE_ID, argAsInt);
+                                return CommandResult.Lang("INVALID_VEHICLE_ID", argAsInt);
                             }
 
                             kit.Items.Add(new KitItemVehicle((ushort) argAsInt));
@@ -153,11 +153,11 @@ namespace Essentials.NativeModules.Kit.Commands {
                             }
 
                             if (!args[3].IsInt) {
-                                return CommandResult.Lang(EssLang.INVALID_NUMBER, args[3]);
+                                return CommandResult.Lang("INVALID_NUMBER", args[3]);
                             }
 
                             if (args[3].ToInt < 0) {
-                                return CommandResult.Lang(EssLang.MUST_POSITIVE);
+                                return CommandResult.Lang("MUST_POSITIVE");
                             }
 
                             kit.Items.Add(new KitItemExperience(args[3].ToUint));
@@ -180,13 +180,13 @@ namespace Essentials.NativeModules.Kit.Commands {
                     }
 
                     if (!args[2].IsInt) {
-                        return CommandResult.Lang(EssLang.INVALID_NUMBER, args[2]);
+                        return CommandResult.Lang("INVALID_NUMBER", args[2]);
                     }
 
                     var argAsInt2 = args[2].ToInt;
 
                     if (argAsInt2 <= 0) {
-                        return CommandResult.Lang(EssLang.MUST_POSITIVE);
+                        return CommandResult.Lang("MUST_POSITIVE");
                     }
 
                     /* 1 to kitItems.Count */
@@ -221,11 +221,11 @@ namespace Essentials.NativeModules.Kit.Commands {
                         case "cooldown":
                         case "cd":
                             if (!args[3].IsInt) {
-                                return CommandResult.Lang(EssLang.INVALID_NUMBER, args[3]);
+                                return CommandResult.Lang("INVALID_NUMBER", args[3]);
                             }
 
                             if (args[3].ToInt < 0) {
-                                return CommandResult.Lang(EssLang.MUST_POSITIVE);
+                                return CommandResult.Lang("MUST_POSITIVE");
                             }
 
                             kit.Cooldown = args[3].ToUint;
@@ -235,7 +235,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                         case "resetcooldownwhendie":
                         case "rwd":
                             if (!args[3].IsBool) {
-                                return CommandResult.Lang(EssLang.INVALID_BOOLEAN, args[3]);
+                                return CommandResult.Lang("INVALID_BOOLEAN", args[3]);
                             }
 
                             kit.ResetCooldownWhenDie = args[3].ToBool;

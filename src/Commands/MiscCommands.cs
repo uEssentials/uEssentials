@@ -56,11 +56,11 @@ namespace Essentials.Commands {
             }
 
             if (!args[0].IsFloat) {
-                return CommandResult.Lang(EssLang.INVALID_NUMBER, args[0]);
+                return CommandResult.Lang("INVALID_NUMBER", args[0]);
             }
 
             if (args[0].ToFloat <= 0) {
-                return CommandResult.Lang(EssLang.MUST_POSITIVE, args[0]);
+                return CommandResult.Lang("MUST_POSITIVE", args[0]);
             }
 
             var player = src.ToPlayer();
@@ -70,7 +70,7 @@ namespace Essentials.Commands {
             pos.y += num;
 
             player.Teleport(pos);
-            EssLang.ASCENDED.SendTo(src, num);
+            EssLang.Send(src, "ASCENDED", num);
 
             return CommandResult.Success();
         }
@@ -89,11 +89,11 @@ namespace Essentials.Commands {
             }
 
             if (!args[0].IsFloat) {
-                return CommandResult.Lang(EssLang.INVALID_NUMBER, args[0]);
+                return CommandResult.Lang("INVALID_NUMBER", args[0]);
             }
 
             if (args[0].ToFloat <= 0) {
-                return CommandResult.Lang(EssLang.MUST_POSITIVE, args[0]);
+                return CommandResult.Lang("MUST_POSITIVE", args[0]);
             }
 
             var player = src.ToPlayer();
@@ -103,7 +103,7 @@ namespace Essentials.Commands {
             pos.y -= num;
 
             player.Teleport(pos);
-            EssLang.DESCENDED.SendTo(src, num);
+            EssLang.Send(src, "DESCENDED", num);
 
             return CommandResult.Success();
         }
@@ -139,11 +139,11 @@ namespace Essentials.Commands {
                 }
 
                 if (!args[1].IsInt) {
-                    return CommandResult.Lang(EssLang.INVALID_NUMBER, args[1]);
+                    return CommandResult.Lang("INVALID_NUMBER", args[1]);
                 }
 
                 if (args[1].ToInt < 1) {
-                    return CommandResult.Lang(EssLang.NUMBER_BETWEEN, 1, int.MaxValue);
+                    return CommandResult.Lang("NUMBER_BETWEEN", 1, int.MaxValue);
                 }
 
                 distance = args[1].ToInt;
@@ -153,7 +153,7 @@ namespace Essentials.Commands {
                 case "ev":
                 case "emptyvehicles":
                     if (!src.HasPermission(cmd.Permission + ".emptyvehicles")) {
-                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
                     new Thread(() => {
@@ -173,7 +173,7 @@ namespace Essentials.Commands {
                                 ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id);
                         });
 
-                        EssLang.CLEAR_EMPTY_VEHICLES.SendTo(src, toRemove.Count);
+                        EssLang.Send(src, "CLEAR_EMPTY_VEHICLES", toRemove.Count);
                     }).Start();
                     break;
 
@@ -182,7 +182,7 @@ namespace Essentials.Commands {
                     return CommandResult.Generic("This option is currently disabled, use /clear ev instead");
                     /*
                     if (!src.HasPermission(cmd.Permission + ".vehicles")) {
-                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
                     new Thread(() => {
@@ -200,18 +200,18 @@ namespace Essentials.Commands {
                         });
 
                         VehicleManager.askVehicleDestroyAll();
-                        EssLang.CLEAR_VEHICLES.SendTo(src);
+                        EssLang.Send(src, "CLEAR_VEHICLES");
                     }).Start();
                     break;*/
 
                 case "i":
                 case "items":
                     if (!src.HasPermission(cmd.Permission + ".items")) {
-                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
                     ItemManager.askClearAllItems();
-                    EssLang.CLEAR_ITEMS.SendTo(src);
+                    EssLang.Send(src, "CLEAR_ITEMS");
                     break;
 
                 default:
@@ -254,7 +254,7 @@ namespace Essentials.Commands {
                     } else if (args[0].Is("*")) {
                         GiveItem(src, null, args[1], One, true);
                     } else if (!args[0].IsValidPlayerName) {
-                        return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     } else {
                         GiveItem(src, UPlayer.From(args[0].ToString()), args[1], One);
                     }
@@ -268,7 +268,7 @@ namespace Essentials.Commands {
                     if (args[0].Is("*")) {
                         GiveItem(src, null, args[1], args[2], true);
                     } else if (!args[0].IsValidPlayerName) {
-                        return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     } else {
                         GiveItem(src, UPlayer.From(args[0].ToString()), args[1], args[2]);
                     }
@@ -299,14 +299,14 @@ namespace Essentials.Commands {
                 var equipament = src.ToPlayer().Equipment;
 
                 if (equipament.HoldingItemID == 0) {
-                    return CommandResult.Lang(EssLang.EMPTY_HANDS);
+                    return CommandResult.Lang("EMPTY_HANDS");
                 }
 
                 asset = equipament.asset;
             } else {
                 if (!args[0].IsUshort ||
                     (asset = Assets.find(EAssetType.ITEM, args[0].ToUshort) as ItemAsset) == null) {
-                    return CommandResult.Lang(EssLang.INVALID_ITEM_ID, args[0]);
+                    return CommandResult.Lang("INVALID_ITEM_ID", args[0]);
                 }
             }
 
@@ -352,27 +352,27 @@ namespace Essentials.Commands {
             switch (args[0].ToLowerString) {
                 case "autoreload":
                     if (!src.HasPermission($"{cmd.Permission}.autoreload")) {
-                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
                     if (toggleValue) {
                         component.AutoReload = true;
-                        EssLang.AUTO_RELOAD_ENABLED.SendTo(src);
+                        EssLang.Send(src, "AUTO_RELOAD_ENABLED");
                     } else {
                         component.AutoReload = false;
-                        EssLang.AUTO_RELOAD_DISABLED.SendTo(src);
+                        EssLang.Send(src, "AUTO_RELOAD_DISABLED");
                     }
                     break;
 
                 case "autorepair":
                     if (!src.HasPermission($"{cmd.Permission}.autorepair")) {
-                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
                     if (toggleValue) {
                         component.AutoRepair = true;
-                        EssLang.AUTO_REPAIR_ENABLED.SendTo(src);
+                        EssLang.Send(src, "AUTO_REPAIR_ENABLED");
                     } else {
                         component.AutoRepair = false;
-                        EssLang.AUTO_REPAIR_DISABLED.SendTo(src);
+                        EssLang.Send(src, "AUTO_REPAIR_DISABLED");
                     }
                     break;
 
@@ -413,20 +413,20 @@ namespace Essentials.Commands {
                 case "autorefuel":
                     if (toggleValue) {
                         component.AutoRefuel = true;
-                        EssLang.AUTO_REFUEL_ENABLED.SendTo(src);
+                        EssLang.Send(src, "AUTO_REFUEL_ENABLED");
                     } else {
                         component.AutoRefuel = false;
-                        EssLang.AUTO_REFUEL_DISABLED.SendTo(src);
+                        EssLang.Send(src, "AUTO_REFUEL_DISABLED");
                     }
                     break;
 
                 case "autorepair":
                     if (toggleValue) {
                         component.AutoRepair = true;
-                        EssLang.AUTO_REPAIR_ENABLED.SendTo(src);
+                        EssLang.Send(src, "AUTO_REPAIR_ENABLED");
                     } else {
                         component.AutoRepair = false;
-                        EssLang.AUTO_REPAIR_DISABLED.SendTo(src);
+                        EssLang.Send(src, "AUTO_REPAIR_DISABLED");
                     }
                     break;
 
@@ -449,10 +449,10 @@ namespace Essentials.Commands {
 
             if (Spies.Contains(playerId)) {
                 Spies.Remove(playerId);
-                EssLang.SPY_MODE_OFF.SendTo(src);
+                EssLang.Send(src, "SPY_MODE_OFF");
             } else {
                 Spies.Add(playerId);
-                EssLang.SPY_MODE_ON.SendTo(src);
+                EssLang.Send(src, "SPY_MODE_ON");
             }
 
             return CommandResult.Success();
@@ -484,18 +484,19 @@ namespace Essentials.Commands {
                 } else {
                     var player = src.ToPlayer();
 
-                    EssLang.POSITION.SendTo(player,
+                    EssLang.Send(player, 
+                        "POSITION",
                         player.Position.x,
                         player.Position.y,
                         player.Position.z);
                 }
             } else {
                 var found = UPlayer.TryGet(args[0], p => {
-                    EssLang.POSITION_OTHER.SendTo(src, p.DisplayName, p.Position.x, p.Position.y, p.Position.z);
+                    EssLang.Send(src, "POSITION_OTHER", p.DisplayName, p.Position.x, p.Position.y, p.Position.z);
                 });
 
                 if (!found) {
-                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                 }
             }
 
@@ -508,7 +509,7 @@ namespace Essentials.Commands {
             Description = "View the number of online players"
         )]
         private CommandResult OnlineCommand(ICommandSource src, ICommandArgs args, ICommand cmd) {
-            EssLang.ONLINE_PLAYERS.SendTo(src, UServer.Players.Count(), UServer.MaxPlayers);
+            EssLang.Send(src, "ONLINE_PLAYERS", UServer.Players.Count(), UServer.MaxPlayers);
 
             return CommandResult.Success();
         }
@@ -535,7 +536,7 @@ namespace Essentials.Commands {
                 }
             }
 
-            EssLang.RESPAWNED_ITEMS.SendTo(src);
+            EssLang.Send(src, "RESPAWNED_ITEMS");
 
             return CommandResult.Success();
         }
@@ -559,7 +560,7 @@ namespace Essentials.Commands {
                 VehicleManager.spawnVehicle(vehicle, point, Quaternion.Euler(0f, vehicleSpawnpoint.angle, 0f));
             }
 
-            EssLang.RESPAWNED_VEHICLES.SendTo(src);
+            EssLang.Send(src, "RESPAWNED_VEHICLES");
 
             return CommandResult.Success();
         }
@@ -599,30 +600,30 @@ namespace Essentials.Commands {
                     var optAsset = VehicleUtil.GetVehicle(args[0].ToString());
 
                     if (optAsset.IsAbsent) {
-                        return CommandResult.Lang(EssLang.INVALID_VEHICLE_ID, args[0]);
+                        return CommandResult.Lang("INVALID_VEHICLE_ID", args[0]);
                     }
 
                     var id = optAsset.Value.id;
 
                     if (UEssentials.Config.VehicleBlacklist.Contains(id) &&
                         !src.HasPermission("essentials.bypass.blacklist.vehicle")) {
-                        return CommandResult.Lang(EssLang.BLACKLISTED_VEHICLE, $"{optAsset.Value.vehicleName} ({id})");
+                        return CommandResult.Lang("BLACKLISTED_VEHICLE", $"{optAsset.Value.vehicleName} ({id})");
                     }
 
                     VehicleTool.giveVehicle(src.ToPlayer().UnturnedPlayer, id);
 
-                    EssLang.RECEIVED_VEHICLE.SendTo(src, optAsset.Value.Name, id);
+                    EssLang.Send(src, "RECEIVED_VEHICLE", optAsset.Value.Name, id);
                     break;
 
                 case 2:
                     if (!src.HasPermission($"{cmd.Permission}.other")) {
-                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
                     optAsset = VehicleUtil.GetVehicle(args[1].ToString());
 
                     if (optAsset.IsAbsent) {
-                        return CommandResult.Lang(EssLang.INVALID_VEHICLE_ID, args[1]);
+                        return CommandResult.Lang("INVALID_VEHICLE_ID", args[1]);
                     }
 
                     var vehAsset = optAsset.Value;
@@ -632,14 +633,14 @@ namespace Essentials.Commands {
                             VehicleTool.giveVehicle(p.UnturnedPlayer, vehAsset.id);
                         });
 
-                        EssLang.GIVEN_VEHICLE_ALL.SendTo(src, vehAsset.Name, vehAsset.Id);
+                        EssLang.Send(src, "GIVEN_VEHICLE_ALL", vehAsset.Name, vehAsset.Id);
                     } else if (!args[0].IsValidPlayerName) {
-                        return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     } else {
                         var target = args[0].ToPlayer;
                         VehicleTool.giveVehicle(target.UnturnedPlayer, vehAsset.id);
 
-                        EssLang.GIVEN_VEHICLE.SendTo(src, vehAsset.Name, vehAsset.Id, target.DisplayName);
+                        EssLang.Send(src, "GIVEN_VEHICLE", vehAsset.Name, vehAsset.Id, target.DisplayName);
                     }
                     break;
 
@@ -698,7 +699,7 @@ namespace Essentials.Commands {
                     var optSkill = USkill.FromName(args[0].ToString());
 
                     if (optSkill.IsAbsent) {
-                        return CommandResult.Lang(EssLang.INVALID_SKILL, args[0]);
+                        return CommandResult.Lang("INVALID_SKILL", args[0]);
                     }
 
                     var player = src.ToPlayer();
@@ -708,29 +709,29 @@ namespace Essentials.Commands {
                         value = player.GetSkill(optSkill.Value).max;
                     } else if (args[1].IsInt) {
                         if (args[1].ToInt < 0 || args[1].ToInt > byte.MaxValue) {
-                            return CommandResult.Lang(EssLang.NEGATIVE_OR_LARGE);
+                            return CommandResult.Lang("NEGATIVE_OR_LARGE");
                         }
 
                         value = (byte) args[1].ToInt;
                     } else {
-                        return CommandResult.Lang(EssLang.INVALID_NUMBER, args[1]);
+                        return CommandResult.Lang("INVALID_NUMBER", args[1]);
                     }
 
                     player.SetSkillLevel(optSkill.Value, value);
-                    EssLang.SKILL_SET.SendTo(src, optSkill.Value.Name.Capitalize(), args[1]);
+                    EssLang.Send(src, "SKILL_SET", optSkill.Value.Name.Capitalize(), args[1]);
                     break;
 
                 // /skill [player|*] [skill] [value]
                 case 3:
                     if (args[0].Is("*")) {
                         if (!UServer.Players.Any()) {
-                            return CommandResult.Lang(EssLang.ANYONE_ONLINE);
+                            return CommandResult.Lang("ANYONE_ONLINE");
                         }
 
                         player = UServer.Players.First();
                     } else {
                         if (!args[0].IsValidPlayerName) {
-                            return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND);
+                            return CommandResult.Lang("PLAYER_NOT_FOUND");
                         }
 
                         player = args[0].ToPlayer;
@@ -739,27 +740,27 @@ namespace Essentials.Commands {
                     optSkill = USkill.FromName(args[1].ToString());
 
                     if (optSkill.IsAbsent) {
-                        return CommandResult.Lang(EssLang.INVALID_SKILL, args[0]);
+                        return CommandResult.Lang("INVALID_SKILL", args[0]);
                     }
 
                     if (args[2].Is("max")) {
                         value = player.GetSkill(optSkill.Value).max;
                     } else if (args[2].IsInt) {
                         if (args[2].ToInt < 0 || args[2].ToInt > byte.MaxValue) {
-                            return CommandResult.Lang(EssLang.NEGATIVE_OR_LARGE);
+                            return CommandResult.Lang("NEGATIVE_OR_LARGE");
                         }
 
                         value = (byte) args[2].ToInt;
                     } else {
-                        return CommandResult.Lang(EssLang.INVALID_NUMBER, args[2]);
+                        return CommandResult.Lang("INVALID_NUMBER", args[2]);
                     }
 
                     if (args[0].Is("*")) {
                         UServer.Players.ForEach(p => p.SetSkillLevel(optSkill.Value, value));
-                        EssLang.SKILL_SET_ALL.SendTo(src, optSkill.Value.Name.Capitalize(), args[2]);
+                        EssLang.Send(src, "SKILL_SET_ALL", optSkill.Value.Name.Capitalize(), args[2]);
                     } else {
                         player.SetSkillLevel(optSkill.Value, value);
-                        EssLang.SKILL_SET_PLAYER.SendTo(src, optSkill.Value.Name.Capitalize(),
+                        EssLang.Send(src, "SKILL_SET_PLAYER", optSkill.Value.Name.Capitalize(),
                             player.CharacterName, args[2]);
                     }
                     break;
@@ -786,14 +787,14 @@ namespace Essentials.Commands {
                 case "true":
                 case "yes":
                     Provider.PvP = true;
-                    EssLang.PVP_ENABLED.SendTo(src);
+                    EssLang.Send(src, "PVP_ENABLED");
                     break;
 
                 case "off":
                 case "false":
                 case "no":
                     Provider.PvP = false;
-                    EssLang.PVP_DISABLED.SendTo(src);
+                    EssLang.Send(src, "PVP_DISABLED");
                     break;
 
                 default:
@@ -818,20 +819,20 @@ namespace Essentials.Commands {
         private static void GiveItem(ICommandSource src, UPlayer target, ICommandArgument itemArg,
             ICommandArgument amountArg, bool allPlayers = false) {
             if (!src.HasPermission("essentials.command.item.other") && target != src) {
-                EssLang.COMMAND_NO_PERMISSION.SendTo(src);
+                EssLang.Send(src, "COMMAND_NO_PERMISSION");
                 return;
             }
 
             var optAsset = ItemUtil.GetItem(itemArg.ToString());
 
             if (optAsset.IsAbsent) {
-                EssLang.ITEM_NOT_FOUND.SendTo(src, itemArg);
+                EssLang.Send(src, "ITEM_NOT_FOUND", itemArg);
                 return;
             }
 
             if (UEssentials.Config.GiveItemBlacklist.Contains(optAsset.Value.id) &&
                 !src.HasPermission("essentials.bypass.blacklist.item")) {
-                EssLang.BLACKLISTED_ITEM.SendTo(src, $"{optAsset.Value.itemName} ({optAsset.Value.Id})");
+                EssLang.Send(src, "BLACKLISTED_ITEM", $"{optAsset.Value.itemName} ({optAsset.Value.Id})");
                 return;
             }
 
@@ -839,9 +840,9 @@ namespace Essentials.Commands {
 
             if (amountArg != null) {
                 if (!amountArg.IsShort) {
-                    EssLang.INVALID_NUMBER.SendTo(src, amountArg);
+                    EssLang.Send(src, "INVALID_NUMBER", amountArg);
                 } else if (amountArg.ToUshort <= 0) {
-                    EssLang.MUST_POSITIVE.SendTo(src);
+                    EssLang.Send(src, "MUST_POSITIVE");
                 } else {
                     amt = amountArg.ToUshort;
                     goto give;
@@ -860,12 +861,12 @@ namespace Essentials.Commands {
 
             if (!src.HasPermission("essentials.bypass.itemlimit") && amt > UEssentials.Config.ItemSpawnLimit) {
                 amt = UEssentials.Config.ItemSpawnLimit;
-                EssLang.ITEM_LIMIT.SendTo(src, amt);
+                EssLang.Send(src, "ITEM_LIMIT", amt);
             }
 
             if (allPlayers) {
                 UServer.Players.ForEach(playersToReceive.Add);
-                EssLang.GIVEN_ITEM_ALL.SendTo(src, amt, asset.Name, asset.Id);
+                EssLang.Send(src, "GIVEN_ITEM_ALL", amt, asset.Name, asset.Id);
             } else {
                 playersToReceive.Add(target);
 
@@ -873,17 +874,17 @@ namespace Essentials.Commands {
                     goto give2;
                 }
 
-                EssLang.GIVEN_ITEM.SendTo(src, amt, asset.Name, asset.Id, target.CharacterName);
+                EssLang.Send(src, "GIVEN_ITEM", amt, asset.Name, asset.Id, target.CharacterName);
             }
 
             give2:
             playersToReceive.ForEach(p => {
                 var success = p.GiveItem(item, amt, true);
 
-                EssLang.RECEIVED_ITEM.SendTo(p, amt, asset.Name, asset.Id);
+                EssLang.Send(p, "RECEIVED_ITEM", amt, asset.Name, asset.Id);
 
                 if (!success) {
-                    EssLang.INVENTORY_FULL.SendTo(p);
+                    EssLang.Send(p, "INVENTORY_FULL");
                 }
             });
         }

@@ -53,11 +53,11 @@ namespace Essentials.Commands {
                     var dataName = (string) data[2];
 
                     if (!dataFound) {
-                        return CommandResult.Lang(EssLang.FAILED_FIND_PLACE_OR_PLAYER, args[0]);
+                        return CommandResult.Lang("FAILED_FIND_PLACE_OR_PLAYER", args[0]);
                     }
 
                     src.ToPlayer().Teleport(dataPosition);
-                    EssLang.TELEPORTED.SendTo(src, dataName);
+                    EssLang.Send(src, "TELEPORTED", dataName);
                     break;
 
                 /*
@@ -68,7 +68,7 @@ namespace Essentials.Commands {
                     var target = UPlayer.From(args[0].ToString());
 
                     if (target == null) {
-                        return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     }
 
                     data = FindPlaceOrPlayer(args[1].ToString());
@@ -77,12 +77,12 @@ namespace Essentials.Commands {
                     dataName = (string) data[2];
 
                     if (!dataFound) {
-                        return CommandResult.Lang(EssLang.FAILED_FIND_PLACE_OR_PLAYER, args[0]);
+                        return CommandResult.Lang("FAILED_FIND_PLACE_OR_PLAYER", args[0]);
                     }
 
                     target.Teleport(dataPosition);
-                    EssLang.TELEPORTED.SendTo(target, dataName);
-                    EssLang.TELEPORTED_SENDER.SendTo(src, target, dataName);
+                    EssLang.Send(target, "TELEPORTED", dataName);
+                    EssLang.Send(src, "TELEPORTED_SENDER", target, dataName);
                     break;
 
                 /*
@@ -93,9 +93,9 @@ namespace Essentials.Commands {
 
                     if (location.HasValue) {
                         src.ToPlayer().Teleport(location.Value);
-                        EssLang.TELEPORTED.SendTo(src, location);
+                        EssLang.Send(src, "TELEPORTED", location);
                     } else {
-                        return CommandResult.Lang(EssLang.INVALID_COORDS, args[0], args[1], args[2]);
+                        return CommandResult.Lang("INVALID_COORDS", args[0], args[1], args[2]);
                     }
                     break;
 
@@ -106,17 +106,17 @@ namespace Essentials.Commands {
                     target = UPlayer.From(args[0].ToString());
 
                     if (target == null) {
-                        return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     }
 
                     location = args.GetVector3(1);
 
                     if (location.HasValue) {
                         target.Teleport(location.Value);
-                        EssLang.TELEPORTED.SendTo(target, location);
-                        EssLang.TELEPORTED_SENDER.SendTo(src, target, location);
+                        EssLang.Send(target, "TELEPORTED", location);
+                        EssLang.Send(src, "TELEPORTED_SENDER", target, location);
                     } else {
-                        return CommandResult.Lang(EssLang.INVALID_COORDS, args[1], args[2], args[3]);
+                        return CommandResult.Lang("INVALID_COORDS", args[1], args[2], args[3]);
                     }
                     break;
 

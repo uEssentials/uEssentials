@@ -38,10 +38,10 @@ namespace Essentials.Commands {
             var players = new List<UPlayer>(UServer.Players);
 
             if (players.Count == 0) {
-                return CommandResult.Lang(EssLang.NO_PLAYERS_FOR_KICK);
+                return CommandResult.Lang("NO_PLAYERS_FOR_KICK");
             }
 
-            var noReasonMessage = EssLang.KICK_NO_SPECIFIED_REASON.GetMessage();
+            var noReasonMessage = EssLang.Translate("KICK_NO_SPECIFIED_REASON");
 
             players.ForEach(player => {
                 player.Kick(args.IsEmpty
@@ -49,7 +49,7 @@ namespace Essentials.Commands {
                     : args.Join(0));
             });
 
-            EssLang.KICKED_ALL.SendTo(src, players.Count);
+            EssLang.Send(src, "KICKED_ALL", players.Count);
 
             return CommandResult.Success();
         }

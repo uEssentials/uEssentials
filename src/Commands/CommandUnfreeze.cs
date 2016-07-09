@@ -44,24 +44,24 @@ namespace Essentials.Commands {
                 foreach (var player in UServer.Players.Where(player => player.HasComponent<FrozenPlayer>())) {
                     player.RemoveComponent<FrozenPlayer>();
 
-                    EssLang.UNFROZEN_PLAYER.SendTo(player, src.DisplayName);
+                    EssLang.Send(player, "UNFROZEN_PLAYER", src.DisplayName);
                 }
 
-                EssLang.UNFROZEN_ALL.SendTo(src);
+                EssLang.Send(src, "UNFROZEN_ALL");
             } else {
                 var target = UPlayer.From(args[0].ToString());
 
                 if (target == null) {
-                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                 }
 
                 if (!target.HasComponent<FrozenPlayer>()) {
-                    return CommandResult.Lang(EssLang.NOT_FROZEN, target.DisplayName);
+                    return CommandResult.Lang("NOT_FROZEN", target.DisplayName);
                 } else {
                     target.RemoveComponent<FrozenPlayer>();
 
-                    EssLang.UNFROZEN_SENDER.SendTo(src, target.DisplayName);
-                    EssLang.UNFROZEN_PLAYER.SendTo(target, src.DisplayName);
+                    EssLang.Send(src, "UNFROZEN_SENDER", target.DisplayName);
+                    EssLang.Send(target, "UNFROZEN_PLAYER", src.DisplayName);
                 }
             }
 

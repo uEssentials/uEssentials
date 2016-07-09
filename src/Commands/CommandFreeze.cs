@@ -47,24 +47,24 @@ namespace Essentials.Commands {
                     .Where(player => !player.HasComponent<FrozenPlayer>())
                     .ForEach(player => {
                         player.AddComponent<FrozenPlayer>();
-                        EssLang.FROZEN_PLAYER.SendTo(player, src.DisplayName);
+                        EssLang.Send(player, "FROZEN_PLAYER", src.DisplayName);
                     });
 
-                EssLang.FROZEN_ALL.SendTo(src);
+                EssLang.Send(src, "FROZEN_ALL");
             } else {
                 var found = UPlayer.TryGet(args[0], player => {
                     if (player.HasComponent<FrozenPlayer>()) {
-                        EssLang.ALREADY_FROZEN.SendTo(src, player.DisplayName);
+                        EssLang.Send(src, "ALREADY_FROZEN", player.DisplayName);
                     } else {
                         player.AddComponent<FrozenPlayer>();
 
-                        EssLang.FROZEN_SENDER.SendTo(src, player.DisplayName);
-                        EssLang.FROZEN_PLAYER.SendTo(player, src.DisplayName);
+                        EssLang.Send(src, "FROZEN_SENDER", player.DisplayName);
+                        EssLang.Send(player, "FROZEN_PLAYER", src.DisplayName);
                     }
                 });
 
                 if (!found) {
-                    return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                 }
             }
 

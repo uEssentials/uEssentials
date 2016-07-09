@@ -47,21 +47,21 @@ namespace Essentials.NativeModules.Kit.Commands {
                     }
 
                     DropKit(src, args[0], src.ToPlayer().Position);
-                    EssLang.DROPKIT_SENDER.SendTo(src, args[0]);
+                    EssLang.Send(src, "DROPKIT_SENDER", args[0]);
                     break;
 
                 case 2:
                     if (!src.HasPermission($"{Permission}.other")) {
-                        return CommandResult.Lang(EssLang.COMMAND_NO_PERMISSION);
+                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
                     var found = UPlayer.TryGet(args[1], player => {
                         DropKit(src, args[0], player.Position);
-                        EssLang.DROPKIT_PLAYER.SendTo(src, args[0], player.DisplayName);
+                        EssLang.Send(src, "DROPKIT_PLAYER", args[0], player.DisplayName);
                     });
 
                     if (!found) {
-                        return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[1]);
+                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
                     }
                     break;
 
@@ -70,9 +70,9 @@ namespace Essentials.NativeModules.Kit.Commands {
 
                     if (pos.HasValue) {
                         DropKit(src, args[0], pos.Value);
-                        EssLang.DROPKIT_LOCATION.SendTo(src, args[1], args[2], args[3]);
+                        EssLang.Send(src, "DROPKIT_LOCATION", args[1], args[2], args[3]);
                     } else {
-                        return CommandResult.Lang(EssLang.INVALID_COORDS, args[1], args[2], args[3]);
+                        return CommandResult.Lang("INVALID_COORDS", args[1], args[2], args[3]);
                     }
                     break;
 
@@ -88,7 +88,7 @@ namespace Essentials.NativeModules.Kit.Commands {
             var kitName = kitArg.ToString();
 
             if (!kitManager.Contains(kitName)) {
-                EssLang.KIT_NOT_EXIST.SendTo(src, kitName);
+                EssLang.Send(src, "KIT_NOT_EXIST", kitName);
             } else {
                 var kitItems = kitManager.GetByName(kitName).Items;
 

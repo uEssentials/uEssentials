@@ -47,7 +47,7 @@ namespace Essentials.Commands {
             var players = UServer.Players.ToList();
 
             if (players.Count == (src.IsConsole ? 0 : 1)) {
-                return CommandResult.Lang(EssLang.NO_PLAYERS_FOR_TELEPORT);
+                return CommandResult.Lang("NO_PLAYERS_FOR_TELEPORT");
             }
             switch (args.Length) {
                 case 0:
@@ -56,17 +56,17 @@ namespace Essentials.Commands {
                     }
 
                     TeleportAll(src.ToPlayer().RocketPlayer.Position, players);
-                    EssLang.TELEPORTED_ALL_YOU.SendTo(src);
+                    EssLang.Send(src, "TELEPORTED_ALL_YOU");
                     break;
 
                 case 1:
                     var found = UPlayer.TryGet(args[0], player => {
                         TeleportAll(player.Position, players);
-                        EssLang.TELEPORTED_ALL_PLAYER.SendTo(src, player.DisplayName);
+                        EssLang.Send(src, "TELEPORTED_ALL_PLAYER", player.DisplayName);
                     });
 
                     if (!found) {
-                        return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[0]);
+                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     }
                     break;
 
@@ -79,9 +79,9 @@ namespace Essentials.Commands {
                         var pos = new Vector3(x, y, z);
 
                         TeleportAll(pos, players);
-                        EssLang.TELEPORTED_ALL_COORDS.SendTo(src, x, y, z);
+                        EssLang.Send(src, "TELEPORTED_ALL_COORDS", x, y, z);
                     } catch (FormatException) {
-                        return CommandResult.Lang(EssLang.INVALID_COORDS,
+                        return CommandResult.Lang("INVALID_COORDS",
                             src, args[0], args[1], args[2]);
                     }
                     break;
