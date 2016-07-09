@@ -34,7 +34,7 @@ namespace Essentials.NativeModules.Warp {
 
         internal WarpManager() {
             WarpMap = new Dictionary<string, Warp>();
-            WarpData = new WarpData();
+            WarpData = new BinaryWarpData();
         }
 
         public Warp this[string warpName] => GetByName(warpName);
