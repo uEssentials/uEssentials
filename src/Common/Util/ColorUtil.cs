@@ -47,14 +47,23 @@ namespace Essentials.Common.Util {
             return ConsoleColor.White;
         }
 
-        public static Color GetColorFromString(ref string message) {
-            Color? color = null;
+        public static bool HasColor(string message) {
+            return message.Contains("<") && message.Contains(">") &&
+                !string.IsNullOrEmpty(message.Split('<')[1].Split('>')[0]);
+        }
 
-            if (message.IndexOfAny(new[] { '<', '>' }) == -1) {
+        public static Color GetColorFromString(ref string message) {
+            Color? color;
+
+            if (!message.Contains("<") || !message.Contains(">")) {
                 return Color.green;
             }
 
             var rawColor = message.Split('<')[1].Split('>')[0];
+
+            if (string.IsNullOrEmpty(rawColor)) {
+                return Color.green;
+            }
 
             // Try get color from name
             switch (rawColor.Trim().ToLower()) {
@@ -91,11 +100,9 @@ namespace Essentials.Common.Util {
                 case "yellow":
                     color = Color.yellow;
                     break;
-            }
-
-            // Try get color from hex
-            if (!color.HasValue) {
-                color = UnturnedChat.GetColorFromHex(rawColor);
+                default:
+                    color = UnturnedChat.GetColorFromHex(rawColor);
+                    break;
             }
 
             // Remove <color>
