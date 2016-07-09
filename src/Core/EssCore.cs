@@ -337,7 +337,7 @@ namespace Essentials.Core {
                             buffer.AppendLine();
                         });
 
-                    File.WriteAllText(Path.Combine(userProfile, "Desktop" + Path.PathSeparator + "commands.txt"), buffer.ToString());
+                    File.WriteAllText(Path.Combine(Path.Combine(userProfile, "Desktop"), "command.txt"), buffer.ToString());
                 }
             #endif
         }
