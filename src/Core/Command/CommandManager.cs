@@ -48,9 +48,7 @@ namespace Essentials.Core.Command {
 
         internal CommandManager() {
             CommandMap = new Dictionary<string, ICommand>();
-            _rocketCommands =
-                AccessorFactory.AccessField<List<RocketCommandManager.RegisteredRocketCommand>>(R.Commands, "commands")
-                    .Value;
+            _rocketCommands = AccessorFactory.AccessField<List<RocketCommandManager.RegisteredRocketCommand>>(R.Commands, "commands").Value;
         }
 
         public ICommand GetByName(string name, bool includeAliases = true) {
@@ -139,11 +137,30 @@ namespace Essentials.Core.Command {
             RegisterAllWhere(
                 GetType().Assembly,
                 type => type.Namespace.EqualsIgnoreCase(targetNamespace)
-                );
+            );
         }
 
         public void Unregister(Type commandType) {
             UnregisterWhere(command => command.Command.GetType() == commandType);
+        }
+
+        public void UnregisterAll(Assembly assembly) {
+            Preconditions.NotNull(assembly, "Assembly cannot be null");
+
+            UnregisterWhere(command => Equals(command.GetType().Assembly, assembly));
+        }
+
+        public void UnregisterAll(string targetNamespace) {
+            UnregisterWhere(command =>
+                command.GetType().Namespace.EqualsIgnoreCase(targetNamespace));
+        }
+
+        public void Unregister<TCommandType>() where TCommandType : ICommand {
+            UnregisterWhere(command => command.Command is TCommandType);
+        }
+
+        public void Unregister(ICommand targetCommand) {
+            UnregisterWhere(command => command.Command == targetCommand);
         }
 
         public bool HasWithName(string commandName) {
@@ -176,25 +193,6 @@ namespace Essentials.Core.Command {
             });
         }
 
-        public void UnregisterAll(Assembly assembly) {
-            Preconditions.NotNull(assembly, "Assembly cannot be null");
-
-            UnregisterWhere(command => Equals(command.GetType().Assembly, assembly));
-        }
-
-        public void UnregisterAll(string targetNamespace) {
-            UnregisterWhere(command =>
-                command.GetType().Namespace.EqualsIgnoreCase(targetNamespace));
-        }
-
-        public void Unregister<TCommandType>() where TCommandType : ICommand {
-            UnregisterWhere(command => command.Command is TCommandType);
-        }
-
-        public void Unregister(ICommand targetCommand) {
-            UnregisterWhere(command => command.Command == targetCommand);
-        }
-
         /*
             Utility methods
         */
@@ -207,11 +205,13 @@ namespace Essentials.Core.Command {
 
         private void UnregisterWhere(Func<CommandAdapter, bool> predicate) {
             _rocketCommands.RemoveAll(cmd => {
-                if (cmd.Command is CommandAdapter && predicate((CommandAdapter) cmd.Command)) {
-                    var command = ((CommandAdapter) cmd.Command).Command;
+                var cmdAdapter = cmd.Command as CommandAdapter;
+                if (cmdAdapter != null && predicate(cmdAdapter)) {
+                    var command = cmdAdapter.Command;
                     if (command is EssCommand) {
                         _onUnregisteredMethod.Invoke(command, ReflectionUtil.EMPTY_ARGS);
                     }
+                    CommandMap.Remove(command.Name);
                     return true;
                 }
                 return false;
