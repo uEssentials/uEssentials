@@ -35,7 +35,7 @@ namespace Essentials.Commands {
     )]
     public class CommandExperience : EssCommand {
 
-        private const int MAX = 10000000;
+        private const int MAX_INPUT_VALUE = 10000000;
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             if (args.Length == 0 || (args.Length == 1 && src.IsConsole)) {
@@ -48,27 +48,29 @@ namespace Essentials.Commands {
 
             var amount = args[0].ToInt;
 
-            if (amount > MAX || amount < -MAX) {
-                return CommandResult.Lang(EssLang.NUMBER_BETWEEN, -MAX, MAX);
+            if (amount > MAX_INPUT_VALUE || amount < -MAX_INPUT_VALUE) {
+                return CommandResult.Lang(EssLang.NUMBER_BETWEEN, -MAX_INPUT_VALUE, MAX_INPUT_VALUE);
             }
 
             if (args.Length == 2) {
                 if (args[1].Is("*")) {
                     UServer.Players.ForEach(p => GiveExp(p, amount));
 
-                    if (amount >= 0)
+                    if (amount >= 0) {
                         EssLang.EXPERIENCE_GIVEN.SendTo(src, amount, EssLang.EVERYONE);
-                    else
+                    } else {
                         EssLang.EXPERIENCE_TAKE.SendTo(src, -amount, EssLang.EVERYONE);
+                    }
                 } else if (!args[1].IsValidPlayerName) {
                     return CommandResult.Lang(EssLang.PLAYER_NOT_FOUND, args[1]);
                 } else {
                     var player = args[1].ToPlayer;
 
-                    if (amount >= 0)
+                    if (amount >= 0) {
                         EssLang.EXPERIENCE_GIVEN.SendTo(src, amount, player.DisplayName);
-                    else
+                    } else {
                         EssLang.EXPERIENCE_TAKE.SendTo(src, -amount, player.DisplayName);
+                    }
 
                     GiveExp(player, amount);
                 }
