@@ -28,31 +28,51 @@ namespace Essentials.Api.Command {
 
     public abstract class EssCommand : ICommand {
 
+        protected CommandInfo Info { get; }
         protected string UsageMessage => "Use /" + Name + " " + Usage;
-        public string Name { get; internal set; }
-        public string Permission { get; set; }
-        public string[] Aliases { get; set; }
-        public string Usage { get; set; }
-        public AllowedSource AllowedSource { get; set; }
-        public string Description { get; set; }
+
+        public string Name {
+            get { return Info.Name; }
+            internal set { Info.Name = value; }
+        }
+
+        public string Permission {
+            get { return Info.Permission; }
+            set { Info.Permission = value; }
+        }
+
+        public string[] Aliases {
+            get { return Info.Aliases; }
+            set { Info.Aliases = value; }
+        }
+
+        public string Usage {
+            get { return Info.Usage; }
+            set { Info.Usage = value; }
+        }
+
+        public AllowedSource AllowedSource {
+            get { return Info.AllowedSource; }
+            set { Info.AllowedSource = value; }
+        }
+
+        public string Description {
+            get { return Info.Description; }
+            set { Info.Description = value; }
+        }
 
         protected EssCommand() {
-            var commandInfo = Preconditions.NotNull(
+            Info = Preconditions.NotNull(
                 ReflectionUtil.GetAttributeFrom<CommandInfo>(this),
                 "EssCommand must have 'CommandInfo' attribute");
 
-            Name = commandInfo.Name;
-            Usage = commandInfo.Usage;
-            Description = commandInfo.Description;
-            AllowedSource = commandInfo.AllowedSource;
-            Aliases = commandInfo.Aliases;
-
             Permission = GetType().Assembly.Equals(typeof(EssCore).Assembly)
                 ? $"essentials.command.{Name}"
-                : commandInfo.Permission;
+                : Info.Permission;
 
-            if (Permission.IsNullOrEmpty())
+            if (Permission.IsNullOrEmpty()) {
                 Permission = Name;
+            }
         }
 
         protected virtual void ShowUsage(ICommandSource source) {

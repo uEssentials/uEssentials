@@ -30,8 +30,8 @@ namespace Essentials.Api.Command {
         public AllowedSource AllowedSource = AllowedSource.BOTH;
         public string[] Aliases = new string[0];
         public string Description = "None";
-        public string Permission = "";
-        public string Usage = "";
+        public string Permission = string.Empty;
+        public string Usage = string.Empty;
         public string Name;
 
     }
