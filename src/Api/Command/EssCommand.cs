@@ -70,7 +70,7 @@ namespace Essentials.Api.Command {
                 ? $"essentials.command.{Name}"
                 : Info.Permission;
 
-            if (Permission.IsNullOrEmpty()) {
+            if (string.IsNullOrEmpty(Permission)) {
                 Permission = Name;
             }
         }

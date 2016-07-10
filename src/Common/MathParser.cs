@@ -645,7 +645,7 @@ namespace Essentials.Common {
                 case Log:
                     return 2;
                 default:
-                    throw new ArgumentException("Unknown operator");
+                    throw new ArgumentException($"Unknown operator {token}");
             }
         }
 

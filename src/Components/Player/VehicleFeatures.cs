@@ -28,7 +28,7 @@ namespace Essentials.Components.Player {
         public bool AutoRefuel { get; set; }
         public bool AutoRepair { get; set; }
 
-        private void FixedUpdate() {
+        protected override void SafeFixedUpdate() {
             if (!Player.IsInVehicle) {
                 return;
             }

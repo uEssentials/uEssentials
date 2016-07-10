@@ -49,7 +49,7 @@ namespace Essentials.Components.Player {
             }
         }
 
-        private void FixedUpdate() {
+        protected override void SafeFixedUpdate() {
             if (Player.Position == _lastPos) return;
             Player.Teleport(_frozenPos);
             _lastPos = Player.Position;

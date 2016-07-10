@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using Essentials.Api.Unturned;
 using UnityEngine;
 
@@ -32,6 +33,18 @@ namespace Essentials.Components.Player {
             Player = UPlayer.From(GetComponent<SDG.Unturned.Player>());
         }
 
+        protected void FixedUpdate() {
+            try {
+                SafeFixedUpdate();
+            } catch (Exception) {
+                Player.RemoveComponent(GetType());
+                throw;
+            }
+        }
+
+        protected virtual void SafeFixedUpdate() {
+            
+        }
     }
 
 }

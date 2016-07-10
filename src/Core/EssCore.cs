@@ -397,7 +397,7 @@ namespace Essentials.Core {
 
                 Logger.LogInfo($"New version avalaible: {lastResult.LatestVersion}");
 
-                if (!lastResult.AdditionalData.IsNullOrEmpty()) {
+                if (!string.IsNullOrEmpty(lastResult.AdditionalData)) {
                     Newtonsoft.Json.Linq.JToken changesStr;
                     if (Newtonsoft.Json.Linq.JObject.Parse(lastResult.AdditionalData)
                         .TryGetValue("changes", out changesStr)) {

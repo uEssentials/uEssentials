@@ -29,16 +29,14 @@ namespace Essentials.Common {
 
     public static class Extensions {
 
+        #region STRING
+
         public static bool EqualsIgnoreCase(this string str1, string str2) {
             return string.Compare(str1, str2, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
         public static bool ContainsIgnoreCase(this string str, string part) {
             return CultureInfo.InvariantCulture.CompareInfo.IndexOf(str, part, CompareOptions.IgnoreCase) >= 0;
-        }
-
-        public static bool IsNullOrEmpty(this string str) {
-            return string.IsNullOrEmpty(str);
         }
 
         public static string Capitalize(this string str) {
@@ -49,25 +47,44 @@ namespace Essentials.Common {
             return string.Format(str, args);
         }
 
-        public static void ForEach<T>(this T[] array, Action<T> act) {
-            foreach (var obj in array) act(obj);
+        #endregion
+
+        #region ENUMERABLE
+
+        public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action) {
+            foreach (var obj in enumerable) action(obj);
         }
 
-        public static void ForEach<T>(this IEnumerable<T> enume, Action<T> act) {
-            foreach (var obj in enume) act(obj);
+        public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) {
+            return enumerable.Where(t => !predicate(t));
         }
 
-        public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> enume, Func<T, bool> predicate) {
-            return enume.Where(t => !predicate(t));
+        public static bool None<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) {
+            return !enumerable.Any(predicate);
         }
 
-        public static bool None<T>(this IEnumerable<T> enume, Func<T, bool> predicate) {
-            return !enume.Any(predicate);
+        public static string ValuesToString<T>(this IEnumerable<T> enumerable) {
+            return MiscUtil.ValuesToString(enumerable);
         }
 
-        public static string ValuesToString<T>(this T[] arr) {
-            return MiscUtil.ValuesToString(arr);
+        #endregion
+
+        #region DICTIONARY
+
+        public static V GetOrDefault<K, V>(this Dictionary<K, V> dict, K key, V def) {
+            V val;
+            return dict.TryGetValue(key, out val) ? val : def;
         }
+
+        public static void PutOrUpdate<K, V>(this Dictionary<K, V> dict, K key, V value) {
+            if (dict.ContainsKey(key)) {
+                dict[key] = value;
+            } else {
+                dict.Add(key, value);
+            }
+        }
+
+        #endregion
 
     }
 

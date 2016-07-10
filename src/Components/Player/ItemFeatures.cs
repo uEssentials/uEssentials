@@ -40,7 +40,7 @@ namespace Essentials.Components.Player {
             _equip = Player.Equipment;
         }
 
-        private void FixedUpdate() {
+        protected override void SafeFixedUpdate() {
             if (_equip.HoldingItemID == 0) return;
 
             /*
