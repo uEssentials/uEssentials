@@ -139,7 +139,7 @@ namespace Essentials.Core {
                 Logger.Log("Plugin version: ", ConsoleColor.Green, suffix: "");
 
                 #if EXPERIMENTAL
-                    var label = "experimental"
+                    const string label = "experimental"
                     #if EXPERIMENTAL_HASH
                         + "-commit-$COMMIT_HASH$"
                     #endif
