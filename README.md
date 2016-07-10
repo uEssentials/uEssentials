@@ -1,3 +1,4 @@
+> uEssentials will not be updated in this month (July). Sorry.
 
 # uEssentials
 
