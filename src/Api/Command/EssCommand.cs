@@ -28,8 +28,9 @@ namespace Essentials.Api.Command {
 
     public abstract class EssCommand : ICommand {
 
-        protected CommandInfo Info { get; }
         protected string UsageMessage => "Use /" + Name + " " + Usage;
+
+        public CommandInfo Info { get; }
 
         public string Name {
             get { return Info.Name; }
@@ -69,6 +70,18 @@ namespace Essentials.Api.Command {
             Permission = GetType().Assembly.Equals(typeof(EssCore).Assembly)
                 ? $"essentials.command.{Name}"
                 : Info.Permission;
+
+            if (string.IsNullOrEmpty(Permission)) {
+                Permission = Name;
+            }
+        }
+
+        internal EssCommand(CommandInfo info) {
+            Info = info;
+
+            Permission = GetType().Assembly.Equals(typeof(EssCore).Assembly)
+               ? $"essentials.command.{Name}"
+               : Info.Permission;
 
             if (string.IsNullOrEmpty(Permission)) {
                 Permission = Name;

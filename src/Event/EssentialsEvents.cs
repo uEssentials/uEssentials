@@ -19,6 +19,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
+using Essentials.Api.Command;
+using Essentials.Api.Command.Source;
 using Essentials.Api.Events;
 
 namespace Essentials.Event {
@@ -26,21 +29,30 @@ namespace Essentials.Event {
     public class EssentialsEvents {
 
         public delegate void CommandPreExecute(CommandPreExecuteEvent e);
-
         public static event CommandPreExecute OnCommandPreExecute;
 
         public delegate void CommandPosExecute(CommandPosExecuteEvent e);
-
         public static event CommandPosExecute OnCommandPosExecute;
 
-        internal static void CallCommandPreExecute(CommandPreExecuteEvent e) {
-            OnCommandPreExecute?.Invoke(e);
+
+        internal static CommandPreExecuteEvent CallCommandPreExecute(ICommand command, ref ICommandArgs cmdArgs, 
+                                                                     ref ICommandSource commandSource) {
+            var evt = new CommandPreExecuteEvent(command, cmdArgs, commandSource);
+            OnCommandPreExecute?.Invoke(evt);
+            cmdArgs = evt.Arguments;
+            commandSource = evt.Source;
+            return evt;
         }
 
-        internal static void CallCommandPosExecute(CommandPosExecuteEvent e) {
-            OnCommandPosExecute?.Invoke(e);
+        internal static CommandPosExecuteEvent CallCommandPosExecute(ICommand command, ref ICommandArgs cmdArgs, 
+                                                                    ref ICommandSource commandSource, ref CommandResult result) {
+            var evt = new CommandPosExecuteEvent(command, cmdArgs, commandSource, result);
+            OnCommandPosExecute?.Invoke(evt);
+            cmdArgs = evt.Arguments;
+            commandSource = evt.Source;
+            result = evt.Result;
+            return evt;
         }
-
     }
 
 }

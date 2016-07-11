@@ -21,6 +21,7 @@
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Common;
 
 namespace Essentials.Api.Events {
 
@@ -31,13 +32,18 @@ namespace Essentials.Api.Events {
         /// 
         /// Can be null.
         /// </summary>
-        public CommandResult Result { get; set; }
+        public CommandResult Result {
+            get { return _result; }
+            set { _result = Preconditions.NotNull(value, "result cannot be null");  }
+        }
 
-        public CommandPosExecuteEvent(ICommand command, ICommandArgs args,
-            ICommandSource src, CommandResult result) : base(command, args, src) {
+        public CommandPosExecuteEvent(ICommand command, ICommandArgs args, ICommandSource src, 
+                                      CommandResult result) : base(command, args, src) {
+            Preconditions.NotNull(result, "result cannot be null");
             Result = result;
         }
 
+        private CommandResult _result;
     }
 
 }

@@ -32,6 +32,8 @@ namespace Essentials.Api.Command {
         public string Description = "None";
         public string Permission = string.Empty;
         public string Usage = string.Empty;
+        public int MinArgs = int.MinValue;
+        public int MaxArgs = int.MaxValue;
         public string Name;
 
     }

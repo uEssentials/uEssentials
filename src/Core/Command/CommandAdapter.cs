@@ -23,7 +23,6 @@ using System;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.Api.Events;
 using Essentials.Api.Unturned;
 using Essentials.Common.Util;
 using Essentials.Event;
@@ -46,6 +45,8 @@ namespace Essentials.Core.Command {
 
         internal readonly ICommand Command;
 
+        private readonly CommandInfo _info;
+
         internal CommandAdapter(ICommand command) {
             Command = command;
             Name = command.Name;
@@ -54,6 +55,10 @@ namespace Essentials.Core.Command {
             Syntax = command.Usage;
             Permissions = new List<string>(1) { command.Permission };
             AllowedCaller = AllowedCaller.Both;
+
+            if (command is EssCommand) {
+                _info = ((EssCommand) command).Info;
+            } 
         }
 
         public void Execute(IRocketPlayer caller, string[] args) {
@@ -71,15 +76,22 @@ namespace Essentials.Core.Command {
                 } else if (!commandSource.IsConsole && Command.AllowedSource == AllowedSource.CONSOLE) {
                     EssLang.Send(commandSource, "PLAYER_CANNOT_EXECUTE");
                 } else {
-                    var cmdArgs = new CommandArgs(args);
-                    var preExec = new CommandPreExecuteEvent(Command, cmdArgs, commandSource);
-                    EssentialsEvents.CallCommandPreExecute(preExec);
+                    var cmdArgs = new CommandArgs(args) as ICommandArgs;
+                    var preExec = EssentialsEvents.CallCommandPreExecute(Command, ref cmdArgs, ref commandSource);
 
                     if (preExec.Cancelled) {
                         return;
                     }
 
-                    var result = Command.OnExecute(commandSource, cmdArgs);
+                    CommandResult result;
+
+                    if (_info.MinArgs > cmdArgs.Length || cmdArgs.Length > _info.MaxArgs) {
+                        result = CommandResult.ShowUsage();
+                    } else {
+                        result = Command.OnExecute(commandSource, cmdArgs);
+                    }
+
+                    EssentialsEvents.CallCommandPosExecute(Command, ref cmdArgs, ref commandSource, ref result);
 
                     if (result != null) {
                         if (result.Type == CommandResult.ResultType.SHOW_USAGE) {
@@ -91,9 +103,6 @@ namespace Essentials.Core.Command {
                             commandSource.SendMessage(message, color);
                         }
                     }
-
-                    var posExec = new CommandPosExecuteEvent(Command, cmdArgs, commandSource, result);
-                    EssentialsEvents.CallCommandPosExecute(posExec);
                 }
             } catch (Exception e) {
                 // Check if is player...
