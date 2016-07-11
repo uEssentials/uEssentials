@@ -841,7 +841,7 @@ namespace Essentials.Commands {
             if (amountArg != null) {
                 if (!amountArg.IsShort) {
                     EssLang.Send(src, "INVALID_NUMBER", amountArg);
-                } else if (amountArg.ToUshort <= 0) {
+                } else if (amountArg.ToShort <= 0) {
                     EssLang.Send(src, "MUST_POSITIVE");
                 } else {
                     amt = amountArg.ToUshort;
