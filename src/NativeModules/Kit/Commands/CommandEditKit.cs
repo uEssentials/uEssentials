@@ -202,7 +202,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                     break;
 
                 case "set":
-                    if (args.Length != 3) {
+                    if (args.Length < 3) {
                         src.SendMessage("Use /ekit [kit] set [option] [value]");
                         src.SendMessage("nm  = Name");
                         src.SendMessage("cd  = Cooldown");
