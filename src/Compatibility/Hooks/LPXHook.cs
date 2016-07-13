@@ -35,13 +35,9 @@ namespace Essentials.Compatibility.Hooks {
         public LPXHook() : base("lpx") {}
 
         public override void OnLoad() {
-            var lpx = R.Plugins.GetPlugins().First(c => c.Name.Equals("LPX"));
+            var lpx = R.Plugins.GetPlugins().FirstOrDefault(c => c.Name.Equals("LPX"));
 
-            if (lpx == null) {
-                return;
-            }
-
-            var lpxBaseType = lpx.GetType().BaseType;
+            var lpxBaseType = lpx?.GetType().BaseType;
             var configProp = lpxBaseType?.GetProperty("Configuration")?.GetValue(lpx, new object[0]);
             var configInst = configProp?.GetType().GetProperty("Instance")?.GetValue(configProp, new object[0]);
             var lpxEnabledField = configInst?.GetType().GetField("LPXEnabled")?.GetValue(configInst);

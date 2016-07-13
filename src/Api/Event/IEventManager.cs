@@ -26,6 +26,8 @@ namespace Essentials.Api.Event {
 
     public interface IEventManager {
 
+        void RegisterAll(object instance);
+
         void RegisterAll(Type type);
 
         void RegisterAll<T>();

@@ -86,7 +86,7 @@ namespace Essentials.Core.Command {
 
                     CommandResult result;
 
-                    if (_info.MinArgs > cmdArgs.Length || cmdArgs.Length > _info.MaxArgs) {
+                    if (_info != null && (_info.MinArgs > cmdArgs.Length || cmdArgs.Length > _info.MaxArgs)) {
                         result = CommandResult.ShowUsage();
                     } else {
                         result = Command.OnExecute(commandSource, cmdArgs);

@@ -87,6 +87,7 @@ namespace Essentials.Core {
         internal string DataFolder => MkDirIfNotExists(_dataFolder);
         internal string ModulesFolder => MkDirIfNotExists(_modulesFolder);
 
+        internal InstancePool CommonInstancePool { get; } = new InstancePool();
 
         protected override void Load() {
             try {

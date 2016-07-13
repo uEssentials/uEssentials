@@ -22,20 +22,17 @@
 using System;
 using System.Collections.Generic;
 
-namespace Essentials.Core.Event {
+namespace Essentials.Core {
 
     internal class InstancePool {
 
-        private readonly Dictionary<Type, object> _instances;
-
-        public InstancePool() {
-            _instances = new Dictionary<Type, object>();
-        }
+        private readonly Dictionary<Type, object> _instances = new Dictionary<Type, object>();
 
         public object GetOrCreate(Type type, params object[] constructorArgs) {
             object inst;
-            if (_instances.TryGetValue(type, out inst))
+            if (_instances.TryGetValue(type, out inst)) {
                 return inst;
+            }
             inst = Activator.CreateInstance(type, constructorArgs);
             _instances.Add(type, inst);
             return inst;

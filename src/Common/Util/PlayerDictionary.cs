@@ -57,8 +57,7 @@ namespace Essentials.Common.Util {
         }
 
         public new void Add(ulong key, TValue value) {
-            if ((Characteristics & PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS) ==
-                PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS && !_registeredEventHandlers)
+            if ((Characteristics & PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS) != 0 && !_registeredEventHandlers)
                 RegisterEventHandlers();
             base.Add(key, value);
         }
@@ -73,12 +72,10 @@ namespace Essentials.Common.Util {
         private void RegisterEventHandlers() {
             _registeredEventHandlers = true;
 
-            if ((Characteristics & PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT) ==
-                PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT)
+            if ((Characteristics & PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT) != 0)
                 Provider.onServerDisconnected += OnPlayerDisconnected;
 
-            if ((Characteristics & PlayerDictionaryCharacteristics.REMOVE_ON_DEATH) ==
-                PlayerDictionaryCharacteristics.REMOVE_ON_DEATH)
+            if ((Characteristics & PlayerDictionaryCharacteristics.REMOVE_ON_DEATH) != 0)
                 UnturnedPlayerEvents.OnPlayerDeath += OnPlayerDeath;
         }
 

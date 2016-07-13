@@ -33,10 +33,8 @@ namespace Essentials.Core.Event {
         private readonly Dictionary<EventHolder, List<Delegate>> _handlerMap =
             new Dictionary<EventHolder, List<Delegate>>();
 
-        private readonly InstancePool _instancePool = new InstancePool();
-
-        public void RegisterAll(object obj) {
-            var type = obj.GetType();
+        public void RegisterAll(object instance) {
+            var type = instance.GetType();
 
             foreach (var listenerMethod in type.GetMethods((BindingFlags) 0x3C)) {
                 var eventHandlerAttrs = listenerMethod.GetCustomAttributes(typeof(SubscribeEvent), false);
@@ -75,9 +73,9 @@ namespace Essentials.Core.Event {
 
                     var methodDelegate = Delegate.CreateDelegate(
                         eventInfo.EventHandlerType,
-                        obj,
+                        instance,
                         listenerMethod
-                        );
+                     );
 
                     eventInfo.AddEventHandler(eventTarget, methodDelegate);
 
@@ -90,7 +88,7 @@ namespace Essentials.Core.Event {
         public void RegisterAll(Type type) {
             if (type.GetMethods((BindingFlags) 0x3C)
                 .Any(md => md.GetCustomAttributes(typeof(SubscribeEvent), false).Length > 0)) {
-                RegisterAll(_instancePool.GetOrCreate(type));
+                RegisterAll(EssCore.Instance.CommonInstancePool.GetOrCreate(type));
             }
         }
 

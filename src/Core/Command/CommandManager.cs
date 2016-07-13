@@ -112,7 +112,7 @@ namespace Essentials.Core.Command {
         }
 
         public void Register<TCommandType>() where TCommandType : ICommand {
-            Register(Activator.CreateInstance<TCommandType>());
+            Register((ICommand) EssCore.Instance.CommonInstancePool.GetOrCreate(typeof(TCommandType)));
         }
 
         public void Register(Func<ICommandSource, ICommandArgs, CommandResult> method) {
@@ -223,6 +223,8 @@ namespace Essentials.Core.Command {
                 return (typeof(ICommand).IsAssignableFrom(type) && !type.IsAbstract && type != typeof(MethodCommand));
             };
 
+            var commonInstPoll = EssCore.Instance.CommonInstancePool;
+
             /*
                 Register classes
             */
@@ -231,20 +233,12 @@ namespace Essentials.Core.Command {
                 from type in asm.GetTypes()
                 where defaultPredicate(type)
                 where filter(type)
-                select (ICommand) Activator.CreateInstance(type)
-                ).ForEach(Register);
+                select (ICommand) commonInstPoll.GetOrCreate(type)
+            ).ForEach(Register);
 
             /*
                 Register methods
             */
-            Func<Type, object> createInstance = type => {
-                if (!type.IsClass || type.IsAbstract) {
-                    throw new Exception($"{type} isn't an class or is abstract.");
-                }
-
-                return Activator.CreateInstance(type);
-            };
-
             Func<Type, object, MethodInfo, Delegate> createDelegate = (type, obj, method) => {
                 return obj == null
                     ? Delegate.CreateDelegate(type, method)
@@ -256,7 +250,7 @@ namespace Essentials.Core.Command {
                     if (ReflectionUtil.GetAttributeFrom<CommandInfo>(method) == null)
                         continue;
 
-                    var inst = method.IsStatic ? null : createInstance(type);
+                    var inst = method.IsStatic ? null : EssCore.Instance.CommonInstancePool.GetOrCreate(type);
                     var paramz = method.GetParameters();
 
                     if (method.ReturnType != typeof(CommandResult)) {
