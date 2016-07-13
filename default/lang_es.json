@@ -49,6 +49,7 @@
     "CLEAR_ITEMS": "Todos los items fueron removidos.",
     "CLEAR_VEHICLES": "Todos los vehiculos han sido removidos.",
     "COMMAND_ERROR_OCURRED": "<red>Un error a ocurrido al ejecutar este comando, por favor, contacta un Administrador.",
+    "COMMAND_ERROR_OCURRED_ADMIN": "<red>An error occurred while executing this command. Check the console for more information.",
     "COMMAND_NO_MONEY": "You must have at least ({0}{1}) to use this command.",
     "COMMAND_NO_PERMISSION": "<red>No tienes acceso a este comando.",
     "COMMAND_PAID": "You have paid ({0}{1}) for using this command.",

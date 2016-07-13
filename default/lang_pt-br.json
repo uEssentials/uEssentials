@@ -49,6 +49,7 @@
     "CLEAR_ITEMS": "Todos os items foram removidos.",
     "CLEAR_VEHICLES": "Todos os veículos foram removidos.",
     "COMMAND_ERROR_OCURRED": "<red>Ocorreu um erro ao tentar executar este comando, por favor contate um administrador.",
+    "COMMAND_ERROR_OCURRED_ADMIN": "<red>An error occurred while executing this command. Check the console for more information.",
     "COMMAND_NO_MONEY": "Você precisa ter pelo menos ({0}{1}) para usar esse comando.",
     "COMMAND_NO_PERMISSION": "<red>Você não tem acesso a este comando.",
     "COMMAND_NO_PERMISSION_WITH_PERM": "<red>Você não tem acesso a este comando (Permissão: {0}).",

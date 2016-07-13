@@ -29,8 +29,6 @@ namespace Essentials.Common {
 
     public static class Extensions {
 
-        #region STRING
-
         public static bool EqualsIgnoreCase(this string str1, string str2) {
             return string.Compare(str1, str2, StringComparison.OrdinalIgnoreCase) == 0;
         }
@@ -47,9 +45,6 @@ namespace Essentials.Common {
             return string.Format(str, args);
         }
 
-        #endregion
-
-        #region ENUMERABLE
 
         public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action) {
             foreach (var obj in enumerable) action(obj);
@@ -67,9 +62,6 @@ namespace Essentials.Common {
             return MiscUtil.ValuesToString(enumerable);
         }
 
-        #endregion
-
-        #region DICTIONARY
 
         public static V GetOrDefault<K, V>(this Dictionary<K, V> dict, K key, V def) {
             V val;
@@ -84,8 +76,16 @@ namespace Essentials.Common {
             }
         }
 
-        #endregion
 
+        public static T TryCast<T>(this object o, Action<T> successCallback) where T : class {
+            var cast = o as T;
+            if (cast != null) {
+                successCallback?.Invoke(cast);
+                return cast;
+            }
+            return null;
+        }
+        
     }
 
 }

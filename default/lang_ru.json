@@ -48,6 +48,7 @@
     "CLEAR_ITEMS": "<magenta>Все предметы удалены!",
     "CLEAR_VEHICLES": "<magenta>Весь транспорт удален!",
     "COMMAND_ERROR_OCURRED": "<red>Произошла ошибка при попытке выполнить эту команду; Свяжитесь с админом!",
+    "COMMAND_ERROR_OCURRED_ADMIN": "<red>An error occurred while executing this command. Check the console for more information.",
     "COMMAND_NO_MONEY": "Вы должны иметь ({0}{1}) для использования команды.",
     "COMMAND_NO_PERMISSION": "<yellow>У Вас нет прав на выполнение этой команды",
     "COMMAND_PAID": "Вы заплатили ({0}{1}) за использование команды.",

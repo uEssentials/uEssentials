@@ -30,6 +30,7 @@ using Essentials.I18n;
 using Rocket.API;
 using System.Collections.Generic;
 using System.Linq;
+using Essentials.Common;
 using Rocket.Unturned.Player;
 
 namespace Essentials.Core.Command {
@@ -104,12 +105,10 @@ namespace Essentials.Core.Command {
                         }
                     }
                 }
-            } catch (Exception e) {
-                // Check if is player...
-                var player = caller as UnturnedPlayer;
-                if (player != null) {
-                    UPlayer.TryGet(player, p => EssLang.Send(p, "COMMAND_ERROR_OCURRED"));
-                }
+            } catch (Exception e) { 
+                caller.TryCast<UnturnedPlayer>(p => {
+                    UPlayer.TryGet(p, up => EssLang.Send(up, p.IsAdmin ? "COMMAND_ERROR_OCURRED_ADMIN" : "COMMAND_ERROR_OCURRED"));
+                });
 
                 UEssentials.Logger.LogError(e.ToString());
             }
