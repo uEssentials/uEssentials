@@ -185,6 +185,8 @@ namespace Essentials.Configuration {
             } catch (Exception ex) {
                 UEssentials.Logger.LogError($"Invalid configuration ({filePath})");
                 UEssentials.Logger.LogError(ex.Message);
+                UEssentials.Logger.LogError("Using default configuration...");
+                LoadDefaults();
             }
         }
 

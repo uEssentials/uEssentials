@@ -63,7 +63,7 @@ namespace Essentials.Api.Module {
                 moduleInstance = (EssModule) Activator.CreateInstance(type);
                 moduleInstance.Assembly = moduleAssembly;
 
-                if (moduleInstance.Info.Version.EqualsIgnoreCase("$asmVersion")) {
+                if (moduleInstance.Info.Version.EqualsIgnoreCase("$ASM_VERSION")) {
                     moduleInstance.Info.Version = moduleAssembly.GetCustomAttributes(false)
                         .Cast<AssemblyFileVersionAttribute>()
                         .Select(c => c.Version)

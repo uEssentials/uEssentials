@@ -51,7 +51,7 @@ namespace Essentials.NativeModules.Kit.Commands {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             if (args.Length == 0 || (args.Length == 1 && src.IsConsole)) {
-                return CommandResult.InvalidArgs(src.IsAdmin ? UsageMessage : "Use /kit [kit_name]");
+                return CommandResult.ShowUsage();
             }
 
             if (args.Length == 1) {

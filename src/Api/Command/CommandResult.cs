@@ -119,6 +119,10 @@ namespace Essentials.Api.Command {
             Type = type;
         }
 
+        public override string ToString() {
+            return $"{Type}{(Message == null ? "" : $" [{Message}]")}";
+        }
+
         public enum ResultType {
             SUCCESS,
             ERROR,

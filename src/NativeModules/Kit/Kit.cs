@@ -25,44 +25,37 @@ using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.I18n;
 using Essentials.NativeModules.Kit.Item;
-using Newtonsoft.Json;
 
 namespace Essentials.NativeModules.Kit {
 
     /// <summary>
     /// Author: leonardosc
     /// </summary>
-    [JsonObject]
     public class Kit {
 
         /// <summary>
         /// Name of kit (obviously)
         /// </summary>
-        [JsonProperty]
         public string Name { get; set; }
 
         /// <summary>
         /// List of items
         /// </summary>
-        [JsonProperty]
         public List<AbstractKitItem> Items { get; set; }
 
         /// <summary>
         /// Cooldown in seconds
         /// </summary>
-        [JsonProperty]
         public uint Cooldown { get; set; }
 
         /// <summary>
         /// Cost of kit.
         /// </summary>
-        [JsonProperty]
         public decimal Cost { get; set; }
 
         /// <summary>
         /// Flag that determines if cooldown will be reseted when player die
         /// </summary>
-        [JsonProperty]
         public bool ResetCooldownWhenDie { get; set; }
 
         /// <summary>

@@ -30,7 +30,6 @@ using Essentials.I18n;
 using Rocket.API;
 using System.Collections.Generic;
 using System.Linq;
-using Essentials.Common;
 using Rocket.Unturned.Player;
 
 namespace Essentials.Core.Command {
@@ -67,6 +66,8 @@ namespace Essentials.Core.Command {
                 var sw = System.Diagnostics.Stopwatch.StartNew();
             #endif
 
+            CommandResult result = null;
+
             try {
                 var commandSource = caller is UnturnedPlayer
                     ? UPlayer.From((UnturnedPlayer) caller)
@@ -84,7 +85,6 @@ namespace Essentials.Core.Command {
                         return;
                     }
 
-                    CommandResult result;
 
                     if (_info != null && (_info.MinArgs > cmdArgs.Length || cmdArgs.Length > _info.MaxArgs)) {
                         result = CommandResult.ShowUsage();
@@ -105,16 +105,21 @@ namespace Essentials.Core.Command {
                         }
                     }
                 }
+            } catch (Exception) when (caller is UnturnedPlayer) {
+                var p = (UnturnedPlayer) caller;
+                UPlayer.TryGet(p, up => EssLang.Send(up, p.IsAdmin ? "COMMAND_ERROR_OCURRED_ADMIN" : "COMMAND_ERROR_OCURRED"));
             } catch (Exception e) { 
-                caller.TryCast<UnturnedPlayer>(p => {
-                    UPlayer.TryGet(p, up => EssLang.Send(up, p.IsAdmin ? "COMMAND_ERROR_OCURRED_ADMIN" : "COMMAND_ERROR_OCURRED"));
-                });
-
                 UEssentials.Logger.LogError(e.ToString());
             }
 
             #if DEBUG_PERF
-                UEssentials.Logger.LogDebug( $"Executed command '{Command.Name}', Took: {sw.ElapsedTicks} ticks | {sw.ElapsedMilliseconds} ms");
+                sw.Stop();
+                UEssentials.Logger.LogDebug("Executed command {");
+                UEssentials.Logger.LogDebug($"  Name: '{Command.Name}'");
+                UEssentials.Logger.LogDebug($"  Type: '{Command.GetType()}'");
+                UEssentials.Logger.LogDebug($"  Result: '{result?.ToString() ?? "null"}'");
+                UEssentials.Logger.LogDebug($"  Took: '{sw.ElapsedTicks} ticks | {sw.ElapsedMilliseconds} ms'");
+                UEssentials.Logger.LogDebug("}");
             #endif
         }
 

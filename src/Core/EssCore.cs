@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -57,6 +58,12 @@ namespace Essentials.Core {
 
     public sealed class EssCore : RocketPlugin {
 
+        /*
+            TODO:
+                - Checar se o itemfeatures/vehiclefeatures esta funcionando.
+                - Add /rawMsg
+        */
+
         internal const string ROCKET_VERSION = "4.9.7.0";
         internal const string UNTURNED_VERSION = "3.15.6.2";
         internal const string PLUGIN_VERSION = "1.2.5.0";
@@ -91,7 +98,7 @@ namespace Essentials.Core {
 
         protected override void Load() {
             try {
-                var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+                var stopwatch = Stopwatch.StartNew();
 
                 Instance = this;
                 R.Permissions = new EssentialsPermissionsProvider();
@@ -191,9 +198,9 @@ namespace Essentials.Core {
                     let mAttr = (ModuleInfo) type.GetCustomAttributes(typeof(ModuleInfo), false)[0]
                     where Config.EnabledSystems.Any(s => s.Equals(mAttr.Name, StringComparison.OrdinalIgnoreCase))
                     select type
-                    ).ForEach(type => {
-                        ModuleManager.LoadModule((NativeModule) Activator.CreateInstance(type));
-                    });
+                ).ForEach(type => {
+                    ModuleManager.LoadModule((NativeModule) Activator.CreateInstance(type));
+                });
 
                 Logger.LogInfo($"Loaded {CommandManager.Commands.Count()} commands");
 
@@ -301,44 +308,9 @@ namespace Essentials.Core {
             #endif
 
             #if DUMP_COMMANDS
-                var userProfile = System.Environment.GetEnvironmentVariable("USERPROFILE");
-                if (userProfile != null && System.IO.Directory.Exists(Path.Combine(userProfile, "Desktop"))) {
-                    var buffer = new System.Text.StringBuilder();
-
-                    CommandManager.Commands
-                        .Where(cmd => cmd is EssCommand || cmd is MethodCommand)
-                        .OrderBy(cmd => cmd.Name)
-                        .ForEach(cmd => {
-                            var usage = cmd.Usage;
-                            var desc = cmd.Description;
-                            string aliases;
-
-                            if (cmd.Aliases == null || cmd.Aliases.Length == 0) {
-                                aliases = "None";
-                            } else {
-                                aliases = Common.Util.MiscUtil.ValuesToString(cmd.Aliases);
-                            }
-
-                            if (string.IsNullOrEmpty(usage.Trim())) {
-                                usage = "None";
-                            }
-                            if (string.IsNullOrEmpty(desc.Trim())) {
-                                desc = "None";
-                            }
-
-                            buffer.Append(cmd.Name);
-                            buffer.Append(" ## ");
-                            buffer.Append(aliases);
-                            buffer.Append(" ## ");
-                            buffer.Append(desc);
-                            buffer.Append(" ## ");
-                            buffer.Append(usage);
-                            buffer.AppendLine();
-                        });
-
-                    File.WriteAllText(Path.Combine(Path.Combine(userProfile, "Desktop"), "command.txt"), buffer.ToString());
-                }
+                DumpCommands();
             #endif
+
         }
 
         protected override void Unload() {
@@ -357,6 +329,47 @@ namespace Essentials.Core {
             ModuleManager.UnloadAll();
 
             Tasks.CancelAll();
+        }
+
+        [Conditional("DUMP_COMMANDS")]
+        private static void DumpCommands() {
+            var userProfile = System.Environment.GetEnvironmentVariable("USERPROFILE");
+            if (userProfile != null && System.IO.Directory.Exists(Path.Combine(userProfile, "Desktop"))) {
+                var buffer = new System.Text.StringBuilder();
+
+                Instance.CommandManager.Commands
+                    .Where(cmd => cmd is EssCommand)
+                    .OrderBy(cmd => cmd.Name)
+                    .ForEach(cmd => {
+                        var usage = cmd.Usage;
+                        var desc = cmd.Description;
+                        string aliases;
+
+                        if (cmd.Aliases == null || cmd.Aliases.Length == 0) {
+                            aliases = "None";
+                        } else {
+                            aliases = Common.Util.MiscUtil.ValuesToString(cmd.Aliases);
+                        }
+
+                        if (string.IsNullOrEmpty(usage.Trim())) {
+                            usage = "None";
+                        }
+                        if (string.IsNullOrEmpty(desc.Trim())) {
+                            desc = "None";
+                        }
+
+                        buffer.Append(cmd.Name);
+                        buffer.Append(" ## ");
+                        buffer.Append(aliases);
+                        buffer.Append(" ## ");
+                        buffer.Append(desc);
+                        buffer.Append(" ## ");
+                        buffer.Append(usage);
+                        buffer.AppendLine();
+                    });
+
+                File.WriteAllText(Path.Combine(Path.Combine(userProfile, "Desktop"), "command.txt"), buffer.ToString());
+            }
         }
 
         private static void ReloadCallback(string command) {
@@ -437,8 +450,12 @@ namespace Essentials.Core {
 
         private void UnregisterRocketCommands(bool silent = false) {
             var _rocketCommands =
-                AccessorFactory.AccessField<List<RocketCommandManager.RegisteredRocketCommand>>(R.Commands, "commands")
-                    .Value;
+                AccessorFactory.AccessField<List<RocketCommandManager.RegisteredRocketCommand>>(R.Commands, "commands").Value;
+
+            if (_rocketCommands == null) {
+                Logger.LogError("Could not unregister Rocket commands.");
+                return;
+            }
 
             /* All names & aliases of uEssentials command */
             var essCommands = _rocketCommands

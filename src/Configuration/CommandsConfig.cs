@@ -46,27 +46,34 @@ namespace Essentials.Configuration {
         }
 
         public override void Load(string filePath) {
-            if (File.Exists(filePath)) {
-                JsonConvert.PopulateObject(File.ReadAllText(filePath), Commands);
+            try {
+                if (File.Exists(filePath)) {
+                    JsonConvert.PopulateObject(File.ReadAllText(filePath), Commands);
 
-                var allCommands = FindAllCommands();
+                    var allCommands = FindAllCommands();
 
-                /*
-                    Add new commands, if necessary.
-                */
-                if (Commands.Count != allCommands.Count) {
-                    var keys = new List<string>(allCommands.Keys); // Avoid out of sync.
+                    /*
+                        Add new commands, if necessary.
+                    */
+                    if (Commands.Count != allCommands.Count) {
+                        var keys = new List<string>(allCommands.Keys); // Avoid out of sync.
 
-                    keys.Where(Commands.ContainsKey).ForEach(k => {
-                        allCommands[k] = Commands[k]; // Update existing command configurations.
-                    });
+                        keys.Where(Commands.ContainsKey).ForEach(k => {
+                            allCommands[k] = Commands[k]; // Update existing command configurations.
+                        });
 
-                    Commands = allCommands;
+                        Commands = allCommands;
+                        Save(filePath);
+                    }
+                } else {
+                    LoadDefaults();
                     Save(filePath);
                 }
-            } else {
+            } catch (Exception ex) {
+                UEssentials.Logger.LogError($"Invalid configuration ({filePath})");
+                UEssentials.Logger.LogError(ex.Message);
+                UEssentials.Logger.LogError("Using default configuration...");
                 LoadDefaults();
-                Save(filePath);
             }
         }
 

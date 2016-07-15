@@ -109,10 +109,8 @@ namespace Essentials.NativeModules.Kit.Data {
     }
 
     internal struct PlayerCooldown {
-
         public Dictionary<string, DateTime> Kits;
         public DateTime Global;
-
     }
 
 }

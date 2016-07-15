@@ -32,7 +32,6 @@ using Essentials.Api.Unturned;
 using Essentials.Commands;
 using Essentials.Common;
 using Essentials.Components.Player;
-using Essentials.Configuration;
 using Essentials.Core;
 using Essentials.Economy;
 using Essentials.I18n;
@@ -259,7 +258,6 @@ namespace Essentials.Event.Handling {
         }
 
         private static Optional<IEconomyProvider> _cachedEconomyProvider;
-        private static IDictionary<string, CommandsConfig.CommandEntry> _cachedCommands;
 
         /*
             TODO: Cache commands & cost ??
@@ -283,15 +281,13 @@ namespace Essentials.Event.Handling {
                 EssCore.Instance.EventManager.Unregister(GetType(), "OnCommandPosExecuted");
             }
 
-            if (_cachedCommands == null) {
-                _cachedCommands = EssCore.Instance.CommandsConfig.Commands;
-            }
+            var commands = EssCore.Instance.CommandsConfig.Commands;
 
-            if (!_cachedCommands.ContainsKey(e.Command.Name)) {
+            if (!commands.ContainsKey(e.Command.Name)) {
                 return;
             }
 
-            var cost = _cachedCommands[e.Command.Name].Cost;
+            var cost = commands[e.Command.Name].Cost;
 
             if (cost <= 0) {
                 return;
@@ -304,7 +300,7 @@ namespace Essentials.Event.Handling {
                 return;
             }
 
-            EssLang.Send(e.Source, "COMMAND_NO_MONEY", cost);
+            EssLang.Send(e.Source, "COMMAND_NO_MONEY", cost, _cachedEconomyProvider.Value.Currency);
             e.Cancelled = true;
         }
 
@@ -315,15 +311,17 @@ namespace Essentials.Event.Handling {
                 return;
             }
 
+            var commands = EssCore.Instance.CommandsConfig.Commands;
+
             /*
                He will not charge if command was not successfully executed.
             */
             if (e.Result?.Type != CommandResult.ResultType.SUCCESS ||
-                !_cachedCommands.ContainsKey(e.Command.Name)) {
+                !commands.ContainsKey(e.Command.Name)) {
                 return;
             }
 
-            var cost = _cachedCommands[e.Command.Name].Cost;
+            var cost = commands[e.Command.Name].Cost;
 
             if (cost <= 0) {
                 return;
@@ -494,15 +492,13 @@ namespace Essentials.Event.Handling {
             }
         }
 
-
         [SubscribeEvent(EventType.PLAYER_DEATH)]
         private void KitPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
             var globalKitCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
 
             if (CommandKit.GlobalCooldown.ContainsKey(player.CSteamID.m_SteamID) &&
                 EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie) {
-                CommandKit.GlobalCooldown[player.CSteamID.m_SteamID] =
-                    DateTime.Now.AddSeconds(-globalKitCooldown);
+                CommandKit.GlobalCooldown[player.CSteamID.m_SteamID] = DateTime.Now.AddSeconds(-globalKitCooldown);
             }
 
             if (!CommandKit.Cooldowns.ContainsKey(player.CSteamID.m_SteamID)) return;

@@ -58,7 +58,7 @@ namespace Essentials.Core.Event {
 
                         eventInfo = eventTargetType.GetEvent(targetFieldName);
 
-                        holder = new EventHolder() {
+                        holder = new EventHolder {
                             EventInfo = eventInfo,
                             Target = eventTarget
                         };
@@ -193,10 +193,8 @@ namespace Essentials.Core.Event {
         }
 
         public sealed class EventHolder {
-
             public object Target;
             public EventInfo EventInfo;
-
         }
 
     }

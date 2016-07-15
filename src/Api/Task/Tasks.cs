@@ -126,6 +126,10 @@ namespace Essentials.Api.Task {
                         If any error occurs he will remove task from Pool.
                     */
                     try {
+                        #if DEBUG_PERF
+                            var sw = System.Diagnostics.Stopwatch.StartNew();
+                        #endif
+
                         task.Action(task);
 
                         if (task.IntervalValue < 0) {
@@ -133,6 +137,18 @@ namespace Essentials.Api.Task {
                         } else {
                             task.NextExecution = DateTime.Now.AddMilliseconds(task.IntervalValue);
                         }
+
+                        #if DEBUG_PERF
+                            sw.Stop();
+                            UEssentials.Logger.LogDebug("Executed task {");
+                            UEssentials.Logger.LogDebug($"  Target: '{task.Action.Target.GetType()}'");
+                            UEssentials.Logger.LogDebug($"  Method: '{task.Action.Method.Name}'");
+                            UEssentials.Logger.LogDebug($"  Delay: '{task.DelayValue} ms'");
+                            UEssentials.Logger.LogDebug($"  Interval: '{(task.IntervalValue == -1 ? "-1" : task.IntervalValue + "ms")}'");
+                            UEssentials.Logger.LogDebug($"  NextExecution: '{task.NextExecution}'");
+                            UEssentials.Logger.LogDebug($"  Took: '{sw.ElapsedTicks} ticks | {sw.ElapsedMilliseconds} ms'");
+                            UEssentials.Logger.LogDebug("}");
+                        #endif
                     } catch (Exception) {
                         Pool.Remove(task);
                         throw;
