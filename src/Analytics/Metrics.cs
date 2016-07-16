@@ -24,7 +24,7 @@ namespace Essentials.Analytics
             var arch = "undefined";
             var gamemode = Provider.mode.ToString();
             var pvp = Provider.PvP.ToString().ToLower();
-            var cameraMode = Provider.camera.ToString();
+            var cameraMode = Provider.cameraMode.ToString();
             var lang = Provider.language;
             var port = Provider.ServerPort.ToString();
 
