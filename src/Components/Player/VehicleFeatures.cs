@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using Essentials.Api;
 using SDG.Unturned;
 
 namespace Essentials.Components.Player {
@@ -28,21 +29,27 @@ namespace Essentials.Components.Player {
         public bool AutoRefuel { get; set; }
         public bool AutoRepair { get; set; }
 
+        private InteractableVehicle _lastVehicle;
+        private int _needRefuelPercentage;
+        private int _needRepairPercentage;
+        private readonly int _refuelPercentage = UEssentials.Config.VehicleFeatures.RefuelPercentage;
+        private readonly int _repairPercentage = UEssentials.Config.VehicleFeatures.RepairPercentage;
+
         protected override void SafeFixedUpdate() {
-            if (!Player.IsInVehicle) {
-                return;
+            if (_lastVehicle == null || _lastVehicle != Player.CurrentVehicle) {
+                _lastVehicle = Player.CurrentVehicle;
+                _needRefuelPercentage = (_lastVehicle.asset.fuel * _refuelPercentage) / 100;
+                _needRepairPercentage = (_lastVehicle.asset.health * _repairPercentage) / 100;
             }
 
-            var vehicle = Player.CurrentVehicle;
-
-            if (AutoRefuel && vehicle.fuel < 100) {
-                VehicleManager.sendVehicleFuel(vehicle, vehicle.asset.fuel);
-                vehicle.fuel = vehicle.asset.fuel;
+            if (AutoRefuel && _lastVehicle.fuel <= _needRefuelPercentage) {
+                VehicleManager.sendVehicleFuel(_lastVehicle, _lastVehicle.asset.fuel);
+                _lastVehicle.fuel = _lastVehicle.asset.fuel;
             }
 
-            if (AutoRepair && vehicle.health != vehicle.asset.health) {
-                VehicleManager.sendVehicleHealth(vehicle, vehicle.asset.health);
-                vehicle.health = vehicle.asset.health;
+            if (AutoRepair && _lastVehicle.health <= _needRepairPercentage) {
+                VehicleManager.sendVehicleHealth(_lastVehicle, _lastVehicle.asset.health);
+                _lastVehicle.health = _lastVehicle.asset.health;
             }
         }
 

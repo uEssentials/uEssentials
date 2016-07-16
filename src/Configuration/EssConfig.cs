@@ -56,6 +56,7 @@ namespace Essentials.Configuration {
         public UpdaterSettings Updater;
         public HomeCommandSettings HomeCommand;
         public WarpCommandSettings WarpCommand;
+        public VehicleFeaturesSettings VehicleFeatures;
         public WebKitsSettings WebKits;
         public WebConfigSettings WebConfig;
         public KitSettings Kit;
@@ -119,9 +120,15 @@ namespace Essentials.Configuration {
                 CancelTeleportWhenMove = false
             };
 
-            WebKits = new WebKitsSettings { Enabled = false, Url = "" };
+            WebKits = new WebKitsSettings {
+                Enabled = false,
+                Url = ""
+            };
 
-            WebConfig = new WebConfigSettings { Enabled = false, Url = "" };
+            WebConfig = new WebConfigSettings {
+                Enabled = false,
+                Url = ""
+            };
 
             Kit = new KitSettings {
                 ShowCost = true,
@@ -131,12 +138,20 @@ namespace Essentials.Configuration {
                 ResetGlobalCooldownWhenDie = false
             };
 
-            Tpa = new TpaSettings { ExpireDelay = 10, TeleportDelay = 5 };
+            Tpa = new TpaSettings {
+                ExpireDelay = 10,
+                TeleportDelay = 5
+            };
 
             Economy = new EconomySettings {
                 UseXp = false,
                 UconomyCurrency = "$",
                 XpCurrency = "Xp"
+            };
+
+            VehicleFeatures = new VehicleFeaturesSettings {
+                RefuelPercentage = 20,
+                RepairPercentage = 70
             };
 
             GiveItemBlacklist = new List<ushort>();
@@ -156,6 +171,9 @@ namespace Essentials.Configuration {
                 var json = JObject.Parse(File.ReadAllText(filePath));
                 base.Load(filePath);
 
+                /*
+                    Add missing fields...
+                */
                 var configFiels = GetType().GetFields();
                 var needUpdate = configFiels.Length != json.Count;
                 var nonNullFields = new Dictionary<string, object>();
@@ -172,6 +190,19 @@ namespace Essentials.Configuration {
                     });
 
                     Save(filePath);
+                }
+
+                /*
+                   Validation
+                */
+                if (VehicleFeatures.RefuelPercentage <= 0) {
+                    UEssentials.Logger.LogError("Invalid config: VehicleFeatures.RefuelPercentage " +
+                                                $"must be positive. (Got {VehicleFeatures.RefuelPercentage})");
+                }
+
+                if (VehicleFeatures.RepairPercentage <= 0) {
+                    UEssentials.Logger.LogError("Invalid config: VehicleFeatures.RepairPercentage " +
+                                                $"must be positive. (Got {VehicleFeatures.RepairPercentage})");
                 }
 
                 /*
@@ -266,6 +297,14 @@ namespace Essentials.Configuration {
             public bool UseXp;
             public string XpCurrency;
             public string UconomyCurrency;
+
+        }
+
+        [JsonObject]
+        public struct VehicleFeaturesSettings {
+
+            public int RefuelPercentage;
+            public int RepairPercentage;
 
         }
 
