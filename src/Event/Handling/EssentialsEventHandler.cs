@@ -78,11 +78,6 @@ namespace Essentials.Event.Handling {
             LastChatted[playerId] = DateTime.Now;
         }
 
-        [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        private void GenericPlayerConnected(UnturnedPlayer player) {
-            Analytics.Metrics.ReportPlayer(player);
-        }
-
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
         private void GenericPlayerDisconnected(UnturnedPlayer player) {
             var displayName = player.CharacterName;

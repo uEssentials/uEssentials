@@ -189,7 +189,6 @@
     <Compile Include="src\Common\Util\JsonUtil.cs" />
     <Compile Include="src\Common\Preconditions.cs" />
     <Compile Include="src\Api\Event\SubscribeEventAttr.cs" />
-    <Compile Include="src\Analytics\Metrics.cs" />
     <Compile Include="src\Api\Module\EssModule.cs" />
     <Compile Include="src\Api\Module\ModuleManager.cs" />
     <Compile Include="src\Api\Module\ModuleInfo.cs" />
