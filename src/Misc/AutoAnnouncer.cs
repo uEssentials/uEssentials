@@ -60,12 +60,11 @@ namespace Essentials.Misc {
             Enabled = false;
 
             Messages = new List<string> {
-                "<cyan>You can see kits by typing /kits, and to get a kit by typing /kit <name>",
-                "<red>Messaage 1",
-                "<green>Message 2",
-                "<blue>Message 3",
-                "<yellow>Message 4",
-                "<purple>Message 5"
+                "<red>Automatic message 1",
+                "<green>Automatic message 2",
+                "<blue>Automatic message 3",
+                "<yellow>Automatic message 4",
+                "<purple>Automatic message 5"
             };
         }
 
