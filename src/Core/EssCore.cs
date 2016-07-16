@@ -304,7 +304,6 @@ namespace Essentials.Core {
 
             #if !DEV
                 CheckUpdates();
-                Analytics.Metrics.Init();
             #else
                 CommandWindow.ConsoleOutput.title = "Unturned Server";
             #endif
