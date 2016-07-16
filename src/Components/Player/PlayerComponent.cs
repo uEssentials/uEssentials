@@ -43,7 +43,6 @@ namespace Essentials.Components.Player {
         }
 
         protected virtual void SafeFixedUpdate() {
-            
         }
     }
 
