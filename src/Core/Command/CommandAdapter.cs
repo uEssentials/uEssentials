@@ -29,6 +29,7 @@ using Essentials.Event;
 using Essentials.I18n;
 using Rocket.API;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Rocket.Unturned.Player;
 
@@ -62,9 +63,10 @@ namespace Essentials.Core.Command {
         }
 
         public void Execute(IRocketPlayer caller, string[] args) {
-            #if DEBUG_PERF
-                var sw = System.Diagnostics.Stopwatch.StartNew();
-            #endif
+            Stopwatch sw = null;
+            if (EssCore.Instance.DebugCommands) {
+                sw = System.Diagnostics.Stopwatch.StartNew();
+            }
 
             CommandResult result = null;
 
@@ -112,7 +114,7 @@ namespace Essentials.Core.Command {
                 UEssentials.Logger.LogError(e.ToString());
             }
 
-            #if DEBUG_PERF
+            if (EssCore.Instance.DebugCommands && sw != null) {
                 sw.Stop();
                 UEssentials.Logger.LogDebug("Executed command {");
                 UEssentials.Logger.LogDebug($"  Name: '{Command.Name}'");
@@ -120,7 +122,7 @@ namespace Essentials.Core.Command {
                 UEssentials.Logger.LogDebug($"  Result: '{result?.ToString() ?? "null"}'");
                 UEssentials.Logger.LogDebug($"  Took: '{sw.ElapsedTicks} ticks | {sw.ElapsedMilliseconds} ms'");
                 UEssentials.Logger.LogDebug("}");
-            #endif
+            }
         }
 
         internal class CommandAliasAdapter : CommandAdapter {

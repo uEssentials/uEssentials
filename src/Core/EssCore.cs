@@ -82,8 +82,6 @@ namespace Essentials.Core {
         internal EssConfig Config { get; set; }
         internal EssLogger Logger { get; set; }
 
-        internal Dictionary<ulong, UPlayer> ConnectedPlayers { get; set; }
-
         private string _folder;
         private string _translationFolder;
         private string _dataFolder;
@@ -94,7 +92,11 @@ namespace Essentials.Core {
         internal string DataFolder => MkDirIfNotExists(_dataFolder);
         internal string ModulesFolder => MkDirIfNotExists(_modulesFolder);
 
+        // TODO: Use fields instead of Properties ?? 
+        internal Dictionary<ulong, UPlayer> ConnectedPlayers { get; set; }
         internal InstancePool CommonInstancePool { get; } = new InstancePool();
+        internal bool DebugCommands { get; set; } = false;
+        internal bool DebugTasks { get; set; } = false;
 
         protected override void Load() {
             try {

@@ -21,6 +21,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Essentials.Core;
 using UnityEngine;
 
 namespace Essentials.Api.Task {
@@ -126,9 +128,10 @@ namespace Essentials.Api.Task {
                         If any error occurs he will remove task from Pool.
                     */
                     try {
-                        #if DEBUG_PERF
-                            var sw = System.Diagnostics.Stopwatch.StartNew();
-                        #endif
+                        Stopwatch sw = null;
+                        if (EssCore.Instance.DebugTasks) {
+                            sw = System.Diagnostics.Stopwatch.StartNew();
+                        }
 
                         task.Action(task);
 
@@ -138,7 +141,7 @@ namespace Essentials.Api.Task {
                             task.NextExecution = DateTime.Now.AddMilliseconds(task.IntervalValue);
                         }
 
-                        #if DEBUG_PERF
+                        if (EssCore.Instance.DebugTasks && sw != null) {
                             sw.Stop();
                             UEssentials.Logger.LogDebug("Executed task {");
                             UEssentials.Logger.LogDebug($"  Target: '{task.Action.Target.GetType()}'");
@@ -148,7 +151,7 @@ namespace Essentials.Api.Task {
                             UEssentials.Logger.LogDebug($"  NextExecution: '{task.NextExecution}'");
                             UEssentials.Logger.LogDebug($"  Took: '{sw.ElapsedTicks} ticks | {sw.ElapsedMilliseconds} ms'");
                             UEssentials.Logger.LogDebug("}");
-                        #endif
+                        }
                     } catch (Exception) {
                         Pool.Remove(task);
                         throw;

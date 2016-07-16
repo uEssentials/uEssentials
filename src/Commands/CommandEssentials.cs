@@ -210,6 +210,27 @@ namespace Essentials.Commands {
                     }
                     break;
 
+                case "debug": case "dbg":
+                    if (!src.HasPermission("essentials.debug")) {
+                        return CommandResult.NoPermission("essentials.debug");
+                    }
+                    if (args.Length < 3 || !args[1].IsOneOf(new [] {"commands", "tasks"}) || !args[2].IsBool) {
+                        return CommandResult.InvalidArgs("Use /essentials debug [commands/tasks] [true/false]");
+                    }
+                    var flag = args[2].ToBool;
+                    switch (args[1].RawValue) {
+                        case "commands":
+                            EssCore.Instance.DebugCommands = flag;
+                            src.SendMessage($"DebugCommands set to {flag}");
+                            break;
+
+                        case "tasks":
+                            src.SendMessage($"DebugTasks set to {flag}");
+                            EssCore.Instance.DebugTasks = flag;
+                            break;
+                    }
+                    break;
+
                 default:
                     return CommandResult.ShowUsage();
             }
