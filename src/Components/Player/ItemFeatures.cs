@@ -67,7 +67,7 @@ namespace Essentials.Components.Player {
                     var id = BitConverter.ToUInt16(
                         new[] { _equip.state[8], _equip.state[9] },
                         0
-                        );
+                    );
 
                     var holdId = _equip.HoldingItemID;
 

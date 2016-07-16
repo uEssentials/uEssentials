@@ -115,7 +115,7 @@ namespace Essentials.Api {
         public static EssCore Core {
             get {
                 Preconditions.CheckState(EssCore.Instance != null, "Essentials isn't initialized");
-
+ 
                 return EssCore.Instance;
             }
         }
