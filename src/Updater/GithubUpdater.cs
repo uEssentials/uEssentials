@@ -48,7 +48,7 @@ namespace Essentials.Updater {
                     EssCore.PLUGIN_VERSION,
                     ToDecimalVersion(EssCore.PLUGIN_VERSION),
                     string.Empty
-                    );
+                );
 
                 try {
                     var httpRequest = (HttpWebRequest) WebRequest.Create(ReleasesUrl);
@@ -85,7 +85,7 @@ namespace Essentials.Updater {
                                 latestVersion.ToString(),
                                 latestVersionDecimal,
                                 additionalData.ToString()
-                                );
+                            );
                         }
                     }
                 } catch (Exception ex) {

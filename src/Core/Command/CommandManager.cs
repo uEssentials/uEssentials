@@ -53,8 +53,11 @@ namespace Essentials.Core.Command {
 
         public ICommand GetByName(string name, bool includeAliases = true) {
             Preconditions.NotNull(name, "name cannot be null");
-
-            return GetWhere(command => command.Name.EqualsIgnoreCase(name));
+            ICommand command;
+            if (CommandMap.TryGetValue(name.ToLowerInvariant(), out command)) {
+                return command;
+            }
+            return GetWhere(cmd => cmd.Name.EqualsIgnoreCase(name));
         }
 
         public ICommand GetByType(Type commandType) {
@@ -95,7 +98,7 @@ namespace Essentials.Core.Command {
             var adapter = new CommandAdapter(command);
 
             _rocketCommands.Add(new RocketCommandManager.RegisteredRocketCommand(name, adapter));
-            CommandMap.Add(name, command);
+            CommandMap.Add(name.ToLowerInvariant(), command);
 
             if (command is EssCommand) {
                 _onRegisteredMethod.Invoke(command, ReflectionUtil.EMPTY_ARGS);
@@ -211,7 +214,7 @@ namespace Essentials.Core.Command {
                     if (command is EssCommand) {
                         _onUnregisteredMethod.Invoke(command, ReflectionUtil.EMPTY_ARGS);
                     }
-                    CommandMap.Remove(command.Name);
+                    CommandMap.Remove(command.Name.ToLowerInvariant());
                     return true;
                 }
                 return false;
@@ -285,7 +288,7 @@ namespace Essentials.Core.Command {
                 let cmdAdapter = command.Command as CommandAdapter
                 where predicate(cmdAdapter)
                 select cmdAdapter.Command
-                ).FirstOrDefault();
+            ).FirstOrDefault();
         }
 
     }
