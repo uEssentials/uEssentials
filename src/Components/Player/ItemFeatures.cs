@@ -52,11 +52,11 @@ namespace Essentials.Components.Player {
                         /*
                             Bows
                         */
-                        case 346:
-                        case 353:
-                        case 355:
-                        case 356:
-                        case 357:
+                        case 346: // Crossbow
+                        case 353: // Maple bow
+                        case 355: // Birch bow
+                        case 356: // Pine Bow
+                        case 357: // Compound bow
                             _lastArrowId1 = _equip.state[8];
                             _lastArrowId2 = _equip.state[9];
                             break;
@@ -64,31 +64,27 @@ namespace Essentials.Components.Player {
                 }
 
                 if (_equip.state[10] == 0) {
-                    var id = BitConverter.ToUInt16(
-                        new[] { _equip.state[8], _equip.state[9] },
-                        0
-                    );
-
+                    var id = BitConverter.ToUInt16(_equip.state, 8);
                     var holdId = _equip.HoldingItemID;
 
                     switch (holdId) {
-                        case 519:
+                        case 519: // Rocket Laucher
                             _equip.state[8] = 8;
                             _equip.state[9] = 2;
                             _equip.state[10] = 1;
                             goto update;
 
-                        case 300:
+                        case 300: // Shadowstalker
                             _equip.state[8] = 45;
                             _equip.state[9] = 1;
                             _equip.state[10] = 1;
                             goto update;
 
-                        case 346:
-                        case 353:
-                        case 355:
-                        case 356:
-                        case 357:
+                        case 346: // Crossbow
+                        case 353: // Maple bow
+                        case 355: // Birch bow
+                        case 356: // Pine Bow
+                        case 357: // Compound bow
                             _equip.state[8] = (byte) (_lastArrowId1 == 0 ? 91 : _lastArrowId1);
                             _equip.state[9] = (byte) (_lastArrowId2 == 0 ? 1 : _lastArrowId2);
                             _equip.state[10] = 1;
