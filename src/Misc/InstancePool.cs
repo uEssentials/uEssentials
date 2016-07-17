@@ -22,7 +22,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Essentials.Core {
+namespace Essentials.Misc {
 
     internal class InstancePool {
 

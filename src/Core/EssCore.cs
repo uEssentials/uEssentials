@@ -47,6 +47,7 @@ using Essentials.NativeModules;
 using Essentials.Updater;
 using Essentials.Compatibility.Hooks;
 using Essentials.Economy;
+using Essentials.Misc;
 using Rocket.Core;
 using Rocket.Core.Plugins;
 using Rocket.Core.Commands;
@@ -95,8 +96,14 @@ namespace Essentials.Core {
         // TODO: Use fields instead of Properties ?? 
         internal Dictionary<ulong, UPlayer> ConnectedPlayers { get; set; }
         internal InstancePool CommonInstancePool { get; } = new InstancePool();
-        internal bool DebugCommands { get; set; } = false;
+
         internal bool DebugTasks { get; set; } = false;
+        internal bool DebugCommands { get; set; } 
+        #if DEV
+            = true;
+        #else
+            = false;
+        #endif
 
         protected override void Load() {
             try {
@@ -289,7 +296,7 @@ namespace Essentials.Core {
 
                 if (!Provider.Version.EqualsIgnoreCase(UNTURNED_VERSION)) {
                     msg.Add("I detected that you are using an different version of the recommended, " +
-                            "please update your uEssentials.");
+                            "please update your uEssentials/Unturned.");
                     msg.Add("If you are using the latest uEssentials release, please wait for update.");
                 }
 
@@ -302,10 +309,10 @@ namespace Essentials.Core {
                 }
             }
 
-            #if !DEV
-                CheckUpdates();
-            #else
+            #if DEV
                 CommandWindow.ConsoleOutput.title = "Unturned Server";
+            #else
+                CheckUpdates();
             #endif
 
             #if DUMP_COMMANDS
