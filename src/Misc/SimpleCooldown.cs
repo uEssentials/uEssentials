@@ -57,9 +57,13 @@ namespace Essentials.Misc {
             return 0;
         }
 
-        public void RemovedIfExpired(CSteamID playerId) {
+        public void RemoveIfExpired(CSteamID playerId) {
             if (GetRemainingTime(playerId) < 0)
                 RemoveEntry(playerId);
+        }
+
+        public void Clear() {
+          Cooldowns.Clear();
         }
 
     }
