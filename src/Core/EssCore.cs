@@ -332,7 +332,7 @@ namespace Essentials.Core {
             Tasks.CancelAll();
         }
 
-        [Conditional("DUMP_COMMANDS")]
+        #if DUMP_COMMANDS
         private static void DumpCommands() {
             var userProfile = System.Environment.GetEnvironmentVariable("USERPROFILE");
             if (userProfile != null && System.IO.Directory.Exists(Path.Combine(userProfile, "Desktop"))) {
@@ -372,6 +372,7 @@ namespace Essentials.Core {
                 File.WriteAllText(Path.Combine(Path.Combine(userProfile, "Desktop"), "command.txt"), buffer.ToString());
             }
         }
+        #endif
 
         private static void ReloadCallback(string command) {
             if (!command.StartsWith("rocket reload", true, CultureInfo.InvariantCulture)) {
@@ -416,7 +417,7 @@ namespace Essentials.Core {
                     Newtonsoft.Json.Linq.JToken changesStr;
                     if (Newtonsoft.Json.Linq.JObject.Parse(lastResult.AdditionalData)
                         .TryGetValue("changes", out changesStr)) {
-                        Logger.LogInfo("========================= [ Changes ] =========================");
+                        Logger.LogInfo("====================== [ Update  Notes ] ======================");
 
                         changesStr.ToString().Split('\n').ForEach(msg => {
                             Logger.Log("", ConsoleColor.Green, suffix: "");
