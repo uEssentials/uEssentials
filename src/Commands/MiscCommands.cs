@@ -296,13 +296,13 @@ namespace Essentials.Commands {
             ItemAsset asset;
 
             if (args.Length == 0) {
-                var equipament = src.ToPlayer().Equipment;
+                var equipment = src.ToPlayer().Equipment;
 
-                if (equipament.HoldingItemID == 0) {
+                if (equipment.HoldingItemID == 0) {
                     return CommandResult.Lang("EMPTY_HANDS");
                 }
 
-                asset = equipament.asset;
+                asset = equipment.asset;
             } else {
                 if (!args[0].IsUshort ||
                     (asset = Assets.find(EAssetType.ITEM, args[0].ToUshort) as ItemAsset) == null) {
