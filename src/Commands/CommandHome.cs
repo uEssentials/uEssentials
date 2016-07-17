@@ -47,7 +47,7 @@ namespace Essentials.Commands {
             PlayerDictionaryCharacteristics.REMOVE_ON_DEATH |
             PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT,
             task => task.Cancel()
-            );
+        );
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
@@ -97,8 +97,11 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
-        protected override void OnUnregistered()
-            => UEssentials.EventManager.Unregister<EssentialsEventHandler>("HomePlayerMove");
+        protected override void OnUnregistered() {
+          Cooldown.Clear();
+          Delay.Clear();
+          UEssentials.EventManager.Unregister<EssentialsEventHandler>("HomePlayerMove");
+        }
 
     }
 
