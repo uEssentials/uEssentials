@@ -33,7 +33,7 @@ namespace Essentials.Components.Player {
             Player = UPlayer.From(GetComponent<SDG.Unturned.Player>());
         }
 
-        protected void FixedUpdate() {
+        protected virtual void FixedUpdate() {
             try {
                 SafeFixedUpdate();
             } catch (Exception) {
@@ -42,8 +42,13 @@ namespace Essentials.Components.Player {
             }
         }
 
-        protected virtual void SafeFixedUpdate() {
-        }
+        /// <summary>
+        /// Called by FixedUpdate.
+        /// 
+        /// If any exceptions are throw, this component will be removed
+        /// to avoid 'error flood'.
+        /// </summary>
+        protected virtual void SafeFixedUpdate() {}
     }
 
 }

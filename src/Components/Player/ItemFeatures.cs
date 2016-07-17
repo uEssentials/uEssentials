@@ -26,47 +26,32 @@ namespace Essentials.Components.Player {
 
     public class ItemFeatures : PlayerComponent {
 
-        private readonly PlayerEquipment _equip;
-
-        /*
-            Used by autoreload for bows.
-        */
-        private byte _lastArrowId1, _lastArrowId2;
-
         public bool AutoRepair { get; set; }
         public bool AutoReload { get; set; }
+
+        private readonly PlayerEquipment _equip;
+        private byte _lastArrowId1, _lastArrowId2;
 
         public ItemFeatures() {
             _equip = Player.Equipment;
         }
 
         protected override void SafeFixedUpdate() {
-            if (_equip.HoldingItemID == 0) return;
+            var holdId = _equip.HoldingItemID;
+            if (holdId == 0) return;
 
             /*
                 Weapon feature (Auto reload)
             */
             if (AutoReload && _equip.state.Length >= 18) {
-                if (_equip.state[10] == 1) {
-                    switch (_equip.HoldingItemID) {
-                        /*
-                            Bows
-                        */
-                        case 346: // Crossbow
-                        case 353: // Maple bow
-                        case 355: // Birch bow
-                        case 356: // Pine Bow
-                        case 357: // Compound bow
-                            _lastArrowId1 = _equip.state[8];
-                            _lastArrowId2 = _equip.state[9];
-                            break;
-                    }
+                // Save last arrow id
+                if (_equip.state[10] == 1 && (holdId == 346 || holdId == 353 ||
+                                              holdId == 355 || holdId == 356 || holdId == 357)) {
+                    _lastArrowId1 = _equip.state[8];
+                    _lastArrowId2 = _equip.state[9];
                 }
 
                 if (_equip.state[10] == 0) {
-                    var id = BitConverter.ToUInt16(_equip.state, 8);
-                    var holdId = _equip.HoldingItemID;
-
                     switch (holdId) {
                         case 519: // Rocket Laucher
                             _equip.state[8] = 8;
@@ -92,8 +77,8 @@ namespace Essentials.Components.Player {
                             goto update;
                     }
 
-                    var maga = Assets.find(EAssetType.ITEM, id) as ItemMagazineAsset;
-
+                    var magazineId = BitConverter.ToUInt16(_equip.state, 8);
+                    var maga = Assets.find(EAssetType.ITEM, magazineId) as ItemMagazineAsset;
                     _equip.state[10] = maga?.amount ?? 0;
 
                     update:
