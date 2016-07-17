@@ -352,7 +352,7 @@ namespace Essentials.Commands {
             switch (args[0].ToLowerString) {
                 case "autoreload":
                     if (!src.HasPermission($"{cmd.Permission}.autoreload")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.NoPermission($"{cmd.Permission}.autoreload");
                     }
                     if (toggleValue) {
                         component.AutoReload = true;
@@ -365,7 +365,7 @@ namespace Essentials.Commands {
 
                 case "autorepair":
                     if (!src.HasPermission($"{cmd.Permission}.autorepair")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.NoPermission($"{cmd.Permission}.autorepair");
                     }
                     if (toggleValue) {
                         component.AutoRepair = true;
@@ -411,6 +411,9 @@ namespace Essentials.Commands {
 
             switch (args[0].ToLowerString) {
                 case "autorefuel":
+                    if (!src.HasPermission($"{cmd.Permission}.autorefuel")) {
+                        return CommandResult.NoPermission($"{cmd.Permission}.autorefuel");
+                    }
                     if (toggleValue) {
                         component.AutoRefuel = true;
                         EssLang.Send(src, "AUTO_REFUEL_ENABLED");
@@ -421,6 +424,9 @@ namespace Essentials.Commands {
                     break;
 
                 case "autorepair":
+                    if (!src.HasPermission($"{cmd.Permission}.autorepair")) {
+                        return CommandResult.NoPermission($"{cmd.Permission}.autorepair");
+                    }
                     if (toggleValue) {
                         component.AutoRepair = true;
                         EssLang.Send(src, "AUTO_REPAIR_ENABLED");
@@ -481,15 +487,14 @@ namespace Essentials.Commands {
             if (args.Length == 0) {
                 if (src.IsConsole) {
                     return CommandResult.ShowUsage();
-                } else {
-                    var player = src.ToPlayer();
-
-                    EssLang.Send(player, 
-                        "POSITION",
-                        player.Position.x,
-                        player.Position.y,
-                        player.Position.z);
                 }
+                var player = src.ToPlayer();
+
+                EssLang.Send(player, 
+                    "POSITION",
+                    player.Position.x,
+                    player.Position.y,
+                    player.Position.z);
             } else {
                 var found = UPlayer.TryGet(args[0], p => {
                     EssLang.Send(src, "POSITION_OTHER", p.DisplayName, p.Position.x, p.Position.y, p.Position.z);
@@ -520,24 +525,24 @@ namespace Essentials.Commands {
             Description = "Respawn all items."
         )]
         private CommandResult RespawnItemsCommand(ICommandSource src, ICommandArgs args) {
-            for (byte b = 0; b < Regions.WORLD_SIZE; b += 1) {
-                for (byte b2 = 0; b2 < Regions.WORLD_SIZE; b2 += 1) {
-                    if (LevelItems.spawns[b, b2].Count <= 0) continue;
+            for (byte x = 0; x < Regions.WORLD_SIZE; x++) {
+                for (byte y = 0; y < Regions.WORLD_SIZE; y++) {
 
-                    for (var i = 0; i < LevelItems.spawns[b, b2].Count; i++) {
-                        var itemSpawnpoint = LevelItems.spawns[b, b2][i];
-                        var item = LevelItems.getItem(itemSpawnpoint);
+                    var itemsCount = LevelItems.spawns[x, y].Count;
+                    if (itemsCount <= 0) continue;
 
-                        if (item == 0) continue;
+                    for (var i = 0; i < itemsCount; i++) {
+                        var itemSpawnpoint = LevelItems.spawns[x, y][i];
+                        var itemId = LevelItems.getItem(itemSpawnpoint);
 
-                        var item2 = new Item(item, true);
-                        ItemManager.dropItem(item2, itemSpawnpoint.point, false, false, false);
+                        if (itemId == 0) continue;
+
+                        var item = new Item(itemId, true);
+                        ItemManager.dropItem(item, itemSpawnpoint.point, false, false, false);
                     }
                 }
             }
-
             EssLang.Send(src, "RESPAWNED_ITEMS");
-
             return CommandResult.Success();
         }
 
@@ -550,14 +555,13 @@ namespace Essentials.Commands {
             var spawns = LevelVehicles.spawns;
 
             foreach (var vehicleSpawnpoint in spawns) {
-                var vehicle = LevelVehicles.getVehicle(vehicleSpawnpoint);
+                var vehicleId = LevelVehicles.getVehicle(vehicleSpawnpoint);
 
-                if (vehicle == 0)
-                    continue;
+                if (vehicleId == 0) continue;
 
                 var point = vehicleSpawnpoint.point;
                 point.y += 1f;
-                VehicleManager.spawnVehicle(vehicle, point, Quaternion.Euler(0f, vehicleSpawnpoint.angle, 0f));
+                VehicleManager.spawnVehicle(vehicleId, point, Quaternion.Euler(0f, vehicleSpawnpoint.angle, 0f));
             }
 
             EssLang.Send(src, "RESPAWNED_VEHICLES");
@@ -576,9 +580,7 @@ namespace Essentials.Commands {
             if (!args.IsEmpty) {
                 Commander.execute(CSteamID.Nil, "kickall " + args.Join(0));
             }
-
             Provider.shutdown();
-
             return CommandResult.Success();
         }
 
