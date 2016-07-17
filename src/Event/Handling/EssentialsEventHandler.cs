@@ -126,7 +126,7 @@ namespace Essentials.Event.Handling {
             var uplayer = UPlayer.From(player);
             var displayName = uplayer.DisplayName;
 
-            CommandHome.Cooldown.RemovedIfExpired(player.CSteamID);
+            CommandHome.Cooldown.RemoveIfExpired(player.CSteamID);
 
             /* Keep skill */
             const string KEEP_SKILL_PERM = "essentials.keepskill.";
