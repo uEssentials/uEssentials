@@ -286,7 +286,7 @@ namespace Essentials.Commands {
             Name = "iteminfo",
             Aliases = new[] { "ii" },
             Description = "See information on an item.",
-            Usage = "<item_id>"
+            Usage = "<item id>"
         )]
         private CommandResult ItemInfoCommand(ICommandSource src, ICommandArgs args, ICommand cmd) {
             if (src.IsConsole && args.Length != 1) {
@@ -311,7 +311,7 @@ namespace Essentials.Commands {
             }
 
             var color = Color.yellow;
-            var name = WrapMessage(src, asset.name);
+            var name = WrapMessage(src, asset.Name);
             var description = WrapMessage(src, asset.Description);
             var type = WrapMessage(src, asset.ItemType.ToString());
 
