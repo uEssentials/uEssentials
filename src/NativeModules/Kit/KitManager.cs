@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using System.Collections.Generic;
 using Essentials.Api;
 using Essentials.Core.Storage;
@@ -73,13 +74,23 @@ namespace Essentials.NativeModules.Kit {
         }
 
         public void Load() {
-            LoadKits();
-            CooldownData.Load();
+            try {
+                LoadKits();
+                CooldownData.Load();
+            } catch (Exception ex) {
+                UEssentials.Logger.LogError("An error ocurred while loading kits...");
+                UEssentials.Logger.LogError(ex.ToString());
+            }
         }
 
         public void Save() {
-            SaveKits();
-            CooldownData.Save();
+            try {
+                SaveKits();
+                CooldownData.Save();
+            } catch (Exception ex) {
+                UEssentials.Logger.LogError("An error ocurred while saving kits...");
+                UEssentials.Logger.LogError(ex.ToString());
+            }
         }
 
     }

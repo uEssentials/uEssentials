@@ -39,9 +39,9 @@ namespace Essentials.NativeModules.Kit.Data {
 
         protected static string DataFilePath => $"{UEssentials.PluginFolder}kits.json";
 
-        public virtual void Save(Dictionary<string, Kit> type) {
+        public virtual void Save(Dictionary<string, Kit> warps) {
             File.WriteAllText(DataFilePath, string.Empty);
-            JsonUtil.Serialize(DataFilePath, type.Values);
+            JsonUtil.Serialize(DataFilePath, warps.Values);
         }
 
         public virtual Dictionary<string, Kit> Load() {
@@ -69,7 +69,7 @@ namespace Essentials.NativeModules.Kit.Data {
                     kitObj.GetValue("Name", strCmp).Value<string>(),
                     kitObj.GetValue("Cooldown", strCmp).Value<uint>(),
                     kitObj.GetValue("ResetCooldownWhenDie", strCmp).Value<bool>()
-                    );
+                );
 
                 var rawCost = kitObj.GetValue("Cost", strCmp);
 
