@@ -117,7 +117,8 @@
     <Compile Include="src\Common\Util\DebugUtil.cs" />
     <Compile Include="src\Compatibility\Hook.cs" />
     <Compile Include="src\Compatibility\HookManager.cs" />
-    <Compile Include="src\Core\InstancePool.cs" />
+    <Compile Include="src\Json\Converters\Vector3Converter.cs" />
+    <Compile Include="src\Misc\InstancePool.cs" />
     <Compile Include="src\Economy\IEconomyProvider.cs" />
     <Compile Include="src\Economy\ExpEconomyProvider.cs" />
     <Compile Include="src\Compatibility\Hooks\UconomyHook.cs" />
@@ -211,7 +212,6 @@
     <Compile Include="src\NativeModules\Kit\KitManager.cs" />
     <Compile Include="src\NativeModules\Kit\Data\WebKitData.cs" />
     <Compile Include="src\NativeModules\Kit\KitModule.cs" />
-    <Compile Include="src\NativeModules\Warp\Data\BinaryWarpData.cs" />
     <Compile Include="src\NativeModules\Warp\WarpModule.cs" />
     <Compile Include="src\Misc\AutoAnnouncer.cs" />
     <Compile Include="src\I18n\EssLang.cs" />
