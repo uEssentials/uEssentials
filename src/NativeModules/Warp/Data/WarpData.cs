@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Essentials.Api;
+using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.Core.Storage;
 using Newtonsoft.Json;
@@ -46,19 +47,17 @@ namespace Essentials.NativeModules.Warp.Data {
             }
         }
 
-        public void Save(Dictionary<string, Warp> type) {
-            File.WriteAllText(DataFilePath, string.Empty);
-            JsonUtil.Serialize(DataFilePath, type.Values.ToArray());
+        public void Save(Dictionary<string, Warp> warps) {
+            JsonUtil.Serialize(DataFilePath, warps.Values.ToArray());
         }
 
         public Dictionary<string, Warp> Load() {
             var loadedWarps = new Dictionary<string, Warp>();
             var deserializedWarpArray = JsonConvert.DeserializeObject<Warp[]>(File.ReadAllText(DataFilePath));
 
-            deserializedWarpArray?.ToList().ForEach(kit => {
-                loadedWarps.Add(kit.Name.ToLower(), kit);
+            deserializedWarpArray?.ForEach(warp => {
+                loadedWarps.Add(warp.Name.ToLowerInvariant(), warp);
             });
-
             return loadedWarps;
         }
 

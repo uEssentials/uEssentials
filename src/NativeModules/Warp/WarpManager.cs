@@ -19,7 +19,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using System.Collections.Generic;
+using Essentials.Api;
 using Essentials.Core.Storage;
 using Essentials.NativeModules.Warp.Data;
 
@@ -29,15 +31,14 @@ namespace Essentials.NativeModules.Warp {
 
         private Dictionary<string, Warp> WarpMap { get; set; }
         private IData<Dictionary<string, Warp>> WarpData { get; }
+
         public IEnumerable<Warp> Warps => WarpMap.Values;
         public int Count => WarpMap.Count;
 
         internal WarpManager() {
             WarpMap = new Dictionary<string, Warp>();
-            WarpData = new BinaryWarpData();
+            WarpData = new WarpData();
         }
-
-        public Warp this[string warpName] => GetByName(warpName);
 
         public bool Contains(string warpName) {
             return WarpMap.ContainsKey(warpName.ToLower());
@@ -48,11 +49,21 @@ namespace Essentials.NativeModules.Warp {
         }
 
         public void Load() {
-            WarpMap = WarpData.Load();
+            try {
+                WarpMap = WarpData.Load();
+            } catch (Exception ex) {
+                UEssentials.Logger.LogError("An error ocurred while loading warps...");
+                UEssentials.Logger.LogError(ex.ToString());
+            }
         }
 
         public void Save() {
-            WarpData.Save(WarpMap);
+            try {
+                WarpData.Save(WarpMap);
+            } catch (Exception ex) {
+                UEssentials.Logger.LogError("An error ocurred while saving warps...");
+                UEssentials.Logger.LogError(ex.ToString());
+            }
         }
 
         public void Add(Warp warp) {
@@ -66,10 +77,10 @@ namespace Essentials.NativeModules.Warp {
                 : null;
         }
 
-        public void Delete(string warpName) {
-            if (!Contains(warpName)) return;
-            WarpMap.Remove(warpName.ToLower());
+        public bool Delete(string warpName) {
+            var success = WarpMap.Remove(warpName.ToLower());
             Save();
+            return success;
         }
 
         public void Delete(Warp warp) {

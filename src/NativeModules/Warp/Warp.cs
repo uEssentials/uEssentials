@@ -21,6 +21,7 @@
 
 using Essentials.Api.Command.Source;
 using Essentials.Common;
+using Essentials.Json.Converters;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -29,41 +30,23 @@ namespace Essentials.NativeModules.Warp {
     /// <summary>
     /// Author: Leonardosc
     /// </summary>
-    [JsonObject]
     public sealed class Warp {
-
-        /// <summary>
-        /// Location in the world of warp
-        /// </summary>
-        [JsonIgnore]
-        public Vector3 Location { get; set; }
-
-        /// <summary>
-        /// Rotation of warp
-        /// </summary>
-        [JsonProperty]
-        public float Rotation { get; set; }
 
         /// <summary>
         /// Name of warp
         /// </summary>
-        [JsonProperty]
         public string Name { get; set; }
 
         /// <summary>
-        /// Serializeble Vector3, used by JsonSerializer
+        /// Rotation of warp
         /// </summary>
-        [JsonProperty(PropertyName = "Location")]
-        private SerializableVector3 SerializableLocation {
-            // Used by jsonSerializer
-            get {
-                return new SerializableVector3(Location.x,
-                    Location.y,
-                    Location.z);
-            }
+        public float Rotation { get; set; }
 
-            set { Location = new Vector3(value.X, value.Y, value.Z); }
-        }
+        /// <summary>
+        /// Location in the world of warp
+        /// </summary>
+        [JsonConverter(typeof(Vector3Converter))]
+        public Vector3 Location { get; set; }
 
         /// <summary>
         ///
@@ -76,13 +59,11 @@ namespace Essentials.NativeModules.Warp {
 
             Name = name;
             Rotation = rotation;
-            SerializableLocation = new SerializableVector3(location.x,
-                location.y,
-                location.z);
+            Location = location;
         }
 
         /// <summary>
-        ///
+        /// Check If source has permission to use this warp
         /// </summary>
         /// <param name="source">Source that you want to check if is authorized</param>
         /// <returns>If source has permission to use this warp</returns>
@@ -94,26 +75,6 @@ namespace Essentials.NativeModules.Warp {
             return "Warp{Name= " + Name + ", " +
                    "Location= " + Location + ", " +
                    "Rotation= " + Rotation + "}";
-        }
-
-    }
-
-    /// <summary>
-    /// Serializeble Vector3, used by JsonSerializer
-    /// </summary>
-    [JsonObject]
-    internal struct SerializableVector3 {
-
-        public float X { get; set; }
-
-        public float Y { get; set; }
-
-        public float Z { get; set; }
-
-        public SerializableVector3(float x, float y, float z) {
-            X = x;
-            Y = y;
-            Z = z;
         }
 
     }
