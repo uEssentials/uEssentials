@@ -23,7 +23,6 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using UnityEngine;
-using Essentials.I18n;
 using SDG.Unturned;
 using Essentials.Common;
 using System.Linq;
