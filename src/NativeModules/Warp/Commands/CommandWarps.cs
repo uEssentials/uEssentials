@@ -32,17 +32,18 @@ namespace Essentials.NativeModules.Warp.Commands {
     )]
     public class CommandWarps : EssCommand {
 
-        public override CommandResult OnExecute(ICommandSource source, ICommandArgs parameters) {
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var warps = (
                 from warp in WarpModule.Instance.WarpManager.Warps
-                where warp.CanUse(source)
+                where warp.CanUse(src)
                 select warp.Name
-                ).ToArray();
+            ).ToArray();
 
-            if (warps.Length == 0)
-                EssLang.Send(source, "WARP_NONE");
-            else
-                EssLang.Send(source, "WARP_LIST", string.Join(", ", warps));
+            if (warps.Length == 0) {
+                EssLang.Send(src, "WARP_NONE");
+            } else {
+                EssLang.Send(src, "WARP_LIST", string.Join(", ", warps));
+            }
 
             return CommandResult.Success();
         }

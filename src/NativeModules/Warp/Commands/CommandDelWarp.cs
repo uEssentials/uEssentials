@@ -29,21 +29,21 @@ namespace Essentials.NativeModules.Warp.Commands {
         Name = "delwarp",
         Aliases = new[] { "deletewarp" },
         Usage = "[warp_name]",
-        Description = "Delete an existing warp"
+        Description = "Delete an existing warp",
+        MinArgs = 1,
+        MaxArgs = 1
     )]
     public class CommandDelWarp : EssCommand {
 
-        public override CommandResult OnExecute(ICommandSource source, ICommandArgs parameters) {
-            if (parameters.IsEmpty || parameters.Length > 1) {
-                return CommandResult.ShowUsage();
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            var warpName = args[0].ToString();
+
+            if (!WarpModule.Instance.WarpManager.Contains(warpName)) {
+                return CommandResult.Lang("WARP_NOT_EXIST", warpName);
             }
 
-            if (!WarpModule.Instance.WarpManager.Contains(parameters[0].ToString())) {
-                return CommandResult.Lang("WARP_NOT_EXIST", parameters[0]);
-            }
-
-            WarpModule.Instance.WarpManager.Delete(parameters[0].ToString());
-            EssLang.Send(source, "WARP_REMOVED", parameters[0]);
+            WarpModule.Instance.WarpManager.Delete(warpName);
+            EssLang.Send(src, "WARP_REMOVED", warpName);
 
             return CommandResult.Success();
         }
