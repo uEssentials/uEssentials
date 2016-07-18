@@ -44,7 +44,7 @@ namespace Essentials.NativeModules.Warp.Commands {
             PlayerDictionaryCharacteristics.REMOVE_ON_DEATH |
             PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT,
             task => task.Cancel()
-            );
+        );
 
         public override CommandResult OnExecute(ICommandSource source, ICommandArgs parameters) {
             var player = source.ToPlayer();
@@ -66,7 +66,7 @@ namespace Essentials.NativeModules.Warp.Commands {
                 return CommandResult.Lang("CANNOT_TELEPORT_DRIVING");
             }
 
-            var dest = WarpModule.Instance.WarpManager[parameters[0].ToString()];
+            var dest = WarpModule.Instance.WarpManager.GetByName(parameters[0].ToString());
             var cooldown = UEssentials.Config.WarpCommand.Cooldown;
 
             if (cooldown > 0 && !player.HasPermission("essentials.bypass.warpcooldown")) {
@@ -85,8 +85,10 @@ namespace Essentials.NativeModules.Warp.Commands {
             return CommandResult.Success();
         }
 
-        protected override void OnUnregistered()
-            => UEssentials.EventManager.Unregister<EssentialsEventHandler>("WarpPlayerMove");
+        protected override void OnUnregistered() {
+            Delay.Clear();
+            UEssentials.EventManager.Unregister<EssentialsEventHandler>("WarpPlayerMove");
+        }
 
     }
 
