@@ -26,8 +26,8 @@ namespace Essentials.Core.Storage {
         /// <summary>
         /// Save given data
         /// </summary>
-        /// <param name="type">The data</param>
-        void Save(T type);
+        /// <param name="value"></param>
+        void Save(T value);
 
         /// <summary>
         /// Load data
