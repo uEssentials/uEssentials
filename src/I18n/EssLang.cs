@@ -78,8 +78,11 @@ namespace Essentials.I18n {
                 if (LANGS.Contains(locale)) {
                     LoadDefault(locale);
                 } else {
-                    throw new ArgumentException($"Invalid locale '{locale}', " +
+                    UEssentials.Logger.LogError($"Invalid locale '{locale}', " +
                                                 $"File not found '{translationPath}'");
+                    UEssentials.Logger.LogError("Switching to default locale (en)...");
+                    locale = "en";
+                    translationPath = $"{UEssentials.TranslationFolder}lang_{locale}.json";
                 }
             }
 
