@@ -51,8 +51,8 @@ namespace Essentials.Event.Handling {
 
         internal static readonly Dictionary<ulong, DateTime> LastChatted = new Dictionary<ulong, DateTime>();
 
-        internal static readonly Dictionary<string, Dictionary<USkill, byte>> CachedSkills =
-            new Dictionary<string, Dictionary<USkill, byte>>();
+        internal static readonly Dictionary<ulong, Dictionary<USkill, byte>> CachedSkills =
+            new Dictionary<ulong, Dictionary<USkill, byte>>();
 
         [SubscribeEvent(EventType.PLAYER_CHATTED)]
         private void OnPlayerChatted(UnturnedPlayer player, ref Color color, string message,
@@ -84,7 +84,7 @@ namespace Essentials.Event.Handling {
 
             MiscCommands.Spies.Remove(player.CSteamID.m_SteamID);
             CommandTell.Conversations.Remove(player.CSteamID.m_SteamID);
-            CachedSkills.Remove(displayName);
+            CachedSkills.Remove(player.CSteamID.m_SteamID);
             CommandHome.Cooldown.RemoveEntry(player.CSteamID);
 
             /* Kit Stuffs */
@@ -101,9 +101,9 @@ namespace Essentials.Event.Handling {
 
                     Global and per kit
                 */
-                if (CommandKit.GlobalCooldown.ContainsKey(playerId) &&
-                    CommandKit.GlobalCooldown[playerId].AddSeconds(
-                        EssCore.Instance.Config.Kit.GlobalCooldown) < DateTime.Now) {
+                var delta = CommandKit.GlobalCooldown[playerId].AddSeconds(UEssentials.Config.Kit.GlobalCooldown);
+
+                if (CommandKit.GlobalCooldown.ContainsKey(playerId) && delta < DateTime.Now) {
                     CommandKit.GlobalCooldown.Remove(playerId);
                 }
 
@@ -124,7 +124,6 @@ namespace Essentials.Event.Handling {
         [SubscribeEvent(EventType.PLAYER_DEATH)]
         private void GenericPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
             var uplayer = UPlayer.From(player);
-            var displayName = uplayer.DisplayName;
 
             CommandHome.Cooldown.RemoveIfExpired(player.CSteamID);
 
@@ -206,20 +205,23 @@ namespace Essentials.Event.Handling {
 
             if (skillValues.Count == 0) return;
 
-            if (CachedSkills.ContainsKey(displayName)) {
-                CachedSkills[displayName] = skillValues;
+            var id = player.CSteamID.m_SteamID;
+            if (CachedSkills.ContainsKey(id)) {
+                CachedSkills[id] = skillValues;
             } else {
-                CachedSkills.Add(displayName, skillValues);
+                CachedSkills.Add(id, skillValues);
             }
         }
 
         [SubscribeEvent(EventType.PLAYER_REVIVE)]
         private void OnPlayerRespawn(UnturnedPlayer player, Vector3 vect, byte angle) {
-            if (!CachedSkills.ContainsKey(player.CharacterName)) return;
+            var playerId = player.CSteamID.m_SteamID;
+            if (!CachedSkills.ContainsKey(playerId)) {
+                return;
+            }
 
-            var uplayer = UPlayer.From(player);
-
-            CachedSkills[uplayer.DisplayName].ForEach(pair => {
+            var uplayer = UPlayer.From(playerId);
+            CachedSkills[playerId].ForEach(pair => {
                 uplayer.SetSkillLevel(pair.Key, pair.Value);
             });
         }
@@ -272,8 +274,8 @@ namespace Essentials.Event.Handling {
                 /*
                     If economy hook is not present, this "handler" will be unregistered.
                 */
-                EssCore.Instance.EventManager.Unregister(GetType(), "OnCommandPreExecuted");
-                EssCore.Instance.EventManager.Unregister(GetType(), "OnCommandPosExecuted");
+                EssCore.Instance.EventManager.Unregister(GetType(), nameof(OnCommandPreExecuted));
+                EssCore.Instance.EventManager.Unregister(GetType(), nameof(OnCommandPosExecuted));
             }
 
             var commands = EssCore.Instance.CommandsConfig.Commands;
@@ -416,6 +418,22 @@ namespace Essentials.Event.Handling {
                 case EDeathCause.ARENA:
                     EssLang.Broadcast("DEATH_ARENA", player.CharacterName);
                     break;
+
+                //TODO add on lang
+                case EDeathCause.MISSILE:
+                    break;
+
+                case EDeathCause.CHARGE:
+                    break;
+
+                case EDeathCause.SPLASH:
+                    break;
+
+                case EDeathCause.SENTRY:
+                    break;
+
+                case EDeathCause.ACID:
+                    break;
             }
         }
 
@@ -423,8 +441,7 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
         private void HomePlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            if (!UEssentials.Config.HomeCommand.CancelTeleportWhenMove ||
-                !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
+            if (!UEssentials.Config.HomeCommand.CancelTeleportWhenMove || !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
 
@@ -439,8 +456,7 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
         private void WarpPlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            if (!UEssentials.Config.WarpCommand.CancelTeleportWhenMove ||
-                !CommandWarp.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
+            if (!UEssentials.Config.WarpCommand.CancelTeleportWhenMove || !CommandWarp.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
 
@@ -491,8 +507,7 @@ namespace Essentials.Event.Handling {
         private void KitPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
             var globalKitCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
 
-            if (CommandKit.GlobalCooldown.ContainsKey(player.CSteamID.m_SteamID) &&
-                EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie) {
+            if (CommandKit.GlobalCooldown.ContainsKey(player.CSteamID.m_SteamID) && EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie) {
                 CommandKit.GlobalCooldown[player.CSteamID.m_SteamID] = DateTime.Now.AddSeconds(-globalKitCooldown);
             }
 
