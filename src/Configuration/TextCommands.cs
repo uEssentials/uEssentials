@@ -34,7 +34,7 @@ namespace Essentials.Configuration {
         public override void LoadDefaults() {
             Commands.Add(new TextCommandData {
                 Name = "rules",
-                Text = new string[] {
+                Text = new [] {
                     "<cyan>Be Respectful.",
                     "<cyan>Don't use cheats.",
                     "<cyan>Have fun :D"
@@ -42,7 +42,7 @@ namespace Essentials.Configuration {
             });
             Commands.Add(new TextCommandData {
                 Name = "website",
-                Text = new string[] {
+                Text = new [] {
                     "<cyan>Our website: github.com/uEssentials"
                 }
             });
