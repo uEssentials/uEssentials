@@ -86,7 +86,7 @@ namespace Essentials.Api.Unturned {
                         EDeathCause.BLEEDING,
                         ELimb.SPINE,
                         CSteamId
-                        );
+                    );
                 } else {
                     RocketPlayer.Heal((byte) (playerHealth - value));
                 }
