@@ -32,6 +32,7 @@ using SDG.Unturned;
 using Essentials.Core;
 using Essentials.Compatibility.Hooks;
 using Essentials.NativeModules.Kit.Item;
+using Newtonsoft.Json.Schema;
 
 namespace Essentials.NativeModules.Kit.Data {
 
@@ -39,9 +40,27 @@ namespace Essentials.NativeModules.Kit.Data {
 
         protected static string DataFilePath => $"{UEssentials.PluginFolder}kits.json";
 
+        private const StringComparison _cmpIgnoreCase = StringComparison.InvariantCultureIgnoreCase;
+
         public virtual void Save(Dictionary<string, Kit> warps) {
             File.WriteAllText(DataFilePath, string.Empty);
             JsonUtil.Serialize(DataFilePath, warps.Values);
+        }
+
+        private static T GetValueOrDefault<T>(JObject obj, string key, T def) {
+            var val = obj.GetValue(key).Value<T>();
+            if (val == null) {
+                return def;
+            }
+            return val;
+        }
+
+        private static T GetNotNullValue<T>(JObject obj, string key, string errMsg = null) {
+            var val = obj.GetValue(key).Value<T>();
+            if (val == null) {
+                throw new ArgumentException(errMsg ?? $"Kit {key} cannot be null.");
+            }
+            return val;
         }
 
         public virtual Dictionary<string, Kit> Load() {
@@ -58,47 +77,43 @@ namespace Essentials.NativeModules.Kit.Data {
                 kitArr = JArray.Parse(File.ReadAllText(DataFilePath));
             } catch (JsonReaderException ex) {
                 UEssentials.Logger.LogError($"Invalid kit configuration ({DataFilePath})");
-                UEssentials.Logger.LogError(ex.Message);
-                kitArr = JArray.Parse("[]");
-            }
+                UEssentials.Logger.LogError(ex.ToString());
+                kitArr = new JArray();
+            }                    
 
             const StringComparison strCmp = StringComparison.InvariantCultureIgnoreCase;
 
             foreach (var kitObj in kitArr.Children<JObject>()) {
                 var kit = new Kit(
-                    kitObj.GetValue("Name", strCmp).Value<string>(),
-                    kitObj.GetValue("Cooldown", strCmp).Value<uint>(),
-                    kitObj.GetValue("ResetCooldownWhenDie", strCmp).Value<bool>()
+                    GetNotNullValue<string>(kitObj, "Name"),
+                    GetValueOrDefault(kitObj, "Cooldown", 0u),
+                    GetValueOrDefault(kitObj, "Cost", 0m),
+                    GetValueOrDefault(kitObj, "ResetCooldownWhenDie", false)
                 );
-
-                var rawCost = kitObj.GetValue("Cost", strCmp);
-
-                if (rawCost != null) {
-                    kit.Cost = rawCost.Value<decimal>();
-                }
 
                 var itemIndex = 0;
                 var economyHook = EssCore.Instance.HookManager.GetActiveByType<UconomyHook>();
 
-                foreach (var itemObj in kitObj.GetValue("items", strCmp).Children<JObject>()) {
+                foreach (var itemObj in kitObj.GetValue("Items", strCmp).Children<JObject>()) {
                     AbstractKitItem kitItem;
+                    JToken val;
 
-                    if (itemObj.GetValue("money", strCmp) != null && economyHook.IsPresent) {
-                        kitItem = new KitItemMoney(itemObj.GetValue("money", strCmp).Value<decimal>());
+                    if ((val = itemObj.GetValue("money", strCmp)) != null && economyHook.IsPresent) {
+                        kitItem = new KitItemMoney(val.Value<decimal>());
                         goto add;
                     }
 
-                    if (itemObj.GetValue("xp", strCmp) != null) {
-                        kitItem = new KitItemExperience(itemObj.GetValue("xp", strCmp).Value<uint>());
+                    if ((val = itemObj.GetValue("xp", strCmp)) != null) {
+                        kitItem = new KitItemExperience(val.Value<uint>());
                         goto add;
                     }
 
-                    if (itemObj.GetValue("vehicle", strCmp) != null) {
-                        var vehicleId = itemObj.GetValue("vehicle", strCmp).Value<ushort>();
+                    if ((val = itemObj.GetValue("vehicle", strCmp)) != null) {
+                        var vehicleId = val.Value<ushort>();
 
                         if (Assets.find(EAssetType.VEHICLE, vehicleId) == null) {
                             UEssentials.Logger.LogWarning(
-                                $"Invalid vehicle id. Kit: {kit.Name} item Index: {itemIndex++}");
+                                $"Invalid vehicle id '{vehicleId}' in kit '{kit.Name}' at index {++itemIndex}");
                             continue;
                         }
 
@@ -106,20 +121,18 @@ namespace Essentials.NativeModules.Kit.Data {
                         goto add;
                     }
 
-                    var tokKitItemId = itemObj.GetValue("id", strCmp);
+                    var kitItemId = itemObj.GetValue("id", strCmp).Value<ushort>();
+                    var itemAsset = (ItemAsset) Assets.find(EAssetType.ITEM, kitItemId);
+
+                    if (itemAsset == null) {
+                        UEssentials.Logger.LogWarning($"Invalid item id '{kitItemId}' in kit '{kit.Name}' at index {++itemIndex}");
+                        continue;
+                    }
+
                     var tokKitItemDurability = itemObj.GetValue("Durability", strCmp);
                     var tokKitItemAmount = itemObj.GetValue("Amount", strCmp);
                     var tokAmmo = itemObj.GetValue("Ammo", strCmp);
 
-                    var itemAsset = (ItemAsset) Assets.find(EAssetType.ITEM,
-                        tokKitItemId?.Value<ushort>() ?? 0);
-
-                    if (tokKitItemId == null || itemAsset == null) {
-                        UEssentials.Logger.LogWarning($"Invalid item id. Kit: {kit.Name} item Index: {itemIndex++}");
-                        continue;
-                    }
-
-                    var kitItemId = tokKitItemId.Value<ushort>();
                     var kitItemAmount = tokKitItemAmount?.Value<byte>() ?? 1;
                     var kitItemDurability = tokKitItemDurability?.Value<byte>() ?? 100;
 
@@ -159,13 +172,12 @@ namespace Essentials.NativeModules.Kit.Data {
                         }
                     }
 
-                    kitItem = new KitItemWeapon(kitItemId,
+                    var weaponItem = new KitItemWeapon(kitItemId,
                         kitItemDurability,
                         kitItemAmount,
                         ammo,
-                        fireMode);
-
-                    var weaponItem = (KitItemWeapon) kitItem;
+                        fireMode
+                    );
 
                     Func<JToken, Attachment> deserializeAttach = json => {
                         return json == null ? null : JsonConvert.DeserializeObject<Attachment>(json.ToString());
@@ -176,6 +188,8 @@ namespace Essentials.NativeModules.Kit.Data {
                     weaponItem.Tactical = deserializeAttach(tokTactical);
                     weaponItem.Grip = deserializeAttach(tokGrip);
                     weaponItem.Magazine = deserializeAttach(tokMagazine);
+
+                    kitItem = weaponItem;
 
                     add:
                     kit.Items.Add(kitItem);
