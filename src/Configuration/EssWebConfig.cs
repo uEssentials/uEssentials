@@ -23,6 +23,7 @@ using System;
 using System.IO;
 using Essentials.Api;
 using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace Essentials.Configuration {
 
@@ -30,14 +31,16 @@ namespace Essentials.Configuration {
 
         public override void Load(string filePath) {
             var logger = UEssentials.Logger;
-            var url = UEssentials.Config.WebConfig.Url;
+            var curWebConf = UEssentials.Config.WebConfig;
 
             try {
-                logger.LogInfo($"Loading web configuration from '{url}'");
+                logger.LogInfo($"Loading web configuration from '{curWebConf.Url}'");
 
                 using (var wc = new WebClient()) {
-                    var resp = wc.DownloadString(url);
-                    File.WriteAllText(filePath, resp);
+                    var resp = JObject.Parse(wc.DownloadString(curWebConf.Url));
+                    resp["WebConfig"]["Url"] = curWebConf.Url;
+                    resp["WebConfig"]["Enabled"] = curWebConf.Enabled;
+                    File.WriteAllText(filePath, resp.ToString());
                 }
             } catch (Exception ex) {
                 logger.LogError("Could not load webconfig.");

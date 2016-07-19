@@ -138,8 +138,9 @@ namespace Essentials.Core {
                 Config.Load(configPath);
 
                 if (Config.WebConfig.Enabled) {
-                    Config = new EssWebConfig();
-                    Config.Load(configPath);
+                    var conf = new EssWebConfig();
+                    conf.Load(configPath);
+                    Config = conf;
                 }
 
                 CommandsConfig = new CommandsConfig();
