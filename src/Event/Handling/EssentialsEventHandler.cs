@@ -80,19 +80,18 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
         private void GenericPlayerDisconnected(UnturnedPlayer player) {
-            var displayName = player.CharacterName;
+            var playerId = player.CSteamID.m_SteamID;
 
-            MiscCommands.Spies.Remove(player.CSteamID.m_SteamID);
-            CommandTell.Conversations.Remove(player.CSteamID.m_SteamID);
-            CachedSkills.Remove(player.CSteamID.m_SteamID);
+            MiscCommands.Spies.Remove(playerId);
+            CommandTell.Conversations.Remove(playerId);
+            CachedSkills.Remove(playerId);
             CommandHome.Cooldown.RemoveEntry(player.CSteamID);
 
             /* Kit Stuffs */
             UEssentials.ModuleManager.GetModule<KitModule>().IfPresent(m => {
                 if (CommandKit.Cooldowns.Count == 0) return;
-                if (!CommandKit.Cooldowns.ContainsKey(player.CSteamID.m_SteamID)) return;
+                if (!CommandKit.Cooldowns.ContainsKey(playerId)) return;
 
-                var playerId = player.CSteamID.m_SteamID;
                 var playerCooldowns = CommandKit.Cooldowns[playerId];
                 var keys = new List<string>(playerCooldowns.Keys);
 
@@ -474,7 +473,7 @@ namespace Essentials.Event.Handling {
                 return;
             }
 
-            UPlayer.TryGet(player, p => p.SetMetadata("back_pos", player.Position));
+            UPlayer.TryGet(player, p => p.SetMetadata(Consts.BACK_METADATA_KEY, player.Position));
         }
 
 

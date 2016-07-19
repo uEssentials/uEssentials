@@ -38,9 +38,7 @@ namespace Essentials.Commands {
     public class CommandTpAll : EssCommand {
 
         private static readonly Action<Vector3, List<UPlayer>> TeleportAll = (pos, players) => {
-            players.ForEach(
-                player => player.UnturnedPlayer.sendTeleport(pos, 0)
-                );
+            players.ForEach(player => player.UnturnedPlayer.sendTeleport(pos, 0));
         };
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
@@ -49,6 +47,7 @@ namespace Essentials.Commands {
             if (players.Count == (src.IsConsole ? 0 : 1)) {
                 return CommandResult.Lang("NO_PLAYERS_FOR_TELEPORT");
             }
+
             switch (args.Length) {
                 case 0:
                     if (src.IsConsole) {

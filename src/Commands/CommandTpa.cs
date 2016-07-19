@@ -39,18 +39,15 @@ namespace Essentials.Commands {
 
     [CommandInfo(
         Name = "tpa",
-        Usage = "[player | accept | deny | cancel]",
-        AllowedSource = AllowedSource.PLAYER
+        Usage = "[player/accept/deny/cancel]",
+        AllowedSource = AllowedSource.PLAYER,
+        MinArgs = 1
     )]
     public class CommandTpa : EssCommand {
 
         public static Dictionary<ulong, ulong> Requests = new Dictionary<ulong, ulong>();
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (args.Length < 1) {
-                return CommandResult.ShowUsage();
-            }
-
             var player = src.ToPlayer();
             var senderId = player.CSteamId.m_SteamID;
 

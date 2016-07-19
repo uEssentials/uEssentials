@@ -670,16 +670,12 @@ namespace Essentials.Commands {
             Description = "Show tps."
         )]
         private CommandResult TpsCommand(ICommandSource src, ICommandArgs args) {
-            Color color;
             var tps = Provider.debugTPS;
-
-            if (tps > 40)
-                color = Color.green;
-            else if (tps < 40 && tps > 25)
-                color = Color.yellow;
-            else
-                color = Color.red;
-
+            var color = 
+                tps > 40 ? Color.green : 
+                tps > 25 ? Color.yellow : 
+                Color.red;
+    
             src.SendMessage($"Ticks per second: {tps}", color);
             return CommandResult.Success();
         }
@@ -776,7 +772,7 @@ namespace Essentials.Commands {
 
         [CommandInfo(
             Name = "pvp",
-            Description = "Enable or disable pvp",
+            Description = "Enable or disable server pvp.",
             Usage = "[on|off]"
         )]
         private CommandResult PvpCommand(ICommandSource src, ICommandArgs args) {

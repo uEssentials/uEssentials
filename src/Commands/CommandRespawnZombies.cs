@@ -48,7 +48,7 @@ namespace Essentials.Commands {
                     zombie.gear,
                     zombie.transform.position,
                     0
-                    );
+                );
                 count++;
             });
 

@@ -31,15 +31,13 @@ namespace Essentials.Commands {
     [CommandInfo(
         Name = "unfreeze",
         Usage = "[player/*]",
-        Description = "Unfreeze a player/everyone"
+        Description = "Unfreeze a player/everyone",
+        MinArgs = 1,
+        MaxArgs = 1
     )]
     public class CommandUnfreeze : EssCommand {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (args.Length == 0) {
-                return CommandResult.ShowUsage();
-            }
-
             if (args[0].Is("*")) {
                 foreach (var player in UServer.Players.Where(player => player.HasComponent<FrozenPlayer>())) {
                     player.RemoveComponent<FrozenPlayer>();
@@ -57,12 +55,11 @@ namespace Essentials.Commands {
 
                 if (!target.HasComponent<FrozenPlayer>()) {
                     return CommandResult.Lang("NOT_FROZEN", target.DisplayName);
-                } else {
-                    target.RemoveComponent<FrozenPlayer>();
-
-                    EssLang.Send(src, "UNFROZEN_SENDER", target.DisplayName);
-                    EssLang.Send(target, "UNFROZEN_PLAYER", src.DisplayName);
                 }
+                target.RemoveComponent<FrozenPlayer>();
+
+                EssLang.Send(src, "UNFROZEN_SENDER", target.DisplayName);
+                EssLang.Send(target, "UNFROZEN_PLAYER", src.DisplayName);
             }
 
             return CommandResult.Success();

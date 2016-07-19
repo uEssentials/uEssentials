@@ -118,6 +118,7 @@
     <Compile Include="src\Common\Util\DebugUtil.cs" />
     <Compile Include="src\Compatibility\Hook.cs" />
     <Compile Include="src\Compatibility\HookManager.cs" />
+    <Compile Include="src\Core\Consts.cs" />
     <Compile Include="src\Json\Converters\Vector3Converter.cs" />
     <Compile Include="src\Misc\InstancePool.cs" />
     <Compile Include="src\Economy\IEconomyProvider.cs" />

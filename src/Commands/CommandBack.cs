@@ -24,6 +24,7 @@ using Essentials.Api.Command.Source;
 using UnityEngine;
 using Essentials.I18n;
 using Essentials.Api;
+using Essentials.Core;
 using Essentials.Event.Handling;
 
 namespace Essentials.Commands {
@@ -39,11 +40,11 @@ namespace Essentials.Commands {
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
 
-            if (!player.HasMetadata("back_pos")) {
+            if (!player.HasMetadata(Consts.BACK_METADATA_KEY)) {
                 return CommandResult.Lang("NOT_DIED_YET");
             }
 
-            var backPosition = player.GetMetadata<Vector3>("back_pos");
+            var backPosition = player.GetMetadata<Vector3>(Consts.BACK_METADATA_KEY);
             src.ToPlayer().Teleport(backPosition);
             EssLang.Send(src, "RETURNED");
 
