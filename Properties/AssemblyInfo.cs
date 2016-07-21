@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using Essentials.Core;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -28,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion(Essentials.Core.EssCore.PLUGIN_VERSION)]
-[assembly: AssemblyFileVersion(Essentials.Core.EssCore.PLUGIN_VERSION)]
+[assembly: AssemblyVersion(EssCore.PLUGIN_VERSION)]
+[assembly: AssemblyFileVersion(EssCore.PLUGIN_VERSION)]
