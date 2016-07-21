@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using UnityEngine.Assertions.Must;
 
 namespace Essentials.Common {
 
@@ -74,6 +73,9 @@ namespace Essentials.Common {
 
     }
 
+/*
+    Unused...
+
     public static class MiscExtensions {
 
         public static Predicate<T> And<T>(this Predicate<T> src, Predicate<T> other) {
@@ -94,5 +96,5 @@ namespace Essentials.Common {
         }
 
     }
-
+*/
 }
