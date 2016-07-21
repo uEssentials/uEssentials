@@ -21,16 +21,13 @@
 
 using System;
 using System.Reflection;
+using Essentials.CodeAnalysis;
 
 namespace Essentials.Common.Reflect {
 
     public static class AccessorFactory {
 
-        public static FieldAccessor<TFieldType> AccessField<TFieldType>(
-            object obj, string fieldName) {
-            Preconditions.NotNull(obj, "obj cannot be null");
-            Preconditions.NotNull(fieldName, "fieldName cannot be null");
-
+        public static FieldAccessor<TFieldType> AccessField<TFieldType>([NotNull] object obj, [NotNull] string fieldName) {
             var objType = obj is Type ? (Type) obj : obj.GetType();
             var fieldInfo = objType.GetField(fieldName, (BindingFlags) 60);
 
@@ -51,11 +48,7 @@ namespace Essentials.Common.Reflect {
             return AccessField<TFieldType>(obj, $"<{fieldName}>k__BackingField");
         }
 
-        public static MethodAccessor<TReturnType> AccessMethod<TReturnType>(
-            object obj, string methodName) {
-            Preconditions.NotNull(obj, "obj cannot be null");
-            Preconditions.NotNull(methodName, "methodName cannot be null");
-
+        public static MethodAccessor<TReturnType> AccessMethod<TReturnType>([NotNull] object obj, [NotNull] string methodName) {
             var objType = obj is Type ? (Type) obj : obj.GetType();
             var methodInfo = objType.GetMethod(methodName, (BindingFlags) 60);
 
