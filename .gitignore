@@ -1,10 +1,9 @@
 obj/
 bin/
-Deprecated/
-Scripts/
-
-build.bat
+codeanalysis/
 .vs/
 .vscode/
+
 experimental.bat
 release.bat
+analize.bat

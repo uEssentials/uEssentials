@@ -1,0 +1,1 @@
+py commands.py BUILD %*
