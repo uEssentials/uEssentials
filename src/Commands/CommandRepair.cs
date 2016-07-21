@@ -29,54 +29,27 @@ using Essentials.Common.Reflect;
 using Essentials.Common.Util;
 using SDG.Unturned;
 using Essentials.I18n;
+using Essentials.Common;
 
 namespace Essentials.Commands {
 
+    //TODO: /repair [all/hand] <player> ?
     [CommandInfo(
         Name = "repair",
         Aliases = new[] { "fix" },
         Description = "Repair all/in hand items",
         AllowedSource = AllowedSource.PLAYER,
-        Usage = "[all/hand]"
+        Usage = "[all/hand]",
+        MinArgs = 1,
+        MaxArgs = 1
     )]
     public class CommandRepair : EssCommand {
-
-        private static readonly Action<UPlayer, Items> Repair = (player, item) => {
-            if (item == null) return;
-
-            var field = AccessorFactory.AccessField<List<ItemJar>>(item, "items");
-            var items = field.Value;
-            byte index = 0;
-
-            items.ForEach(itemJar => {
-                item.updateQuality(index, 100);
-
-                player.UnturnedPlayer.inventory.channel.send("tellUpdateQuality", ESteamCall.OWNER,
-                    ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[] {
-                        item.page,
-                        player.UnturnedPlayer.inventory.getIndex(item.page, itemJar.PositionX, itemJar.PositionY),
-                        100
-                    });
-
-                var optAttach = ItemUtil.GetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL);
-
-                optAttach.IfPresent(attach => {
-                    attach.Durability = 100;
-                    ItemUtil.SetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL, attach);
-                });
-
-                index++;
-            });
-        };
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
 
-            if (args.IsEmpty) {
-                return CommandResult.ShowUsage();
-            }
             if (args[0].Is("all")) {
-                player.RocketPlayer.Inventory.Items.ToList().ForEach(item => Repair(player, item));
+                player.RocketPlayer.Inventory.Items.ForEach(item => Repair(player, item));
                 EssLang.Send(src, "ALL_REPAIRED");
             } else if (args[0].Is("hand")) {
                 Repair(player, player.Inventory.Items[0]);
@@ -90,6 +63,32 @@ namespace Essentials.Commands {
             }
 
             return CommandResult.Success();
+        }
+
+        private void Repair(UPlayer player, Items item) {
+            if (item == null) return;
+
+            var playerInv = player.UnturnedPlayer.inventory;
+            var field = AccessorFactory.AccessField<List<ItemJar>>(item, "items");//TODO 'cache'
+            var items = field.Value;
+            byte index = 0;
+
+            items.ForEach(itemJar => {
+                item.updateQuality(index, 100);
+
+                playerInv.channel.send("tellUpdateQuality", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[] {
+                    item.page,
+                    playerInv.getIndex(item.page, itemJar.PositionX, itemJar.PositionY),
+                    100
+                });
+
+                var barrel = ItemUtil.GetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL);
+                barrel.IfPresent(attach => {
+                    attach.Durability = 100;
+                    ItemUtil.SetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL, attach);
+                });
+                index++;
+            });
         }
 
     }
