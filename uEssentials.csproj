@@ -99,6 +99,7 @@
     <Compile Include="src\Api\Configuration\IConfig.cs" />
     <Compile Include="src\Api\Module\LoadFlags.cs" />
     <Compile Include="src\Api\Task\Tasks.cs" />
+    <Compile Include="src\CodeAnalysis\NotNullAttribute.cs" />
     <Compile Include="src\Commands\CommandHome.cs" />
     <Compile Include="src\Commands\CommandJump.cs" />
     <Compile Include="src\Commands\CommandKillAnimals.cs" />
