@@ -20,6 +20,7 @@
 */
 
 using System;
+using Essentials.CodeAnalysis;
 
 namespace Essentials.Common {
 
@@ -51,17 +52,13 @@ namespace Essentials.Common {
             _value = value;
         }
 
-        public void IfPresent(Action<T> consumer) {
-            Preconditions.NotNull(consumer, "consumer cannot be null");
-
+        public void IfPresent([NotNull] Action<T> consumer) {
             if (IsPresent) {
                 consumer(Value);
             }
         }
 
-        public void IfAbsent(Action<T> consumer) {
-            Preconditions.NotNull(consumer, "consumer cannot be null");
-
+        public void IfAbsent([NotNull] Action<T> consumer) {
             if (IsAbsent) {
                 consumer(Value);
             }

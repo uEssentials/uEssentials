@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Essentials.CodeAnalysis;
 using Essentials.Common;
 using Essentials.Core;
 
@@ -50,9 +51,7 @@ namespace Essentials.Api.Module {
         /// Load module from an assembly
         /// </summary>
         /// <param name="moduleAssembly">Assembly that contains module that you want to load</param>
-        public EssModule LoadModule(Assembly moduleAssembly) {
-            Preconditions.NotNull(moduleAssembly, "ModuleAssembly cannot be null");
-
+        public EssModule LoadModule([NotNull] Assembly moduleAssembly) {
             // Prevents to load uEssentials dll accidently
             if (moduleAssembly.Equals(typeof(EssCore).Assembly))
                 return null;
@@ -84,8 +83,7 @@ namespace Essentials.Api.Module {
         /// Load an module
         /// </summary>
         /// <param name="module">Module that you want to load</param>
-        public void LoadModule(EssModule module) {
-            Preconditions.NotNull(module, "Module cannot be null");
+        public void LoadModule([NotNull] EssModule module) {
             Preconditions.IsTrue(RunningModules.Contains(module), "This module already loaded");
 
             module.Load();
@@ -96,8 +94,7 @@ namespace Essentials.Api.Module {
         /// Unload ab module
         /// </summary>
         /// <param name="module">Module that you want to unload</param>
-        public void UnloadModule(EssModule module) {
-            Preconditions.NotNull(module, "Module cannot be null");
+        public void UnloadModule([NotNull] EssModule module) {
             Preconditions.IsFalse(RunningModules.Contains(module), "This module isn't running");
 
             module.Unload();

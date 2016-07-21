@@ -26,6 +26,7 @@ using System.Reflection;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.CodeAnalysis;
 using Essentials.Common;
 using Essentials.Common.Reflect;
 using Essentials.Common.Util;
@@ -51,8 +52,7 @@ namespace Essentials.Core.Command {
             _rocketCommands = AccessorFactory.AccessField<List<RocketCommandManager.RegisteredRocketCommand>>(R.Commands, "commands").Value;
         }
 
-        public ICommand GetByName(string name, bool includeAliases = true) {
-            Preconditions.NotNull(name, "name cannot be null");
+        public ICommand GetByName([NotNull] string name, bool includeAliases = true) {
             ICommand command;
             if (CommandMap.TryGetValue(name.ToLowerInvariant(), out command)) {
                 return command;
@@ -68,9 +68,8 @@ namespace Essentials.Core.Command {
             return (TCommandType) GetByType(typeof(TCommandType));
         }
 
-        public void Register(ICommand command) {
-            Preconditions.NotNull(command, "Command cannot be null");
-            Preconditions.NotNull(command.Name, "Command name cannot be null");
+        public void Register([NotNull] ICommand command) {
+            Preconditions.NotNull(command.Name, "Command 'Name' cannot be null");
 
             var name = command.Name.ToLowerInvariant();
 
@@ -118,21 +117,15 @@ namespace Essentials.Core.Command {
             Register((ICommand) EssCore.Instance.CommonInstancePool.GetOrCreate(typeof(TCommandType)));
         }
 
-        public void Register(Func<ICommandSource, ICommandArgs, CommandResult> method) {
-            Preconditions.NotNull(method, "method cannot be null");
-
+        public void Register([NotNull] Func<ICommandSource, ICommandArgs, CommandResult> method) {
             Register(new MethodCommand(method));
         }
 
-        public void Register(Func<ICommandSource, ICommandArgs, ICommand, CommandResult> method) {
-            Preconditions.NotNull(method, "method cannot be null");
-
+        public void Register([NotNull] Func<ICommandSource, ICommandArgs, ICommand, CommandResult> method) {
             Register(new MethodCommand(method));
         }
 
-        public void RegisterAll(Assembly assembly) {
-            Preconditions.NotNull(assembly, "Assembly cannot be null");
-
+        public void RegisterAll([NotNull] Assembly assembly) {
             RegisterAllWhere(assembly, type => true);
         }
 
@@ -147,9 +140,7 @@ namespace Essentials.Core.Command {
             UnregisterWhere(command => command.Command.GetType() == commandType);
         }
 
-        public void UnregisterAll(Assembly assembly) {
-            Preconditions.NotNull(assembly, "Assembly cannot be null");
-
+        public void UnregisterAll([NotNull] Assembly assembly) {
             UnregisterWhere(command => Equals(command.GetType().Assembly, assembly));
         }
 
@@ -166,9 +157,7 @@ namespace Essentials.Core.Command {
             UnregisterWhere(command => command.Command == targetCommand);
         }
 
-        public bool HasWithName(string commandName) {
-            Preconditions.NotNull(commandName, "commandName cannot be null");
-
+        public bool HasWithName([NotNull] string commandName) {
             return HasWith(command => {
                 var rocketCommand = command as IRocketCommand;
 

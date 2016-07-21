@@ -21,6 +21,7 @@
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.CodeAnalysis;
 using Essentials.Common;
 
 namespace Essentials.Api.Events {
@@ -56,9 +57,7 @@ namespace Essentials.Api.Events {
             }
         }
 
-        public CommandEvent(ICommand command, ICommandArgs args, ICommandSource src) {
-            Preconditions.NotNull(command, "command cannot be null");
-
+        public CommandEvent([NotNull] ICommand command, ICommandArgs args, ICommandSource src) {
             Command = command;
             Arguments = args;
             Source = src;

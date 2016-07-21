@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
 using Essentials.Common.Util;
@@ -63,9 +64,11 @@ namespace Essentials.Api.Command {
         }
 
         protected EssCommand() {
-            Info = Preconditions.NotNull(
-                ReflectionUtil.GetAttributeFrom<CommandInfo>(this),
-                "EssCommand must have 'CommandInfo' attribute");
+            Info = ReflectionUtil.GetAttributeFrom<CommandInfo>(this);
+
+            if (Info == null) {
+                throw new ArgumentException("EssCommand must have 'CommandInfo' attribute.");
+            }
 
             Permission = GetType().Assembly.Equals(typeof(EssCore).Assembly)
                 ? $"essentials.command.{Name}"

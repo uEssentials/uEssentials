@@ -22,7 +22,7 @@
 using System.Collections.Generic;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
-using Essentials.Common;
+using Essentials.CodeAnalysis;
 using Essentials.I18n;
 using Essentials.NativeModules.Kit.Item;
 
@@ -65,9 +65,7 @@ namespace Essentials.NativeModules.Kit {
         ///     Flag that determines if cooldown will be reseted when player die
         /// </param>
         /// </summary>
-        public Kit(string name, uint cooldown, bool resetCooldownWhenDie) {
-            Preconditions.NotNull(name, "Kit Name cannot be null");
-
+        public Kit([NotNull] string name, uint cooldown, bool resetCooldownWhenDie) {
             Name = name;
             Cooldown = cooldown;
             ResetCooldownWhenDie = resetCooldownWhenDie;

@@ -20,6 +20,7 @@
 */
 
 using Essentials.Api.Command.Source;
+using Essentials.CodeAnalysis;
 using Essentials.Common;
 using Essentials.Json.Converters;
 using Newtonsoft.Json;
@@ -54,9 +55,7 @@ namespace Essentials.NativeModules.Warp {
         /// <param name="name">Name of warp</param>
         /// <param name="location">Location of warp</param>
         /// <param name="rotation">Rotation of warp</param>
-        public Warp(string name, Vector3 location, float rotation) {
-            Preconditions.NotNull(name, "Warp name connot be null");
-
+        public Warp([NotNull] string name, Vector3 location, float rotation) {
             Name = name;
             Rotation = rotation;
             Location = location;
