@@ -30,28 +30,28 @@ namespace Essentials.Commands {
     [CommandInfo(
         Name = "kill",
         Description = "Kill an player",
-        Usage = "[player/*]"
+        Usage = "[player/*]",
+        MinArgs = 1,
+        MaxArgs = 1
     )]
     public class CommandKill : EssCommand {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (args.IsEmpty) {
-                return CommandResult.ShowUsage();
-            }
-
             if (args[0].Is("*")) {
                 UServer.Players.ForEach(p => p.Kill());
 
                 EssLang.Send(src, "KILL_ALL");
-            } else if (args[0].IsValidPlayerName) {
-                var target = args[0].ToPlayer;
-                target.Kill();
-
-                EssLang.Send(src, "KILL_PLAYER", target.DisplayName);
-            } else {
-                EssLang.Send(src, "PLAYER_NOT_FOUND", args[0]);
+                return CommandResult.Success();
             }
 
+            if (!args[0].IsValidPlayerName) {
+                return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+            }
+
+            var target = args[0].ToPlayer;
+            target.Kill();
+
+            EssLang.Send(src, "KILL_PLAYER", target.DisplayName);
             return CommandResult.Success();
         }
 

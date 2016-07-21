@@ -70,19 +70,16 @@ namespace Essentials.Commands {
                     break;
 
                 case 3:
-                    try {
-                        var x = (float) args[0].ToDouble;
-                        var y = (float) args[1].ToDouble;
-                        var z = (float) args[2].ToDouble;
+                    var vec3 = args.GetVector3(0);
 
-                        var pos = new Vector3(x, y, z);
-
-                        TeleportAll(pos, players);
-                        EssLang.Send(src, "TELEPORTED_ALL_COORDS", x, y, z);
-                    } catch (FormatException) {
-                        return CommandResult.Lang("INVALID_COORDS",
-                            src, args[0], args[1], args[2]);
+                    if (!vec3.HasValue) {
+                        return CommandResult.Lang("INVALID_COORDS", src, args[0], args[1], args[2]);
                     }
+
+                    var pos = vec3.Value;
+
+                    TeleportAll(pos, players);
+                    EssLang.Send(src, "TELEPORTED_ALL_COORDS", pos.x);
                     break;
 
                 default:

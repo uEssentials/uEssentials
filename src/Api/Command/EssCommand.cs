@@ -21,7 +21,6 @@
 
 using System;
 using Essentials.Api.Command.Source;
-using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.Core;
 

@@ -34,12 +34,14 @@ namespace Essentials.Commands {
     )]
     public class CommandClearInventory : EssCommand {
 
+        public readonly byte[] EMPTY_BYTE_ARRAY = new byte[0];
+
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (args.IsEmpty) {
-                if (src.IsConsole) {
-                    return CommandResult.ShowUsage();
-                }
-            } else if (!src.HasPermission(Permission + ".other")) {
+            if (args.IsEmpty && src.IsConsole) {
+                return CommandResult.ShowUsage();
+            }
+
+            if (!args.IsEmpty && !src.HasPermission(Permission + ".other")) {
                 return CommandResult.NoPermission($"{Permission}.other");
             }
 
@@ -49,20 +51,20 @@ namespace Essentials.Commands {
                 return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
             }
 
-            var playerInventory = player.Inventory;
+            var playerInv = player.Inventory;
 
             // "Remove "models" of items from player "body""
-            player.Channel.send("tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, (byte) 0, (byte) 0,
-                new byte[0]);
-            player.Channel.send("tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, (byte) 1, (byte) 0,
-                new byte[0]);
+            player.Channel.send("tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, 
+                (byte) 0, (byte) 0, EMPTY_BYTE_ARRAY);
+            player.Channel.send("tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, 
+                (byte) 1, (byte) 0, EMPTY_BYTE_ARRAY);
 
             // Remove items
             for (byte page = 0; page < 8; page++) {
-                var count = playerInventory.getItemCount(page);
+                var count = playerInv.getItemCount(page);
 
                 for (byte index = 0; index < count; index++) {
-                    playerInventory.removeItem(page, 0);
+                    playerInv.removeItem(page, 0);
                 }
             }
 
@@ -70,31 +72,31 @@ namespace Essentials.Commands {
 
             // Remove unequipped cloths
             System.Action removeUnequipped = () => {
-                for (byte i = 0; i < playerInventory.getItemCount(2); i++) {
-                    playerInventory.removeItem(2, 0);
+                for (byte i = 0; i < playerInv.getItemCount(2); i++) { //TODO isso é necessario?
+                    playerInv.removeItem(2, 0);
                 }
             };
 
             // Unequip & remove from inventory
-            player.UnturnedPlayer.clothing.askWearBackpack(0, 0, new byte[0], true);
+            player.UnturnedPlayer.clothing.askWearBackpack(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            player.UnturnedPlayer.clothing.askWearGlasses(0, 0, new byte[0], true);
+            player.UnturnedPlayer.clothing.askWearGlasses(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            player.UnturnedPlayer.clothing.askWearHat(0, 0, new byte[0], true);
+            player.UnturnedPlayer.clothing.askWearHat(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            player.UnturnedPlayer.clothing.askWearPants(0, 0, new byte[0], true);
+            player.UnturnedPlayer.clothing.askWearPants(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            player.UnturnedPlayer.clothing.askWearMask(0, 0, new byte[0], true);
+            player.UnturnedPlayer.clothing.askWearMask(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            player.UnturnedPlayer.clothing.askWearShirt(0, 0, new byte[0], true);
+            player.UnturnedPlayer.clothing.askWearShirt(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            player.UnturnedPlayer.clothing.askWearVest(0, 0, new byte[0], true);
+            player.UnturnedPlayer.clothing.askWearVest(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
             EssLang.Send(player, "INVENTORY_CLEAN");

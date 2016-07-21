@@ -21,7 +21,6 @@
 
 using System.Linq;
 using Essentials.I18n;
-using System;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
@@ -34,17 +33,6 @@ namespace Essentials.Commands {
         Usage = "<overpower[true|false]> <player>"
     )]
     public class CommandMaxSkills : EssCommand {
-
-        private static readonly Action<UPlayer, bool> GiveMaxSkills = (player, overpower) => {
-            var pSkills = player.UnturnedPlayer.skills;
-
-            foreach (var skill in pSkills.skills.SelectMany(skArr => skArr)) {
-                skill.level = overpower ? byte.MaxValue : skill.max;
-            }
-
-            pSkills.askSkills(player.CSteamId);
-            EssLang.Send(player, "MAX_SKILLS");
-        };
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             if (args.IsEmpty) {
@@ -81,6 +69,17 @@ namespace Essentials.Commands {
             }
 
             return CommandResult.Success();
+        }
+
+        private void GiveMaxSkills(UPlayer player, bool overpower) {
+            var pSkills = player.UnturnedPlayer.skills;
+
+            foreach (var skill in pSkills.skills.SelectMany(skArr => skArr)) {
+                skill.level = overpower ? byte.MaxValue : skill.max;
+            }
+
+            pSkills.askSkills(player.CSteamId);
+            EssLang.Send(player, "MAX_SKILLS");
         }
 
     }

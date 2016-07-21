@@ -24,7 +24,6 @@ using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
-using Essentials.I18n;
 using static Essentials.Commands.CommandTell;
 
 namespace Essentials.Commands {

@@ -93,10 +93,11 @@ namespace Essentials.Commands {
                 playerExp += (uint) amount;
             }
 
-            if (amount >= 0)
+            if (amount >= 0) {
                 EssLang.Send(player, "EXPERIENCE_RECEIVED", amount);
-            else
+            } else {
                 EssLang.Send(player, "EXPERIENCE_LOST", -amount);
+            }
 
             player.UnturnedPlayer.skills.Experience = playerExp;
             player.UnturnedPlayer.skills.askSkills(player.CSteamId);

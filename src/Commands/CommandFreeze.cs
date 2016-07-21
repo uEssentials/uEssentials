@@ -34,14 +34,13 @@ namespace Essentials.Commands {
     [CommandInfo(
         Name = "freeze",
         Usage = "[player/*]",
-        Description = "Freeze a player/everyone"
+        Description = "Freeze a player/everyone",
+        MinArgs = 1,
+        MaxArgs = 1
     )]
     public class CommandFreeze : EssCommand {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (args.Length == 0) {
-                return CommandResult.ShowUsage();
-            }
             if (args[0].Is("*")) {
                 UServer.Players
                     .Where(player => !player.HasComponent<FrozenPlayer>())

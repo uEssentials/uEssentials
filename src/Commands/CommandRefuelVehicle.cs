@@ -19,14 +19,12 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
+using Essentials.Common;
 using Essentials.I18n;
 using SDG.Unturned;
-
-// ReSharper disable InconsistentNaming
 
 namespace Essentials.Commands {
 
@@ -34,7 +32,8 @@ namespace Essentials.Commands {
         Name = "refuelvehicle",
         Aliases = new[] { "refuel" },
         Description = "Refuel current/all vehicles",
-        Usage = "<all>"
+        Usage = "<all>",
+        MaxArgs = 1
     )]
     public class CommandRefuelVehicle : EssCommand {
 
@@ -53,14 +52,13 @@ namespace Essentials.Commands {
                     return CommandResult.Lang("NOT_IN_VEHICLE");
                 }
             } else if (args[0].Is("all")) {
-                if (!src.HasPermission(Permission + ".all")) {
-                    return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                if (!src.HasPermission($"{Permission}.all")) {
+                    return CommandResult.NoPermission($"{Permission}.all");
                 }
 
                 lock (UWorld.Vehicles) {
                     UWorld.Vehicles
-                        .Where(veh => !veh.isExploded && !veh.isUnderwater)
-                        .ToList()
+                        .WhereNot(veh => veh.isExploded || veh.isUnderwater)
                         .ForEach(RefuelVehicle);
 
                     EssLang.Send(src, "VEHICLE_REFUELED_ALL");

@@ -20,7 +20,6 @@
 */
 
 
-using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
@@ -41,7 +40,7 @@ namespace Essentials.Commands {
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var killedCount = 0;
 
-            UWorld.Animals.Where(animal => !animal.isDead).ForEach(animal => {
+            UWorld.Animals.WhereNot(animal => animal.isDead).ForEach(animal => {
                 AnimalManager.sendAnimalDead(animal, Vector3.zero);
                 killedCount++;
             });

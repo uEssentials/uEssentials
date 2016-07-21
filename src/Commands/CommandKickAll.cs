@@ -41,12 +41,12 @@ namespace Essentials.Commands {
                 return CommandResult.Lang("NO_PLAYERS_FOR_KICK");
             }
 
-            var noReasonMessage = EssLang.Translate("KICK_NO_SPECIFIED_REASON");
+            var reason = args.IsEmpty
+                ? EssLang.Translate("KICK_NO_SPECIFIED_REASON")
+                : args.Join(0);
 
             players.ForEach(player => {
-                player.Kick(args.IsEmpty
-                    ? noReasonMessage
-                    : args.Join(0));
+                player.Kick(reason);
             });
 
             EssLang.Send(src, "KICKED_ALL", players.Count);

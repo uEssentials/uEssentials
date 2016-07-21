@@ -21,7 +21,6 @@
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.I18n;
 using Essentials.Common.Util;
 using Essentials.NativeModules.Kit.Item;
 using SDG.Unturned;

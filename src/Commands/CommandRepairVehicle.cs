@@ -25,9 +25,7 @@ using Essentials.I18n;
 using SDG.Unturned;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
-
-
-// ReSharper disable InconsistentNaming
+using Essentials.Common;
 
 namespace Essentials.Commands {
 
@@ -55,13 +53,13 @@ namespace Essentials.Commands {
                     return CommandResult.Lang("NOT_IN_VEHICLE");
                 }
             } else if (args[0].Is("all")) {
-                if (!src.HasPermission(Permission + ".all")) {
-                    return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                if (!src.HasPermission($"{Permission}.all")) {
+                    return CommandResult.NoPermission($"{Permission}.all");
                 }
 
                 lock (UWorld.Vehicles) {
                     UWorld.Vehicles
-                        .Where(veh => !veh.isExploded && !veh.isUnderwater)
+                        .WhereNot(veh => veh.isExploded || veh.isUnderwater)
                         .ToList()
                         .ForEach(vehicle => {
                             VehicleManager.sendVehicleHealth(vehicle, vehicle.asset.health);

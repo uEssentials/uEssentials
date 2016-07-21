@@ -32,7 +32,6 @@ using SDG.Unturned;
 using Essentials.Core;
 using Essentials.Compatibility.Hooks;
 using Essentials.NativeModules.Kit.Item;
-using Newtonsoft.Json.Schema;
 
 namespace Essentials.NativeModules.Kit.Data {
 
