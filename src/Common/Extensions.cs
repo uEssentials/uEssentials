@@ -23,11 +23,11 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Essentials.Common.Util;
+using UnityEngine.Assertions.Must;
 
 namespace Essentials.Common {
 
-    public static class Extensions {
+    public static class StringExtensions {
 
         public static bool EqualsIgnoreCase(this string str1, string str2) {
             return string.Compare(str1, str2, StringComparison.OrdinalIgnoreCase) == 0;
@@ -37,45 +37,52 @@ namespace Essentials.Common {
             return CultureInfo.InvariantCulture.CompareInfo.IndexOf(str, part, CompareOptions.IgnoreCase) >= 0;
         }
 
+        public static bool IsNullOrEmpty(this string str) {
+            return string.IsNullOrEmpty(str);
+        }
+
         public static string Capitalize(this string str) {
             return CultureInfo.InvariantCulture.TextInfo.ToTitleCase(str.ToLowerInvariant());
         }
 
-        public static string Format(this string str, params object[] args) {
-            return string.Format(str, args);
-        }
+    }
 
+    public static class EnumerableExtensions {
 
-        public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action) {
-            foreach (var obj in enumerable) action(obj);
-        }
-
-        public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) {
-            return enumerable.Where(t => !predicate(t));
-        }
-
-        public static bool None<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) {
-            return !enumerable.Any(predicate);
-        }
-
-        public static string ValuesToString<T>(this IEnumerable<T> enumerable) {
-            return MiscUtil.ValuesToString(enumerable);
-        }
-
-
-        public static V GetOrDefault<K, V>(this Dictionary<K, V> dict, K key, V def) {
-            V val;
-            return dict.TryGetValue(key, out val) ? val : def;
-        }
-
-        public static void PutOrUpdate<K, V>(this Dictionary<K, V> dict, K key, V value) {
-            if (dict.ContainsKey(key)) {
-                dict[key] = value;
-            } else {
-                dict.Add(key, value);
+        public static void ForEach<T>(this IEnumerable<T> src, Action<T> action) {
+            foreach (var obj in src) {
+                action(obj);
             }
         }
 
+        public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> src, Func<T, bool> predicate) {
+            return src.Where(t => !predicate(t));
+        }
+
+        public static bool None<T>(this IEnumerable<T> src, Func<T, bool> predicate) {
+            return !src.Any(predicate);
+        }
+
+    }
+
+    public static class DictionaryExtensions {
+
+        public static V GetOrDefault<K, V>(this Dictionary<K, V> src, K key, V def) {
+            V val;
+            return src.TryGetValue(key, out val) ? val : def;
+        }
+
+    }
+
+    public static class MiscExtensions {
+
+        public static Predicate<T> And<T>(this Predicate<T> src, Predicate<T> other) {
+            return p => src(p) && other(p);
+        }
+
+        public static Predicate<T> Or<T>(this Predicate<T> src, Predicate<T> other) {
+            return p => src(p) || other(p);
+        }
 
         public static T TryCast<T>(this object o, Action<T> successCallback) where T : class {
             var cast = o as T;
@@ -85,7 +92,7 @@ namespace Essentials.Common {
             }
             return null;
         }
-        
+
     }
 
 }
