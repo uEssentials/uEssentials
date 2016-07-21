@@ -22,8 +22,10 @@
 using System.IO;
 using Steamworks;
 using System;
+using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Common;
 using Essentials.I18n;
 
 namespace Essentials.Commands {
@@ -31,21 +33,11 @@ namespace Essentials.Commands {
     [CommandInfo(
         Name = "resetplayer",
         Description = "Reset all player data.",
-        Usage = "[player/playerid]"
+        Usage = "[player/playerid]",
+        MinArgs = 1,
+        MaxArgs = 1
     )]
     public class CommandResetPlayer : EssCommand {
-
-        private static readonly Action<ulong> ResetPlayer = steamId => {
-            var sep = Path.DirectorySeparatorChar.ToString();
-            var idStr = steamId.ToString();
-
-            foreach (var dic in Directory.GetDirectories(Directory.GetParent(
-                Directory.GetCurrentDirectory()).ToString() + $"{sep}Players{sep}")) {
-                if (dic.Substring(dic.LastIndexOf(sep, StringComparison.Ordinal) + 1).StartsWith(idStr)) {
-                    Directory.Delete(dic, true);
-                }
-            }
-        };
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             if (args.IsEmpty || args.Length > 1) {
@@ -75,6 +67,16 @@ namespace Essentials.Commands {
             }
 
             return CommandResult.Success();
+        }
+
+        private void ResetPlayer(ulong steamId) {
+            var sep = Path.DirectorySeparatorChar.ToString();
+            var idStr = steamId.ToString();
+            var parentDir = Directory.GetParent(Directory.GetCurrentDirectory());
+
+            Directory.GetDirectories(parentDir + $"{sep}Players{sep}")
+                .Where(dic => dic.Substring(dic.LastIndexOf(sep, StringComparison.Ordinal) + 1).StartsWith(idStr))
+                .ForEach(dic => Directory.Delete(dic, true));
         }
 
     }

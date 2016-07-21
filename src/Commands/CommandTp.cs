@@ -32,7 +32,7 @@ namespace Essentials.Commands {
     [CommandInfo(
         Name = "tp",
         Usage = "[player|place|x y z] or [player] [player|place|x y z]",
-        Description = "Teleportation command"
+        Description = "Teleport to an player or place."
     )]
     public class CommandTp : EssCommand {
 
@@ -132,7 +132,6 @@ namespace Essentials.Commands {
             1 - location
             2 - place/player name
         */
-
         private static object[] FindPlaceOrPlayer(string arg) {
             var position = Vector3.zero;
             var placeOrPlayerName = string.Empty;
@@ -156,21 +155,14 @@ namespace Essentials.Commands {
         }
 
         private static bool TryFindPlace(string name, out LocationNode outNode) {
-            outNode = null;
-
-            var locationNode = (
+            outNode = (
                 from node in LevelNodes.Nodes
                 where node.type == ENodeType.LOCATION
                 let locNode = node as LocationNode
                 where locNode.Name.ToLower().Contains(name.ToLower())
                 select locNode
-                ).FirstOrDefault();
-
-            if (locationNode == null)
-                return false;
-
-            outNode = locationNode;
-            return true;
+            ).FirstOrDefault();
+            return outNode != null;
         }
 
     }

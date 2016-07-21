@@ -86,6 +86,8 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
+        protected override void OnUnregistered() => Conversations.Clear();
+
     }
 
 }

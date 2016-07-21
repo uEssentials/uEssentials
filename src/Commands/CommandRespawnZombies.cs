@@ -20,9 +20,11 @@
 */
 
 
+using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
+using Essentials.Common;
 using SDG.Unturned;
 using Essentials.I18n;
 
@@ -37,7 +39,7 @@ namespace Essentials.Commands {
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var count = 0;
 
-            UWorld.Zombies.ForEach(zombie => {
+            UWorld.Zombies.Where(z => z.isDead).ForEach(zombie => {
                 ZombieManager.sendZombieAlive(
                     zombie,
                     zombie.type,

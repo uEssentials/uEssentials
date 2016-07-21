@@ -31,7 +31,7 @@ namespace Essentials.Commands {
     [CommandInfo(
         Name = "sudo",
         Description = "Make player or console execute an command",
-        Usage = "[player/*console*/* = all]"
+        Usage = "[player/*/*console*/]"
     )]
     public class CommandSudo : EssCommand {
 

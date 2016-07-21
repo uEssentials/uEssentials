@@ -33,15 +33,13 @@ namespace Essentials.Commands {
         Aliases = new[] { "r" },
         Description = "Reply to the most recent private message",
         Usage = "[message]",
-        AllowedSource = AllowedSource.PLAYER
+        AllowedSource = AllowedSource.PLAYER,
+        MinArgs = 1,
+        MaxArgs = 1
     )]
     public class CommandReply : EssCommand {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (args.Length == 0) {
-                return CommandResult.ShowUsage();
-            }
-
             var playerId = src.ToPlayer().CSteamId.m_SteamID;
 
             if (!Conversations.ContainsKey(playerId)) {

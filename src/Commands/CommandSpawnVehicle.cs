@@ -85,9 +85,7 @@ namespace Essentials.Commands {
             VehicleManager.spawnVehicle(id, pos, Quaternion.identity);
         }
 
-        private static bool IsValidVehicleId(ushort id) {
-            return Assets.find(EAssetType.VEHICLE, id) is VehicleAsset;
-        }
+        private static bool IsValidVehicleId(ushort id) => Assets.find(EAssetType.VEHICLE, id) is VehicleAsset;
 
     }
 
