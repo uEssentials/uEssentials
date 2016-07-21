@@ -30,7 +30,7 @@ namespace Essentials.Api.Event {
     public sealed class SubscribeEvent : Attribute {
 
         /// <summary>
-        /// Type of event event
+        /// Type of event
         /// </summary>
         public EventType EventType;
 
