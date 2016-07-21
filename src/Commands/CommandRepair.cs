@@ -19,17 +19,15 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
-using Essentials.Common.Reflect;
 using Essentials.Common.Util;
 using SDG.Unturned;
 using Essentials.I18n;
 using Essentials.Common;
+using System.Reflection;
 
 namespace Essentials.Commands {
 
@@ -44,6 +42,8 @@ namespace Essentials.Commands {
         MaxArgs = 1
     )]
     public class CommandRepair : EssCommand {
+
+        private readonly FieldInfo _itemsField = typeof(Items).GetField("items", ReflectionUtil.INSTANCE_FLAGS);
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
@@ -69,8 +69,7 @@ namespace Essentials.Commands {
             if (item == null) return;
 
             var playerInv = player.UnturnedPlayer.inventory;
-            var field = AccessorFactory.AccessField<List<ItemJar>>(item, "items");//TODO 'cache'
-            var items = field.Value;
+            var items = (List<ItemJar>) _itemsField.GetValue(item);
             byte index = 0;
 
             items.ForEach(itemJar => {
