@@ -40,9 +40,9 @@ namespace Essentials.NativeModules.Warp.Commands {
     public class CommandWarp : EssCommand {
 
         internal static PlayerDictionary<Tasks.Task> Delay = new PlayerDictionary<Tasks.Task>(
-            PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS |
-            PlayerDictionaryCharacteristics.REMOVE_ON_DEATH |
-            PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT,
+            PlayerDictionaryOptions.LAZY_REGISTER_HANDLERS |
+            PlayerDictionaryOptions.REMOVE_ON_DEATH |
+            PlayerDictionaryOptions.REMOVE_ON_DISCONNECT,
             task => task.Cancel()
         );
 

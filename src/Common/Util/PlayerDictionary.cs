@@ -31,18 +31,18 @@ namespace Essentials.Common.Util {
 
     public class PlayerDictionary<TValue> : Dictionary<ulong, TValue> {
 
-        public PlayerDictionaryCharacteristics Characteristics { get; }
+        public PlayerDictionaryOptions Options { get; }
         private bool _registeredEventHandlers;
         private readonly Action<TValue> _removalCallback;
 
-        public PlayerDictionary() : this(PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT, null) {}
+        public PlayerDictionary() : this(PlayerDictionaryOptions.REMOVE_ON_DISCONNECT, null) {}
 
-        public PlayerDictionary(PlayerDictionaryCharacteristics characteristics, Action<TValue> removalCallback) {
-            Characteristics = characteristics;
+        public PlayerDictionary(PlayerDictionaryOptions options, Action<TValue> removalCallback) {
+            Options = options;
             _removalCallback = removalCallback;
 
-            if ((Characteristics & PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS) !=
-                PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS)
+            if ((Options & PlayerDictionaryOptions.LAZY_REGISTER_HANDLERS) !=
+                PlayerDictionaryOptions.LAZY_REGISTER_HANDLERS)
                 RegisterEventHandlers();
         }
 
@@ -57,7 +57,7 @@ namespace Essentials.Common.Util {
         }
 
         public new void Add(ulong key, TValue value) {
-            if ((Characteristics & PlayerDictionaryCharacteristics.LAZY_REGISTER_HANDLERS) != 0 && !_registeredEventHandlers)
+            if ((Options & PlayerDictionaryOptions.LAZY_REGISTER_HANDLERS) != 0 && !_registeredEventHandlers)
                 RegisterEventHandlers();
             base.Add(key, value);
         }
@@ -72,10 +72,10 @@ namespace Essentials.Common.Util {
         private void RegisterEventHandlers() {
             _registeredEventHandlers = true;
 
-            if ((Characteristics & PlayerDictionaryCharacteristics.REMOVE_ON_DISCONNECT) != 0)
+            if ((Options & PlayerDictionaryOptions.REMOVE_ON_DISCONNECT) != 0)
                 Provider.onServerDisconnected += OnPlayerDisconnected;
 
-            if ((Characteristics & PlayerDictionaryCharacteristics.REMOVE_ON_DEATH) != 0)
+            if ((Options & PlayerDictionaryOptions.REMOVE_ON_DEATH) != 0)
                 UnturnedPlayerEvents.OnPlayerDeath += OnPlayerDeath;
         }
 
@@ -91,7 +91,7 @@ namespace Essentials.Common.Util {
     }
 
     [Flags]
-    public enum PlayerDictionaryCharacteristics {
+    public enum PlayerDictionaryOptions {
 
         /// Remove when player dies.
         REMOVE_ON_DEATH = 1,
