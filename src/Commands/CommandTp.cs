@@ -43,14 +43,14 @@ namespace Essentials.Commands {
 
             switch (args.Length) {
                 /*
-                    /tp player  -> sender to player
-                    /tp place   -> sender to place
+                    /tp player  -> teleport sender to player
+                    /tp place   -> teleport sender to place
                 */
-                case 1:
-                    var data = FindPlaceOrPlayer(args[0].ToString());
-                    var dataFound = (bool) data[0];
-                    var dataPosition = (Vector3) data[1];
-                    var dataName = (string) data[2];
+                case 1: {
+                    bool dataFound;
+                    Vector3 dataPosition;
+                    string dataName;
+                    FindPlaceOrPlayer(args[0].ToString(), out dataFound, out dataPosition, out dataName);
 
                     if (!dataFound) {
                         return CommandResult.Lang("FAILED_FIND_PLACE_OR_PLAYER", args[0]);
@@ -59,36 +59,38 @@ namespace Essentials.Commands {
                     src.ToPlayer().Teleport(dataPosition);
                     EssLang.Send(src, "TELEPORTED", dataName);
                     break;
+                }
 
                 /*
-                    /tp player other   -> player to other
-                    /tp player place   -> player to place
+                    /tp player other player   -> teleport player to other player
+                    /tp player place          -> teleport player to place
                 */
-                case 2:
+                case 2: {
                     var target = UPlayer.From(args[0].ToString());
 
                     if (target == null) {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     }
 
-                    data = FindPlaceOrPlayer(args[1].ToString());
-                    dataFound = (bool) data[0];
-                    dataPosition = (Vector3) data[1];
-                    dataName = (string) data[2];
+                    bool dataFound;
+                    Vector3 dataPosition;
+                    string dataName;
+                    FindPlaceOrPlayer(args[1].ToString(), out dataFound, out dataPosition, out dataName);
 
                     if (!dataFound) {
-                        return CommandResult.Lang("FAILED_FIND_PLACE_OR_PLAYER", args[0]);
+                        return CommandResult.Lang("FAILED_FIND_PLACE_OR_PLAYER", args[1]);
                     }
 
                     target.Teleport(dataPosition);
                     EssLang.Send(target, "TELEPORTED", dataName);
                     EssLang.Send(src, "TELEPORTED_SENDER", target, dataName);
                     break;
+                }
 
                 /*
                     /tp x y z          -> sender to x,y,z
                 */
-                case 3:
+                case 3: {
                     var location = args.GetVector3(0);
 
                     if (location.HasValue) {
@@ -98,18 +100,19 @@ namespace Essentials.Commands {
                         return CommandResult.Lang("INVALID_COORDS", args[0], args[1], args[2]);
                     }
                     break;
+                }
 
                 /*
                     /tp player x y z   -> player to x, y, z
                 */
-                case 4:
-                    target = UPlayer.From(args[0].ToString());
+                case 4: {
+                    var target = UPlayer.From(args[0].ToString());
 
                     if (target == null) {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     }
 
-                    location = args.GetVector3(1);
+                    var location = args.GetVector3(1);
 
                     if (location.HasValue) {
                         target.Teleport(location.Value);
@@ -119,6 +122,7 @@ namespace Essentials.Commands {
                         return CommandResult.Lang("INVALID_COORDS", args[1], args[2], args[3]);
                     }
                     break;
+                }
 
                 default:
                     return CommandResult.ShowUsage();
@@ -127,31 +131,25 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
-        /*
-            0 - found
-            1 - location
-            2 - place/player name
-        */
-        private static object[] FindPlaceOrPlayer(string arg) {
-            var position = Vector3.zero;
-            var placeOrPlayerName = string.Empty;
+        private static void FindPlaceOrPlayer(string arg, out bool found, 
+                                              out Vector3 position, out string placeOrPlayer) {
+            position = Vector3.zero;
+            placeOrPlayer = string.Empty;
 
-            var found = UPlayer.TryGet(arg, p => {
-                position = p.Position;
-                placeOrPlayerName = p.CharacterName;
-            });
-
-            if (!found) {
+            var player = UPlayer.From(arg);
+            if (player != null) {
+                found = true;
+                position = player.Position;
+                placeOrPlayer = player.DisplayName;
+            } else {
                 LocationNode node;
                 found = TryFindPlace(arg, out node);
 
                 if (found) {
-                    placeOrPlayerName = node.Name;
+                    placeOrPlayer = node.Name;
                     position = node.Position + new Vector3(0, 1, 0);
                 }
             }
-
-            return new object[] { found, position, placeOrPlayerName };
         }
 
         private static bool TryFindPlace(string name, out LocationNode outNode) {
