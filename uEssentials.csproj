@@ -181,7 +181,6 @@
     <Compile Include="src\Common\Reflect\FieldAccessor.cs" />
     <Compile Include="src\Common\Reflect\MethodAccessor.cs" />
     <Compile Include="src\Common\Extensions.cs" />
-    <Compile Include="src\Common\Reflect\MethodReference.cs" />
     <Compile Include="src\Common\Util\ReflectionUtil.cs" />
     <Compile Include="src\Configuration\EssConfig.cs" />
     <Compile Include="src\Configuration\EssWebConfig.cs" />
