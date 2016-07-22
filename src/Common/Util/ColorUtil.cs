@@ -107,7 +107,7 @@ namespace Essentials.Common.Util {
 
             // Remove <color>
             if (color.HasValue) {
-                message = message.Replace($"<{rawColor}>", "");
+                message = message.Replace($"<{rawColor}>", string.Empty);
             }
 
             return color ?? Color.green;
