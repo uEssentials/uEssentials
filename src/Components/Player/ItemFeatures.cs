@@ -19,7 +19,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System;
 using SDG.Unturned;
 
 namespace Essentials.Components.Player {
@@ -30,7 +29,7 @@ namespace Essentials.Components.Player {
         public bool AutoReload { get; set; }
 
         private readonly PlayerEquipment _equip;
-        private byte _lastArrowId1, _lastArrowId2;
+        private ushort _lastArrowId;
 
         public ItemFeatures() {
             _equip = Player.Equipment;
@@ -45,10 +44,9 @@ namespace Essentials.Components.Player {
             */
             if (AutoReload && _equip.state.Length >= 18) {
                 // Save last arrow id
-                if (_equip.state[10] == 1 && (holdId == 346 || holdId == 353 ||
-                                              holdId == 355 || holdId == 356 || holdId == 357)) {
-                    _lastArrowId1 = _equip.state[8];
-                    _lastArrowId2 = _equip.state[9];
+                if (_equip.state[10] == 1 && (holdId == 346 || holdId == 353 || holdId == 355 || 
+                                              holdId == 356 || holdId == 357)) {
+                    _lastArrowId = (ushort) (_equip.state[8] | _equip.state[9] << 8);
                 }
 
                 if (_equip.state[10] == 0) {
@@ -57,31 +55,31 @@ namespace Essentials.Components.Player {
                             _equip.state[8] = 8;
                             _equip.state[9] = 2;
                             _equip.state[10] = 1;
-                            goto update;
+                            break;
 
                         case 300: // Shadowstalker
                             _equip.state[8] = 45;
                             _equip.state[9] = 1;
                             _equip.state[10] = 1;
-                            goto update;
+                            break;
 
                         case 346: // Crossbow
                         case 353: // Maple bow
                         case 355: // Birch bow
                         case 356: // Pine Bow
                         case 357: // Compound bow
-                            _equip.state[8] = (byte) (_lastArrowId1 == 0 ? 91 : _lastArrowId1);
-                            _equip.state[9] = (byte) (_lastArrowId2 == 0 ? 1 : _lastArrowId2);
+                            _equip.state[8] = (byte) (_lastArrowId == 0 ? 91 : _lastArrowId);
+                            _equip.state[9] = (byte) (_lastArrowId == 0 ? 1 : _lastArrowId >> 8);
                             _equip.state[10] = 1;
                             _equip.state[17] = 100; // Durability (for arrows)
-                            goto update;
+                            break;
+
+                        default:
+                            var magazineId = (ushort) (_equip.state[8] | _equip.state[9] << 8);
+                            var maga = Assets.find(EAssetType.ITEM, magazineId) as ItemMagazineAsset;
+                            _equip.state[10] = maga?.amount ?? 0;
+                            break;
                     }
-
-                    var magazineId = BitConverter.ToUInt16(_equip.state, 8);
-                    var maga = Assets.find(EAssetType.ITEM, magazineId) as ItemMagazineAsset;
-                    _equip.state[10] = maga?.amount ?? 0;
-
-                    update:
                     _equip.sendUpdateState();
                 }
             }

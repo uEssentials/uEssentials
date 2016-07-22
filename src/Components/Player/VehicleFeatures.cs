@@ -32,14 +32,13 @@ namespace Essentials.Components.Player {
         private InteractableVehicle _lastVehicle;
         private int _needRefuelPercentage;
         private int _needRepairPercentage;
-        private readonly int _refuelPercentage = UEssentials.Config.VehicleFeatures.RefuelPercentage;
-        private readonly int _repairPercentage = UEssentials.Config.VehicleFeatures.RepairPercentage;
 
         protected override void SafeFixedUpdate() {
             if (_lastVehicle == null || _lastVehicle != Player.CurrentVehicle) {
+                var vehFeatures = UEssentials.Config.VehicleFeatures;
                 _lastVehicle = Player.CurrentVehicle;
-                _needRefuelPercentage = (_lastVehicle.asset.fuel * _refuelPercentage) / 100;
-                _needRepairPercentage = (_lastVehicle.asset.health * _repairPercentage) / 100;
+                _needRefuelPercentage = _lastVehicle.asset.fuel * (vehFeatures.RefuelPercentage / 100);
+                _needRepairPercentage = _lastVehicle.asset.health * (vehFeatures.RepairPercentage / 100);
             }
 
             if (AutoRefuel && _lastVehicle.fuel <= _needRefuelPercentage) {
