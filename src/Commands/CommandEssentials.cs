@@ -105,7 +105,7 @@ namespace Essentials.Commands {
             switch (args[0].ToLowerString) {
                 case "savedata":
                     if (!src.HasPermission("essentials.savedata")) {
-                        return CommandResult.NoPermission($"essentials.savedata");//TODO change to essentials.command.essentials.savedata?
+                        return CommandResult.NoPermission("essentials.savedata");//TODO change to essentials.command.essentials.savedata?
                     }
                     UEssentials.ModuleManager.GetModule<KitModule>().IfPresent(m => {
                         m.KitManager.CooldownData.Save();
@@ -201,7 +201,7 @@ namespace Essentials.Commands {
                             src.SendMessage("  Usage Syntax: ", Color.cyan);
                             src.SendMessage("    - [arg] = required argument.", Color.cyan);
                             src.SendMessage("    - <arg> = optional argument.", Color.cyan);
-                            src.SendMessage("    - | = means 'Or'.", Color.cyan);
+                            src.SendMessage("    - | or / = means 'Or'.", Color.cyan);
                             src.SendMessage("  Description: " + command.Description, Color.cyan);
                             src.SendMessage("  Usage: /" + command.Name + " " + command.Usage, Color.cyan);
                             if (command.Aliases.Any())
