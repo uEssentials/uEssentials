@@ -27,14 +27,12 @@ namespace Essentials.Common.Util {
     public static class TimeUtil {
 
         public static string FormatSeconds(uint seconds) {
-            var msgDay = EssLang.Translate("DAY");
-            var msgDays = EssLang.Translate("DAYS");
             var msgSecond = EssLang.Translate("SECOND");
             var msgSeconds = EssLang.Translate("SECONDS");
-            var msgMinute = EssLang.Translate("MINUTE");
-            var msgMinutes = EssLang.Translate("MINUTES");
-            var msgHour = EssLang.Translate("HOUR");
-            var msgHours = EssLang.Translate("HOURS");
+
+            if (seconds < 60) {
+                return $"{seconds} {(seconds == 1 ? msgSecond : msgSeconds )}";
+            }
 
             const uint MIN = 60;
             const uint HOUR = MIN*MIN;
@@ -51,27 +49,39 @@ namespace Essentials.Common.Util {
 
             var sb = new StringBuilder();
 
-            if (days > 0)
+            if (days > 0) {
+                var msgDay = EssLang.Translate("DAY");
+                var msgDays = EssLang.Translate("DAYS");
+
                 sb.Append(days)
                     .Append(" ")
-                    .Append(days > 1 ? msgDays : msgDay)
+                    .Append(days == 1 ? msgDay : msgDays)
                     .Append(", ");
+            }
 
-            if (hours > 0)
+            if (hours > 0) {
+                var msgHour = EssLang.Translate("HOUR");
+                var msgHours = EssLang.Translate("HOURS");
+
                 sb.Append(hours)
                     .Append(" ")
-                    .Append(hours > 1 ? msgHours : msgHour)
+                    .Append(hours == 1 ? msgHour : msgHours)
                     .Append(", ");
+            }
 
-            if (minutes > 0)
+            if (minutes > 0) {
+                var msgMinute = EssLang.Translate("MINUTE");
+                var msgMinutes = EssLang.Translate("MINUTES");
+
                 sb.Append(minutes)
                     .Append(" ")
-                    .Append(minutes > 1 ? msgMinutes : msgMinute)
+                    .Append(minutes == 1 ? msgMinute : msgMinutes)
                     .Append(", ");
+            }
 
             sb.Append(seconds)
                 .Append(" ")
-                .Append(seconds > 1 ? msgSeconds : msgSecond)
+                .Append(seconds == 1 ? msgSecond : msgSeconds)
                 .Append(", ");
 
             return sb.ToString().Substring(0, sb.Length - 2);
