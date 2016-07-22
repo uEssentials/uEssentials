@@ -27,7 +27,6 @@ namespace Essentials.Json.Converters {
 
     public class Vector3Converter : JsonConverter {
 
-        public override bool CanRead => true;
         private readonly string[] _propNames = { "X", "Y", "Z" };
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
