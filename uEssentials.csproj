@@ -105,6 +105,7 @@
     <Compile Include="src\Commands\CommandKillAnimals.cs" />
     <Compile Include="src\Commands\CommandSpawnVehicle.cs" />
     <Compile Include="src\Commands\CommandBoom.cs" />
+    <Compile Include="src\Commands\CommandTellRaw.cs" />
     <Compile Include="src\Commands\CommandTp.cs" />
     <Compile Include="src\Commands\MiscCommands.cs" />
     <Compile Include="src\Common\MathParser.cs" />
