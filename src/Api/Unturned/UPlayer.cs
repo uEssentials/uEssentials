@@ -281,9 +281,7 @@ namespace Essentials.Api.Unturned {
         }
 
         public void SetMetadata(string key, object value) {
-            if (HasMetadata(key))
-                _metadataStore[key] = value;
-            _metadataStore.Add(key, value);
+            _metadataStore[key] = value;
         }
 
         public static UPlayer From(UnturnedPlayer player) {
