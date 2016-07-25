@@ -100,7 +100,7 @@ namespace Essentials.Core.Command {
             CommandMap.Add(name.ToLowerInvariant(), command);
 
             if (command is EssCommand) {
-                _onRegisteredMethod.Invoke(command, ReflectionUtil.EMPTY_ARGS);
+                _onRegisteredMethod?.Invoke(command, ReflectionUtil.EMPTY_ARGS);
             }
 
             var aliases = command.Aliases;
@@ -201,7 +201,7 @@ namespace Essentials.Core.Command {
                 if (cmdAdapter != null && predicate(cmdAdapter)) {
                     var command = cmdAdapter.Command;
                     if (command is EssCommand) {
-                        _onUnregisteredMethod.Invoke(command, ReflectionUtil.EMPTY_ARGS);
+                        _onUnregisteredMethod?.Invoke(command, ReflectionUtil.EMPTY_ARGS);
                     }
                     CommandMap.Remove(command.Name.ToLowerInvariant());
                     return true;
