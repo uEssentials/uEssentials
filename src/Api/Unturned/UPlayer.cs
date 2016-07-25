@@ -289,13 +289,13 @@ namespace Essentials.Api.Unturned {
         public static UPlayer From(UnturnedPlayer player) {
             return player == null
                 ? null
-                : From(player.CSteamID);
+                : From(player.CSteamID.m_SteamID);
         }
 
         public static UPlayer From(Player player) {
             return player == null
                 ? null
-                : From(player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID);
+                : From(player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID.m_SteamID);
         }
 
         /// <summary>
