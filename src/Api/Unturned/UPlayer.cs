@@ -38,7 +38,7 @@ namespace Essentials.Api.Unturned {
 
     public class UPlayer : ICommandSource {
 
-        public UnturnedPlayer RocketPlayer { get; } 
+        public UnturnedPlayer RocketPlayer { get; }
         public string DisplayName => CharacterName;
         public string Id => CSteamId.m_SteamID.ToString();
         public string CharacterName => RocketPlayer.CharacterName;
@@ -298,7 +298,7 @@ namespace Essentials.Api.Unturned {
 
         /// <summary>
         /// Character name has more priority than steam name.
-        /// 
+        ///
         /// Order: Equals > Starts With > Contains
         /// </summary>
         /// <param name="name"></param>
