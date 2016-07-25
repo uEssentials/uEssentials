@@ -98,9 +98,10 @@ namespace Essentials.NativeModules.Kit.Commands {
                     } else {
                         var kitCooldown = requestedKit.Cooldown;
 
-                        if (!Cooldowns.ContainsKey(steamPlayerId) ||
-                            Cooldowns[steamPlayerId] == null) {
+                        if (!Cooldowns.ContainsKey(steamPlayerId)) {
                             Cooldowns.Add(steamPlayerId, new Dictionary<string, DateTime>());
+                        } else if (Cooldowns[steamPlayerId] == null) {
+                            Cooldowns[steamPlayerId] = new Dictionary<string, DateTime>();
                         }
 
                         if (Cooldowns[steamPlayerId].ContainsKey(kitName)) {
