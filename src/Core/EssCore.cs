@@ -65,9 +65,9 @@ namespace Essentials.Core {
                 - Add /rawMsg
         */
 
-        internal const string ROCKET_VERSION = "4.9.7.0";
-        internal const string UNTURNED_VERSION = "3.15.6.2";
-        internal const string PLUGIN_VERSION = "1.2.5.0";
+        internal const string ROCKET_VERSION = "4.9.8.0";
+        internal const string UNTURNED_VERSION = "3.15.10.1";
+        internal const string PLUGIN_VERSION = "1.2.6.0";
 
         internal static EssCore Instance { get; set; }
 
