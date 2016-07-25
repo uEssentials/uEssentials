@@ -59,12 +59,6 @@ namespace Essentials.Core {
 
     public sealed class EssCore : RocketPlugin {
 
-        /*
-            TODO:
-                - Checar se o itemfeatures/vehiclefeatures esta funcionando.
-                - Add /rawMsg
-        */
-
         internal const string ROCKET_VERSION = "4.9.8.0";
         internal const string UNTURNED_VERSION = "3.15.10.1";
         internal const string PLUGIN_VERSION = "1.2.6.0";
@@ -93,12 +87,12 @@ namespace Essentials.Core {
         internal string DataFolder => MkDirIfNotExists(_dataFolder);
         internal string ModulesFolder => MkDirIfNotExists(_modulesFolder);
 
-        // TODO: Use fields instead of Properties ?? 
+        // TODO: Use fields instead of Properties ??
         internal Dictionary<ulong, UPlayer> ConnectedPlayers { get; set; }
         internal InstancePool CommonInstancePool { get; } = new InstancePool();
 
         internal bool DebugTasks { get; set; } = false;
-        internal bool DebugCommands { get; set; } 
+        internal bool DebugCommands { get; set; }
         #if DEV
             = true;
         #else
