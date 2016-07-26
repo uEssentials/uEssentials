@@ -89,8 +89,15 @@ namespace Essentials.Event.Handling {
 
             /* Kit Stuffs */
             UEssentials.ModuleManager.GetModule<KitModule>().IfPresent(m => {
-                if (CommandKit.Cooldowns.Count == 0) return;
-                if (!CommandKit.Cooldowns.ContainsKey(playerId)) return;
+                if (CommandKit.Cooldowns.Count == 0 ||
+                    !CommandKit.Cooldowns.ContainsKey(playerId)) {
+                    return;
+                }
+
+                if (CommandKit.Cooldowns[playerId] == null) {
+                    CommandKit.Cooldowns.Remove(playerId);
+                    return;
+                }
 
                 var playerCooldowns = CommandKit.Cooldowns[playerId];
                 var keys = new List<string>(playerCooldowns.Keys);
@@ -100,9 +107,10 @@ namespace Essentials.Event.Handling {
 
                     Global and per kit
                 */
-                var delta = CommandKit.GlobalCooldown[playerId].AddSeconds(UEssentials.Config.Kit.GlobalCooldown);
+                var gCooldown = UEssentials.Config.Kit.GlobalCooldown;
 
-                if (CommandKit.GlobalCooldown.ContainsKey(playerId) && delta < DateTime.Now) {
+                if (CommandKit.GlobalCooldown.ContainsKey(playerId) &&
+                    CommandKit.GlobalCooldown[playerId].AddSeconds(gCooldown) < DateTime.Now) {
                     CommandKit.GlobalCooldown.Remove(playerId);
                 }
 
