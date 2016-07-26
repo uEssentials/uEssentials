@@ -129,7 +129,8 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void GenericPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+        private void GenericPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb,
+                                        CSteamID murderer) {
             var uplayer = UPlayer.From(player);
 
             CommandHome.Cooldown.RemoveIfExpired(player.CSteamID);
@@ -246,7 +247,8 @@ namespace Essentials.Event.Handling {
 
                 Tasks.New(t => {
                     UPlayer.From(player).SendMessage("[uEssentials] New version avalaible " +
-                                                     $"{updater.LastResult.LatestVersion}!", Color.cyan);
+                                                     $"{updater.LastResult.LatestVersion}!",
+                                                     Color.cyan);
                 }).Delay(1000).Go();
             }
         }
@@ -336,7 +338,8 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer) {
+        private void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb,
+                                   CSteamID killer) {
             switch (cause) {
                 case EDeathCause.BLEEDING:
                     EssLang.Broadcast("DEATH_BLEEDING", player.CharacterName);
@@ -448,7 +451,8 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
         private void HomePlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            if (!UEssentials.Config.HomeCommand.CancelTeleportWhenMove || !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
+            if (!UEssentials.Config.HomeCommand.CancelTeleportWhenMove ||
+                !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
 
@@ -463,7 +467,8 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
         private void WarpPlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            if (!UEssentials.Config.WarpCommand.CancelTeleportWhenMove || !CommandWarp.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
+            if (!UEssentials.Config.WarpCommand.CancelTeleportWhenMove ||
+                !CommandWarp.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
 
@@ -512,19 +517,21 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
         private void KitPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
-            var globalKitCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
+            var gCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
 
-            if (CommandKit.GlobalCooldown.ContainsKey(player.CSteamID.m_SteamID) && EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie) {
-                CommandKit.GlobalCooldown[player.CSteamID.m_SteamID] = DateTime.Now.AddSeconds(-globalKitCooldown);
+            if (CommandKit.GlobalCooldown.ContainsKey(player.CSteamID.m_SteamID) &&
+                EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie) {
+                CommandKit.GlobalCooldown[player.CSteamID.m_SteamID] = DateTime.Now.AddSeconds(-gCooldown);
             }
 
             if (!CommandKit.Cooldowns.ContainsKey(player.CSteamID.m_SteamID)) return;
 
             var playerCooldowns = CommandKit.Cooldowns[player.CSteamID.m_SteamID];
             var keys = new List<string>(playerCooldowns.Keys);
+            var km = KitModule.Instance.KitManager;
 
             foreach (var kitName in keys) {
-                var kit = KitModule.Instance.KitManager.GetByName(kitName);
+                var kit = km.GetByName(kitName);
 
                 if (kit == null) {
                     playerCooldowns.Remove(kitName);
