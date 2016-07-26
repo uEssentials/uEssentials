@@ -56,7 +56,7 @@ def build(args):
 
                 os.system("msbuild /p:DefineConstants=\"EXPERIMENTAL;EXPERIMENTAL_HASH\" /t:Rebuild,Clean")
                 os.remove("src\\Core\\EssCore.cs")
-                os.rename("src\\Core\\EssCore.cs.old", "EssCore.cs")
+                os.rename("src\\Core\\EssCore.cs.old", "src\\Core\\EssCore.cs")
             else:
                 os.system("msbuild /p:DefineConstants=\"EXPERIMENTAL\" /t:Rebuild,Clean")
         else:
