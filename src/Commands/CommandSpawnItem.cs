@@ -77,18 +77,20 @@ namespace Essentials.Commands {
 
             var item = new Item(itemAsset.Value.id, true);
 
-            if (itemAsset.Value is ItemFuelAsset) {
-                item.Metadata[0] = 1;
+            if (item.id == 28) { // Gas can
+                item.Metadata[0] = 244;
+                item.Metadata[1] = 1;
             }
 
             for (var i = 0; i < amount; i++) {
                 ItemManager.dropItem(item, pos, true, true, true);
             }
 
-            if (args.Length == 5)
+            if (args.Length == 5) {
                 EssLang.Send(src, "SPAWNED_ITEM_AT", amount, itemAsset.Value.Name, pos.x, pos.y, pos.z);
-            else
+            } else {
                 EssLang.Send(src, "SPAWNED_ITEM", amount, itemAsset.Value.Name);
+            }
 
             return CommandResult.Success();
         }

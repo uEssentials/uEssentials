@@ -854,7 +854,8 @@ namespace Essentials.Commands {
             var item = new Item(asset.id, true);
 
             if (asset is ItemFuelAsset) {
-                item.Metadata[0] = 1;
+                item.Metadata[0] = 244;
+                item.Metadata[1] = 1;
             }
 
             if (!src.HasPermission("essentials.bypass.itemlimit") && amt > UEssentials.Config.ItemSpawnLimit) {
