@@ -517,16 +517,22 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
         private void KitPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+            var playerId = player.CSteamID.m_SteamID;
             var gCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
 
-            if (CommandKit.GlobalCooldown.ContainsKey(player.CSteamID.m_SteamID) &&
+            if (CommandKit.GlobalCooldown.ContainsKey(playerId) &&
                 EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie) {
-                CommandKit.GlobalCooldown[player.CSteamID.m_SteamID] = DateTime.Now.AddSeconds(-gCooldown);
+                CommandKit.GlobalCooldown[playerId] = DateTime.Now.AddSeconds(-gCooldown);
             }
 
-            if (!CommandKit.Cooldowns.ContainsKey(player.CSteamID.m_SteamID)) return;
+            if (!CommandKit.Cooldowns.ContainsKey(playerId)) return;
 
-            var playerCooldowns = CommandKit.Cooldowns[player.CSteamID.m_SteamID];
+            if (CommandKit.Cooldowns[playerId] == null) {
+                CommandKit.Cooldowns.Remove(playerId);
+                return;
+            }
+
+            var playerCooldowns = CommandKit.Cooldowns[playerId];
             var keys = new List<string>(playerCooldowns.Keys);
             var km = KitModule.Instance.KitManager;
 
