@@ -76,17 +76,25 @@ namespace Essentials.NativeModules.Kit.Data {
             JsonUtil.Serialize(FilePath, toSave);
         }
 
+        /// <summary>
+        /// Remove 'expired' cooldowns.
+        /// </summary>
+        /// <param name="playerId"></param>
         private void ClearCooldowns(ulong playerId) {
             var km = KitModule.Instance.KitManager;
+            var gCooldown = UEssentials.Config.Kit.GlobalCooldown;
 
             if (CommandKit.GlobalCooldown.ContainsKey(playerId) &&
-                CommandKit.GlobalCooldown[playerId].AddSeconds(
-                    UEssentials.Config.Kit.GlobalCooldown) < DateTime.Now) {
+                CommandKit.GlobalCooldown[playerId].AddSeconds(gCooldown) < DateTime.Now) {
                 CommandKit.GlobalCooldown.Remove(playerId);
             }
 
-            if (!CommandKit.Cooldowns.ContainsKey(playerId) ||
-                CommandKit.Cooldowns[playerId] == null) {
+            if (!CommandKit.Cooldowns.ContainsKey(playerId)) {
+                return;
+            }
+
+            if (CommandKit.Cooldowns[playerId] == null) {
+                CommandKit.Cooldowns.Remove(playerId);
                 return;
             }
 
