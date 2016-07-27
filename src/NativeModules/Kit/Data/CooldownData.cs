@@ -42,9 +42,12 @@ namespace Essentials.NativeModules.Kit.Data {
             saved.ForEach(kv => {
                 CommandKit.Cooldowns.Clear();
                 CommandKit.GlobalCooldown.Clear();
-                CommandKit.Cooldowns.Add(kv.Key, kv.Value.Kits);
-                if (!kv.Value.Global.Equals(default(DateTime)))
+                if (kv.Value.Kits != null) {
+                    CommandKit.Cooldowns.Add(kv.Key, kv.Value.Kits);
+                }
+                if (!kv.Value.Global.Equals(default(DateTime))) {
                     CommandKit.GlobalCooldown.Add(kv.Key, kv.Value.Global);
+                }
                 ClearCooldowns(kv.Key);
             });
         }
@@ -58,19 +61,14 @@ namespace Essentials.NativeModules.Kit.Data {
             kitCooldowns.ForEach(k => playerIds.Add(k.Key));
             globalCooldowns.ForEach(k => playerIds.Add(k.Key));
 
-            playerIds.ForEach(p => {
-                ClearCooldowns(p);
+            playerIds.ForEach(id => {
+                ClearCooldowns(id);
 
-                var pc = new PlayerCooldown();
-                Dictionary<string, DateTime> kits;
-                DateTime global;
-                if (kitCooldowns.TryGetValue(p, out kits)) {
-                    pc.Kits = kits;
-                }
-                if (globalCooldowns.TryGetValue(p, out global)) {
-                    pc.Global = global;
-                }
-                toSave.Add(p, pc);
+                var pCooldown = new PlayerCooldown();
+                kitCooldowns.TryGetValue(id, out pCooldown.Kits);
+                globalCooldowns.TryGetValue(id, out pCooldown.Global);
+
+                toSave.Add(id, pCooldown);
             });
 
             JsonUtil.Serialize(FilePath, toSave);
