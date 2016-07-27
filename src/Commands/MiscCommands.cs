@@ -152,7 +152,8 @@ namespace Essentials.Commands {
             switch (args[0].ToLowerString) {
                 case "ev":
                 case "emptyvehicles":
-                    if (!src.HasPermission(cmd.Permission + ".emptyvehicles")) {
+                    return CommandResult.Generic("This option is currently disabled.");
+                    /*if (!src.HasPermission(cmd.Permission + ".emptyvehicles")) {
                         return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
@@ -174,12 +175,12 @@ namespace Essentials.Commands {
                         });
 
                         EssLang.Send(src, "CLEAR_EMPTY_VEHICLES", toRemove.Count);
-                    }).Start();
+                    }).Start();*/
                     break;
 
                 case "v":
                 case "vehicle":
-                    return CommandResult.Generic("This option is currently disabled, use /clear ev instead");
+                    return CommandResult.Generic("This option is currently disabled.");
                     /*
                     if (!src.HasPermission(cmd.Permission + ".vehicles")) {
                         return CommandResult.Lang("COMMAND_NO_PERMISSION");
@@ -490,7 +491,7 @@ namespace Essentials.Commands {
                 }
                 var player = src.ToPlayer();
 
-                EssLang.Send(player, 
+                EssLang.Send(player,
                     "POSITION",
                     player.Position.x,
                     player.Position.y,
@@ -671,11 +672,11 @@ namespace Essentials.Commands {
         )]
         private CommandResult TpsCommand(ICommandSource src, ICommandArgs args) {
             var tps = Provider.debugTPS;
-            var color = 
-                tps > 40 ? Color.green : 
-                tps > 25 ? Color.yellow : 
+            var color =
+                tps > 40 ? Color.green :
+                tps > 25 ? Color.yellow :
                 Color.red;
-    
+
             src.SendMessage($"Ticks per second: {tps}", color);
             return CommandResult.Success();
         }
