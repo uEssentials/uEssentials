@@ -44,4 +44,4 @@ uEssentials has an easy and intuitive module system to allow the creation of com
 
 ---
 
-If you have any questions or suggestions, feel free to send them to us [here](../../issues/).
+If you have any questions or suggestions, feel free to send them to us [here](https://github.com/uEssentials/uEssentials/issues/).
