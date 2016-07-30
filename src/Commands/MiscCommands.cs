@@ -22,10 +22,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Core.Command;
@@ -803,6 +803,16 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
+        #if DEV
+        [CommandInfo(
+            Name = "stoptasks"
+        )]
+        private CommandResult StopTasksCommand(ICommandSource src, ICommandArgs args) {
+            Tasks.CancelAll();
+            return CommandResult.Success();
+        }
+        #endif
+
         #region HELPER METHODS
 
         private static string WrapMessage(ICommandSource src, string str) {
@@ -816,7 +826,7 @@ namespace Essentials.Commands {
         }
 
         private static void GiveItem(ICommandSource src, UPlayer target, ICommandArgument itemArg,
-            ICommandArgument amountArg, bool allPlayers = false) {
+                                     ICommandArgument amountArg, bool allPlayers = false) {
             if (!src.HasPermission("essentials.command.item.other") && target != src) {
                 EssLang.Send(src, "COMMAND_NO_PERMISSION");
                 return;
