@@ -26,8 +26,12 @@ namespace Essentials.Common.Util {
 
     public static class ReflectionUtil {
 
+        // Empty object array, commonly used on method invocation.
         public static object[] EMPTY_ARGS = new object[0];
+
+        // Common binding flags
         public static BindingFlags INSTANCE_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        public static BindingFlags STATIC_FLAGS = (INSTANCE_FLAGS & ~BindingFlags.Instance) | BindingFlags.Static;
 
         public static TAttribute GetAttributeFrom<TAttribute>(object instance) where TAttribute : Attribute {
             object[] attrs;
