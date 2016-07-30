@@ -63,9 +63,10 @@ namespace Essentials.Core.Command {
         }
 
         public void Execute(IRocketPlayer caller, string[] args) {
+            // Timings
             Stopwatch sw = null;
             if (EssCore.Instance.DebugCommands) {
-                sw = System.Diagnostics.Stopwatch.StartNew();
+                sw = Stopwatch.StartNew();
             }
 
             CommandResult result = null;
@@ -107,10 +108,12 @@ namespace Essentials.Core.Command {
                         }
                     }
                 }
-            } catch (Exception) when (caller is UnturnedPlayer) {
-                var p = (UnturnedPlayer) caller;
-                UPlayer.TryGet(p, up => EssLang.Send(up, p.IsAdmin ? "COMMAND_ERROR_OCURRED_ADMIN" : "COMMAND_ERROR_OCURRED"));
-            } catch (Exception e) { 
+            } catch (Exception e) {
+                if (caller is UnturnedPlayer) {
+                    UPlayer.TryGet((UnturnedPlayer) caller, p => {
+                        EssLang.Send(p, p.IsAdmin ? "COMMAND_ERROR_OCURRED_ADMIN" : "COMMAND_ERROR_OCURRED");
+                    });
+                }
                 UEssentials.Logger.LogError(e.ToString());
             }
 
