@@ -328,7 +328,7 @@ namespace Essentials.Commands {
         [CommandInfo(
             Name = "itemfeatures",
             Aliases = new[] { "if" },
-            Usage = "[autoreload | autorepair] [on | off]",
+            Usage = "[autoreload | autorepair | all] [on | off]",
             Description = "Item features",
             AllowedSource = AllowedSource.PLAYER
         )]
@@ -401,7 +401,7 @@ namespace Essentials.Commands {
         [CommandInfo(
             Name = "vehiclefeatures",
             Aliases = new[] { "vehfeatures", "vf" },
-            Usage = "[autorefuel | autorepair] [on|off]",
+            Usage = "[autorefuel | autorepair | all] [on|off]",
             Description = "Vehicle features",
             AllowedSource = AllowedSource.PLAYER
         )]
