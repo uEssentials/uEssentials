@@ -139,12 +139,7 @@ namespace Essentials.NativeModules.Kit.Data {
                         goto weaponItem;
 
                     if (itemAsset is ItemMagazineAsset || itemAsset is ItemSupplyAsset) {
-                        byte magazineAmmo;
-                        if (tokAmmo == null) {
-                            magazineAmmo = ((ItemMagazineAsset) itemAsset).Amount;
-                        } else {
-                            magazineAmmo = tokAmmo.Value<byte>();
-                        }
+                        var magazineAmmo = tokAmmo?.Value<byte>() ?? itemAsset.Amount;
                         kitItem = new KitItemMagazine(kitItemId, kitItemDurability, kitItemAmount, magazineAmmo);
                     } else {
                         kitItem = new KitItem(kitItemId, kitItemDurability, kitItemAmount);
