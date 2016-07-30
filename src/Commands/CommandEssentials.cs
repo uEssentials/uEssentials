@@ -104,8 +104,8 @@ namespace Essentials.Commands {
 
             switch (args[0].ToLowerString) {
                 case "savedata":
-                    if (!src.HasPermission("essentials.savedata")) {
-                        return CommandResult.NoPermission("essentials.savedata");//TODO change to essentials.command.essentials.savedata?
+                     if (!src.HasPermission($"{Permission}.savedata")) {
+                        return CommandResult.NoPermission($"{Permission}.savedata");
                     }
                     UEssentials.ModuleManager.GetModule<KitModule>().IfPresent(m => {
                         m.KitManager.CooldownData.Save();
@@ -116,8 +116,8 @@ namespace Essentials.Commands {
                     break;
 
                 case "reload":
-                    if (!src.HasPermission("essentials.reload")) {
-                        return CommandResult.NoPermission("essentials.reload");
+                    if (!src.HasPermission($"{Permission}.reload")) {
+                        return CommandResult.NoPermission($"{Permission}.reload");
                     }
                     if (args.Length == 1) {
                         src.SendMessage("Reloading all...");
@@ -210,15 +210,22 @@ namespace Essentials.Commands {
                     }
                     break;
 
-                case "debug": case "dbg":
-                    if (!src.HasPermission("essentials.debug")) {
-                        return CommandResult.NoPermission("essentials.debug");
+                case "debug":
+                case "dbg":
+                    if (!src.HasPermission($"{Permission}.debug")) {
+                        return CommandResult.NoPermission($"{Permission}.debug");
                     }
-                    if (args.Length < 3 || !args[1].IsOneOf(new [] {"commands", "tasks"}) || !args[2].IsBool) {
+
+                    if (args.Length < 3) {
                         return CommandResult.InvalidArgs("Use /essentials debug [commands/tasks] [true/false]");
                     }
+
+                    if (!args[2].IsBool) {
+                        return CommandResult.Lang("INVALID_BOOLEAN", args[2]);
+                    }
+
                     var flag = args[2].ToBool;
-                    switch (args[1].RawValue) {
+                    switch (args[1].RawValue.ToLowerInvariant()) {
                         case "commands":
                             EssCore.Instance.DebugCommands = flag;
                             src.SendMessage($"DebugCommands set to {flag}");
@@ -228,6 +235,9 @@ namespace Essentials.Commands {
                             src.SendMessage($"DebugTasks set to {flag}");
                             EssCore.Instance.DebugTasks = flag;
                             break;
+
+                        default:
+                            return CommandResult.InvalidArgs($"Invalid option '{args[1]}'");
                     }
                     break;
 
