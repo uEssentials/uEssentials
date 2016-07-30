@@ -135,8 +135,9 @@ namespace Essentials.NativeModules.Kit.Data {
                     var kitItemAmount = tokKitItemAmount?.Value<byte>() ?? 1;
                     var kitItemDurability = tokKitItemDurability?.Value<byte>() ?? 100;
 
-                    if (itemAsset.UseableType == EUseableType.GUN)
-                        goto weaponItem;
+                    if (itemAsset.UseableType == EUseableType.GUN) {
+                        goto parseWeaponItem;
+                    }
 
                     if (itemAsset is ItemMagazineAsset || itemAsset is ItemSupplyAsset) {
                         var magazineAmmo = tokAmmo?.Value<byte>() ?? itemAsset.Amount;
@@ -151,7 +152,7 @@ namespace Essentials.NativeModules.Kit.Data {
                     }
                     goto add;
 
-                    weaponItem:
+                    parseWeaponItem:
                     var tokFireMode = itemObj.GetValue("FireMode", strCmp);
                     var tokBarrel = itemObj.GetValue("Barrel", strCmp);
                     var tokSight = itemObj.GetValue("Sight", strCmp);
