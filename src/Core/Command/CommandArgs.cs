@@ -243,7 +243,7 @@ namespace Essentials.Core.Command {
                 ToString(),
                 other,
                 StringComparison.OrdinalIgnoreCase
-                ) == 0;
+            ) == 0;
         }
 
         public bool Is(UPlayer other) {

@@ -337,13 +337,9 @@ namespace Essentials.Commands {
                 return CommandResult.ShowUsage();
             }
 
-            bool toggleValue;
+            var toggleVal = GetToggleValue(args[0]);
 
-            if (args[1].IsOneOf(new[] { "1", "on", "true" })) {
-                toggleValue = true;
-            } else if (args[1].IsOneOf(new[] { "0", "off", "false" })) {
-                toggleValue = false;
-            } else {
+            if (!toggleVal.HasValue) {
                 return CommandResult.ShowUsage();
             }
 
@@ -355,7 +351,7 @@ namespace Essentials.Commands {
                     if (!src.HasPermission($"{cmd.Permission}.autoreload")) {
                         return CommandResult.NoPermission($"{cmd.Permission}.autoreload");
                     }
-                    if (toggleValue) {
+                    if (toggleVal.Value) {
                         component.AutoReload = true;
                         EssLang.Send(src, "AUTO_RELOAD_ENABLED");
                     } else {
@@ -368,7 +364,7 @@ namespace Essentials.Commands {
                     if (!src.HasPermission($"{cmd.Permission}.autorepair")) {
                         return CommandResult.NoPermission($"{cmd.Permission}.autorepair");
                     }
-                    if (toggleValue) {
+                    if (toggleVal.Value) {
                         component.AutoRepair = true;
                         EssLang.Send(src, "AUTO_REPAIR_ENABLED");
                     } else {
@@ -377,6 +373,23 @@ namespace Essentials.Commands {
                     }
                     break;
 
+                case "all":
+                    if (!src.HasPermission($"{cmd.Permission}.all")) {
+                        return CommandResult.NoPermission($"{cmd.Permission}.all");
+                    }
+                    if (toggleVal.Value) {
+                        component.AutoReload = true;
+                        component.AutoRepair = true;
+                        EssLang.Send(src, "AUTO_RELOAD_ENABLED");
+                        EssLang.Send(src, "AUTO_REPAIR_ENABLED");
+                    } else {
+                        component.AutoReload = false;
+                        component.AutoRepair = false;
+                        EssLang.Send(src, "AUTO_RELOAD_DISABLED");
+                        EssLang.Send(src, "AUTO_REPAIR_DISABLED");
+                    }
+                    break;
+                
                 default:
                     return CommandResult.ShowUsage();
             }
@@ -397,13 +410,9 @@ namespace Essentials.Commands {
                 return CommandResult.ShowUsage();
             }
 
-            bool toggleValue;
+            var toggleVal = GetToggleValue(args[0]);
 
-            if (args[1].IsOneOf(new[] { "1", "on", "true" })) {
-                toggleValue = true;
-            } else if (args[1].IsOneOf(new[] { "0", "off", "false" })) {
-                toggleValue = false;
-            } else {
+            if (!toggleVal.HasValue) {
                 return CommandResult.ShowUsage();
             }
 
@@ -415,7 +424,7 @@ namespace Essentials.Commands {
                     if (!src.HasPermission($"{cmd.Permission}.autorefuel")) {
                         return CommandResult.NoPermission($"{cmd.Permission}.autorefuel");
                     }
-                    if (toggleValue) {
+                    if (toggleVal.Value) {
                         component.AutoRefuel = true;
                         EssLang.Send(src, "AUTO_REFUEL_ENABLED");
                     } else {
@@ -428,12 +437,29 @@ namespace Essentials.Commands {
                     if (!src.HasPermission($"{cmd.Permission}.autorepair")) {
                         return CommandResult.NoPermission($"{cmd.Permission}.autorepair");
                     }
-                    if (toggleValue) {
+                    if (toggleVal.Value) {
                         component.AutoRepair = true;
                         EssLang.Send(src, "AUTO_REPAIR_ENABLED");
                     } else {
                         component.AutoRepair = false;
                         EssLang.Send(src, "AUTO_REPAIR_DISABLED");
+                    }
+                    break;
+                    
+                case "all":
+                    if (!src.HasPermission($"{cmd.Permission}.all")) {
+                        return CommandResult.NoPermission($"{cmd.Permission}.all");
+                    }
+                    if (toggleVal.Value) {
+                        component.AutoRepair = true;
+                        component.AutoRefuel = true;
+                        EssLang.Send(src, "AUTO_REPAIR_ENABLED");
+                        EssLang.Send(src, "AUTO_REFUEL_ENABLED");
+                    } else {
+                        component.AutoRepair = false;
+                        component.AutoRefuel = false;
+                        EssLang.Send(src, "AUTO_REPAIR_DISABLED");
+                        EssLang.Send(src, "AUTO_REFUEL_DISABLED");
                     }
                     break;
 
@@ -781,25 +807,18 @@ namespace Essentials.Commands {
                 return CommandResult.ShowUsage();
             }
 
-            switch (args[0].ToLowerString) {
-                case "on":
-                case "true":
-                case "yes":
-                    Provider.PvP = true;
-                    EssLang.Send(src, "PVP_ENABLED");
-                    break;
+            var toggleVal = GetToggleValue(args[0]);
 
-                case "off":
-                case "false":
-                case "no":
-                    Provider.PvP = false;
-                    EssLang.Send(src, "PVP_DISABLED");
-                    break;
-
-                default:
-                    return CommandResult.ShowUsage();
+            if (!toggleVal.HasValue) {
+                return CommandResult.ShowUsage();
             }
-
+            if (toggleVal.Value) {
+                Provider.PvP = true;
+                EssLang.Send(src, "PVP_ENABLED");
+            } else {
+                Provider.PvP = false;
+                EssLang.Send(src, "PVP_DISABLED");
+            }
             return CommandResult.Success();
         }
 
@@ -814,6 +833,23 @@ namespace Essentials.Commands {
         #endif
 
         #region HELPER METHODS
+
+        private static bool? GetToggleValue(ICommandArgument arg) {
+            switch (arg.RawValue.ToLowerInvariant()) {
+                case "true":
+                case "on":
+                case "1":
+                    return true;
+
+                case "false":
+                case "off":
+                case "0":
+                    return false;
+
+                default:
+                    return null;
+            }
+        }
 
         private static string WrapMessage(ICommandSource src, string str) {
             if (str == null)

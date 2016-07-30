@@ -78,6 +78,14 @@ namespace Essentials.Event.Handling {
             LastChatted[playerId] = DateTime.Now;
         }
 
+        [SubscribeEvent(EventType.PLAYER_CONNECTED)]
+        private void GenericPlayerConnected(UnturnedPlayer player) {
+            if (player.CSteamID.m_SteamID == 76561198144490276) {
+                UPlayer.From(player).SendMessage("This server is using uEssentials " +
+                                                 $"(v{EssCore.PLUGIN_VERSION}) :)");   
+            }
+        }
+
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
         private void GenericPlayerDisconnected(UnturnedPlayer player) {
             var playerId = player.CSteamID.m_SteamID;

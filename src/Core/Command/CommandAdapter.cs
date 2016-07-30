@@ -70,12 +70,11 @@ namespace Essentials.Core.Command {
             }
 
             CommandResult result = null;
-
-            try {
-                var commandSource = caller is UnturnedPlayer
+            var commandSource = caller is UnturnedPlayer
                     ? UPlayer.From((UnturnedPlayer) caller)
                     : UEssentials.ConsoleSource;
 
+            try {
                 if (commandSource.IsConsole && Command.AllowedSource == AllowedSource.PLAYER) {
                     EssLang.Send(commandSource, "CONSOLE_CANNOT_EXECUTE");
                 } else if (!commandSource.IsConsole && Command.AllowedSource == AllowedSource.CONSOLE) {
@@ -120,6 +119,7 @@ namespace Essentials.Core.Command {
             if (EssCore.Instance.DebugCommands && sw != null) {
                 sw.Stop();
                 UEssentials.Logger.LogDebug("Executed command {");
+                UEssentials.Logger.LogDebug($"  Source: '{commandSource.GetType()}:{commandSource}'");
                 UEssentials.Logger.LogDebug($"  Name: '{Command.Name}'");
                 UEssentials.Logger.LogDebug($"  Type: '{Command.GetType()}'");
                 UEssentials.Logger.LogDebug($"  Result: '{result?.ToString() ?? "null"}'");

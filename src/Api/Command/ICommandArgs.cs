@@ -202,20 +202,6 @@ namespace Essentials.Api.Command {
         ///
         /// </summary>
         /// <param name="other"></param>
-        /// <returns></returns>
-        bool Is(int other);
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        bool Is(double other);
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="other"></param>
         /// <param name="ignoreCase"></param>
         /// <returns></returns>
         bool Is(string other, bool ignoreCase = true);
