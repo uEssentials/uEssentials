@@ -78,7 +78,7 @@ namespace Essentials.NativeModules.Kit.Data {
                 UEssentials.Logger.LogError($"Invalid kit configuration ({DataFilePath})");
                 UEssentials.Logger.LogError(ex.ToString());
                 kitArr = new JArray();
-            }                    
+            }
 
             const StringComparison strCmp = StringComparison.InvariantCultureIgnoreCase;
 
@@ -139,8 +139,13 @@ namespace Essentials.NativeModules.Kit.Data {
                         goto weaponItem;
 
                     if (itemAsset is ItemMagazineAsset || itemAsset is ItemSupplyAsset) {
-                        kitItem = new KitItemMagazine(kitItemId, kitItemDurability, kitItemAmount,
-                            tokAmmo?.Value<byte>() ?? 1);
+                        byte magazineAmmo;
+                        if (tokAmmo == null) {
+                            magazineAmmo = ((ItemMagazineAsset) itemAsset).Amount;
+                        } else {
+                            magazineAmmo = tokAmmo.Value<byte>();
+                        }
+                        kitItem = new KitItemMagazine(kitItemId, kitItemDurability, kitItemAmount, magazineAmmo);
                     } else {
                         kitItem = new KitItem(kitItemId, kitItemDurability, kitItemAmount);
 
