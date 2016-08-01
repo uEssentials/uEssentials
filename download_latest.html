@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Downloading...</title>
+  </head>
+  <script type="text/javascript">
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://api.github.com/repos/uEssentials/uEssentials/releases/latest');
+    xhr.setRequestHeader("Accept", "application/vnd.github.3.raw");
+    xhr.send();
+
+    xhr.onload = function(e) {
+       var json = JSON.parse(xhr.response);
+       var tag = json.tag_name;
+       //TODO: Add key?
+       var url = "https://github.com/uEssentials/uEssentials/releases/download/"+tag+"/uEssentials-"+tag+".zip?client_id=23ed59af16a9ac08aa33&client_secret=16b1208acc17dc87bd57bf710bf11965a73154ae";
+       window.location.replace(url);
+    }
+  </script>
+</html>
