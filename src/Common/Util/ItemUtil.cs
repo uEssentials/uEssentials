@@ -20,7 +20,6 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Rocket.Unturned.Items;
@@ -70,8 +69,7 @@ namespace Essentials.Common.Util {
                     itemPriority = 3;
                 } else if (itemName.ContainsIgnoreCase(name)) {
                     itemPriority = 2;
-                } else if (name.Contains(" ") &&
-                           name.Split(' ').All(p => itemName.ContainsIgnoreCase(p))) {
+                } else if (name.IndexOf(' ') > 0 && name.Split(' ').All(p => itemName.ContainsIgnoreCase(p))) {
                     itemPriority = 1;
                 }
 
@@ -94,11 +92,6 @@ namespace Essentials.Common.Util {
             var optItem = GetItem(id);
 
             return optItem.IsPresent ? Optional<T>.Of(optItem.Value as T) : Optional<T>.Empty();
-        }
-
-
-        public static Optional<Attachment> GetWeaponAttachment(Item weaponItem, AttachmentType type) {
-            return GetWeaponAttachment(weaponItem.Metadata, type);
         }
 
         public static Optional<Attachment> GetWeaponAttachment(byte[] metadata, AttachmentType type) {
@@ -142,20 +135,12 @@ namespace Essentials.Common.Util {
             return Optional<Attachment>.Of(new Attachment(attachId, attachDurability));
         }
 
-        public static Optional<EFiremode> GetWeaponFiremode(Item weaponItem) {
-            return GetWeaponFiremode(weaponItem.Metadata);
-        }
-
         public static Optional<EFiremode> GetWeaponFiremode(byte[] metadata) {
             if (metadata.Length < 18) {
                 return Optional<EFiremode>.Empty();
             }
 
             return Optional<EFiremode>.OfNullable((EFiremode) metadata[0xB]);
-        }
-
-        public static Optional<byte> GetWeaponAmmo(Item weaponItem) {
-            return GetWeaponAmmo(weaponItem.Metadata);
         }
 
         public static Optional<byte> GetWeaponAmmo(byte[] metadata) {
@@ -167,6 +152,46 @@ namespace Essentials.Common.Util {
         }
 
 
+        public static Optional<Attachment> GetWeaponAttachment(Item weaponItem, AttachmentType type) {
+            return GetWeaponAttachment(weaponItem.Metadata, type);
+        }
+
+        public static Optional<EFiremode> GetWeaponFiremode(Item weaponItem) {
+            return GetWeaponFiremode(weaponItem.Metadata);
+        }
+
+        public static Optional<byte> GetWeaponAmmo(Item weaponItem) {
+            return GetWeaponAmmo(weaponItem.Metadata);
+        }
+
+       /*
+            Unturned weapon state structure.
+
+            state[0] = sight id byte 1
+            state[1] = sight id byte 2
+
+            state[2] = tactical id byte 1
+            state[3] = tactical id byte 2
+            
+            state[4] = grip id byte 1
+            state[5] = grip id byte 2
+
+            state[6] = barrel id byte 1
+            state[7] = barrel id byte 2
+
+            state[8] = magazine id byte 1
+            state[9] = magazine id byte 2
+
+            state[10] = ammo
+            state[11] = firemode
+            state[12] = ??
+
+            state[13] = sight durability
+            state[14] = tactical durability
+            state[15] = grip durability
+            state[16] = barrel durability
+            state[17] = magazine durability
+        */
         public static void SetWeaponAttachment(Item weaponItem, AttachmentType type, Attachment attach) {
             if (weaponItem.Metadata.Length < 18) {
                 return;
@@ -174,23 +199,23 @@ namespace Essentials.Common.Util {
 
             switch (type) {
                 case AttachmentType.SIGHT:
-                    AssembleAttach(weaponItem, new[] { 0x0, 0x1, 0xD }, attach);
+                    AssembleAttach(weaponItem, 0, 1, 13, attach);
                     break;
 
                 case AttachmentType.TACTICAL:
-                    AssembleAttach(weaponItem, new[] { 0x2, 0x3, 0xE }, attach);
+                    AssembleAttach(weaponItem, 2, 3, 14, attach);
                     break;
 
                 case AttachmentType.GRIP:
-                    AssembleAttach(weaponItem, new[] { 0x4, 0x5, 0xF }, attach);
+                    AssembleAttach(weaponItem, 4, 5, 15, attach);
                     break;
 
                 case AttachmentType.BARREL:
-                    AssembleAttach(weaponItem, new[] { 0x6, 0x7, 0x10 }, attach);
+                    AssembleAttach(weaponItem, 6, 7, 16, attach);
                     break;
 
                 case AttachmentType.MAGAZINE:
-                    AssembleAttach(weaponItem, new[] { 0x8, 0x9, 0x11 }, attach);
+                    AssembleAttach(weaponItem, 8, 9, 17, attach);
                     break;
 
                 default:
@@ -203,7 +228,7 @@ namespace Essentials.Common.Util {
                 return;
             }
 
-            weaponItem.Metadata[0xB] = (byte) firemode;
+            weaponItem.Metadata[11] = (byte) firemode;
         }
 
         public static void SetWeaponAmmo(Item weaponItem, byte ammo) {
@@ -211,27 +236,30 @@ namespace Essentials.Common.Util {
                 return;
             }
 
-            weaponItem.Metadata[0xA] = ammo;
+            weaponItem.Metadata[10] = ammo;
         }
 
-        private static void AssembleAttach(Item item, IList<int> indexes, Attachment attach) {
+        
+        private static void AssembleAttach(Item item, int idx0, int idx1, int idx2, Attachment attach) {
             if (attach == null || attach.AttachmentId == 0) return;
 
             var attachIdBytes = BitConverter.GetBytes(attach.AttachmentId);
 
-            item.Metadata[indexes[0]] = attachIdBytes[0];
-            item.Metadata[indexes[1]] = attachIdBytes[1];
-            item.Metadata[indexes[2]] = attach.Durability;
+            // 2 bytes for id (uint16)
+            item.Metadata[idx0] = attachIdBytes[0];
+            item.Metadata[idx1] = attachIdBytes[1];
+
+            // 1 byte for durability (uint8)
+            item.Metadata[idx2] = attach.Durability;
         }
 
-        public enum AttachmentType {
 
+        public enum AttachmentType {
             SIGHT,
             BARREL,
             GRIP,
             TACTICAL,
             MAGAZINE
-
         }
 
     }

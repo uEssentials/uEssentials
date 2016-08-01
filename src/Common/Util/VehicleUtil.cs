@@ -52,7 +52,7 @@ namespace Essentials.Common.Util {
             }
 
             var lastAsset = null as VehicleAsset;
-            int lastPriority = 0;
+            var lastPriority = 0;
 
             foreach (var asset in _cachedAssets) {
                 var itemPriority = 0;
@@ -67,8 +67,7 @@ namespace Essentials.Common.Util {
                     itemPriority = 3;
                 } else if (itemName.ContainsIgnoreCase(name)) {
                     itemPriority = 2;
-                } else if (name.Contains(" ") &&
-                           name.Split(' ').All(p => itemName.ContainsIgnoreCase(p))) {
+                } else if (name.IndexOf(' ') > 0 && name.Split(' ').All(p => itemName.ContainsIgnoreCase(p))) {
                     itemPriority = 1;
                 }
 

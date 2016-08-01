@@ -50,9 +50,8 @@ namespace Essentials.Common.Util {
             }
         }
 
-        public static T DeserializeFile<T>(string configPath) {
-            var allText = File.ReadAllText(configPath);
-
+        public static T DeserializeFile<T>(string filePath) {
+            var allText = File.ReadAllText(filePath);
             return JsonConvert.DeserializeObject<T>(allText);
         }
 

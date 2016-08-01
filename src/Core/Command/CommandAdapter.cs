@@ -63,11 +63,7 @@ namespace Essentials.Core.Command {
         }
 
         public void Execute(IRocketPlayer caller, string[] args) {
-            // Timings
-            Stopwatch sw = null;
-            if (EssCore.Instance.DebugCommands) {
-                sw = Stopwatch.StartNew();
-            }
+            var sw = EssCore.Instance.DebugCommands ? Stopwatch.StartNew() : null;
 
             CommandResult result = null;
             var commandSource = caller is UnturnedPlayer
@@ -80,13 +76,12 @@ namespace Essentials.Core.Command {
                 } else if (!commandSource.IsConsole && Command.AllowedSource == AllowedSource.CONSOLE) {
                     EssLang.Send(commandSource, "PLAYER_CANNOT_EXECUTE");
                 } else {
-                    var cmdArgs = new CommandArgs(args) as ICommandArgs;
+                    var cmdArgs = (ICommandArgs) new CommandArgs(args);
                     var preExec = EssentialsEvents.CallCommandPreExecute(Command, ref cmdArgs, ref commandSource);
 
                     if (preExec.Cancelled) {
                         return;
                     }
-
 
                     if (_info != null && (_info.MinArgs > cmdArgs.Length || cmdArgs.Length > _info.MaxArgs)) {
                         result = CommandResult.ShowUsage();
@@ -102,7 +97,6 @@ namespace Essentials.Core.Command {
                         } else if (result.Message != null) {
                             var message = result.Message;
                             var color = ColorUtil.GetColorFromString(ref message);
-
                             commandSource.SendMessage(message, color);
                         }
                     }

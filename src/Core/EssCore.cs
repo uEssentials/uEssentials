@@ -92,12 +92,7 @@ namespace Essentials.Core {
         internal InstancePool CommonInstancePool { get; } = new InstancePool();
 
         internal bool DebugTasks { get; set; } = false;
-        internal bool DebugCommands { get; set; }
-        #if DEV
-            = true;
-        #else
-            = false;
-        #endif
+        internal bool DebugCommands { get; set; } = false;
 
         protected override void Load() {
             try {
