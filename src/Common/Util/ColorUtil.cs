@@ -40,18 +40,22 @@ namespace Essentials.Common.Util {
         }
 
         public static bool HasColor(string message) {
-            return message.Contains("<") && message.Contains(">") &&
-                !string.IsNullOrEmpty(message.Split('<')[1].Split('>')[0]);
+            int l, r;
+            if ((l = message.IndexOf('<')) == -1 || (r = message.IndexOf('>')) == -1) {
+                return false;
+            }
+            return message.Substring(++l, --r).Length > 0;
         }
 
         public static Color GetColorFromString(ref string message) {
             Color? color;
-
-            if (!message.Contains("<") || !message.Contains(">")) {
+            int l, r;
+            
+            if ((l = message.IndexOf('<')) == -1 || (r = message.IndexOf('>')) == -1) {
                 return Color.green;
             }
 
-            var rawColor = message.Split('<')[1].Split('>')[0];
+            var rawColor = message.Substring(++l, --r);
 
             if (string.IsNullOrEmpty(rawColor)) {
                 return Color.green;
