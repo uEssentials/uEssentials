@@ -94,43 +94,44 @@ namespace Essentials.Common.Util {
             return optItem.IsPresent ? Optional<T>.Of(optItem.Value as T) : Optional<T>.Empty();
         }
 
+
+        /*
+            Unturned weapon metadata structure.
+
+            metadata[0] = sight id byte 1
+            metadata[1] = sight id byte 2
+
+            metadata[2] = tactical id byte 1
+            metadata[3] = tactical id byte 2
+            
+            metadata[4] = grip id byte 1
+            metadata[5] = grip id byte 2
+
+            metadata[6] = barrel id byte 1
+            metadata[7] = barrel id byte 2
+
+            metadata[8] = magazine id byte 1
+            metadata[9] = magazine id byte 2
+
+            metadata[10] = ammo
+            metadata[11] = firemode
+            metadata[12] = ??
+
+            metadata[13] = sight durability
+            metadata[14] = tactical durability
+            metadata[15] = grip durability
+            metadata[16] = barrel durability
+            metadata[17] = magazine durability
+        */
         public static Optional<Attachment> GetWeaponAttachment(byte[] metadata, AttachmentType type) {
             if (metadata.Length < 18) {
                 return Optional<Attachment>.Empty();
             }
 
-            int[] indexes;
-
-            switch (type) {
-                case AttachmentType.SIGHT:
-                    indexes = new[] { 0x0, 0x1, 0xD };
-                    break;
-
-                case AttachmentType.TACTICAL:
-                    indexes = new[] { 0x2, 0x3, 0xE };
-                    break;
-
-                case AttachmentType.GRIP:
-                    indexes = new[] { 0x4, 0x5, 0xF };
-                    break;
-
-                case AttachmentType.BARREL:
-                    indexes = new[] { 0x6, 0x7, 0x10 };
-                    break;
-
-                case AttachmentType.MAGAZINE:
-                    indexes = new[] { 0x8, 0x9, 0x11 };
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
+            var indexes = GetAttachIndexes(type);
 
             var attachDurability = metadata[indexes[2]];
-            var attachId = BitConverter.ToUInt16(new[] {
-                metadata[indexes[0]],
-                metadata[indexes[1]]
-            }, 0);
+            var attachId = BitConverter.ToUInt16(metadata, indexes[0]);
 
             return Optional<Attachment>.Of(new Attachment(attachId, attachDurability));
         }
@@ -164,63 +165,13 @@ namespace Essentials.Common.Util {
             return GetWeaponAmmo(weaponItem.Metadata);
         }
 
-       /*
-            Unturned weapon state structure.
 
-            state[0] = sight id byte 1
-            state[1] = sight id byte 2
-
-            state[2] = tactical id byte 1
-            state[3] = tactical id byte 2
-            
-            state[4] = grip id byte 1
-            state[5] = grip id byte 2
-
-            state[6] = barrel id byte 1
-            state[7] = barrel id byte 2
-
-            state[8] = magazine id byte 1
-            state[9] = magazine id byte 2
-
-            state[10] = ammo
-            state[11] = firemode
-            state[12] = ??
-
-            state[13] = sight durability
-            state[14] = tactical durability
-            state[15] = grip durability
-            state[16] = barrel durability
-            state[17] = magazine durability
-        */
         public static void SetWeaponAttachment(Item weaponItem, AttachmentType type, Attachment attach) {
             if (weaponItem.Metadata.Length < 18) {
                 return;
             }
 
-            switch (type) {
-                case AttachmentType.SIGHT:
-                    AssembleAttach(weaponItem, 0, 1, 13, attach);
-                    break;
-
-                case AttachmentType.TACTICAL:
-                    AssembleAttach(weaponItem, 2, 3, 14, attach);
-                    break;
-
-                case AttachmentType.GRIP:
-                    AssembleAttach(weaponItem, 4, 5, 15, attach);
-                    break;
-
-                case AttachmentType.BARREL:
-                    AssembleAttach(weaponItem, 6, 7, 16, attach);
-                    break;
-
-                case AttachmentType.MAGAZINE:
-                    AssembleAttach(weaponItem, 8, 9, 17, attach);
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
+            AssembleAttach(weaponItem, GetAttachIndexes(type), attach);
         }
 
         public static void SetWeaponFiremode(Item weaponItem, EFiremode firemode) {
@@ -240,17 +191,36 @@ namespace Essentials.Common.Util {
         }
 
         
-        private static void AssembleAttach(Item item, int idx0, int idx1, int idx2, Attachment attach) {
+        private static void AssembleAttach(Item item, int[] idxs, Attachment attach) {
             if (attach == null || attach.AttachmentId == 0) return;
 
             var attachIdBytes = BitConverter.GetBytes(attach.AttachmentId);
 
             // 2 bytes for id (uint16)
-            item.Metadata[idx0] = attachIdBytes[0];
-            item.Metadata[idx1] = attachIdBytes[1];
+            item.Metadata[idxs[0]] = attachIdBytes[0];
+            item.Metadata[idxs[1]] = attachIdBytes[1];
 
             // 1 byte for durability (uint8)
-            item.Metadata[idx2] = attach.Durability;
+            item.Metadata[idxs[2]] = attach.Durability;
+        }
+
+        /*
+            return an array with 3 values
+
+            0 = id byte 1
+            1 = id byte 2
+            2 = durability
+        */
+        private static int[] GetAttachIndexes(AttachmentType attachType) {
+            switch (attachType) {
+                case AttachmentType.SIGHT:    return new [] { 0, 1, 13 };
+                case AttachmentType.TACTICAL: return new [] { 2, 3, 14 };
+                case AttachmentType.GRIP:     return new [] { 4, 5, 15 };
+                case AttachmentType.BARREL:   return new [] { 6, 7, 16 };
+                case AttachmentType.MAGAZINE: return new [] { 8, 9, 17 };
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(attachType), attachType, null);
+            }
         }
 
 
