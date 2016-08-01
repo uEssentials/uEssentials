@@ -28,22 +28,14 @@ namespace Essentials.Common.Util {
     public static class ColorUtil {
 
         public static ConsoleColor UnityColorToConsoleColor(Color color) {
-            if (color == Color.black)
-                return ConsoleColor.Black;
-            if (color == Color.green)
-                return ConsoleColor.Green;
-            if (color == Color.blue)
-                return ConsoleColor.Blue;
-            if (color == Color.cyan)
-                return ConsoleColor.Cyan;
-            if (color == Color.yellow)
-                return ConsoleColor.Yellow;
-            if (color == Color.gray)
-                return ConsoleColor.Gray;
-            if (color == Color.magenta)
-                return ConsoleColor.Magenta;
-            if (color == Color.red)
-                return ConsoleColor.Red;
+            if (color == Color.black) return ConsoleColor.Black;
+            if (color == Color.green) return ConsoleColor.Green;
+            if (color == Color.blue) return ConsoleColor.Blue;
+            if (color == Color.cyan) return ConsoleColor.Cyan;
+            if (color == Color.yellow) return ConsoleColor.Yellow;
+            if (color == Color.gray) return ConsoleColor.Gray;
+            if (color == Color.magenta) return ConsoleColor.Magenta;
+            if (color == Color.red) return ConsoleColor.Red;
             return ConsoleColor.White;
         }
 
@@ -67,42 +59,18 @@ namespace Essentials.Common.Util {
 
             // Try get color from name
             switch (rawColor.Trim().ToLower()) {
-                case "black":
-                    color = Color.black;
-                    break;
-                case "blue":
-                    color = Color.blue;
-                    break;
-                case "clear":
-                    color = Color.clear;
-                    break;
-                case "cyan":
-                    color = Color.cyan;
-                    break;
-                case "gray":
-                    color = Color.gray;
-                    break;
-                case "green":
-                    color = Color.green;
-                    break;
-                case "grey":
-                    color = Color.grey;
-                    break;
-                case "magenta":
-                    color = Color.magenta;
-                    break;
-                case "red":
-                    color = Color.red;
-                    break;
-                case "white":
-                    color = Color.white;
-                    break;
-                case "yellow":
-                    color = Color.yellow;
-                    break;
-                default:
-                    color = UnturnedChat.GetColorFromHex(rawColor);
-                    break;
+                case "black": color = Color.black; break;
+                case "blue": color = Color.blue; break;
+                case "clear": color = Color.clear; break;
+                case "cyan": color = Color.cyan; break;
+                case "gray": color = Color.gray; break;
+                case "green": color = Color.green; break;
+                case "grey": color = Color.grey; break;
+                case "magenta": color = Color.magenta; break;
+                case "red": color = Color.red; break;
+                case "white": color = Color.white; break;
+                case "yellow": color = Color.yellow; break;
+                default: color = UnturnedChat.GetColorFromHex(rawColor); break;
             }
 
             // Remove <color>
