@@ -192,7 +192,7 @@
     <Compile Include="src\Common\Util\ColorUtil.cs" />
     <Compile Include="src\Common\Util\JsonUtil.cs" />
     <Compile Include="src\Common\Preconditions.cs" />
-    <Compile Include="src\Api\Event\SubscribeEventAttr.cs" />
+    <Compile Include="src\Api\Event\SubscribeEventAttribute.cs" />
     <Compile Include="src\Api\Module\EssModule.cs" />
     <Compile Include="src\Api\Module\ModuleManager.cs" />
     <Compile Include="src\Api\Module\ModuleInfo.cs" />
@@ -228,7 +228,7 @@
     <Compile Include="src\NativeModules\Warp\WarpManager.cs" />
     <Compile Include="src\NativeModules\Warp\Warp.cs" />
     <Compile Include="src\NativeModules\Warp\Data\WarpData.cs" />
-    <Compile Include="src\Api\Command\CommandInfoAttr.cs" />
+    <Compile Include="src\Api\Command\CommandInfoAttribute.cs" />
     <Compile Include="src\Core\Command\CommandManager.cs" />
     <Compile Include="src\Api\Command\Source\ICommandSource.cs" />
     <Compile Include="src\Api\Command\Source\AllowedSource.cs" />
