@@ -205,7 +205,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                     if (args.Length < 3) {
                         src.SendMessage("Use /ekit [kit] set [option] [value]");
                         src.SendMessage("nm  = Name");
-                        src.SendMessage("cst  = Cost");
+                        src.SendMessage("cst = Cost");
                         src.SendMessage("cd  = Cooldown");
                         src.SendMessage("rwd = ResetCooldownWhenDie");
 
@@ -213,15 +213,15 @@ namespace Essentials.NativeModules.Kit.Commands {
                     }
 
                     switch (args[2].ToLowerString) {
-						case "cost":
+                        case "cost":
                         case "cst":
-							if (!args[3].IsDouble) {
-								return CommandResult.Lang("INVALID_NUMBER", args[3]);
-							}
+                            if (!args[3].IsDouble) {
+	                            return CommandResult.Lang("INVALID_NUMBER", args[3]);
+                            }
 
                             kit.Cost = (decimal) args[3].ToDouble;
                             src.SendMessage("Cost set to " + kit.Cost);
-							break;
+                            break;
 
                         case "name":
                         case "nm":
@@ -256,7 +256,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                         default:
                             src.SendMessage("nm  = Name");
                             src.SendMessage("cd  = Cooldown");
-							src.SendMessage("cost = Cost");
+                            src.SendMessage("cst = Cost");
                             src.SendMessage("rwd = ResetCooldownWhenDie");
                             return CommandResult.InvalidArgs();
                     }
