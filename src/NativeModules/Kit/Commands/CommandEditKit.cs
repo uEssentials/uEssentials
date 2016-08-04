@@ -51,10 +51,11 @@ namespace Essentials.NativeModules.Kit.Commands {
 
             var kit = kitManager.GetByName(kitName);
 
-            switch (args[1].ToLowerString) {
+			switch (args[1].ToLowerString) {
                 case "view":
                     src.SendMessage($"Name: {kit.Name}");
                     src.SendMessage($"Cooldown: {kit.Cooldown}");
+                    src.SendMessage($"Cost: {kit.Cost}");
                     src.SendMessage($"ResetCooldownWhenDie: {kit.ResetCooldownWhenDie}");
                     src.SendMessage(string.Empty);
                     src.SendMessage("Items:");
@@ -204,6 +205,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                     if (args.Length < 3) {
                         src.SendMessage("Use /ekit [kit] set [option] [value]");
                         src.SendMessage("nm  = Name");
+                        src.SendMessage("cst  = Cost");
                         src.SendMessage("cd  = Cooldown");
                         src.SendMessage("rwd = ResetCooldownWhenDie");
 
@@ -211,6 +213,16 @@ namespace Essentials.NativeModules.Kit.Commands {
                     }
 
                     switch (args[2].ToLowerString) {
+						case "cost":
+                        case "cst":
+							if (!args[3].IsDouble) {
+								return CommandResult.Lang("INVALID_NUMBER", args[3]);
+							}
+
+                            kit.Cost = (decimal) args[3].ToDouble;
+                            src.SendMessage("Cost set to " + kit.Cost);
+							break;
+
                         case "name":
                         case "nm":
                             kit.Name = args[3].ToString();
@@ -244,6 +256,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                         default:
                             src.SendMessage("nm  = Name");
                             src.SendMessage("cd  = Cooldown");
+							src.SendMessage("cost = Cost");
                             src.SendMessage("rwd = ResetCooldownWhenDie");
                             return CommandResult.InvalidArgs();
                     }
