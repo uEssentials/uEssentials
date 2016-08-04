@@ -116,13 +116,19 @@ namespace Essentials.Api.Unturned {
         }
 
         public bool IsBleeding {
-            get { return RocketPlayer.Bleeding; }
-            set { RocketPlayer.Bleeding = value; }
+            get { return Life.Bleeding; }
+            set {
+                Life.Bleeding = value;
+                RocketPlayer.Bleeding = value;
+            }
         }
 
         public bool IsBroken {
-            get { return RocketPlayer.Broken; }
-            set { RocketPlayer.Broken = value; }
+            get { return Life.Broken; }
+            set {
+                Life.Broken = value;
+                RocketPlayer.Broken = value;
+            }
         }
 
         public bool IsAdmin {
