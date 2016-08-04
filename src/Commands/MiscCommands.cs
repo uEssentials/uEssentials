@@ -387,7 +387,7 @@ namespace Essentials.Commands {
                         EssLang.Send(src, "AUTO_REPAIR_DISABLED");
                     }
                     break;
-                
+
                 default:
                     return CommandResult.ShowUsage();
             }
@@ -441,7 +441,7 @@ namespace Essentials.Commands {
                         EssLang.Send(src, "AUTO_REPAIR_DISABLED");
                     }
                     break;
-                    
+
                 case "all":
                     if (!src.HasPermission($"{cmd.Permission}.all")) {
                         return CommandResult.NoPermission($"{cmd.Permission}.all");
