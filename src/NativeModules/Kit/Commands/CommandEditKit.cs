@@ -67,7 +67,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                     });
                     break;
 
-                // /ekit xp additem normal id amount durability
+                /* ekit name additem normal id amount durability */
                 case "additem":
                     if (args.Length < 3) {
                         return CommandResult.InvalidArgs("Use /ekit [kit] additem [type] [id] [amount] [durability]");
@@ -107,9 +107,8 @@ namespace Essentials.NativeModules.Kit.Commands {
                     switch (args[2].ToLowerString) {
                         case "normal":
                             if (args.Length < 4) {
-                                return
-                                    CommandResult.InvalidArgs(
-                                        "Use /ekit [kit] additem [type] [id] [amount] [durability]");
+                                return CommandResult.InvalidArgs("Use /ekit [kit] additem " +
+                                                                 "[type] [id] [amount] [durability]");
                             }
 
                             var optAsset = ItemUtil.GetItem(args[3].ToString());
@@ -119,7 +118,8 @@ namespace Essentials.NativeModules.Kit.Commands {
                             }
 
                             kit.Items.Add(new KitItem(optAsset.Value.id, durability, amount));
-                            src.SendMessage($"Added Id: {optAsset.Value.id}, Amount: {amount}, Durability: {durability}");
+                            src.SendMessage($"Added Id: {optAsset.Value.id}, Amount: {amount}, " +
+                                            $"Durability: {durability}");
                             break;
 
                         case "vehicle":
@@ -165,12 +165,11 @@ namespace Essentials.NativeModules.Kit.Commands {
                             break;
 
                         default:
-                            return
-                                CommandResult.Error("Invalid type '{args[2]}'. Valid types are: normal, vehicle or xp.");
+                            return CommandResult.Error("Invalid type '{args[2]}'. Valid types are: 'normal', 'vehicle' and 'xp'");
                     }
                     break;
 
-                // /ekit kit delitem [itemindex]
+                /* ekit name delitem [itemindex] */
                 case "delitem":
                     if (args.Length != 3) {
                         src.SendMessage("Use '/ekit [kit] delitem [itemIndex]'");
