@@ -330,17 +330,15 @@ namespace Essentials.Commands {
             Aliases = new[] { "if" },
             Usage = "[autoreload | autorepair | all] [on | off]",
             Description = "Item features",
-            AllowedSource = AllowedSource.PLAYER
+            AllowedSource = AllowedSource.PLAYER,
+            MinArgs = 2,
+            MaxArgs = 2
         )]
         private CommandResult ItemFeaturesCommand(ICommandSource src, ICommandArgs args, ICommand cmd) {
-            if (args.Length != 2) {
-                return CommandResult.ShowUsage();
-            }
-
-            var toggleVal = GetToggleValue(args[0]);
+            var toggleVal = GetToggleValue(args[1]);
 
             if (!toggleVal.HasValue) {
-                return CommandResult.ShowUsage();
+                return CommandResult.Lang("INVALID_BOOLEAN", args[1]);
             }
 
             var player = src.ToPlayer();
@@ -403,17 +401,15 @@ namespace Essentials.Commands {
             Aliases = new[] { "vehfeatures", "vf" },
             Usage = "[autorefuel | autorepair | all] [on|off]",
             Description = "Vehicle features",
-            AllowedSource = AllowedSource.PLAYER
+            AllowedSource = AllowedSource.PLAYER,
+            MinArgs = 2,
+            MaxArgs = 2
         )]
         private CommandResult VehicleFeaturesCommand(ICommandSource src, ICommandArgs args, ICommand cmd) {
-            if (args.Length != 2) {
-                return CommandResult.ShowUsage();
-            }
-
-            var toggleVal = GetToggleValue(args[0]);
+            var toggleVal = GetToggleValue(args[1]);
 
             if (!toggleVal.HasValue) {
-                return CommandResult.ShowUsage();
+                return CommandResult.Lang("INVALID_BOOLEAN", args[1]);
             }
 
             var player = src.ToPlayer();
