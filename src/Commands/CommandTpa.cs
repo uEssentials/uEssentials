@@ -62,10 +62,9 @@ namespace Essentials.Commands {
                         return CommandResult.Lang("TPA_NONE");
                     }
 
-                    var whoSentId = new List<ulong>(Requests.Keys).FirstOrDefault(k => Requests[k] == senderId);
+                    var whoSentId = Requests.Keys.FirstOrDefault(k => Requests[k] == senderId);
                     var whoSent = UPlayer.From(new Steamworks.CSteamID(whoSentId));
 
-                    /* Should never happen */
                     if (whoSent == null) {
                         return CommandResult.Lang("TPA_NONE");
                     }
@@ -105,7 +104,7 @@ namespace Essentials.Commands {
                         return CommandResult.Lang("TPA_NONE");
                     }
 
-                    var whoSentId = new List<ulong>(Requests.Keys).FirstOrDefault(k => Requests[k] == senderId);
+                    var whoSentId = Requests.Keys.FirstOrDefault(k => Requests[k] == senderId);
                     var whoSent = UPlayer.From(new Steamworks.CSteamID(whoSentId));
 
                     if (whoSent != null) {
