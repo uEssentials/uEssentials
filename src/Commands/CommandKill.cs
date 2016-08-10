@@ -37,7 +37,7 @@ namespace Essentials.Commands {
     public class CommandKill : EssCommand {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (args[0].Is("*")) {
+            if (args[0].Equals("*")) {
                 UServer.Players.ForEach(p => p.Kill());
 
                 EssLang.Send(src, "KILL_ALL");

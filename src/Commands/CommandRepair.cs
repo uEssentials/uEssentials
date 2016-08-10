@@ -48,10 +48,10 @@ namespace Essentials.Commands {
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
 
-            if (args[0].Is("all")) {
+            if (args[0].Equals("all")) {
                 player.RocketPlayer.Inventory.Items.ForEach(item => Repair(player, item));
                 EssLang.Send(src, "ALL_REPAIRED");
-            } else if (args[0].Is("hand")) {
+            } else if (args[0].Equals("hand")) { //TODO remove 'hand' argument... 
                 Repair(player, player.Inventory.Items[0]);
                 Repair(player, player.Inventory.Items[1]);
 

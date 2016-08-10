@@ -42,9 +42,9 @@ namespace Essentials.Commands {
 
             string name;
 
-            if (args[0].Is(name = "*console*")) {
+            if (args[0].Equals(name = "*console*")) {
                 CommandWindow.ConsoleInput.onInputText(args.Join(1));
-            } else if (args[0].Is("*")) {
+            } else if (args[0].Equals("*")) {
                 UServer.Players.ForEach(p => {
                     ChatManager.Instance.askChat(p.CSteamId, (byte) EChatMode.GLOBAL, args.Join(1));
                 });

@@ -52,7 +52,7 @@ namespace Essentials.Commands {
                 } else {
                     return CommandResult.Lang("NOT_IN_VEHICLE");
                 }
-            } else if (args[0].Is("all")) {
+            } else if (args[0].Equals("all")) {
                 if (!src.HasPermission($"{Permission}.all")) {
                     return CommandResult.NoPermission($"{Permission}.all");
                 }

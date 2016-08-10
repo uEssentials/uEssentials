@@ -45,10 +45,10 @@ namespace Essentials.Commands {
                     return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
                 }
 
-                if (!vehId.IsUshort || !IsValidVehicleId(vehId.ToUshort)) {
+                if (!vehId.IsUShort || !IsValidVehicleId(vehId.ToUShort)) {
                     EssLang.Send(src, "INVALID_VEHICLE_ID", vehId);
                 } else {
-                    VehicleTool.giveVehicle(target.UnturnedPlayer, vehId.ToUshort);
+                    VehicleTool.giveVehicle(target.UnturnedPlayer, vehId.ToUShort);
                     EssLang.Send(src, "SPAWNED_VEHICLE_AT_PLAYER", args[1]);
                 }
             } else if (args.Length == 4) {
@@ -58,11 +58,11 @@ namespace Essentials.Commands {
                 if (pos.HasValue) {
                     var pVal = pos.Value;
 
-                    if (!vehId.IsUshort || !IsValidVehicleId(vehId.ToUshort)) {
+                    if (!vehId.IsUShort || !IsValidVehicleId(vehId.ToUShort)) {
                         return CommandResult.Lang("INVALID_VEHICLE_ID", vehId);
                     }
 
-                    SpawnVehicle(pVal, vehId.ToUshort);
+                    SpawnVehicle(pVal, vehId.ToUShort);
                     EssLang.Send(src, "SPAWNED_VEHICLE_AT_POSITION", pVal.x, pVal.y, pVal.z);
                 } else {
                     return CommandResult.Lang("INVALID_COORDS", args[1], args[2], args[3]);

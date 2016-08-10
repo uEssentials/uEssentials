@@ -25,8 +25,6 @@ using Essentials.Api.Command;
 using Essentials.Api.Unturned;
 using UnityEngine;
 
-// ReSharper disable ConvertPropertyToExpressionBody
-
 namespace Essentials.Core.Command {
 
     ///<summary>
@@ -134,13 +132,21 @@ namespace Essentials.Core.Command {
 
     ///<summary>
     /// Default implementation of ICommandArgument
-    /// Author: Leonardosc
     ///</summary>
     internal class CommandArgument : ICommandArgument {
 
         public int Index { get; }
 
         public string RawValue { get; }
+
+        public CommandArgument(int index, string rawValue) {
+            Index = index;
+            RawValue = rawValue;
+        }
+
+        public ulong ToULong => ulong.Parse(RawValue);
+
+        public long ToLong => long.Parse(RawValue);
 
         public int ToInt => int.Parse(RawValue);
 
@@ -156,11 +162,11 @@ namespace Essentials.Core.Command {
 
         public string ToUpperString => ToString().ToUpperInvariant();
 
-        public uint ToUint => uint.Parse(RawValue);
+        public uint ToUInt => uint.Parse(RawValue);
 
         public short ToShort => short.Parse(RawValue);
 
-        public ushort ToUshort => ushort.Parse(RawValue);
+        public ushort ToUShort => ushort.Parse(RawValue);
 
         public bool IsBool {
             get {
@@ -170,11 +176,28 @@ namespace Essentials.Core.Command {
         }
 
         public bool IsString {
-            get { return !IsBool && !IsDouble && !IsInt && !IsFloat; }
+            get {
+                var c = RawValue[0];
+                return c != '-' && (c < '0' || c > '9');
+            }
         }
 
         public bool IsValidPlayerName {
             get { return UPlayer.From(RawValue) != null; }
+        }
+
+        public bool IsLong {
+            get {
+                long unused;
+                return long.TryParse(RawValue, out unused);
+            }
+        }
+
+        public bool IsULong {
+            get {
+                ulong unused;
+                return ulong.TryParse(RawValue, out unused);
+            }
         }
 
         public bool IsInt {
@@ -198,7 +221,7 @@ namespace Essentials.Core.Command {
             }
         }
 
-        public bool IsUint {
+        public bool IsUInt {
             get {
                 uint unused;
                 return uint.TryParse(RawValue, out unused);
@@ -212,38 +235,11 @@ namespace Essentials.Core.Command {
             }
         }
 
-        public bool IsUshort {
+        public bool IsUShort {
             get {
                 ushort unused;
                 return ushort.TryParse(RawValue, out unused);
             }
-        }
-
-        public CommandArgument(int index, string rawValue) {
-            Index = index;
-            RawValue = rawValue;
-        }
-
-        public bool Is(int other) {
-            if (!IsInt)
-                return false;
-
-            return ToInt == other;
-        }
-
-        public bool Is(double other) {
-            if (!IsDouble)
-                return false;
-
-            return Math.Abs(ToDouble - other) < 0.05;
-        }
-
-        public bool Is(string other, bool ignoreCase = true) {
-            return string.Compare(
-                ToString(),
-                other,
-                StringComparison.OrdinalIgnoreCase
-            ) == 0;
         }
 
         public bool Is(UPlayer other) {
@@ -253,12 +249,33 @@ namespace Essentials.Core.Command {
             return ToPlayer == other;
         }
 
-        public bool IsOneOf(string[] others, bool ignoreCase = true) {
-            return others.Any(other => Is(other, ignoreCase));
-        }
-
         public override string ToString() {
             return RawValue;
+        }
+
+        public override bool Equals(object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (ReferenceEquals(this, obj)) {
+                return true;
+            }
+            if (obj is string) {
+                return this.RawValue == (string) obj;
+            }
+            if (obj is ICommandArgument) {
+                return Equals((ICommandArgument) obj);
+            }
+            return false;
+
+        }
+
+        public bool Equals(ICommandArgument other) {
+            return other.RawValue == this.RawValue;
+        }
+
+        public override int GetHashCode() {
+            return RawValue.GetHashCode();
         }
 
     }

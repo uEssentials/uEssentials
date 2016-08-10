@@ -39,7 +39,7 @@ namespace Essentials.Commands {
             var msg = args.Length == 2 ? args[1].ToString() : args.Join(1);
             var color = ColorUtil.HasColor(msg) ? ColorUtil.GetColorFromString(ref msg) : Color.green;
 
-            if (args[0].Is("*console*")) {
+            if (args[0].Equals("*console*")) {
                 UEssentials.ConsoleSource.SendMessage(msg, color);
             } else {
                 if (!args[0].IsValidPlayerName) {

@@ -160,7 +160,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                                 return CommandResult.Lang("MUST_POSITIVE");
                             }
 
-                            kit.Items.Add(new KitItemExperience(args[3].ToUint));
+                            kit.Items.Add(new KitItemExperience(args[3].ToUInt));
                             src.SendMessage($"Added Xp item. Amount: {amount}");
                             break;
 
@@ -238,7 +238,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                                 return CommandResult.Lang("MUST_POSITIVE");
                             }
 
-                            kit.Cooldown = args[3].ToUint;
+                            kit.Cooldown = args[3].ToUInt;
                             src.SendMessage("Cooldown set to " + kit.Cooldown);
                             break;
 

@@ -54,7 +54,7 @@ namespace Essentials.Commands {
                     break;
 
                 case 1:
-                    if (args[0].Is("*")) {
+                    if (args[0].Equals("*")) {
                         UPlayer caller = null;
 
                         if (!src.IsConsole) {

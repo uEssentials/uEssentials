@@ -140,7 +140,7 @@ namespace Essentials.NativeModules.Kit.Commands {
 
                 var kit = KitModule.Instance.KitManager.GetByName(kitName);
 
-                if (args[1].Is("*")) {
+                if (args[1].Equals("*")) {
                     UServer.Players.ForEach(kit.GiveTo);
                     EssLang.Send(src, "KIT_GIVEN_SENDER_ALL", kitName);
                 } else {

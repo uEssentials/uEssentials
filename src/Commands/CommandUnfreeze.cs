@@ -38,7 +38,7 @@ namespace Essentials.Commands {
     public class CommandUnfreeze : EssCommand {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (args[0].Is("*")) {
+            if (args[0].Equals("*")) {
                 foreach (var player in UServer.Players.Where(player => player.HasComponent<FrozenPlayer>())) {
                     player.RemoveComponent<FrozenPlayer>();
 

@@ -53,7 +53,7 @@ namespace Essentials.Commands {
             }
 
             if (args.Length == 2) {
-                if (args[1].Is("*")) {
+                if (args[1].Equals("*")) {
                     UServer.Players.ForEach(p => GiveExp(p, amount));
 
                     if (amount >= 0) {

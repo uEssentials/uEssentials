@@ -252,7 +252,7 @@ namespace Essentials.Commands {
                             return CommandResult.ShowUsage();
                         }
                         GiveItem(src, src.ToPlayer(), args[0], args[1]);
-                    } else if (args[0].Is("*")) {
+                    } else if (args[0].Equals("*")) {
                         GiveItem(src, null, args[1], One, true);
                     } else if (!args[0].IsValidPlayerName) {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
@@ -266,7 +266,7 @@ namespace Essentials.Commands {
                     /i all [item] [amount]
                  */
                 case 3:
-                    if (args[0].Is("*")) {
+                    if (args[0].Equals("*")) {
                         GiveItem(src, null, args[1], args[2], true);
                     } else if (!args[0].IsValidPlayerName) {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
@@ -305,8 +305,8 @@ namespace Essentials.Commands {
 
                 asset = equipment.asset;
             } else {
-                if (!args[0].IsUshort ||
-                    (asset = Assets.find(EAssetType.ITEM, args[0].ToUshort) as ItemAsset) == null) {
+                if (!args[0].IsUShort ||
+                    (asset = Assets.find(EAssetType.ITEM, args[0].ToUShort) as ItemAsset) == null) {
                     return CommandResult.Lang("INVALID_ITEM_ID", args[0]);
                 }
             }
@@ -653,7 +653,7 @@ namespace Essentials.Commands {
 
                     var vehAsset = optAsset.Value;
 
-                    if (args[0].Is("*")) {
+                    if (args[0].Equals("*")) {
                         UServer.Players.ForEach(p => {
                             VehicleTool.giveVehicle(p.UnturnedPlayer, vehAsset.id);
                         });
@@ -726,7 +726,7 @@ namespace Essentials.Commands {
                     var player = src.ToPlayer();
                     byte value;
 
-                    if (args[1].Is("max")) {
+                    if (args[1].Equals("max")) {
                         value = player.GetSkill(optSkill.Value).max;
                     } else if (args[1].IsInt) {
                         if (args[1].ToInt < 0 || args[1].ToInt > byte.MaxValue) {
@@ -744,7 +744,7 @@ namespace Essentials.Commands {
 
                 // /skill [player|*] [skill] [value]
                 case 3:
-                    if (args[0].Is("*")) {
+                    if (args[0].Equals("*")) {
                         if (!UServer.Players.Any()) {
                             return CommandResult.Lang("ANYONE_ONLINE");
                         }
@@ -764,7 +764,7 @@ namespace Essentials.Commands {
                         return CommandResult.Lang("INVALID_SKILL", args[0]);
                     }
 
-                    if (args[2].Is("max")) {
+                    if (args[2].Equals("max")) {
                         value = player.GetSkill(optSkill.Value).max;
                     } else if (args[2].IsInt) {
                         if (args[2].ToInt < 0 || args[2].ToInt > byte.MaxValue) {
@@ -776,7 +776,7 @@ namespace Essentials.Commands {
                         return CommandResult.Lang("INVALID_NUMBER", args[2]);
                     }
 
-                    if (args[0].Is("*")) {
+                    if (args[0].Equals("*")) {
                         UServer.Players.ForEach(p => p.SetSkillLevel(optSkill.Value, value));
                         EssLang.Send(src, "SKILL_SET_ALL", optSkill.Value.Name.Capitalize(), args[2]);
                     } else {
@@ -885,7 +885,7 @@ namespace Essentials.Commands {
                 } else if (amountArg.ToShort <= 0) {
                     EssLang.Send(src, "MUST_POSITIVE");
                 } else {
-                    amt = amountArg.ToUshort;
+                    amt = amountArg.ToUShort;
                     goto give;
                 }
                 return;

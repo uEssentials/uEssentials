@@ -24,10 +24,6 @@ using UnityEngine;
 
 namespace Essentials.Api.Command {
 
-    /// <summary>
-    /// The purpose of this is help the manipulation
-    /// of arguments given when an command is executed.
-    /// </summary>
     public interface ICommandArgs {
 
         /// <summary>
@@ -37,7 +33,7 @@ namespace Essentials.Api.Command {
         string[] RawArguments { get; }
 
         /// <summary>
-        /// Array containing the "treated" arguments.
+        /// Array containing the "parsed" arguments.
         /// </summary>
         /// <returns></returns>
         ICommandArgument[] Arguments { get; }
@@ -85,142 +81,62 @@ namespace Essentials.Api.Command {
     }
 
     /// <summary>
-    /// Represent an command argument
+    /// Represent an argument
     /// </summary>
     public interface ICommandArgument {
-
-        /// <summary>
-        ///
-        /// </summary>
         int Index { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
         string RawValue { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
         bool IsBool { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
         bool IsString { get; }
 
         /// <summary>
-        /// Check if argument in determined index is an valid player name
+        /// Check if argument in determined index is an valid player name.
         /// </summary>
-        /// <returns> Return is argument is an valid player name </returns>
+        /// <returns> Return is argument is an valid player name</returns>
         bool IsValidPlayerName { get; }
 
-        /// <summary>
-        /// Check if argument in determined index is int
-        /// </summary>
-        /// <returns> Return is argument is int </returns>
+        bool IsLong { get; }
+
+        bool IsULong { get; }
+
         bool IsInt { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
-        bool IsUint { get; }
+        bool IsUInt { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
         bool IsShort { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
-        bool IsUshort { get; }
+        bool IsUShort { get; }
 
-        /// <summary>
-        /// Check if argument in determined index is double
-        /// </summary>
-        /// <returns> Return is argument is double </returns>
         bool IsDouble { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <returns> Return is argument is double </returns>
         bool IsFloat { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
+        long ToLong { get; }
+
+        ulong ToULong { get; }
+
         int ToInt { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
-        uint ToUint { get; }
+        uint ToUInt { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
         short ToShort { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
-        ushort ToUshort { get; }
+        ushort ToUShort { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
         string ToLowerString { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
         string ToUpperString { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
         bool ToBool { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
         double ToDouble { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
         float ToFloat { get; }
 
-        /// <summary>
-        ///
-        /// </summary>
         UPlayer ToPlayer { get; }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="other"></param>
-        /// <param name="ignoreCase"></param>
-        /// <returns></returns>
-        bool Is(string other, bool ignoreCase = true);
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        bool Is(UPlayer other);
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="ignoreCase"></param>
-        /// <param name="others"></param>
-        /// <returns></returns>
-        bool IsOneOf(string[] others, bool ignoreCase = true);
-
     }
 
 }

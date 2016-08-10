@@ -64,7 +64,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                     return CommandResult.Lang("MUST_POSITIVE");
                 }
 
-                cooldown = args[1].ToUint;
+                cooldown = args[1].ToUInt;
             }
 
             if (args.Length > 2) {
