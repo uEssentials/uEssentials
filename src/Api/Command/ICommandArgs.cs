@@ -71,13 +71,6 @@ namespace Essentials.Api.Command {
         /// <returns>String containing the 'joined arguments'</returns>
         string Join(int startIndex, int endIndex, string separator);
 
-        /// <summary>
-        /// Try get an vector3 from 3 arguments, starting in <paramref name="initialIndex"/>
-        /// </summary>
-        /// <param name="initialIndex"> Initial index </param>
-        /// <returns>New vector3 with given positions.</returns>
-        Vector3? GetVector3(int initialIndex);
-
     }
 
     /// <summary>
