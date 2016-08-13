@@ -24,9 +24,6 @@ using Essentials.Common;
 
 namespace Essentials.Api.Unturned {
 
-    /// <summary>
-    /// <para>Type-Safe enum, that represent unturned skills</para>
-    /// </summary>
     public class USkill {
 
         public static readonly USkill OVERKILL = new USkill(0, 0, "OVERKILL");
