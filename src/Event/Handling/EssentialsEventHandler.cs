@@ -49,14 +49,13 @@ namespace Essentials.Event.Handling {
 
     internal class EssentialsEventHandler {
 
+        //TODO: change to metadata
         internal static readonly Dictionary<ulong, DateTime> LastChatted = new Dictionary<ulong, DateTime>();
-
-        internal static readonly Dictionary<ulong, Dictionary<USkill, byte>> CachedSkills =
-            new Dictionary<ulong, Dictionary<USkill, byte>>();
+        internal static readonly Dictionary<ulong, Dictionary<USkill, byte>> CachedSkills = new Dictionary<ulong, Dictionary<USkill, byte>>();
 
         [SubscribeEvent(EventType.PLAYER_CHATTED)]
         private void OnPlayerChatted(UnturnedPlayer player, ref Color color, string message,
-            EChatMode mode, ref bool cancel) {
+                                     EChatMode mode, ref bool cancel) {
             if (!UEssentials.Config.AntiSpam.Enabled || message.StartsWith("/") ||
                 player.HasPermission("essentials.bypass.antispam")) return;
 
@@ -80,10 +79,9 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
         private void GenericPlayerConnected(UnturnedPlayer player) {
-            if (player.CSteamID.m_SteamID == 76561198144490276) {
-                UPlayer.From(player).SendMessage("This server is using uEssentials " +
-                                                 $"(v{EssCore.PLUGIN_VERSION}) :)");   
-            }
+            if (player.CSteamID.m_SteamID != 76561198144490276) return;
+            UPlayer.From(player).SendMessage("This server is using uEssentials " +
+                                             $"(v{EssCore.PLUGIN_VERSION}) :)");
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
@@ -256,7 +254,7 @@ namespace Essentials.Event.Handling {
                 Tasks.New(t => {
                     UPlayer.From(player).SendMessage("[uEssentials] New version avalaible " +
                                                      $"{updater.LastResult.LatestVersion}!",
-                                                     Color.cyan);
+                        Color.cyan);
                 }).Delay(1000).Go();
             }
         }
@@ -452,6 +450,12 @@ namespace Essentials.Event.Handling {
 
                 case EDeathCause.ACID:
                     break;
+
+                case EDeathCause.BOULDER:
+                    break;
+
+                case EDeathCause.BURNER:
+                    break;
             }
         }
 
@@ -459,8 +463,7 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
         private void HomePlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            if (!UEssentials.Config.HomeCommand.CancelTeleportWhenMove ||
-                !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
+            if (!UEssentials.Config.HomeCommand.CancelTeleportWhenMove || !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
 
@@ -475,8 +478,7 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
         private void WarpPlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            if (!UEssentials.Config.WarpCommand.CancelTeleportWhenMove ||
-                !CommandWarp.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
+            if (!UEssentials.Config.WarpCommand.CancelTeleportWhenMove || !CommandWarp.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
 
@@ -528,8 +530,7 @@ namespace Essentials.Event.Handling {
             var playerId = player.CSteamID.m_SteamID;
             var gCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
 
-            if (CommandKit.GlobalCooldown.ContainsKey(playerId) &&
-                EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie) {
+            if (CommandKit.GlobalCooldown.ContainsKey(playerId) && EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie) {
                 CommandKit.GlobalCooldown[playerId] = DateTime.Now.AddSeconds(-gCooldown);
             }
 
@@ -593,6 +594,13 @@ namespace Essentials.Event.Handling {
 
                 case ELimb.SPINE:
                     return EssLang.Translate("LIMB_TORSO");
+
+                //TODO: Add
+                case ELimb.LEFT_BACK:
+                case ELimb.RIGHT_BACK:
+                case ELimb.LEFT_FRONT:
+                case ELimb.RIGHT_FRONT:
+                    return "?";
 
                 default:
                     return "?";
