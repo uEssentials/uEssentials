@@ -362,11 +362,9 @@ namespace Essentials.Api.Unturned {
         }
 
         public static UPlayer From(ulong rawCSteamId) {
-            var players = EssCore.Instance.ConnectedPlayers;
-            //TODO use try-get
-            return players.ContainsKey(rawCSteamId)
-                ? players[rawCSteamId]
-                : null;
+            UPlayer ret;
+            return EssCore.Instance.ConnectedPlayers.TryGetValue(rawCSteamId, out ret) 
+                   ? ret : null;
         }
 
         public static UPlayer From(CSteamID csteamId) {
