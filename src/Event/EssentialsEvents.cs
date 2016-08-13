@@ -43,8 +43,8 @@ namespace Essentials.Event {
             return evt;
         }
 
-        internal static CommandPosExecuteEvent CallCommandPosExecute(ICommand command, ref ICommandArgs cmdArgs, 
-                                                                    ref ICommandSource commandSource, ref CommandResult result) {
+        internal static CommandPosExecuteEvent CallCommandPosExecute(ICommand command, ref ICommandArgs cmdArgs,
+                                                                     ref ICommandSource commandSource, ref CommandResult result) {
             var evt = new CommandPosExecuteEvent(command, cmdArgs, commandSource, result);
             OnCommandPosExecute?.Invoke(evt);
             cmdArgs = evt.Arguments;
