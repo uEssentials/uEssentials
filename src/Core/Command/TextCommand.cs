@@ -36,10 +36,10 @@ namespace Essentials.Core.Command {
         public string Permission { get; set; }
         public AllowedSource AllowedSource { get; set; }
 
-        private TextCommands.TextCommandData Data;
+        private TextCommands.TextCommandData _data;
 
         public TextCommand(TextCommands.TextCommandData data) {
-            Data = data;
+            _data = data;
             Name = data.Name;
             Usage = string.Empty;
             Aliases = new string[0];
@@ -49,7 +49,7 @@ namespace Essentials.Core.Command {
         }
 
         public CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            Data.Text.ForEach(txt => {
+            _data.Text.ForEach(txt => {
                 var color = ColorUtil.GetColorFromString(ref txt);
                 src.SendMessage(txt, color);
             });
