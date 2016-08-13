@@ -145,17 +145,12 @@ namespace Essentials.Core {
 
                 Logger.Log("Plugin version: ", ConsoleColor.Green, suffix: "");
 
-                #if EXPERIMENTAL
-                    const string label = "experimental"
-                    #if EXPERIMENTAL_HASH
-                        + "-commit-$COMMIT_HASH$"
-                    #endif
-                    ;
-
-                    Logger.Log( $"{PLUGIN_VERSION} {label}", ConsoleColor.White, "" );
-                #else
-                    Logger.Log(PLUGIN_VERSION, ConsoleColor.White, "");
-                #endif
+#if EXPERIMENTAL
+                const string label = "experimental-commit-$COMMIT_HASH$";
+                Logger.Log( $"{PLUGIN_VERSION} {label}", ConsoleColor.White, "" );
+#else
+                Logger.Log(PLUGIN_VERSION, ConsoleColor.White, "");
+#endif
 
                 Logger.Log("Recommended Rocket version: ", ConsoleColor.Green, suffix: "");
                 Logger.Log(ROCKET_VERSION, ConsoleColor.White, "");
@@ -257,10 +252,10 @@ namespace Essentials.Core {
                     EventManager.Unregister<EssentialsEventHandler>("DeathMessages");
                 }
 
-                #if EXPERIMENTAL
-                    Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
-                    Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
-                #endif
+#if EXPERIMENTAL
+                Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
+                Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
+#endif
 
                 TryAddComponent<Tasks.TaskExecutor>();
 
@@ -299,16 +294,15 @@ namespace Essentials.Core {
                 }
             }
 
-            #if DEV
-                CommandWindow.ConsoleOutput.title = "Unturned Server";
-            #else
-                CheckUpdates();
-            #endif
+#if DEV
+            CommandWindow.ConsoleOutput.title = "Unturned Server";
+#else
+            CheckUpdates();
+#endif
 
-            #if DUMP_COMMANDS
-                DumpCommands();
-            #endif
-
+#if DUMP_COMMANDS
+            DumpCommands();
+#endif
         }
 
         protected override void Unload() {
@@ -329,7 +323,7 @@ namespace Essentials.Core {
             Tasks.CancelAll();
         }
 
-        #if DUMP_COMMANDS
+#if DUMP_COMMANDS
         private static void DumpCommands() {
             var userProfile = System.Environment.GetEnvironmentVariable("USERPROFILE");
             if (userProfile != null && System.IO.Directory.Exists(Path.Combine(userProfile, "Desktop"))) {
@@ -369,7 +363,7 @@ namespace Essentials.Core {
                 File.WriteAllText(Path.Combine(Path.Combine(userProfile, "Desktop"), "command.txt"), buffer.ToString());
             }
         }
-        #endif
+#endif
 
         private static void ReloadCallback(string command) {
             if (!command.StartsWith("rocket reload", true, CultureInfo.InvariantCulture)) {
