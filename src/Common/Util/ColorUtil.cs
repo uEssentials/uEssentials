@@ -20,7 +20,7 @@
 */
 
 using System;
-using Rocket.Unturned.Chat;
+using System.Globalization;
 using UnityEngine;
 
 namespace Essentials.Common.Util {
@@ -74,7 +74,7 @@ namespace Essentials.Common.Util {
                 case "red": color = Color.red; break;
                 case "white": color = Color.white; break;
                 case "yellow": color = Color.yellow; break;
-                default: color = UnturnedChat.GetColorFromHex(rawColor); break;
+                default: color = ColorFromHex(rawColor); break;
             }
 
             // Remove <color>
@@ -85,6 +85,35 @@ namespace Essentials.Common.Util {
             return color ?? Color.green;
         }
 
+        private static Color? ColorFromHex(string rawColor) {
+            var len = rawColor.Length;
+            int val;
+
+            if (len == 7 || len == 6) { // Parse <#RRGGBB> or <RRGGBB>
+                if (len == 7) {
+                    rawColor = rawColor.Substring(1);// Remove #
+                }
+                val = int.Parse(rawColor, NumberStyles.HexNumber);
+            } else if (len == 4 || len == 3) { // <#RGB> or <RGB>
+                var offset = len == 4 ? 1 : 0;
+                var chars = new char[6];
+                chars[0] = rawColor[offset];
+                chars[1] = rawColor[offset];
+                chars[2] = rawColor[offset + 1];
+                chars[3] = rawColor[offset + 1];
+                chars[4] = rawColor[offset + 2];
+                chars[5] = rawColor[offset + 2];
+                val = int.Parse(new string(chars), NumberStyles.HexNumber);
+            } else {
+                return null;
+            }
+
+            return new Color(
+                ((val & 0xFF)) / 255.0F,
+                ((val >> 8) & 0xFF) / 255.0F, 
+                ((val >> 16) & 0xFF) / 255.0F
+            );
+        }
     }
 
 }
