@@ -19,7 +19,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Essentials.Api.Command;
@@ -36,10 +35,6 @@ namespace Essentials.Commands {
         Usage = "[player/x y z]"
     )]
     public class CommandTpAll : EssCommand {
-
-        private static readonly Action<Vector3, List<UPlayer>> TeleportAll = (pos, players) => {
-            players.ForEach(player => player.UnturnedPlayer.sendTeleport(pos, 0));
-        };
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var players = UServer.Players.ToList();
@@ -87,6 +82,10 @@ namespace Essentials.Commands {
             }
 
             return CommandResult.Success();
+        }
+
+        private void TeleportAll(Vector3 pos, List<UPlayer> players) {
+             players.ForEach(player => player.UnturnedPlayer.sendTeleport(pos, 0));
         }
 
     }
