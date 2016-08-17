@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using Essentials.Core.Command;
 using UnityEngine;
 
 namespace Essentials.Api.Command {
@@ -45,6 +46,11 @@ namespace Essentials.Api.Command {
             }
 
             return null;
+        }
+
+        public static bool IsInRange(this ICommandArgument src, int min, int max) {
+            var val = src.ToInt;
+            return val >= min && val <= max;
         }
 
     }
