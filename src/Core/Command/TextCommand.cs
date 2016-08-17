@@ -19,11 +19,13 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System.Collections.Generic;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.Configuration;
+using UnityEngine;
 
 namespace Essentials.Core.Command {
 
@@ -36,26 +38,34 @@ namespace Essentials.Core.Command {
         public string Permission { get; set; }
         public AllowedSource AllowedSource { get; set; }
 
-        private TextCommands.TextCommandData _data;
+        private readonly HashSet<TextEntry> _texts; 
 
         public TextCommand(TextCommands.TextCommandData data) {
-            _data = data;
+            _texts = new HashSet<TextEntry>();
             Name = data.Name;
             Usage = string.Empty;
             Aliases = new string[0];
             Description = string.Empty;
             AllowedSource = AllowedSource.BOTH;
             Permission = $"essentials.textcommand.{Name}";
+
+            data.Text.ForEach(txt => {
+                var color = ColorUtil.GetColorFromString(ref txt);
+                _texts.Add(new TextEntry { Text = txt, Color = color });
+            });
         }
 
         public CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            _data.Text.ForEach(txt => {
-                var color = ColorUtil.GetColorFromString(ref txt);
-                src.SendMessage(txt, color);
-            });
+            foreach (var entry in _texts) {
+                src.SendMessage(entry.Text, entry.Color);
+            }
             return CommandResult.Success();
         }
 
+        struct TextEntry {
+            public string Text;
+            public Color Color;
+        }
     }
 
 }
