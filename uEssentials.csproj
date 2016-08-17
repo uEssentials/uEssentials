@@ -98,6 +98,7 @@
     <Compile Include="src\Api\Event\ICancellable.cs" />
     <Compile Include="src\Api\Event\IEventManager.cs" />
     <Compile Include="src\Api\Configuration\IConfig.cs" />
+    <Compile Include="src\Api\Metadata\MetadataStore.cs" />
     <Compile Include="src\Api\Module\LoadFlags.cs" />
     <Compile Include="src\Api\Task\Tasks.cs" />
     <Compile Include="src\CodeAnalysis\NotNullAttribute.cs" />
@@ -121,7 +122,6 @@
     <Compile Include="src\Common\Util\DebugUtil.cs" />
     <Compile Include="src\Compatibility\Hook.cs" />
     <Compile Include="src\Compatibility\HookManager.cs" />
-    <Compile Include="src\Core\Consts.cs" />
     <Compile Include="src\Json\Converters\Vector3Converter.cs" />
     <Compile Include="src\Misc\InstancePool.cs" />
     <Compile Include="src\Economy\IEconomyProvider.cs" />

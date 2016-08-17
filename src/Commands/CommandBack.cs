@@ -40,11 +40,11 @@ namespace Essentials.Commands {
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
 
-            if (!player.HasMetadata(Consts.BACK_METADATA_KEY)) {
+            if (!player.Metadata.Has("back_pos")) {
                 return CommandResult.Lang("NOT_DIED_YET");
             }
 
-            var backPosition = player.GetMetadata<Vector3>(Consts.BACK_METADATA_KEY);
+            var backPosition = player.Metadata.Get<Vector3>("back_pos");
             src.ToPlayer().Teleport(backPosition);
             EssLang.Send(src, "RETURNED");
 

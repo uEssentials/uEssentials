@@ -496,7 +496,9 @@ namespace Essentials.Event.Handling {
                 return;
             }
 
-            UPlayer.TryGet(player, p => p.SetMetadata(Consts.BACK_METADATA_KEY, player.Position));
+            UPlayer.TryGet(player, p => {
+                p.Metadata["back_po"] = p.Position;
+            });
         }
 
 

@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Metadata;
 using Essentials.Common;
 using Essentials.Core;
 using Rocket.API;
@@ -65,12 +66,12 @@ namespace Essentials.Api.Unturned {
         public PlayerEquipment Equipment => UnturnedPlayer.equipment;
         public EPlayerStance Stance => UnturnedPlayer.Stance.Stance;
         public bool IsOnline => RocketPlayer != null && UnturnedPlayer != null;
+        public MetadataStore<object> Metadata { get; private set; }
 
         bool ICommandSource.IsConsole => false;
 
-        private readonly Dictionary<string, object> _metadataStore = new Dictionary<string, object>();
-
         internal UPlayer(UnturnedPlayer player) {
+            Metadata = new MetadataStore<object>();
             RocketPlayer = player;
         }
 
@@ -270,26 +271,6 @@ namespace Essentials.Api.Unturned {
             return UnturnedPlayer.gameObject.GetComponent(componentType);
         }
 
-        public bool RemoveMetadata(string key) {
-            return _metadataStore.Remove(key);
-        }
-
-        public bool HasMetadata(string key) {
-            return _metadataStore.ContainsKey(key);
-        }
-
-        public object GetMetadata(string key) {
-            return _metadataStore[key];
-        }
-
-        public T GetMetadata<T>(string key) {
-            return (T) GetMetadata(key);
-        }
-
-        public void SetMetadata(string key, object value) {
-            _metadataStore[key] = value;
-        }
-
         public static UPlayer From(UnturnedPlayer player) {
             return player == null
                 ? null
@@ -372,7 +353,7 @@ namespace Essentials.Api.Unturned {
         }
 
         /// <summary>
-        /// Tries to find a player, if found, it will execute the <paramref name="callback"/>
+        /// Tries to find a player, if found then <paramref name="callback"/> will be called
         /// </summary>
         /// <param name="id"></param>
         /// <param name="callback"></param>
@@ -388,7 +369,7 @@ namespace Essentials.Api.Unturned {
         }
 
         /// <summary>
-        /// Tries to find a player, if found, it will execute the <paramref name="callback"/>
+        /// Tries to find a player, if found then <paramref name="callback"/> will be called
         /// </summary>
         /// <param name="name"></param>
         /// <param name="callback"></param>
@@ -404,7 +385,7 @@ namespace Essentials.Api.Unturned {
         }
 
         /// <summary>
-        /// Tries to find a player, if found, it will execute the <paramref name="callback"/>
+        /// Tries to find a player, if found then <paramref name="callback"/> will be called
         /// </summary>
         /// <param name="rocketPlayer"></param>
         /// <param name="callback"></param>
@@ -420,7 +401,7 @@ namespace Essentials.Api.Unturned {
         }
 
         /// <summary>
-        /// Tries to find a player, if found, it will execute the <paramref name="callback"/>
+        /// Tries to find a player, if found then <paramref name="callback"/> will be called
         /// </summary>
         /// <param name="unturnedPlayer"></param>
         /// <param name="callback"></param>
@@ -436,7 +417,7 @@ namespace Essentials.Api.Unturned {
         }
 
         /// <summary>
-        /// Tries to find a player, if found, it will execute the <paramref name="callback"/>
+        /// Tries to find a player, if found then <paramref name="callback"/> will be called
         /// </summary>
         /// <param name="cmdArg"></param>
         /// <param name="callback"></param>

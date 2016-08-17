@@ -19,11 +19,38 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-namespace Essentials.Core {
+using System.Collections.Generic;
 
-    internal static class Consts {
+namespace Essentials.Api.Metadata {
 
-        internal const string BACK_METADATA_KEY = "back_pos";
+    public class MetadataStore<TValue> {
+
+        private readonly IDictionary<string, TValue> _metadata = new Dictionary<string, TValue>();
+
+        public TValue this[string key] {
+            get { return _metadata[key]; }
+            set { _metadata[key] = value; }
+        }
+
+        public bool Has(string key) {
+            return _metadata.ContainsKey(key);
+        }
+
+        public void Set(string key, TValue value) {
+            this[key] = value;
+        }
+
+        public TValue Get(string key) {
+            return this[key];
+        }
+
+        public T Get<T>(string key) where T : TValue {
+            return (T) Get(key);
+        }
+
+        public bool Remove(string key) {
+            return _metadata.Remove(key);
+        }
 
     }
 
