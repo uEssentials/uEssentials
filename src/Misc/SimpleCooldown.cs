@@ -51,15 +51,14 @@ namespace Essentials.Misc {
 
         public double GetRemainingTime(CSteamID playerId) {
             DateTime val;
-            if (Cooldowns.TryGetValue(playerId.m_SteamID, out val)) {
-                return (val - DateTime.Now).TotalSeconds;
-            }
-            return 0;
+            return Cooldowns.TryGetValue(playerId.m_SteamID, out val) 
+                   ? (val - DateTime.Now).TotalSeconds : 0;
         }
 
         public void RemoveIfExpired(CSteamID playerId) {
-            if (GetRemainingTime(playerId) < 0)
+            if (GetRemainingTime(playerId) < 0) {
                 RemoveEntry(playerId);
+            }
         }
 
         public void Clear() {

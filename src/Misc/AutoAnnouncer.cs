@@ -42,7 +42,7 @@ namespace Essentials.Misc {
         public bool RandomMessages { get; set; }
 
         /// <summary>
-        /// Flag that determine if announcer  is enabled
+        /// Flag that determine if announcer is enabled
         /// </summary>
         public bool Enabled { get; set; }
 
@@ -86,7 +86,7 @@ namespace Essentials.Misc {
                 var messageColor = ColorUtil.GetColorFromString(ref message);
 
                 UServer.Broadcast(message, messageColor);
-            }).Delay(MessageInterval*1000).Interval(MessageInterval*1000).Go();
+            }).Delay(MessageInterval * 1000).Interval(MessageInterval*1000).Go();
         }
 
     }
