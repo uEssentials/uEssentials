@@ -41,17 +41,12 @@ namespace Essentials.Commands {
             if (args[0].Equals("*")) {
                 foreach (var player in UServer.Players.Where(player => player.HasComponent<FrozenPlayer>())) {
                     player.RemoveComponent<FrozenPlayer>();
-
                     EssLang.Send(player, "UNFROZEN_PLAYER", src.DisplayName);
                 }
 
                 EssLang.Send(src, "UNFROZEN_ALL");
-            } else {
-                var target = UPlayer.From(args[0].ToString());
-
-                if (target == null) {
-                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
-                }
+            } else if (args[0].IsValidPlayerIdentifier) {
+                var target = args[0].ToPlayer;
 
                 if (!target.HasComponent<FrozenPlayer>()) {
                     return CommandResult.Lang("NOT_FROZEN", target.DisplayName);
@@ -60,8 +55,9 @@ namespace Essentials.Commands {
 
                 EssLang.Send(src, "UNFROZEN_SENDER", target.DisplayName);
                 EssLang.Send(target, "UNFROZEN_PLAYER", src.DisplayName);
+            } else {
+                return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
             }
-
             return CommandResult.Success();
         }
 

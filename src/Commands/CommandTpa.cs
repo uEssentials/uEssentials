@@ -136,7 +136,7 @@ namespace Essentials.Commands {
                         return CommandResult.NoPermission($"{Permission}.send");
                     }
 
-                    if (!args[0].IsValidPlayerName) {
+                    if (!args[0].IsValidPlayerIdentifier) {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     }
 

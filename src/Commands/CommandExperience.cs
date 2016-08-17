@@ -61,7 +61,7 @@ namespace Essentials.Commands {
                     } else {
                         EssLang.Send(src, "EXPERIENCE_TAKE", -amount, EssLang.Translate("EVERYONE"));
                     }
-                } else if (!args[1].IsValidPlayerName) {
+                } else if (!args[1].IsValidPlayerIdentifier) {
                     return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
                 } else {
                     var player = args[1].ToPlayer;

@@ -254,10 +254,10 @@ namespace Essentials.Commands {
                         GiveItem(src, src.ToPlayer(), args[0], args[1]);
                     } else if (args[0].Equals("*")) {
                         GiveItem(src, null, args[1], One, true);
-                    } else if (!args[0].IsValidPlayerName) {
+                    } else if (!args[0].IsValidPlayerIdentifier) {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     } else {
-                        GiveItem(src, UPlayer.From(args[0].ToString()), args[1], One);
+                        GiveItem(src, args[0].ToPlayer, args[1], One);
                     }
                     break;
 
@@ -268,10 +268,10 @@ namespace Essentials.Commands {
                 case 3:
                     if (args[0].Equals("*")) {
                         GiveItem(src, null, args[1], args[2], true);
-                    } else if (!args[0].IsValidPlayerName) {
+                    } else if (!args[0].IsValidPlayerIdentifier) {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     } else {
-                        GiveItem(src, UPlayer.From(args[0].ToString()), args[1], args[2]);
+                        GiveItem(src, args[0].ToPlayer, args[1], args[2]);
                     }
                     break;
 
@@ -659,7 +659,7 @@ namespace Essentials.Commands {
                         });
 
                         EssLang.Send(src, "GIVEN_VEHICLE_ALL", vehAsset.Name, vehAsset.Id);
-                    } else if (!args[0].IsValidPlayerName) {
+                    } else if (!args[0].IsValidPlayerIdentifier) {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     } else {
                         var target = args[0].ToPlayer;
@@ -751,7 +751,7 @@ namespace Essentials.Commands {
 
                         player = UServer.Players.First();
                     } else {
-                        if (!args[0].IsValidPlayerName) {
+                        if (!args[0].IsValidPlayerIdentifier) {
                             return CommandResult.Lang("PLAYER_NOT_FOUND");
                         }
 

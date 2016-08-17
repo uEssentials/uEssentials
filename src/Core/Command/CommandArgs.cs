@@ -19,11 +19,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System;
 using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Unturned;
-using UnityEngine;
 
 namespace Essentials.Core.Command {
 
@@ -120,14 +118,14 @@ namespace Essentials.Core.Command {
     ///</summary>
     internal class CommandArgument : ICommandArgument {
 
-        public int Index { get; }
-
-        public string RawValue { get; }
-
-        public CommandArgument(int index, string rawValue) {
+        internal CommandArgument(int index, string rawValue) {
             Index = index;
             RawValue = rawValue;
         }
+
+        public int Index { get; }
+
+        public string RawValue { get; }
 
         public ulong ToULong => ulong.Parse(RawValue);
 
@@ -141,8 +139,6 @@ namespace Essentials.Core.Command {
 
         public float ToFloat => float.Parse(RawValue);
 
-        public UPlayer ToPlayer => UPlayer.From(RawValue);
-
         public string ToLowerString => ToString().ToLowerInvariant();
 
         public string ToUpperString => ToString().ToUpperInvariant();
@@ -152,6 +148,19 @@ namespace Essentials.Core.Command {
         public short ToShort => short.Parse(RawValue);
 
         public ushort ToUShort => ushort.Parse(RawValue);
+
+        public UPlayer ToPlayer {
+            get {
+                ulong id;
+                if (ulong.TryParse(RawValue, out id)) {
+                    var player = UPlayer.From(id);
+                    if (player != null) {
+                        return player;
+                    }
+                }
+                return UPlayer.From(RawValue);
+            }
+        }
 
         public bool IsBool {
             get {
@@ -167,8 +176,16 @@ namespace Essentials.Core.Command {
             }
         }
 
-        public bool IsValidPlayerName {
-            get { return UPlayer.From(RawValue) != null; }
+        public bool IsValidPlayerIdentifier {
+            get {
+                // Steam 64 id
+                ulong id;
+                if (ulong.TryParse(RawValue, out id)) {
+                    return UPlayer.From(id) != null;
+                }
+                // Player name
+                return UPlayer.From(RawValue) != null;
+            }
         }
 
         public bool IsLong {
@@ -225,13 +242,6 @@ namespace Essentials.Core.Command {
                 ushort unused;
                 return ushort.TryParse(RawValue, out unused);
             }
-        }
-
-        public bool Is(UPlayer other) {
-            if (!IsValidPlayerName)
-                return false;
-
-            return ToPlayer == other;
         }
 
         public override string ToString() {

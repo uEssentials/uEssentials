@@ -20,7 +20,6 @@
 */
 
 using Essentials.Api.Unturned;
-using UnityEngine;
 
 namespace Essentials.Api.Command {
 
@@ -39,7 +38,7 @@ namespace Essentials.Api.Command {
         ICommandArgument[] Arguments { get; }
 
         /// <summary>
-        /// Get and argument at given index.
+        /// Get an argument at given index.
         /// </summary>
         /// <param name="argIndex"></param>
         /// <returns></returns>
@@ -52,7 +51,7 @@ namespace Essentials.Api.Command {
 
         /// <summary>
         /// </summary>
-        /// <returns>Return is arguments are empty</returns>>
+        /// <returns>Return if arguments are empty</returns>>
         bool IsEmpty { get; }
 
         /// <summary>
@@ -86,10 +85,10 @@ namespace Essentials.Api.Command {
         bool IsString { get; }
 
         /// <summary>
-        /// Check if argument in determined index is an valid player name.
+        /// Check if argument is an valid player name / steam 64 id.
         /// </summary>
-        /// <returns> Return is argument is an valid player name</returns>
-        bool IsValidPlayerName { get; }
+        /// <returns> Return if argument is an valid player name / steam 64 id.</returns>
+        bool IsValidPlayerIdentifier { get; }
 
         bool IsLong { get; }
 

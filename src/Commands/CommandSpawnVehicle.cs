@@ -38,12 +38,13 @@ namespace Essentials.Commands {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             if (args.Length == 2) {
-                var target = UPlayer.From(args[1].ToString());
                 var vehId = args[0];
 
-                if (target == null) {
+                if (!args[1].IsValidPlayerIdentifier) {
                     return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
                 }
+
+                var target = args[1].ToPlayer;
 
                 if (!vehId.IsUShort || !IsValidVehicleId(vehId.ToUShort)) {
                     EssLang.Send(src, "INVALID_VEHICLE_ID", vehId);

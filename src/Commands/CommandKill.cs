@@ -44,7 +44,7 @@ namespace Essentials.Commands {
                 return CommandResult.Success();
             }
 
-            if (!args[0].IsValidPlayerName) {
+            if (!args[0].IsValidPlayerIdentifier) {
                 return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
             }
 

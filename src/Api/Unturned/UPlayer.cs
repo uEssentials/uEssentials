@@ -302,14 +302,6 @@ namespace Essentials.Api.Unturned {
                 : From(player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID.m_SteamID);
         }
 
-        /// <summary>
-        /// Character name has more priority than steam name.
-        ///
-        /// Order: Equals > Starts With > Contains
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="ignoreCase"></param>
-        /// <returns></returns>
         public static UPlayer From(string name, bool ignoreCase = true) {
             /*
                 - equals > startwith > contains

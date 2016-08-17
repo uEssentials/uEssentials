@@ -66,11 +66,11 @@ namespace Essentials.Commands {
                     /tp player place          -> teleport player to place
                 */
                 case 2: {
-                    var target = UPlayer.From(args[0].ToString());
-
-                    if (target == null) {
+                    if (!args[0].IsValidPlayerIdentifier) {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     }
+
+                    var target = args[0].ToPlayer;
 
                     bool dataFound;
                     Vector3 dataPosition;
@@ -106,12 +106,11 @@ namespace Essentials.Commands {
                     /tp player x y z   -> player to x, y, z
                 */
                 case 4: {
-                    var target = UPlayer.From(args[0].ToString());
-
-                    if (target == null) {
+                    if (!args[0].IsValidPlayerIdentifier) {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     }
 
+                    var target = args[0].ToPlayer;
                     var location = args.GetVector3(1);
 
                     if (location.HasValue) {
