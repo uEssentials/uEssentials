@@ -27,7 +27,6 @@ using Essentials.Api.Command.Source;
 using Essentials.Common.Util;
 using Essentials.I18n;
 using Essentials.Core;
-using Essentials.Event.Handling;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 
@@ -41,13 +40,13 @@ namespace Essentials.NativeModules.Kit.Commands {
     public class CommandKit : EssCommand {
 
         /*
-            player_id -> [kit_name, time]
+            player_id -> [kit_name, last_use]
         */
-
         internal static Dictionary<ulong, Dictionary<string, DateTime>> Cooldowns =
             new Dictionary<ulong, Dictionary<string, DateTime>>();
 
-        internal static Dictionary<ulong, DateTime> GlobalCooldown = new Dictionary<ulong, DateTime>();
+        internal static Dictionary<ulong, DateTime> GlobalCooldown = 
+            new Dictionary<ulong, DateTime>();
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             if (args.Length == 0 || (args.Length == 1 && src.IsConsole)) {
@@ -157,9 +156,6 @@ namespace Essentials.NativeModules.Kit.Commands {
 
             return CommandResult.Success();
         }
-
-        protected override void OnUnregistered()
-            => UEssentials.EventManager.Unregister<EssentialsEventHandler>("KitPlayerDeath");
 
     }
 

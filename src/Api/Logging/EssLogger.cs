@@ -32,15 +32,15 @@ namespace Essentials.Api.Logging {
         }
 
         public void LogError(string message) {
-            Log(message, ConsoleColor.Red);
+            Log(message, ConsoleColor.Red, Prefix + "[ERROR] ");
         }
 
         public void LogWarning(string message) {
-            Log(message, ConsoleColor.Yellow);
+            Log(message, ConsoleColor.Yellow, Prefix + "[WARN] ");
         }
 
         public void LogInfo(string message) {
-            Log(message, ConsoleColor.Green);
+            Log(message, ConsoleColor.Green, Prefix + "[INFO] ");
         }
 
         public void LogDebug(string message) {

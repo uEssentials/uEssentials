@@ -21,13 +21,15 @@
 
 using Essentials.Api.Module;
 using Essentials.Api.Task;
-using Essentials.NativeModules.Warp.Commands;
 using static Essentials.Api.UEssentials;
 
 namespace Essentials.NativeModules.Warp {
 
     [ModuleInfo(Name = "Warps")]
     public class WarpModule : NativeModule {
+
+        private const int kAutoSaveInterval = 60 * 1000; // 60 Seconds
+        private const string kCommandsNamespace = "Essentials.NativeModules.Warp.Commands";
 
         public WarpManager WarpManager { get; private set; }
         public static WarpModule Instance { get; private set; }
@@ -40,23 +42,18 @@ namespace Essentials.NativeModules.Warp {
 
             Logger.LogInfo($"Loaded {WarpManager.Count} warps");
 
-            CommandManager.Register<CommandWarp>();
-            CommandManager.Register<CommandWarps>();
-            CommandManager.Register<CommandSetWarp>();
-            CommandManager.Register<CommandDelWarp>();
+            CommandManager.RegisterAll(kCommandsNamespace);
+            EventManager.RegisterAll<WarpEventHandler>();
 
             Tasks.New(t => {
                 WarpManager.Save();
-            }).Delay(60*1000).Interval(60*1000).Go();
+            }).Delay(kAutoSaveInterval).Interval(kAutoSaveInterval).Go();
         }
 
         public override void OnUnload() {
             WarpManager.Save();
-
-            CommandManager.Unregister<CommandWarp>();
-            CommandManager.Unregister<CommandWarps>();
-            CommandManager.Unregister<CommandSetWarp>();
-            CommandManager.Unregister<CommandDelWarp>();
+            EventManager.UnregisterAll<WarpEventHandler>();
+            CommandManager.UnregisterAll(kCommandsNamespace);
         }
 
     }

@@ -149,6 +149,7 @@
     <Compile Include="src\Commands\CommandExperience.cs" />
     <Compile Include="src\Event\EssentialsEvents.cs" />
     <Compile Include="src\Misc\AutoCommands.cs" />
+    <Compile Include="src\NativeModules\Kit\KitEventHandler.cs" />
     <Compile Include="src\NativeModules\NativeModule.cs" />
     <Compile Include="src\NativeModules\Kit\Commands\CommandDeleteKit.cs" />
     <Compile Include="src\NativeModules\Kit\Commands\CommandCreateKit.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="src\NativeModules\Kit\KitManager.cs" />
     <Compile Include="src\NativeModules\Kit\Data\WebKitData.cs" />
     <Compile Include="src\NativeModules\Kit\KitModule.cs" />
+    <Compile Include="src\NativeModules\Warp\WarpEventHandler.cs" />
     <Compile Include="src\NativeModules\Warp\WarpModule.cs" />
     <Compile Include="src\Misc\AutoAnnouncer.cs" />
     <Compile Include="src\I18n\EssLang.cs" />

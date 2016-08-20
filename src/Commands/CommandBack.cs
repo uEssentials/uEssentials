@@ -24,7 +24,6 @@ using Essentials.Api.Command.Source;
 using UnityEngine;
 using Essentials.I18n;
 using Essentials.Api;
-using Essentials.Core;
 using Essentials.Event.Handling;
 
 namespace Essentials.Commands {

@@ -41,7 +41,7 @@ namespace Essentials.Commands {
     public class MiscCommands {
 
         private static readonly ICommandArgument One = new CommandArgument(0, "1");
-        public static readonly HashSet<ulong> Spies = new HashSet<ulong>();
+        internal static readonly HashSet<ulong> Spies = new HashSet<ulong>();
 
         [CommandInfo(
             Name = "ascend",
@@ -131,7 +131,7 @@ namespace Essentials.Commands {
                 /clear -i -z -v = items, zombies, vehicles
             */
 
-            var distance = -1;
+            //var distance = -1;
 
             if (args.Length > 1) {
                 if (src.IsConsole) {
@@ -146,7 +146,7 @@ namespace Essentials.Commands {
                     return CommandResult.Lang("NUMBER_BETWEEN", 1, int.MaxValue);
                 }
 
-                distance = args[1].ToInt;
+                //distance = args[1].ToInt;
             }
 
             switch (args[0].ToLowerString) {
@@ -818,7 +818,7 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
-        #if DEV
+#if DEV
         [CommandInfo(
             Name = "stoptasks"
         )]
@@ -826,7 +826,15 @@ namespace Essentials.Commands {
             Tasks.CancelAll();
             return CommandResult.Success();
         }
-        #endif
+
+        [CommandInfo(
+            Name = "cls"
+        )]
+        private CommandResult ClsCommand(ICommandSource src, ICommandArgs args) {
+            Console.Clear();
+            return CommandResult.Success();
+        }
+#endif
 
         #region HELPER METHODS
 

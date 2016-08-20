@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Essentials.Api.Event;
@@ -75,7 +76,9 @@ namespace Essentials.Core.Event {
                         eventInfo.EventHandlerType,
                         instance,
                         listenerMethod
-                     );
+                    );
+
+                    Debug.WriteLine($"Registered '{type}::{listenerMethod}'", "EventManager");
 
                     eventInfo.AddEventHandler(eventTarget, methodDelegate);
 

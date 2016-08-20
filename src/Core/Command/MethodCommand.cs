@@ -61,6 +61,11 @@ namespace Essentials.Core.Command {
                 : _methodFunc(source, args);
         }
 
+        public override string ToString() {
+            var method = _methodFunc == null ? _methodFuncWithCommand.Method : _methodFunc.Method;
+            return $"{method.DeclaringType}::{method}";
+        }
+
     }
 
 }

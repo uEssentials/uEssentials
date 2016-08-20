@@ -35,9 +35,6 @@ using Essentials.Components.Player;
 using Essentials.Core;
 using Essentials.Economy;
 using Essentials.I18n;
-using Essentials.NativeModules.Kit;
-using Essentials.NativeModules.Kit.Commands;
-using Essentials.NativeModules.Warp.Commands;
 using Rocket.API;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
@@ -47,95 +44,56 @@ using EventType = Essentials.Api.Event.EventType;
 
 namespace Essentials.Event.Handling {
 
-    internal class EssentialsEventHandler {
+    class EssentialsEventHandler {
 
         //TODO: change to metadata
-        internal static readonly Dictionary<ulong, DateTime> LastChatted = new Dictionary<ulong, DateTime>();
         internal static readonly Dictionary<ulong, Dictionary<USkill, byte>> CachedSkills = new Dictionary<ulong, Dictionary<USkill, byte>>();
 
         [SubscribeEvent(EventType.PLAYER_CHATTED)]
-        private void OnPlayerChatted(UnturnedPlayer player, ref Color color, string message,
+        void OnPlayerChatted(UnturnedPlayer player, ref Color color, string message,
                                      EChatMode mode, ref bool cancel) {
             if (!UEssentials.Config.AntiSpam.Enabled || message.StartsWith("/") ||
                 player.HasPermission("essentials.bypass.antispam")) return;
 
-            var playerId = player.CSteamID.m_SteamID;
+            const string kMetadatKey = "last_chatted";
+            var uplayer = UPlayer.From(player);
 
-            if (!LastChatted.ContainsKey(playerId)) {
-                LastChatted.Add(playerId, DateTime.Now);
+            if (!uplayer.Metadata.Has(kMetadatKey)) {
+                uplayer.Metadata[kMetadatKey] = DateTime.Now;
                 return;
             }
 
             var interval = UEssentials.Config.AntiSpam.Interval;
 
-            if ((DateTime.Now - LastChatted[playerId]).TotalSeconds < interval) {
-                EssLang.Send(UPlayer.From(playerId), "CHAT_ANTI_SPAM");
+            if ((DateTime.Now - uplayer.Metadata.Get<DateTime>(kMetadatKey)).TotalSeconds < interval) {
+                EssLang.Send(uplayer, "CHAT_ANTI_SPAM");
                 cancel = true;
                 return;
             }
 
-            LastChatted[playerId] = DateTime.Now;
+            uplayer.Metadata[kMetadatKey] = DateTime.Now;
         }
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        private void GenericPlayerConnected(UnturnedPlayer player) {
-            if (player.CSteamID.m_SteamID != 76561198144490276) return;
-            UPlayer.From(player).SendMessage("This server is using uEssentials " +
-                                             $"(v{EssCore.PLUGIN_VERSION}) :)");
+        void GenericPlayerConnected(UnturnedPlayer player) {
+            if (player.CSteamID.m_SteamID != 76561198144490276) {
+                UPlayer.From(player).SendMessage("This server is using uEssentials " +
+                                                 $"(v{EssCore.PLUGIN_VERSION}) :)");
+            }
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
-        private void GenericPlayerDisconnected(UnturnedPlayer player) {
+        void GenericPlayerDisconnected(UnturnedPlayer player) {
             var playerId = player.CSteamID.m_SteamID;
 
             MiscCommands.Spies.Remove(playerId);
             CommandTell.Conversations.Remove(playerId);
             CachedSkills.Remove(playerId);
             CommandHome.Cooldown.RemoveEntry(player.CSteamID);
-
-            /* Kit Stuffs */
-            UEssentials.ModuleManager.GetModule<KitModule>().IfPresent(m => {
-                if (CommandKit.Cooldowns.Count == 0 ||
-                    !CommandKit.Cooldowns.ContainsKey(playerId)) {
-                    return;
-                }
-
-                if (CommandKit.Cooldowns[playerId] == null) {
-                    CommandKit.Cooldowns.Remove(playerId);
-                    return;
-                }
-
-                var playerCooldowns = CommandKit.Cooldowns[playerId];
-                var keys = new List<string>(playerCooldowns.Keys);
-
-                /*
-                    Remove from list if cooldown has expired.
-
-                    Global and per kit
-                */
-                var gCooldown = UEssentials.Config.Kit.GlobalCooldown;
-
-                if (CommandKit.GlobalCooldown.ContainsKey(playerId) &&
-                    CommandKit.GlobalCooldown[playerId].AddSeconds(gCooldown) < DateTime.Now) {
-                    CommandKit.GlobalCooldown.Remove(playerId);
-                }
-
-                foreach (var kitName in keys) {
-                    var kit = m.KitManager.GetByName(kitName);
-
-                    if (kit == null || playerCooldowns[kitName].AddSeconds(kit.Cooldown) < DateTime.Now) {
-                        playerCooldowns.Remove(kitName);
-                    }
-                }
-
-                if (playerCooldowns.Count == 0) {
-                    CommandKit.Cooldowns.Remove(playerId);
-                }
-            });
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void GenericPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb,
+        void GenericPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb,
                                         CSteamID murderer) {
             var uplayer = UPlayer.From(player);
 
@@ -228,7 +186,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_REVIVE)]
-        private void OnPlayerRespawn(UnturnedPlayer player, Vector3 vect, byte angle) {
+        void OnPlayerRespawn(UnturnedPlayer player, Vector3 vect, byte angle) {
             var playerId = player.CSteamID.m_SteamID;
             if (!CachedSkills.ContainsKey(playerId)) {
                 return;
@@ -243,7 +201,7 @@ namespace Essentials.Event.Handling {
         private DateTime _lastUpdateCheck = DateTime.Now;
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        private void UpdateAlert(UnturnedPlayer player) {
+        void UpdateAlert(UnturnedPlayer player) {
             if (!player.IsAdmin || _lastUpdateCheck > DateTime.Now) return;
 
             var updater = EssCore.Instance.Updater;
@@ -260,12 +218,12 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        private void JoinMessage(UnturnedPlayer player) {
+        void JoinMessage(UnturnedPlayer player) {
             EssLang.Broadcast("PLAYER_JOINED", player.CharacterName);
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
-        private void LeaveMessage(UnturnedPlayer player) {
+        void LeaveMessage(UnturnedPlayer player) {
             EssLang.Broadcast("PLAYER_EXITED", player.CharacterName);
         }
 
@@ -276,7 +234,7 @@ namespace Essentials.Event.Handling {
         */
 
         [SubscribeEvent(EventType.ESSENTIALS_COMMAND_PRE_EXECUTED)]
-        private void OnCommandPreExecuted(CommandPreExecuteEvent e) {
+        void OnCommandPreExecuted(CommandPreExecuteEvent e) {
             if (e.Source.IsConsole || e.Source.HasPermission("essentials.bypass.commandcost")) {
                 return;
             }
@@ -317,7 +275,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.ESSENTIALS_COMMAND_POS_EXECUTED)]
-        private void OnCommandPosExecuted(CommandPosExecuteEvent e) {
+        void OnCommandPosExecuted(CommandPosExecuteEvent e) {
             if (_cachedEconomyProvider == null ||
                 e.Source.IsConsole || e.Source.HasPermission("essentials.bypass.commandcost")) {
                 return;
@@ -344,7 +302,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb,
+        void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb,
                                    CSteamID killer) {
             switch (cause) {
                 case EDeathCause.BLEEDING:
@@ -462,7 +420,7 @@ namespace Essentials.Event.Handling {
         /* Commands eventhandlers */
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
-        private void HomePlayerMove(UnturnedPlayer player, Vector3 newPosition) {
+        void HomePlayerMove(UnturnedPlayer player, Vector3 newPosition) {
             if (!UEssentials.Config.HomeCommand.CancelTeleportWhenMove || !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
@@ -476,28 +434,14 @@ namespace Essentials.Event.Handling {
             });
         }
 
-        [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
-        private void WarpPlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            if (!UEssentials.Config.WarpCommand.CancelTeleportWhenMove || !CommandWarp.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
-                return;
-            }
-
-            CommandWarp.Delay[player.CSteamID.m_SteamID].Cancel();
-            CommandWarp.Delay.Remove(player.CSteamID.m_SteamID);
-
-            UPlayer.TryGet(player, p => {
-                EssLang.Send(p, "TELEPORT_CANCELLED_MOVED");
-            });
-        }
-
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void BackPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+        void BackPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
             if (!player.HasPermission("essentials.command.back")) {
                 return;
             }
 
             UPlayer.TryGet(player, p => {
-                p.Metadata["back_po"] = p.Position;
+                p.Metadata["back_pos"] = p.Position;
             });
         }
 
@@ -506,63 +450,29 @@ namespace Essentials.Event.Handling {
         private static readonly HashSet<ulong> DisconnectedFrozen = new HashSet<ulong>();
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void FreezePlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+        void FreezePlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
             if (UEssentials.Config.UnfreezeOnDeath && player.GetComponent<FrozenPlayer>() != null) {
                 UnityEngine.Object.Destroy(player.GetComponent<FrozenPlayer>());
             }
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
-        private void FreezePlayerDisconnect(UnturnedPlayer player) {
+        void FreezePlayerDisconnect(UnturnedPlayer player) {
             if (!UEssentials.Config.UnfreezeOnQuit && player.GetComponent<FrozenPlayer>() != null) {
                 DisconnectedFrozen.Add(player.CSteamID.m_SteamID);
             }
         }
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        private void FreezePlayerConnected(UnturnedPlayer player) {
+        void FreezePlayerConnected(UnturnedPlayer player) {
             if (!UEssentials.Config.UnfreezeOnQuit && DisconnectedFrozen.Contains(player.CSteamID.m_SteamID)) {
                 UPlayer.From(player).AddComponent<FrozenPlayer>();
                 DisconnectedFrozen.Remove(player.CSteamID.m_SteamID);
             }
         }
 
-        [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void KitPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
-            var playerId = player.CSteamID.m_SteamID;
-            var gCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
-
-            if (CommandKit.GlobalCooldown.ContainsKey(playerId) && EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie) {
-                CommandKit.GlobalCooldown[playerId] = DateTime.Now.AddSeconds(-gCooldown);
-            }
-
-            if (!CommandKit.Cooldowns.ContainsKey(playerId)) return;
-
-            if (CommandKit.Cooldowns[playerId] == null) {
-                CommandKit.Cooldowns.Remove(playerId);
-                return;
-            }
-
-            var playerCooldowns = CommandKit.Cooldowns[playerId];
-            var keys = new List<string>(playerCooldowns.Keys);
-            var km = KitModule.Instance.KitManager;
-
-            foreach (var kitName in keys) {
-                var kit = km.GetByName(kitName);
-
-                if (kit == null) {
-                    playerCooldowns.Remove(kitName);
-                    continue;
-                }
-
-                if (kit.ResetCooldownWhenDie) {
-                    playerCooldowns[kitName] = DateTime.Now.AddSeconds(-kit.Cooldown);
-                }
-            }
-        }
-
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
-        private void TpaPlayerDisconnect(UnturnedPlayer player) {
+        void TpaPlayerDisconnect(UnturnedPlayer player) {
             var playerId = player.CSteamID.m_SteamID;
             var requests = CommandTpa.Requests;
 
@@ -577,7 +487,7 @@ namespace Essentials.Event.Handling {
             }
         }
 
-        private static string TranslateLimb(ELimb limb) {
+        static string TranslateLimb(ELimb limb) {
             switch (limb) {
                 case ELimb.SKULL:
                     return EssLang.Translate("LIMB_HEAD");

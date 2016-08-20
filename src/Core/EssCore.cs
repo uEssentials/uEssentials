@@ -87,7 +87,6 @@ namespace Essentials.Core {
         internal string DataFolder => MkDirIfNotExists(_dataFolder);
         internal string ModulesFolder => MkDirIfNotExists(_modulesFolder);
 
-        // TODO: Use fields instead of Properties ??
         internal Dictionary<ulong, UPlayer> ConnectedPlayers { get; set; }
         internal InstancePool CommonInstancePool { get; } = new InstancePool();
 
@@ -105,9 +104,10 @@ namespace Essentials.Core {
                 Provider.onServerConnected += PlayerConnectCallback;
 
                 Logger = new EssLogger("[uEssentials] ");
+                Debug.Listeners.Add(new EssentialsConsoleTraceListener());
                 ConnectedPlayers = new Dictionary<ulong, UPlayer>();
 
-                Logger.Log("Enabling uEssentials.", ConsoleColor.Green);
+                Logger.LogInfo("Enabling uEssentials.");
 
                 if (Provider.Players.Count > 0) {
                     Provider.Players.ForEach(p => {
@@ -121,7 +121,7 @@ namespace Essentials.Core {
                 _dataFolder = Folder + "data/";
                 _modulesFolder = Folder + "modules/";
 
-                var configPath = $"{Folder}config.json";
+                var configPath = Path.Combine(Folder, "config.json");
 
                 Config = new EssConfig();
                 Config.Load(configPath);
@@ -133,7 +133,7 @@ namespace Essentials.Core {
                 }
 
                 CommandsConfig = new CommandsConfig();
-                CommandsConfig.Load($"{Folder}commands.json");
+                CommandsConfig.Load(Path.Combine(Folder, "commands.json"));
 
                 Updater = new GithubUpdater();
                 EventManager = new EventManager();
@@ -185,6 +185,7 @@ namespace Essentials.Core {
                 /*
                     Load native modules
                 */
+                //TODO: Use to func
                 (
                     from type in Assembly.GetTypes()
                     where typeof(NativeModule).IsAssignableFrom(type)
@@ -238,7 +239,7 @@ namespace Essentials.Core {
                 }
 
                 if (Config.EnableTextCommands) {
-                    var textCommandsFile = $"{Folder}textcommands.json";
+                    var textCommandsFile = Path.Combine(Folder, "textcommands.json");
 
                     TextCommands = new TextCommands();
                     TextCommands.Load(textCommandsFile);
@@ -270,7 +271,7 @@ namespace Essentials.Core {
 
                 CommandWindow.ConsoleInput.onInputText += ReloadCallback;
                 UnregisterRocketCommands(); // First check.
-                Logger.Log($"Enabled ({stopwatch.ElapsedMilliseconds} ms)", ConsoleColor.Green);
+                Logger.LogInfo($"Enabled ({stopwatch.ElapsedMilliseconds} ms)");
             } catch (Exception e) {
                 var msg = new List<string>() {
                     "An error occurred while enabling uEssentials.",
@@ -280,7 +281,7 @@ namespace Essentials.Core {
                 };
 
                 if (!Provider.Version.EqualsIgnoreCase(UNTURNED_VERSION)) {
-                    msg.Add("I detected that you are using an different version of the recommended, " +
+                    msg.Add("I detected that you are using a different version of the recommended, " +
                             "please update your uEssentials/Unturned.");
                     msg.Add("If you are using the latest uEssentials release, please wait for update.");
                 }
@@ -472,6 +473,36 @@ namespace Essentials.Core {
             return dir;
         }
 
+    }
+
+    internal class EssentialsConsoleTraceListener : ConsoleTraceListener {
+
+        public override void WriteLine(string message, string category) {
+#if !EVENT_MANAGER_DEBUG
+            if (category == "EventManager") return;
+#endif
+
+#if !COMMAND_MANAGER_DEBUG
+            if (category == "CommandManager") return;
+#endif
+            WriteLine($"[{category}] {message}");
+        }
+
+        public override void WriteLine(object obj, string category) {
+            WriteLine(ObjectToString(obj), category);
+        }
+
+        public override void WriteLine(string message) {
+            UEssentials.Logger.LogDebug(message);
+        }
+
+        public override void WriteLine(object obj) {
+            WriteLine(ObjectToString(obj));
+        }
+
+        private string ObjectToString(object obj) {
+            return obj == null ? "null" : obj.ToString();
+        }
     }
 
 }

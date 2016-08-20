@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Essentials.Api;
@@ -98,6 +99,8 @@ namespace Essentials.Core.Command {
 
             _rocketCommands.Add(new RocketCommandManager.RegisteredRocketCommand(name, adapter));
             CommandMap.Add(name.ToLowerInvariant(), command);
+
+            Debug.WriteLine($"Registered '{command}'", "CommandManager");
 
             if (command is EssCommand) {
                 _onRegisteredMethod?.Invoke(command, ReflectionUtil.EMPTY_ARGS);

@@ -21,7 +21,6 @@
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
 using Essentials.I18n;
 using SDG.Unturned;
 using UnityEngine;

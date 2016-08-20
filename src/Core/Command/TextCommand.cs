@@ -20,6 +20,7 @@
 */
 
 using System.Collections.Generic;
+using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
@@ -62,10 +63,16 @@ namespace Essentials.Core.Command {
             return CommandResult.Success();
         }
 
-        struct TextEntry {
+        private struct TextEntry {
             public string Text;
             public Color Color;
         }
+
+        public override string ToString() {
+            var text = MiscUtil.ValuesToString(_texts.Select(t => t.Text).ToArray());
+            return $"TextCommand {{Name: {Name}, Text:{text}}}";
+        }
+
     }
 
 }
