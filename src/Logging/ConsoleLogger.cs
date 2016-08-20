@@ -2,7 +2,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2016  Leonardosc
+ *  Copyright (C) 2015-2016  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,22 @@ namespace Essentials.Logging {
             Prefix = prefix;
         }
 
+        public void LogError(string message, bool parseColors) {
+            Log(message, ConsoleColor.Red, Prefix + "[ERROR] ", parseColors: parseColors);
+        }
+
+        public void LogWarning(string message, bool parseColors) {
+            Log(message, ConsoleColor.Yellow, Prefix + "[WARN] ", parseColors: parseColors);
+        }
+
+        public void LogInfo(string message, bool parseColors) {
+            Log(message, ConsoleColor.Green, Prefix + "[INFO] ", parseColors: parseColors);
+        }
+
+        public void LogDebug(string message, bool parseColors) {
+            Log(message, ConsoleColor.DarkGray, Prefix + "[DEBUG] ", parseColors: parseColors);
+        }
+
         public void LogError(string message) {
             Log(message, ConsoleColor.Red, Prefix + "[ERROR] ");
         }
@@ -47,14 +63,101 @@ namespace Essentials.Logging {
             Log(message, ConsoleColor.DarkGray, Prefix + "[DEBUG] ");
         }
 
-        public void Log(string message, ConsoleColor color, string prefix = "default", string suffix = "\n") {
-            if (prefix.Equals("default"))
+        public void Log(string message, ConsoleColor color, string prefix = "def", string suffix = "def", bool parseColors = false) {
+            if (prefix == "def") {
                 prefix = Prefix;
-
+            }
+            if (suffix == "def") {
+                suffix = Environment.NewLine;
+            }
             var lastColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
-            Console.Write(prefix + message + suffix);
+            Write(prefix + message + suffix, parseColors);
             Console.ForegroundColor = lastColor;
+        }
+
+        private void Write(string text, bool parseColors = false) {
+            if (!parseColors) {
+                Console.Write(text);
+                return;
+            }
+            var colorBuf = new char[11];
+            var lastClrIdx = 0;
+
+            for (var i = 0; i < text.Length; i++) {
+                var c = text[i];
+                if (c == '~') {
+                    Console.Write(text.Substring(lastClrIdx, i - lastClrIdx));
+                    var j = 0;
+                    for (;;) {
+                        c = text[++i];
+                        if (c == '~' || i == text.Length || j == 11) break;
+                        if (c >= 'A' && c <= 'Z') {
+                            c = (char) (c + 32); // To lower case
+                        }
+                        colorBuf[j++] = c;
+                    }
+                    i++; // Skip ~
+                    lastClrIdx = i;
+                    var strClr = new string(colorBuf, 0, j);
+                    switch (strClr) {
+                        case "black":
+                            Console.ForegroundColor = ConsoleColor.Black;
+                            break;
+                        case "darkblue":
+                            Console.ForegroundColor = ConsoleColor.DarkBlue;
+                            break;
+                        case "darkgreen":
+                            Console.ForegroundColor = ConsoleColor.DarkGreen;
+                            break;
+                        case "darkcyan":
+                            Console.ForegroundColor = ConsoleColor.DarkCyan;
+                            break;
+                        case "darkred":
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            break;
+                        case "darkmagenta":
+                            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                            break;
+                        case "darkyellow":
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            break;
+                        case "gray":
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                            break;
+                        case "darkgray":
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            break;
+                        case "blue":
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            break;
+                        case "green":
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            break;
+                        case "cyan":
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            break;
+                        case "red":
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            break;
+                        case "magenta":
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            break;
+                        case "yellow":
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            break;
+                        case "white":
+                            Console.ForegroundColor = ConsoleColor.White;
+                            break;
+                        default:
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                            break;
+                    }
+                }
+                if (i + 1 == text.Length && lastClrIdx != text.Length) {
+                    Console.Write(text.Substring(lastClrIdx, (i - lastClrIdx) + 1));
+                }
+            }
         }
 
     }

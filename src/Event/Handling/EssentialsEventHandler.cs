@@ -2,7 +2,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2016  Leonardosc
+ *  Copyright (C) 2015-2016  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -256,13 +256,14 @@ namespace Essentials.Event.Handling {
                 EssCore.Instance.EventManager.Unregister(GetType(), nameof(OnCommandPosExecuted));
             }
 
-            var commands = EssCore.Instance.CommandsConfig.Commands;
+            /*var commands = EssCore.Instance.CommandsConfig.Commands;
 
             if (!commands.ContainsKey(e.Command.Name)) {
                 return;
             }
 
-            var cost = commands[e.Command.Name].Cost;
+            var cost = commands[e.Command.Name].Cost;*/
+            var cost = 0;
 
             if (cost <= 0) {
                 return;
@@ -286,18 +287,15 @@ namespace Essentials.Event.Handling {
                 return;
             }
 
-            var commands = EssCore.Instance.CommandsConfig.Commands;
+           // var commands = EssCore.Instance.CommandsConfig.Commands;
 
-            /*
-               He will not charge if command was not successfully executed.
-            */
-            if (e.Result?.Type != CommandResult.ResultType.SUCCESS ||
-                !commands.ContainsKey(e.Command.Name)) {
-                return;
-            }
+//if (e.Result?.Type != CommandResult.ResultType.SUCCESS ||
+          //      !commands.ContainsKey(e.Command.Name)) {
+          //      return;
+//}
 
-            var cost = commands[e.Command.Name].Cost;
-
+        //    var cost = commands[e.Command.Name].Cost;
+            var cost = 0;
             if (cost <= 0) {
                 return;
             }

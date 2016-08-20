@@ -2,7 +2,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2016  Leonardosc
+ *  Copyright (C) 2015-2016  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ namespace Essentials.Core.Command {
                 return;
             }
 
-            var configCommands = EssCore.Instance.CommandsConfig.Commands;
+            /*var configCommands = EssCore.Instance.CommandsConfig.Commands;
 
             if (configCommands.ContainsKey(command.Name)) {
                 var cmdEntry = configCommands[command.Name];
@@ -93,7 +93,7 @@ namespace Essentials.Core.Command {
                 if (cmdEntry.Usage != null) {
                     command.Usage = cmdEntry.Usage;
                 }
-            }
+            }*/
 
             var adapter = new CommandAdapter(command);
 

@@ -2,7 +2,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2016  Leonardosc
+ *  Copyright (C) 2015-2016  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,26 +27,11 @@ namespace Essentials.Common.Util {
     public static class JsonUtil {
 
         public static void Serialize(string filePath, object obj) {
-            File.WriteAllText(filePath, string.Empty);
-
-            FileStream fs = null;
-            try {
-                fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
-
-                using (TextWriter writer = new StreamWriter(fs)) {
-                    fs = null;
-                    var jsonWriter = new JsonTextWriter(writer);
-                    var serializer = JsonSerializer.Create();
-
-                    serializer.Formatting = Formatting.Indented;
-                    serializer.NullValueHandling = NullValueHandling.Ignore;
-                    serializer.Serialize(jsonWriter, obj);
-
-                    jsonWriter.Close();
-                }
-            } finally {
-                fs?.Dispose();
-            }
+            var text = JsonConvert.SerializeObject(obj, new JsonSerializerSettings {
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore
+            });
+            File.WriteAllText(filePath, text);
         }
 
         public static T DeserializeFile<T>(string filePath) {

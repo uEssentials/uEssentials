@@ -2,7 +2,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2016  Leonardosc
+ *  Copyright (C) 2015-2016  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -179,7 +179,7 @@ namespace Essentials.Commands {
                         Console.ForegroundColor = ConsoleColor.Green;
                     }
 
-                    src.SendMessage("Author:  leonardosc", Color.yellow);
+                    src.SendMessage("Author:  leonardosnt", Color.yellow);
                     src.SendMessage("Github:  github.com/leonardosnt", Color.yellow);
                     src.SendMessage("uEssentials Github:  github.com/uEssentials", Color.yellow);
                     src.SendMessage("Version: " + EssCore.PLUGIN_VERSION, Color.yellow);
@@ -243,7 +243,7 @@ namespace Essentials.Commands {
                     if (flag) {
                         EssCore.DebugFlags |= mask;
                     } else {
-                        EssCore.DebugFlags &= ((byte) ~mask); //O'Rly c#?
+                        EssCore.DebugFlags &= (byte) ~mask; //O'Rly c#?
                     }
                     break;
 

@@ -2,7 +2,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2016  Leonardosc
+ *  Copyright (C) 2015-2016  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ using Essentials.Api.Command.Source;
 namespace Essentials.Api.Command {
 
     /// <summary>
-    /// Author: leonardosc
+    /// Author: leonardosnt
     /// </summary>
     public interface ICommandManager {
 

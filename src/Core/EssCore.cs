@@ -2,7 +2,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2016  Leonardosc
+ *  Copyright (C) 2015-2016  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -111,7 +111,7 @@ namespace Essentials.Core {
                 Debug.Listeners.Add(new EssentialsConsoleTraceListener());
                 ConnectedPlayers = new Dictionary<ulong, UPlayer>();
 
-                Logger.LogInfo("Enabling uEssentials.");
+                Logger.LogInfo("Enabling uEssentials...");
 
                 if (Provider.Players.Count > 0) {
                     Provider.Players.ForEach(p => {
@@ -147,23 +147,19 @@ namespace Essentials.Core {
 
                 EssLang.Load();
 
-                Logger.Log("Plugin version: ", ConsoleColor.Green, suffix: "");
-
 #if EXPERIMENTAL
-                const string label = "experimental-commit-$COMMIT_HASH$";
-                Logger.Log( $"{PLUGIN_VERSION} {label}", ConsoleColor.White, "" );
+                const string version = PLUGIN_VERSION + " experimental-commit-$COMMIT_HASH$";
 #else
-                Logger.Log(PLUGIN_VERSION, ConsoleColor.White, "");
+                const string version = PLUGIN_VERSION;
 #endif
-
-                Logger.Log("Recommended Rocket version: ", ConsoleColor.Green, suffix: "");
-                Logger.Log(ROCKET_VERSION, ConsoleColor.White, "");
-                Logger.Log("Recommended Unturned version: ", ConsoleColor.Green, suffix: "");
-                Logger.Log(UNTURNED_VERSION, ConsoleColor.White, "");
-                Logger.Log("Author: ", ConsoleColor.Green, suffix: "");
-                Logger.Log("leonardosc", ConsoleColor.White, "");
-                Logger.Log("Wiki: ", ConsoleColor.Green, suffix: "");
-                Logger.Log("uessentials.github.io", ConsoleColor.White, "");
+                string[] logs = {
+                    "Plugin version: ~white~" + version,
+                    "Recommended Rocket version: ~white~" + ROCKET_VERSION,
+                    "Recommended Unturned version: ~white~" + UNTURNED_VERSION,
+                    "Author: ~white~leonardosnt",
+                    "Wiki: ~white~uessentials.github.io",
+                };
+                logs.ForEach(text => Logger.LogInfo(text, true));
 
                 EventManager.RegisterAll(GetType().Assembly);
 
@@ -189,17 +185,16 @@ namespace Essentials.Core {
                 /*
                     Load native modules
                 */
-                //TODO: Use to func
-                (
-                    from type in Assembly.GetTypes()
-                    where typeof(NativeModule).IsAssignableFrom(type)
-                    where !type.IsAbstract
-                    let mAttr = (ModuleInfo) type.GetCustomAttributes(typeof(ModuleInfo), false)[0]
-                    where Config.EnabledSystems.Any(s => s.Equals(mAttr.Name, StringComparison.OrdinalIgnoreCase))
-                    select type
-                ).ForEach(type => {
-                    ModuleManager.LoadModule((NativeModule) Activator.CreateInstance(type));
-                });
+                Assembly.GetTypes()
+                    .Where(t => typeof(NativeModule).IsAssignableFrom(t))
+                    .WhereNot(t => t.IsAbstract)
+                    .Where(t => {
+                        var moduleInfo = (ModuleInfo) t.GetCustomAttributes(typeof(ModuleInfo), false)[0];
+                        return Config.EnabledSystems.Any(s => s.Equals(moduleInfo.Name, StringComparison.OrdinalIgnoreCase));
+                    })
+                    .ForEach(t => {
+                        ModuleManager.LoadModule((NativeModule) Activator.CreateInstance(t));
+                    });
 
                 Logger.LogInfo($"Loaded {CommandManager.Commands.Count()} commands");
 
