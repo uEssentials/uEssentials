@@ -69,6 +69,14 @@ namespace Essentials.Common.Util {
             return sb.ToString();
         }
 
+        public static string ToBinaryString(long val, long numBits = 16) {
+            var bit = 0;
+            var buf = new char[numBits];
+            while (numBits > 0) {
+                buf[--numBits] = (val & (1 << bit++)) > 0 ? '1' : '0';
+            }
+            return new string(buf);
+        }
     }
 
 }
