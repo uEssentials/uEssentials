@@ -22,13 +22,14 @@
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Event;
-using Essentials.Api.Logging;
 using Essentials.Api.Module;
+using Essentials.Api.Task;
 using Essentials.Common;
 using Essentials.Compatibility;
 using Essentials.Configuration;
 using Essentials.Core;
 using Essentials.Economy;
+using Essentials.Logging;
 
 namespace Essentials.Api {
 
@@ -74,10 +75,9 @@ namespace Essentials.Api {
         /// </summary>
         public static EssConfig Config => Core.Config;
 
-        /// <summary>
-        /// Instance of EssLogger
-        /// </summary>
-        internal static EssLogger Logger => Core.Logger;
+        internal static ConsoleLogger Logger => Core.Logger;
+
+        internal static ITaskExecutor TaskExecutor => Core.TaskExecutor;
 
         /// <summary>
         /// Current economy provider.

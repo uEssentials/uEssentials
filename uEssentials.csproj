@@ -100,7 +100,9 @@
     <Compile Include="src\Api\Configuration\IConfig.cs" />
     <Compile Include="src\Api\Metadata\MetadataStore.cs" />
     <Compile Include="src\Api\Module\LoadFlags.cs" />
-    <Compile Include="src\Api\Task\Tasks.cs" />
+    <Compile Include="src\Api\Task\ITaskExecutor.cs" />
+    <Compile Include="src\Api\Task\Task.cs" />
+    <Compile Include="src\Api\Task\DefaultTaskExecutor.cs" />
     <Compile Include="src\CodeAnalysis\NotNullAttribute.cs" />
     <Compile Include="src\Commands\CommandHome.cs" />
     <Compile Include="src\Commands\CommandJump.cs" />
@@ -221,7 +223,7 @@
     <Compile Include="src\NativeModules\Warp\WarpModule.cs" />
     <Compile Include="src\Misc\AutoAnnouncer.cs" />
     <Compile Include="src\I18n\EssLang.cs" />
-    <Compile Include="src\Api\Logging\EssLogger.cs" />
+    <Compile Include="src\Logging\ConsoleLogger.cs" />
     <Compile Include="src\NativeModules\Kit\Item\KitItem.cs" />
     <Compile Include="src\NativeModules\Kit\Kit.cs" />
     <Compile Include="src\Misc\SimpleCooldown.cs" />

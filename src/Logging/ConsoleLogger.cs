@@ -21,13 +21,13 @@
 
 using System;
 
-namespace Essentials.Api.Logging {
+namespace Essentials.Logging {
 
-    public class EssLogger {
+    public class ConsoleLogger {
 
         private string Prefix { get; }
 
-        public EssLogger(string prefix) {
+        public ConsoleLogger(string prefix) {
             Prefix = prefix;
         }
 
@@ -47,9 +47,9 @@ namespace Essentials.Api.Logging {
             Log(message, ConsoleColor.DarkGray, Prefix + "[DEBUG] ");
         }
 
-        public void Log(string message, ConsoleColor color, string prefix = "default",
-            string suffix = "\n") {
-            if (prefix.Equals("default")) prefix = Prefix;
+        public void Log(string message, ConsoleColor color, string prefix = "default", string suffix = "\n") {
+            if (prefix.Equals("default"))
+                prefix = Prefix;
 
             var lastColor = Console.ForegroundColor;
             Console.ForegroundColor = color;

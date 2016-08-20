@@ -45,9 +45,12 @@ namespace Essentials.NativeModules.Warp {
             CommandManager.RegisterAll(kCommandsNamespace);
             EventManager.RegisterAll<WarpEventHandler>();
 
-            Tasks.New(t => {
-                WarpManager.Save();
-            }).Delay(kAutoSaveInterval).Interval(kAutoSaveInterval).Go();
+            Task.Create()
+                .Id("Warp Auto-Save")
+                .Interval(kAutoSaveInterval)
+                .UseIntervalAsDelay()
+                .Action(WarpManager.Save)
+                .Submit();
         }
 
         public override void OnUnload() {

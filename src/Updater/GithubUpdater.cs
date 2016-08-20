@@ -24,9 +24,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Essentials.Api;
-using Essentials.Api.Logging;
 using Essentials.Common;
 using Essentials.Core;
+using Essentials.Logging;
 using Newtonsoft.Json.Linq;
 
 namespace Essentials.Updater {
@@ -34,7 +34,7 @@ namespace Essentials.Updater {
     internal class GithubUpdater : IUpdater {
 
         private const string ReleasesUrl = @"https://api.github.com/repos/uEssentials/uEssentials/releases/latest";
-        private static readonly EssLogger Logger = UEssentials.Logger;
+        private static readonly ConsoleLogger Logger = UEssentials.Logger;
 
         public UpdateResult LastResult { get; private set; }
 

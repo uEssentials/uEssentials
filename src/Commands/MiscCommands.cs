@@ -25,7 +25,6 @@ using System.Linq;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Core.Command;
@@ -823,7 +822,7 @@ namespace Essentials.Commands {
             Name = "stoptasks"
         )]
         private CommandResult StopTasksCommand(ICommandSource src, ICommandArgs args) {
-            Tasks.CancelAll();
+            UEssentials.TaskExecutor.DequeueAll();
             return CommandResult.Success();
         }
 

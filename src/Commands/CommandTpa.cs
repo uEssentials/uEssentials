@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Essentials.Api;
@@ -82,12 +83,16 @@ namespace Essentials.Commands {
                     var tpaSettings = EssCore.Instance.Config.Tpa;
 
                     if (tpaSettings.TeleportDelay > 0) {
-                        Tasks.New(t => {
-                            if (!whoSent.IsOnline || !player.IsOnline) {
-                                return;
-                            }
-                            whoSent.Teleport(player.Position);
-                        }).Delay(tpaSettings.TeleportDelay*1000).Go();
+                        Task.Create()
+                            .Id("Tpa Teleport")
+                            .Action(() => {
+                                if (!whoSent.IsOnline || !player.IsOnline) {
+                                    return;
+                                }
+                                whoSent.Teleport(player.Position);
+                            })
+                            .Delay(TimeSpan.FromSeconds(tpaSettings.TeleportDelay))
+                            .Submit();
                     } else {
                         whoSent.Teleport(player.Position);
                     }
@@ -160,9 +165,11 @@ namespace Essentials.Commands {
                     var tpaSettings = EssCore.Instance.Config.Tpa;
 
                     if (tpaSettings.ExpireDelay > 0) {
-                        Tasks.New(t => {
-                            Requests.Remove(senderId);
-                        }).Delay(tpaSettings.ExpireDelay*1000).Go();
+                        Task.Create()
+                            .Id("Tpa Expire")
+                            .Action(() => Requests.Remove(senderId))
+                            .Delay(TimeSpan.FromSeconds(tpaSettings.ExpireDelay))
+                            .Submit();
                     } else {
                         Requests.Remove(senderId);
                     }

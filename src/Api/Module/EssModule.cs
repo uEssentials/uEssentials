@@ -22,9 +22,9 @@
 using System.IO;
 using System.Reflection;
 using Essentials.Api.Configuration;
-using Essentials.Api.Logging;
 using Essentials.Common;
 using Essentials.Common.Util;
+using Essentials.Logging;
 
 namespace Essentials.Api.Module {
 
@@ -46,7 +46,7 @@ namespace Essentials.Api.Module {
         /// <summary>
         /// Module logger
         /// </summary>
-        public EssLogger Logger { get; internal set; }
+        public ConsoleLogger Logger { get; internal set; }
 
         /// <summary>
         /// Module folder
@@ -61,7 +61,7 @@ namespace Essentials.Api.Module {
             Preconditions.NotNull(Info, "Module must have 'ModuleInfo' attribute");
             Preconditions.NotNull(Info.Name, "Module name cannot be null");
 
-            Logger = new EssLogger($"[{Info.Name}] ");
+            Logger = new ConsoleLogger($"[{Info.Name}] ");
             Folder = UEssentials.ModulesFolder + Info.Name + "/";
 
             if (!Directory.Exists(Folder))

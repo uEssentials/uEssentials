@@ -63,7 +63,7 @@ namespace Essentials.Core.Command {
         }
 
         public void Execute(IRocketPlayer caller, string[] args) {
-            var sw = EssCore.Instance.DebugCommands ? Stopwatch.StartNew() : null;
+            var sw = (EssCore.DebugFlags & EssCore.kDebugCommands) != 0 ? Stopwatch.StartNew() : null;
 
             CommandResult result = null;
             var commandSource = caller is UnturnedPlayer
@@ -110,7 +110,7 @@ namespace Essentials.Core.Command {
                 UEssentials.Logger.LogError(e.ToString());
             }
 
-            if (EssCore.Instance.DebugCommands && sw != null) {
+            if ((EssCore.DebugFlags & EssCore.kDebugCommands) != 0 && sw != null) {
                 sw.Stop();
                 UEssentials.Logger.LogDebug("Executed command {");
                 UEssentials.Logger.LogDebug($"  Source: '{commandSource.GetType()}:{commandSource}'");

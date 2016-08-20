@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -42,7 +43,7 @@ namespace Essentials.Commands {
 
         internal static SimpleCooldown Cooldown = new SimpleCooldown();
 
-        internal static PlayerDictionary<Tasks.Task> Delay = new PlayerDictionary<Tasks.Task>(
+        internal static PlayerDictionary<Task> Delay = new PlayerDictionary<Task>(
             PlayerDictionaryOptions.LAZY_REGISTER_HANDLERS |
             PlayerDictionaryOptions.REMOVE_ON_DEATH |
             PlayerDictionaryOptions.REMOVE_ON_DISCONNECT,
@@ -83,13 +84,14 @@ namespace Essentials.Commands {
                 EssLang.Send(src, "TELEPORT_DELAY", TimeUtil.FormatSeconds((uint) delay));
             }
 
-            var task = Tasks.New(t => {
-                Delay.Remove(playerId.m_SteamID);
-                player.Teleport(position, angle);
-                EssLang.Send(src, "TELEPORTED_BED");
-            }).Delay(delay*1000);
-
-            task.Go();
+            var task = Task.Create()
+                   .Delay(TimeSpan.FromSeconds(delay))
+                   .Action(t => {
+                       Delay.Remove(playerId.m_SteamID);
+                       player.Teleport(position, angle);
+                       EssLang.Send(src, "TELEPORTED_BED");
+                   })
+                   .Submit();
 
             Delay.Add(playerId.m_SteamID, task);
             Cooldown.AddEntry(playerId, cooldown);

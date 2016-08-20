@@ -19,6 +19,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using System.Collections.Generic;
 using Essentials.Api.Task;
 using Essentials.Api.Unturned;
@@ -49,14 +50,12 @@ namespace Essentials.Misc {
 
         public void Start() {
             Commands.ForEach(cmd => {
-                var task = Tasks.New(t =>
-                    cmd.Commands.ForEach(UServer.DispatchCommand)
-                    ).Delay(cmd.Timer*1000);
-
-                if (!cmd.RunOnce)
-                    task.Interval(cmd.Timer*1000);
-
-                task.Go();
+                Task.Create()
+                    .Id("AutoCommand Executor")
+                    .Delay(TimeSpan.FromSeconds(cmd.Timer))
+                    .Interval(cmd.RunOnce ? 0 : cmd.Timer * 1000)
+                    .Action(() => cmd.Commands.ForEach(UServer.DispatchCommand))
+                    .Submit();
             });
         }
 

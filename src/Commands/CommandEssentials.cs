@@ -225,19 +225,25 @@ namespace Essentials.Commands {
                     }
 
                     var flag = args[2].ToBool;
+                    byte mask;
                     switch (args[1].RawValue.ToLowerInvariant()) {
                         case "commands":
-                            EssCore.Instance.DebugCommands = flag;
+                            mask = EssCore.kDebugCommands;
                             src.SendMessage($"DebugCommands set to {flag}");
                             break;
 
                         case "tasks":
+                            mask = EssCore.kDebugTasks;
                             src.SendMessage($"DebugTasks set to {flag}");
-                            EssCore.Instance.DebugTasks = flag;
                             break;
 
                         default:
                             return CommandResult.InvalidArgs($"Invalid option '{args[1]}'");
+                    }
+                    if (flag) {
+                        EssCore.DebugFlags |= mask;
+                    } else {
+                        EssCore.DebugFlags &= ((byte) ~mask); //O'Rly c#?
                     }
                     break;
 

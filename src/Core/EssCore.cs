@@ -29,7 +29,6 @@ using System.Linq;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Event;
-using Essentials.Api.Logging;
 using Essentials.Api.Module;
 using Essentials.Api.Task;
 using Essentials.Api.Unturned;
@@ -47,6 +46,7 @@ using Essentials.NativeModules;
 using Essentials.Updater;
 using Essentials.Compatibility.Hooks;
 using Essentials.Economy;
+using Essentials.Logging;
 using Essentials.Misc;
 using Rocket.Core;
 using Rocket.Core.Plugins;
@@ -63,9 +63,14 @@ namespace Essentials.Core {
         internal const string UNTURNED_VERSION = "3.15.10.1";
         internal const string PLUGIN_VERSION = "1.2.6.4";
 
-        internal static EssCore Instance { get; set; }
+        internal static EssCore Instance;
 
-        internal Optional<IEconomyProvider> EconomyProvider { get; set; }
+        internal static byte DebugFlags = kDebugTasks;
+
+        internal const byte kDebugTasks = 0x01;
+        internal const byte kDebugCommands = 0x02;
+
+        internal Optional<IEconomyProvider> EconomyProvider;
         internal ModuleManager ModuleManager { get; set; }
         internal ICommandManager CommandManager { get; set; }
         internal IEventManager EventManager { get; set; }
@@ -75,7 +80,8 @@ namespace Essentials.Core {
         internal CommandsConfig CommandsConfig { get; set; }
         internal TextCommands TextCommands { get; set; }
         internal EssConfig Config { get; set; }
-        internal EssLogger Logger { get; set; }
+        internal ConsoleLogger Logger { get; set; }
+        internal ITaskExecutor TaskExecutor { get; set; }
 
         private string _folder;
         private string _translationFolder;
@@ -90,20 +96,18 @@ namespace Essentials.Core {
         internal Dictionary<ulong, UPlayer> ConnectedPlayers { get; set; }
         internal InstancePool CommonInstancePool { get; } = new InstancePool();
 
-        internal bool DebugTasks { get; set; } = false;
-        internal bool DebugCommands { get; set; } = false;
-
         protected override void Load() {
             try {
                 var stopwatch = Stopwatch.StartNew();
 
                 Instance = this;
                 R.Permissions = new EssentialsPermissionsProvider();
+                TaskExecutor = TryAddComponent<DefaultTaskExecutor>();
 
                 Provider.onServerDisconnected += PlayerDisconnectCallback;
                 Provider.onServerConnected += PlayerConnectCallback;
 
-                Logger = new EssLogger("[uEssentials] ");
+                Logger = new ConsoleLogger("[uEssentials] ");
                 Debug.Listeners.Add(new EssentialsConsoleTraceListener());
                 ConnectedPlayers = new Dictionary<ulong, UPlayer>();
 
@@ -258,16 +262,20 @@ namespace Essentials.Core {
                 Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
 #endif
 
-                TryAddComponent<Tasks.TaskExecutor>();
+                Task.Create()
+                    .Id("Delete Xml Files")
+                    .Delay(TimeSpan.FromSeconds(1))
+                    .Action(() => {
+                        File.Delete($"{Folder}uEssentials.en.translation.xml");
+                        File.Delete($"{Folder}uEssentials.configuration.xml");
+                    })
+                    .Submit();  
 
-                Tasks.New(t => {
-                    File.Delete($"{Folder}uEssentials.en.translation.xml");
-                    File.Delete($"{Folder}uEssentials.configuration.xml");
-                }).Delay(100).Go();
-
-                Tasks.New(t => {
-                    UnregisterRocketCommands(true); // Second check, silently.
-                }).Delay(3000).Go();
+                Task.Create()
+                    .Id("Unregister Rocket Commands")
+                    .Delay(TimeSpan.FromSeconds(3))
+                    .Action(() => UnregisterRocketCommands(true)) // Second check, silently.
+                    .Submit();
 
                 CommandWindow.ConsoleInput.onInputText += ReloadCallback;
                 UnregisterRocketCommands(); // First check.
@@ -311,7 +319,7 @@ namespace Essentials.Core {
             Provider.onServerDisconnected -= PlayerDisconnectCallback;
             Provider.onServerConnected -= PlayerConnectCallback;
 
-            TryRemoveComponent<Tasks.TaskExecutor>();
+            TryAddComponent<DefaultTaskExecutor>();
 
             var executingAssembly = GetType().Assembly;
 
@@ -321,7 +329,7 @@ namespace Essentials.Core {
             EventManager.UnregisterAll(executingAssembly);
             ModuleManager.UnloadAll();
 
-            Tasks.CancelAll();
+            TaskExecutor.DequeueAll();
         }
 
 #if DUMP_COMMANDS
@@ -500,9 +508,8 @@ namespace Essentials.Core {
             WriteLine(ObjectToString(obj));
         }
 
-        private string ObjectToString(object obj) {
-            return obj == null ? "null" : obj.ToString();
-        }
+        private static string ObjectToString(object obj) => obj == null ? "null" : obj.ToString();
+
     }
 
 }

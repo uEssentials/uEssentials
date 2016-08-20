@@ -219,35 +219,38 @@ namespace Essentials.Commands {
                 lock (Polls) Polls.Add(Name, thiz);
 
                 if (Duration > 0) {
-                    Tasks.New(task => {
-                        lock (Polls) {
-                            if (!Polls.ContainsKey(thiz.Name)) return;
-
-                            thiz.Stop();
-                        }
-                    }).Delay(Duration*1000).Go();
+                    Task.Create()
+                        .Id("Poll Stop")
+                        .Delay(TimeSpan.FromSeconds(Duration))
+                        .Action(() => {
+                            lock (Polls) {
+                                if (!Polls.ContainsKey(thiz.Name)) return;
+                                thiz.Stop();
+                            }
+                        })
+                        .Submit();
                 }
 
                 if (!UEssentials.Config.EnablePollRunningMessage) return;
 
                 var interval = UEssentials.Config.PollRunningMessageCooldown*1000;
 
-                Tasks.New(task => {
-                    lock (Polls) {
-                        if (!Polls.ContainsKey(thiz.Name)) {
-                            task.Cancel();
-                            return;
-                        }
+                Task.Create()
+                    .Id("Poll Running Message")
+                    .Interval(interval)
+                    .UseIntervalAsDelay()
+                    .Action(task => {
+                        lock (Polls) {
+                            if (!Polls.ContainsKey(thiz.Name)) {
+                                task.Cancel();
+                                return;
+                            }
 
-                        EssLang.Broadcast(
-                            "POLL_RUNNING",
-                            thiz.Name,
-                            thiz.Description,
-                            thiz.YesVotes,
-                            thiz.NoVotes
-                        );
-                    }
-                }).Interval(interval).Delay(interval).Go();
+                            EssLang.Broadcast("POLL_RUNNING", thiz.Name, thiz.Description,
+                                thiz.YesVotes, thiz.NoVotes);
+                        }
+                    })
+                    .Submit();
             }
 
             /// <summary>

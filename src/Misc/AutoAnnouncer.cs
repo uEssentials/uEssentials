@@ -75,18 +75,23 @@ namespace Essentials.Misc {
             var messageIndex = 0;
             var rand = new Random();
 
-            Tasks.New(t => {
-                var messagesCount = Messages.Count;
+            Task.Create()
+                .Id("AutoMessage Executor")
+                .Interval(TimeSpan.FromSeconds(MessageInterval))
+                .UseIntervalAsDelay()
+                .Action(() => {
+                    var messagesCount = Messages.Count;
 
-                messageIndex = RandomMessages
-                    ? rand.Next(messagesCount)
-                    : (++messageIndex == messagesCount ? 0 : messageIndex);
+                    messageIndex = RandomMessages
+                        ? rand.Next(messagesCount)
+                        : (++messageIndex == messagesCount ? 0 : messageIndex);
 
-                var message = (string) Messages[messageIndex].Clone();
-                var messageColor = ColorUtil.GetColorFromString(ref message);
+                    var message = (string) Messages[messageIndex].Clone();
+                    var messageColor = ColorUtil.GetColorFromString(ref message);
 
-                UServer.Broadcast(message, messageColor);
-            }).Delay(MessageInterval * 1000).Interval(MessageInterval*1000).Go();
+                    UServer.Broadcast(message, messageColor);
+                })
+                .Submit();
         }
 
     }

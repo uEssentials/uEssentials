@@ -39,7 +39,7 @@ namespace Essentials.NativeModules.Warp.Commands {
     )]
     public class CommandWarp : EssCommand {
 
-        internal static PlayerDictionary<Tasks.Task> Delay = new PlayerDictionary<Tasks.Task>(
+        internal static PlayerDictionary<Task> Delay = new PlayerDictionary<Task>(
             PlayerDictionaryOptions.LAZY_REGISTER_HANDLERS |
             PlayerDictionaryOptions.REMOVE_ON_DEATH |
             PlayerDictionaryOptions.REMOVE_ON_DISCONNECT,
@@ -73,13 +73,16 @@ namespace Essentials.NativeModules.Warp.Commands {
                 EssLang.Send(src, "WARP_COOLDOWN", cooldown);
             }
 
-            var task = Tasks.New(t => {
-                Delay.Remove(player.CSteamId.m_SteamID);
-                player.Teleport(dest.Location, dest.Rotation);
-                EssLang.Send(src, "WARP_TELEPORTED", args[0]);
-            });
+            var task = Task.Create()
+                .Id($"Warp teleport '{player.DisplayName}'")
+                .Delay(player.HasPermission("essentials.bypass.warpcooldown") ? 0 : cooldown * 1000)
+                .Action(t => {
+                    Delay.Remove(player.CSteamId.m_SteamID);
+                    player.Teleport(dest.Location, dest.Rotation);
+                    EssLang.Send(src, "WARP_TELEPORTED", args[0]);
+                })
+                .Submit();
 
-            task.Delay(player.HasPermission("essentials.bypass.warpcooldown") ? 0 : cooldown*1000).Go();
             Delay.Add(player.CSteamId.m_SteamID, task);
 
             return CommandResult.Success();

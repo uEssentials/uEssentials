@@ -209,11 +209,16 @@ namespace Essentials.Event.Handling {
             if (!updater.IsUpdated()) {
                 _lastUpdateCheck = DateTime.Now.AddMinutes(10);
 
-                Tasks.New(t => {
-                    UPlayer.From(player).SendMessage("[uEssentials] New version avalaible " +
-                                                     $"{updater.LastResult.LatestVersion}!",
-                        Color.cyan);
-                }).Delay(1000).Go();
+                Task.Create()
+                    .Id("Update Alert")
+                    .Delay(TimeSpan.FromSeconds(1))
+                    .Action(() => {
+                        UPlayer.TryGet(player, p => {
+                            p.SendMessage("[uEssentials] New version avalaible " +
+                                          $"{updater.LastResult.LatestVersion}!", Color.cyan);
+                        });
+                    })
+                    .Submit();
             }
         }
 
