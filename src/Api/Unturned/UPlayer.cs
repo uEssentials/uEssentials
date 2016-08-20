@@ -37,7 +37,7 @@ using UnityEngine;
 
 namespace Essentials.Api.Unturned {
 
-    public class UPlayer : ICommandSource {
+    public sealed class UPlayer : ICommandSource {
 
         public UnturnedPlayer RocketPlayer { get; }
         public string DisplayName => CharacterName;
@@ -447,7 +447,7 @@ namespace Essentials.Api.Unturned {
             return !(left == right);
         }
 
-        protected bool Equals(UPlayer other) {
+        public bool Equals(UPlayer other) {
             return Equals(this, other);
         }
 

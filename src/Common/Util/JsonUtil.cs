@@ -43,7 +43,6 @@ namespace Essentials.Common.Util {
                     serializer.Serialize(jsonWriter, obj);
 
                     jsonWriter.Close();
-                    writer.Close();
                 }
             } finally {
                 fs?.Dispose();
