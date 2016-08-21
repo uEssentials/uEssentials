@@ -36,14 +36,14 @@ namespace Essentials.Core.Command {
         internal Type Owner { get; private set; }
 
         internal MethodCommand(Func<ICommandSource, ICommandArgs, CommandResult> methodFunc) :
-            base(Preconditions.NotNull(ReflectionUtil.GetAttributeFrom<CommandInfo>(methodFunc.Method),
+            base(Preconditions.NotNull(ReflectUtil.GetAttributeFrom<CommandInfo>(methodFunc.Method),
                  "methodFunc must have 'CommandInfo' attribute.")) {
             _methodFunc = methodFunc;
             Init(false, methodFunc.Method);
         }
 
         internal MethodCommand(Func<ICommandSource, ICommandArgs, ICommand, CommandResult> methodFunc) :
-            base(Preconditions.NotNull(ReflectionUtil.GetAttributeFrom<CommandInfo>(methodFunc.Method),
+            base(Preconditions.NotNull(ReflectUtil.GetAttributeFrom<CommandInfo>(methodFunc.Method),
                  "methodFunc must have 'CommandInfo' attribute.")) {
             _methodFuncWithCommand = methodFunc;
             Init(true, methodFunc.Method);

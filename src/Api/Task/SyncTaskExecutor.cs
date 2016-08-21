@@ -27,9 +27,9 @@ using UnityEngine;
 
 namespace Essentials.Api.Task {
 
-    internal class DefaultTaskExecutor : MonoBehaviour, ITaskExecutor {
+    internal class SyncTaskExecutor : MonoBehaviour, ITaskExecutor {
 
-        private readonly Queue<Task> _queue = new Queue<Task>(); 
+        private readonly Queue<Task> _queue = new Queue<Task>();
 
         private void FixedUpdate() {
             lock (_queue) {

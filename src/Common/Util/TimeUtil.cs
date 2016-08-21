@@ -31,21 +31,21 @@ namespace Essentials.Common.Util {
             var msgSeconds = EssLang.Translate("SECONDS");
 
             if (seconds < 60) {
-                return $"{seconds} {(seconds == 1 ? msgSecond : msgSeconds )}";
+                return $"{seconds} {(seconds == 1 ? msgSecond : msgSeconds)}";
             }
 
             const uint MIN = 60;
-            const uint HOUR = MIN*MIN;
-            const uint DAY = HOUR*24;
+            const uint HOUR = MIN * 60;
+            const uint DAY = HOUR * 24;
 
-            var days = seconds/DAY;
-            seconds -= days*DAY;
+            var days = seconds / DAY;
+            seconds -= days * DAY;
 
-            var hours = seconds/HOUR;
-            seconds -= hours*HOUR;
+            var hours = seconds / HOUR;
+            seconds -= hours * HOUR;
 
-            var minutes = seconds/MIN;
-            seconds -= minutes*MIN;
+            var minutes = seconds / MIN;
+            seconds -= minutes * MIN;
 
             var sb = new StringBuilder();
 

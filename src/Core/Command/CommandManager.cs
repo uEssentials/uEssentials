@@ -43,8 +43,8 @@ namespace Essentials.Core.Command {
         private Dictionary<string, ICommand> CommandMap { get; }
 
         private readonly List<RocketCommandManager.RegisteredRocketCommand> _rocketCommands;
-        private readonly MethodInfo _onRegisteredMethod = typeof(EssCommand).GetMethod("OnRegistered", ReflectionUtil.INSTANCE_FLAGS);
-        private readonly MethodInfo _onUnregisteredMethod = typeof(EssCommand).GetMethod("OnUnregisted", ReflectionUtil.INSTANCE_FLAGS);
+        private readonly MethodInfo _onRegisteredMethod = ReflectUtil.GetMethod<EssCommand>("OnRegistered");
+        private readonly MethodInfo _onUnregisteredMethod = ReflectUtil.GetMethod<EssCommand>("OnUnregistered");
 
         public IEnumerable<ICommand> Commands => CommandMap.Values;
 
@@ -80,20 +80,27 @@ namespace Essentials.Core.Command {
                 return;
             }
 
-            /*var configCommands = EssCore.Instance.CommandsConfig.Commands;
+            var configCommands = EssCore.Instance.CommandsConfig.Commands;
 
             if (configCommands.ContainsKey(command.Name)) {
                 var cmdEntry = configCommands[command.Name];
 
-                command.Aliases = cmdEntry.Aliases ?? new string[0];
+                if (cmdEntry.Aliases != null) {
+                    command.Aliases = cmdEntry.Aliases;
+                }
+
+                if (cmdEntry.CustomAliases != null) {
+                    command.Aliases = command.Aliases.Concat(cmdEntry.CustomAliases).ToArray();
+                }
 
                 if (cmdEntry.Description != null) {
                     command.Description = cmdEntry.Description;
                 }
+
                 if (cmdEntry.Usage != null) {
                     command.Usage = cmdEntry.Usage;
                 }
-            }*/
+            }
 
             var adapter = new CommandAdapter(command);
 
@@ -103,7 +110,7 @@ namespace Essentials.Core.Command {
             Debug.WriteLine($"Registered '{command}'", "CommandManager");
 
             if (command is EssCommand) {
-                _onRegisteredMethod?.Invoke(command, ReflectionUtil.EMPTY_ARGS);
+                _onRegisteredMethod?.Invoke(command, ReflectUtil.EMPTY_ARGS);
             }
 
             var aliases = command.Aliases;
@@ -204,7 +211,7 @@ namespace Essentials.Core.Command {
                 if (cmdAdapter != null && predicate(cmdAdapter)) {
                     var command = cmdAdapter.Command;
                     if (command is EssCommand) {
-                        _onUnregisteredMethod?.Invoke(command, ReflectionUtil.EMPTY_ARGS);
+                        _onUnregisteredMethod?.Invoke(command, ReflectUtil.EMPTY_ARGS);
                     }
                     CommandMap.Remove(command.Name.ToLowerInvariant());
                     return true;
@@ -242,7 +249,7 @@ namespace Essentials.Core.Command {
 
             foreach (var type in asm.GetTypes().Where(filter.Invoke)) {
                 foreach (var method in type.GetMethods((BindingFlags) 0x3C)) {
-                    if (ReflectionUtil.GetAttributeFrom<CommandInfo>(method) == null)
+                    if (ReflectUtil.GetAttributeFrom<CommandInfo>(method) == null)
                         continue;
 
                     var inst = method.IsStatic ? null : EssCore.Instance.CommonInstancePool.GetOrCreate(type);

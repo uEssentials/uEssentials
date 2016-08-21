@@ -101,8 +101,9 @@
     <Compile Include="src\Api\Metadata\MetadataStore.cs" />
     <Compile Include="src\Api\Module\LoadFlags.cs" />
     <Compile Include="src\Api\Task\ITaskExecutor.cs" />
+    <Compile Include="src\Api\Task\SyncTaskExecutor.cs" />
     <Compile Include="src\Api\Task\Task.cs" />
-    <Compile Include="src\Api\Task\DefaultTaskExecutor.cs" />
+    <Compile Include="src\Api\Task\EssentialsTaskExecutor.cs" />
     <Compile Include="src\CodeAnalysis\NotNullAttribute.cs" />
     <Compile Include="src\Commands\CommandHome.cs" />
     <Compile Include="src\Commands\CommandJump.cs" />
@@ -186,7 +187,7 @@
     <Compile Include="src\Common\Reflect\FieldAccessor.cs" />
     <Compile Include="src\Common\Reflect\MethodAccessor.cs" />
     <Compile Include="src\Common\Extensions.cs" />
-    <Compile Include="src\Common\Util\ReflectionUtil.cs" />
+    <Compile Include="src\Common\Util\ReflectUtil.cs" />
     <Compile Include="src\Configuration\EssConfig.cs" />
     <Compile Include="src\Configuration\EssWebConfig.cs" />
     <Compile Include="src\Api\Command\ICommand.cs" />

@@ -20,18 +20,20 @@
 */
 
 using System;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Essentials.Common.Util {
 
-    public static class ReflectionUtil {
+    public static class ReflectUtil {
 
         // Empty object array, commonly used on method invocation.
         public static object[] EMPTY_ARGS = new object[0];
 
         // Common binding flags
         public static BindingFlags INSTANCE_FLAGS = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-        public static BindingFlags STATIC_FLAGS = (INSTANCE_FLAGS & ~BindingFlags.Instance) | BindingFlags.Static;
+        public static BindingFlags STATIC_FLAGS = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+        public static BindingFlags STATIC_INSTANCE_FLAGS = INSTANCE_FLAGS | STATIC_FLAGS;
 
         public static TAttribute GetAttributeFrom<TAttribute>(object instance) where TAttribute : Attribute {
             object[] attrs;
@@ -44,6 +46,24 @@ namespace Essentials.Common.Util {
 
             attrs = instance.GetType().GetCustomAttributes(typeof(TAttribute), true);
             return attrs.Length == 0 ? default(TAttribute) : (TAttribute) attrs.GetValue(0);
+        }
+
+        public static MethodInfo GetMethod(Type type, string name, BindingFlags flags, Type[] argTypes) {
+            var ret = type.GetMethod(name, flags, null, CallingConventions.Any, argTypes ?? new Type[0], null);
+            Debug.WriteIf(ret == null, $"Could not find method '{type.FullName}::{name}'", "ReflectUtil");
+            return ret;
+        }
+        
+        public static MethodInfo GetMethod(Type type, string name, Type[] argTypes = null) {
+            return GetMethod(type, name, STATIC_INSTANCE_FLAGS, argTypes);
+        }
+
+        public static MethodInfo GetMethod<T>(string name, BindingFlags flags, Type[] argTypes) {
+            return GetMethod(typeof(T), name, flags, argTypes);
+        }
+
+        public static MethodInfo GetMethod<T>(string name, Type[] argTypes = null) {
+            return GetMethod(typeof(T), name, STATIC_INSTANCE_FLAGS, argTypes);
         }
 
     }

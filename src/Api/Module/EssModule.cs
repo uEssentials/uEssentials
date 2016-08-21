@@ -57,7 +57,7 @@ namespace Essentials.Api.Module {
         /// Constructor :D
         /// </summary>
         protected EssModule() {
-            Info = ReflectionUtil.GetAttributeFrom<ModuleInfo>(this);
+            Info = ReflectUtil.GetAttributeFrom<ModuleInfo>(this);
             Preconditions.NotNull(Info, "Module must have 'ModuleInfo' attribute");
             Preconditions.NotNull(Info.Name, "Module name cannot be null");
 

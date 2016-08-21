@@ -63,7 +63,7 @@ namespace Essentials.Api.Command {
         }
 
         protected EssCommand() {
-            Info = ReflectionUtil.GetAttributeFrom<CommandInfo>(this);
+            Info = ReflectUtil.GetAttributeFrom<CommandInfo>(this);
 
             if (Info == null) {
                 throw new ArgumentException("EssCommand must have 'CommandInfo' attribute.");

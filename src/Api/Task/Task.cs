@@ -33,6 +33,8 @@ namespace Essentials.Api.Task {
 
         public bool IsAlive { get; internal set; }
 
+        public bool IsAsync { get; internal set; }
+
         public Action<Task> Action { get; internal set; }
 
         public DateTime NextExecution { get; internal set; }
@@ -88,6 +90,11 @@ namespace Essentials.Api.Task {
 
             public Builder Action(Action<Task> action) {
                 _task.Action = action;
+                return this;
+            }
+
+            public Builder Async() {
+                _task.IsAsync = true;
                 return this;
             }
 

@@ -43,7 +43,7 @@ namespace Essentials.Commands {
     )]
     public class CommandRepair : EssCommand {
 
-        private readonly FieldInfo _itemsField = typeof(Items).GetField("items", ReflectionUtil.INSTANCE_FLAGS);
+        private readonly FieldInfo _itemsField = typeof(Items).GetField("items", ReflectUtil.INSTANCE_FLAGS);
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();

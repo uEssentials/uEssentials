@@ -19,36 +19,39 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System.Collections.Generic;
-using Essentials.Api.Configuration;
+using System;
+using System.Diagnostics;
+using Essentials.Core;
 
-namespace Essentials.Configuration {
+namespace Essentials.Api.Task {
 
-    public class CommandsConfig : JsonConfig {
+    internal class EssentialsTaskExecutor : ITaskExecutor {
 
-        public IDictionary<string, CommandEntry> Commands { get; } = new Dictionary<string, CommandEntry>();
+        private readonly ITaskExecutor _syncExecutor;
 
-        public override void Save(string filePath) {
-           // JsonUtil.Serialize(filePath, Commands);
+        internal EssentialsTaskExecutor() {
+            _syncExecutor = EssCore.Instance.TryAddComponent<SyncTaskExecutor>();
         }
 
-        public override void Load(string filePath) {
-
-            
+        internal void Stop() {
+            if (_syncExecutor != null)
+                EssCore.Instance.TryRemoveComponent<SyncTaskExecutor>();
+            DequeueAll();
         }
 
-        public override void LoadDefaults() {
+        public void Enqueue(Task task) {
+            Debug.Assert(_syncExecutor != null, "_syncExecutor != null");
 
+            if (task.IsAsync) {
+                throw new NotImplementedException();
+            } else {
+                _syncExecutor.Enqueue(task);
+            }
         }
 
-        public struct CommandEntry {
-
-            public string[] CustomAliases;
-            public string[] Aliases;
-            public string Usage;
-            public string Description;
-            public decimal Cost;
-
+        public void DequeueAll() {
+            _syncExecutor?.DequeueAll();
+            //_asyncExecutor.DequeueAll();
         }
 
     }

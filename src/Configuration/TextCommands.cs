@@ -19,8 +19,10 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
+using Essentials.Api;
 using Essentials.Api.Configuration;
 using Essentials.Common.Util;
 using Newtonsoft.Json;
@@ -49,13 +51,18 @@ namespace Essentials.Configuration {
         }
 
         public override void Save(string filePath) {
-            File.WriteAllText(filePath, string.Empty);
             JsonUtil.Serialize(filePath, Commands);
         }
 
         public override void Load(string filePath) {
             if (File.Exists(filePath)) {
-                JsonConvert.PopulateObject(File.ReadAllText(filePath), Commands);
+                try {
+                    JsonConvert.PopulateObject(File.ReadAllText(filePath), Commands);
+                } catch (Exception ex) {
+                    UEssentials.Logger.LogError("Failed to load TextCommands.");
+                    UEssentials.Logger.LogError("Error: " + ex);
+                    LoadDefaults();
+                }
             } else {
                 LoadDefaults();
                 Save(filePath);

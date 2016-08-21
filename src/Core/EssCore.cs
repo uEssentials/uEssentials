@@ -66,7 +66,6 @@ namespace Essentials.Core {
         internal static EssCore Instance;
 
         internal static byte DebugFlags = kDebugTasks;
-
         internal const byte kDebugTasks = 0x01;
         internal const byte kDebugCommands = 0x02;
 
@@ -102,7 +101,7 @@ namespace Essentials.Core {
 
                 Instance = this;
                 R.Permissions = new EssentialsPermissionsProvider();
-                TaskExecutor = TryAddComponent<DefaultTaskExecutor>();
+                TaskExecutor = new EssentialsTaskExecutor();
 
                 Provider.onServerDisconnected += PlayerDisconnectCallback;
                 Provider.onServerConnected += PlayerConnectCallback;
@@ -152,14 +151,13 @@ namespace Essentials.Core {
 #else
                 const string version = PLUGIN_VERSION;
 #endif
-                string[] logs = {
+                new [] {
                     "Plugin version: ~white~" + version,
                     "Recommended Rocket version: ~white~" + ROCKET_VERSION,
                     "Recommended Unturned version: ~white~" + UNTURNED_VERSION,
                     "Author: ~white~leonardosnt",
                     "Wiki: ~white~uessentials.github.io",
-                };
-                logs.ForEach(text => Logger.LogInfo(text, true));
+                }.ForEach(text => Logger.LogInfo(text, true));
 
                 EventManager.RegisterAll(GetType().Assembly);
 
@@ -314,8 +312,6 @@ namespace Essentials.Core {
             Provider.onServerDisconnected -= PlayerDisconnectCallback;
             Provider.onServerConnected -= PlayerConnectCallback;
 
-            TryAddComponent<DefaultTaskExecutor>();
-
             var executingAssembly = GetType().Assembly;
 
             HookManager.UnloadAll();
@@ -324,7 +320,7 @@ namespace Essentials.Core {
             EventManager.UnregisterAll(executingAssembly);
             ModuleManager.UnloadAll();
 
-            TaskExecutor.DequeueAll();
+            ((EssentialsTaskExecutor) TaskExecutor).Stop(); // '-'
         }
 
 #if DUMP_COMMANDS
