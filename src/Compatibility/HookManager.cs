@@ -53,7 +53,7 @@ namespace Essentials.Compatibility {
                 where typeof(Hook).IsAssignableFrom(type)
                 where !type.IsAbstract
                 select type
-                ).ForEach(RegisterHook);
+            ).ForEach(RegisterHook);
         }
 
         public void UnregisterAll() {
@@ -72,11 +72,6 @@ namespace Essentials.Compatibility {
             RegisterHook(typeof(T));
         }
 
-        /// <summary>
-        /// Get hook if he is active
-        /// </summary>
-        /// <param name="hookName"></param>
-        /// <returns></returns>
         public Optional<Hook> GetActiveByName(string hookName) {
             var hook = GetByName(hookName);
 
@@ -87,10 +82,6 @@ namespace Essentials.Compatibility {
             return Optional<Hook>.Empty();
         }
 
-        /// <summary>
-        /// Get hook if he is active
-        /// </summary>
-        /// <returns></returns>
         public Optional<THookType> GetActiveByType<THookType>() where THookType : Hook {
             var hook = Optional<THookType>.OfNullable(
                 (THookType) _hooks.FirstOrDefault(h => h.Value is THookType &&
@@ -111,9 +102,8 @@ namespace Essentials.Compatibility {
         }
 
         public Optional<THookType> GetByType<THookType>() where THookType : Hook {
-            return Optional<THookType>.OfNullable(
-                (THookType) _hooks.FirstOrDefault(h => h.Value is THookType).Value
-                );
+            return Optional<THookType>.OfNullable((THookType) _hooks
+                .FirstOrDefault(h => h.Value is THookType).Value);
         }
 
     }

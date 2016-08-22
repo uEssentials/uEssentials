@@ -174,8 +174,7 @@ namespace Essentials.Core {
                 if (Config.Economy.UseXp) {
                     EconomyProvider = Optional<IEconomyProvider>.Of(new ExpEconomyProvider());
                 } else if (HookManager.GetActiveByType<UconomyHook>().IsPresent) {
-                    EconomyProvider = Optional<IEconomyProvider>.Of(
-                        HookManager.GetActiveByType<UconomyHook>().Value);
+                    EconomyProvider = Optional<IEconomyProvider>.Of(HookManager.GetActiveByType<UconomyHook>().Value);
                 } else {
                     EconomyProvider = Optional<IEconomyProvider>.Empty();
                 }

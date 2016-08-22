@@ -46,10 +46,11 @@ namespace Essentials.NativeModules.Kit.Commands {
             }).ToList();
 
 
-            if (kits.Count == 0)
+            if (kits.Count == 0) {
                 EssLang.Send(source, "KIT_NONE");
-            else
+            } else {
                 EssLang.Send(source, "KIT_LIST", string.Join(", ", kits.ToArray()));
+            }
 
             return CommandResult.Success();
         }
