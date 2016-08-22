@@ -258,6 +258,7 @@ namespace Essentials.Core {
                 Task.Create()
                     .Id("Delete Xml Files")
                     .Delay(TimeSpan.FromSeconds(1))
+                    .Async()
                     .Action(() => {
                         File.Delete($"{Folder}uEssentials.en.translation.xml");
                         File.Delete($"{Folder}uEssentials.configuration.xml");
@@ -301,10 +302,6 @@ namespace Essentials.Core {
 #else
             CheckUpdates();
 #endif
-
-#if DUMP_COMMANDS
-            DumpCommands();
-#endif
         }
 
         protected override void Unload() {
@@ -320,50 +317,8 @@ namespace Essentials.Core {
             EventManager.UnregisterAll(executingAssembly);
             ModuleManager.UnloadAll();
 
-            ((EssentialsTaskExecutor) TaskExecutor).Stop(); // '-'
+            TaskExecutor.Stop();
         }
-
-#if DUMP_COMMANDS
-        private static void DumpCommands() {
-            var userProfile = System.Environment.GetEnvironmentVariable("USERPROFILE");
-            if (userProfile != null && System.IO.Directory.Exists(Path.Combine(userProfile, "Desktop"))) {
-                var buffer = new System.Text.StringBuilder();
-
-                Instance.CommandManager.Commands
-                    .Where(cmd => cmd is EssCommand)
-                    .OrderBy(cmd => cmd.Name)
-                    .ForEach(cmd => {
-                        var usage = cmd.Usage;
-                        var desc = cmd.Description;
-                        string aliases;
-
-                        if (cmd.Aliases == null || cmd.Aliases.Length == 0) {
-                            aliases = "None";
-                        } else {
-                            aliases = Common.Util.MiscUtil.ValuesToString(cmd.Aliases);
-                        }
-
-                        if (string.IsNullOrEmpty(usage.Trim())) {
-                            usage = "None";
-                        }
-                        if (string.IsNullOrEmpty(desc.Trim())) {
-                            desc = "None";
-                        }
-
-                        buffer.Append(cmd.Name);
-                        buffer.Append(" ## ");
-                        buffer.Append(aliases);
-                        buffer.Append(" ## ");
-                        buffer.Append(desc);
-                        buffer.Append(" ## ");
-                        buffer.Append(usage);
-                        buffer.AppendLine();
-                    });
-
-                File.WriteAllText(Path.Combine(Path.Combine(userProfile, "Desktop"), "command.txt"), buffer.ToString());
-            }
-        }
-#endif
 
         private static void ReloadCallback(string command) {
             if (!command.StartsWith("rocket reload", true, CultureInfo.InvariantCulture)) {

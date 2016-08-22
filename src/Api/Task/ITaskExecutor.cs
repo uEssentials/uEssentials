@@ -27,6 +27,8 @@ namespace Essentials.Api.Task {
 
         void DequeueAll();
 
+        void Stop();
+
     }
 
 }

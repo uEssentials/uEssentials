@@ -19,7 +19,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using System;
 using System.Diagnostics;
 using Essentials.Core;
 
@@ -27,23 +26,28 @@ namespace Essentials.Api.Task {
 
     internal class EssentialsTaskExecutor : ITaskExecutor {
 
-        private readonly ITaskExecutor _syncExecutor;
+        private readonly SyncTaskExecutor _syncExecutor;
+        private readonly AsyncTaskExecutor _asyncExecutor;
 
         internal EssentialsTaskExecutor() {
-            _syncExecutor = EssCore.Instance.TryAddComponent<SyncTaskExecutor>();
+            _syncExecutor = EssCore.Instance.TryAddComponent<SyncTaskExecutor.ExecutorComponent>().SyncExecutor;
+            _asyncExecutor = new AsyncTaskExecutor();
         }
 
-        internal void Stop() {
-            if (_syncExecutor != null)
-                EssCore.Instance.TryRemoveComponent<SyncTaskExecutor>();
-            DequeueAll();
+        public void Stop() {
+            if (_syncExecutor != null) {
+                EssCore.Instance.TryRemoveComponent<SyncTaskExecutor.ExecutorComponent>();
+                _syncExecutor.Stop();
+            }
+            _asyncExecutor?.Stop();
         }
 
         public void Enqueue(Task task) {
             Debug.Assert(_syncExecutor != null, "_syncExecutor != null");
+            Debug.Assert(_asyncExecutor != null, "_asyncExecutor != null");
 
             if (task.IsAsync) {
-                throw new NotImplementedException();
+                _asyncExecutor.Enqueue(task);
             } else {
                 _syncExecutor.Enqueue(task);
             }
@@ -51,7 +55,7 @@ namespace Essentials.Api.Task {
 
         public void DequeueAll() {
             _syncExecutor?.DequeueAll();
-            //_asyncExecutor.DequeueAll();
+            _asyncExecutor?.DequeueAll();
         }
 
     }

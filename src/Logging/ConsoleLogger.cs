@@ -72,7 +72,9 @@ namespace Essentials.Logging {
             }
             var lastColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
-            Write(prefix + message + suffix, parseColors);
+            lock (Console.Out) {
+                Write(prefix + message + suffix, parseColors);
+            }
             Console.ForegroundColor = lastColor;
         }
 

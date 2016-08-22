@@ -19,21 +19,35 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-using UnityEngine;
+using System.Threading;
 
 namespace Essentials.Api.Task {
 
-    internal class SyncTaskExecutor : AbstractTaskExecutor {
+    // Single Threaded task executor
+    internal class AsyncTaskExecutor : AbstractTaskExecutor {
 
-        // That is weird '-'
-        // Java... SyncTaskExecutor.this.Update() ;-;
-        internal class ExecutorComponent : MonoBehaviour {
+        private volatile bool _running;
 
-            internal readonly SyncTaskExecutor SyncExecutor = new SyncTaskExecutor();
-
-            internal void FixedUpdate() => SyncExecutor.Update();
-
+        public AsyncTaskExecutor() {
+            _running = true;
+            ThreadStart start = () => {
+                while (_running) {
+                    Thread.Sleep(1);
+                    Update();
+                }
+            };
+            var executorThread = new Thread(start) {
+                IsBackground = true,
+                Name = "AsyncTaskExecutorThread"
+            };
+            executorThread.Start();
         }
+
+        public override void Stop() {
+            _running = false;
+            base.Stop();
+        }
+
     }
 
 }

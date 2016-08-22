@@ -47,9 +47,18 @@ namespace Essentials.Api.Task {
             IsAlive = false;
         }
 
+        public void Run() {
+            Action(this);
+        }
+
         public override string ToString() {
-            return $"Id: \"{Id}\", Delay: {Delay}, Interval: {Interval}," +
-                   $" IsAlive: {IsAlive}, Action: {Action}, NextExecution: {NextExecution}";
+            return $"Id: \"{Id}\", " +
+                   $"Delay: {Delay}, " +
+                   $"Interval: {Interval}, " +
+                   $"IsAlive: {IsAlive}, " +
+                   $"IsAsync: {IsAsync}, " +
+                   $"Action: {Action}, " +
+                   $"NextExecution: {NextExecution}";
         }
 
         public class Builder {
