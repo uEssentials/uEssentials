@@ -95,7 +95,7 @@ namespace Essentials.NativeModules.Kit {
 
                 if (added || onetime) continue;
 
-                EssLang.Send(player, "INVENTORY_FULL");
+                EssLang.Send(player, "INVENTORY_FULL"); // TODO: Remove msgs
                 onetime = true;
             }
 

@@ -74,7 +74,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                     var ecoProvider = UEssentials.EconomyProvider.Value;
 
                     if (!ecoProvider.Has(player, kitCost)) {
-                        return CommandResult.Lang("KIT_NO_MONEY", kitCost, ecoProvider.Currency);
+                        return CommandResult.Lang("KIT_NO_MONEY", kitCost, ecoProvider.CurrencySymbol);
                     }
                 }
 
@@ -121,11 +121,11 @@ namespace Essentials.NativeModules.Kit.Commands {
                 if (kitCost > 0) {
                     UEssentials.EconomyProvider.IfPresent(ec => {
                         ec.Withdraw(player, kitCost);
-                        EssLang.Send(player, "KIT_PAID", kitCost, ec.Currency);
+                        EssLang.Send(player, "KIT_PAID", kitCost, ec.CurrencySymbol);
                     });
                 }
 
-                KitModule.Instance.KitManager.GetByName(kitName).GiveTo(player);
+                requestedKit.GiveTo(player);
             } else if (args.Length == 2) {
                 var kitName = args[0].ToLowerString;
 

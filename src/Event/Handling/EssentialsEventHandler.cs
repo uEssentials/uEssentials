@@ -275,7 +275,7 @@ namespace Essentials.Event.Handling {
                 return;
             }
 
-            EssLang.Send(e.Source, "COMMAND_NO_MONEY", cost, _cachedEconomyProvider.Value.Currency);
+            EssLang.Send(e.Source, "COMMAND_NO_MONEY", cost, _cachedEconomyProvider.Value.CurrencySymbol);
             e.Cancelled = true;
         }
 

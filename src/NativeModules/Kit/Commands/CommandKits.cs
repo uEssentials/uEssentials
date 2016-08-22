@@ -42,7 +42,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                 if (!hasEconomyProvider || !kitConfig.ShowCost || (k.Cost <= 0 && !kitConfig.ShowCostIfZero)) {
                     return k.Name;
                 }
-                return string.Format(kitConfig.CostFormat, k.Name, k.Cost, UEssentials.EconomyProvider.Value.Currency);
+                return string.Format(kitConfig.CostFormat, k.Name, k.Cost, UEssentials.EconomyProvider.Value.CurrencySymbol);
             }).ToList();
 
 

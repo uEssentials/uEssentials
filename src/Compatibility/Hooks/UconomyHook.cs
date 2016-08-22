@@ -32,7 +32,7 @@ namespace Essentials.Compatibility.Hooks {
 
     public class UconomyHook : Hook, IEconomyProvider {
 
-        public string Currency => UEssentials.Config.Economy.UconomyCurrency;
+        public string CurrencySymbol => UEssentials.Config.Economy.UconomyCurrency;
 
         private MethodAccessor<decimal> _getBalanceMethod;
         private MethodAccessor<decimal> _increaseBalanceMethod;

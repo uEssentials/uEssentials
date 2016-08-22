@@ -25,7 +25,7 @@ namespace Essentials.Economy {
 
     public interface IEconomyProvider {
 
-        string Currency { get; }
+        string CurrencySymbol { get; }
 
         decimal Withdraw(UPlayer player, decimal amount);
 

@@ -26,7 +26,7 @@ namespace Essentials.Economy {
 
     public class ExpEconomyProvider : IEconomyProvider {
 
-        public string Currency => UEssentials.Config.Economy.XpCurrency;
+        public string CurrencySymbol => UEssentials.Config.Economy.XpCurrency;
 
         public decimal Withdraw(UPlayer player, decimal amount) {
             return (player.Experience -= (uint) amount);
