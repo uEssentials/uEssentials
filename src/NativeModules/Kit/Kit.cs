@@ -78,10 +78,10 @@ namespace Essentials.NativeModules.Kit {
         }
 
         /// <summary>
-        /// <returns> If determinated player has permission for this kit </returns>
+        /// <returns> Check if <paramref name="src"/>> has permission for this kit. </returns>
         /// </summary>
-        public bool CanUse(ICommandSource player) {
-            return player.HasPermission($"essentials.kit.{Name.ToLowerInvariant()}");
+        public bool CanUse(ICommandSource src) {
+            return src.HasPermission($"essentials.kit.{Name.ToLowerInvariant()}");
         }
 
         /// <summary>
