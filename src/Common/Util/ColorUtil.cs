@@ -89,25 +89,27 @@ namespace Essentials.Common.Util {
             var len = rawColor.Length;
             int hex;
 
-            if (len == 7 || len == 6) { // Parse <#RRGGBB> or <RRGGBB>
-                if (len == 7) {
-                    rawColor = rawColor.Substring(1);// Remove #
-                }
-            } else if (len == 4 || len == 3) { // <#RGB> or <RGB>
-                var offset = len == 4 ? 1 : 0;
-                var chars = new char[6];
-                chars[0] = rawColor[offset];
-                chars[1] = rawColor[offset];
-                chars[2] = rawColor[offset + 1];
-                chars[3] = rawColor[offset + 1];
-                chars[4] = rawColor[offset + 2];
-                chars[5] = rawColor[offset + 2];
-                rawColor = new string(chars);
-            } else {
+            if (len == 0) {
                 return null;
             }
 
-            if (!int.TryParse(rawColor, out hex)) {
+            if (rawColor[0] == '#') {
+                rawColor = rawColor.Substring(1);
+            }
+
+            // <RGB> to <RRGGBB>
+            if (len == 3) {
+                var chars = new char[6];
+                chars[0] = rawColor[0];
+                chars[1] = rawColor[0];
+                chars[2] = rawColor[1];
+                chars[3] = rawColor[1];
+                chars[4] = rawColor[2];
+                chars[5] = rawColor[2];
+                rawColor = new string(chars);
+            }
+
+            if (!int.TryParse(rawColor, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out hex)) {
                 System.Diagnostics.Debug.Print("Failed to parse hex color '{0}'.", rawColor);
                 return null;
             }
