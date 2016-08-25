@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Event;
@@ -65,7 +66,7 @@ namespace Essentials.Core {
 
         internal static EssCore Instance;
 
-        internal static byte DebugFlags = kDebugTasks;
+        internal static byte DebugFlags;
         internal const byte kDebugTasks = 0x01;
         internal const byte kDebugCommands = 0x02;
 
@@ -100,15 +101,22 @@ namespace Essentials.Core {
                 var stopwatch = Stopwatch.StartNew();
 
                 Instance = this;
-                R.Permissions = new EssentialsPermissionsProvider();
+
+                try {
+                    var essPermProvider = new EssentialsPermissionsProvider();
+                    R.Permissions = essPermProvider;
+                } catch (Exception ex) {
+                    Console.Error.WriteLine(ex);
+                }
+
                 TaskExecutor = new EssentialsTaskExecutor();
 
+                Logger = new ConsoleLogger("[uEssentials] ");
+                ConnectedPlayers = new Dictionary<ulong, UPlayer>();
+                Debug.Listeners.Add(new EssentialsConsoleTraceListener());
+                
                 Provider.onServerDisconnected += PlayerDisconnectCallback;
                 Provider.onServerConnected += PlayerConnectCallback;
-
-                Logger = new ConsoleLogger("[uEssentials] ");
-                Debug.Listeners.Add(new EssentialsConsoleTraceListener());
-                ConnectedPlayers = new Dictionary<ulong, UPlayer>();
 
                 Logger.LogInfo("Enabling uEssentials...");
 
