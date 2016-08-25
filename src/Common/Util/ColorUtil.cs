@@ -109,9 +109,9 @@ namespace Essentials.Common.Util {
             }
 
             return new Color(
-                ((val & 0xFF)) / 255.0F,
-                ((val >> 8) & 0xFF) / 255.0F, 
-                ((val >> 16) & 0xFF) / 255.0F
+                ((val & 0xFF)) / 255F,
+                ((val >> 8) & 0xFF) / 255F, 
+                ((val >> 16) & 0xFF) / 255F
             );
         }
     }

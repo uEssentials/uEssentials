@@ -388,7 +388,7 @@ namespace Essentials.Core {
             worker.RunWorkerCompleted += (sender, args) => {
                 if (args.Error != null) {
                     Logger.LogError($"Could not update, try again later. ({args.Error.Message})");
-                    Logger.LogError("Try downloading manually here: https://github.com/uEssentials/uEssentials/releases");
+                    Logger.LogError("Try download manually here: https://github.com/uEssentials/uEssentials/releases");
                 }
             };
 

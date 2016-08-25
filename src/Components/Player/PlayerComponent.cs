@@ -42,12 +42,6 @@ namespace Essentials.Components.Player {
             }
         }
 
-        /// <summary>
-        /// Called by FixedUpdate.
-        /// 
-        /// If any exceptions are throw, this component will be removed
-        /// to avoid 'error flood'.
-        /// </summary>
         protected virtual void SafeFixedUpdate() {}
     }
 
