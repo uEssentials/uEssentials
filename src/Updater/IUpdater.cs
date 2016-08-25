@@ -23,29 +23,12 @@ namespace Essentials.Updater {
 
     public interface IUpdater {
 
-        /// <summary>
-        /// Get last result or null if <see cref="CheckUpdate"/> isn't called.
-        ///
-        /// LastResult is set when <see cref="CheckUpdate"/> is called.
-        /// </summary>
         UpdateResult LastResult { get; }
 
-        /// <summary>
-        /// Check if has update available
-        /// </summary>
-        /// <returns>The result of check</returns>
         UpdateResult CheckUpdate();
 
-        /// <summary>
-        /// Check if version of plugin is the latest.
-        /// </summary>
-        /// <returns></returns>
         bool IsUpdated();
 
-        /// <summary>
-        /// Downloads latest version of plugin and put in <paramref name="path"/>
-        /// </summary>
-        /// <param name="path">Path that the downloaded file will be stored</param>
         void DownloadLatestRelease(string path);
 
     }
