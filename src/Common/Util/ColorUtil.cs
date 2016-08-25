@@ -87,13 +87,12 @@ namespace Essentials.Common.Util {
 
         private static Color? ColorFromHex(string rawColor) {
             var len = rawColor.Length;
-            int val;
+            int hex;
 
             if (len == 7 || len == 6) { // Parse <#RRGGBB> or <RRGGBB>
                 if (len == 7) {
                     rawColor = rawColor.Substring(1);// Remove #
                 }
-                val = int.Parse(rawColor, NumberStyles.HexNumber);
             } else if (len == 4 || len == 3) { // <#RGB> or <RGB>
                 var offset = len == 4 ? 1 : 0;
                 var chars = new char[6];
@@ -103,15 +102,20 @@ namespace Essentials.Common.Util {
                 chars[3] = rawColor[offset + 1];
                 chars[4] = rawColor[offset + 2];
                 chars[5] = rawColor[offset + 2];
-                val = int.Parse(new string(chars), NumberStyles.HexNumber);
+                rawColor = new string(chars);
             } else {
                 return null;
             }
 
+            if (!int.TryParse(rawColor, out hex)) {
+                System.Diagnostics.Debug.Print("Failed to parse hex color '{0}'.", rawColor);
+                return null;
+            }
+
             return new Color(
-                ((val & 0xFF)) / 255F,
-                ((val >> 8) & 0xFF) / 255F, 
-                ((val >> 16) & 0xFF) / 255F
+                ((hex & 0xFF)) / 255F,
+                ((hex >> 8) & 0xFF) / 255F, 
+                ((hex >> 16) & 0xFF) / 255F
             );
         }
     }
