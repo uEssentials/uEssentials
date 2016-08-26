@@ -330,6 +330,15 @@ namespace Essentials.Core {
             TaskExecutor.Stop();
         }
 
+        // TODO: WIP
+        internal void LoadConfig() {
+            var configPath = Path.Combine(Folder, "config.json");
+            var isReload = (Instance.Config != null);
+
+            Instance.Config = new EssConfig();
+            Instance.Config.Load(configPath);
+        }
+
         private static void ReloadCallback(string command) {
             if (!command.StartsWith("rocket reload", true, CultureInfo.InvariantCulture)) {
                 return;

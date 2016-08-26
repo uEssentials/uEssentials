@@ -280,11 +280,7 @@ namespace Essentials.Commands {
         }
 
         private static void ReloadConfig() {
-            var core = EssCore.Instance;
-            var configPath = $"{core.Folder}config.json";
-
-            core.Config = new EssConfig();
-            core.Config.Load(configPath);
+            EssCore.Instance.LoadConfig();
         }
     }
 }
