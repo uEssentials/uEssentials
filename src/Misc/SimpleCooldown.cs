@@ -64,7 +64,7 @@ namespace Essentials.Misc {
         }
 
         public void Clear() {
-          Cooldowns.Clear();
+            Cooldowns.Clear();
         }
 
     }
