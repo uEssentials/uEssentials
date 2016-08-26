@@ -76,7 +76,7 @@ namespace Essentials.Core {
         internal HookManager HookManager { get; set; }
         internal IUpdater Updater { get; set; }
 
-        internal CommandsConfig CommandsConfig { get; set; }
+        internal CommandOptions CommandOptions { get; set; }
         internal TextCommands TextCommands { get; set; }
         internal EssConfig Config { get; set; }
         internal ConsoleLogger Logger { get; set; }
@@ -145,8 +145,8 @@ namespace Essentials.Core {
 
                 Config.Load(configPath);
 
-                CommandsConfig = new CommandsConfig();
-                CommandsConfig.Load(Path.Combine(Folder, CommandsConfig.FileName));
+                CommandOptions = new CommandOptions();
+                CommandOptions.Load(Path.Combine(Folder, CommandOptions.FileName));
 
                 Updater = new GithubUpdater();
                 EventManager = new EventManager();

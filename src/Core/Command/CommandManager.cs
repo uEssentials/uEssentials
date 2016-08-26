@@ -80,16 +80,14 @@ namespace Essentials.Core.Command {
                 return;
             }
 
-            var configCommands = EssCore.Instance.CommandsConfig.Commands;
+            var commandOptions = EssCore.Instance.CommandOptions.Commands;
 
-            if (configCommands.ContainsKey(command.Name)) {
-                var cmdEntry = configCommands[command.Name];
+            if (commandOptions.ContainsKey(command.Name)) {
+                var cmdEntry = commandOptions[command.Name];
 
-                if (cmdEntry.Aliases != null) {
-                    command.Aliases = cmdEntry.Aliases;
-                }
-
-                if (cmdEntry.CustomAliases != null) {
+                if (cmdEntry.OverridedAliases != null) {
+                    command.Aliases = cmdEntry.OverridedAliases;
+                } else if (cmdEntry.CustomAliases != null) {
                     command.Aliases = command.Aliases.Concat(cmdEntry.CustomAliases).ToArray();
                 }
 

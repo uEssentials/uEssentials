@@ -256,7 +256,7 @@ namespace Essentials.Event.Handling {
                 EssCore.Instance.EventManager.Unregister(GetType(), nameof(OnCommandPosExecuted));
             }
 
-            var commands = EssCore.Instance.CommandsConfig.Commands;
+            var commands = EssCore.Instance.CommandOptions.Commands;
 
             if (!commands.ContainsKey(e.Command.Name)) {
                 return;
@@ -286,7 +286,7 @@ namespace Essentials.Event.Handling {
                 return;
             }
 
-            var commands = EssCore.Instance.CommandsConfig.Commands;
+            var commands = EssCore.Instance.CommandOptions.Commands;
 
             if (e.Result?.Type != CommandResult.ResultType.SUCCESS || !commands.ContainsKey(e.Command.Name)) {
                 return;

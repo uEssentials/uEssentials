@@ -202,9 +202,9 @@ namespace Essentials.Configuration {
                     Save(filePath);
                 }
             } catch (Exception ex) {
-                UEssentials.Logger.LogError($"Invalid configuration ({filePath})");
-                UEssentials.Logger.LogError(ex.Message);
-                UEssentials.Logger.LogError("Using default configuration...");
+                UEssentials.Logger.LogError("Failed to load 'config.json'.");
+                UEssentials.Logger.LogError($"Error: {ex}");
+                UEssentials.Logger.LogError("Using default...");
                 LoadDefaults();
             }
         }
