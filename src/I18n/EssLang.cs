@@ -43,7 +43,7 @@ namespace Essentials.I18n {
         private static readonly string[] LANGS = { "en", "pt-br", "es", "ru" };
         private static readonly Dictionary<string, object> _translations = new Dictionary<string, object>();
 
-        public static void LoadDefault(string locale) {
+        private static void LoadDefault(string locale) {
             LoadDefault(locale, Path.Combine(UEssentials.TranslationFolder, $"lang_{locale}.json"));
         }
 

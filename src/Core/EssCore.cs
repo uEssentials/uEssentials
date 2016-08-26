@@ -263,8 +263,8 @@ namespace Essentials.Core {
                 }
 
 #if EXPERIMENTAL
-                Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
-                Logger.LogWarning( "THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY." );
+                Logger.LogWarning("THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY.");
+                Logger.LogWarning("THIS IS AN EXPERIMENTAL BUILD, CAN BE BUGGY.");
 #endif
 
                 Task.Create()
