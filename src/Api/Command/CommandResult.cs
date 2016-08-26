@@ -1,4 +1,5 @@
-﻿/*
+﻿#region License
+/*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
@@ -107,6 +108,7 @@ namespace Essentials.Api.Command {
         }
 
         /* COMMON UTIL RESULTS */
+#endregion
 
         public static CommandResult NoPermission(string permission) {
             return UEssentials.Config.ShowPermissionOnErrorMessage 

@@ -1,3 +1,4 @@
+#region License
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -18,6 +19,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+#endregion
 
 using System;
 using System.Collections.Generic;
@@ -77,7 +79,7 @@ namespace Essentials.Core.Command {
             return DisplayName;
         }
 
-        private /*unsafe*/ static string AeiouToAscii(string str) {
+        private static string AeiouToAscii(string str) {
             var chars = str.ToCharArray();
 
             for (var i = 0; i < chars.Length; i++) {
@@ -99,31 +101,6 @@ namespace Essentials.Core.Command {
                 if (chars[i] == 231) chars[i] = 'c';
                 if (chars[i] == 199) chars[i] = 'C';
             }
-
-            /*
-            There are no performance diff... :C
-
-            for (var i = 0; i < chars.Length; i++) {
-                fixed (char* cur = &chars[i]) {
-                    if (*cur >= 224 && *cur <= 229) *cur = 'a';
-                    if (*cur >= 192 && *cur <= 197) *cur = 'A';
-
-                    if (*cur >= 232 && *cur <= 235) *cur = 'e';
-                    if (*cur >= 200 && *cur <= 203) *cur = 'E';
-
-                    if (*cur >= 236 && *cur <= 239) *cur = 'i';
-                    if (*cur >= 204 && *cur <= 207) *cur = 'I';
-
-                    if (*cur >= 242 && *cur <= 246) *cur = 'o';
-                    if (*cur >= 210 && *cur <= 214) *cur = 'O';
-
-                    if (*cur >= 249 && *cur <= 252) *cur = 'u';
-                    if (*cur >= 218 && *cur <= 220) *cur = 'U';
-
-                    if (*cur == 231) *cur = 'c';
-                    if (*cur == 199) *cur = 'C';
-                }
-            }*/
 
             return new string(chars);
         }

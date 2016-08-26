@@ -1,4 +1,5 @@
-﻿/*
+﻿#region License
+/*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
@@ -18,6 +19,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+#endregion
 
 using System;
 using System.Collections.Generic;
@@ -31,7 +33,7 @@ using Steamworks;
 
 namespace Essentials.NativeModules.Kit {
 
-    class KitEventHandler {
+    internal class KitEventHandler {
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
         void OnPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
