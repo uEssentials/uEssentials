@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Essentials.Api;
 using Essentials.Core.Storage;
 using Essentials.NativeModules.Kit.Data;
@@ -38,7 +39,12 @@ namespace Essentials.NativeModules.Kit {
         internal KitManager() {
             CooldownData = new CooldownData();
             KitMap = new Dictionary<string, Kit>();
-            KitData = UEssentials.Config.WebKits.Enabled ? new WebKitData() : new KitData();
+            KitData = new KitData();
+
+            var webResources = UEssentials.Core.WebResources;
+            if (webResources.Loaded.ContainsKey("Kits")) {
+                File.WriteAllText(Data.KitData.DataFilePath, webResources.Loaded["Kits"]);
+            }
         }
 
         public bool Contains(string kitName) {

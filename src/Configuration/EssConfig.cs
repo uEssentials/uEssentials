@@ -57,8 +57,6 @@ namespace Essentials.Configuration {
         public HomeCommandSettings HomeCommand;
         public WarpCommandSettings WarpCommand;
         public VehicleFeaturesSettings VehicleFeatures;
-        public WebKitsSettings WebKits;
-        public WebConfigSettings WebConfig;
         public KitSettings Kit;
         public TpaSettings Tpa;
         public EconomySettings Economy;
@@ -118,16 +116,6 @@ namespace Essentials.Configuration {
                 Cooldown = 5,
                 PerWarpPermission = true,
                 CancelTeleportWhenMove = false
-            };
-
-            WebKits = new WebKitsSettings {
-                Enabled = false,
-                Url = ""
-            };
-
-            WebConfig = new WebConfigSettings {
-                Enabled = false,
-                Url = ""
             };
 
             Kit = new KitSettings {
@@ -253,22 +241,6 @@ namespace Essentials.Configuration {
             public int Cooldown;
             public bool CancelTeleportWhenMove;
             public bool PerWarpPermission;
-
-        }
-
-        [JsonObject]
-        public struct WebKitsSettings {
-
-            public string Url;
-            public bool Enabled;
-
-        }
-
-        [JsonObject]
-        public struct WebConfigSettings {
-
-            public string Url;
-            public bool Enabled;
 
         }
 

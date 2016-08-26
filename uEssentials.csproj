@@ -127,6 +127,7 @@
     <Compile Include="src\Common\Util\DebugUtil.cs" />
     <Compile Include="src\Compatibility\Hook.cs" />
     <Compile Include="src\Compatibility\HookManager.cs" />
+    <Compile Include="src\Configuration\WebResources.cs" />
     <Compile Include="src\Json\Converters\Vector3Converter.cs" />
     <Compile Include="src\Misc\InstancePool.cs" />
     <Compile Include="src\Economy\IEconomyProvider.cs" />
@@ -191,7 +192,6 @@
     <Compile Include="src\Common\Extensions.cs" />
     <Compile Include="src\Common\Util\ReflectUtil.cs" />
     <Compile Include="src\Configuration\EssConfig.cs" />
-    <Compile Include="src\Configuration\EssWebConfig.cs" />
     <Compile Include="src\Api\Command\ICommand.cs" />
     <Compile Include="src\Api\Command\ICommandArgs.cs" />
     <Compile Include="src\Core\Command\CommandArgs.cs" />
@@ -220,7 +220,6 @@
     <Compile Include="src\NativeModules\Kit\Data\CooldownData.cs" />
     <Compile Include="src\NativeModules\Kit\Data\KitData.cs" />
     <Compile Include="src\NativeModules\Kit\KitManager.cs" />
-    <Compile Include="src\NativeModules\Kit\Data\WebKitData.cs" />
     <Compile Include="src\NativeModules\Kit\KitModule.cs" />
     <Compile Include="src\NativeModules\Warp\WarpEventHandler.cs" />
     <Compile Include="src\NativeModules\Warp\WarpModule.cs" />
@@ -262,6 +261,13 @@
     <EmbeddedResource Include="default\docs\pt-BR\Docs for config.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>py ../commands.py COPY_TO_PLUGINS</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>for /f "tokens=2 delims=," %25%25F in ('tasklist /nh /fi "WINDOWTITLE eq Unturned Server" /fo csv') do taskkill /PID %25%25~F /F
+ EXIT 0</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

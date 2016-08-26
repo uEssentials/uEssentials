@@ -26,7 +26,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Event;
@@ -82,6 +81,7 @@ namespace Essentials.Core {
         internal EssConfig Config { get; set; }
         internal ConsoleLogger Logger { get; set; }
         internal ITaskExecutor TaskExecutor { get; set; }
+        internal WebResources WebResources { get; set; }
 
         private string _folder;
         private string _translationFolder;
@@ -132,19 +132,21 @@ namespace Essentials.Core {
                 _dataFolder = Folder + "data/";
                 _modulesFolder = Folder + "modules/";
 
-                var configPath = Path.Combine(Folder, "config.json");
+                WebResources = new WebResources();
+                WebResources.Load(Path.Combine(Folder, WebResources.FileName));
 
                 Config = new EssConfig();
-                Config.Load(configPath);
+                var configPath = Path.Combine(Folder, Config.FileName);
 
-                if (Config.WebConfig.Enabled) {
-                    var conf = new EssWebConfig();
-                    conf.Load(configPath);
-                    Config = conf;
+                 // Sync web config with local config.json
+                if (WebResources.Loaded.ContainsKey("Config")) {
+                    File.WriteAllText(configPath, WebResources.Loaded["Config"]);
                 }
 
+                Config.Load(configPath);
+
                 CommandsConfig = new CommandsConfig();
-                CommandsConfig.Load(Path.Combine(Folder, "commands.json"));
+                CommandsConfig.Load(Path.Combine(Folder, CommandsConfig.FileName));
 
                 Updater = new GithubUpdater();
                 EventManager = new EventManager();
@@ -243,9 +245,10 @@ namespace Essentials.Core {
                 }
 
                 if (Config.EnableTextCommands) {
-                    var textCommandsFile = Path.Combine(Folder, "textcommands.json");
-
                     TextCommands = new TextCommands();
+
+                    var textCommandsFile = Path.Combine(Folder, TextCommands.FileName);
+
                     TextCommands.Load(textCommandsFile);
 
                     TextCommands.Commands.ForEach(txtCommand => {

@@ -19,8 +19,10 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
@@ -39,10 +41,12 @@ namespace Essentials.Core.Command {
         public string Permission { get; set; }
         public AllowedSource AllowedSource { get; set; }
 
-        private readonly HashSet<TextEntry> _texts; 
+        private readonly List<CommandEntry> _commands;
+        private readonly List<TextEntry> _texts; 
 
         public TextCommand(TextCommands.TextCommandData data) {
-            _texts = new HashSet<TextEntry>();
+            _texts = new List<TextEntry>();
+            _commands = new List<CommandEntry>();
             Name = data.Name;
             Usage = string.Empty;
             Aliases = new string[0];
@@ -51,6 +55,20 @@ namespace Essentials.Core.Command {
             Permission = $"essentials.textcommand.{Name}";
 
             data.Text.ForEach(txt => {
+                if (txt.StartsWith("console_execute:")) {
+                    _commands.Add(new CommandEntry {
+                        IsConsoleExecutor = true,
+                        Command = txt.Substring(16)
+                    });
+                    return;
+                }
+                if (txt.StartsWith("execute:")) {
+                    _commands.Add(new CommandEntry {
+                        IsConsoleExecutor = false,
+                        Command = txt.Substring(8)
+                    });
+                    return;
+                }
                 var color = ColorUtil.GetColorFromString(ref txt);
                 _texts.Add(new TextEntry { Text = txt, Color = color });
             });
@@ -60,12 +78,22 @@ namespace Essentials.Core.Command {
             foreach (var entry in _texts) {
                 src.SendMessage(entry.Text, entry.Color);
             }
+            foreach (var entry in _commands) {
+                var source = entry.IsConsoleExecutor ? UEssentials.ConsoleSource : src;
+                source.DispatchCommand(entry.Command);
+                Console.WriteLine($"'{entry.Command}'");
+            }
             return CommandResult.Success();
         }
 
         private struct TextEntry {
             public string Text;
             public Color Color;
+        }
+
+        private struct CommandEntry {
+            public bool IsConsoleExecutor;
+            public string Command;
         }
 
         public override string ToString() {

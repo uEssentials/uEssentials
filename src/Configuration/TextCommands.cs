@@ -31,6 +31,8 @@ namespace Essentials.Configuration {
 
     public class TextCommands : JsonConfig {
 
+        public override string FileName => "text_commands.json";
+
         public List<TextCommandData> Commands { get; } = new List<TextCommandData>();
 
         public override void LoadDefaults() {
@@ -64,6 +66,19 @@ namespace Essentials.Configuration {
                     LoadDefaults();
                 }
             } else {
+                // TODO: Remove
+                // Rename 'textcommands.json' to 'text_commands.json'
+                var dir = Path.GetDirectoryName(filePath);
+                if (dir == null) { // Resharper pls
+                    throw new InvalidOperationException("dir == null");
+                }
+                var legacyPath = Path.Combine(dir, "textcommands.json");
+                if (File.Exists(legacyPath)) {
+                    File.Copy(legacyPath, Path.Combine(dir, FileName));
+                    File.Delete(legacyPath);
+                    Load(filePath);
+                    return;
+                }
                 LoadDefaults();
                 Save(filePath);
             }

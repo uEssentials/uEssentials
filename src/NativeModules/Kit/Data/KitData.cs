@@ -37,7 +37,7 @@ namespace Essentials.NativeModules.Kit.Data {
 
     internal class KitData : IData<Dictionary<string, Kit>> {
 
-        protected static string DataFilePath => $"{UEssentials.PluginFolder}kits.json";
+        internal static string DataFilePath => Path.Combine(UEssentials.PluginFolder, "kits.json");
 
         private const StringComparison _cmpIgnoreCase = StringComparison.InvariantCultureIgnoreCase;
 
