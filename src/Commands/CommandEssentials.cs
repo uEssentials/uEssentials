@@ -28,7 +28,6 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
 using Essentials.Common.Util;
-using Essentials.Configuration;
 using Essentials.Core;
 using Essentials.Core.Command;
 using Essentials.I18n;
