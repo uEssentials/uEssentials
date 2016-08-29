@@ -64,6 +64,12 @@ namespace Essentials.Common {
             return !src.Any(predicate);
         }
 
+        public static bool DeepEquals<T>(this List<T> src, List<T> dest) {
+            if (src.Count != dest.Count) {
+                return false;
+            }
+            return !src.Where((t, i) => !t.Equals(dest[i])).Any();
+        }
     }
 
     public static class DictionaryExtensions {

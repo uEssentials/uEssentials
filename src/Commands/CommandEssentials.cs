@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Essentials.Api;
@@ -30,6 +31,7 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
 using Essentials.Common.Util;
+using Essentials.Configuration;
 using Essentials.Core;
 using Essentials.Core.Command;
 using Essentials.I18n;
@@ -281,7 +283,9 @@ namespace Essentials.Commands {
         }
 
         private static void ReloadConfig() {
-            EssCore.Instance.LoadConfig();
+            var config = new EssConfig();
+            config.Load(Path.Combine(EssCore.Instance.Folder, config.FileName));
+            EssCore.Instance.Config = config;
         }
     }
 }
