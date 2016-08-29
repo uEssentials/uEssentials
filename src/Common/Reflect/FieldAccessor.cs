@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -35,8 +37,12 @@ namespace Essentials.Common.Reflect {
         }
 
         public TFieldType Value {
-            get { return (TFieldType) Info.GetValue(Owner is Type ? null : Owner); }
-            set { Info.SetValue(Owner is Type ? null : Owner, value); }
+            get {
+                return (TFieldType) Info.GetValue(Owner is Type ? null : Owner);
+            }
+            set {
+                Info.SetValue(Owner is Type ? null : Owner, value);
+            }
         }
 
     }

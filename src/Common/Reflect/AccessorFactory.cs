@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,9 +20,11 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using Essentials.CodeAnalysis;
 
@@ -33,10 +36,13 @@ namespace Essentials.Common.Reflect {
             var objType = obj is Type ? (Type) obj : obj.GetType();
             var fieldInfo = objType.GetField(fieldName, (BindingFlags) 60);
 
-            if (fieldInfo == null) return null;
+            if (fieldInfo == null) {
+                Debug.Print($"Could not find field '{objType.FullName}.{fieldName}'", "AccessorFactory");
+                return null;
+            }
 
             Type fieldType = fieldInfo.FieldType,
-                informedFieldType = typeof(TFieldType);
+                 informedFieldType = typeof(TFieldType);
 
             Preconditions.IsFalse(informedFieldType == fieldType,
                 "Inconsistent given type {0} and field type {1}",
@@ -45,8 +51,7 @@ namespace Essentials.Common.Reflect {
             return new FieldAccessor<TFieldType>(obj, fieldInfo);
         }
 
-        public static FieldAccessor<TFieldType> AccessProperty<TFieldType>(
-            object obj, string fieldName) {
+        public static FieldAccessor<TFieldType> AccessProperty<TFieldType>(object obj, string fieldName) {
             return AccessField<TFieldType>(obj, $"<{fieldName}>k__BackingField");
         }
 
@@ -54,7 +59,10 @@ namespace Essentials.Common.Reflect {
             var objType = obj is Type ? (Type) obj : obj.GetType();
             var methodInfo = objType.GetMethod(methodName, (BindingFlags) 60);
 
-            if (methodInfo == null) return null;
+            if (methodInfo == null) {
+                Debug.Print($"Could not find method '{objType.FullName}::{methodName}'", "AccessorFactory");
+                return null;
+            }
 
             return new MethodAccessor<TReturnType>(obj, methodInfo);
         }

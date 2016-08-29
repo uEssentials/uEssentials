@@ -71,7 +71,7 @@ namespace Essentials.Common.Util {
             return sb.ToString();
         }
 
-        public static string ToBinaryString(long val, long numBits = 16) {
+        public static string ToBinaryString(long val, byte numBits = 16) {
             var bit = 0;
             var buf = new char[numBits];
             while (numBits > 0) {

@@ -68,6 +68,20 @@ namespace Essentials.Common.Util {
             return GetMethod(typeof(T), name, STATIC_INSTANCE_FLAGS, argTypes);
         }
 
+        public static FieldInfo GetField(Type type, string name, BindingFlags flags) {
+            var ret = type.GetField(name, flags);
+            Debug.WriteIf(ret == null, $"Could not find field '{type.FullName}.{name}'", "ReflectUtil");
+            return ret;
+        }
+
+        public static FieldInfo GetField(Type type, string name) {
+            return GetField(type, name, STATIC_INSTANCE_FLAGS);
+        }
+
+        public static FieldInfo GetField<T>(string name) {
+            return GetField(typeof(T), name);
+        }
+
     }
 
 }
