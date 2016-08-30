@@ -255,9 +255,6 @@
     <EmbeddedResource Include="default\lang_ru.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="default\docs\docs_version" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="default\docs\pt-BR\Docs for config.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
