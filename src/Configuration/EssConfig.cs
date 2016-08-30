@@ -155,6 +155,7 @@ namespace Essentials.Configuration {
         public override void Load(string filePath) {
             if (!File.Exists(filePath)) {
                 base.Load(filePath);
+                return;
             }
 
             try {
@@ -193,15 +194,6 @@ namespace Essentials.Configuration {
                 if (VehicleFeatures.RepairPercentage <= 0) {
                     UEssentials.Logger.LogError("Invalid config: VehicleFeatures.RepairPercentage " +
                                                 $"must be positive. (Got {VehicleFeatures.RepairPercentage})");
-                }
-
-                /*
-                    Update old configs
-                */
-                if (json["HomeCommand"]["CancelTeleportWhenMove"] == null &&
-                    json["HomeCommand"]["CancelWhenMove"] != null) {
-                    HomeCommand.CancelTeleportWhenMove = (bool) json["HomeCommand"]["CancelWhenMove"];
-                    Save(filePath);
                 }
             } catch (Exception ex) {
                 UEssentials.Logger.LogError("Failed to load 'config.json'.");
