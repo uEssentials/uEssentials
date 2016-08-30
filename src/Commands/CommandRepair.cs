@@ -37,11 +37,8 @@ namespace Essentials.Commands {
     [CommandInfo(
         Name = "repair",
         Aliases = new[] { "fix" },
-        Description = "Repair all/in hand items",
-        AllowedSource = AllowedSource.PLAYER,
-        Usage = "[all/hand]",
-        MinArgs = 1,
-        MaxArgs = 1
+        Description = "Repair all items in your inventory.",
+        AllowedSource = AllowedSource.PLAYER
     )]
     public class CommandRepair : EssCommand {
 
@@ -50,19 +47,8 @@ namespace Essentials.Commands {
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
 
-            if (args[0].Equals("all")) {
-                player.RocketPlayer.Inventory.Items.ForEach(item => Repair(player, item));
-                EssLang.Send(src, "ALL_REPAIRED");
-            } else if (args[0].Equals("hand")) { //TODO remove 'hand' argument... 
-                Repair(player, player.Inventory.Items[0]);
-                Repair(player, player.Inventory.Items[1]);
-
-                if (player.Equipment.HoldingItemID != 0) {
-                    player.Equipment.sendUpdateState();
-                }
-
-                EssLang.Send(src, "HAND_REPAIRED");
-            }
+            player.RocketPlayer.Inventory.Items.ForEach(item => Repair(player, item));
+            EssLang.Send(src, "ALL_REPAIRED");
 
             return CommandResult.Success();
         }
