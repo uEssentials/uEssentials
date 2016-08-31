@@ -324,7 +324,7 @@ namespace Essentials.Core {
                     "Error: " + e
                 };
 
-                if (!Provider.Version.EqualsIgnoreCase(UNTURNED_VERSION)) {
+                if (!Provider.APP_VERSION.EqualsIgnoreCase(UNTURNED_VERSION)) {
                     msg.Add("I detected that you are using a different version of the recommended, " +
                             "please update your uEssentials/Unturned.");
                     msg.Add("If you are using the latest uEssentials release, please wait for update.");
