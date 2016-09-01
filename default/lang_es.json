@@ -230,5 +230,6 @@
     "WARP_REMOVED": "Warp {0} fue eliminado",
     "WARP_SET": "Warp {0} fue creado",
     "WARP_TELEPORTED": "Teletransportado al warp {0}",
-    "WITHOUT_BED": "No tienes una cama para teletransportarte."
+    "WITHOUT_BED": "No tienes una cama para teletransportarte.",
+    "REQUEST_URL_SUCCESS": "You have requested '{0}' to open url '{1}'"
 }

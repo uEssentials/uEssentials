@@ -231,5 +231,6 @@
     "WARP_REMOVED": "<magenta>Warp '{0}' has been removed.",
     "WARP_SET": "<cyan>Warp '{0}' has been set.",
     "WARP_TELEPORTED": "Teleported to warp '{0}'.",
-    "WITHOUT_BED": "<yellow>You do not have a bed to teleport to."
+    "WITHOUT_BED": "<yellow>You do not have a bed to teleport to.",
+    "REQUEST_URL_SUCCESS": "You have requested '{0}' to open url '{1}'"
 }

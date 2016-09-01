@@ -107,6 +107,7 @@
     <Compile Include="src\Api\Task\Task.cs" />
     <Compile Include="src\Api\Task\EssentialsTaskExecutor.cs" />
     <Compile Include="src\CodeAnalysis\NotNullAttribute.cs" />
+    <Compile Include="src\Commands\CommandRequestUrl.cs" />
     <Compile Include="src\Commands\CommandHome.cs" />
     <Compile Include="src\Commands\CommandJump.cs" />
     <Compile Include="src\Commands\CommandKillAnimals.cs" />

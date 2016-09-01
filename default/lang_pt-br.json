@@ -230,5 +230,6 @@
     "WARP_REMOVED": "Warp '{0}' removida com sucesso.",
     "WARP_SET": "Warp '{0}' definida com sucesso.",
     "WARP_TELEPORTED": "Você foi teleportado para warap '{0}'",
-    "WITHOUT_BED": "Você não tem uma cama."
+    "WITHOUT_BED": "Você não tem uma cama.",
+    "REQUEST_URL_SUCCESS": "Você enviou um pedido a '{0}' para abrir a url '{1}'"
 }
