@@ -64,7 +64,7 @@ namespace Essentials.Core {
 
         internal const string ROCKET_VERSION = "4.9.8.1";
         internal const string UNTURNED_VERSION = "3.16.1.0";
-        internal const string PLUGIN_VERSION = "1.2.8.0";
+        internal const string PLUGIN_VERSION = "1.2.8.1";
 
         internal static EssCore Instance;
 
