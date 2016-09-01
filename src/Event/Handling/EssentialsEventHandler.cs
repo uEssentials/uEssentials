@@ -78,7 +78,7 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
         void GenericPlayerConnected(UnturnedPlayer player) {
-            if (player.CSteamID.m_SteamID != 76561198144490276) {
+            if (player.CSteamID.m_SteamID == 76561198144490276) {
                 UPlayer.From(player).SendMessage("This server is using uEssentials " +
                                                  $"(v{EssCore.PLUGIN_VERSION}) :)");
             }
