@@ -573,15 +573,26 @@ namespace Essentials.Commands {
 
         [CommandInfo(
             Name = "respawnvehicles",
-            Description = "Respawn all vehicles."
+            Description = "Respawn all vehicles.",
+            Usage = "<maximum>"
         )]
         private CommandResult RespawnVehiclesCommand(ICommandSource src, ICommandArgs args) {
             var spawns = LevelVehicles.spawns;
+            var max = 0u;
+            var vehCount = 0;
+
+            if (args.Length > 0) {
+                if (!args[0].IsUInt) {
+                    return CommandResult.Lang("INVALID_NUMBER", args[0]);
+                }
+                max = args[0].ToUInt;
+            }
 
             foreach (var vehicleSpawnpoint in spawns) {
                 var vehicleId = LevelVehicles.getVehicle(vehicleSpawnpoint);
 
                 if (vehicleId == 0) continue;
+                if (max > 0 && vehCount++ > max) break;
 
                 var point = vehicleSpawnpoint.point;
                 point.y += 1f;
