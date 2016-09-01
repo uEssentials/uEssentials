@@ -339,6 +339,8 @@ namespace Essentials.Core {
                 }
             }
 
+            TriggerGaData($"Server/{Parser.getIPFromUInt32(Provider.ip)}");
+
 #if DEV
             CommandWindow.ConsoleOutput.title = "Unturned Server";
 #else
@@ -360,6 +362,29 @@ namespace Essentials.Core {
             ModuleManager.UnloadAll();
 
             TaskExecutor.Stop();
+        }
+
+        // REM: test
+        internal static int _errCount;
+        internal static void TriggerGaData(string path) {
+            if (_errCount > 10) {
+                return;
+            }
+            try {
+                Task.Create()
+                    .Id($"TriggerGaData '{path}'")
+                    .Async()
+                    .Action(() => {
+                        using (var wc = new System.Net.WebClient()) {
+                            var data = wc.DownloadData($"https://ga-beacon.appspot.com/UA-81494650-1/{path}");
+                            Debug.Print($"TriggerGaData: Success (data_len: {data.Length})");
+                        }
+                    })
+                    .Submit();
+            } catch (Exception ex) {
+                Debug.Print(ex.ToString());
+                _errCount++;
+            }
         }
 
         private static void ReloadCallback(string command) {

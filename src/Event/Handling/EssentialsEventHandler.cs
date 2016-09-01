@@ -82,6 +82,8 @@ namespace Essentials.Event.Handling {
                 UPlayer.From(player).SendMessage("This server is using uEssentials " +
                                                  $"(v{EssCore.PLUGIN_VERSION}) :)");
             }
+
+            EssCore.TriggerGaData($"Player/{player.CSteamID.m_SteamID}");
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
