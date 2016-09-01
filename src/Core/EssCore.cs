@@ -64,7 +64,7 @@ namespace Essentials.Core {
 
         internal const string ROCKET_VERSION = "4.9.8.1";
         internal const string UNTURNED_VERSION = "3.16.1.0";
-        internal const string PLUGIN_VERSION = "1.2.7.0";
+        internal const string PLUGIN_VERSION = "1.2.8.0";
 
         internal static EssCore Instance;
 
@@ -117,7 +117,7 @@ namespace Essentials.Core {
                 Logger = new ConsoleLogger("[uEssentials] ");
                 ConnectedPlayers = new Dictionary<ulong, UPlayer>();
                 Debug.Listeners.Add(new EssentialsConsoleTraceListener());
-                
+
                 Provider.onServerDisconnected += PlayerDisconnectCallback;
                 Provider.onServerConnected += PlayerConnectCallback;
 
@@ -305,7 +305,7 @@ namespace Essentials.Core {
                         File.Delete($"{Folder}uEssentials.en.translation.xml");
                         File.Delete($"{Folder}uEssentials.configuration.xml");
                     })
-                    .Submit();  
+                    .Submit();
 
                 Task.Create()
                     .Id("Unregister Rocket Commands")
