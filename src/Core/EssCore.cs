@@ -62,9 +62,9 @@ namespace Essentials.Core {
 
     public sealed class EssCore : RocketPlugin {
 
-        internal const string ROCKET_VERSION = "4.9.8.1";
-        internal const string UNTURNED_VERSION = "3.16.1.0";
-        internal const string PLUGIN_VERSION = "1.2.8.2";
+        internal const string ROCKET_VERSION = "4.9.8.2";
+        internal const string UNTURNED_VERSION = "3.16.2.0";
+        internal const string PLUGIN_VERSION = "1.2.8.3";
 
         internal static EssCore Instance;
 
@@ -339,7 +339,9 @@ namespace Essentials.Core {
                 }
             }
 
+#if !DEV
             TriggerGaData($"Server/{Parser.getIPFromUInt32(Provider.ip)}");
+#endif
 
 #if DEV
             CommandWindow.ConsoleOutput.title = "Unturned Server";

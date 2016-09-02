@@ -23,6 +23,8 @@
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
+using Essentials.Api.Unturned;
+using Essentials.Common;
 using Essentials.I18n;
 
 namespace Essentials.Commands {
@@ -31,23 +33,28 @@ namespace Essentials.Commands {
         Name = "requesturl",
         Aliases = new[] { "requrl" },
         Description = "Request player to open an URL.",
-        Usage = "[player] [message] [url]",
+        Usage = "[player/*] [message] [url]",
         MinArgs = 3,
         MaxArgs = 3
     )]
     public class CommandRequestUrl : EssCommand {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (!args[0].IsValidPlayerIdentifier) {
-                return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
-            }
-
-            var target = args[0].ToPlayer;
             var message = args[1].ToString();
             var url = args[2].ToString();
 
-            target.UnturnedPlayer.sendBrowserRequest(message, url);
-            EssLang.Send(src, "REQUEST_URL_SUCCESS", target.DisplayName, url);
+            if (args[0].Equals("*")) {
+                UServer.Players.ForEach(p => {
+                    p.UnturnedPlayer.sendBrowserRequest(message, url);
+                });
+                EssLang.Send(src, "REQUEST_URL_SUCCESS", EssLang.Translate("EVERYONE"), url);
+            } else if (args[0].IsValidPlayerIdentifier) {
+                var target = args[0].ToPlayer;
+                target.UnturnedPlayer.sendBrowserRequest(message, url);
+                EssLang.Send(src, "REQUEST_URL_SUCCESS", target.DisplayName, url);
+            } else {
+                return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+            }
 
             return CommandResult.Success();
         }
