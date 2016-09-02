@@ -115,11 +115,11 @@ namespace Essentials.Common.Util {
                 System.Diagnostics.Debug.Print("Failed to parse hex color '{0}'.", rawColor);
                 return null;
             }
-
+            
             return new Color(
-                ((hex & 0xFF)) / 255F,
+                ((hex >> 16) & 0xFF) / 255F,
                 ((hex >> 8) & 0xFF) / 255F, 
-                ((hex >> 16) & 0xFF) / 255F
+                ((hex) & 0xFF) / 255F
             );
         }
     }
