@@ -98,7 +98,7 @@ namespace Essentials.Configuration {
                 FormatFrom = "(From {0}): {1}",
                 FormatTo = "(To {0}): {1}",
                 FormatSpy = "<gray>Spy: {0} -> {1}: {2}",
-                ConsoleDisplayName = "*coxxnsole*"
+                ConsoleDisplayName = "*console*"
             };
 
             AntiSpam = new AntiSpamSettings {
