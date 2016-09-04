@@ -28,7 +28,6 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Common.Util;
-using UnityEngine;
 using static Essentials.Commands.MiscCommands;
 
 namespace Essentials.Commands {
@@ -54,20 +53,27 @@ namespace Essentials.Commands {
                 return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
             }
 
-            var formatFrom = UEssentials.Config.PMFormatFrom;
-            var formatTo = UEssentials.Config.PMFormatTo;
+            var pmSettings = UEssentials.Config.PrivateMessage;
+            var formatFrom = pmSettings.FormatFrom;
+            var formatTo = pmSettings.FormatTo;
+            var formatSpy = pmSettings.FormatSpy;
+
             var formatFromColor = ColorUtil.GetColorFromString(ref formatFrom);
             var formatToColor = ColorUtil.GetColorFromString(ref formatTo);
+            var formatSpyColor = ColorUtil.GetColorFromString(ref formatSpy);
 
-            var message = string.Format(formatFrom, src.DisplayName, args.Join(1));
-            var message2 = string.Format(formatTo, target.DisplayName, args.Join(1));
+            var targetName = src.IsConsole ? pmSettings.ConsoleDisplayName : target.DisplayName;
+            var srcName = src.IsConsole ? pmSettings.ConsoleDisplayName : src.DisplayName;
 
-            target.SendMessage(message, formatFromColor);
-            src.SendMessage(message2, formatToColor);
+            formatFrom = string.Format(formatFrom, srcName, args.Join(1));
+            formatTo = string.Format(formatTo, targetName, args.Join(1));
+            formatSpy = string.Format(formatSpy, srcName, targetName, args.Join(1));
+
+            target.SendMessage(formatFrom, formatFromColor);
+            src.SendMessage(formatTo, formatToColor);
 
             Spies.ForEach(p => {
-                UPlayer.From(p).SendMessage($"Spy: ({src.DisplayName} -> " +
-                                            $"{target.CharacterName}): {args.Join(1)}", Color.gray);
+                UPlayer.From(p).SendMessage(formatSpy, formatSpyColor);
             });
 
             if (src.IsConsole) {

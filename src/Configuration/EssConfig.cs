@@ -37,8 +37,8 @@ namespace Essentials.Configuration {
     public class EssConfig : JsonConfig {
 
         public string Locale;
-        public string PMFormatFrom;
-        public string PMFormatTo;
+
+        public PrivateMessageSettings PrivateMessage;
 
         public bool UnfreezeOnDeath;
         public bool UnfreezeOnQuit;
@@ -76,9 +76,6 @@ namespace Essentials.Configuration {
         public override void LoadDefaults() {
             Locale = "en";
 
-            PMFormatFrom = "(From {0}): {1}";
-            PMFormatTo = "(To {0}): {1}";
-
             UnfreezeOnDeath = true;
             UnfreezeOnQuit = true;
 
@@ -96,6 +93,13 @@ namespace Essentials.Configuration {
 
             AutoCommands = new AutoCommands();
             AutoCommands.LoadDefaults();
+
+            PrivateMessage = new PrivateMessageSettings {
+                FormatFrom = "(From {0}): {1}",
+                FormatTo = "(To {0}): {1}",
+                FormatSpy = "<gray>Spy: {0} -> {1}: {2}",
+                ConsoleDisplayName = "*coxxnsole*"
+            };
 
             AntiSpam = new AntiSpamSettings {
                 Enabled = true,
@@ -203,7 +207,15 @@ namespace Essentials.Configuration {
             }
         }
 
-        [JsonObject]
+        public struct PrivateMessageSettings {
+
+            public string FormatFrom;
+            public string FormatTo;
+            public string FormatSpy;
+            public string ConsoleDisplayName;
+
+        }
+
         public struct AntiSpamSettings {
 
             public bool Enabled;
@@ -211,7 +223,6 @@ namespace Essentials.Configuration {
 
         }
 
-        [JsonObject]
         public struct UpdaterSettings {
 
             public bool CheckUpdates;
@@ -220,7 +231,6 @@ namespace Essentials.Configuration {
 
         }
 
-        [JsonObject]
         public struct HomeCommandSettings {
 
             public int Cooldown;
@@ -229,7 +239,6 @@ namespace Essentials.Configuration {
 
         }
 
-        [JsonObject]
         public struct WarpCommandSettings {
 
             public int Cooldown;
@@ -238,7 +247,6 @@ namespace Essentials.Configuration {
 
         }
 
-        [JsonObject]
         public struct KitSettings {
 
             public bool ShowCost;
@@ -249,7 +257,6 @@ namespace Essentials.Configuration {
 
         }
 
-        [JsonObject]
         public struct TpaSettings {
 
             public int ExpireDelay;
@@ -257,7 +264,6 @@ namespace Essentials.Configuration {
 
         }
 
-        [JsonObject]
         public struct EconomySettings {
 
             public bool UseXp;
@@ -266,7 +272,6 @@ namespace Essentials.Configuration {
 
         }
 
-        [JsonObject]
         public struct VehicleFeaturesSettings {
 
             public int RefuelPercentage;
