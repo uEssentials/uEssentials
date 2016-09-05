@@ -29,7 +29,6 @@ using Essentials.Api;
 using Essentials.Api.Configuration;
 using Essentials.Common;
 using Essentials.Misc;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Essentials.Configuration {
