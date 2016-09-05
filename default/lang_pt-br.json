@@ -56,6 +56,7 @@
     "COMMAND_PAID": "Você pagou ({0}{1}) para usar esse comando.",
     "CONSOLE_CANNOT_EXECUTE": "<red>Este comando não pode ser executado no console.",
     "CREATED_KIT": "Você criou um novo kit chamado '{0}'.",
+    "COMMAND_COOLDOWN": "<yellow>Você precisa esperar {0} para usar esse comando novamente.",
     "DAY": "dia",
     "DAYS": "dias",
     "DEATH_ANIMAL": "{0} for morto por um animal!",
