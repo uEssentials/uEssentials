@@ -27,7 +27,7 @@ using System.IO;
 using Essentials.Api;
 using Essentials.Api.Configuration;
 using Essentials.Common.Util;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Essentials.Configuration {
 
@@ -35,6 +35,9 @@ namespace Essentials.Configuration {
 
         public override string FileName => "command_options.json";
 
+        /// <summary>
+        /// Key: command name (lower case)
+        /// </summary>
         public IDictionary<string, CommandEntry> Commands { get; } = new Dictionary<string, CommandEntry>();
 
         public override void Save(string filePath) {
@@ -45,7 +48,9 @@ namespace Essentials.Configuration {
             try {
                 if (File.Exists(filePath)) {
                     var json = File.ReadAllText(filePath);
-                    JsonConvert.PopulateObject(json, Commands);
+                    foreach (var entry in JObject.Parse(json)) {
+                        Commands.Add(entry.Key.ToLowerInvariant(), entry.Value.ToObject<CommandEntry>());
+                    }
                 } else {
                     base.Load(filePath);
                 }
@@ -58,8 +63,8 @@ namespace Essentials.Configuration {
         }
 
         public override void LoadDefaults() {
-            Commands.Add("example_1", new CommandEntry{
-                Cost = 0.0m,
+            Commands.Add("example_1", new CommandEntry {
+                Cost = 0m,
                 CustomAliases = new [] {
                     "these aliases",
                     "will be",
@@ -75,10 +80,13 @@ namespace Essentials.Configuration {
                 Usage = "Usage",
                 Description = "Description"
             });
-            Commands.Add("example_2", new CommandEntry{
-                Cost = 1110.0m,
+            Commands.Add("example_2", new CommandEntry {
+                Cost = 1110m,
                 Usage = "Usage",
                 Description = "Description"
+            });
+            Commands.Add("home", new CommandEntry {
+                Cooldown = 30
             });
         }
 
@@ -88,6 +96,7 @@ namespace Essentials.Configuration {
             public string Usage;
             public string Description;
             public decimal Cost;
+            public uint Cooldown;
         }
 
     }

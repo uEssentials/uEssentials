@@ -46,6 +46,7 @@ namespace Essentials.Configuration {
         public bool EnableDeathMessages;
         public bool EnableJoinLeaveMessage;
         public bool ShowPermissionOnErrorMessage;
+        public bool SaveCommandCooldowns;
 
         public bool EnablePollRunningMessage;
         public int PollRunningMessageCooldown;
@@ -55,8 +56,8 @@ namespace Essentials.Configuration {
 
         public AntiSpamSettings AntiSpam;
         public UpdaterSettings Updater;
-        public HomeCommandSettings HomeCommand;
-        public WarpCommandSettings WarpCommand;
+        public HomeCommandSettings Home;
+        public WarpCommandSettings Warp;
         public VehicleFeaturesSettings VehicleFeatures;
         public KitSettings Kit;
         public TpaSettings Tpa;
@@ -82,6 +83,7 @@ namespace Essentials.Configuration {
             EnableTextCommands = true;
             EnableDeathMessages = true;
             ShowPermissionOnErrorMessage = true;
+            SaveCommandCooldowns = false;
 
             EnablePollRunningMessage = true;
             PollRunningMessageCooldown = 20;
@@ -111,14 +113,13 @@ namespace Essentials.Configuration {
                 AlertOnJoin = true
             };
 
-            HomeCommand = new HomeCommandSettings {
-                Cooldown = 30,
-                Delay = 5,
+            Home = new HomeCommandSettings {
+                TeleportDelay = 5,
                 CancelTeleportWhenMove = true
             };
 
-            WarpCommand = new WarpCommandSettings {
-                Cooldown = 5,
+            Warp = new WarpCommandSettings {
+                TeleportDelay = 5,
                 PerWarpPermission = true,
                 CancelTeleportWhenMove = false
             };
@@ -163,17 +164,45 @@ namespace Essentials.Configuration {
 
             try {
                 var json = JObject.Parse(File.ReadAllText(filePath));
+
+                // TODO: Remove
+                // Update old stuffs
+                if (json["WarpCommand"] != null) {
+                    json["Warp"] = json["WarpCommand"];
+                    json["WarpCommand"] = null;
+                }
+
+                if (json["HomeCommand"] != null) {
+                    json["Home"] = json["HomeCommand"];
+                    json["HomeCommand"] = null;
+                }
+
+                if (json["Warp"]["Cooldown"] != null) {
+                    json["Warp"]["TeleportDelay"] = 5;
+                    json["Warp"]["Cooldown"] = null;
+                }
+
+                if (json["Home"]["Delay"] != null) {
+                    json["Home"]["TeleportDelay"] = 5;
+                    json["Home"]["Delay"] = null;
+                }
+
+                if (json["Home"]["Cooldown"] != null) {
+                    json["Home"]["Cooldown"] = null;
+                }
+                // end: Update old stuffs
+
                 base.Load(filePath);
 
                 /*
                     Add missing fields...
                 */
-                var configFiels = GetType().GetFields();
-                var needUpdate = configFiels.Length != json.Count;
+                var configFields = GetType().GetFields();
+                var needUpdate = configFields.Length != json.Count;
                 var nonNullFields = new Dictionary<string, object>();
 
                 if (needUpdate) {
-                    configFiels.Where(f => json[f.Name] != null).ForEach(f => {
+                    configFields.Where(f => json[f.Name] != null).ForEach(f => {
                         nonNullFields.Add(f.Name, f.GetValue(this));
                     });
 
@@ -207,75 +236,56 @@ namespace Essentials.Configuration {
         }
 
         public struct PrivateMessageSettings {
-
             public string FormatFrom;
             public string FormatTo;
             public string FormatSpy;
             public string ConsoleDisplayName;
-
         }
 
         public struct AntiSpamSettings {
-
             public bool Enabled;
             public int Interval;
-
         }
 
         public struct UpdaterSettings {
-
             public bool CheckUpdates;
             public bool DownloadLatest;
             public bool AlertOnJoin;
-
         }
 
         public struct HomeCommandSettings {
-
-            public int Cooldown;
-            public int Delay;
+            public int TeleportDelay;
             public bool CancelTeleportWhenMove;
-
         }
 
         public struct WarpCommandSettings {
-
-            public int Cooldown;
+            public int TeleportDelay;
             public bool CancelTeleportWhenMove;
             public bool PerWarpPermission;
-
         }
 
         public struct KitSettings {
-
             public bool ShowCost;
             public bool ShowCostIfZero;
             public string CostFormat;
             public uint GlobalCooldown;
             public bool ResetGlobalCooldownWhenDie;
-
         }
 
         public struct TpaSettings {
-
             public int ExpireDelay;
             public int TeleportDelay;
-
         }
 
         public struct EconomySettings {
-
             public bool UseXp;
             public string XpCurrency;
             public string UconomyCurrency;
-
         }
 
         public struct VehicleFeaturesSettings {
-
             public int RefuelPercentage;
             public int RepairPercentage;
-
         }
 
     }

@@ -55,6 +55,7 @@
     "COMMAND_PAID": "You have paid ({0}{1}) for using this command.",
     "CONSOLE_CANNOT_EXECUTE": "<yellow>This command can't be executed from the console.",
     "CREATED_KIT": "<cyan>You created a new kit named '{0}'!",
+    "COMMAND_COOLDOWN": "<yellow>You must wait {0} to use this command again.",
     "DAY": "day",
     "DAYS": "days",
     "DEATH_ANIMAL": "{0} has been mauled by a animal!",

@@ -28,7 +28,6 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Task;
 using Essentials.Common.Util;
 using Essentials.I18n;
-using Essentials.Misc;
 using UnityEngine;
 using SDG.Unturned;
 using Essentials.Event.Handling;
@@ -43,8 +42,6 @@ namespace Essentials.Commands {
     )]
     public class CommandHome : EssCommand {
 
-        internal static SimpleCooldown Cooldown = new SimpleCooldown();
-
         internal static PlayerDictionary<Task> Delay = new PlayerDictionary<Task>(
             PlayerDictionaryOptions.LAZY_REGISTER_HANDLERS |
             PlayerDictionaryOptions.REMOVE_ON_DEATH |
@@ -55,11 +52,6 @@ namespace Essentials.Commands {
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
             var playerId = player.CSteamId;
-
-            if (Cooldown.HasEntry(playerId)) {
-                return CommandResult.Lang("USE_COOLDOWN",
-                    TimeUtil.FormatSeconds((uint) Cooldown.GetRemainingTime(playerId)));
-            }
 
             Vector3 position;
             byte angle;
@@ -73,13 +65,11 @@ namespace Essentials.Commands {
                 return CommandResult.Lang("WITHOUT_BED");
             }
 
-            var homeCommand = UEssentials.Config.HomeCommand;
-            var delay = homeCommand.Delay;
-            var cooldown = homeCommand.Cooldown;
+            var homeCommand = UEssentials.Config.Home;
+            var delay = homeCommand.TeleportDelay;
 
             if (player.HasPermission("essentials.bypass.homecooldown")) {
                 delay = 0;
-                cooldown = 0;
             }
 
             if (delay > 0) {
@@ -96,13 +86,11 @@ namespace Essentials.Commands {
                    .Submit();
 
             Delay.Add(playerId.m_SteamID, task);
-            Cooldown.AddEntry(playerId, cooldown);
 
             return CommandResult.Success();
         }
 
         protected override void OnUnregistered() {
-          Cooldown.Clear();
           Delay.Clear();
           UEssentials.EventManager.Unregister<EssentialsEventHandler>("HomePlayerMove");
         }

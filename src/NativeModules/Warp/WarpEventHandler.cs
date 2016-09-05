@@ -36,7 +36,7 @@ namespace Essentials.NativeModules.Warp {
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
         void OnPlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            if (!UEssentials.Config.WarpCommand.CancelTeleportWhenMove || !CommandWarp.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
+            if (!UEssentials.Config.Warp.CancelTeleportWhenMove || !CommandWarp.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
 

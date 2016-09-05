@@ -94,7 +94,7 @@ namespace Essentials.Api {
         /// <summary>
         /// Plugin folder path
         /// </summary>
-        public static string PluginFolder => Core.Folder;
+        public static string Folder => Core.Folder;
 
         /// <summary>
         /// Data folder path

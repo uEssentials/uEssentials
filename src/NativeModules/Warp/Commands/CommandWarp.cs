@@ -69,7 +69,7 @@ namespace Essentials.NativeModules.Warp.Commands {
             }
 
             var dest = WarpModule.Instance.WarpManager.GetByName(args[0].ToString());
-            var cooldown = UEssentials.Config.WarpCommand.Cooldown;
+            var cooldown = UEssentials.Config.Warp.TeleportDelay;
 
             if (cooldown > 0 && !player.HasPermission("essentials.bypass.warpcooldown")) {
                 EssLang.Send(src, "WARP_COOLDOWN", cooldown);

@@ -33,7 +33,9 @@ using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Commands;
 using Essentials.Common;
+using Essentials.Common.Util;
 using Essentials.Components.Player;
+using Essentials.Configuration;
 using Essentials.Core;
 using Essentials.Economy;
 using Essentials.I18n;
@@ -50,6 +52,10 @@ namespace Essentials.Event.Handling {
 
         //TODO: change to metadata
         internal static readonly Dictionary<ulong, Dictionary<USkill, byte>> CachedSkills = new Dictionary<ulong, Dictionary<USkill, byte>>();
+
+        // player_id => [command_name, nextUse]
+        internal static readonly Dictionary<ulong, Dictionary<string, DateTime>> CommandCooldowns = new Dictionary<ulong, Dictionary<string, DateTime>>();
+
 
         [SubscribeEvent(EventType.PLAYER_CHATTED)]
         void OnPlayerChatted(UnturnedPlayer player, ref Color color, string message,
@@ -94,15 +100,12 @@ namespace Essentials.Event.Handling {
             MiscCommands.Spies.Remove(playerId);
             CommandTell.Conversations.Remove(playerId);
             CachedSkills.Remove(playerId);
-            CommandHome.Cooldown.RemoveEntry(player.CSteamID);
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
         void GenericPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb,
                                         CSteamID murderer) {
             var uplayer = UPlayer.From(player);
-
-            CommandHome.Cooldown.RemoveIfExpired(player.CSteamID);
 
             /* Keep skill */
             const string KEEP_SKILL_PERM = "essentials.keepskill.";
@@ -237,79 +240,71 @@ namespace Essentials.Event.Handling {
             EssLang.Broadcast("PLAYER_EXITED", player.CharacterName);
         }
 
-        private static Optional<IEconomyProvider> _cachedEconomyProvider;
-
-        /*
-            TODO: Cache commands & cost ??
-        */
-
         [SubscribeEvent(EventType.ESSENTIALS_COMMAND_PRE_EXECUTED)]
         void OnCommandPreExecuted(CommandPreExecuteEvent e) {
-            if (e.Source.IsConsole || e.Source.HasPermission("essentials.bypass.commandcost")) {
+            var commandName = e.Command.Name.ToLowerInvariant();
+            CommandOptions.CommandEntry cmdEntry;
+
+            if (e.Source.IsConsole || !EssCore.Instance.CommandOptions.Commands.TryGetValue(commandName, out cmdEntry)) {
                 return;
             }
 
-            if (_cachedEconomyProvider == null) {
-                _cachedEconomyProvider = UEssentials.EconomyProvider;
+            // Check cooldown
+            if (!e.Source.HasPermission("essentials.bypass.commandcooldown") && cmdEntry.Cooldown > 0) {
+                var playerId = e.Source.ToPlayer().CSteamId.m_SteamID;
+                DateTime nextUse;
+
+                if (CommandCooldowns.ContainsKey(playerId) && CommandCooldowns[playerId].TryGetValue(commandName, out nextUse) &&
+                    nextUse > DateTime.Now) {
+                    var diffSec = (uint) (nextUse - DateTime.Now).TotalSeconds;
+                    EssLang.Send(e.Source, "COMMAND_COOLDOWN", TimeUtil.FormatSeconds(diffSec));
+                    e.Cancelled = true;
+                    return;
+                }
             }
 
-            if (_cachedEconomyProvider.IsAbsent) {
-                /*
-                    If economy hook is not present, this "handler" will be unregistered.
-                */
-                EssCore.Instance.EventManager.Unregister(GetType(), nameof(OnCommandPreExecuted));
-                EssCore.Instance.EventManager.Unregister(GetType(), nameof(OnCommandPosExecuted));
+            // Check if player has sufficient money to use this command.
+            if (
+                UEssentials.EconomyProvider.IsPresent &&
+                !e.Source.HasPermission("essentials.bypass.commandcost") &&
+                cmdEntry.Cost > 0 &&
+                !UEssentials.EconomyProvider.Value.Has(e.Source.ToPlayer(), cmdEntry.Cost)
+            ) {
+                EssLang.Send(e.Source, "COMMAND_NO_MONEY", cmdEntry.Cost, UEssentials.EconomyProvider.Value.CurrencySymbol);
+                e.Cancelled = true;
             }
-
-            var commands = EssCore.Instance.CommandOptions.Commands;
-
-            if (!commands.ContainsKey(e.Command.Name)) {
-                return;
-            }
-
-            var cost = commands[e.Command.Name].Cost;
-
-            if (cost <= 0) {
-                return;
-            }
-
-            /*
-                Check if player has sufficient money to use this command.
-            */
-            if (_cachedEconomyProvider.Value.Has(e.Source.ToPlayer(), cost)) {
-                return;
-            }
-
-            EssLang.Send(e.Source, "COMMAND_NO_MONEY", cost, _cachedEconomyProvider.Value.CurrencySymbol);
-            e.Cancelled = true;
         }
 
         [SubscribeEvent(EventType.ESSENTIALS_COMMAND_POS_EXECUTED)]
         void OnCommandPosExecuted(CommandPosExecuteEvent e) {
-            if (_cachedEconomyProvider == null ||
-                e.Source.IsConsole || e.Source.HasPermission("essentials.bypass.commandcost")) {
+            var commandName = e.Command.Name.ToLowerInvariant();
+            CommandOptions.CommandEntry cmdEntry;
+
+            // It will only apply cooldown/cost if the command was sucessfully executed.
+            if (e.Source.IsConsole || e.Result.Type != CommandResult.ResultType.SUCCESS ||
+                !EssCore.Instance.CommandOptions.Commands.TryGetValue(commandName, out cmdEntry)) {
                 return;
             }
 
-            var commands = EssCore.Instance.CommandOptions.Commands;
+            if (!e.Source.HasPermission("essentials.bypass.commandcooldown") && cmdEntry.Cooldown > 0) {
+                var playerId = e.Source.ToPlayer().CSteamId.m_SteamID;
 
-            if (e.Result?.Type != CommandResult.ResultType.SUCCESS || !commands.ContainsKey(e.Command.Name)) {
-                return;
-             }
+                if (!CommandCooldowns.ContainsKey(playerId)) {
+                    CommandCooldowns.Add(playerId, new Dictionary<string, DateTime>());
+                }
 
-            var cost = commands[e.Command.Name].Cost;
-
-            if (cost <= 0) {
-                return;
+                CommandCooldowns[playerId][commandName] = DateTime.Now.AddSeconds(cmdEntry.Cooldown);
             }
 
-            _cachedEconomyProvider.Value.Withdraw(e.Source.ToPlayer(), cost);
-            EssLang.Send(e.Source, "COMMAND_PAID", cost);
+            if (UEssentials.EconomyProvider.IsPresent && !e.Source.HasPermission("essentials.bypass.commandcost") &&
+                cmdEntry.Cost > 0) {
+                UEssentials.EconomyProvider.Value.Withdraw(e.Source.ToPlayer(), cmdEntry.Cost);
+                EssLang.Send(e.Source, "COMMAND_PAID", cmdEntry.Cost, UEssentials.EconomyProvider.Value.CurrencySymbol);
+            }
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb,
-                                   CSteamID killer) {
+        void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer) {
             switch (cause) {
                 case EDeathCause.BLEEDING:
                     EssLang.Broadcast("DEATH_BLEEDING", player.CharacterName);
@@ -427,13 +422,12 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
         void HomePlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            if (!UEssentials.Config.HomeCommand.CancelTeleportWhenMove || !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
+            if (!UEssentials.Config.Home.CancelTeleportWhenMove || !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
 
             CommandHome.Delay[player.CSteamID.m_SteamID].Cancel();
             CommandHome.Delay.Remove(player.CSteamID.m_SteamID);
-            CommandHome.Cooldown.RemoveEntry(player.CSteamID);
 
             UPlayer.TryGet(player, p => {
                 EssLang.Send(p, "TELEPORT_CANCELLED_MOVED");
