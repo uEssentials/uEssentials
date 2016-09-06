@@ -22,6 +22,9 @@
 #endregion
 
 using System;
+using Essentials.Api;
+using Rocket.Core;
+using Rocket.Core.RCON;
 
 namespace Essentials.Logging {
 
@@ -57,13 +60,13 @@ namespace Essentials.Logging {
 
         public void LogDebug(string message) => LogDebug(message, false);
 
-        public void Log(string message, ConsoleColor color, string prefix = "default", 
+        public void Log(string message, ConsoleColor color, string prefix = "default",
                         string suffix = "default", bool parseColors = false) {
             if (prefix == "default") {
                 prefix = Prefix;
             }
             if (suffix == "default") {
-                suffix = Environment.NewLine;
+                suffix = System.Environment.NewLine;
             }
             var lastColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
@@ -71,6 +74,13 @@ namespace Essentials.Logging {
                 Write(prefix + message + suffix, parseColors);
             }
             Console.ForegroundColor = lastColor;
+            try {
+                if (R.Settings.Instance.RCON.Enabled) {
+                    RCONServer.Broadcast(message);
+                }
+            } catch (Exception ex) {
+                UEssentials.Logger.LogError(ex.ToString());
+            }
         }
 
         private void Write(string text, bool parseColors = false) {

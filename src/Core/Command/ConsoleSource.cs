@@ -23,8 +23,11 @@
 
 using System;
 using System.Collections.Generic;
+using Essentials.Api;
 using Essentials.Api.Command.Source;
 using Essentials.Common.Util;
+using Rocket.Core;
+using Rocket.Core.RCON;
 using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
@@ -61,9 +64,21 @@ namespace Essentials.Core.Command {
         }
 
         public void SendMessage(object message, Color color) {
+            string sMessage = message is string
+                ? AeiouToAscii((string) message)
+                : message.ToString();
+
+            try {
+                if (R.Settings.Instance.RCON.Enabled) {
+                    RCONServer.Broadcast(sMessage);
+                }
+            } catch (Exception ex) {
+                UEssentials.Logger.LogError(ex.ToString());
+            }
+
             var oldColor = Console.ForegroundColor;
             Console.ForegroundColor = ColorUtil.UnityColorToConsoleColor(color);
-            Console.WriteLine(message is string ? AeiouToAscii((string) message) : message);
+            Console.WriteLine(sMessage);
             Console.ForegroundColor = oldColor;
         }
 
