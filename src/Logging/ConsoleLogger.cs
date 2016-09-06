@@ -79,7 +79,7 @@ namespace Essentials.Logging {
                     RCONServer.Broadcast(message);
                 }
             } catch (Exception ex) {
-                UEssentials.Logger.LogError(ex.ToString());
+                Console.WriteLine($"ConsoleLogger error: {ex.ToString()}");
             }
         }
 
