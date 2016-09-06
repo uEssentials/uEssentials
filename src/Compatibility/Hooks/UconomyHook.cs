@@ -42,6 +42,8 @@ namespace Essentials.Compatibility.Hooks {
         public UconomyHook() : base("economy") {}
 
         public override void OnLoad() {
+            UEssentials.Logger.LogInfo("Loading Uconomy hook...");
+
             var uconomyPlugin = R.Plugins.GetPlugins().FirstOrDefault(c => c.Name.EqualsIgnoreCase("uconomy"));
             var uconomyType = uconomyPlugin.GetType().Assembly.GetType("fr34kyn01535.Uconomy.Uconomy");
             var uconomyInstance =
@@ -50,6 +52,8 @@ namespace Essentials.Compatibility.Hooks {
             var databaseInstance = uconomyInstance.GetType().GetField("Database").GetValue(uconomyInstance);
             _getBalanceMethod = AccessorFactory.AccessMethod<decimal>(databaseInstance, "GetBalance");
             _increaseBalanceMethod = AccessorFactory.AccessMethod<decimal>(databaseInstance, "IncreaseBalance");
+
+            UEssentials.Logger.LogInfo("Uconomy hook loaded.");
         }
 
         public override void OnUnload() {}
