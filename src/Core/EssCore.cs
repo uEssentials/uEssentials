@@ -64,7 +64,13 @@ namespace Essentials.Core {
 
         internal const string ROCKET_VERSION = "4.9.8.2";
         internal const string UNTURNED_VERSION = "3.16.2.1";
-        internal const string PLUGIN_VERSION = "1.2.8.3";
+        internal const string PLUGIN_VERSION = "1.2.9.0";
+
+#if EXPERIMENTAL
+        internal const string BUILD_INFO = " experimental (commit: $COMMIT_HASH$)";
+#else
+        internal const string BUILD_INFO = "";
+#endif
 
         internal static EssCore Instance;
 
@@ -188,13 +194,8 @@ namespace Essentials.Core {
 
                 EssLang.Load();
 
-#if EXPERIMENTAL
-                const string version = PLUGIN_VERSION + " experimental-commit-$COMMIT_HASH$";
-#else
-                const string version = PLUGIN_VERSION;
-#endif
                 new [] {
-                    "Plugin version: ~white~" + version,
+                    "Plugin version: ~white~" + PLUGIN_VERSION + BUILD_INFO,
                     "Recommended Rocket version: ~white~" + ROCKET_VERSION,
                     "Recommended Unturned version: ~white~" + UNTURNED_VERSION,
                     "Author: ~white~leonardosnt",
@@ -429,8 +430,8 @@ namespace Essentials.Core {
                 Logger.LogInfo($"New version avalaible: {lastResult.LatestVersion}");
 
                 if (!string.IsNullOrEmpty(lastResult.AdditionalData)) {
-                    Newtonsoft.Json.Linq.JToken changesStr;
-                    if (Newtonsoft.Json.Linq.JObject.Parse(lastResult.AdditionalData)
+                    JToken changesStr;
+                    if (JObject.Parse(lastResult.AdditionalData)
                         .TryGetValue("changes", out changesStr)) {
                         Logger.LogInfo("====================== [ Update  Notes ] ======================");
 
