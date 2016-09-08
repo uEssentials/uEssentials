@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -132,7 +133,7 @@ namespace Essentials.Commands {
                 /clear -i -z -v = items, zombies, vehicles
             */
 
-            //var distance = -1;
+            var distance = -1;
 
             if (args.Length > 1) {
                 if (src.IsConsole) {
@@ -147,37 +148,34 @@ namespace Essentials.Commands {
                     return CommandResult.Lang("NUMBER_BETWEEN", 1, int.MaxValue);
                 }
 
-                //distance = args[1].ToInt;
+                distance = args[1].ToInt;
             }
 
             switch (args[0].ToLowerString) {
                 case "ev":
                 case "emptyvehicles":
-                    return CommandResult.Generic("This option is currently disabled.");
-                    /*if (!src.HasPermission(cmd.Permission + ".emptyvehicles")) {
+                    if (!src.HasPermission(cmd.Permission + ".emptyvehicles")) {
                         return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
-                    new Thread(() => {
-                        var toRemove = new List<uint>();
+                    src.SendMessage("This command is instable and can cause bugs.", Color.red);
 
-                        UWorld.Vehicles
-                            .Where(v => v.passengers.All(p => p?.player == null))
-                            .Where(v => {
-                                if (distance == -1) return true;
-                                return Vector3.Distance(v.transform.position, src.ToPlayer().Position) <= distance;
-                            })
-                            .Select(v => v.instanceID)
-                            .ForEach(toRemove.Add);
+                    var toRemove = new List<uint>();
+                    UWorld.Vehicles
+                        .Where(v => v.passengers.All(p => p?.player == null))
+                        .Where(v => {
+                            if (distance == -1) return true;
+                            return Vector3.Distance(v.transform.position, src.ToPlayer().Position) <= distance;
+                        })
+                        .Select(v => v.instanceID)
+                        .ForEach(toRemove.Add);
 
-                        toRemove.ForEach(id => {
-                            VehicleManager.Instance.SteamChannel.send("tellVehicleDestroy",
-                                ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id);
-                        });
+                    toRemove.ForEach(id => {
+                        VehicleManager.Instance.SteamChannel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id);
+                    });
 
-                        EssLang.Send(src, "CLEAR_EMPTY_VEHICLES", toRemove.Count);
-                    }).Start();
-                    break;*/
+                    EssLang.Send(src, "CLEAR_EMPTY_VEHICLES", toRemove.Count);
+                    break;
 
                 case "v":
                 case "vehicle":
