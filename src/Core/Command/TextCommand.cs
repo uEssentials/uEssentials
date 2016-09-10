@@ -83,7 +83,6 @@ namespace Essentials.Core.Command {
             foreach (var entry in _commands) {
                 var source = entry.IsConsoleExecutor ? UEssentials.ConsoleSource : src;
                 source.DispatchCommand(entry.Command);
-                Console.WriteLine($"'{entry.Command}'");
             }
             return CommandResult.Success();
         }
