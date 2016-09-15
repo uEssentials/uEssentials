@@ -5,10 +5,6 @@
 [![Downloads](https://img.shields.io/github/downloads/uEssentials/uEssentials/total.svg?maxAge=600)](https://github.com/uEssentials/uEssentials/releases)
 [![Download latest release here](https://img.shields.io/badge/download-latest_release here-brightgreen.svg?maxAge=2592000)](http://uessentials.github.io/uEssentials/download_latest.html)
 
-uEssentials is a modular [Rocket](http://rocketmod.net/) plugin with commands and systems to help server administration, and the fun of players.
-
-uEssentials has an easy and intuitive module system to allow the creation of commands, new systems, and so on!
-
 ---
 
 **How to Install:**
