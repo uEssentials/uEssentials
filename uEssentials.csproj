@@ -181,7 +181,6 @@
     <Compile Include="src\Commands\CommandFreeze.cs" />
     <Compile Include="src\NativeModules\Warp\Commands\CommandWarp.cs" />
     <Compile Include="src\NativeModules\Warp\Commands\CommandWarps.cs" />
-    <Compile Include="src\Commands\CommandTest.cs" />
     <Compile Include="src\Commands\CommandTpAll.cs" />
     <Compile Include="src\Commands\CommandKickAll.cs" />
     <Compile Include="src\Commands\CommandUnfreeze.cs" />
