@@ -44,7 +44,7 @@ namespace Essentials.Core.Command {
         public AllowedSource AllowedSource { get; set; }
 
         private readonly List<CommandEntry> _commands;
-        private readonly List<TextEntry> _texts; 
+        private readonly List<TextEntry> _texts;
 
         public TextCommand(TextCommands.TextCommandData data) {
             _texts = new List<TextEntry>();
@@ -78,13 +78,17 @@ namespace Essentials.Core.Command {
 
         public CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             foreach (var entry in _texts) {
-                src.SendMessage(entry.Text, entry.Color);
+                src.SendMessage(ReplaceVariables(entry.Text, src, args), entry.Color);
             }
             foreach (var entry in _commands) {
                 var source = entry.IsConsoleExecutor ? UEssentials.ConsoleSource : src;
-                source.DispatchCommand(entry.Command);
+                source.DispatchCommand(ReplaceVariables(entry.Command, src, args));
             }
             return CommandResult.Success();
+        }
+
+        private string ReplaceVariables(string text, ICommandSource src, ICommandArgs args) {
+            return text.Replace("%sender%", src.DisplayName);
         }
 
         private struct TextEntry {
