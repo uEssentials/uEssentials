@@ -260,10 +260,6 @@ namespace Essentials.Commands {
         private static bool IsEssentialsCommand(ICommand cmd) {
             var asm = cmd.GetType().Assembly;
 
-            if (cmd is CommandTest) {
-                return false;
-            }
-
             if (cmd.GetType() == typeof(MethodCommand)) {
                 asm = ((MethodCommand) cmd).Owner.Assembly;
             }
