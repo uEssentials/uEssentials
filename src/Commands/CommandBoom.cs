@@ -28,6 +28,7 @@ using UnityEngine;
 using SDG.Unturned;
 using Essentials.Common;
 using System.Linq;
+using Steamworks;
 
 namespace Essentials.Commands {
 
@@ -91,8 +92,10 @@ namespace Essentials.Commands {
         }
 
         private static void Explode(Vector3 pos) {
+            const float DAMAGE = 200;
+
             EffectManager.sendEffect(20, EffectManager.INSANE, pos);
-            DamageTool.explode(pos, 10f, EDeathCause.GRENADE, 200, 200, 200, 200, 200, 200, 200, 200);
+            DamageTool.explode(pos, 10f, EDeathCause.GRENADE, CSteamID.Nil, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE);
         }
 
     }
