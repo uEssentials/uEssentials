@@ -63,8 +63,8 @@ namespace Essentials.Core {
     public sealed class EssCore : RocketPlugin {
 
         internal const string ROCKET_VERSION = "4.9.8.2";
-        internal const string UNTURNED_VERSION = "3.17.0.0";
-        internal const string PLUGIN_VERSION = "1.2.9.1";
+        internal const string UNTURNED_VERSION = "3.17.1.0";
+        internal const string PLUGIN_VERSION = "1.2.9.2";
 
 #if EXPERIMENTAL
         internal const string BUILD_INFO = " experimental (commit: $COMMIT_HASH$)";
@@ -367,27 +367,27 @@ namespace Essentials.Core {
             TaskExecutor.Stop();
         }
 
-        // REM: test
         internal static int _errCount;
+
         internal static void TriggerGaData(string path) {
             if (_errCount > 10) {
                 return;
             }
-            try {
-                Task.Create()
-                    .Id($"TriggerGaData '{path}'")
-                    .Async()
-                    .Action(() => {
+            Task.Create()
+                .Id($"TriggerGaData '{path}'")
+                .Async()
+                .Action(() => {
+                    try {
                         using (var wc = new System.Net.WebClient()) {
                             var data = wc.DownloadData($"https://ga-beacon.appspot.com/UA-81494650-1/{path}");
                             Debug.Print($"TriggerGaData: Success (data_len: {data.Length})");
                         }
-                    })
-                    .Submit();
-            } catch (Exception ex) {
-                Debug.Print(ex.ToString());
-                _errCount++;
-            }
+                    } catch (Exception ex) {
+                        Debug.Print(ex.ToString());
+                        EssCore._errCount++;
+                    }
+                })
+                .Submit();
         }
 
         private static void ReloadCallback(string command) {
