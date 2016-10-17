@@ -232,5 +232,6 @@
     "WARP_SET": "<cyan>Варп '{0}' установлен.",
     "WARP_TELEPORTED": "Телепортированы на варп '{0}'.",
     "WITHOUT_BED": "<yellow>У Вас нет кровати для телепортации.",
-    "REQUEST_URL_SUCCESS": "You have requested '{0}' to open url '{1}'"
+    "REQUEST_URL_SUCCESS": "You have requested '{0}' to open url '{1}'",
+    "WARP_ALREADY_WAITING": "You already waiting to be teleported."
 }

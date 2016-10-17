@@ -68,6 +68,10 @@ namespace Essentials.NativeModules.Warp.Commands {
                 return CommandResult.Lang("CANNOT_TELEPORT_DRIVING");
             }
 
+            if (Delay.ContainsKey(player.CSteamId.m_SteamID)) {
+                return CommandResult.Lang("WARP_ALREADY_WAITING");
+            }
+
             var dest = WarpModule.Instance.WarpManager.GetByName(args[0].ToString());
             var cooldown = UEssentials.Config.Warp.TeleportDelay;
 
