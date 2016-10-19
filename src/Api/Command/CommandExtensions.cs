@@ -49,9 +49,15 @@ namespace Essentials.Api.Command {
             return null;
         }
 
-        public static bool IsInRange(this ICommandArgument src, int min, int max) {
+        /// <summary>
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="minInclusive">Maximum value</param>
+        /// <param name="maxInclusive">Minimum value</param>
+        /// <returns></returns>
+        public static bool IsInRange(this ICommandArgument src, int minInclusive, int maxInclusive) {
             var val = src.ToInt;
-            return val >= min && val <= max;
+            return val >= minInclusive && val <= maxInclusive;
         }
 
     }
