@@ -7,6 +7,10 @@
 
 ---
 
+Versão em Português (Brasil) do README.md [AQUI](https://github.com/uEssentials/uEssentials/blob/master/README_PT-BR.md)
+
+---
+
 **How to Install:**
 
 - Download the latest [release](https://github.com/uEssentials/uEssentials/releases/latest).
