@@ -607,13 +607,23 @@ namespace Essentials.Commands {
             Name = "shutdown",
             Aliases = new[] { "stop" },
             Description = "Shutdown server",
-            Usage = "<reason>"
+            Usage = "<delay in seconds> <reason>"
         )]
         private CommandResult ShutdownCommand(ICommandSource src, ICommandArgs args) {
-            if (!args.IsEmpty) {
-                Commander.execute(CSteamID.Nil, "kickall " + args.Join(0));
+            int delay;
+            if (!args[0].IsInt) {
+                return CommandResult.Lang("INVALID_NUMBER", args[0]);
+            } else if ((delay = args[0].ToInt) < 0) {
+                delay = 0;
             }
-            Provider.shutdown();
+            // Will only send the messages if delay > 0
+            if (delay > 0) {
+                if (args.Length > 1) {
+                    UServer.Broadcast(args.Join(1)); // Broadcast <reason>
+                }
+                EssLang.Send(src, "SHUTDOWN_DELAY_SENDER", TimeUtil.FormatSeconds((uint) delay));
+            }
+            Provider.shutdown(delay);
             return CommandResult.Success();
         }
 
