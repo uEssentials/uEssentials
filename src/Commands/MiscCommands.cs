@@ -24,7 +24,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -33,7 +32,6 @@ using Essentials.Common;
 using Essentials.Core.Command;
 using Essentials.I18n;
 using SDG.Unturned;
-using Steamworks;
 using UnityEngine;
 using Essentials.Common.Util;
 using Essentials.Components.Player;

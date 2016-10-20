@@ -22,7 +22,6 @@
 #endregion
 
 using System;
-using Essentials.Api;
 using Rocket.Core;
 using Rocket.Core.RCON;
 

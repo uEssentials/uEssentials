@@ -37,7 +37,6 @@ using Essentials.Common.Util;
 using Essentials.Components.Player;
 using Essentials.Configuration;
 using Essentials.Core;
-using Essentials.Economy;
 using Essentials.I18n;
 using Rocket.API;
 using Rocket.Unturned.Player;
