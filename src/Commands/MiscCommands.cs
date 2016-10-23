@@ -608,11 +608,13 @@ namespace Essentials.Commands {
             Usage = "<delay in seconds> <reason>"
         )]
         private CommandResult ShutdownCommand(ICommandSource src, ICommandArgs args) {
-            int delay;
-            if (!args[0].IsInt) {
-                return CommandResult.Lang("INVALID_NUMBER", args[0]);
-            } else if ((delay = args[0].ToInt) < 0) {
-                delay = 0;
+            int delay = 0;
+            if (args.Length > 0) {
+                if (!args[0].IsInt) {
+                    return CommandResult.Lang("INVALID_NUMBER", args[0]);
+                } else if ((delay = args[0].ToInt) < 0) {
+                    delay = 0;
+                }
             }
             // Will only send the messages if delay > 0
             if (delay > 0) {
