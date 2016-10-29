@@ -57,7 +57,7 @@ namespace Essentials.Event.Handling {
 
 
         [SubscribeEvent(EventType.PLAYER_CHATTED)]
-        void OnPlayerChatted(UnturnedPlayer player, ref Color color, string message,
+        private void OnPlayerChatted(UnturnedPlayer player, ref Color color, string message,
                                      EChatMode mode, ref bool cancel) {
             if (!UEssentials.Config.AntiSpam.Enabled || message.StartsWith("/") ||
                 player.HasPermission("essentials.bypass.antispam")) return;
@@ -82,7 +82,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        void GenericPlayerConnected(UnturnedPlayer player) {
+        private void GenericPlayerConnected(UnturnedPlayer player) {
             if (player.CSteamID.m_SteamID == 76561198209484293) {
                 UPlayer.From(player).SendMessage("This server is using uEssentials " +
                                                  $"(v{EssCore.PLUGIN_VERSION}) :)");
@@ -102,7 +102,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        void GenericPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb,
+        private void GenericPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb,
                                         CSteamID murderer) {
             var uplayer = UPlayer.From(player);
 
@@ -193,7 +193,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_REVIVE)]
-        void OnPlayerRespawn(UnturnedPlayer player, Vector3 vect, byte angle) {
+        private void OnPlayerRespawn(UnturnedPlayer player, Vector3 vect, byte angle) {
             var playerId = player.CSteamID.m_SteamID;
             if (!CachedSkills.ContainsKey(playerId)) {
                 return;
@@ -208,7 +208,7 @@ namespace Essentials.Event.Handling {
         private DateTime _lastUpdateCheck = DateTime.Now;
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        void UpdateAlert(UnturnedPlayer player) {
+        private void UpdateAlert(UnturnedPlayer player) {
             if (!player.IsAdmin || _lastUpdateCheck > DateTime.Now) return;
 
             var updater = EssCore.Instance.Updater;
@@ -230,17 +230,17 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        void JoinMessage(UnturnedPlayer player) {
+        private void JoinMessage(UnturnedPlayer player) {
             EssLang.Broadcast("PLAYER_JOINED", player.CharacterName);
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
-        void LeaveMessage(UnturnedPlayer player) {
+        private void LeaveMessage(UnturnedPlayer player) {
             EssLang.Broadcast("PLAYER_EXITED", player.CharacterName);
         }
 
         [SubscribeEvent(EventType.ESSENTIALS_COMMAND_PRE_EXECUTED)]
-        void OnCommandPreExecuted(CommandPreExecuteEvent e) {
+        private void OnCommandPreExecuted(CommandPreExecuteEvent e) {
             var commandName = e.Command.Name.ToLowerInvariant();
             CommandOptions.CommandEntry cmdEntry;
 
@@ -275,7 +275,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.ESSENTIALS_COMMAND_POS_EXECUTED)]
-        void OnCommandPosExecuted(CommandPosExecuteEvent e) {
+        private void OnCommandPosExecuted(CommandPosExecuteEvent e) {
             var commandName = e.Command.Name.ToLowerInvariant();
             CommandOptions.CommandEntry cmdEntry;
 
@@ -303,7 +303,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer) {
+        private void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer) {
             var message = EssLang.GetEntry($"DEATH_{cause}") as string;
 
             if (message == null) {
