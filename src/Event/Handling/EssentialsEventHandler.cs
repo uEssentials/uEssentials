@@ -315,7 +315,7 @@ namespace Essentials.Event.Handling {
             var color = ColorUtil.GetColorFromString(ref message);
 
             arguments[0] = player.CharacterName;
-            arguments[1] = limb;
+            arguments[1] = TranslateLimb(limb);
             if (hasKiller) arguments[2] = UPlayer.From(killer)?.CharacterName ?? "?";
 
             UServer.Broadcast(string.Format(message, arguments), color);
