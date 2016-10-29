@@ -315,7 +315,7 @@ namespace Essentials.Event.Handling {
             var color = ColorUtil.GetColorFromString(ref message);
 
             arguments[0] = player.CharacterName;
-            arguments[1] = TranslateLimb(limb);
+            arguments[1] = EssLang.Translate($"LIMB_{limb}") ?? "?";
             if (hasKiller) arguments[2] = UPlayer.From(killer)?.CharacterName ?? "?";
 
             UServer.Broadcast(string.Format(message, arguments), color);
@@ -387,38 +387,6 @@ namespace Essentials.Event.Handling {
                 if (val != default(ulong)) {
                     requests.Remove(val);
                 }
-            }
-        }
-
-        private static string TranslateLimb(ELimb limb) {
-            switch (limb) {
-                case ELimb.SKULL:
-                    return EssLang.Translate("LIMB_HEAD");
-
-                case ELimb.LEFT_HAND:
-                case ELimb.RIGHT_HAND:
-                case ELimb.LEFT_ARM:
-                case ELimb.RIGHT_ARM:
-                    return EssLang.Translate("LIMB_ARM");
-
-                case ELimb.LEFT_FOOT:
-                case ELimb.RIGHT_FOOT:
-                case ELimb.LEFT_LEG:
-                case ELimb.RIGHT_LEG:
-                    return EssLang.Translate("LIMB_LEG");
-
-                case ELimb.SPINE:
-                    return EssLang.Translate("LIMB_TORSO");
-
-                //TODO: Add
-                case ELimb.LEFT_BACK:
-                case ELimb.RIGHT_BACK:
-                case ELimb.LEFT_FRONT:
-                case ELimb.RIGHT_FRONT:
-                    return "?";
-
-                default:
-                    return "?";
             }
         }
 

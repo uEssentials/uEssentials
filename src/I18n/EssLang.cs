@@ -125,6 +125,10 @@ namespace Essentials.I18n {
             }
         }
 
+        public static string Translate(string key) {
+            return GetEntry(key) as string;
+        }
+
         public static string Translate(string key, params object[] args) {
             var raw = GetEntry(key) as string;
             return raw == null ? null : string.Format(raw, args);
