@@ -79,6 +79,7 @@
     "DEATH_VEHICLE": "{0} murio en un accidente!",
     "DEATH_WATER": "{0} murio deshidratado!",
     "DEATH_ZOMBIE": "{0} fue apaleado por un zombie!",
+    "DEATH_MISSILE": "{0} has killed by a missile!",
     "DEATH_CHARGE": "{0} has killed by a charge!",
     "DEATH_SPLASH": "{0} has killed by splash!",
     "DEATH_SENTRY": "{0} has killed by a sentry!",
@@ -242,6 +243,5 @@
     "WITHOUT_BED": "No tienes una cama para teletransportarte.",
     "REQUEST_URL_SUCCESS": "Enviaste a '{0}' un enlace: '{1}' .",
     "WARP_ALREADY_WAITING": "You already waiting to be teleported.",
-    "SHUTDOWN_DELAY_SENDER": "Server will shutdown in {0}",
-    "DEATH_MISSILE": "{0} has killed by a missile!"
+    "SHUTDOWN_DELAY_SENDER": "Server will shutdown in {0}"
 }
