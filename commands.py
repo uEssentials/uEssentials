@@ -21,11 +21,10 @@
 
 """
 
-import sys, os
+import sys, os, shutil
 
-def copy_file(orig, dest):
-    # TODO: change to python function
-    os.system("copy /y %s %s"%(orig, dest))
+# Rocket Plugins Folder
+PLUGINS_FOLDER = "C:\\Users\\Leonardo\\Documents\\Unturned\\Rocket\\All\\Unturned\\Servers\\MyFirstRocketServer\Rocket\\Plugins\\"
 
 def build(args):
     print("Build() %s"%args)
@@ -63,9 +62,7 @@ def build(args):
             print("Invalid build type: %s"%build_type)
 
 def copy_to_plugins():
-    # Rocket Plugins Folder
-    plugins_folder = "C:\\Users\\Leonardo\\Documents\\Unturned\\Rocket\\All\\Unturned\\Servers\\MyFirstRocketServer\Rocket\\Plugins\\"
-    copy_file("%s\\bin\\uEssentials.dll"%sys.path[0], "%suEssentials.dll"%plugins_folder)
+    shutil.copy2("%s\\bin\\uEssentials.dll"%sys.path[0], "%suEssentials.dll"%PLUGINS_FOLDER)
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
@@ -83,5 +80,5 @@ if __name__ == '__main__':
         copy_to_plugins()
     else:
         print("Invalid option %s"%option)
-    
+
     sys.exit(0)
