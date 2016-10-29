@@ -307,7 +307,6 @@ namespace Essentials.Event.Handling {
             var message = EssLang.GetEntry($"DEATH_{cause}") as string;
 
             if (message == null) {
-                System.Console.WriteLine("null message");
                 return;
             }
 
