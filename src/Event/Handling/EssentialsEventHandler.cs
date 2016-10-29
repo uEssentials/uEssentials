@@ -304,123 +304,28 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
         void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer) {
-            switch (cause) {
-                case EDeathCause.BLEEDING:
-                    EssLang.Broadcast("DEATH_BLEEDING", player.CharacterName);
-                    break;
+            var message = EssLang.GetEntry($"DEATH_{cause}") as string;
 
-                case EDeathCause.BONES:
-                    EssLang.Broadcast("DEATH_BONES", player.CharacterName);
-                    break;
-
-                case EDeathCause.FREEZING:
-                    EssLang.Broadcast("DEATH_FREEZING", player.CharacterName);
-                    break;
-
-                case EDeathCause.BURNING:
-                    EssLang.Broadcast("DEATH_BURNING", player.CharacterName);
-                    break;
-
-                case EDeathCause.FOOD:
-                    EssLang.Broadcast("DEATH_FOOD", player.CharacterName);
-                    break;
-
-                case EDeathCause.WATER:
-                    EssLang.Broadcast("DEATH_WATER", player.CharacterName);
-                    break;
-
-                case EDeathCause.GUN:
-                    var pKiller = UPlayer.From(killer)?.CharacterName ?? "?";
-                    EssLang.Broadcast("DEATH_GUN", player.CharacterName, TranslateLimb(limb), pKiller);
-                    break;
-
-                case EDeathCause.MELEE:
-                    pKiller = UPlayer.From(killer)?.CharacterName ?? "?";
-                    EssLang.Broadcast("DEATH_MELEE", player.CharacterName, TranslateLimb(limb), pKiller);
-                    break;
-
-                case EDeathCause.ZOMBIE:
-                    EssLang.Broadcast("DEATH_ZOMBIE", player.CharacterName);
-                    break;
-
-                case EDeathCause.ANIMAL:
-                    EssLang.Broadcast("DEATH_ANIMAL", player.CharacterName);
-                    break;
-
-                case EDeathCause.SUICIDE:
-                    EssLang.Broadcast("DEATH_SUICIDE", player.CharacterName);
-                    break;
-
-                case EDeathCause.KILL:
-                    EssLang.Broadcast("DEATH_KILL", player.CharacterName);
-                    break;
-
-                case EDeathCause.INFECTION:
-                    EssLang.Broadcast("DEATH_INFECTION", player.CharacterName);
-                    break;
-
-                case EDeathCause.PUNCH:
-                    pKiller = UPlayer.From(killer)?.CharacterName ?? "?";
-                    EssLang.Broadcast("DEATH_PUNCH", player.CharacterName, TranslateLimb(limb), pKiller);
-                    break;
-
-                case EDeathCause.BREATH:
-                    EssLang.Broadcast("DEATH_BREATH", player.CharacterName);
-                    break;
-
-                case EDeathCause.ROADKILL:
-                    pKiller = UPlayer.From(killer)?.CharacterName ?? "?";
-                    EssLang.Broadcast("DEATH_ROADKILL", pKiller, player.CharacterName);
-                    break;
-
-                case EDeathCause.VEHICLE:
-                    EssLang.Broadcast("DEATH_VEHICLE", player.CharacterName);
-                    break;
-
-                case EDeathCause.GRENADE:
-                    EssLang.Broadcast("DEATH_GRENADE", player.CharacterName);
-                    break;
-
-                case EDeathCause.SHRED:
-                    EssLang.Broadcast("DEATH_SHRED", player.CharacterName);
-                    break;
-
-                case EDeathCause.LANDMINE:
-                    EssLang.Broadcast("DEATH_LANDMINE", player.CharacterName);
-                    break;
-
-                case EDeathCause.ARENA:
-                    EssLang.Broadcast("DEATH_ARENA", player.CharacterName);
-                    break;
-
-                //TODO add on lang
-                case EDeathCause.MISSILE:
-                    break;
-
-                case EDeathCause.CHARGE:
-                    break;
-
-                case EDeathCause.SPLASH:
-                    break;
-
-                case EDeathCause.SENTRY:
-                    break;
-
-                case EDeathCause.ACID:
-                    break;
-
-                case EDeathCause.BOULDER:
-                    break;
-
-                case EDeathCause.BURNER:
-                    break;
+            if (message == null) {
+                System.Console.WriteLine("null message");
+                return;
             }
+
+            var hasKiller = killer != CSteamID.Nil;
+            var arguments = new object[hasKiller ? 3 : 2];
+            var color = ColorUtil.GetColorFromString(ref message);
+
+            arguments[0] = player.CharacterName;
+            arguments[1] = limb;
+            if (hasKiller) arguments[2] = UPlayer.From(killer)?.CharacterName ?? "?";
+
+            UServer.Broadcast(string.Format(message, arguments), color);
         }
 
         /* Commands eventhandlers */
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
-        void HomePlayerMove(UnturnedPlayer player, Vector3 newPosition) {
+        private void HomePlayerMove(UnturnedPlayer player, Vector3 newPosition) {
             if (!UEssentials.Config.Home.CancelTeleportWhenMove || !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
@@ -434,7 +339,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        void BackPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+        private void BackPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
             if (!player.HasPermission("essentials.command.back")) {
                 return;
             }
@@ -449,21 +354,21 @@ namespace Essentials.Event.Handling {
         private static readonly HashSet<ulong> DisconnectedFrozen = new HashSet<ulong>();
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        void FreezePlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+        private void FreezePlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
             if (UEssentials.Config.UnfreezeOnDeath && player.GetComponent<FrozenPlayer>() != null) {
                 UnityEngine.Object.Destroy(player.GetComponent<FrozenPlayer>());
             }
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
-        void FreezePlayerDisconnect(UnturnedPlayer player) {
+        private void FreezePlayerDisconnect(UnturnedPlayer player) {
             if (!UEssentials.Config.UnfreezeOnQuit && player.GetComponent<FrozenPlayer>() != null) {
                 DisconnectedFrozen.Add(player.CSteamID.m_SteamID);
             }
         }
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        void FreezePlayerConnected(UnturnedPlayer player) {
+        private void FreezePlayerConnected(UnturnedPlayer player) {
             if (!UEssentials.Config.UnfreezeOnQuit && DisconnectedFrozen.Contains(player.CSteamID.m_SteamID)) {
                 UPlayer.From(player).AddComponent<FrozenPlayer>();
                 DisconnectedFrozen.Remove(player.CSteamID.m_SteamID);
@@ -471,7 +376,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
-        void TpaPlayerDisconnect(UnturnedPlayer player) {
+        private void TpaPlayerDisconnect(UnturnedPlayer player) {
             var playerId = player.CSteamID.m_SteamID;
             var requests = CommandTpa.Requests;
 
@@ -486,7 +391,7 @@ namespace Essentials.Event.Handling {
             }
         }
 
-        static string TranslateLimb(ELimb limb) {
+        private static string TranslateLimb(ELimb limb) {
             switch (limb) {
                 case ELimb.SKULL:
                     return EssLang.Translate("LIMB_HEAD");

@@ -58,6 +58,7 @@
     "COMMAND_COOLDOWN": "<yellow>You must wait {0} to use this command again.",
     "DAY": "day",
     "DAYS": "days",
+
     "DEATH_ANIMAL": "{0} has been mauled by a animal!",
     "DEATH_ARENA": "{0} has been killed in the arena!",
     "DEATH_BLEEDING": "{0} has bled to death!",
@@ -79,6 +80,17 @@
     "DEATH_VEHICLE": "{0} has been blown up by a vehicle!",
     "DEATH_WATER": "{0} has died from dehydration!",
     "DEATH_ZOMBIE": "{0} has been mauled by a zombie!",
+    /* Need to be improved... I need help */
+    "DEATH_MISSILE": "{0} has killed by a missile!",
+    "DEATH_CHARGE": "{0} has killed by a charge!",
+    "DEATH_SPLASH": "{0} has killed by splash!",
+    "DEATH_SENTRY": "{0} has killed by a sentry!",
+    "DEATH_ACID": "{0} has killed by acid zombie!",
+    "DEATH_BOULDER": "{0} has killed by a boulder zombie!",
+    "DEATH_BURNER": "{0} has killed by a burner zombie!",
+    "DEATH_SPIT": "{0} has killed by a spit!",
+    "DEATH_SPARK": "{0} has killed by a spark!",
+
     "DELETED_KIT": "<magenta>You deleted the '{0}' kit.",
     "DESCENDED": "You descended {0} 'meters'",
     "DROPKIT_LOCATION": "Dropped kit '{0}' at (x: {1:0.00}, y: {2:0.00}, z: {3:0.00})",

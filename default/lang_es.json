@@ -79,6 +79,14 @@
     "DEATH_VEHICLE": "{0} murio en un accidente!",
     "DEATH_WATER": "{0} murio deshidratado!",
     "DEATH_ZOMBIE": "{0} fue apaleado por un zombie!",
+    "DEATH_CHARGE": "{0} has killed by a charge!",
+    "DEATH_SPLASH": "{0} has killed by splash!",
+    "DEATH_SENTRY": "{0} has killed by a sentry!",
+    "DEATH_ACID": "{0} has killed by acid zombie!",
+    "DEATH_BOULDER": "{0} has killed by a boulder zombie!",
+    "DEATH_BURNER": "{0} has killed by a burner zombie!",
+    "DEATH_SPIT": "{0} has killed by a spit!",
+    "DEATH_SPARK": "{0} has killed by a spark!",
     "DELETED_KIT": "<yellow>Has eliminado el kit '{0}'.",
     "DESCENDED": "Has descendido {0} 'metros'.",
     "DROPKIT_LOCATION": "Dejaste el kit '{0}' en (x: {1:0.00}, y: {2:0.00}, z: {3:0.00})",
@@ -234,5 +242,6 @@
     "WITHOUT_BED": "No tienes una cama para teletransportarte.",
     "REQUEST_URL_SUCCESS": "Enviaste a '{0}' un enlace: '{1}' .",
     "WARP_ALREADY_WAITING": "You already waiting to be teleported.",
-    "SHUTDOWN_DELAY_SENDER": "Server will shutdown in {0}"
+    "SHUTDOWN_DELAY_SENDER": "Server will shutdown in {0}",
+    "DEATH_MISSILE": "{0} has killed by a missile!"
 }
