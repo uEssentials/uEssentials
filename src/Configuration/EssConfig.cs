@@ -51,6 +51,7 @@ namespace Essentials.Configuration {
         public bool EnablePollRunningMessage;
         public int PollRunningMessageCooldown;
         public int ServerFrameRate;
+        public int BackDelay;
 
         public ushort ItemSpawnLimit;
 
@@ -75,6 +76,8 @@ namespace Essentials.Configuration {
 
         public override void LoadDefaults() {
             Locale = "en";
+
+            BackDelay = 10;
 
             UnfreezeOnDeath = true;
             UnfreezeOnQuit = true;

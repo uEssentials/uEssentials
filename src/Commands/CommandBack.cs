@@ -21,11 +21,13 @@
 */
 #endregion
 
+using System;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using UnityEngine;
 using Essentials.I18n;
 using Essentials.Api;
+using Essentials.Common.Util;
 using Essentials.Event.Handling;
 
 namespace Essentials.Commands {
@@ -38,16 +40,30 @@ namespace Essentials.Commands {
     )]
     public class CommandBack : EssCommand {
 
+        internal const string META_KEY_DELAY = "back_delay";
+        internal const string META_KEY_POS = "back_pos";
+
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
+            var playerMeta = player.Metadata;
 
-            if (!player.Metadata.Has("back_pos")) {
+            if (!playerMeta.Has(META_KEY_POS) || !playerMeta.Has(META_KEY_DELAY)) {
                 return CommandResult.Lang("NOT_DIED_YET");
             }
 
-            var backPosition = player.Metadata.Get<Vector3>("back_pos");
+            var deathTime = playerMeta.Get<DateTime>(META_KEY_DELAY);
+            var delta = UEssentials.Config.BackDelay - (DateTime.Now - deathTime).Seconds;
+
+            if (delta > 0 && !player.HasPermission($"essentials.bypass.backdelay")) {
+                return CommandResult.Lang("BACK_DELAY", TimeUtil.FormatSeconds((uint) delta));
+            }
+
+            var backPosition = playerMeta.Get<Vector3>(META_KEY_POS);
             src.ToPlayer().Teleport(backPosition);
             EssLang.Send(src, "RETURNED");
+
+            playerMeta.Remove(META_KEY_DELAY);
+            playerMeta.Remove(META_KEY_POS);
 
             return CommandResult.Success();
         }

@@ -344,7 +344,8 @@ namespace Essentials.Event.Handling {
             }
 
             UPlayer.TryGet(player, p => {
-                p.Metadata["back_pos"] = p.Position;
+                p.Metadata[CommandBack.META_KEY_DELAY] = DateTime.Now;
+                p.Metadata[CommandBack.META_KEY_POS] = p.Position;
             });
         }
 
