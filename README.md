@@ -33,11 +33,6 @@ Versão em Português (Brasil) do README.md [AQUI](https://github.com/uEssential
 
 ---
 
-**Videos**
-- Russian: https://www.youtube.com/watch?v=HPNWKFj_tqw
-
----
-
 **Do you love my work?**
 
   _[Consider donating! :heart:](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY)_
