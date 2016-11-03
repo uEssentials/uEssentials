@@ -30,12 +30,14 @@ def build(args):
     print("Build() %s"%args)
     if len(args) == 0:
         # Development build
-        os.system("msbuild /nologo")
+        os.system("msbuild /nologo /p:Configuration=Debug")
     else:
         build_type = args[0]
         # Release build
-        if build_type == "RELEASE":
-            os.system("msbuild /p:DefineConstants="" /t:Rebuild,Clean")
+        if build_type == "REBUILD":
+            os.system("msbuild /nologo /p:Configuration=Debug /t:Rebuild,Clean")
+        elif build_type == "RELEASE":
+            os.system("msbuild /p:DefineConstants="" /p:Configuration=Release /t:Rebuild,Clean")
         elif build_type == "EXPERIMENTAL":
             # Check if has EXPERIMENTAL_HASH
             if len(args) > 2 and args[1] == "EXPERIMENTAL_HASH":
@@ -53,7 +55,7 @@ def build(args):
                 file_reader.close()
                 file_writer.close()
 
-                os.system("msbuild /p:DefineConstants=\"EXPERIMENTAL;EXPERIMENTAL_HASH\" /t:Rebuild,Clean")
+                os.system("msbuild /p:DefineConstants=\"EXPERIMENTAL;EXPERIMENTAL_HASH\" /p:Configuration=Release /t:Rebuild,Clean")
                 os.remove("src\\Core\\EssCore.cs")
                 os.rename("src\\Core\\EssCore.cs.old", "src\\Core\\EssCore.cs")
             else:
