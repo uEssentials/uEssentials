@@ -35,8 +35,8 @@ namespace Essentials.Api.Unturned {
         public static IEnumerable<UPlayer> Players => EssCore.Instance.ConnectedPlayers.Values;
 
         public static byte MaxPlayers {
-            get { return Provider.MaxPlayers; }
-            set { Provider.MaxPlayers = value; }
+            get { return Provider.maxPlayers; }
+            set { Provider.maxPlayers = value; }
         }
 
         public static string ServerName {

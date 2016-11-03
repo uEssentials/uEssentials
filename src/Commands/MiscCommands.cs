@@ -169,7 +169,7 @@ namespace Essentials.Commands {
                         .ForEach(toRemove.Add);
 
                     toRemove.ForEach(id => {
-                        VehicleManager.Instance.SteamChannel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id);
+                        VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id);
                     });
 
                     EssLang.Send(src, "CLEAR_EMPTY_VEHICLES", toRemove.Count);
@@ -296,7 +296,7 @@ namespace Essentials.Commands {
             if (args.Length == 0) {
                 var equipment = src.ToPlayer().Equipment;
 
-                if (equipment.HoldingItemID == 0) {
+                if (equipment.itemID == 0) { // TODO: Check
                     return CommandResult.Lang("EMPTY_HANDS");
                 }
 
@@ -309,9 +309,9 @@ namespace Essentials.Commands {
             }
 
             var color = Color.yellow;
-            var name = WrapMessage(src, asset.Name);
-            var description = WrapMessage(src, asset.Description);
-            var type = WrapMessage(src, asset.ItemType.ToString());
+            var name = WrapMessage(src, asset.name);
+            var description = WrapMessage(src, asset.itemDescription);
+            var type = WrapMessage(src, asset.type.ToString());
 
             src.SendMessage($"Name: {name}", color);
             src.SendMessage($"Description: {description}", color);
@@ -657,7 +657,7 @@ namespace Essentials.Commands {
 
                     VehicleTool.giveVehicle(src.ToPlayer().UnturnedPlayer, id);
 
-                    EssLang.Send(src, "RECEIVED_VEHICLE", optAsset.Value.Name, id);
+                    EssLang.Send(src, "RECEIVED_VEHICLE", optAsset.Value.name, id);
                     break;
 
                 case 2:
@@ -678,14 +678,14 @@ namespace Essentials.Commands {
                             VehicleTool.giveVehicle(p.UnturnedPlayer, vehAsset.id);
                         });
 
-                        EssLang.Send(src, "GIVEN_VEHICLE_ALL", vehAsset.Name, vehAsset.Id);
+                        EssLang.Send(src, "GIVEN_VEHICLE_ALL", vehAsset.name, vehAsset.id);
                     } else if (!args[0].IsValidPlayerIdentifier) {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     } else {
                         var target = args[0].ToPlayer;
                         VehicleTool.giveVehicle(target.UnturnedPlayer, vehAsset.id);
 
-                        EssLang.Send(src, "GIVEN_VEHICLE", vehAsset.Name, vehAsset.Id, target.DisplayName);
+                        EssLang.Send(src, "GIVEN_VEHICLE", vehAsset.name, vehAsset.id, target.DisplayName);
                     }
                     break;
 
@@ -829,10 +829,10 @@ namespace Essentials.Commands {
                 return CommandResult.ShowUsage();
             }
             if (toggleVal.Value) {
-                Provider.PvP = true;
+                Provider.isPvP = true;
                 EssLang.Send(src, "PVP_ENABLED");
             } else {
-                Provider.PvP = false;
+                Provider.isPvP = false;
                 EssLang.Send(src, "PVP_DISABLED");
             }
             return CommandResult.Success();
@@ -901,7 +901,7 @@ namespace Essentials.Commands {
 
             if (UEssentials.Config.GiveItemBlacklist.Contains(optAsset.Value.id) &&
                 !src.HasPermission("essentials.bypass.blacklist.item")) {
-                EssLang.Send(src, "BLACKLISTED_ITEM", $"{optAsset.Value.itemName} ({optAsset.Value.Id})");
+                EssLang.Send(src, "BLACKLISTED_ITEM", $"{optAsset.Value.itemName} ({optAsset.Value.id})");
                 return;
             }
 
@@ -925,8 +925,8 @@ namespace Essentials.Commands {
             var item = new Item(asset.id, true);
 
             if (asset is ItemFuelAsset) {
-                item.Metadata[0] = 244;
-                item.Metadata[1] = 1;
+                item.metadata[0] = 244;
+                item.metadata[1] = 1;
             }
 
             if (!src.HasPermission("essentials.bypass.itemlimit") && amt > UEssentials.Config.ItemSpawnLimit) {
@@ -936,7 +936,7 @@ namespace Essentials.Commands {
 
             if (allPlayers) {
                 UServer.Players.ForEach(playersToReceive.Add);
-                EssLang.Send(src, "GIVEN_ITEM_ALL", amt, asset.Name, asset.Id);
+                EssLang.Send(src, "GIVEN_ITEM_ALL", amt, asset.name, asset.id);
             } else {
                 playersToReceive.Add(target);
 
@@ -944,14 +944,14 @@ namespace Essentials.Commands {
                     goto give2;
                 }
 
-                EssLang.Send(src, "GIVEN_ITEM", amt, asset.Name, asset.Id, target.CharacterName);
+                EssLang.Send(src, "GIVEN_ITEM", amt, asset.name, asset.id, target.CharacterName);
             }
 
             give2:
             playersToReceive.ForEach(p => {
                 var success = p.GiveItem(item, amt, true);
 
-                EssLang.Send(p, "RECEIVED_ITEM", amt, asset.Name, asset.Id);
+                EssLang.Send(p, "RECEIVED_ITEM", amt, asset.name, asset.id);
 
                 if (!success) {
                     EssLang.Send(p, "INVENTORY_FULL");

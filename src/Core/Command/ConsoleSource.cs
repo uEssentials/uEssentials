@@ -87,7 +87,7 @@ namespace Essentials.Core.Command {
                 command = command.Remove(0);
             }
 
-            CommandWindow.ConsoleInput.onInputText?.Invoke(command);
+            CommandWindow.input.onInputText?.Invoke(command);
         }
 
         public override string ToString() {

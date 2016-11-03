@@ -38,7 +38,7 @@ namespace Essentials.Components.Player {
         }
 
         protected override void SafeFixedUpdate() {
-            var holdId = _equip.HoldingItemID;
+            var holdId = _equip.itemID; //TODO: check also (HoldingItemId)
             if (holdId == 0) return;
 
             /*

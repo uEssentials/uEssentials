@@ -45,10 +45,10 @@ namespace Essentials.Commands {
             string name;
 
             if (args[0].Equals(name = "*console*")) {
-                CommandWindow.ConsoleInput.onInputText(args.Join(1));
+                CommandWindow.input.onInputText(args.Join(1));
             } else if (args[0].Equals("*")) {
                 UServer.Players.ForEach(p => {
-                    ChatManager.Instance.askChat(p.CSteamId, (byte) EChatMode.GLOBAL, args.Join(1));
+                    ChatManager.instance.askChat(p.CSteamId, (byte) EChatMode.GLOBAL, args.Join(1));
                 });
 
                 name = "Everyone";
@@ -59,7 +59,7 @@ namespace Essentials.Commands {
 
                 var targetPlayer = args[0].ToPlayer;
 
-                ChatManager.Instance.askChat(targetPlayer.CSteamId, (byte) EChatMode.GLOBAL, args.Join(1));
+                ChatManager.instance.askChat(targetPlayer.CSteamId, (byte) EChatMode.GLOBAL, args.Join(1));
 
                 name = targetPlayer.CharacterName;
             }

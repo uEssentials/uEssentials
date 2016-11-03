@@ -74,14 +74,14 @@ namespace Essentials.Commands {
 
             if (UEssentials.Config.GiveItemBlacklist.Contains(itemAsset.Value.id) &&
                 !src.HasPermission("essentials.bypass.blacklist.item")) {
-                return CommandResult.Lang("BLACKLISTED_ITEM", $"{itemAsset.Value.itemName} ({itemAsset.Value.Id})");
+                return CommandResult.Lang("BLACKLISTED_ITEM", $"{itemAsset.Value.itemName} ({itemAsset.Value.id})");
             }
 
             var item = new Item(itemAsset.Value.id, true);
 
             if (item.id == 28) { // Gas can
-                item.Metadata[0] = 244;
-                item.Metadata[1] = 1;
+                item.metadata[0] = 244;
+                item.metadata[1] = 1;
             }
 
             for (var i = 0; i < amount; i++) {
@@ -89,9 +89,9 @@ namespace Essentials.Commands {
             }
 
             if (args.Length == 5) {
-                EssLang.Send(src, "SPAWNED_ITEM_AT", amount, itemAsset.Value.Name, pos.x, pos.y, pos.z);
+                EssLang.Send(src, "SPAWNED_ITEM_AT", amount, itemAsset.Value.name, pos.x, pos.y, pos.z);
             } else {
-                EssLang.Send(src, "SPAWNED_ITEM", amount, itemAsset.Value.Name);
+                EssLang.Send(src, "SPAWNED_ITEM", amount, itemAsset.Value.name);
             }
 
             return CommandResult.Success();

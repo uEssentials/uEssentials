@@ -47,7 +47,7 @@ namespace Essentials.Commands {
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
 
-            player.RocketPlayer.Inventory.Items.ForEach(item => Repair(player, item));
+            player.RocketPlayer.Inventory.items.ForEach(item => Repair(player, item));
             EssLang.Send(src, "ALL_REPAIRED");
 
             return CommandResult.Success();
@@ -65,7 +65,7 @@ namespace Essentials.Commands {
 
                 playerInv.channel.send("tellUpdateQuality", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[] {
                     item.page,
-                    playerInv.getIndex(item.page, itemJar.PositionX, itemJar.PositionY),
+                    playerInv.getIndex(item.page, itemJar.x, itemJar.y),
                     100
                 });
 

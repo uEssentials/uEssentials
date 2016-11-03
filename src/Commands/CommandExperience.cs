@@ -84,7 +84,7 @@ namespace Essentials.Commands {
         }
 
         private void GiveExp(UPlayer player, int amount) {
-            var playerExp = player.UnturnedPlayer.skills.Experience;
+            var playerExp = player.UnturnedPlayer.skills.experience;
 
             if (amount < 0) {
                 if ((playerExp - amount) < 0)
@@ -101,7 +101,7 @@ namespace Essentials.Commands {
                 EssLang.Send(player, "EXPERIENCE_LOST", -amount);
             }
 
-            player.UnturnedPlayer.skills.Experience = playerExp;
+            // TODO: no setter... player.UnturnedPlayer.skills.experience = playerExp;
             player.UnturnedPlayer.skills.askSkills(player.CSteamId);
         }
 

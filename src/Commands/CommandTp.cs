@@ -147,18 +147,18 @@ namespace Essentials.Commands {
                 found = TryFindPlace(arg, out node);
 
                 if (found) {
-                    placeOrPlayer = node.Name;
-                    position = node.Position + new Vector3(0, 1, 0);
+                    placeOrPlayer = node.name;
+                    position = node.point + new Vector3(0, 1, 0);
                 }
             }
         }
 
         private static bool TryFindPlace(string name, out LocationNode outNode) {
             outNode = (
-                from node in LevelNodes.Nodes
+                from node in LevelNodes.nodes
                 where node.type == ENodeType.LOCATION
                 let locNode = node as LocationNode
-                where locNode.Name.ToLower().Contains(name.ToLower())
+                where locNode.name.ToLower().Contains(name.ToLower())
                 select locNode
             ).FirstOrDefault();
             return outNode != null;
