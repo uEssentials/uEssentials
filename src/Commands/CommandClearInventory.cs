@@ -74,7 +74,7 @@ namespace Essentials.Commands {
 
             // Remove unequipped cloths
             System.Action removeUnequipped = () => {
-                for (byte i = 0; i < playerInv.getItemCount(2); i++) { //TODO isso é necessario?
+                for (byte i = 0; i < playerInv.getItemCount(2); i++) {
                     playerInv.removeItem(2, 0);
                 }
             };
