@@ -62,10 +62,10 @@ namespace Essentials.NativeModules.Kit.Item {
             get {
                 var item = base.UnturnedItem;
 
-                if (item.Metadata.Length != 18)
+                if (item.metadata.Length != 18)
                     return item;
 
-                var metadata = item.Metadata;
+                var metadata = item.metadata;
 
                 Action<int[], Attachment> assembleAttach = (indexes, attach) => {
                     if (attach == null || attach.AttachmentId == 0) return;

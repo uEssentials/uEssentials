@@ -45,8 +45,8 @@ namespace Essentials.Api.Task {
         }
 
         public void Enqueue(Task task) {
-            Debug.Assert(_syncExecutor != null, "_syncExecutor != null");
-            Debug.Assert(_asyncExecutor != null, "_asyncExecutor != null");
+            Debug.Assert(_syncExecutor != null, "_syncExecutor == null");
+            Debug.Assert(_asyncExecutor != null, "_asyncExecutor == null");
 
             if (task.IsAsync) {
                 _asyncExecutor.Enqueue(task);

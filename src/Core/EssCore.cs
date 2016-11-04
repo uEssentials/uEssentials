@@ -62,9 +62,9 @@ namespace Essentials.Core {
 
     public sealed class EssCore : RocketPlugin {
 
-        internal const string ROCKET_VERSION = "4.9.8.2";
+        internal const string ROCKET_VERSION = "4.9.3.0";
         internal const string UNTURNED_VERSION = "3.17.1.0";
-        internal const string PLUGIN_VERSION = "1.2.9.2";
+        internal const string PLUGIN_VERSION = "1.3.0.0";
 
 #if EXPERIMENTAL
         internal const string BUILD_INFO = " experimental (commit: $COMMIT_HASH$)";
@@ -129,9 +129,9 @@ namespace Essentials.Core {
 
                 Logger.LogInfo("Enabling uEssentials...");
 
-                if (Provider.Players.Count > 0) {
-                    Provider.Players.ForEach(p => {
-                        ConnectedPlayers.Add(p.SteamPlayerID.CSteamID.m_SteamID,
+                if (Provider.clients.Count > 0) {
+                    Provider.clients.ForEach(p => {
+                        ConnectedPlayers.Add(p.playerID.steamID.m_SteamID,
                             new UPlayer(UnturnedPlayer.FromSteamPlayer(p)));
                     });
                 }
@@ -314,7 +314,7 @@ namespace Essentials.Core {
                     .Action(() => UnregisterRocketCommands(true)) // Second check, silently.
                     .Submit();
 
-                CommandWindow.ConsoleInput.onInputText += ReloadCallback;
+                CommandWindow.input.onInputText += ReloadCallback;
                 UnregisterRocketCommands(); // First check.
                 Logger.LogInfo($"Enabled ({stopwatch.ElapsedMilliseconds} ms)");
             } catch (Exception e) {
@@ -345,14 +345,14 @@ namespace Essentials.Core {
 #endif
 
 #if DEV
-            CommandWindow.ConsoleOutput.title = "Unturned Server";
+            Console.Title = "Unturned Server";
 #else
             CheckUpdates();
 #endif
         }
 
         protected override void Unload() {
-            CommandWindow.ConsoleInput.onInputText -= ReloadCallback;
+            CommandWindow.input.onInputText -= ReloadCallback;
             Provider.onServerDisconnected -= PlayerDisconnectCallback;
             Provider.onServerConnected -= PlayerConnectCallback;
 

@@ -45,28 +45,28 @@ namespace Essentials.Api.Unturned {
         public string DisplayName => CharacterName;
         public string Id => CSteamId.m_SteamID.ToString();
         public string CharacterName => RocketPlayer.CharacterName;
-        public string SteamName => SteamPlayer.SteamPlayerID.SteamName;
+        public string SteamName => RocketPlayer.SteamName;
         public float Rotation => RocketPlayer.Rotation;
         public bool IsOnGround => UnturnedPlayer.movement.isGrounded;
-        public byte Stamina => Life.Stamina;
-        public bool IsDead => Life.Dead;
-        public bool IsPro => SteamPlayer.IsPro;
+        public byte Stamina => Life.stamina;
+        public bool IsDead => Life.isDead;
+        public bool IsPro => SteamPlayer.isPro;
         public bool IsInVehicle => CurrentVehicle != null;
-        public uint Ping => (uint) (RocketPlayer.Player.SteamChannel.SteamPlayer.ping*1000);
-        public SteamChannel Channel => UnturnedPlayer.SteamChannel;
+        public uint Ping => (uint) (RocketPlayer.Player.channel.owner.ping*1000);
+        public SteamChannel Channel => UnturnedPlayer.channel;
         public List<string> Permissions => R.Permissions.GetPermissions(RocketPlayer).Select(p => p.Name).ToList();
         public Player UnturnedPlayer => RocketPlayer.Player;
-        public SteamPlayer SteamPlayer => Channel.SteamPlayer;
+        public SteamPlayer SteamPlayer => Channel.owner;
         public Vector3 Position => RocketPlayer.Position;
         public PlayerInventory Inventory => RocketPlayer.Inventory;
         public InteractableVehicle CurrentVehicle => UnturnedPlayer.movement.getVehicle();
-        public CSteamID CSteamId => SteamPlayer.SteamPlayerID.CSteamID;
+        public CSteamID CSteamId => SteamPlayer.playerID.steamID;
         public PlayerMovement Movement => UnturnedPlayer.movement;
         public PlayerLook Look => UnturnedPlayer.look;
         public PlayerClothing Clothing => UnturnedPlayer.clothing;
         public PlayerLife Life => UnturnedPlayer.life;
         public PlayerEquipment Equipment => UnturnedPlayer.equipment;
-        public EPlayerStance Stance => UnturnedPlayer.Stance.Stance;
+        public EPlayerStance Stance => UnturnedPlayer.stance.stance;
         public bool IsOnline => RocketPlayer != null && UnturnedPlayer != null;
         public MetadataStore<object> Metadata { get; private set; }
 
@@ -119,17 +119,17 @@ namespace Essentials.Api.Unturned {
         }
 
         public bool IsBleeding {
-            get { return Life.Bleeding; }
+            get { return Life.isBleeding; }
             set {
-                Life.Bleeding = value;
+                // Life.Bleeding = value; No setter...
                 RocketPlayer.Bleeding = value;
             }
         }
 
         public bool IsBroken {
-            get { return Life.Broken; }
+            get { return Life.isBleeding; }
             set {
-                Life.Broken = value;
+                // Life.Broken = value; No setter...
                 RocketPlayer.Broken = value;
             }
         }
@@ -163,7 +163,7 @@ namespace Essentials.Api.Unturned {
             var added = false;
 
             for (var i = 0; i < amount; i++) {
-                var clone = new Item(item.ItemID, item.Amount, item.Durability, item.Metadata);
+                var clone = new Item(item.id, item.amount, item.durability, item.metadata);
 
                 added = UnturnedPlayer.inventory.tryAddItem(clone, true);
 
@@ -176,7 +176,7 @@ namespace Essentials.Api.Unturned {
         }
 
         public bool GiveItem(Item item, bool dropIfInventoryIsFull = false) {
-            return GiveItem(item, item.Amount, dropIfInventoryIsFull);
+            return GiveItem(item, item.amount, dropIfInventoryIsFull);
         }
 
         public void DispatchCommand(string command) {
@@ -191,7 +191,7 @@ namespace Essentials.Api.Unturned {
         public void Kill() {
             EPlayerKill outKill;
 
-            UnturnedPlayer.PlayerLife.askDamage(
+            UnturnedPlayer.life.askDamage(
                 100,
                 Position.normalized,
                 EDeathCause.KILL,
@@ -282,7 +282,7 @@ namespace Essentials.Api.Unturned {
         public static UPlayer From(Player player) {
             return player == null
                 ? null
-                : From(player.SteamChannel.SteamPlayer.SteamPlayerID.CSteamID.m_SteamID);
+                : From(player.channel.owner.playerID.steamID.m_SteamID);
         }
 
         public static UPlayer From(string name, bool ignoreCase = true) {
@@ -351,7 +351,7 @@ namespace Essentials.Api.Unturned {
         public static UPlayer From(SteamPlayer player) {
             return player == null
                 ? null
-                : From(player.SteamPlayerID.CSteamID);
+                : From(player.playerID.steamID);
         }
 
         /// <summary>

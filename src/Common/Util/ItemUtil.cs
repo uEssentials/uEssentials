@@ -51,8 +51,8 @@ namespace Essentials.Common.Util {
             if (_cachedAssets == null) {
                 _cachedAssets = Assets.find(EAssetType.ITEM)
                     .Cast<ItemAsset>()
-                    .Where(i => i.Name != null)
-                    .OrderBy(i => i.Id);
+                    .Where(i => i.name != null)
+                    .OrderBy(i => i.id);
             }
 
             var lastAsset = null as ItemAsset;
@@ -60,7 +60,7 @@ namespace Essentials.Common.Util {
 
             foreach (var asset in _cachedAssets) {
                 var itemPriority = 0;
-                var itemName = asset.Name;
+                var itemName = asset.name;
 
                 if (itemName.EqualsIgnoreCase(name)) {
                     lastAsset = asset;
@@ -156,20 +156,20 @@ namespace Essentials.Common.Util {
 
 
         public static Optional<Attachment> GetWeaponAttachment(Item weaponItem, AttachmentType type) {
-            return GetWeaponAttachment(weaponItem.Metadata, type);
+            return GetWeaponAttachment(weaponItem.metadata, type);
         }
 
         public static Optional<EFiremode> GetWeaponFiremode(Item weaponItem) {
-            return GetWeaponFiremode(weaponItem.Metadata);
+            return GetWeaponFiremode(weaponItem.metadata);
         }
 
         public static Optional<byte> GetWeaponAmmo(Item weaponItem) {
-            return GetWeaponAmmo(weaponItem.Metadata);
+            return GetWeaponAmmo(weaponItem.metadata);
         }
 
 
         public static void SetWeaponAttachment(Item weaponItem, AttachmentType type, Attachment attach) {
-            if (weaponItem.Metadata.Length < 18) {
+            if (weaponItem.metadata.Length < 18) {
                 return;
             }
 
@@ -177,19 +177,19 @@ namespace Essentials.Common.Util {
         }
 
         public static void SetWeaponFiremode(Item weaponItem, EFiremode firemode) {
-            if (weaponItem.Metadata.Length < 18) {
+            if (weaponItem.metadata.Length < 18) {
                 return;
             }
 
-            weaponItem.Metadata[11] = (byte) firemode;
+            weaponItem.metadata[11] = (byte) firemode;
         }
 
         public static void SetWeaponAmmo(Item weaponItem, byte ammo) {
-            if (weaponItem.Metadata.Length < 18) {
+            if (weaponItem.metadata.Length < 18) {
                 return;
             }
 
-            weaponItem.Metadata[10] = ammo;
+            weaponItem.metadata[10] = ammo;
         }
 
         
@@ -199,11 +199,11 @@ namespace Essentials.Common.Util {
             var attachIdBytes = BitConverter.GetBytes(attach.AttachmentId);
 
             // 2 bytes for id (uint16)
-            item.Metadata[idxs[0]] = attachIdBytes[0];
-            item.Metadata[idxs[1]] = attachIdBytes[1];
+            item.metadata[idxs[0]] = attachIdBytes[0];
+            item.metadata[idxs[1]] = attachIdBytes[1];
 
             // 1 byte for durability (uint8)
-            item.Metadata[idxs[2]] = attach.Durability;
+            item.metadata[idxs[2]] = attach.Durability;
         }
 
         /*

@@ -49,8 +49,8 @@ namespace Essentials.Common.Util {
             if (_cachedAssets == null) {
                 _cachedAssets = Assets.find(EAssetType.VEHICLE)
                     .Cast<VehicleAsset>()
-                    .Where(i => i.Name != null)
-                    .OrderBy(i => i.Id);
+                    .Where(i => i.name != null) // TODO: check name or vehicleName (same with itemUtil)
+                    .OrderBy(i => i.id);
             }
 
             var lastAsset = null as VehicleAsset;
@@ -58,7 +58,7 @@ namespace Essentials.Common.Util {
 
             foreach (var asset in _cachedAssets) {
                 var itemPriority = 0;
-                var itemName = asset.Name;
+                var itemName = asset.name;
 
                 if (itemName.EqualsIgnoreCase(name)) {
                     lastAsset = asset;

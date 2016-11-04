@@ -110,7 +110,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                         var ammo = GetWeaponAmmo(item);
                         var firemode = GetWeaponFiremode(item).OrElse(EFiremode.SAFETY);
 
-                        var kItem = new KitItemWeapon(item.id, item.Durability, 1, ammo.OrElse(0), firemode) {
+                        var kItem = new KitItemWeapon(item.id, item.durability, 1, ammo.OrElse(0), firemode) {
                             Magazine = GetWeaponAttachment(item, AttachmentType.MAGAZINE).OrElse(null),
                             Barrel = GetWeaponAttachment(item, AttachmentType.BARREL).OrElse(null),
                             Sight = GetWeaponAttachment(item, AttachmentType.SIGHT).OrElse(null),
@@ -120,12 +120,12 @@ namespace Essentials.NativeModules.Kit.Commands {
 
                         kitItem = kItem;
                     } else if (asset is ItemMagazineAsset || asset is ItemSupplyAsset) {
-                        kitItem = new KitItemMagazine(item.id, item.Durability, 1, item.Amount);
+                        kitItem = new KitItemMagazine(item.id, item.durability, 1, item.amount);
                     } else {
-                        kitItem = new KitItem(item.id, item.Durability, 1);
+                        kitItem = new KitItem(item.id, item.durability, 1);
                     }
 
-                    kitItem.Metadata = item.Metadata;
+                    kitItem.Metadata = item.metadata;
 
                     items.Add(kitItem);
                 }

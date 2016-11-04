@@ -71,7 +71,7 @@ namespace Essentials.Commands {
         }
 
         private void RefuelVehicle(InteractableVehicle veh) {
-            VehicleManager.Instance.channel.send("tellVehicleFuel", ESteamCall.ALL,
+            VehicleManager.instance.channel.send("tellVehicleFuel", ESteamCall.ALL,
                 ESteamPacket.UPDATE_UNRELIABLE_BUFFER, veh.instanceID, veh.asset.fuel);
         }
 
