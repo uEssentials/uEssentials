@@ -137,7 +137,9 @@ namespace Essentials.NativeModules.Kit.Data {
                     var kitItemAmount = tokKitItemAmount?.Value<byte>() ?? 1;
                     var kitItemDurability = tokKitItemDurability?.Value<byte>() ?? 100;
 
-                    if (itemAsset.useable == EUseableType.GUN) {
+                    Console.WriteLine(">> " + itemAsset);
+
+                    if (itemAsset is ItemGunAsset) { // TODO: check
                         goto parseWeaponItem;
                     }
 
