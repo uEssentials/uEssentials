@@ -22,6 +22,8 @@
 #endregion
 
 using Essentials.Api.Module;
+using Essentials.Api.Task;
+using SDG.Unturned;
 using static Essentials.Api.UEssentials;
 
 namespace Essentials.NativeModules.Kit {
@@ -37,9 +39,22 @@ namespace Essentials.NativeModules.Kit {
             Instance = this;
 
             KitManager = new KitManager();
-            KitManager.Load();
 
-            Logger.LogInfo($"Loaded {KitManager.Count} kits");
+            Logger.LogInfo("Waiting assets to load kits");
+
+            // Must load kits only when Assets is loaded.
+            Task.Create()
+                .Action(t => {
+                    if (!Assets.isLoading) {
+                        KitManager.Load();
+                        Logger.LogInfo($"Loaded {KitManager.Count} kits");
+                        t.Cancel();
+                    }
+                })
+                .Delay(600)
+                .Interval(200)
+                .Submit();
+
 
             CommandManager.RegisterAll(kCommandsNamespace);
             EventManager.RegisterAll<KitEventHandler>();
