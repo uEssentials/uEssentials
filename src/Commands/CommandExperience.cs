@@ -21,11 +21,15 @@
 */
 #endregion
 
+using System;
+using System.Reflection;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
+using Essentials.Common.Util;
 using Essentials.I18n;
+using SDG.Unturned;
 
 namespace Essentials.Commands {
 
@@ -38,6 +42,7 @@ namespace Essentials.Commands {
     public class CommandExperience : EssCommand {
 
         private const int MAX_INPUT_VALUE = 10000000;
+        private readonly FieldInfo _experienceField = ReflectUtil.GetField<PlayerSkills>("_experience"); 
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             if (args.Length == 0 || (args.Length == 1 && src.IsConsole)) {
@@ -101,7 +106,7 @@ namespace Essentials.Commands {
                 EssLang.Send(player, "EXPERIENCE_LOST", -amount);
             }
 
-            // TODO: no setter... player.UnturnedPlayer.skills.experience = playerExp;
+            _experienceField.SetValue(player.UnturnedPlayer.skills, playerExp);
             player.UnturnedPlayer.skills.askSkills(player.CSteamId);
         }
 
