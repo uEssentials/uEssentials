@@ -195,7 +195,7 @@ namespace Essentials.Api.Event {
         PLAYER_UPDATE_BROKEN,
 
         /// <summary>
-        /// Signature: (UnturnedPlayer player, uint newSeq, Vector3 newPosition, byte newPitch, byte newYaw)
+        /// Signature: (UnturnedPlayer player, Vector3 newPosition)
         /// </summary>
         PLAYER_UPDATE_POSITION,
 
