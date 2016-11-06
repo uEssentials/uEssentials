@@ -64,7 +64,8 @@ def build(args):
             print("Invalid build type: %s"%build_type)
 
 def copy_to_plugins():
-    shutil.copy2("%s\\bin\\uEssentials.dll"%sys.path[0], "%suEssentials.dll"%PLUGINS_FOLDER)
+    shutil.copy("%s\\bin\\uEssentials.dll"%sys.path[0], "%suEssentials.dll"%PLUGINS_FOLDER)
+    pass
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
