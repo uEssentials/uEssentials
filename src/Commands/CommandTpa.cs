@@ -49,6 +49,7 @@ namespace Essentials.Commands {
     public class CommandTpa : EssCommand {
 
         public static Dictionary<ulong, ulong> Requests = new Dictionary<ulong, ulong>();
+        public static Dictionary<ulong, Task> WaitingToTeleport = new Dictionary<ulong, Task>();
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
@@ -85,16 +86,17 @@ namespace Essentials.Commands {
                     var tpaSettings = EssCore.Instance.Config.Tpa;
 
                     if (tpaSettings.TeleportDelay > 0) {
-                        Task.Create()
+                        var task = Task.Create()
                             .Id("Tpa Teleport")
                             .Action(() => {
-                                if (!whoSent.IsOnline || !player.IsOnline) {
-                                    return;
+                                WaitingToTeleport.Remove(player.CSteamId.m_SteamID);
+                                if (whoSent.IsOnline && player.IsOnline) {
+                                    whoSent.Teleport(player.Position);
                                 }
-                                whoSent.Teleport(player.Position);
                             })
                             .Delay(TimeSpan.FromSeconds(tpaSettings.TeleportDelay))
                             .Submit();
+                        WaitingToTeleport[player.CSteamId.m_SteamID] = task;
                     } else {
                         whoSent.Teleport(player.Position);
                     }
@@ -156,9 +158,11 @@ namespace Essentials.Commands {
 
                     var target = args[0].ToPlayer;
 
+#if !DEV
                     if (target == player) {
                         return CommandResult.Lang("TPA_YOURSELF");
                     }
+#endif
 
                     Requests.Add(senderId, target.CSteamId.m_SteamID);
                     EssLang.Send(src, "TPA_SENT_SENDER", target.DisplayName);
@@ -182,8 +186,10 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
-        protected override void OnUnregistered()
-            => UEssentials.EventManager.Unregister<EssentialsEventHandler>("TpaPlayerDisconnect");
+        protected override void OnUnregistered() {
+            UEssentials.EventManager.Unregister<EssentialsEventHandler>("TpaPlayerDisconnect");
+            UEssentials.EventManager.Unregister<EssentialsEventHandler>("TpaPlayerMove");
+        }
 
     }
 

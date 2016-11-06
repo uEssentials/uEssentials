@@ -391,6 +391,17 @@ namespace Essentials.Event.Handling {
             }
         }
 
+        [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
+        private void TpaPlayerMove(UnturnedPlayer player, Vector3 newPosition) {
+            Task task;
+            if (UEssentials.Config.Tpa.TeleportDelay > 0 && UEssentials.Config.Tpa.CancelTeleportWhenMove &&
+                CommandTpa.WaitingToTeleport.TryGetValue(player.CSteamID.m_SteamID, out task)) {
+                task.Cancel();
+                CommandTpa.WaitingToTeleport.Remove(player.CSteamID.m_SteamID);
+                UPlayer.TryGet(player, p => EssLang.Send(p, "TELEPORT_CANCELLED_MOVED"));
+            }
+        }
+
     }
 
 }

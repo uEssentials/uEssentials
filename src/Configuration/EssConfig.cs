@@ -137,7 +137,8 @@ namespace Essentials.Configuration {
 
             Tpa = new TpaSettings {
                 ExpireDelay = 10,
-                TeleportDelay = 5
+                TeleportDelay = 5,
+                CancelTeleportWhenMove = true
             };
 
             Economy = new EconomySettings {
@@ -168,32 +169,10 @@ namespace Essentials.Configuration {
             try {
                 var json = JObject.Parse(File.ReadAllText(filePath));
 
-                // TODO: Remove
-                // Update old stuffs
-                if (json["WarpCommand"] != null) {
-                    json["Warp"] = json["WarpCommand"];
-                    json["WarpCommand"] = null;
+                if (json["Tpa"]["CancelTeleportWhenMove"] == null) {
+                    json["Tpa"]["CancelTeleportWhenMove"] = true;
+                    File.WriteAllText(filePath, json.ToString());
                 }
-
-                if (json["HomeCommand"] != null) {
-                    json["Home"] = json["HomeCommand"];
-                    json["HomeCommand"] = null;
-                }
-
-                if (json["Warp"]["Cooldown"] != null) {
-                    json["Warp"]["TeleportDelay"] = 5;
-                    json["Warp"]["Cooldown"] = null;
-                }
-
-                if (json["Home"]["Delay"] != null) {
-                    json["Home"]["TeleportDelay"] = 5;
-                    json["Home"]["Delay"] = null;
-                }
-
-                if (json["Home"]["Cooldown"] != null) {
-                    json["Home"]["Cooldown"] = null;
-                }
-                // end: Update old stuffs
 
                 base.Load(filePath);
 
@@ -276,6 +255,7 @@ namespace Essentials.Configuration {
         }
 
         public struct TpaSettings {
+            public bool CancelTeleportWhenMove;
             public int ExpireDelay;
             public int TeleportDelay;
         }
