@@ -33,7 +33,7 @@ namespace Essentials.Commands {
         Name = "experience",
         Aliases = new[] { "exp" },
         Description = "Give experience to you/player",
-        Usage = "[amount] <target>"
+        Usage = "[amount] <target/*>"
     )]
     public class CommandExperience : EssCommand {
 
