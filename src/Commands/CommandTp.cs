@@ -34,7 +34,7 @@ namespace Essentials.Commands {
     [CommandInfo(
         Name = "tp",
         Usage = "[player|place|x y z] or [player] [player|place|x y z]",
-        Description = "Teleport to an player or place."
+        Description = "Teleport to a player or place."
     )]
     public class CommandTp : EssCommand {
 
@@ -132,7 +132,7 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
-        private static void FindPlaceOrPlayer(string arg, out bool found, 
+        private static void FindPlaceOrPlayer(string arg, out bool found,
                                               out Vector3 position, out string placeOrPlayer) {
             position = Vector3.zero;
             placeOrPlayer = string.Empty;

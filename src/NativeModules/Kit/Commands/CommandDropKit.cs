@@ -36,7 +36,7 @@ namespace Essentials.NativeModules.Kit.Commands {
     [CommandInfo(
         Name = "dropkit",
         Aliases = new[] { "dk" },
-        Description = "Drop an kit at given player/position",
+        Description = "Drop a kit at given player/position",
         Usage = "[kit] <player | x y z>"
     )]
     public class CommandDropKit : EssCommand {

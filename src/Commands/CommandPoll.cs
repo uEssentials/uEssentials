@@ -35,7 +35,7 @@ namespace Essentials.Commands {
 
     [CommandInfo(
         Name = "poll",
-        Description = "Start/Stop an poll",
+        Description = "Start/Stop a poll",
         Usage = "[start | stop | list | info]"
     )]
     public class CommandPoll : EssCommand {
@@ -46,7 +46,7 @@ namespace Essentials.Commands {
         public static Dictionary<string, Poll> Polls = new Dictionary<string, Poll>();
 
         /// <summary>
-        /// Check an poll with passed name exists, if not, will send POLL_NOT_EXIST message.
+        /// Check a poll with passed name exists, if not, will send POLL_NOT_EXIST message.
         /// </summary>
         internal static readonly Func<string, ICommandSource, bool> PollExists = (pollName, source) => {
             lock (Polls) {
@@ -56,7 +56,7 @@ namespace Essentials.Commands {
             }
         };
 
-        private static readonly string[] _validInputs = { "start", "stop", "list", "info" }; 
+        private static readonly string[] _validInputs = { "start", "stop", "list", "info" };
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             if (args.IsEmpty || _validInputs.None(i => i.EqualsIgnoreCase(args[0].ToString())) ) {

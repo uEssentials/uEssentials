@@ -81,7 +81,7 @@ namespace Essentials.NativeModules.Kit.Item {
         }
 
         /// <summary>
-        /// Give this item to an specified player
+        /// Give this item to a specified player
         /// </summary>
         /// <param name="player"> player that you should give this item </param>
         /// <param name="dropIfInventoryFull"> determine if this item should be dropped

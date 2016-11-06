@@ -25,9 +25,6 @@ using Essentials.Api.Command.Source;
 
 namespace Essentials.Api.Command {
 
-    /// <summary>
-    /// This class represents an command
-    /// </summary>
     public interface ICommand {
 
         /// <summary>

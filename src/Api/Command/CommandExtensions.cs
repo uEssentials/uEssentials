@@ -28,7 +28,7 @@ namespace Essentials.Api.Command {
     public static class CommandExtensions {
 
         /// <summary>
-        /// Try get an vector3 from 3 arguments, starting in <paramref name="initialIndex"/>
+        /// Try get a vector3 from 3 arguments, starting in <paramref name="initialIndex"/>
         /// </summary>
         /// <param name="src">Source</param>
         /// <param name="initialIndex"> Initial index </param>

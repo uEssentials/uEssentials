@@ -49,17 +49,17 @@ namespace Essentials.Api.Command.Source {
         bool IsAdmin { get; }
 
         /// <summary>
-        /// Send an message to player/console
+        /// Send a message to player/console
         /// </summary>
         void SendMessage(object message);
 
         /// <summary>
-        /// Send an message to player/console
+        /// Send a message to player/console
         /// </summary>
         void SendMessage(object message, Color color);
 
         /// <summary>
-        /// Dispatch an command
+        /// Dispatch a command
         /// </summary>
         /// <param name="command"> Command that you want to dispatch </param>
         void DispatchCommand(string command);

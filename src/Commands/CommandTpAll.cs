@@ -33,7 +33,7 @@ namespace Essentials.Commands {
 
     [CommandInfo(
         Name = "tpall",
-        Description = "Teleport all players to an player/position",
+        Description = "Teleport all players to a player/position",
         Usage = "[player/x y z]"
     )]
     public class CommandTpAll : EssCommand {

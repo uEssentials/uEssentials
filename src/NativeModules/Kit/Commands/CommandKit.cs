@@ -36,7 +36,7 @@ namespace Essentials.NativeModules.Kit.Commands {
 
     [CommandInfo(
         Name = "kit",
-        Description = "Get an kit",
+        Description = "Get a kit",
         Usage = "[kit_name] <player | *>"
     )]
     public class CommandKit : EssCommand {
@@ -47,7 +47,7 @@ namespace Essentials.NativeModules.Kit.Commands {
         internal static Dictionary<ulong, Dictionary<string, DateTime>> Cooldowns =
             new Dictionary<ulong, Dictionary<string, DateTime>>();
 
-        internal static Dictionary<ulong, DateTime> GlobalCooldown = 
+        internal static Dictionary<ulong, DateTime> GlobalCooldown =
             new Dictionary<ulong, DateTime>();
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {

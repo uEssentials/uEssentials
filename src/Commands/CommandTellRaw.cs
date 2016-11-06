@@ -31,7 +31,7 @@ namespace Essentials.Commands {
 
     [CommandInfo(
         Name = "tellraw",
-        Description = "Send raw message to an player.",
+        Description = "Send raw message to a player.",
         Usage = "[player/*console*] [message]",
         MinArgs = 2
     )]

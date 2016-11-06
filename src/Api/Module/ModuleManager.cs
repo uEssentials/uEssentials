@@ -82,7 +82,7 @@ namespace Essentials.Api.Module {
         }
 
         /// <summary>
-        /// Load an module
+        /// Load a module
         /// </summary>
         /// <param name="module">Module that you want to load</param>
         public void LoadModule([NotNull] EssModule module) {
@@ -104,7 +104,7 @@ namespace Essentials.Api.Module {
         }
 
         ///<summary>
-        /// Load all modules from an folder
+        /// Load all modules from a folder
         ///</summary>
         /// <param name="directory"> Directory that you want to load modules</param>>
         public void LoadAll(string directory) {

@@ -34,7 +34,7 @@ namespace Essentials.NativeModules.Kit.Commands {
     [CommandInfo(
         Name = "editkit",
         Aliases = new[] { "ekit" },
-        Description = "Edit an kit",
+        Description = "Edit a kit",
         Usage = "[kit] [view | additem | delitem | set]"
     )]
     public class CommandEditKit : EssCommand {

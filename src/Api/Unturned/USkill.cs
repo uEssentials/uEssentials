@@ -93,7 +93,7 @@ namespace Essentials.Api.Unturned {
         /// <param name="input">Skill name</param>
         /// <returns>
         ///   <see cref="Optional{USkill}.Empty"/> if not found,
-        ///   otherwise return an <see cref="Optional{USkill}"/> containing the skill.
+        ///   otherwise return a <see cref="Optional{USkill}"/> containing the skill.
         /// </returns>
         public static Optional<USkill> FromName(string input) {
             var skill = Skills

@@ -726,7 +726,7 @@ namespace Essentials.Commands {
 
         [CommandInfo(
             Name = "skill",
-            Description = "Edit skill of an player|you",
+            Description = "Edit skill of a player|you",
             Usage = "[skill] [value|max] or [player|*] [skill] [value|max]"
         )]
         private CommandResult SkillCommand(ICommandSource src, ICommandArgs args) {

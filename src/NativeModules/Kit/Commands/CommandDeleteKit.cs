@@ -30,7 +30,7 @@ namespace Essentials.NativeModules.Kit.Commands {
     [CommandInfo(
         Name = "deletekit",
         Aliases = new[] { "dkit" },
-        Description = "Delete an kit.",
+        Description = "Delete a kit.",
         Usage = "[name]"
     )]
     public class CommandDeleteKit : EssCommand {

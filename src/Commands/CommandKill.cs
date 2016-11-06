@@ -31,7 +31,7 @@ namespace Essentials.Commands {
 
     [CommandInfo(
         Name = "kill",
-        Description = "Kill an player",
+        Description = "Kill a player",
         Usage = "[player/*]",
         MinArgs = 1,
         MaxArgs = 1

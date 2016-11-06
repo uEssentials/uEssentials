@@ -87,9 +87,9 @@ namespace Essentials.Api.Command {
         bool IsString { get; }
 
         /// <summary>
-        /// Check if argument is an valid player name / steam 64 id.
+        /// Check if argument is a valid player name / steam 64 id.
         /// </summary>
-        /// <returns> Return if argument is an valid player name / steam 64 id.</returns>
+        /// <returns> Return if argument is a valid player name / steam 64 id.</returns>
         bool IsValidPlayerIdentifier { get; }
 
         bool IsLong { get; }

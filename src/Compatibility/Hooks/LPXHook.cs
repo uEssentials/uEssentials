@@ -27,6 +27,7 @@ using Essentials.Api;
 using Rocket.API;
 using Rocket.Core;
 using Essentials.Core.Permission;
+using Essentials.Common;
 
 namespace Essentials.Compatibility.Hooks {
 
@@ -38,6 +39,8 @@ namespace Essentials.Compatibility.Hooks {
 
         public override void OnLoad() {
             var lpx = R.Plugins.GetPlugins().FirstOrDefault(c => c.Name.Equals("LPX"));
+
+            Preconditions.NotNull(lpx, "lpx == null");
 
             var lpxBaseType = lpx?.GetType().BaseType;
             var configProp = lpxBaseType?.GetProperty("Configuration")?.GetValue(lpx, new object[0]);

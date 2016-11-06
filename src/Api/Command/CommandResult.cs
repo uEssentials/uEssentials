@@ -86,7 +86,7 @@ namespace Essentials.Api.Command {
         }
 
         /// <summary>
-        /// Commonly indicate that an given argument is invalid, and send the
+        /// Commonly indicate that a given argument is invalid, and send the
         /// give <paramref name="key"/> to sender.
         /// </summary>
         /// <param name="key">Translation entry</param>
@@ -111,8 +111,8 @@ namespace Essentials.Api.Command {
 #endregion
 
         public static CommandResult NoPermission(string permission) {
-            return UEssentials.Config.ShowPermissionOnErrorMessage 
-                ? Lang("COMMAND_NO_PERMISSION_WITH_PERM", permission) 
+            return UEssentials.Config.ShowPermissionOnErrorMessage
+                ? Lang("COMMAND_NO_PERMISSION_WITH_PERM", permission)
                 : Lang("COMMAND_NO_PERMISSION");
         }
 

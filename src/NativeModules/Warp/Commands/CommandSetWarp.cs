@@ -29,7 +29,7 @@ namespace Essentials.NativeModules.Warp.Commands {
 
     [CommandInfo(
         Name = "setwarp",
-        Description = "Set an warp.",
+        Description = "Set a warp.",
         Usage = "[warp_name] <x> <y> <z>"
     )]
     public class CommandSetWarp : EssCommand {

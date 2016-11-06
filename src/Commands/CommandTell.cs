@@ -35,7 +35,7 @@ namespace Essentials.Commands {
     [CommandInfo(
         Name = "tell",
         Aliases = new[] { "msg", "pm" },
-        Description = "Send private message to an player",
+        Description = "Send private message to a player",
         Usage = "[player] [message]"
     )]
     public class CommandTell : EssCommand {
