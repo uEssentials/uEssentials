@@ -21,6 +21,7 @@
 */
 #endregion
 
+using System.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,7 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Metadata;
 using Essentials.Common;
+using Essentials.Common.Util;
 using Essentials.Core;
 using Rocket.API;
 using Rocket.Core;
@@ -70,6 +72,8 @@ namespace Essentials.Api.Unturned {
         public bool IsOnline => RocketPlayer != null && UnturnedPlayer != null;
         public MetadataStore<object> Metadata { get; private set; }
 
+        private readonly FieldInfo _experienceField = ReflectUtil.GetField<PlayerSkills>("_experience");
+
         bool ICommandSource.IsConsole => false;
 
         internal UPlayer(UnturnedPlayer player) {
@@ -100,7 +104,10 @@ namespace Essentials.Api.Unturned {
 
         public uint Experience {
             get { return RocketPlayer.Experience; }
-            set { RocketPlayer.Experience = value; }
+            set {
+                _experienceField.SetValue(UnturnedPlayer.skills, value);
+                UnturnedPlayer.skills.askSkills(CSteamId);
+            }
         }
 
         public byte Hunger {
@@ -338,7 +345,7 @@ namespace Essentials.Api.Unturned {
 
         public static UPlayer From(ulong rawCSteamId) {
             UPlayer ret;
-            return EssCore.Instance.ConnectedPlayers.TryGetValue(rawCSteamId, out ret) 
+            return EssCore.Instance.ConnectedPlayers.TryGetValue(rawCSteamId, out ret)
                    ? ret : null;
         }
 
