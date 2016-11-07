@@ -70,9 +70,6 @@ namespace Essentials.NativeModules.Kit.Item {
         public virtual SDG.Unturned.Item UnturnedItem => new SDG.Unturned.Item(Id, Amount, Durability, Metadata);
 
         public KitItem(ushort id, byte durability, byte amount) {
-            /*Preconditions.CheckState(
-                Assets.find(EAssetType.ITEM, id) != null, EssLang.Translate("INVALID_ITEM_ID", id)); // TODO: don't throw exception*/
-
             Id = id;
             Durability = durability;
             Amount = amount;
