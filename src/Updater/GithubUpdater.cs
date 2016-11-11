@@ -114,8 +114,9 @@ namespace Essentials.Updater {
 
         public void DownloadLatestRelease(string path) {
             lock (this) {
-                if (!Directory.Exists(path))
+                if (!Directory.Exists(path)) {
                     Directory.CreateDirectory(path);
+                }
 
                 var result = LastResult ?? CheckUpdate();
                 var downloadUrl = JObject.Parse(result.AdditionalData).GetValue("download_url").ToString();
