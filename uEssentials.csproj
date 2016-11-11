@@ -262,10 +262,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF EXIST "../../commands.py" ( py ../../commands.py COPY_TO_PLUGINS )</PostBuildEvent>
+    <PostBuildEvent>IF EXIST "$(ProjectDir)Repl.cs" ( py "$(ProjectDir)commands.py" COPY_TO_PLUGINS )</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>IF EXIST "Repl.cs" ( for /f "tokens=2 delims=," %25%25F in ('tasklist /nh /fi "WINDOWTITLE eq Unturned Server" /fo csv') do taskkill /PID %25%25~F /F
+    <PreBuildEvent>IF EXIST "$(ProjectDir)Repl.cs" ( for /f "tokens=2 delims=," %25%25F in ('tasklist /nh /fi "WINDOWTITLE eq Unturned Server" /fo csv') do taskkill /PID %25%25~F /F
 EXIT 0 )</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
