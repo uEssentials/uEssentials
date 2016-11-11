@@ -772,7 +772,7 @@ namespace Essentials.Commands {
                         player = UServer.Players.First();
                     } else {
                         if (!args[0].IsValidPlayerIdentifier) {
-                            return CommandResult.Lang("PLAYER_NOT_FOUND");
+                            return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                         }
 
                         player = args[0].ToPlayer;
