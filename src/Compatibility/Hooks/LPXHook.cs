@@ -65,7 +65,7 @@ namespace Essentials.Compatibility.Hooks {
         }
 
         public override bool CanBeLoaded() {
-            return R.Plugins.GetPlugins().Any(p => p.Name.Equals("LPX"));
+            return R.Plugins.GetPlugins().Any(p => "LPX".Equals(p?.Name));
         }
 
     }
