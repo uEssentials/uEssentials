@@ -63,8 +63,8 @@ namespace Essentials.Core {
     public sealed class EssCore : RocketPlugin {
 
         internal const string ROCKET_VERSION = "4.9.3.0";
-        internal const string UNTURNED_VERSION = "3.17.1.0";
-        internal const string PLUGIN_VERSION = "1.3.0.0";
+        internal const string UNTURNED_VERSION = "3.17.5.0";
+        internal const string PLUGIN_VERSION = "1.3.1.0";
 
 #if EXPERIMENTAL
         internal const string BUILD_INFO = " experimental (commit: $COMMIT_HASH$)";
