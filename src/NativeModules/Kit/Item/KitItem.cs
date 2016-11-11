@@ -22,19 +22,12 @@
 #endregion
 
 using Essentials.Api.Unturned;
-using Essentials.Common;
 using Essentials.Common.Util;
-using Essentials.I18n;
 using Newtonsoft.Json;
-using SDG.Unturned;
 
-// ReSharper disable InconsistentNaming
 
 namespace Essentials.NativeModules.Kit.Item {
 
-    /// <summary>
-    /// Author: leonardosnt
-    /// </summary>
     [JsonObject(Id = "Item")]
     public class KitItem : AbstractKitItem {
 
