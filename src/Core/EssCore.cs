@@ -144,37 +144,10 @@ namespace Essentials.Core {
                 WebResources = new WebResources();
                 Config = new EssConfig();
 
-                var webRscPath = Path.Combine(Folder, WebResources.FileName);
+                var webResourcesPath = Path.Combine(Folder, WebResources.FileName);
                 var configPath = Path.Combine(Folder, Config.FileName);
 
-                WebResources.Load(webRscPath);
-
-                // TODO: Remove
-                // Load old webkit/webconfig
-                try {
-                    if (File.Exists(configPath) && !WebResources.Enabled) {
-                        var json = JObject.Parse(File.ReadAllText(configPath));
-                        var save = false;
-
-                        foreach (var opt in new[] { "Config", "Kits" }) {
-                            JToken val;
-                            if (json.TryGetValue($"Web{opt}", out val)) {
-                                if (val.Value<bool>("Enabled")) {
-                                    WebResources.Enabled = true;
-                                    WebResources.URLs[opt] = val.Value<string>("Url");
-                                    save = true;
-                                }
-                            }
-                        }
-
-                        if (save) {
-                            WebResources.Save(webRscPath);
-                            WebResources.Load(webRscPath);
-                        }
-                    }
-                } catch (Exception ex) {
-                    Debug.Print(ex.ToString());
-                }
+                WebResources.Load(webResourcesPath);
 
                  // Sync web config with local config.json
                 if (WebResources.Loaded.ContainsKey("Config")) {
