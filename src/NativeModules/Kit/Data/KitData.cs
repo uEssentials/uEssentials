@@ -49,19 +49,19 @@ namespace Essentials.NativeModules.Kit.Data {
         }
 
         private static T GetValueOrDefault<T>(JObject obj, string key, T def) {
-            var val = obj.GetValue(key).Value<T>();
+            var val = obj.GetValue(key);
             if (val == null) {
                 return def;
             }
-            return val;
+            return val.Value<T>();
         }
 
         private static T GetNotNullValue<T>(JObject obj, string key, string errMsg = null) {
-            var val = obj.GetValue(key).Value<T>();
+            var val = obj.GetValue(key);
             if (val == null) {
                 throw new ArgumentException(errMsg ?? $"Kit {key} cannot be null.");
             }
-            return val;
+            return val.Value<T>();
         }
 
         public virtual Dictionary<string, Kit> Load() {
