@@ -357,7 +357,7 @@ namespace Essentials.Core {
                         }
                     } catch (Exception ex) {
                         Debug.Print(ex.ToString());
-                        EssCore._errCount++;
+                        _errCount++;
                     }
                 })
                 .Submit();
