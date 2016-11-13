@@ -12,3 +12,5 @@ trigger_experimental_release.bat
 
 src/Commands/CommandTest.cs
 Repl.cs
+
+.idea/
