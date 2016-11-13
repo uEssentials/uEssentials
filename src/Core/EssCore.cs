@@ -199,7 +199,7 @@ namespace Essentials.Core {
                 // Load native modules
                 Assembly.GetTypes()
                     .Where(t => typeof(NativeModule).IsAssignableFrom(t))
-                    .WhereNot(t => t.IsAbstract)
+                    .Where(t => !t.IsAbstract)
                     .Where(t => {
                         var moduleInfo = (ModuleInfo) t.GetCustomAttributes(typeof(ModuleInfo), false)[0];
                         return Config.EnabledSystems.Any(s => s.Equals(moduleInfo.Name, StringComparison.OrdinalIgnoreCase));

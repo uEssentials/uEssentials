@@ -61,7 +61,7 @@ namespace Essentials.Commands {
 
                 lock (UWorld.Vehicles) {
                     UWorld.Vehicles
-                        .WhereNot(veh => veh.isExploded || veh.isUnderwater)
+                        .Where(veh => !veh.isExploded && !veh.isUnderwater)
                         .ToList()
                         .ForEach(vehicle => {
                             VehicleManager.sendVehicleHealth(vehicle, vehicle.asset.health);

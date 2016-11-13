@@ -21,6 +21,7 @@
 */
 #endregion
 
+using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
@@ -60,7 +61,7 @@ namespace Essentials.Commands {
 
                 lock (UWorld.Vehicles) {
                     UWorld.Vehicles
-                        .WhereNot(veh => veh.isExploded || veh.isUnderwater)
+                        .Where(veh => !veh.isExploded && !veh.isUnderwater)
                         .ForEach(RefuelVehicle);
 
                     EssLang.Send(src, "VEHICLE_REFUELED_ALL");

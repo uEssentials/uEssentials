@@ -56,10 +56,6 @@ namespace Essentials.Common {
             }
         }
 
-        public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> src, Func<T, bool> predicate) {
-            return src.Where(t => !predicate(t));
-        }
-
         public static bool None<T>(this IEnumerable<T> src, Func<T, bool> predicate) {
             return !src.Any(predicate);
         }
