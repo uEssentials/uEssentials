@@ -26,36 +26,19 @@ using System.Collections.Generic;
 using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Common.Util;
-using Newtonsoft.Json;
 
 namespace Essentials.Misc {
 
-    [JsonObject]
     public class AutoAnnouncer {
 
-        /// <summary>
-        /// Interval between the messages
-        /// </summary>
         public int MessageInterval { get; set; }
 
-        /// <summary>
-        /// Flag that determine if messages will be random
-        /// </summary>
         public bool RandomMessages { get; set; }
 
-        /// <summary>
-        /// Flag that determine if announcer is enabled
-        /// </summary>
         public bool Enabled { get; set; }
 
-        /// <summary>
-        /// List of messages
-        /// </summary>
         public List<string> Messages { get; set; }
 
-        /// <summary>
-        /// Load default values
-        /// </summary>
         public void LoadDefaults() {
             MessageInterval = 30;
             RandomMessages = false;
