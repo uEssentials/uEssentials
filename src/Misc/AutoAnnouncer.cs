@@ -31,7 +31,7 @@ namespace Essentials.Misc {
 
     public class AutoAnnouncer {
 
-        public int MessageInterval { get; set; }
+        public int Interval { get; set; }
 
         public bool RandomMessages { get; set; }
 
@@ -40,7 +40,7 @@ namespace Essentials.Misc {
         public List<string> Messages { get; set; }
 
         public void LoadDefaults() {
-            MessageInterval = 30;
+            Interval = 30;
             RandomMessages = false;
             Enabled = false;
 
@@ -58,18 +58,16 @@ namespace Essentials.Misc {
         /// </summary>
         public void Start() {
             var messageIndex = 0;
-            var rand = new Random();
+            var rand = RandomMessages ? new Random() : null;
 
             Task.Create()
                 .Id("AutoMessage Executor")
-                .Interval(TimeSpan.FromSeconds(MessageInterval))
+                .Interval(TimeSpan.FromSeconds(Interval))
                 .UseIntervalAsDelay()
                 .Action(() => {
-                    var messagesCount = Messages.Count;
-
                     messageIndex = RandomMessages
-                        ? rand.Next(messagesCount)
-                        : (++messageIndex == messagesCount ? 0 : messageIndex);
+                        ? rand.Next(Messages.Count)
+                        : (++messageIndex == Messages.Count ? 0 : messageIndex);
 
                     var message = (string) Messages[messageIndex].Clone();
                     var messageColor = ColorUtil.GetColorFromString(ref message);
