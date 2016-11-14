@@ -22,12 +22,12 @@
 #endregion
 
 using Essentials.Common;
-using Essentials.Common.Reflect;
 using Rocket.Core;
 using System.Linq;
 using System.Reflection;
 using Essentials.Api;
 using Essentials.Api.Unturned;
+using Essentials.Common.Util;
 using Essentials.Economy;
 
 namespace Essentials.Compatibility.Hooks {
@@ -36,8 +36,9 @@ namespace Essentials.Compatibility.Hooks {
 
         public string CurrencySymbol => UEssentials.Config.Economy.UconomyCurrency;
 
-        private MethodAccessor<decimal> _getBalanceMethod;
-        private MethodAccessor<decimal> _increaseBalanceMethod;
+        private MethodInfo _getBalanceMethod;
+        private MethodInfo _increaseBalanceMethod;
+        private object _databaseInstance;
 
         public UconomyHook() : base("economy") {}
 
@@ -49,9 +50,10 @@ namespace Essentials.Compatibility.Hooks {
             var uconomyInstance =
                 uconomyType.GetField("Instance", BindingFlags.Static | BindingFlags.Public).GetValue(uconomyPlugin);
 
-            var databaseInstance = uconomyInstance.GetType().GetField("Database").GetValue(uconomyInstance);
-            _getBalanceMethod = AccessorFactory.AccessMethod<decimal>(databaseInstance, "GetBalance");
-            _increaseBalanceMethod = AccessorFactory.AccessMethod<decimal>(databaseInstance, "IncreaseBalance");
+            _databaseInstance = uconomyInstance.GetType().GetField("Database").GetValue(uconomyInstance);
+
+            _getBalanceMethod = ReflectUtil.GetMethod(_databaseInstance.GetType(), "GetBalance");
+            _increaseBalanceMethod = ReflectUtil.GetMethod(_databaseInstance.GetType(), "IncreaseBalance");
 
             UEssentials.Logger.LogInfo("Uconomy hook loaded.");
         }
@@ -63,15 +65,21 @@ namespace Essentials.Compatibility.Hooks {
         }
 
         public decimal Withdraw(UPlayer player, decimal amount) {
-            return _increaseBalanceMethod.Invoke(player.CSteamId.m_SteamID.ToString(), -amount);
+            return (decimal) _increaseBalanceMethod.Invoke(_databaseInstance, new object[] {
+                player.CSteamId.m_SteamID.ToString(), -amount
+            });
         }
 
         public decimal Deposit(UPlayer player, decimal amount) {
-            return _increaseBalanceMethod.Invoke(player.CSteamId.m_SteamID.ToString(), amount);
+            return (decimal) _increaseBalanceMethod.Invoke(_databaseInstance, new object[] {
+                player.CSteamId.m_SteamID.ToString(), amount
+            });
         }
 
         public decimal GetBalance(UPlayer player) {
-            return _getBalanceMethod.Invoke(player.CSteamId.m_SteamID.ToString());
+            return (decimal) _getBalanceMethod.Invoke(_getBalanceMethod, new object[] {
+                player.CSteamId.m_SteamID.ToString()
+            });
         }
 
         public bool Has(UPlayer player, decimal amount) {

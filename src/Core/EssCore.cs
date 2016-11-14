@@ -36,11 +36,11 @@ using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Commands;
 using Essentials.Common;
+using Essentials.Common.Util;
 using Essentials.Configuration;
 using Essentials.Core.Command;
 using Essentials.Core.Event;
 using Essentials.I18n;
-using Essentials.Common.Reflect;
 using Essentials.Compatibility;
 using Essentials.Core.Permission;
 using Essentials.Event.Handling;
@@ -439,8 +439,8 @@ namespace Essentials.Core {
         }
 
         private void UnregisterRocketCommands(bool silent = false) {
-            var _rocketCommands =
-                AccessorFactory.AccessField<List<RocketCommandManager.RegisteredRocketCommand>>(R.Commands, "commands").Value;
+            var commandsField = ReflectUtil.GetField(R.Commands.GetType(), "commands");
+            var _rocketCommands = (List<RocketCommandManager.RegisteredRocketCommand>) commandsField.GetValue(R.Commands);
 
             if (_rocketCommands == null) {
                 Logger.LogError("Could not unregister Rocket commands.");

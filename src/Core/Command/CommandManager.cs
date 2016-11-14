@@ -31,7 +31,6 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.CodeAnalysis;
 using Essentials.Common;
-using Essentials.Common.Reflect;
 using Essentials.Common.Util;
 using Rocket.API;
 using Rocket.Core;
@@ -52,7 +51,8 @@ namespace Essentials.Core.Command {
 
         internal CommandManager() {
             CommandMap = new Dictionary<string, ICommand>();
-            _rocketCommands = AccessorFactory.AccessField<List<RocketCommandManager.RegisteredRocketCommand>>(R.Commands, "commands").Value;
+            var commandsField = ReflectUtil.GetField(R.Commands.GetType(), "commands");
+            _rocketCommands = (List<RocketCommandManager.RegisteredRocketCommand>) commandsField.GetValue(R.Commands);
         }
 
         public ICommand GetByName([NotNull] string name, bool includeAliases = true) {
