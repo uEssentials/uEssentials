@@ -89,9 +89,9 @@ namespace Essentials.Commands {
             }
 
             if (args.Length == 5) {
-                EssLang.Send(src, "SPAWNED_ITEM_AT", amount, itemAsset.Value.name, pos.x, pos.y, pos.z);
+                EssLang.Send(src, "SPAWNED_ITEM_AT", amount, itemAsset.Value.itemName, pos.x, pos.y, pos.z);
             } else {
-                EssLang.Send(src, "SPAWNED_ITEM", amount, itemAsset.Value.name);
+                EssLang.Send(src, "SPAWNED_ITEM", amount, itemAsset.Value.itemName);
             }
 
             return CommandResult.Success();

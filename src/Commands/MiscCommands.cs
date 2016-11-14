@@ -309,7 +309,7 @@ namespace Essentials.Commands {
             }
 
             var color = Color.yellow;
-            var name = WrapMessage(src, asset.name);
+            var name = WrapMessage(src, asset.itemName);
             var description = WrapMessage(src, asset.itemDescription);
             var type = WrapMessage(src, asset.type.ToString());
 
@@ -657,7 +657,7 @@ namespace Essentials.Commands {
 
                     VehicleTool.giveVehicle(src.ToPlayer().UnturnedPlayer, id);
 
-                    EssLang.Send(src, "RECEIVED_VEHICLE", optAsset.Value.name, id);
+                    EssLang.Send(src, "RECEIVED_VEHICLE", optAsset.Value.vehicleName, id);
                     break;
 
                 case 2:
@@ -678,14 +678,14 @@ namespace Essentials.Commands {
                             VehicleTool.giveVehicle(p.UnturnedPlayer, vehAsset.id);
                         });
 
-                        EssLang.Send(src, "GIVEN_VEHICLE_ALL", vehAsset.name, vehAsset.id);
+                        EssLang.Send(src, "GIVEN_VEHICLE_ALL", vehAsset.vehicleName, vehAsset.id);
                     } else if (!args[0].IsValidPlayerIdentifier) {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     } else {
                         var target = args[0].ToPlayer;
                         VehicleTool.giveVehicle(target.UnturnedPlayer, vehAsset.id);
 
-                        EssLang.Send(src, "GIVEN_VEHICLE", vehAsset.name, vehAsset.id, target.DisplayName);
+                        EssLang.Send(src, "GIVEN_VEHICLE", vehAsset.vehicleName, vehAsset.id, target.DisplayName);
                     }
                     break;
 
@@ -936,7 +936,7 @@ namespace Essentials.Commands {
 
             if (allPlayers) {
                 UServer.Players.ForEach(playersToReceive.Add);
-                EssLang.Send(src, "GIVEN_ITEM_ALL", amt, asset.name, asset.id);
+                EssLang.Send(src, "GIVEN_ITEM_ALL", amt, asset.itemName, asset.id);
             } else {
                 playersToReceive.Add(target);
 
@@ -944,14 +944,14 @@ namespace Essentials.Commands {
                     goto give2;
                 }
 
-                EssLang.Send(src, "GIVEN_ITEM", amt, asset.name, asset.id, target.CharacterName);
+                EssLang.Send(src, "GIVEN_ITEM", amt, asset.itemName, asset.id, target.CharacterName);
             }
 
             give2:
             playersToReceive.ForEach(p => {
                 var success = p.GiveItem(item, amt, true);
 
-                EssLang.Send(p, "RECEIVED_ITEM", amt, asset.name, asset.id);
+                EssLang.Send(p, "RECEIVED_ITEM", amt, asset.itemName, asset.id);
 
                 if (!success) {
                     EssLang.Send(p, "INVENTORY_FULL");

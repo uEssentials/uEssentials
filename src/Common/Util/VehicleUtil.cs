@@ -49,7 +49,7 @@ namespace Essentials.Common.Util {
             if (_cachedAssets == null) {
                 _cachedAssets = Assets.find(EAssetType.VEHICLE)
                     .Cast<VehicleAsset>()
-                    .Where(i => i.name != null) // TODO: check name or vehicleName (same with itemUtil)
+                    .Where(i => i.vehicleName != null)
                     .OrderBy(i => i.id);
             }
 
@@ -58,18 +58,18 @@ namespace Essentials.Common.Util {
 
             foreach (var asset in _cachedAssets) {
                 var itemPriority = 0;
-                var itemName = asset.name;
+                var vehName = asset.vehicleName;
 
-                if (itemName.EqualsIgnoreCase(name)) {
+                if (vehName.EqualsIgnoreCase(name)) {
                     lastAsset = asset;
                     break;
                 }
 
-                if (itemName.StartsWith(name, true, CultureInfo.InvariantCulture)) {
+                if (vehName.StartsWith(name, true, CultureInfo.InvariantCulture)) {
                     itemPriority = 3;
-                } else if (itemName.ContainsIgnoreCase(name)) {
+                } else if (vehName.ContainsIgnoreCase(name)) {
                     itemPriority = 2;
-                } else if (name.IndexOf(' ') > 0 && name.Split(' ').All(p => itemName.ContainsIgnoreCase(p))) {
+                } else if (name.IndexOf(' ') > 0 && name.Split(' ').All(p => vehName.ContainsIgnoreCase(p))) {
                     itemPriority = 1;
                 }
 
