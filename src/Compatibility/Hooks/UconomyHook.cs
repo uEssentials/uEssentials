@@ -21,6 +21,7 @@
 */
 #endregion
 
+using System;
 using Essentials.Common;
 using Rocket.Core;
 using System.Linq;
@@ -52,8 +53,11 @@ namespace Essentials.Compatibility.Hooks {
 
             _databaseInstance = uconomyInstance.GetType().GetField("Database").GetValue(uconomyInstance);
 
-            _getBalanceMethod = ReflectUtil.GetMethod(_databaseInstance.GetType(), "GetBalance");
-            _increaseBalanceMethod = ReflectUtil.GetMethod(_databaseInstance.GetType(), "IncreaseBalance");
+            _getBalanceMethod = ReflectUtil.GetMethod(_databaseInstance.GetType(),
+                "GetBalance", new [] { typeof(string) });
+
+            _increaseBalanceMethod = ReflectUtil.GetMethod(_databaseInstance.GetType(),
+                "IncreaseBalance", new [] { typeof(string), typeof(decimal) });
 
             UEssentials.Logger.LogInfo("Uconomy hook loaded.");
         }
