@@ -52,7 +52,7 @@ namespace Essentials.Common.Util {
 
         public static MethodInfo GetMethod(Type type, string name, BindingFlags flags, Type[] argTypes) {
             var ret = type.GetMethod(name, flags, null, CallingConventions.Any, argTypes ?? new Type[0], null);
-            Debug.WriteIf(ret == null, $"Could not find method '{type.FullName}::{name}'", "ReflectUtil");
+            Debug.WriteLineIf(ret == null, $"Could not find method '{type.FullName}::{name}'", "ReflectUtil");
             return ret;
         }
         
@@ -70,7 +70,7 @@ namespace Essentials.Common.Util {
 
         public static FieldInfo GetField(Type type, string name, BindingFlags flags) {
             var ret = type.GetField(name, flags);
-            Debug.WriteIf(ret == null, $"Could not find field '{type.FullName}.{name}'", "ReflectUtil");
+            Debug.WriteLineIf(ret == null, $"Could not find field '{type.FullName}.{name}'", "ReflectUtil");
             return ret;
         }
 
