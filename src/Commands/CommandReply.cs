@@ -36,8 +36,7 @@ namespace Essentials.Commands {
         Description = "Reply to the most recent private message",
         Usage = "[message]",
         AllowedSource = AllowedSource.PLAYER,
-        MinArgs = 1,
-        MaxArgs = 1
+        MinArgs = 1
     )]
     public class CommandReply : EssCommand {
 
