@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Essentials.Api;
 using Essentials.Api.Configuration;
 using Essentials.Common;
@@ -169,13 +170,19 @@ namespace Essentials.Configuration {
             try {
                 var json = JObject.Parse(File.ReadAllText(filePath));
 
-                if (json["Tpa"]["CancelTeleportWhenMove"] == null) {
-                    json["Tpa"]["CancelTeleportWhenMove"] = true;
+                if (json["AutoAnnouncer"]["Interval"] == null) {
+                    var old = json["AutoAnnouncer"]
+                        .Children<JProperty>()
+                        .FirstOrDefault(n => n.Name.Equals("MessageInterval"));
+
+                    if (old != null) {
+                        json["AutoAnnouncer"]["Interval"] = old.Value;
+                        old.Remove();
+                    }
                     File.WriteAllText(filePath, json.ToString());
                 }
 
                 base.Load(filePath);
-
                 /*
                     Add missing fields...
                 */
