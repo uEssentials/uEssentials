@@ -49,7 +49,7 @@ namespace Essentials.Misc {
                 "<green>Automatic message 2",
                 "<blue>Automatic message 3",
                 "<yellow>Automatic message 4",
-                "<purple>Automatic message 5"
+                "<magenta>Automatic message 5"
             };
         }
 
