@@ -30,7 +30,7 @@
         The default color is Green.
     */
 
-    "ALL_REPAIRED": "<cyan>All of your items have been repaired."
+    "ALL_REPAIRED": "<cyan>All of your items have been repaired.",
     "ALREADY_FROZEN": "<yellow>This player is already frozen.",
     "ANYONE_ONLINE": "There is no players online.",
     "ASCENDED": "You ascended {0} 'meters'",
