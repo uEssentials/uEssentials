@@ -81,7 +81,7 @@ namespace Essentials.Compatibility.Hooks {
         }
 
         public decimal GetBalance(UPlayer player) {
-            return (decimal) _getBalanceMethod.Invoke(_getBalanceMethod, new object[] {
+            return (decimal) _getBalanceMethod.Invoke(_databaseInstance, new object[] {
                 player.CSteamId.m_SteamID.ToString()
             });
         }
