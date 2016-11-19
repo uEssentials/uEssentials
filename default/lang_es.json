@@ -252,7 +252,7 @@
     "WARP_TELEPORTED": "Teletransportado al warp {0}.",
     "WITHOUT_BED": "No tienes una cama para teletransportarte.",
     "REQUEST_URL_SUCCESS": "Enviaste a '{0}' un enlace: '{1}' .",
-    "WARP_ALREADY_WAITING": "You already waiting to be teleported.",
+    "ALREADY_WAITING": "You already waiting to be teleported.",
     "SHUTDOWN_DELAY_SENDER": "Server will shutdown in {0}",
     "BACK_DELAY": "You must wait {0} to return to the location of your death."
 }

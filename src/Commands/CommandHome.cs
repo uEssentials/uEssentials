@@ -65,6 +65,10 @@ namespace Essentials.Commands {
                 return CommandResult.Lang("WITHOUT_BED");
             }
 
+            if (Delay.ContainsKey(player.CSteamId.m_SteamID)) {
+                return CommandResult.Lang("ALREADY_WAITING");
+            }
+
             var homeCommand = UEssentials.Config.Home;
             var delay = homeCommand.TeleportDelay;
 

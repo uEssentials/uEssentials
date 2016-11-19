@@ -256,7 +256,7 @@
     "WARP_TELEPORTED": "Teleported to warp '{0}'.",
     "WITHOUT_BED": "<yellow>You do not have a bed to teleport to.",
     "REQUEST_URL_SUCCESS": "You have requested '{0}' to open url '{1}'",
-    "WARP_ALREADY_WAITING": "You already waiting to be teleported.",
+    "ALREADY_WAITING": "You already waiting to be teleported.",
     "SHUTDOWN_DELAY_SENDER": "Server will shutdown in {0}",
     "BACK_DELAY": "You must wait {0} to return to the location of your death."
 }

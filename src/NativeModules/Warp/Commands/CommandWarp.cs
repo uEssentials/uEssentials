@@ -69,7 +69,7 @@ namespace Essentials.NativeModules.Warp.Commands {
             }
 
             if (Delay.ContainsKey(player.CSteamId.m_SteamID)) {
-                return CommandResult.Lang("WARP_ALREADY_WAITING");
+                return CommandResult.Lang("ALREADY_WAITING");
             }
 
             var dest = WarpModule.Instance.WarpManager.GetByName(args[0].ToString());
