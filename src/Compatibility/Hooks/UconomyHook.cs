@@ -21,7 +21,6 @@
 */
 #endregion
 
-using System;
 using Essentials.Common;
 using Rocket.Core;
 using System.Linq;
