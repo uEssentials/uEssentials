@@ -85,8 +85,15 @@ namespace Essentials.NativeModules.Kit.Data {
             const StringComparison strCmp = StringComparison.InvariantCultureIgnoreCase;
 
             foreach (var kitObj in kitArr.Children<JObject>()) {
+                var name = GetNotNullValue<string>(kitObj, "Name");
+
+                if (loadedKits.ContainsKey(name.ToLowerInvariant())) {
+                    UEssentials.Logger.LogWarning($"Duplicated kit name ({name})");
+                    continue;
+                }
+
                 var kit = new Kit(
-                    GetNotNullValue<string>(kitObj, "Name"),
+                    name,
                     GetValueOrDefault(kitObj, "Cooldown", 0u),
                     GetValueOrDefault(kitObj, "Cost", 0m),
                     GetValueOrDefault(kitObj, "ResetCooldownWhenDie", false)
