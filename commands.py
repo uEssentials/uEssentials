@@ -38,6 +38,7 @@ def build(args):
             os.system("msbuild /nologo /p:Configuration=Debug /t:Rebuild,Clean")
         elif build_type == "RELEASE":
             os.system("msbuild /p:DefineConstants="" /p:Configuration=Release /t:Rebuild,Clean")
+            shutil.copy("%s\\bin\\Release\\uEssentials.dll"%sys.path[0], "%s\\bin\\uEssentials.dll"%sys.path[0])
         elif build_type == "EXPERIMENTAL":
             # Check if has EXPERIMENTAL_HASH
             if len(args) > 2 and args[1] == "EXPERIMENTAL_HASH":
