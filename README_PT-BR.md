@@ -8,7 +8,7 @@
 
 ---
 
-uEssentials é um plugin para o [RocketMod](rocketmod.net) que adiciona diversos comandos e sistemas em seu servidor.
+uEssentials é um plugin para o [RocketMod](https://goo.gl/RWrn5O) que adiciona diversos comandos e sistemas em seu servidor.
 
 ---
 
