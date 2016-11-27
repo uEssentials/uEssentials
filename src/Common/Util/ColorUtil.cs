@@ -42,22 +42,24 @@ namespace Essentials.Common.Util {
         }
 
         public static bool HasColor(string message) {
-            int l, r;
-            if ((l = message.IndexOf('<')) == -1 || (r = message.IndexOf('>')) == -1) {
+            int l = message.IndexOf('<');
+            int r = message.IndexOf('>');
+            if (l == -1 || r == -1 || l > r) {
                 return false;
             }
-            return message.Substring(++l, --r).Length > 0;
+            return message.Substring(++l, r - l).Length > 0;
         }
 
         public static Color GetColorFromString(ref string message) {
             Color? color;
-            int l, r;
+            int l = message.IndexOf('<');
+            int r = message.IndexOf('>');
             
-            if ((l = message.IndexOf('<')) == -1 || (r = message.IndexOf('>')) == -1) {
+            if (l == -1 || r == -1 || l > r) {
                 return Color.green;
             }
 
-            var rawColor = message.Substring(++l, --r);
+            var rawColor = message.Substring(++l, r - l);
 
             if (string.IsNullOrEmpty(rawColor)) {
                 return Color.green;
