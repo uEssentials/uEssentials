@@ -1,18 +1,20 @@
 # uEssentials
 
 [![Participe do nosso chat https://gitter.im/uEssentials/uEssentials](https://badges.gitter.im/uEssentials/uEssentials.svg)](https://gitter.im/uEssentials/uEssentials?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Faça uma doação https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY) [![Travis-CI](https://api.travis-ci.org/uEssentials/uEssentials.svg?branch=master)](https://travis-ci.org/uEssentials/uEssentials)
-[![Baixe a última atualização aqui](https://img.shields.io/badge/download-latest_release here-brightgreen.svg?maxAge=2592000)](http://uessentials.github.io/uEssentials/download_latest.html)
+[![Faça uma doação https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY) 
+[![Travis-CI](https://api.travis-ci.org/uEssentials/uEssentials.svg?branch=master)](https://travis-ci.org/uEssentials/uEssentials)
+[![Build status](https://ci.appveyor.com/api/projects/status/pxm15136lg6mcd2n?svg=true)](https://ci.appveyor.com/project/leonardosnt/uessentials)
+[![Baixe a última atualização aqui](https://img.shields.io/badge/download-latest_release here-brightgreen.svg?maxAge=2592000)](https://goo.gl/638UlM)
 
 ---
 
-uEssentials é um plugin para o [RocketMod](rocketmod.net) que adiciona diversos comandos e sistemas em seu servidor.
+uEssentials é um plugin para o [RocketMod](https://goo.gl/RWrn5O) que adiciona diversos comandos e sistemas em seu servidor.
 
 ---
 
 **Como instalar:**
 
-- Baixe a última versão [AQUI](https://github.com/uEssentials/uEssentials/releases/latest) (Primeiro link).
+- Baixe a última versão [AQUI](https://goo.gl/VKjqPg) (Primeiro link).
 - Extraia o conteúdo do arquivo para a pasta do Rocket _(**PastaDoUnturned/Servers/NomeDoSeuServidor/Rocket/**)_.
 - Inicie o Servidor e seja feliz.
 
@@ -21,14 +23,14 @@ uEssentials é um plugin para o [RocketMod](rocketmod.net) que adiciona diversos
 **Características:**
 - Sistema de Kits robusto;
 - Sistema de Warps;
-- [Mais de 60 comandos diversos](https://github.com/uEssentials/uEssentials/wiki/Command-Reference);
+- [Mais de 60 comandos diversos](https://goo.gl/VpucUK);
 - Sistema de módulos intuitivo e simples.
 
 ---
 
 **Veja também:**
-- Wiki: https://github.com/uEssentials/uEssentials/wiki
-- Releases: https://github.com/uEssentials/uEssentials/releases
+- Wiki: [https://github.com/uEssentials/uEssentials/wiki](https://goo.gl/MPe1AW)
+- Releases: [https://github.com/uEssentials/uEssentials/releases](https://goo.gl/uql6bm)
 
 ---
 
@@ -38,4 +40,4 @@ _[Considere fazer uma doação :heart:](https://www.paypal.com/cgi-bin/webscr?cm
 
 ---
 
-Caso tenha alguma dúvida ou deseje reportar algum problema, sinta-se à vontade para enviar [aqui](https://github.com/uEssentials/uEssentials/issues/).
+Caso tenha alguma dúvida ou deseje reportar algum problema, sinta-se à vontade para enviar [aqui](https://goo.gl/amgH8v).
