@@ -35,7 +35,7 @@ namespace Essentials.NativeModules.Kit.Commands {
     [CommandInfo(
         Name = "createkit",
         Aliases = new[] { "ckit" },
-        Description = "Create a kit.",
+        Description = "Create a kit using your inventory items.",
         Usage = "[name] <cooldown> <resetCooldownWhenDie> <cost>",
         AllowedSource = AllowedSource.PLAYER
     )]
