@@ -25,7 +25,6 @@ using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common.Util;
-using UnityEngine;
 
 namespace Essentials.Commands {
 
@@ -39,7 +38,7 @@ namespace Essentials.Commands {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var msg = args.Length == 2 ? args[1].ToString() : args.Join(1);
-            var color = ColorUtil.HasColor(msg) ? ColorUtil.GetColorFromString(ref msg) : Color.green;
+            var color = ColorUtil.GetColorFromString(ref msg);
 
             if (args[0].Equals("*console*")) {
                 UEssentials.ConsoleSource.SendMessage(msg, color);
