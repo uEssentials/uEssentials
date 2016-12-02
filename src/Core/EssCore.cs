@@ -64,7 +64,7 @@ namespace Essentials.Core {
 
         internal const string ROCKET_VERSION = "4.9.3.0";
         internal const string UNTURNED_VERSION = "3.17.8.0";
-        internal const string PLUGIN_VERSION = "1.3.1.5";
+        internal const string PLUGIN_VERSION = "1.3.1.6";
 
 #if EXPERIMENTAL
         internal const string BUILD_INFO = " experimental (commit: $COMMIT_HASH$)";
