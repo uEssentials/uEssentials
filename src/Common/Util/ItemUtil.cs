@@ -105,7 +105,7 @@ namespace Essentials.Common.Util {
 
             metadata[2] = tactical id byte 1
             metadata[3] = tactical id byte 2
-            
+
             metadata[4] = grip id byte 1
             metadata[5] = grip id byte 2
 
@@ -192,7 +192,29 @@ namespace Essentials.Common.Util {
             weaponItem.metadata[10] = ammo;
         }
 
-        
+        /// <summary>
+        /// Refuel Gas can (100%)
+        /// </summary>
+        /// <param name="item">Gas can item</param>
+        public static void Refuel(Item item) {
+            Refuel(item.metadata, item.id);
+        }
+
+        /// <summary>
+        /// Refuel Gas can (100%)
+        /// </summary>
+        /// <param name="metadata">Gas can metadata</param>
+        /// <param name="itemId">Gas can ID</param>
+        public static void Refuel(byte[] metadata, ushort itemId) {
+            if (itemId == 28) { // Gas can
+                metadata[0] = 244;
+                metadata[1] = 1;
+            } else if (itemId == 1440) { // Industrial Gas can
+                metadata[0] = 196;
+                metadata[1] = 9;
+            }
+        }
+
         private static void AssembleAttach(Item item, int[] idxs, Attachment attach) {
             if (attach == null || attach.AttachmentId == 0) return;
 

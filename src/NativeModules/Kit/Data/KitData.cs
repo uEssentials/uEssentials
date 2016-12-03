@@ -155,8 +155,8 @@ namespace Essentials.NativeModules.Kit.Data {
                         kitItem = new KitItem(kitItemId, kitItemDurability, kitItemAmount);
 
                         if (itemAsset is ItemFuelAsset) {
-                            ((KitItem) kitItem).Metadata[0] = 244;
-                            ((KitItem) kitItem).Metadata[1] = 1;
+                            var item = (KitItem) kitItem;
+                            ItemUtil.Refuel(item.Metadata, item.Id);
                         }
                     }
                     goto add;

@@ -79,9 +79,8 @@ namespace Essentials.Commands {
 
             var item = new Item(itemAsset.Value.id, true);
 
-            if (item.id == 28) { // Gas can
-                item.metadata[0] = 244;
-                item.metadata[1] = 1;
+            if (itemAsset.Value is ItemFuelAsset) {
+                ItemUtil.Refuel(item);
             }
 
             for (var i = 0; i < amount; i++) {
