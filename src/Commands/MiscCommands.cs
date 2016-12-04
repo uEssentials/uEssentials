@@ -817,8 +817,7 @@ namespace Essentials.Commands {
             Aliases = new [] {"refuelgen"},
             Description = "Refuel generators in specific radius (default 20).",
             Usage = "<radius> <percentage>",
-            AllowedSource = AllowedSource.PLAYER,
-            MinArgs = 1
+            AllowedSource = AllowedSource.PLAYER
         )]
         private CommandResult RefuelGeneratorCommand(ICommandSource src, ICommandArgs args) {
             float radius = 20;
