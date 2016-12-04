@@ -812,6 +812,51 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
+        [CommandInfo(
+            Name = "refuelgenerator",
+            Aliases = new [] {"refuelgen"},
+            Description = "Refuel generators in specific radius (default 20).",
+            Usage = "<radius> <percentage>",
+            AllowedSource = AllowedSource.PLAYER,
+            MinArgs = 1
+        )]
+        private CommandResult RefuelGeneratorCommand(ICommandSource src, ICommandArgs args) {
+            float radius = 20;
+            float percentage = 100;
+
+            if (args.Length > 0) {
+                if (!args[0].IsFloat) {
+                    return CommandResult.Lang("INVALID_NUMBER", args[0]);
+                }
+                if ((radius = args[0].ToFloat) <= 0) {
+                     return CommandResult.Lang("MUST_POSITIVE");
+                }
+            }
+            if (args.Length > 1) {
+                if (!args[1].IsFloat) {
+                    return CommandResult.Lang("INVALID_NUMBER", args[1]);
+                }
+                if (!args[1].IsInRange(0, 100)) {
+                     return CommandResult.Lang("NUMBER_BETWEEN", 0, 100);
+                }
+                percentage = args[1].ToFloat / 100;
+            }
+
+            var count = 0;
+            var player = src.ToPlayer();
+            var rayResult = Physics.SphereCastAll(player.Position, radius, Vector3.forward, RayMasks.BARRICADE);
+
+            rayResult
+                .Select(r => r.transform.GetComponent<InteractableGenerator>())
+                .Where(r => r != null)
+                .ForEach(r => {
+                    BarricadeManager.sendFuel(r.transform, (ushort) Math.Floor(r.capacity * percentage));
+                    count++;
+                });
+
+            EssLang.Send(player, "REFUEL_GENERATOR_REFUELED", count);
+            return CommandResult.Success();
+        }
 
         [CommandInfo(
             Name = "pvp",

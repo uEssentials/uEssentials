@@ -258,5 +258,6 @@
     "REQUEST_URL_SUCCESS": "You have requested '{0}' to open url '{1}'",
     "ALREADY_WAITING": "You already waiting to be teleported.",
     "SHUTDOWN_DELAY_SENDER": "Server will shutdown in {0}",
-    "BACK_DELAY": "You must wait {0} to return to the location of your death."
+    "BACK_DELAY": "You must wait {0} to return to the location of your death.",
+    "REFUEL_GENERATOR_REFUELED": "Refueled {0} generators."
 }
