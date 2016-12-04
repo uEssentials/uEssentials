@@ -105,7 +105,6 @@
     "GIVEN_ITEM_ALL": "<cyan>Вы дали {0}x {1} ({2}) всем игрокам!",
     "GIVEN_VEHICLE": "Вы дали {0} ({1}) игроку '{2}'",
     "GIVEN_VEHICLE_ALL": "Вы дали {0} ({1}) всем игрокам.",
-    "HAND_REPAIRED": "<cyan>Предмет в Ваших руках восстановлен.",
     "HOUR": "hour",
     "HOURS": "hours",
     "INVALID_BOOLEAN": "<yellow>Неверное значение '{0}'.  Ожидается 'true' или 'false'.",

@@ -107,7 +107,6 @@
     "GIVEN_ITEM_ALL": "Você enviou {0}x '{1}' para todos os jogadores.",
     "GIVEN_VEHICLE": "Você deu um {0} ({1}) para '{2}'",
     "GIVEN_VEHICLE_ALL": "Você deu um {0} ({1}) para todos os jogadores.",
-    "HAND_REPAIRED": "Os items da sua mão foram reparados.",
     "HOUR": "hora",
     "HOURS": "horas",
     "INVALID_BOOLEAN": "<red>Valor inválido: '{0}'. Esperado 'true' ou 'false'",

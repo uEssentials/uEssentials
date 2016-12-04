@@ -110,7 +110,6 @@
     "GIVEN_ITEM_ALL": "<cyan>You gave {0}x {1} ({2}) to all players!",
     "GIVEN_VEHICLE": "You gave a {0} ({1}) to '{2}'",
     "GIVEN_VEHICLE_ALL": "You gave a {0} ({1}) to all players.",
-    "HAND_REPAIRED": "<cyan>Items in your hands have been repaired.",
     "HOUR": "hour",
     "HOURS": "hours",
     "INVALID_BOOLEAN": "<yellow>Invalid value '{0}'. Expected 'true' or 'false'.",
