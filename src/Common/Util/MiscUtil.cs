@@ -42,9 +42,7 @@ namespace Essentials.Common.Util {
                 sb.Remove(sb.Length - separator.Length, separator.Length);
             }
 
-            sb.Append(end);
-
-            return sb.ToString();
+            return sb.Append(end).ToString();
         }
 
     }
