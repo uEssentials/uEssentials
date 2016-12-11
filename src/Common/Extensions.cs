@@ -68,37 +68,4 @@ namespace Essentials.Common {
         }
     }
 
-    public static class DictionaryExtensions {
-
-        public static V GetOrDefault<K, V>(this Dictionary<K, V> src, K key, V def) {
-            V val;
-            return src.TryGetValue(key, out val) ? val : def;
-        }
-
-    }
-
-/*
-    Unused...
-
-    public static class MiscExtensions {
-
-        public static Predicate<T> And<T>(this Predicate<T> src, Predicate<T> other) {
-            return p => src(p) && other(p);
-        }
-
-        public static Predicate<T> Or<T>(this Predicate<T> src, Predicate<T> other) {
-            return p => src(p) || other(p);
-        }
-
-        public static T TryCast<T>(this object o, Action<T> successCallback) where T : class {
-            var cast = o as T;
-            if (cast != null) {
-                successCallback?.Invoke(cast);
-                return cast;
-            }
-            return null;
-        }
-
-    }
-*/
 }
