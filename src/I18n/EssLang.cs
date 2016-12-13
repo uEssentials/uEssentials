@@ -21,6 +21,7 @@
 */
 #endregion
 
+using System;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -131,7 +132,16 @@ namespace Essentials.I18n {
 
         public static string Translate(string key, params object[] args) {
             var raw = GetEntry(key) as string;
-            return raw == null ? null : string.Format(raw, args);
+            if (raw == null) {
+                return null;
+            }
+            try {
+                return string.Format(raw, args);
+            } catch (FormatException) {
+                UEssentials.Logger.LogError($"An error ocurred while translating the entry " +
+                                            $"'{key}'. Arguments: {MiscUtil.ValuesToString(args)}");
+                throw;
+            }
         }
 
         public static bool HasEntry(string key) {
