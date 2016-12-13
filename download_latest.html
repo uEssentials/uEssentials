@@ -13,7 +13,7 @@
     xhr.onload = function(e) {
        var json = JSON.parse(xhr.response);
        var tag = json.tag_name;
-       var url = "https://github.com/uEssentials/uEssentials/releases/download/"+tag+"/uEssentials-"+tag+".zip?client_id=23ed59af16a9ac08aa33&client_secret=16b1208acc17dc87bd57bf710bf11965a73154ae";
+       var url = "https://github.com/uEssentials/uEssentials/releases/download/" + tag + "/uEssentials-" + tag + ".zip";
        window.location.replace(url);
     }
   </script>
