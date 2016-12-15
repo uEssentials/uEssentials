@@ -93,7 +93,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
-        void GenericPlayerDisconnected(UnturnedPlayer player) {
+        private void GenericPlayerDisconnected(UnturnedPlayer player) {
             var playerId = player.CSteamID.m_SteamID;
 
             MiscCommands.Spies.Remove(playerId);
@@ -102,107 +102,94 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void GenericPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb,
-                                        CSteamID murderer) {
-            var uplayer = UPlayer.From(player);
-
-            /* Keep skill */
+        private void GenericPlayerDeath(UnturnedPlayer rocketPlayer, EDeathCause cause, ELimb limb, CSteamID murderer) {
+            const string METADATA_KEY = "KEEP_SKILL";
             const string KEEP_SKILL_PERM = "essentials.keepskill.";
 
-            var globalPercentage = -1;
-            var playerPermissions = player.GetPermissions().Select(p => p.Name).ToList();
+            var player = UPlayer.From(rocketPlayer);
+            var allPercentage = -1; // essentials.keepskill.all.<percentage>
 
-            /*
-                Search for 'global percentage' Ex: (essentials.keepskill.50)
-            */
-
-            foreach (var p in playerPermissions.Where(p => p.StartsWith(KEEP_SKILL_PERM))) {
-                var rawAmount = p.Substring(KEEP_SKILL_PERM.Length);
-
-                if (rawAmount.Equals("*")) {
-                    globalPercentage = 100;
-                    break;
-                }
-                if (int.TryParse(rawAmount, out globalPercentage)) {
-                    break;
-                }
-                globalPercentage = -1;
+            // Save skills in metadata, that will be restored when player respawn.
+            // Format: Skill -> NewValue
+            // Get or instantiate new Dictionary
+            Dictionary<USkill, byte> skillsToRestore;
+            if (player.Metadata.Has(METADATA_KEY)) {
+                skillsToRestore = player.Metadata.Get<Dictionary<USkill, byte>>(METADATA_KEY);
+            } else {
+                skillsToRestore = new Dictionary<USkill, byte>();
+                player.Metadata[METADATA_KEY] = skillsToRestore;
             }
 
-            /*
-                If player has global percentage he will keep all skills.
-            */
-            var hasGlobalPercentage = (globalPercentage != -1 || player.IsAdmin);
-            var skillValues = new Dictionary<USkill, byte>();
+            // Parse keepskill permissions
+            foreach (var perm in player.Permissions.Where(perm => perm.StartsWith(KEEP_SKILL_PERM))) {
+                var kind = perm.Substring(KEEP_SKILL_PERM.Length);
+                var keepPercentage = 100;
 
-            foreach (var skill in USkill.Skills) {
-                var currentLevel = uplayer.GetSkillLevel(skill);
-                var newLevel = (byte?) null;
-
-                if (hasGlobalPercentage) {
-                    newLevel = (byte) Math.Round((currentLevel*globalPercentage)/100.0);
-                    goto add;
+                if (string.IsNullOrEmpty(kind)) {
+                    continue;
                 }
 
-                /*
-                    Search for single percentage.
-                */
-                var skillPermission = KEEP_SKILL_PERM + skill.Name.ToLowerInvariant() + ".";
-                var skillPermission2 = KEEP_SKILL_PERM + skill.Name.ToLowerInvariant();
-                var skillPercentage = -1;
-
-                foreach (var p in playerPermissions) {
-                    if (!p.StartsWith(skillPermission)) {
+                // Parse percentage, if present.
+                // e.g 'essentials.keepskill.cardio.25' -> keepPercentage = 25
+                if (kind.IndexOf('.') >= 0) {
+                    // Split 'skill.percentage'
+                    var parts = kind.Split('.');
+                    if (!int.TryParse(parts[1], out keepPercentage)) {
                         continue;
                     }
-
-                    var rawAmount = p.Substring(skillPermission.Length);
-
-                    if (int.TryParse(rawAmount, out skillPercentage)) {
-                        break;
+                    // Percentage must be between 0-100
+                    if (keepPercentage < 0) {
+                        keepPercentage = 0;
                     }
-
-                    skillPercentage = -1;
+                    if (keepPercentage > 100) {
+                        keepPercentage = 100;
+                    }
+                    kind = parts[0]; // let only skill name
                 }
 
-                if (skillPercentage != -1) {
-                    newLevel = (byte) Math.Round((currentLevel*skillPercentage)/100.0);
+                if (kind.EqualsIgnoreCase("all")) {
+                    allPercentage = keepPercentage;
+                    continue;
                 }
 
-                /*
-                    Ccheck for 'essentials.keepskill.SKILL'
-                */
-                if (!newLevel.HasValue && player.HasPermission(skillPermission2)) {
-                    newLevel = currentLevel;
+                // Parse skill from name
+                var fromName = USkill.FromName(kind);
+                if (fromName.IsAbsent) {
+                    continue;
                 }
+                skillsToRestore[fromName.Value] = (byte) Math.Ceiling(player.GetSkillLevel(fromName.Value) * (keepPercentage / 100.0));
+            }
 
-                add:
-                if (newLevel.HasValue) {
-                    skillValues.Add(skill, newLevel.Value);
+            // All Skills
+            if (allPercentage != -1) {
+                foreach (var skill in USkill.Skills) {
+                    // We wanna not change previously added skills.
+                    // This will allow to set a separated percentage while using modifier 'all' (essentials.keepskill.all)
+                    // e.g
+                    // essentials.keepskill.all.50
+                    // essentials.keepskill.cardio.100
+                    // this will keep 50% of all skills and 100% of cardio skill
+                    if (skillsToRestore.ContainsKey(skill)) {
+                        continue;
+                    }
+                    var newValue = Math.Ceiling(player.GetSkillLevel(skill) * (allPercentage / 100.0));
+                    skillsToRestore[skill] = (byte) newValue;
                 }
             }
 
-            if (skillValues.Count == 0) return;
-
-            var id = player.CSteamID.m_SteamID;
-            if (CachedSkills.ContainsKey(id)) {
-                CachedSkills[id] = skillValues;
-            } else {
-                CachedSkills.Add(id, skillValues);
-            }
         }
 
         [SubscribeEvent(EventType.PLAYER_REVIVE)]
-        private void OnPlayerRespawn(UnturnedPlayer player, Vector3 vect, byte angle) {
-            var playerId = player.CSteamID.m_SteamID;
-            if (!CachedSkills.ContainsKey(playerId)) {
-                return;
-            }
+        private void OnPlayerRespawn(UnturnedPlayer rocketPlayer, Vector3 vect, byte angle) {
+            var player = UPlayer.From(rocketPlayer);
+            var skillsToRestore = player.Metadata.GetOrDefault<Dictionary<USkill, byte>>("KEEP_SKILL", null);
 
-            var uplayer = UPlayer.From(playerId);
-            CachedSkills[playerId].ForEach(pair => {
-                uplayer.SetSkillLevel(pair.Key, pair.Value);
-            });
+            if (skillsToRestore != null) {
+                foreach (var pair in skillsToRestore) {
+                    player.SetSkillLevel(pair.Key, pair.Value);
+                }
+                player.Metadata.Remove("KEEP_SKILL");
+            }
         }
 
         private DateTime _lastUpdateCheck = DateTime.Now;
