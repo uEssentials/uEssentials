@@ -31,6 +31,7 @@ uEssentials é um plugin para o [RocketMod](https://goo.gl/RWrn5O) que adiciona 
 **Veja também:**
 - Wiki: [https://github.com/uEssentials/uEssentials/wiki](https://goo.gl/MPe1AW)
 - Releases: [https://github.com/uEssentials/uEssentials/releases](https://goo.gl/uql6bm)
+- Releases Experimentais: [https://github.com/uEssentials/Builds/releases](https://goo.gl/aI71Bs)
 
 ---
 
