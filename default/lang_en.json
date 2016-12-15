@@ -120,7 +120,6 @@
     "INVALID_SKILL": "<yellow>Invalid skill: {0}",
     "INVALID_STEAMID": "<yellow>SteamID '{0}' isn't valid!",
     "INVALID_VEHICLE_ID": "<yellow>Invalid vehicle id/name '{0}'.",
-    "INVENTORY_CLEAN": "<magenta>Your inventory was cleared.",
     "INVENTORY_FULL": "<yellow>Your inventory is full; dropping items on ground.",
     "ITEM_LIMIT": "<red>You cannot spawn more than {0} items at once time.",
     "ITEM_NOT_FOUND": "<yellow>Item not found: {0}",
@@ -159,7 +158,8 @@
     "LIMB_LEFT_FRONT": "left front",
     "LIMB_RIGHT_FRONT": "right front",
     "MAX_SKILLS": "<cyan>All of your skills were upgraded to the max level.",
-    "MAX_SKILLS_TARGET": "<cyan>All skills for {0} were upgraded to the max level.",
+    "MAX_SKILLS_TARGET": "<cyan>All skills of '{0}' were upgraded to the max level.",
+    "MAX_SKILLS_ALL": "<cyan>All skills of everyone were upgraded to the max level.",
     "MINUTE": "minute",
     "MINUTES": "minutes",
     "MUST_POSITIVE": "<yellow>The value must be positive.",
@@ -258,5 +258,8 @@
     "ALREADY_WAITING": "You already waiting to be teleported.",
     "SHUTDOWN_DELAY_SENDER": "Server will shutdown in {0}",
     "BACK_DELAY": "You must wait {0} to return to the location of your death.",
-    "REFUEL_GENERATOR_REFUELED": "Refueled {0} generators."
+    "REFUEL_GENERATOR_REFUELED": "Refueled {0} generators.",
+    "INVENTORY_CLEARED": "<magenta>Your inventory was cleared.",
+    "INVENTORY_CLEARED_ALL": "<magenta>You cleared inventory of everyone.",
+    "INVENTORY_CLEARED_PLAYER": "<magenta>Your cleared {0}'s inventory."
 }

@@ -253,5 +253,9 @@
     "ALREADY_WAITING": "Você já está esperando para ser teleportado.",
     "SHUTDOWN_DELAY_SENDER": "O servidor desligará em {0}",
     "BACK_DELAY": "Você precisa esperar {0} para retornar ao local da sua morte.",
-    "REFUEL_GENERATOR_REFUELED": "{0} geradores reabastecidos."
+    "REFUEL_GENERATOR_REFUELED": "{0} geradores reabastecidos.",
+    "INVENTORY_CLEARED": "<magenta>Você limbou seu inventário.",
+    "INVENTORY_CLEARED_ALL": "<magenta>Você limpou o inventário de todos os jogadores.",
+    "INVENTORY_CLEARED_PLAYER": "<magenta>Você limpou o inventário do jogador {0}.",
+    "MAX_SKILLS_ALL": "<cyan>Todas as skills de todos os jogadores foram atualizadas para o nível máximo."
 }

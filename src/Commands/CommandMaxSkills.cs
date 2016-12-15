@@ -26,13 +26,14 @@ using Essentials.I18n;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
+using Essentials.Common;
 
 namespace Essentials.Commands {
 
     [CommandInfo(
         Name = "maxskills",
         Description = "Set to max level all of your/player skills",
-        Usage = "<overpower[true|false]> <player>"
+        Usage = "<overpower[true|false]> <player | *>"
     )]
     public class CommandMaxSkills : EssCommand {
 
@@ -52,21 +53,29 @@ namespace Essentials.Commands {
                     return CommandResult.Lang("INVALID_BOOLEAN", args[0]);
                 }
 
-                if (args.Length == 2 && !src.HasPermission(Permission + ".other")) {
-                    return CommandResult.Lang("COMMAND_NO_PERMISSION");
-                }
-
                 var overpower = args[0].ToBool;
-                var targetPlayer = args.Length == 2 ? args[1].ToPlayer : src.ToPlayer();
 
-                if (targetPlayer == null) {
-                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
-                }
-
-                GiveMaxSkills(targetPlayer, overpower);
-
-                if (src.IsConsole || src.ToPlayer() != targetPlayer) {
-                    EssLang.Send(src, "MAX_SKILLS_TARGET", targetPlayer.DisplayName);
+                // player or all
+                if (args.Length > 1) {
+                    if (args[1].Equals("*")) {
+                        if (!src.HasPermission($"{Permission}.all")) {
+                            return CommandResult.NoPermission($"{Permission}.all");
+                        }
+                        UServer.Players.ForEach(p => GiveMaxSkills(p, overpower));
+                        EssLang.Send(src, "MAX_SKILLS_ALL");
+                    } else {
+                        if (!src.HasPermission($"{Permission}.other")) {
+                            return CommandResult.NoPermission($"{Permission}.other");
+                        }
+                        if (!args[1].IsValidPlayerIdentifier) {
+                            return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
+                        }
+                        var targetPlayer = args[1].ToPlayer;
+                        GiveMaxSkills(targetPlayer, overpower);
+                        EssLang.Send(src, "MAX_SKILLS_TARGET", targetPlayer.DisplayName);
+                    }
+                } else { // self (with overpower)
+                    GiveMaxSkills(src.ToPlayer(), overpower);
                 }
             }
 

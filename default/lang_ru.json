@@ -253,5 +253,9 @@
     "ALREADY_WAITING": "You already waiting to be teleported.",
     "SHUTDOWN_DELAY_SENDER": "Server will shutdown in {0}",
     "BACK_DELAY": "You must wait {0} to return to the location of your death.",
-    "REFUEL_GENERATOR_REFUELED": "Refueled {0} generators."
+    "REFUEL_GENERATOR_REFUELED": "Refueled {0} generators.",
+    "INVENTORY_CLEARED": "<magenta>Your inventory was cleared.",
+    "INVENTORY_CLEARED_ALL": "<magenta>You cleared inventory of everyone.",
+    "INVENTORY_CLEARED_PLAYER": "<magenta>Your cleared {0}'s inventory.",
+    "MAX_SKILLS_ALL": "<cyan>All skills of everyone were upgraded to the max level."
 }
