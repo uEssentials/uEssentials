@@ -31,6 +31,7 @@ Versão em Português (Brasil) do README.md [AQUI](https://github.com/uEssential
 **Resources:**
 - Wiki: [https://github.com/uEssentials/uEssentials/wiki](https://goo.gl/MPe1AW)
 - Releases: [https://github.com/uEssentials/uEssentials/releases](https://goo.gl/uql6bm)
+- Experimental Releases [https://github.com/uEssentials/Builds/releases](https://goo.gl/aI71Bs)
 
 ---
 
