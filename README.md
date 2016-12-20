@@ -4,7 +4,8 @@
 [![Donate https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY) 
 [![Travis-CI](https://api.travis-ci.org/uEssentials/uEssentials.svg?branch=master)](https://travis-ci.org/uEssentials/uEssentials)
 [![Build status](https://ci.appveyor.com/api/projects/status/pxm15136lg6mcd2n?svg=true)](https://ci.appveyor.com/project/leonardosnt/uessentials)
-[![Download latest release here](https://img.shields.io/badge/download-latest_release_here-brightgreen.svg?maxAge=2592000)](https://goo.gl/638UlM)
+[![Releases download count](https://www.dropbox.com/sh/chkgkpe8ksfanbe/AADrLVEwOZkz65faac71go6oa/total.svg?raw=1)](https://goo.gl/uql6bm)
+[![Download latest release here](https://img.shields.io/badge/download-latest_release-brightgreen.svg?maxAge=2592000)](https://goo.gl/638UlM)
 
 ---
 
