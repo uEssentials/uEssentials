@@ -100,13 +100,17 @@ namespace Essentials.NativeModules.Kit.Data {
                 );
 
                 var itemIndex = 0;
-                var economyHook = EssCore.Instance.HookManager.GetActiveByType<UconomyHook>();
+                var economyHook = UEssentials.EconomyProvider;
 
                 foreach (var itemObj in kitObj.GetValue("Items", strCmp).Children<JObject>()) {
                     AbstractKitItem kitItem;
                     JToken val;
 
-                    if ((val = itemObj.GetValue("money", strCmp)) != null && economyHook.IsPresent) {
+                    if ((val = itemObj.GetValue("money", strCmp)) != null) {
+                        if (!economyHook.IsPresent) {
+                            UEssentials.Logger.LogWarning("Cannot add 'Money' item because there is no active economy system.");
+                            continue;
+                        }
                         kitItem = new KitItemMoney(val.Value<decimal>());
                         goto add;
                     }
@@ -129,7 +133,14 @@ namespace Essentials.NativeModules.Kit.Data {
                         goto add;
                     }
 
-                    var kitItemId = itemObj.GetValue("id", strCmp).Value<ushort>();
+                    var kitItemIdToken = itemObj.GetValue("id", strCmp);
+
+                    if (kitItemIdToken == null) {
+                        UEssentials.Logger.LogWarning($"Missing attribute 'Id' in kit '{kit.Name}' at index {++itemIndex}");
+                        continue;
+                    }
+
+                    var kitItemId = kitItemIdToken.Value<ushort>();
                     var itemAsset = (ItemAsset) Assets.find(EAssetType.ITEM, kitItemId);
 
                     if (itemAsset == null) {
