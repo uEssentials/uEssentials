@@ -61,7 +61,7 @@ namespace Essentials.Core.Command {
 
             if (command is EssCommand) {
                 _info = ((EssCommand) command).Info;
-            } 
+            }
         }
 
         public void Execute(IRocketPlayer caller, string[] args) {
@@ -95,7 +95,7 @@ namespace Essentials.Core.Command {
 
                     if (result != null) {
                         if (result.Type == CommandResult.ResultType.SHOW_USAGE) {
-                            commandSource.SendMessage($"Use /{Command.Name} {Command.Usage}");
+                            EssLang.Send(commandSource, "COMMAND_USAGE_TEMPLATE", Command.Name, Command.Usage);
                         } else if (result.Message != null) {
                             var message = result.Message;
                             var color = ColorUtil.GetColorFromString(ref message);

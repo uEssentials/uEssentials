@@ -257,5 +257,6 @@
     "INVENTORY_CLEARED": "<magenta>Você limbou seu inventário.",
     "INVENTORY_CLEARED_ALL": "<magenta>Você limpou o inventário de todos os jogadores.",
     "INVENTORY_CLEARED_PLAYER": "<magenta>Você limpou o inventário do jogador {0}.",
-    "MAX_SKILLS_ALL": "<cyan>Todas as skills de todos os jogadores foram atualizadas para o nível máximo."
+    "MAX_SKILLS_ALL": "<cyan>Todas as skills de todos os jogadores foram atualizadas para o nível máximo.",
+    "COMMAND_USAGE_TEMPLATE": "<green>Use /{0} {1}"
 }

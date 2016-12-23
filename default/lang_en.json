@@ -261,5 +261,6 @@
     "REFUEL_GENERATOR_REFUELED": "Refueled {0} generators.",
     "INVENTORY_CLEARED": "<magenta>Your inventory was cleared.",
     "INVENTORY_CLEARED_ALL": "<magenta>You cleared inventory of everyone.",
-    "INVENTORY_CLEARED_PLAYER": "<magenta>Your cleared {0}'s inventory."
+    "INVENTORY_CLEARED_PLAYER": "<magenta>Your cleared {0}'s inventory.",
+    "COMMAND_USAGE_TEMPLATE": "<green>Use /{0} {1}"
 }

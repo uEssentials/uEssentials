@@ -257,5 +257,6 @@
     "INVENTORY_CLEARED": "<magenta>Your inventory was cleared.",
     "INVENTORY_CLEARED_ALL": "<magenta>You cleared inventory of everyone.",
     "INVENTORY_CLEARED_PLAYER": "<magenta>Your cleared {0}'s inventory.",
-    "MAX_SKILLS_ALL": "<cyan>All skills of everyone were upgraded to the max level."
+    "MAX_SKILLS_ALL": "<cyan>All skills of everyone were upgraded to the max level.",
+    "COMMAND_USAGE_TEMPLATE": "<green>Use /{0} {1}"
 }
