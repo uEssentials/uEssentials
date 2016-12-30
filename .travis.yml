@@ -1,5 +1,0 @@
-language: csharp
-solution: uEssentials.sln
-
-notifications:
- email: false
