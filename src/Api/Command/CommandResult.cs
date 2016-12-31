@@ -19,6 +19,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+#endregion
 
 using Essentials.Common.Util;
 using Essentials.I18n;
@@ -108,7 +109,6 @@ namespace Essentials.Api.Command {
         }
 
         /* COMMON UTIL RESULTS */
-#endregion
 
         public static CommandResult NoPermission(string permission) {
             return UEssentials.Config.ShowPermissionOnErrorMessage
