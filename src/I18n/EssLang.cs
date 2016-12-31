@@ -160,8 +160,10 @@ namespace Essentials.I18n {
             if (message == null) {
                 color = Color.red;
                 message = string.Format(KEY_NOT_FOUND_MESSAGE, key);
-            } else {
+            } else if (message.Length > 0) {
                 color = ColorUtil.GetColorFromString(ref message);
+            } else {
+                return;  // Will not send if message is empty.
             }
 
             target.SendMessage(message, color);
