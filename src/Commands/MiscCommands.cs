@@ -301,22 +301,18 @@ namespace Essentials.Commands {
                 }
 
                 asset = equipment.asset;
-            } else {
-                if (!args[0].IsUShort ||
-                    (asset = Assets.find(EAssetType.ITEM, args[0].ToUShort) as ItemAsset) == null) {
-                    return CommandResult.Lang("INVALID_ITEM_ID", args[0]);
-                }
+            } else if (!args[0].IsUShort || (asset = Assets.find(EAssetType.ITEM, args[0].ToUShort) as ItemAsset) == null) {
+                return CommandResult.Lang("INVALID_ITEM_ID", args[0]);
             }
 
-            var color = Color.yellow;
             var name = WrapMessage(src, asset.itemName);
             var description = WrapMessage(src, asset.itemDescription);
             var type = WrapMessage(src, asset.type.ToString());
 
-            src.SendMessage($"Name: {name}", color);
-            src.SendMessage($"Description: {description}", color);
-            src.SendMessage($"Id: {asset.id}", color);
-            src.SendMessage($"Type: {type}", color);
+            EssLang.Send(src, "ITEMINFO_NAME", name);
+            EssLang.Send(src, "ITEMINFO_DESCRIPTION", description);
+            EssLang.Send(src, "ITEMINFO_ID", asset.id);
+            EssLang.Send(src, "ITEMINFO_TYPE", type);
 
             return CommandResult.Success();
         }
