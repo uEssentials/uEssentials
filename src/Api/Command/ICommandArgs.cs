@@ -28,13 +28,13 @@ namespace Essentials.Api.Command {
     public interface ICommandArgs {
 
         /// <summary>
-        /// Array containing the raw arguments.
+        /// Array containing raw arguments.
         /// </summary>
         /// <returns></returns>
         string[] RawArguments { get; }
 
         /// <summary>
-        /// Array containing the "parsed" arguments.
+        /// Array containing "parsed" arguments.
         /// </summary>
         /// <returns></returns>
         ICommandArgument[] Arguments { get; }
