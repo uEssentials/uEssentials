@@ -30,13 +30,13 @@ echo Done!
 rmdir /s /q TmpRocket
 rm -f Rocket.zip
 
-git diff --name-only lib
+git diff --name-only ..\lib
 
 :: Commit changes
 set /P commit=Commit changes ? [Y/N] 
 
 IF /I "%commit%" EQU "Y" (
-  git add lib/
+  git add ..\lib
   git commit -m "Update lib"
   git push -u origin master
 )
