@@ -109,6 +109,8 @@ namespace Essentials.Core.Command {
                         EssLang.Send(p, p.IsAdmin ? "COMMAND_ERROR_OCURRED_ADMIN" : "COMMAND_ERROR_OCURRED");
                     });
                 }
+                UEssentials.Logger.LogError($"An error ocurred while executing command: '{Name} " +
+                                             $"{MiscUtil.ValuesToString(args, " ", "", "")}'");
                 UEssentials.Logger.LogError(e.ToString());
             }
 
