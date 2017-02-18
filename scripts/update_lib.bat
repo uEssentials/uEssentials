@@ -13,7 +13,7 @@ IF NOT EXIST "TmpRocket" (
 )
 
 :: Unzip Rocket
-7z -y x Rocket.zip -o./TmpRocket
+"C:\Program Files\7-Zip\7z.exe" -y x Rocket.zip -o./TmpRocket
 
 :: Copy Rocket dll's to lib\
 cp TmpRocket/Modules/Rocket.Unturned/*.dll ..\lib
