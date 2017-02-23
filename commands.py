@@ -24,7 +24,7 @@
 import sys, os, shutil
 
 # Rocket Plugins Folder
-PLUGINS_FOLDER = "C:\\Users\\Leonardo\\Documents\\Unturned\\Rocket\\All\\Unturned\\Servers\\MyFirstRocketServer\Rocket\\Plugins\\"
+PLUGINS_FOLDER = "C:\\Users\\Leonardo\\Documents\\Unturned\\Rocket\\All\\Unturned\\Servers\\MyFirstRocketServer\\Rocket\\Plugins\\"
 
 def build(args):
     print("Build() %s"%args)
@@ -65,8 +65,7 @@ def build(args):
             print("Invalid build type: %s"%build_type)
 
 def copy_to_plugins():
-    shutil.copy("%s\\bin\\uEssentials.dll"%sys.path[0], "%suEssentials.dll"%PLUGINS_FOLDER)
-    pass
+    shutil.copy2("%s\\bin\\uEssentials.dll"%sys.path[0], "%suEssentials.dll"%PLUGINS_FOLDER)
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
