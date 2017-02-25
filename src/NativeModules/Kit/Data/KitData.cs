@@ -31,8 +31,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
-using Essentials.Core;
-using Essentials.Compatibility.Hooks;
 using Essentials.NativeModules.Kit.Item;
 
 namespace Essentials.NativeModules.Kit.Data {
@@ -167,7 +165,8 @@ namespace Essentials.NativeModules.Kit.Data {
 
                         if (itemAsset is ItemFuelAsset) {
                             var item = (KitItem) kitItem;
-                            ItemUtil.Refuel(item.Metadata, item.Id);
+                            var fuelPercentage = itemObj.GetValue("FuelPercentage", strCmp)?.Value<float>() ?? 100;
+                            ItemUtil.Refuel(item.Metadata, item.Id, fuelPercentage);
                         }
                     }
                     goto add;

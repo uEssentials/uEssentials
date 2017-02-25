@@ -196,8 +196,8 @@ namespace Essentials.Common.Util {
         /// Refuel Gas can (100%)
         /// </summary>
         /// <param name="item">Gas can item</param>
-        public static void Refuel(Item item) {
-            Refuel(item.metadata, item.id);
+        public static void Refuel(Item item, float percentage = 100) {
+            Refuel(item.metadata, item.id, percentage);
         }
 
         /// <summary>
@@ -206,13 +206,18 @@ namespace Essentials.Common.Util {
         /// <param name="metadata">Gas can metadata</param>
         /// <param name="itemId">Gas can ID</param>
         public static void Refuel(byte[] metadata, ushort itemId) {
-            if (itemId == 28) { // Gas can
-                metadata[0] = 244;
-                metadata[1] = 1;
-            } else if (itemId == 1440) { // Industrial Gas can
-                metadata[0] = 196;
-                metadata[1] = 9;
-            }
+            Refuel(metadata, itemId);
+        }
+
+        public static void Refuel(byte[] metadata, ushort itemId, float percentage = 100) {
+            if (percentage > 100) percentage = 100;
+            if (percentage < 0) percentage = 0;
+
+            var maxFuel = itemId == 28 ? 500 : 2500;
+            var fuel = (int) Math.Floor((maxFuel * (percentage / 100)));
+
+            metadata[0] = (byte) fuel;
+            metadata[1] = (byte) (fuel >> 8);
         }
 
         private static void AssembleAttach(Item item, int[] idxs, Attachment attach) {
