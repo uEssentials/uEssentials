@@ -199,7 +199,7 @@ namespace Essentials.Common.Util {
         public static void Refuel(byte[] metadata, ushort itemId, float percentage = 100) {
             Asset asset = Assets.find(EAssetType.ITEM, itemId);
             if (asset is ItemFuelAsset) {
-                Refuel(metadata, itemId, percentage);
+                Refuel(metadata, (ItemFuelAsset) asset, percentage);
             } else {
                 throw new ArgumentException("itemId does not refer to a ItemFuelAsset");
             }
