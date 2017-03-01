@@ -192,29 +192,24 @@ namespace Essentials.Common.Util {
             weaponItem.metadata[10] = ammo;
         }
 
-        /// <summary>
-        /// Refuel Gas can (100%)
-        /// </summary>
-        /// <param name="item">Gas can item</param>
         public static void Refuel(Item item, float percentage = 100) {
             Refuel(item.metadata, item.id, percentage);
         }
 
-        /// <summary>
-        /// Refuel Gas can (100%)
-        /// </summary>
-        /// <param name="metadata">Gas can metadata</param>
-        /// <param name="itemId">Gas can ID</param>
-        public static void Refuel(byte[] metadata, ushort itemId) {
-            Refuel(metadata, itemId);
+        public static void Refuel(byte[] metadata, ushort itemId, float percentage = 100) {
+            Asset asset = Assets.find(EAssetType.ITEM, itemId);
+            if (asset is ItemFuelAsset) {
+                Refuel(metadata, itemId, percentage);
+            } else {
+                throw new ArgumentException("itemId does not refer to a ItemFuelAsset");
+            }
         }
 
-        public static void Refuel(byte[] metadata, ushort itemId, float percentage = 100) {
+        public static void Refuel(byte[] metadata, ItemFuelAsset fuelAsset, float percentage) {
             if (percentage > 100) percentage = 100;
             if (percentage < 0) percentage = 0;
 
-            var maxFuel = itemId == 28 ? 500 : 2500;
-            var fuel = (int) Math.Floor((maxFuel * (percentage / 100)));
+            var fuel = (int) Math.Floor((fuelAsset.fuel * (percentage / 100)));
 
             metadata[0] = (byte) fuel;
             metadata[1] = (byte) (fuel >> 8);
