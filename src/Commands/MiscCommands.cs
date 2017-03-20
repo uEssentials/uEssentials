@@ -156,7 +156,7 @@ namespace Essentials.Commands {
                         return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
-                    src.SendMessage("This command is instable and can cause bugs.", Color.red);
+                    src.SendMessage("This command is unstable and can cause bugs.", Color.red);
 
                     var toRemove = new List<uint>();
                     UWorld.Vehicles
