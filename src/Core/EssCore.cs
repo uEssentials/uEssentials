@@ -198,17 +198,7 @@ namespace Essentials.Core {
                     EconomyProvider = Optional<IEconomyProvider>.Empty();
                 }
 
-                // Load native modules
-                Assembly.GetTypes()
-                    .Where(t => typeof(NativeModule).IsAssignableFrom(t))
-                    .Where(t => !t.IsAbstract)
-                    .Where(t => {
-                        var moduleInfo = (ModuleInfo) t.GetCustomAttributes(typeof(ModuleInfo), false)[0];
-                        return Config.EnabledSystems.Any(s => s.Equals(moduleInfo.Name, StringComparison.OrdinalIgnoreCase));
-                    })
-                    .ForEach(t => {
-                        ModuleManager.LoadModule((NativeModule) Activator.CreateInstance(t));
-                    });
+                LoadNativeModules();
 
                 Logger.LogInfo($"Loaded {CommandManager.Commands.Count()} commands");
 
@@ -316,7 +306,7 @@ namespace Essentials.Core {
             }
 
 #if !DEV
-            TriggerGaData($"Server/{Parser.getIPFromUInt32(Provider.ip)}");
+            Analytics.SendEvent($"ServerInit");
 #endif
 
 #if DEV
@@ -342,27 +332,18 @@ namespace Essentials.Core {
             TaskExecutor.Stop();
         }
 
-        internal static int _errCount;
-
-        internal static void TriggerGaData(string path) {
-            if (_errCount > 10) {
-                return;
-            }
-            Task.Create()
-                .Id($"TriggerGaData '{path}'")
-                .Async()
-                .Action(() => {
-                    try {
-                        using (var wc = new System.Net.WebClient()) {
-                            var data = wc.DownloadData($"https://ga-beacon.appspot.com/UA-81494650-1/{path}");
-                            Debug.Print($"TriggerGaData: Success (data_len: {data.Length})");
-                        }
-                    } catch (Exception ex) {
-                        Debug.Print(ex.ToString());
-                        _errCount++;
-                    }
+        private static void LoadNativeModules() {
+            // Load native modules
+            Instance.Assembly.GetTypes()
+                .Where(t => typeof(NativeModule).IsAssignableFrom(t))
+                .Where(t => !t.IsAbstract)
+                .Where(t => {
+                    var moduleInfo = (ModuleInfo)t.GetCustomAttributes(typeof(ModuleInfo), false)[0];
+                    return Instance.Config.EnabledSystems.Any(s => s.Equals(moduleInfo.Name, StringComparison.OrdinalIgnoreCase));
                 })
-                .Submit();
+                .ForEach(t => {
+                    Instance.ModuleManager.LoadModule((NativeModule)Activator.CreateInstance(t));
+                });
         }
 
         private static void ReloadCallback(string command) {
