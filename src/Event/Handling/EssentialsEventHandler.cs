@@ -280,7 +280,7 @@ namespace Essentials.Event.Handling {
                 var playerGroups = R.Permissions.GetGroups(e.Source.ToPlayer().RocketPlayer, true);
                 var cooldownValue = cmdEntry.Cooldown;
 
-                if (playerGroups != null && playerGroups.Count > 0) {
+                if (playerGroups != null && cmdEntry.PerGroupCooldown != null && playerGroups.Count > 0) {
                     var group = playerGroups
                         .Select(g => g.Id)
                         .FirstOrDefault(cmdEntry.PerGroupCooldown.ContainsKey);
