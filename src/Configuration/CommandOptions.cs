@@ -86,7 +86,10 @@ namespace Essentials.Configuration {
                 Description = "Description"
             });
             Commands.Add("home", new CommandEntry {
-                Cooldown = 30
+                Cooldown = 30,
+                PerGroupCooldown = {
+                    { "vip", 10 }
+                }
             });
         }
 
@@ -97,6 +100,7 @@ namespace Essentials.Configuration {
             public string Description;
             public decimal Cost;
             public uint Cooldown;
+            public Dictionary<string, uint> PerGroupCooldown;
         }
 
     }

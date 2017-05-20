@@ -44,6 +44,9 @@ using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
 using EventType = Essentials.Api.Event.EventType;
+using Essentials.Misc;
+using Rocket.API.Serialisation;
+using Rocket.Core;
 
 namespace Essentials.Event.Handling {
 
@@ -88,7 +91,7 @@ namespace Essentials.Event.Handling {
                                                  $"(v{EssCore.PLUGIN_VERSION}) :)");
             }
 #if !DEV
-            EssCore.TriggerGaData($"Player/{player.CSteamID.m_SteamID}");
+            Analytics.SendEvent($"Player/{player.CSteamID.m_SteamID}");
 #endif
         }
 
@@ -272,14 +275,30 @@ namespace Essentials.Event.Handling {
                 return;
             }
 
-            if (!e.Source.HasPermission("essentials.bypass.commandcooldown") && cmdEntry.Cooldown > 0) {
+            if (!e.Source.HasPermission("essentials.bypass.commandcooldown")) {
                 var playerId = e.Source.ToPlayer().CSteamId.m_SteamID;
+                var playerGroups = R.Permissions.GetGroups(e.Source.ToPlayer().RocketPlayer, true);
+                var cooldownValue = cmdEntry.Cooldown;
+
+                if (playerGroups != null && playerGroups.Count > 0) {
+                    var group = playerGroups
+                        .Select(g => g.Id)
+                        .FirstOrDefault(cmdEntry.PerGroupCooldown.ContainsKey);
+
+                    if (group != null) {
+                        cooldownValue = cmdEntry.PerGroupCooldown[group];
+                    }
+                }
+
+                if (cooldownValue <= 0) {
+                    return;
+                }
 
                 if (!CommandCooldowns.ContainsKey(playerId)) {
                     CommandCooldowns.Add(playerId, new Dictionary<string, DateTime>());
                 }
 
-                CommandCooldowns[playerId][commandName] = DateTime.Now.AddSeconds(cmdEntry.Cooldown);
+                CommandCooldowns[playerId][commandName] = DateTime.Now.AddSeconds(cooldownValue);
             }
 
             if (UEssentials.EconomyProvider.IsPresent && !e.Source.HasPermission("essentials.bypass.commandcost") &&
