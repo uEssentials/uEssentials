@@ -107,6 +107,7 @@
     <Compile Include="src\Api\Task\Task.cs" />
     <Compile Include="src\Api\Task\EssentialsTaskExecutor.cs" />
     <Compile Include="src\CodeAnalysis\NotNullAttribute.cs" />
+    <Compile Include="src\Commands\CommandReputation.cs" />
     <Compile Include="src\Commands\CommandRequestUrl.cs" />
     <Compile Include="src\Commands\CommandHome.cs" />
     <Compile Include="src\Commands\CommandJump.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="src\Common\Util\DebugUtil.cs" />
     <Compile Include="src\Compatibility\Hook.cs" />
     <Compile Include="src\Compatibility\HookManager.cs" />
+    <Compile Include="src\Compatibility\Hooks\AviEconomyHook.cs" />
     <Compile Include="src\Configuration\WebResources.cs" />
     <Compile Include="src\Json\Converters\Vector3Converter.cs" />
     <Compile Include="src\Misc\Analytics.cs" />
