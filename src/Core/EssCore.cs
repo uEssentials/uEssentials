@@ -63,7 +63,7 @@ namespace Essentials.Core {
     public sealed class EssCore : RocketPlugin {
 
         internal const string ROCKET_VERSION = "4.9.3.0";
-        internal const string UNTURNED_VERSION = "3.18.1.1";
+        internal const string UNTURNED_VERSION = "3.18.12.0";
         internal const string PLUGIN_VERSION = "1.3.3.2";
 
 #if EXPERIMENTAL
@@ -192,6 +192,8 @@ namespace Essentials.Core {
 
                 if (Config.Economy.UseXp) {
                     EconomyProvider = Optional<IEconomyProvider>.Of(new ExpEconomyProvider());
+                } else if (this.HookManager.GetActiveByType<AviEconomyHook>().IsPresent) {
+                    EconomyProvider = Optional<IEconomyProvider>.Of(HookManager.GetActiveByType<AviEconomyHook>().Value);
                 } else if (HookManager.GetActiveByType<UconomyHook>().IsPresent) {
                     EconomyProvider = Optional<IEconomyProvider>.Of(HookManager.GetActiveByType<UconomyHook>().Value);
                 } else {
