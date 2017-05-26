@@ -63,6 +63,7 @@ def build(args):
                 os.system("msbuild /p:DefineConstants=\"EXPERIMENTAL\" /t:Rebuild,Clean")
         else:
             print("Invalid build type: %s"%build_type)
+    copy_to_plugins()
 
 def copy_to_plugins():
     shutil.copy2("%s\\bin\\uEssentials.dll"%sys.path[0], "%suEssentials.dll"%PLUGINS_FOLDER)
