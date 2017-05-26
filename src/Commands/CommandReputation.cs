@@ -1,10 +1,9 @@
 ﻿#region License
-
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2017  leonardosnt and contributors
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +19,6 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-
 #endregion
 
 using Essentials.Api.Command;
@@ -43,9 +41,13 @@ namespace Essentials.Commands {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
 
-            if (args.Length == 0 || (args.Length == 1 && src.IsConsole)) { return CommandResult.ShowUsage(); }
+            if (args.Length == 0 || (args.Length == 1 && src.IsConsole)) {
+                return CommandResult.ShowUsage();
+            }
 
-            if (!args[0].IsInt) { return CommandResult.Lang("INVALID_NUMBER", args[0]); }
+            if (!args[0].IsInt) {
+                return CommandResult.Lang("INVALID_NUMBER", args[0]);
+            }
 
             int amount = args[0].ToInt;
 
@@ -83,11 +85,13 @@ namespace Essentials.Commands {
         }
 
         private static void GiveRep(UPlayer player, int amount) {
-
             player.RocketPlayer.Player.skills.askRep(amount);
 
-            if (amount >= 0) { EssLang.Send(player, "REPUTATION_RECEIVED", amount); } else { EssLang.Send(player, "REPUTATION_LOST", -amount); }
-
+            if (amount >= 0) {
+                EssLang.Send(player, "REPUTATION_RECEIVED", amount);
+            } else {
+                EssLang.Send(player, "REPUTATION_LOST", -amount);
+            }
         }
 
     }

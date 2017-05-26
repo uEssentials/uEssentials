@@ -42,3 +42,7 @@ _[Considere fazer uma doação :heart:](https://www.paypal.com/cgi-bin/webscr?cm
 ---
 
 Caso tenha alguma dúvida ou deseje reportar algum problema, sinta-se à vontade para enviar [aqui](https://goo.gl/amgH8v).
+
+## License
+Copyright (C) 2015-2017 leonardosnt <leonrdsnt@gmail.com> e contribuidores.  
+Licenciado sobre a licença GPL v2. Veja o arquivo LICENSE na raiz do projeto para mais informações sobre a licença.
