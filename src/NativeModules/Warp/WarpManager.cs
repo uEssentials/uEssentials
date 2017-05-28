@@ -43,7 +43,7 @@ namespace Essentials.NativeModules.Warp {
         }
 
         public bool Contains(string warpName) {
-            return WarpMap.ContainsKey(warpName.ToLower());
+            return WarpMap.ContainsKey(warpName.ToLowerInvariant());
         }
 
         public bool Contains(Warp warp) {
@@ -69,18 +69,18 @@ namespace Essentials.NativeModules.Warp {
         }
 
         public void Add(Warp warp) {
-            WarpMap.Add(warp.Name, warp);
+            WarpMap.Add(warp.Name.ToLowerInvariant(), warp);
             Save();
         }
 
         public Warp GetByName(string warpName) {
             return Contains(warpName)
-                ? WarpMap[warpName.ToLower()]
+                ? WarpMap[warpName.ToLowerInvariant()]
                 : null;
         }
 
         public bool Delete(string warpName) {
-            var success = WarpMap.Remove(warpName.ToLower());
+            var success = WarpMap.Remove(warpName.ToLowerInvariant());
             Save();
             return success;
         }
