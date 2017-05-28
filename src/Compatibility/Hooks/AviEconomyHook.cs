@@ -33,7 +33,6 @@ using Essentials.Economy;
 
 using Rocket.API;
 using Rocket.Core;
-using Rocket.Core.Logging;
 using Rocket.Unturned.Player;
 
 namespace Essentials.Compatibility.Hooks {
@@ -51,7 +50,7 @@ namespace Essentials.Compatibility.Hooks {
 
         public override void OnLoad() {
 
-            Logger.Log("Loading AviEconomy hook...");
+            UEssentials.Logger.LogInfo("Loading AviEconomy hook...");
 
             IRocketPlugin economyPlugin = R.Plugins.GetPlugins().FirstOrDefault(c => c.Name.EqualsIgnoreCase("AviEconomy"));
 
@@ -77,7 +76,7 @@ namespace Essentials.Compatibility.Hooks {
 
             if (this._bankType == null) { throw new Exception("AviEconomy ProcessPurchase method couldn't be loaded..."); }
 
-            Logger.Log("AviEconomy hook loaded.");
+            UEssentials.Logger.LogInfo("AviEconomy hook loaded.");
 
         }
 
