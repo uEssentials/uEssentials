@@ -87,7 +87,7 @@ namespace Essentials.Configuration {
             });
             Commands.Add("home", new CommandEntry {
                 Cooldown = 30,
-                PerGroupCooldown = {
+                PerGroupCooldown = new Dictionary<string, uint>{
                     { "vip", 10 }
                 }
             });
