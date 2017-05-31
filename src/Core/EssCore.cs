@@ -192,7 +192,7 @@ namespace Essentials.Core {
 
                 if (Config.Economy.UseXp) {
                     EconomyProvider = Optional<IEconomyProvider>.Of(new ExpEconomyProvider());
-                } else if (this.HookManager.GetActiveByType<AviEconomyHook>().IsPresent) {
+                } else if (HookManager.GetActiveByType<AviEconomyHook>().IsPresent) {
                     EconomyProvider = Optional<IEconomyProvider>.Of(HookManager.GetActiveByType<AviEconomyHook>().Value);
                 } else if (HookManager.GetActiveByType<UconomyHook>().IsPresent) {
                     EconomyProvider = Optional<IEconomyProvider>.Of(HookManager.GetActiveByType<UconomyHook>().Value);
