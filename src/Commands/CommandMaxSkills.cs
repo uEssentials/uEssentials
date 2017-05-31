@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,9 +20,11 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Linq;
+
 using Essentials.I18n;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -53,7 +56,11 @@ namespace Essentials.Commands {
                     return CommandResult.Lang("INVALID_BOOLEAN", args[0]);
                 }
 
-                var overpower = args[0].ToBool;
+                bool overpower = args[0].ToBool;
+
+                if (overpower && !src.HasPermission($"{Permission}.overpower")) {
+                    return CommandResult.NoPermission($"{Permission}.overpower");
+                }
 
                 // player or all
                 if (args.Length > 1) {
