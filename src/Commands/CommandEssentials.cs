@@ -116,6 +116,7 @@ namespace Essentials.Commands {
                     UEssentials.ModuleManager.GetModule<WarpModule>().IfPresent(m => {
                         m.WarpManager.Save();
                     });
+                    src.SendMessage("Data sucessfully saved.");
                     break;
 
                 case "reload":

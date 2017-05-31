@@ -112,7 +112,7 @@ namespace Essentials.Commands {
         [CommandInfo(
             Name = "clear",
             Description = "Clear things",
-            Usage = "[i = items, v = vehicles, ev = empty vehicles] <distance>"
+            Usage = "[i = items, ev = empty vehicles] <distance>" //v = vehicles,
         )]
         private CommandResult ClearCommand(ICommandSource src, ICommandArgs args, ICommand cmd) {
             if (args.IsEmpty) {
@@ -175,31 +175,29 @@ namespace Essentials.Commands {
                     EssLang.Send(src, "CLEAR_EMPTY_VEHICLES", toRemove.Count);
                     break;
 
-                case "v":
+                /*case "v":
                 case "vehicle":
                     return CommandResult.Generic("This option is currently disabled.");
-                    /*
+
                     if (!src.HasPermission(cmd.Permission + ".vehicles")) {
                         return CommandResult.Lang("COMMAND_NO_PERMISSION");
                     }
 
-                    new Thread(() => {
-                        UWorld.Vehicles.ForEach(v => {
-                            for (byte i = 0; i < v.passengers.Length; i++) {
-                                if (v.passengers[i] == null ||
-                                    v.passengers[i].player == null) continue;
+                    UWorld.Vehicles.ForEach(v => {
+                        for (byte i = 0; i < v.passengers.Length; i++) {
+                            if (v.passengers[i] == null ||
+                                v.passengers[i].player == null) continue;
 
-                                Vector3 point;
-                                byte angle;
+                            Vector3 point;
+                            byte angle;
 
-                                v.getExit(i, out point, out angle);
-                                VehicleManager.sendExitVehicle(v, i, point, angle, true);
-                            }
-                        });
+                            v.getExit(i, out point, out angle);
+                            VehicleManager.sendExitVehicle(v, i, point, angle, true);
+                        }
+                    });
 
-                        VehicleManager.askVehicleDestroyAll();
-                        EssLang.Send(src, "CLEAR_VEHICLES");
-                    }).Start();
+                    VehicleManager.askVehicleDestroyAll();
+                    EssLang.Send(src, "CLEAR_VEHICLES");
                     break;*/
 
                 case "i":
