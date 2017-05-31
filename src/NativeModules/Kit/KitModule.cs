@@ -55,14 +55,13 @@ namespace Essentials.NativeModules.Kit {
                 .Interval(200)
                 .Submit();
 
-
             CommandManager.RegisterAll(kCommandsNamespace);
             EventManager.RegisterAll<KitEventHandler>();
         }
 
         public override void OnUnload() {
             CommandManager.UnregisterAll(kCommandsNamespace);
-            EventManager.RegisterAll<KitEventHandler>();
+            EventManager.UnregisterAll<KitEventHandler>();
             KitManager.Save();
         }
 
