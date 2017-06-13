@@ -67,10 +67,12 @@ namespace Essentials.Configuration {
         public AutoAnnouncer AutoAnnouncer;
         public AutoCommands AutoCommands;
 
+        // TODO: use HashSet to provide an O(1) search...
         public List<ushort> GiveItemBlacklist;
         public List<ushort> VehicleBlacklist;
         public List<string> EnabledSystems;
         public List<string> DisabledCommands;
+        public HashSet<string> CommandsToOverride;
 
         internal EssConfig() {}
 
@@ -155,6 +157,7 @@ namespace Essentials.Configuration {
             GiveItemBlacklist = new List<ushort>();
             VehicleBlacklist = new List<ushort>();
             DisabledCommands = new List<string>();
+            CommandsToOverride = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
             EnabledSystems = new List<string> { "kits", "warps" };
 
             ItemSpawnLimit = 10;
@@ -166,6 +169,7 @@ namespace Essentials.Configuration {
                 return;
             }
 
+            // Custom config load
             try {
                 var json = JObject.Parse(File.ReadAllText(filePath));
 
@@ -182,6 +186,7 @@ namespace Essentials.Configuration {
                 }
 
                 base.Load(filePath);
+
                 /*
                     Add missing fields...
                 */
@@ -201,6 +206,15 @@ namespace Essentials.Configuration {
                     });
 
                     Save(filePath);
+                }
+
+                if (CommandsToOverride == null) {
+                    CommandsToOverride = new HashSet<string>();
+                }
+
+                // Make sure that CommandsToOverride use StringComparer.InvariantCultureIgnoreCase to compare the values
+                if (CommandsToOverride.Comparer != StringComparer.InvariantCultureIgnoreCase) {
+                    CommandsToOverride = new HashSet<string>(CommandsToOverride, StringComparer.InvariantCultureIgnoreCase);
                 }
 
                 /*

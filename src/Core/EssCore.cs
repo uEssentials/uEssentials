@@ -120,6 +120,8 @@ namespace Essentials.Core {
                     Console.Error.WriteLine(ex);
                 }
 
+                R.Plugins.OnPluginsLoaded += OverrideCommands;
+
                 TaskExecutor = new EssentialsTaskExecutor();
 
                 Logger = new ConsoleLogger("[uEssentials] ");
@@ -275,14 +277,7 @@ namespace Essentials.Core {
                     })
                     .Submit();
 
-                Task.Create()
-                    .Id("Unregister Rocket Commands")
-                    .Delay(TimeSpan.FromSeconds(3))
-                    .Action(() => UnregisterRocketCommands(true)) // Second check, silently.
-                    .Submit();
-
                 CommandWindow.input.onInputText += ReloadCallback;
-                UnregisterRocketCommands(); // First check.
                 Logger.LogInfo($"Enabled ({stopwatch.ElapsedMilliseconds} ms)");
             } catch (Exception e) {
                 var msg = new List<string>() {
@@ -423,29 +418,66 @@ namespace Essentials.Core {
             worker.RunWorkerAsync();
         }
 
-        private void UnregisterRocketCommands(bool silent = false) {
-            var commandsField = ReflectUtil.GetField(R.Commands.GetType(), "commands");
-            var _rocketCommands = (List<RocketCommandManager.RegisteredRocketCommand>) commandsField.GetValue(R.Commands);
+        private void OverrideCommands() {
+            R.Plugins.OnPluginsLoaded -= OverrideCommands;
 
-            if (_rocketCommands == null) {
-                Logger.LogError("Could not unregister Rocket commands.");
+            var commandsField = ReflectUtil.GetField(R.Commands.GetType(), "commands");
+            var rocketCommands = (List<RocketCommandManager.RegisteredRocketCommand>) commandsField.GetValue(R.Commands);
+            var essCommands = new HashSet<string>(CommandManager.Commands.Select(c => c.Name.ToLowerInvariant()));
+
+            // Used to check which commands are not "owned' by uEssentials
+            var mappedRocketCommands = new Dictionary<string, RocketCommandManager.RegisteredRocketCommand>();
+
+            if (rocketCommands == null) {
+                Logger.LogError("Could not override Rocket commands.");
                 return;
             }
 
-            /* All names & aliases of uEssentials command */
-            var essCommands = _rocketCommands
-                .Where(c => c.Command is CommandAdapter)
-                .Select(c => c.Name.ToLowerInvariant())
-                .ToList();
+            rocketCommands.RemoveAll(command => {
+                var name = command.Name.ToLowerInvariant();
+                var wrapper = command.Command;
 
-            _rocketCommands.RemoveAll(c => {
-                if (essCommands.Contains(c.Name.ToLowerInvariant()) && !(c.Command is CommandAdapter)) {
-                    if (!silent)
-                        Logger.LogInfo($"Overriding Rocket command ({c.Name.ToLowerInvariant()})");
+                // Override default commands from Rocket and Unturned
+                if (wrapper.GetType().FullName.StartsWith("Rocket.Unturned.Commands") && essCommands.Contains(name)) {
+                    Logger.LogInfo($"Overriding Unturned/Rocket command ({command.Name.ToLowerInvariant()})");
                     return true;
+                }
+
+                // It will override a command from another plugin only if specified in the config.json
+                if (Config.CommandsToOverride.Contains(name) && !(command.Command is CommandAdapter)) {
+                    var pluginName = command.Command.GetType().Assembly.GetName().Name;
+                    Logger.LogInfo($"Overriding command \"{command.Name.ToLowerInvariant()}\" from the plugin: {pluginName}");
+                    return true;
+                }
+
+                if (!mappedRocketCommands.ContainsKey(name)) {
+                    mappedRocketCommands.Add(name, command);
                 }
                 return false;
             });
+
+            // Check commands that are not "owned" by uEssentials.
+            var commandsNotOwnedByEss = CommandManager.Commands
+                .Select(command => {
+                    var rocketCommand = mappedRocketCommands[command.Name.ToLowerInvariant()];
+                    if (rocketCommand.Command is CommandAdapter) return null;
+                    return rocketCommand;
+                })
+                .Where(command => command != null)
+                .ToList();
+
+            if (commandsNotOwnedByEss.Count == 0) {
+                return;
+            }
+
+            lock (Console.Out) {
+                Logger.LogWarning("The following commands cannot be used by uEssentials because them already exists in another plugin.");
+                commandsNotOwnedByEss.ForEach(command => {
+                    var pluginName = command.Command.GetType().Assembly.GetName().Name;
+                    Logger.LogWarning($" The command \"{command.Name}\" is owned by the plugin: {pluginName}");
+                });
+                Logger.LogWarning("If you want to use a command from uEssentials instead of another plugin, add it in \"CommandsToOverride\" in the config.json");
+            }
         }
 
         private static string MkDirIfNotExists(string dir) {
