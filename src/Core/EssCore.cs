@@ -124,6 +124,8 @@ namespace Essentials.Core {
 
                 TaskExecutor = new EssentialsTaskExecutor();
 
+                SteamGameServer.SetKeyValue("essversion", PLUGIN_VERSION);
+
                 Logger = new ConsoleLogger("[uEssentials] ");
                 ConnectedPlayers = new Dictionary<ulong, UPlayer>();
                 Debug.Listeners.Add(new EssentialsConsoleTraceListener());

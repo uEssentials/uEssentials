@@ -1,1 +1,1 @@
-py commands.py BUILD %*
+py scripts/commands.py BUILD %* 
