@@ -1,5 +1,6 @@
 # uEssentials
 
+[![Join in our discord](https://discordapp.com/api/guilds/325080396868091906/widget.png)](https://discord.gg/JtHwhNq)
 [![Join the chat at https://gitter.im/uEssentials/uEssentials](https://badges.gitter.im/uEssentials/uEssentials.svg)](https://gitter.im/uEssentials/uEssentials?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build status](https://ci.appveyor.com/api/projects/status/pxm15136lg6mcd2n?svg=true)](https://ci.appveyor.com/project/leonardosnt/uessentials)
 [![Releases download count](https://www.dropbox.com/sh/chkgkpe8ksfanbe/AADrLVEwOZkz65faac71go6oa/total.svg?raw=1)](https://goo.gl/uql6bm)
