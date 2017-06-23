@@ -108,3 +108,5 @@ request("POST", `https://api.github.com/repos/uessentials/uessentials/statuses/$
     context: "Download"
   })
 });
+
+fs.writeFileSync('download_url', `https://github.com/uEssentials/Builds/releases/tag/build-${shortSha}`);
