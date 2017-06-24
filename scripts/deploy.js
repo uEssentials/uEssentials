@@ -39,6 +39,8 @@ const UPLOAD_RELEASE_URL = `https://uploads.github.com/repos/${REPO}/releases/{i
 
 const RELEASE_BODY = `Released at {date}\r\n\r\nRelease for commit: https://github.com/uEssentials/uEssentials/commit/${COMMIT} (${process.env['APPVEYOR_REPO_COMMIT_MESSAGE']})`;
 
+let shortSha = COMMIT.substring(0, 7);
+
 function createRelease(version) {
   let res = request('POST', CREATE_RELEASE_URL, {
     headers: {
@@ -55,6 +57,7 @@ function createRelease(version) {
   });
   if (res.body.toString().indexOf('already_exists') > -1) {
     console.log(`Release for commit ${COMMIT} already exists. Exiting...`);
+    fs.writeFileSync('download_url', `https://github.com/uEssentials/Builds/releases/tag/build-${shortSha}`);
     process.exit(0);
   }
   return JSON.parse(res.getBody('utf8'));
@@ -94,8 +97,6 @@ request('PUT', `https://api.github.com/repos/${REPO}/contents/README.md?access_t
 });
 
 // Create release & upload asset
-let shortSha = COMMIT.substring(0, 7);
-
 uploadAsset(createRelease(`build-${shortSha}`), 'deploy/uEssentials.zip', `uEssentials-build-${shortSha}.zip`);
 
 // Add 'Download available' status
