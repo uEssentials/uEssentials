@@ -1,1 +1,1 @@
-py scripts/commands.py BUILD %* 
+"scripts/build.bat" %* 

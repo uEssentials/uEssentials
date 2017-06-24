@@ -7,5 +7,6 @@ IF NOT EXIST "%cd%\uEssentials.sln" (
 )
 
 :: Create shortcut build scripts
-echo py scripts/commands.py BUILD %%* > %scripts_base_path%\build.bat
-echo py scripts/commands.py BUILD RELEASE > %scripts_base_path%\release.bat
+echo "scripts/build.bat" %%* > %scripts_base_path%\build.bat
+echo "scripts/build.bat" release > %scripts_base_path%\release.bat
+echo "scripts/build.bat" rebuild > %scripts_base_path%\rebuild.bat
