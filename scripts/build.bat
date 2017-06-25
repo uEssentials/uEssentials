@@ -6,10 +6,8 @@ IF NOT EXIST "%cd%\uEssentials.sln" (
   SET base_path="."
 )
 
-echo %base_path%
-
 :: Change this to your Rocket/Plugins folder
-set "ROCKET_PLUGINS_FOLDER"="C:\Users\Leonardo\Documents\Unturned\Rocket\All\Unturned\Servers\MyFirstRocketServer\Rocket\Plugins"
+set ROCKET_PLUGINS_FOLDER="C:\Users\Leonardo\Documents\Unturned\Rocket\All\Unturned\Servers\MyFirstRocketServer\Rocket\Plugins"
 
 if "%1"=="" (
   msbuild %base_path% /nologo /p:Configuration=Debug
@@ -23,6 +21,7 @@ if "%1"=="rebuild" (
 
 if "%1"=="release" (
   msbuild %base_path% /nologo /p:Configuration=Release /t:Rebuild,Clean
+  copy /Y %base_path%\bin\Release\uEssentials.dll %base_path%\bin\
   goto :copy
 )
 
@@ -34,5 +33,5 @@ if exist "%ROCKET_PLUGINS_FOLDER%" (
  echo Copying uEssentials.dll to %ROCKET_PLUGINS_FOLDER%
  copy /Y %base_path%\bin\uEssentials.dll %ROCKET_PLUGINS_FOLDER%
 ) else (
-  echo Directory "%ROCKET_PLUGINS_FOLDER%" does not exist
+ echo Directory "%ROCKET_PLUGINS_FOLDER%" does not exist
 )
