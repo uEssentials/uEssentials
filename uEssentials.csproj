@@ -136,7 +136,6 @@
     <Compile Include="src\Economy\IEconomyProvider.cs" />
     <Compile Include="src\Economy\ExpEconomyProvider.cs" />
     <Compile Include="src\Compatibility\Hooks\UconomyHook.cs" />
-    <Compile Include="src\Compatibility\Hooks\LPXHook.cs" />
     <Compile Include="src\Configuration\CommandOptions.cs" />
     <Compile Include="src\Configuration\TextCommands.cs" />
     <Compile Include="src\Core\Command\TextCommand.cs" />
@@ -207,7 +206,6 @@
     <Compile Include="src\Api\Unturned\UWorld.cs" />
     <Compile Include="src\Core\EssCore.cs" />
     <Compile Include="src\Api\UEssentials.cs" />
-    <Compile Include="src\Core\Permission\EssentialsPermissionProvider.cs" />
     <Compile Include="src\Event\Handling\EssentialsEventHandler.cs" />
     <Compile Include="src\NativeModules\Kit\Item\AbstractKitItem.cs" />
     <Compile Include="src\NativeModules\Kit\Item\KitItemExperience.cs" />
