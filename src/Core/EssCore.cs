@@ -42,7 +42,6 @@ using Essentials.Core.Command;
 using Essentials.Core.Event;
 using Essentials.I18n;
 using Essentials.Compatibility;
-using Essentials.Core.Permission;
 using Essentials.Event.Handling;
 using Essentials.NativeModules;
 using Essentials.Updater;
@@ -63,8 +62,8 @@ namespace Essentials.Core {
     public sealed class EssCore : RocketPlugin {
 
         internal const string ROCKET_VERSION = "4.9.3.0";
-        internal const string UNTURNED_VERSION = "3.18.12.0";
-        internal const string PLUGIN_VERSION = "1.3.4.0";
+        internal const string UNTURNED_VERSION = "3.20.0.0";
+        internal const string PLUGIN_VERSION = "1.3.5.0";
 
 #if EXPERIMENTAL
         internal const string BUILD_INFO = " experimental (commit: COMMIT_HASH)";
@@ -109,16 +108,9 @@ namespace Essentials.Core {
 
         protected override void Load() {
             try {
-                var stopwatch = Stopwatch.StartNew();
+                Stopwatch stopwatch = Stopwatch.StartNew();
 
                 Instance = this;
-
-                try {
-                    var essPermProvider = new EssentialsPermissionsProvider();
-                    R.Permissions = essPermProvider;
-                } catch (Exception ex) {
-                    Console.Error.WriteLine(ex);
-                }
 
                 R.Plugins.OnPluginsLoaded += OverrideCommands;
 
@@ -150,8 +142,8 @@ namespace Essentials.Core {
                 WebResources = new WebResources();
                 Config = new EssConfig();
 
-                var webResourcesPath = Path.Combine(Folder, WebResources.FileName);
-                var configPath = Path.Combine(Folder, Config.FileName);
+                string webResourcesPath = Path.Combine(Folder, WebResources.FileName);
+                string configPath = Path.Combine(Folder, Config.FileName);
 
                 WebResources.Load(webResourcesPath);
 
