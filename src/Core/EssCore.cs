@@ -42,7 +42,6 @@ using Essentials.Core.Command;
 using Essentials.Core.Event;
 using Essentials.I18n;
 using Essentials.Compatibility;
-using Essentials.Core.Permission;
 using Essentials.Event.Handling;
 using Essentials.NativeModules;
 using Essentials.Updater;
@@ -112,13 +111,6 @@ namespace Essentials.Core {
                 var stopwatch = Stopwatch.StartNew();
 
                 Instance = this;
-
-                try {
-                    var essPermProvider = new EssentialsPermissionsProvider();
-                    R.Permissions = essPermProvider;
-                } catch (Exception ex) {
-                    Console.Error.WriteLine(ex);
-                }
 
                 R.Plugins.OnPluginsLoaded += OverrideCommands;
 
