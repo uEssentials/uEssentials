@@ -41,9 +41,11 @@ namespace Essentials.NativeModules.Kit.Data {
             }
 
             var saved = JsonUtil.DeserializeFile<Dictionary<ulong, PlayerCooldown>>(FilePath);
+            
+            CommandKit.Cooldowns.Clear();
+            CommandKit.GlobalCooldown.Clear();
+            
             saved.ForEach(kv => {
-                CommandKit.Cooldowns.Clear();
-                CommandKit.GlobalCooldown.Clear();
                 if (kv.Value.Kits != null) {
                     CommandKit.Cooldowns.Add(kv.Key, kv.Value.Kits);
                 }
