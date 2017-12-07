@@ -167,7 +167,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                             break;
 
                         default:
-                            return CommandResult.Error("Invalid type '{args[2]}'. Valid types are: 'normal', 'vehicle' and 'xp'");
+                            return CommandResult.Error($"Invalid type '{args[2]}'. Valid types are: 'normal', 'vehicle' and 'xp'");
                     }
                     break;
 
