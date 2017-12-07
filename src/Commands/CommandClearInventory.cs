@@ -77,7 +77,10 @@ namespace Essentials.Commands {
                 (byte) 1, (byte) 0, EMPTY_BYTE_ARRAY);
 
             // Remove items
-            for (byte page = 0; page < 8; page++) {
+            for (byte page = 0; page < PlayerInventory.PAGES; page++) {
+                if(page == PlayerInventory.AREA)
+                    continue;
+                
                 var count = playerInv.getItemCount(page);
 
                 for (byte index = 0; index < count; index++) {

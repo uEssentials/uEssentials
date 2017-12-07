@@ -95,7 +95,7 @@ namespace Essentials.Commands {
             const float DAMAGE = 200;
 
             EffectManager.sendEffect(20, EffectManager.INSANE, pos);
-            DamageTool.explode(pos, 10f, EDeathCause.GRENADE, CSteamID.Nil, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE);
+            DamageTool.explode(pos, 10f, EDeathCause.GRENADE, CSteamID.Nil, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, EExplosionDamageType.CONVENTIONAL, 32, true, false);
         }
 
     }
