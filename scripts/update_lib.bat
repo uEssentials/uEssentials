@@ -20,8 +20,9 @@ IF NOT EXIST "C:\Program Files (x86)\7-Zip\7z.exe" (
 :: Unzip Rocket
 "C:\Program Files (x86)\7-Zip\7z.exe" -y x Rocket.zip -oTmpRocket/
 
+
 :: Copy Rocket dll's to lib\
-copy /Y TmpRocket/Modules/Rocket.Unturned/*.dll ..\lib
+xcopy /y TmpRocket\Modules\Rocket.Unturned\*.dll ..\lib /s /i
 
 :: Copy Unturned dll's
 echo Copying unturned assemblies
