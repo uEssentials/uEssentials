@@ -237,6 +237,7 @@
     "TPA_SENT": "{0} se quiere teleportar donde estas, escribe /tpa [accept/deny].",
     "TPA_SENT_SENDER": "Enviaste un /tpa a {0}, escribe /tpa [cancel] para cancelar.",
     "TPA_YOURSELF": "No puedes teleportarte a ti mismo.",
+    "TPA_ALREADY_SENT": "<yellow>You already sent a tpa request to {0}!",
     "UNFROZEN_ALL": "Has descongelado a todos los jugadores.",
     "UNFROZEN_PLAYER": "Has sido descongelado por {0}.",
     "UNFROZEN_SENDER": "jugador {0} descongelado.",

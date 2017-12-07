@@ -240,6 +240,7 @@
     "TPA_SENT": "{0} has sent you a tpa request, use '/tpa accept/deny'.",
     "TPA_SENT_SENDER": "You sent a tpa request to {0}, use '/tpa cancel' to cancel.",
     "TPA_YOURSELF": "You cannot send a tpa request to yourself.",
+    "TPA_ALREADY_SENT": "<yellow>You already sent a tpa request to {0}!",
     "UNFROZEN_ALL": "<magenta>You unfroze all players!",
     "UNFROZEN_PLAYER": "<magenta>You were unfrozen by {0}!",
     "UNFROZEN_SENDER": "<magenta>Player {0} has been unfrozen!",

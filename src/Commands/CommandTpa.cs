@@ -140,6 +140,7 @@ namespace Essentials.Commands {
                     break;
                 }
 
+                // Send TPA to someone
                 default: {
                     if (!player.HasPermission($"{Permission}.send")) {
                         return CommandResult.NoPermission($"{Permission}.send");
@@ -149,14 +150,17 @@ namespace Essentials.Commands {
                         return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
                     }
 
-                    /*
-                        Cancel current request
-                    */
-                    if (Requests.ContainsKey(senderId)) {
+                    var target = args[0].ToPlayer;
+
+                    // Cancel current request. We currently does not support multiple requests.
+                    if (Requests.TryGetValue(senderId, out var value)) {
+                        // Avoid 'flooding' requests to the same player
+                        if (value == target.CSteamId.m_SteamID) {
+                            return CommandResult.Lang("TPA_ALREADY_SENT", target.DisplayName);
+                        }
+
                         Requests.Remove(senderId);
                     }
-
-                    var target = args[0].ToPlayer;
 
 #if !DEV
                     if (target == player) {

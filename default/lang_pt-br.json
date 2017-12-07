@@ -235,6 +235,7 @@
     "TPA_SENT": "{0} enviou um pedido de tpa para você, use '/tpa accept/deny'.",
     "TPA_SENT_SENDER": "Você enviou um pedido de tpa para {0}, use '/tpa cancel' para cancelar.",
     "TPA_YOURSELF": "Você não pode enviar um pedido de tpa para sí mesmo.",
+    "TPA_ALREADY_SENT": "<yellow>Você já enviou um pedido de tpa para {0}!",
     "UNFROZEN_ALL": "Você descongelou todos os jogadores.",
     "UNFROZEN_PLAYER": "Você foi descongelado por '{0}'",
     "UNFROZEN_SENDER": "Jogador '{0}' descongelado.",
