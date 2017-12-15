@@ -1,0 +1,45 @@
+version: '{branch}/{build}'
+image: Visual Studio 2017
+branches:
+  only:
+  - master
+  - test
+configuration: Release
+platform: Any CPU
+build:
+  project: uEssentials.csproj
+  verbosity: normal
+after_build:
+- cmd: curl -s -k %GITTER_BOT_SCRIPT_URL% | node -c
+test_script:
+- cmd: >-
+    npm install cjson
+
+    node ./scripts/check_lang_syntax.js
+deploy_script:
+- cmd: >-
+    rem Running deployment script...
+
+
+    mkdir deploy > nul
+
+    copy /y "bin\Release\uEssentials.dll" "deploy\" > nul
+
+    cd deploy
+
+    7z a -tzip uEssentials.zip uEssentials.dll > nul
+
+    cd ..
+
+
+    npm install sync-request
+
+    node ./scripts/deploy.js
+
+
+    rem Done!
+on_finish:
+- cmd: >-
+    npm install request
+
+    curl -s -k %DISCORD_WH_SCRIPT% | node -c
