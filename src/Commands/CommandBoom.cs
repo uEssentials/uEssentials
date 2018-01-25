@@ -29,6 +29,7 @@ using SDG.Unturned;
 using Essentials.Common;
 using System.Linq;
 using Steamworks;
+using System.Collections.Generic;
 
 namespace Essentials.Commands {
 
@@ -95,7 +96,8 @@ namespace Essentials.Commands {
             const float DAMAGE = 200;
 
             EffectManager.sendEffect(20, EffectManager.INSANE, pos);
-            DamageTool.explode(pos, 10f, EDeathCause.GRENADE, CSteamID.Nil, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE, EExplosionDamageType.CONVENTIONAL, 32, true, false);
+            DamageTool.explode(pos, 10f, EDeathCause.GRENADE, CSteamID.Nil, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE,
+                DAMAGE, DAMAGE, DAMAGE, out List<EPlayerKill> unused, EExplosionDamageType.CONVENTIONAL, 32, true, false);
         }
 
     }
