@@ -55,7 +55,12 @@ namespace Essentials.Commands {
             }
 
             if (args.Length == 2) {
+                // Everyone
                 if (args[1].Equals("*")) {
+                    if (!src.HasPermission($"{Permission}.all")) {
+                        return CommandResult.NoPermission($"{Permission}.all");
+                    }
+
                     UServer.Players.ForEach(p => GiveExp(p, amount));
 
                     if (amount >= 0) {
@@ -65,7 +70,11 @@ namespace Essentials.Commands {
                     }
                 } else if (!args[1].IsValidPlayerIdentifier) {
                     return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
-                } else {
+                } else { // Other player
+                    if (!src.HasPermission($"{Permission}.other")) {
+                        return CommandResult.NoPermission($"{Permission}.other");
+                    }
+
                     var player = args[1].ToPlayer;
 
                     if (amount >= 0) {
