@@ -53,6 +53,7 @@ namespace Essentials.Components.Player {
 
                 if (_equip.state[10] == 0) {
                     switch (holdId) {
+                        case 3517: // Lancer
                         case 519: // Rocket Laucher
                             _equip.state[8] = 8;
                             _equip.state[9] = 2;
@@ -78,8 +79,10 @@ namespace Essentials.Components.Player {
 
                         default:
                             var magazineId = (ushort) (_equip.state[8] | _equip.state[9] << 8);
-                            var maga = Assets.find(EAssetType.ITEM, magazineId) as ItemMagazineAsset;
-                            _equip.state[10] = maga?.amount ?? 0;
+                            var magazine = Assets.find(EAssetType.ITEM, magazineId) as ItemMagazineAsset;
+                            if (magazine != null) {
+                                _equip.state[10] = magazine.amount;
+                            }
                             break;
                     }
                     _equip.sendUpdateState();
