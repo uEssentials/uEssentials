@@ -810,12 +810,17 @@ namespace Essentials.Commands {
             Name = "refuelgenerator",
             Aliases = new [] {"refuelgen"},
             Description = "Refuel generators in specific radius (default 20).",
-            Usage = "<radius> <percentage>",
-            AllowedSource = AllowedSource.PLAYER
+            Usage = "<radius> <percentage> <x> <y> <z>",
+            AllowedSource = AllowedSource.BOTH
         )]
         private CommandResult RefuelGeneratorCommand(ICommandSource src, ICommandArgs args) {
             float radius = 20;
             float percentage = 100;
+
+            // Console should explicitly provide a position
+            if (src.IsConsole && args.Length < 5) {
+                return CommandResult.ShowUsage();
+            }
 
             if (args.Length > 0) {
                 if (!args[0].IsFloat) {
@@ -835,9 +840,22 @@ namespace Essentials.Commands {
                 percentage = args[1].ToFloat / 100;
             }
 
+            Vector3 position;
+
+            if (args.Length > 4) {
+                var argPos = args.GetVector3(2);
+
+                if (!argPos.HasValue) {
+                    return CommandResult.Lang("INVALID_COORDS", args[2], args[3], args[4]);
+                }
+
+                position = argPos.Value;
+            } else {
+                position = src.ToPlayer().Position;
+            }
+
             var count = 0;
-            var player = src.ToPlayer();
-            var rayResult = Physics.SphereCastAll(player.Position, radius, Vector3.forward, RayMasks.BARRICADE);
+            var rayResult = Physics.SphereCastAll(position, radius, Vector3.forward, RayMasks.BARRICADE);
 
             rayResult
                 .Select(r => r.transform.GetComponent<InteractableGenerator>())
@@ -847,7 +865,7 @@ namespace Essentials.Commands {
                     count++;
                 });
 
-            EssLang.Send(player, "REFUEL_GENERATOR_REFUELED", count);
+            EssLang.Send(src, "REFUEL_GENERATOR_REFUELED", count);
             return CommandResult.Success();
         }
 
