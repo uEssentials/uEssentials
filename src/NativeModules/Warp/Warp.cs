@@ -24,6 +24,7 @@
 using Essentials.Api.Command.Source;
 using Essentials.CodeAnalysis;
 using Essentials.Json.Converters;
+using Essentials.Api;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -67,8 +68,8 @@ namespace Essentials.NativeModules.Warp {
         /// </summary>
         /// <param name="source">Source that you want to check if is authorized</param>
         /// <returns>If source has permission to use this warp</returns>
-        public bool CanUse(ICommandSource source) {
-            return source.HasPermission($"essentials.warp.{Name.ToLowerInvariant()}");
+        public bool CanBeUsedBy(ICommandSource source) {
+            return source.HasPermission($"essentials.warp.{Name.ToLowerInvariant()}") || !UEssentials.Config.Warp.PerWarpPermission;
         }
 
         public override string ToString() {

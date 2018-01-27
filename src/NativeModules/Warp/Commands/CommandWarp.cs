@@ -59,10 +59,6 @@ namespace Essentials.NativeModules.Warp.Commands {
                 return CommandResult.Lang("WARP_NOT_EXIST", args[0]);
             }
 
-            if (!player.HasPermission($"essentials.warp.{args[0]}")) {
-                return CommandResult.Lang("WARP_NO_PERMISSION", args[0]);
-            }
-
             if (player.RocketPlayer.Stance == EPlayerStance.DRIVING ||
                 player.RocketPlayer.Stance == EPlayerStance.SITTING) {
                 return CommandResult.Lang("CANNOT_TELEPORT_DRIVING");
@@ -72,8 +68,12 @@ namespace Essentials.NativeModules.Warp.Commands {
                 return CommandResult.Lang("ALREADY_WAITING");
             }
 
-            var dest = WarpModule.Instance.WarpManager.GetByName(args[0].ToString());
+            var targetWarp = WarpModule.Instance.WarpManager.GetByName(args[0].ToString());
             var cooldown = UEssentials.Config.Warp.TeleportDelay;
+
+            if (!targetWarp.CanBeUsedBy(src)) {
+                return CommandResult.Lang("WARP_NO_PERMISSION", args[0]);
+            }
 
             if (cooldown > 0 && !player.HasPermission("essentials.bypass.warpcooldown")) {
                 EssLang.Send(src, "WARP_COOLDOWN", cooldown);
@@ -84,7 +84,7 @@ namespace Essentials.NativeModules.Warp.Commands {
                 .Delay(player.HasPermission("essentials.bypass.warpcooldown") ? 0 : cooldown * 1000)
                 .Action(t => {
                     Delay.Remove(player.CSteamId.m_SteamID);
-                    player.Teleport(dest.Location, dest.Rotation);
+                    player.Teleport(targetWarp.Location, targetWarp.Rotation);
                     EssLang.Send(src, "WARP_TELEPORTED", args[0]);
                 })
                 .Submit();

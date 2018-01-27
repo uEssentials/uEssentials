@@ -37,7 +37,7 @@ namespace Essentials.NativeModules.Warp.Commands {
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var warps = (
                 from warp in WarpModule.Instance.WarpManager.Warps
-                where warp.CanUse(src)
+                where warp.CanBeUsedBy(src)
                 select warp.Name
             ).ToArray();
 
