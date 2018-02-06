@@ -232,19 +232,22 @@ namespace Essentials.Event.Handling {
         [SubscribeEvent(EventType.ESSENTIALS_COMMAND_PRE_EXECUTED)]
         private void OnCommandPreExecuted(CommandPreExecuteEvent e) {
             var commandName = e.Command.Name.ToLowerInvariant();
-            CommandOptions.CommandEntry cmdEntry;
+            CommandOptions.CommandEntry commandOptions;
 
-            if (e.Source.IsConsole || !EssCore.Instance.CommandOptions.Commands.TryGetValue(commandName, out cmdEntry)) {
+            if (e.Source.IsConsole || !EssCore.Instance.CommandOptions.Commands.TryGetValue(commandName, out commandOptions)) {
                 return;
             }
 
             // Check cooldown
-            if (!e.Source.HasPermission("essentials.bypass.commandcooldown") && cmdEntry.Cooldown > 0) {
+            if (!e.Source.HasPermission("essentials.bypass.commandcooldown")) {
                 var playerId = e.Source.ToPlayer().CSteamId.m_SteamID;
                 DateTime nextUse;
 
-                if (CommandCooldowns.ContainsKey(playerId) && CommandCooldowns[playerId].TryGetValue(commandName, out nextUse) &&
-                    nextUse > DateTime.Now) {
+                if (
+                    CommandCooldowns.ContainsKey(playerId) &&
+                    CommandCooldowns[playerId].TryGetValue(commandName, out nextUse) &&
+                    nextUse > DateTime.Now
+                ) {
                     var diffSec = (uint) (nextUse - DateTime.Now).TotalSeconds;
                     EssLang.Send(e.Source, "COMMAND_COOLDOWN", TimeUtil.FormatSeconds(diffSec));
                     e.Cancelled = true;
@@ -252,43 +255,51 @@ namespace Essentials.Event.Handling {
                 }
             }
 
-            // Check if player has sufficient money to use this command.
+            // Check if player has money enough to run this command
             if (
-                UEssentials.EconomyProvider.IsPresent &&
+                UEssentials.EconomyProvider.IsPresent && 
                 !e.Source.HasPermission("essentials.bypass.commandcost") &&
-                cmdEntry.Cost > 0 &&
-                !UEssentials.EconomyProvider.Value.Has(e.Source.ToPlayer(), cmdEntry.Cost)
+                commandOptions.PerGroupCost != null
             ) {
-                EssLang.Send(e.Source, "COMMAND_NO_MONEY", cmdEntry.Cost, UEssentials.EconomyProvider.Value.CurrencySymbol);
-                e.Cancelled = true;
+                var cost = GetCommandCost(commandOptions, e.Source.ToPlayer());
+                var ecoProvider = UEssentials.EconomyProvider.Value;
+
+                if (cost > 0 && !ecoProvider.Has(e.Source.ToPlayer(), cost)) {
+                    EssLang.Send(e.Source, "COMMAND_NO_MONEY", cost, ecoProvider.CurrencySymbol);
+                    e.Cancelled = true;
+                }
             }
+        }
+
+        private static decimal GetCommandCost(CommandOptions.CommandEntry commandOptions, UPlayer player) {
+            var cost = commandOptions.Cost;
+            
+            R.Permissions.GetGroups(player.RocketPlayer, false)
+                .OrderBy(g => -g.Priority)
+                .FirstOrDefault(g => commandOptions.PerGroupCost.TryGetValue(g.Id, out cost));
+
+            return cost;
         }
 
         [SubscribeEvent(EventType.ESSENTIALS_COMMAND_POS_EXECUTED)]
         private void OnCommandPosExecuted(CommandPosExecuteEvent e) {
             var commandName = e.Command.Name.ToLowerInvariant();
-            CommandOptions.CommandEntry cmdEntry;
+            CommandOptions.CommandEntry commandOptions;
 
             // It will only apply cooldown/cost if the command was sucessfully executed.
             if (e.Source.IsConsole || e.Result.Type != CommandResult.ResultType.SUCCESS ||
-                !EssCore.Instance.CommandOptions.Commands.TryGetValue(commandName, out cmdEntry)) {
+                !EssCore.Instance.CommandOptions.Commands.TryGetValue(commandName, out commandOptions)) {
                 return;
             }
 
-            if (!e.Source.HasPermission("essentials.bypass.commandcooldown")) {
+            // Handle cooldown
+            if (!e.Source.HasPermission("essentials.bypass.commandcooldown") && commandOptions.PerGroupCooldown != null) {
                 var playerId = e.Source.ToPlayer().CSteamId.m_SteamID;
-                var playerGroups = R.Permissions.GetGroups(e.Source.ToPlayer().RocketPlayer, true);
-                var cooldownValue = cmdEntry.Cooldown;
+                var cooldownValue = commandOptions.Cooldown;
 
-                if (playerGroups != null && cmdEntry.PerGroupCooldown != null && playerGroups.Count > 0) {
-                    var group = playerGroups
-                        .Select(g => g.Id)
-                        .FirstOrDefault(cmdEntry.PerGroupCooldown.ContainsKey);
-
-                    if (group != null) {
-                        cooldownValue = cmdEntry.PerGroupCooldown[group];
-                    }
-                }
+                R.Permissions.GetGroups(e.Source.ToPlayer().RocketPlayer, false)
+                    .OrderBy(g => -g.Priority)
+                    .FirstOrDefault(g => commandOptions.PerGroupCooldown.TryGetValue(g.Id, out cooldownValue));
 
                 if (cooldownValue <= 0) {
                     return;
@@ -301,10 +312,15 @@ namespace Essentials.Event.Handling {
                 CommandCooldowns[playerId][commandName] = DateTime.Now.AddSeconds(cooldownValue);
             }
 
-            if (UEssentials.EconomyProvider.IsPresent && !e.Source.HasPermission("essentials.bypass.commandcost") &&
-                cmdEntry.Cost > 0) {
-                UEssentials.EconomyProvider.Value.Withdraw(e.Source.ToPlayer(), cmdEntry.Cost);
-                EssLang.Send(e.Source, "COMMAND_PAID", cmdEntry.Cost, UEssentials.EconomyProvider.Value.CurrencySymbol);
+            // Handle cost
+            if (
+                UEssentials.EconomyProvider.IsPresent && 
+                !e.Source.HasPermission("essentials.bypass.commandcost") &&
+                commandOptions.PerGroupCost != null
+            ) {
+                var commandCost = GetCommandCost(commandOptions, e.Source.ToPlayer());
+                UEssentials.EconomyProvider.Value.Withdraw(e.Source.ToPlayer(), commandCost);
+                EssLang.Send(e.Source, "COMMAND_PAID", commandCost, UEssentials.EconomyProvider.Value.CurrencySymbol);
             }
         }
 
