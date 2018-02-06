@@ -67,11 +67,10 @@ namespace Essentials.Configuration {
         public AutoAnnouncer AutoAnnouncer;
         public AutoCommands AutoCommands;
 
-        // TODO: use HashSet to provide an O(1) search...
-        public List<ushort> GiveItemBlacklist;
-        public List<ushort> VehicleBlacklist;
-        public List<string> EnabledSystems;
-        public List<string> DisabledCommands;
+        public HashSet<ushort> GiveItemBlacklist;
+        public HashSet<ushort> VehicleBlacklist;
+        public HashSet<string> EnabledSystems;
+        public HashSet<string> DisabledCommands;
         public HashSet<string> CommandsToOverride;
 
         internal EssConfig() {}
@@ -154,11 +153,11 @@ namespace Essentials.Configuration {
                 RepairPercentage = 70
             };
 
-            GiveItemBlacklist = new List<ushort>();
-            VehicleBlacklist = new List<ushort>();
-            DisabledCommands = new List<string>();
+            GiveItemBlacklist = new HashSet<ushort>();
+            VehicleBlacklist = new HashSet<ushort>();
+            DisabledCommands = new HashSet<string>();
             CommandsToOverride = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
-            EnabledSystems = new List<string> { "kits", "warps" };
+            EnabledSystems = new HashSet<string> { "kits", "warps" };
 
             ItemSpawnLimit = 10;
         }
