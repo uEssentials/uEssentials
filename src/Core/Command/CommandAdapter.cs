@@ -119,6 +119,7 @@ namespace Essentials.Core.Command {
                 UEssentials.Logger.LogDebug("Executed command {");
                 UEssentials.Logger.LogDebug($"  Source: '{commandSource.GetType()}:{commandSource}'");
                 UEssentials.Logger.LogDebug($"  Name: '{Command.Name}'");
+                UEssentials.Logger.LogDebug($"  Args: [{string.Join(", ", args)}]");
                 UEssentials.Logger.LogDebug($"  Type: '{Command.GetType()}'");
                 UEssentials.Logger.LogDebug($"  Result: '{result?.ToString() ?? "null"}'");
                 UEssentials.Logger.LogDebug($"  Took: '{sw.ElapsedTicks} ticks | {sw.ElapsedMilliseconds} ms'");
