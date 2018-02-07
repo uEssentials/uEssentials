@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2018  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,6 +35,10 @@ using SDG.Unturned;
 using UnityEngine;
 using Essentials.Common.Util;
 using Essentials.Components.Player;
+using System.IO;
+using Microsoft.CSharp;
+using System.CodeDom.Compiler;
+using System.Reflection;
 
 namespace Essentials.Commands {
 
@@ -46,13 +50,26 @@ namespace Essentials.Commands {
         [CommandInfo(
             Name = "ascend",
             Aliases = new[] { "asc" },
-            Usage = "[amount]",
+            Usage = "<amount>",
             Description = "Ascend X \"meters\".",
             AllowedSource = AllowedSource.PLAYER
         )]
         private CommandResult AscendCommand(ICommandSource src, ICommandArgs args, ICommand cmd) {
+            var player = src.ToPlayer();
+
             if (args.IsEmpty) {
-                return CommandResult.ShowUsage();
+                // Raycast up
+                Physics.Raycast(player.Position, Vector3.up, out var raycastHit, 1000, RayMasks.BLOCK_COLLISION & ~RayMasks.CLIP);
+
+                if (raycastHit.transform == null) {
+                    return CommandResult.Lang("ASCEND_NOTHING_ABOVE");
+                }
+
+                var yDelta = raycastHit.point.y - player.Position.y;
+
+                player.Teleport(raycastHit.point + Vector3.up);
+
+                return CommandResult.Lang("ASCENDED", yDelta);
             }
 
             if (!args[0].IsFloat) {
@@ -63,7 +80,6 @@ namespace Essentials.Commands {
                 return CommandResult.Lang("MUST_POSITIVE", args[0]);
             }
 
-            var player = src.ToPlayer();
             var pos = new Vector3(player.Position.x, player.Position.y, player.Position.z);
             var num = args[0].ToFloat;
 
@@ -893,24 +909,6 @@ namespace Essentials.Commands {
             }
             return CommandResult.Success();
         }
-
-#if DEV
-        [CommandInfo(
-            Name = "stoptasks"
-        )]
-        private CommandResult StopTasksCommand(ICommandSource src, ICommandArgs args) {
-            UEssentials.TaskExecutor.DequeueAll();
-            return CommandResult.Success();
-        }
-
-        [CommandInfo(
-            Name = "cls"
-        )]
-        private CommandResult ClsCommand(ICommandSource src, ICommandArgs args) {
-            Console.Clear();
-            return CommandResult.Success();
-        }
-#endif
 
         #region HELPER METHODS
 

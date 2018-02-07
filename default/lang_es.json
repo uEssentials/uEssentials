@@ -35,6 +35,7 @@
     "ALREADY_FROZEN": "Este jugador ya esta congelado",
     "ANYONE_ONLINE": "No hay jugadores conectados.",
     "ASCENDED": "Asciendes {0} 'metros'",
+    "ASCEND_NOTHING_ABOVE": "<yellow>There is nothing above you to teleport to. Use /ascend <amount> to specify a bigger height.",
     "AUTO_REFUEL_DISABLED": "Combustible automatico OFF!",
     "AUTO_REFUEL_ENABLED": "Combustible automatico ON!",
     "AUTO_RELOAD_DISABLED": "Recarga automatica OFF!",

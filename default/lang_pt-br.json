@@ -35,6 +35,7 @@
     "ALREADY_FROZEN": "Este jogador já esta congelado.",
     "ANYONE_ONLINE": "Não há nenhum jogador online.",
     "ASCENDED": "You ascended {0} 'meters'",
+    "ASCEND_NOTHING_ABOVE": "<yellow>Não há nada acima de você. Use /ascend <amount> para especificar uma altura maior.",
     "AUTO_REFUEL_DISABLED": "Auto-Refuel desativado!",
     "AUTO_REFUEL_ENABLED": "Auto-Refuel ativado!",
     "AUTO_RELOAD_DISABLED": "Auto-Reload desativado!",

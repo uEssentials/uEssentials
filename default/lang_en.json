@@ -34,6 +34,7 @@
     "ALREADY_FROZEN": "<yellow>This player is already frozen.",
     "ANYONE_ONLINE": "There is no players online.",
     "ASCENDED": "You ascended {0} 'meters'",
+    "ASCEND_NOTHING_ABOVE": "<yellow>There is nothing above you to teleport to. Use /ascend <amount> to specify a bigger height.",
     "AUTO_REFUEL_DISABLED": "<magenta>Auto-Refuel disabled!",
     "AUTO_REFUEL_ENABLED": "<cyan>Auto-Refuel enabled!",
     "AUTO_RELOAD_DISABLED": "<magenta>Auto-Reload disabled!",

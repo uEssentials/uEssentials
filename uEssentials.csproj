@@ -116,6 +116,7 @@
     <Compile Include="src\Commands\CommandBoom.cs" />
     <Compile Include="src\Commands\CommandTellRaw.cs" />
     <Compile Include="src\Commands\CommandTp.cs" />
+    <Compile Include="src\Commands\DevCommands.cs" />
     <Compile Include="src\Commands\MiscCommands.cs" />
     <Compile Include="src\Common\Optional.cs" />
     <Compile Include="src\Common\Util\ItemUtil.cs" />

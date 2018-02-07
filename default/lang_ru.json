@@ -34,6 +34,7 @@
     "ALREADY_FROZEN": "<yellow>Этот игрок уже заморожен.",
     "ANYONE_ONLINE": "Нет игроков онлайн.",
     "ASCENDED": "Вы поднялись на {0} метров",
+    "ASCEND_NOTHING_ABOVE": "<yellow>There is nothing above you to teleport to. Use /ascend <amount> to specify a bigger height.",
     "AUTO_REFUEL_DISABLED": "<magenta>Авто-заправка запрещена!",
     "AUTO_REFUEL_ENABLED": "<cyan>Авто-заправка разрешена!",
     "AUTO_RELOAD_DISABLED": "<magenta>Авто-перезарядка отключена!",
