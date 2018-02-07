@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2018  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ namespace Essentials.Common.Util {
             Color? color;
             int l = message.IndexOf('<');
             int r = message.IndexOf('>');
-            
+
             if (l == -1 || r == -1 || l > r) {
                 return Color.green;
             }
@@ -120,7 +120,7 @@ namespace Essentials.Common.Util {
 
             return new Color(
                 ((hex >> 16) & 0xFF) / 255F,
-                ((hex >> 8) & 0xFF) / 255F, 
+                ((hex >> 8) & 0xFF) / 255F,
                 ((hex) & 0xFF) / 255F
             );
         }

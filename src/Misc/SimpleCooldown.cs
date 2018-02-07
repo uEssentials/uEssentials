@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2018  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ namespace Essentials.Misc {
 
         public double GetRemainingTime(CSteamID playerId) {
             DateTime val;
-            return Cooldowns.TryGetValue(playerId.m_SteamID, out val) 
+            return Cooldowns.TryGetValue(playerId.m_SteamID, out val)
                    ? (val - DateTime.Now).TotalSeconds : 0;
         }
 

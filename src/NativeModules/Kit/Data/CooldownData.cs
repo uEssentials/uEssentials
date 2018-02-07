@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2018  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,10 +41,10 @@ namespace Essentials.NativeModules.Kit.Data {
             }
 
             var saved = JsonUtil.DeserializeFile<Dictionary<ulong, PlayerCooldown>>(FilePath);
-            
+
             CommandKit.Cooldowns.Clear();
             CommandKit.GlobalCooldown.Clear();
-            
+
             saved.ForEach(kv => {
                 if (kv.Value.Kits != null) {
                     CommandKit.Cooldowns.Add(kv.Key, kv.Value.Kits);

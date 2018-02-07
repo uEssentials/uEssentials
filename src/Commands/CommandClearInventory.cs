@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2018  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ namespace Essentials.Commands {
             for (byte page = 0; page < PlayerInventory.PAGES; page++) {
                 if(page == PlayerInventory.AREA)
                     continue;
-                
+
                 var count = playerInv.getItemCount(page);
 
                 for (byte index = 0; index < count; index++) {

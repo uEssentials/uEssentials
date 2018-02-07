@@ -1,7 +1,7 @@
 # uEssentials
 
 [![Participe do nosso Discord](https://discordapp.com/api/guilds/325080396868091906/widget.png)](https://discord.gg/JtHwhNq)
-[![Faça uma doação https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY) 
+[![Faça uma doação https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY)
 [![Build status](https://ci.appveyor.com/api/projects/status/pxm15136lg6mcd2n?svg=true)](https://ci.appveyor.com/project/leonardosnt/uessentials)
 [![Releases download count](https://www.dropbox.com/s/iqy5xhax6tg8slh/total.svg?raw=1)](https://goo.gl/uql6bm)
 [![Baixe a última atualização aqui](https://img.shields.io/badge/download-latest_release-brightgreen.svg?maxAge=2592000)](https://goo.gl/638UlM)
@@ -44,5 +44,5 @@ _[Considere fazer uma doação :heart:](https://www.paypal.com/cgi-bin/webscr?cm
 Caso tenha alguma dúvida ou deseje reportar algum problema, sinta-se à vontade para enviar [aqui](https://goo.gl/amgH8v).
 
 ## License
-Copyright (C) 2015-2017 leonardosnt <leonrdsnt@gmail.com> e contribuidores.  
+Copyright (C) 2015-2018 leonardosnt <leonrdsnt@gmail.com> e contribuidores.
 Licenciado sobre a licença GPL v2. Veja o arquivo LICENSE na raiz do projeto para mais informações sobre a licença.

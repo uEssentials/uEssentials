@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2018  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ namespace Essentials.Common.Util {
             Debug.WriteLineIf(ret == null, $"Could not find method '{type.FullName}::{name}'", "ReflectUtil");
             return ret;
         }
-        
+
         public static MethodInfo GetMethod(Type type, string name, Type[] argTypes = null) {
             return GetMethod(type, name, STATIC_INSTANCE_FLAGS, argTypes);
         }

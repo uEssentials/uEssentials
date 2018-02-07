@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2018  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -257,7 +257,7 @@ namespace Essentials.Event.Handling {
 
             // Check if player has money enough to run this command
             if (
-                UEssentials.EconomyProvider.IsPresent && 
+                UEssentials.EconomyProvider.IsPresent &&
                 !e.Source.HasPermission("essentials.bypass.commandcost") &&
                 commandOptions.PerGroupCost != null
             ) {
@@ -273,7 +273,7 @@ namespace Essentials.Event.Handling {
 
         private static decimal GetCommandCost(CommandOptions.CommandEntry commandOptions, UPlayer player) {
             var cost = commandOptions.Cost;
-            
+
             R.Permissions.GetGroups(player.RocketPlayer, false)
                 .OrderBy(g => -g.Priority)
                 .FirstOrDefault(g => commandOptions.PerGroupCost.TryGetValue(g.Id, out cost));
@@ -314,7 +314,7 @@ namespace Essentials.Event.Handling {
 
             // Handle cost
             if (
-                UEssentials.EconomyProvider.IsPresent && 
+                UEssentials.EconomyProvider.IsPresent &&
                 !e.Source.HasPermission("essentials.bypass.commandcost") &&
                 commandOptions.PerGroupCost != null
             ) {

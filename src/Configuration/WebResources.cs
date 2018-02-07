@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2018  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ namespace Essentials.Configuration {
         /// Value: file contents
         /// </summary>
         [JsonIgnore]
-        public Dictionary<string, string> Loaded { get; } = new Dictionary<string, string>(); 
+        public Dictionary<string, string> Loaded { get; } = new Dictionary<string, string>();
 
         public override void Load(string filePath) {
             try {

@@ -35,10 +35,6 @@ using SDG.Unturned;
 using UnityEngine;
 using Essentials.Common.Util;
 using Essentials.Components.Player;
-using System.IO;
-using Microsoft.CSharp;
-using System.CodeDom.Compiler;
-using System.Reflection;
 
 namespace Essentials.Commands {
 

@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2018  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ namespace Essentials.Api.Task {
                 _task.Delay = delayInMs;
                 return this;
             }
-            
+
             public Builder Delay(TimeSpan delay) {
                 _task.Delay = (int) delay.TotalMilliseconds;
                 return this;
@@ -88,7 +88,7 @@ namespace Essentials.Api.Task {
                 _task.Interval = intervalInMs;
                 return this;
             }
-            
+
             public Builder Interval(TimeSpan interval) {
                 _task.Interval = (int) interval.TotalMilliseconds;
                 return this;

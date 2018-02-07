@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2018  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ namespace Essentials.Components.Player {
             */
             if (AutoReload && _equip.state.Length >= 18) {
                 // Save last arrow id
-                if (_equip.state[10] == 1 && (holdId == 346 || holdId == 353 || holdId == 355 || 
+                if (_equip.state[10] == 1 && (holdId == 346 || holdId == 353 || holdId == 355 ||
                                               holdId == 356 || holdId == 357)) {
                     _lastArrowId = (ushort) (_equip.state[8] | _equip.state[9] << 8);
                 }

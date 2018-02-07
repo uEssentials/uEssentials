@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2018  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ namespace Essentials.Api.Events {
 
         /// <summary>
         /// Result of execution.
-        /// 
+        ///
         /// Can be null.
         /// </summary>
         public CommandResult Result {
@@ -39,7 +39,7 @@ namespace Essentials.Api.Events {
             set { _result = Preconditions.NotNull(value, "result cannot be null");  }
         }
 
-        public CommandPosExecuteEvent(ICommand command, ICommandArgs args, ICommandSource src, 
+        public CommandPosExecuteEvent(ICommand command, ICommandArgs args, ICommandSource src,
                                       CommandResult result) : base(command, args, src) {
             Preconditions.NotNull(result, "result cannot be null");
             Result = result;

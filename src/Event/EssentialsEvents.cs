@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2017  leonardosnt
+ *  Copyright (C) 2015-2018  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ namespace Essentials.Event {
         public static event CommandPosExecute OnCommandPosExecute;
 
 
-        internal static CommandPreExecuteEvent CallCommandPreExecute(ICommand command, ref ICommandArgs cmdArgs, 
+        internal static CommandPreExecuteEvent CallCommandPreExecute(ICommand command, ref ICommandArgs cmdArgs,
                                                                      ref ICommandSource commandSource) {
             var evt = new CommandPreExecuteEvent(command, cmdArgs, commandSource);
             OnCommandPreExecute?.Invoke(evt);
