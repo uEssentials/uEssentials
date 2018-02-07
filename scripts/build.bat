@@ -12,7 +12,7 @@ set ROCKET_PLUGINS_FOLDER="C:\Users\Leonardo\Documents\Unturned\Rocket\All\Untur
 if "%1"=="" (
   msbuild %base_path% /nologo /p:Configuration=Debug
   goto :copy
-) 
+)
 
 if "%1"=="rebuild" (
   msbuild %base_path% /nologo /p:Configuration=Debug /t:Rebuild,Clean
@@ -31,7 +31,7 @@ goto :EOF
 :copy
 if exist "%ROCKET_PLUGINS_FOLDER%" (
  echo Copying uEssentials.dll to %ROCKET_PLUGINS_FOLDER%
- copy /Y %base_path%\bin\uEssentials.dll %ROCKET_PLUGINS_FOLDER%
+ taskkill /F /FI "WINDOWTITLE eq Unturned Server" && sleep .2 && copy /Y %base_path%\bin\uEssentials.dll %ROCKET_PLUGINS_FOLDER%
 ) else (
  echo Directory "%ROCKET_PLUGINS_FOLDER%" does not exist
 )
