@@ -96,6 +96,7 @@ namespace Essentials.Commands {
                         return CommandResult.Generic("not watching");
                     } else {
                         _evalFileWatchTask.Cancel();
+                        return CommandResult.Success();
                     }
                 }
 
