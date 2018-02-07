@@ -417,7 +417,9 @@ namespace Essentials.Core {
 
             var commandsField = ReflectUtil.GetField(R.Commands.GetType(), "commands");
             var rocketCommands = (List<RocketCommandManager.RegisteredRocketCommand>) commandsField.GetValue(R.Commands);
-            var essCommands = new HashSet<string>(CommandManager.Commands.Select(c => c.Name.ToLowerInvariant()));
+            var essCommands = new HashSet<string>(
+              CommandManager.Commands.Select(c => c.Name.ToLowerInvariant()).Concat(
+              CommandManager.Commands.SelectMany(c => c.Aliases).Select(c => c.ToLowerInvariant())));
 
             // Used to check which commands are not "owned' by uEssentials
             var mappedRocketCommands = new Dictionary<string, RocketCommandManager.RegisteredRocketCommand>();
@@ -431,7 +433,8 @@ namespace Essentials.Core {
                 var name = command.Name.ToLowerInvariant();
                 var wrapper = command.Command;
 
-                // Override default commands from Rocket and Unturned
+                // Override commands from Rocket and Unturned by default,
+                // since uEssentials commands are an improved version of them.
                 if (wrapper.GetType().FullName.StartsWith("Rocket.Unturned.Commands") && essCommands.Contains(name)) {
                     Logger.LogInfo($"Overriding Unturned/Rocket command ({command.Name.ToLowerInvariant()})");
                     return true;
@@ -440,7 +443,7 @@ namespace Essentials.Core {
                 // It will override a command from another plugin only if specified in the config.json
                 if (Config.CommandsToOverride.Contains(name) && !(command.Command is CommandAdapter)) {
                     var pluginName = command.Command.GetType().Assembly.GetName().Name;
-                    Logger.LogInfo($"Overriding command \"{command.Name.ToLowerInvariant()}\" from the plugin: {pluginName}");
+                    Logger.LogInfo($"Overriding command \"{command.Name.ToLowerInvariant()}\" from plugin: {pluginName}");
                     return true;
                 }
 
