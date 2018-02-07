@@ -63,20 +63,20 @@ namespace Essentials.Commands {
                     }
 
                     if (!Requests.ContainsValue(senderId)) {
-                        return CommandResult.Lang("TPA_NONE");
+                        return CommandResult.LangError("TPA_NONE");
                     }
 
                     var whoSentId = Requests.Keys.FirstOrDefault(k => Requests[k] == senderId);
                     var whoSent = UPlayer.From(new Steamworks.CSteamID(whoSentId));
 
                     if (whoSent == null) {
-                        return CommandResult.Lang("TPA_NONE");
+                        return CommandResult.LangError("TPA_NONE");
                     }
 
                     if (whoSent.Stance == EPlayerStance.DRIVING ||
                         whoSent.Stance == EPlayerStance.SITTING) {
                         EssLang.Send(whoSent, "CANNOT_TELEPORT_DRIVING");
-                        return CommandResult.Lang("TPA_CANNOT_TELEPORT", whoSent.DisplayName);
+                        return CommandResult.LangError("TPA_CANNOT_TELEPORT", whoSent.DisplayName);
                     }
 
                     EssLang.Send(src, "TPA_ACCEPTED_SENDER", whoSent.DisplayName);
@@ -110,7 +110,7 @@ namespace Essentials.Commands {
                     }
 
                     if (!Requests.ContainsValue(senderId)) {
-                        return CommandResult.Lang("TPA_NONE");
+                        return CommandResult.LangError("TPA_NONE");
                     }
 
                     var whoSentId = Requests.Keys.FirstOrDefault(k => Requests[k] == senderId);
@@ -132,7 +132,7 @@ namespace Essentials.Commands {
                     }
 
                     if (!Requests.ContainsKey(senderId)) {
-                        return CommandResult.Lang("TPA_NONE");
+                        return CommandResult.LangError("TPA_NONE");
                     }
 
                     Requests.Remove(senderId);
@@ -147,7 +147,7 @@ namespace Essentials.Commands {
                     }
 
                     if (!args[0].IsValidPlayerIdentifier) {
-                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                        return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                     }
 
                     var target = args[0].ToPlayer;
@@ -156,7 +156,7 @@ namespace Essentials.Commands {
                     if (Requests.TryGetValue(senderId, out var value)) {
                         // Avoid 'flooding' requests to the same player
                         if (value == target.CSteamId.m_SteamID) {
-                            return CommandResult.Lang("TPA_ALREADY_SENT", target.DisplayName);
+                            return CommandResult.LangError("TPA_ALREADY_SENT", target.DisplayName);
                         }
 
                         Requests.Remove(senderId);
@@ -164,7 +164,7 @@ namespace Essentials.Commands {
 
 #if !DEV
                     if (target == player) {
-                        return CommandResult.Lang("TPA_YOURSELF");
+                        return CommandResult.LangError("TPA_YOURSELF");
                     }
 #endif
 

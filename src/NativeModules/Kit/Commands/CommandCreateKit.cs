@@ -54,16 +54,16 @@ namespace Essentials.NativeModules.Kit.Commands {
             var cost = 0d;
 
             if (KitModule.Instance.KitManager.Contains(name)) {
-                return CommandResult.Lang("KIT_ALREADY_EXIST", name);
+                return CommandResult.LangError("KIT_ALREADY_EXIST", name);
             }
 
             if (args.Length > 1) {
                 if (!args[1].IsInt) {
-                    return CommandResult.Lang("INVALID_NUMBER", args[1]);
+                    return CommandResult.LangError("INVALID_NUMBER", args[1]);
                 }
 
                 if (args[1].ToInt < 0) {
-                    return CommandResult.Lang("MUST_POSITIVE");
+                    return CommandResult.LangError("MUST_POSITIVE");
                 }
 
                 cooldown = args[1].ToUInt;
@@ -71,7 +71,7 @@ namespace Essentials.NativeModules.Kit.Commands {
 
             if (args.Length > 2) {
                 if (!args[2].IsBool) {
-                    return CommandResult.Lang("INVALID_BOOLEAN", args[2]);
+                    return CommandResult.LangError("INVALID_BOOLEAN", args[2]);
                 }
 
                 resetCooldownWhenDie = args[2].ToBool;
@@ -79,11 +79,11 @@ namespace Essentials.NativeModules.Kit.Commands {
 
             if (args.Length > 3) {
                 if (!args[3].IsDouble) {
-                    return CommandResult.Lang("INVALID_NUMBER", args[3]);
+                    return CommandResult.LangError("INVALID_NUMBER", args[3]);
                 }
 
                 if (args[3].ToDouble < 0) {
-                    return CommandResult.Lang("MUST_POSITIVE");
+                    return CommandResult.LangError("MUST_POSITIVE");
                 }
 
                 cost = args[3].ToDouble;

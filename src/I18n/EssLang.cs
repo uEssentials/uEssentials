@@ -40,7 +40,7 @@ namespace Essentials.I18n {
 
     public static class EssLang {
 
-        private const string KEY_NOT_FOUND_MESSAGE = "Lang: Key not found '{0}', report to an adminstrator.";
+        internal const string KEY_NOT_FOUND_MESSAGE = "Lang: Key not found '{0}', report to an adminstrator.";
         private static readonly string[] LANGS = { "en", "pt-br", "es", "ru" };
         private static readonly Dictionary<string, object> _translations = new Dictionary<string, object>();
 

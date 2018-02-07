@@ -225,7 +225,7 @@ namespace Essentials.Commands {
                     }
 
                     if (!args[2].IsBool) {
-                        return CommandResult.Lang("INVALID_BOOLEAN", args[2]);
+                        return CommandResult.LangError("INVALID_BOOLEAN", args[2]);
                     }
 
                     var flag = args[2].ToBool;

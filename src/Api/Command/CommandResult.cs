@@ -55,8 +55,12 @@ namespace Essentials.Api.Command {
             return new CommandResult(string.Format(message, args), ResultType.ERROR);
         }
 
-        public static CommandResult Lang(string key, params object[] args) {
-            return new CommandResult(EssLang.Translate(key, args), ResultType.LANG);
+        public static CommandResult LangError(string key, params object[] args) {
+            return new CommandResult(FailSafeTranslate(key, args), ResultType.ERROR);
+        }
+
+        public static CommandResult LangSuccess(string key, params object[] args) {
+            return new CommandResult(FailSafeTranslate(key, args), ResultType.SUCCESS);
         }
 
         public static CommandResult Generic(string message, params object[] args) {
@@ -67,8 +71,8 @@ namespace Essentials.Api.Command {
 
         public static CommandResult NoPermission(string permission) {
             return UEssentials.Config.ShowPermissionOnErrorMessage
-                ? Lang("COMMAND_NO_PERMISSION_WITH_PERM", permission)
-                : Lang("COMMAND_NO_PERMISSION");
+                ? LangError("COMMAND_NO_PERMISSION_WITH_PERM", permission)
+                : LangError("COMMAND_NO_PERMISSION");
         }
 
         public CommandResult(string message, ResultType type) {
@@ -84,12 +88,13 @@ namespace Essentials.Api.Command {
             SUCCESS,
             ERROR,
             SHOW_USAGE,
-            LANG,
             GENERIC,
             EMPTY,
             INVALID_ARGS
         }
 
+        private static string FailSafeTranslate(string key, params object[] args) =>
+            EssLang.Translate(key, args) ?? string.Format(EssLang.KEY_NOT_FOUND_MESSAGE, key);
     }
 
 }

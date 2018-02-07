@@ -52,7 +52,7 @@ namespace Essentials.Commands {
                     RefuelVehicle(currentVeh);
                     EssLang.Send(src, "VEHICLE_REFUELED");
                 } else {
-                    return CommandResult.Lang("NOT_IN_VEHICLE");
+                    return CommandResult.LangError("NOT_IN_VEHICLE");
                 }
             } else if (args[0].Equals("all")) {
                 if (!src.HasPermission($"{Permission}.all")) {

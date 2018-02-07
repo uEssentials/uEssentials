@@ -45,13 +45,13 @@ namespace Essentials.Commands {
             }
 
             if (!args[0].IsInt) {
-                return CommandResult.Lang("INVALID_NUMBER", args[0]);
+                return CommandResult.LangError("INVALID_NUMBER", args[0]);
             }
 
             var amount = args[0].ToInt;
 
             if (amount > MAX_INPUT_VALUE || amount < -MAX_INPUT_VALUE) {
-                return CommandResult.Lang("NUMBER_BETWEEN", -MAX_INPUT_VALUE, MAX_INPUT_VALUE);
+                return CommandResult.LangError("NUMBER_BETWEEN", -MAX_INPUT_VALUE, MAX_INPUT_VALUE);
             }
 
             if (args.Length == 2) {
@@ -69,7 +69,7 @@ namespace Essentials.Commands {
                         EssLang.Send(src, "EXPERIENCE_TAKE", -amount, EssLang.Translate("EVERYONE"));
                     }
                 } else if (!args[1].IsValidPlayerIdentifier) {
-                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
+                    return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                 } else { // Other player
                     if (!src.HasPermission($"{Permission}.other")) {
                         return CommandResult.NoPermission($"{Permission}.other");

@@ -42,7 +42,7 @@ namespace Essentials.Commands {
                 var vehId = args[0];
 
                 if (!args[1].IsValidPlayerIdentifier) {
-                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
+                    return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                 }
 
                 var target = args[1].ToPlayer;
@@ -61,13 +61,13 @@ namespace Essentials.Commands {
                     var pVal = pos.Value;
 
                     if (!vehId.IsUShort || !IsValidVehicleId(vehId.ToUShort)) {
-                        return CommandResult.Lang("INVALID_VEHICLE_ID", vehId);
+                        return CommandResult.LangError("INVALID_VEHICLE_ID", vehId);
                     }
 
                     SpawnVehicle(pVal, vehId.ToUShort);
                     EssLang.Send(src, "SPAWNED_VEHICLE_AT_POSITION", pVal.x, pVal.y, pVal.z);
                 } else {
-                    return CommandResult.Lang("INVALID_COORDS", args[1], args[2], args[3]);
+                    return CommandResult.LangError("INVALID_COORDS", args[1], args[2], args[3]);
                 }
             } else {
                 return CommandResult.ShowUsage();

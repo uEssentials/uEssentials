@@ -43,7 +43,7 @@ namespace Essentials.NativeModules.Kit.Commands {
             var km = KitModule.Instance.KitManager;
 
             if (!km.Contains(args[0].ToString())) {
-                return CommandResult.Lang("KIT_NOT_EXIST", args[0]);
+                return CommandResult.LangError("KIT_NOT_EXIST", args[0]);
             }
 
             km.Remove(km.GetByName(args[0].ToString()));

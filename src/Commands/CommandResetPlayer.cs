@@ -50,7 +50,7 @@ namespace Essentials.Commands {
                 var steamId = new CSteamID(ulong.Parse(args[0].ToString()));
 
                 if (!steamId.IsValid()) {
-                    return CommandResult.Lang("INVALID_STEAMID", steamId.m_SteamID);
+                    return CommandResult.LangError("INVALID_STEAMID", steamId.m_SteamID);
                 }
 
                 ResetPlayer(steamId.m_SteamID);
@@ -59,7 +59,7 @@ namespace Essentials.Commands {
                 var target = args[0].ToPlayer;
 
                 if (target == null) {
-                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                    return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                 }
 
                 target.Kick(EssLang.Translate("PLAYER_RESET_KICK"));

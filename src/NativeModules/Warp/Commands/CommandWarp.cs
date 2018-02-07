@@ -56,23 +56,23 @@ namespace Essentials.NativeModules.Warp.Commands {
             }
 
             if (!WarpModule.Instance.WarpManager.Contains(args[0].ToString())) {
-                return CommandResult.Lang("WARP_NOT_EXIST", args[0]);
+                return CommandResult.LangError("WARP_NOT_EXIST", args[0]);
             }
 
             if (player.RocketPlayer.Stance == EPlayerStance.DRIVING ||
                 player.RocketPlayer.Stance == EPlayerStance.SITTING) {
-                return CommandResult.Lang("CANNOT_TELEPORT_DRIVING");
+                return CommandResult.LangError("CANNOT_TELEPORT_DRIVING");
             }
 
             if (Delay.ContainsKey(player.CSteamId.m_SteamID)) {
-                return CommandResult.Lang("ALREADY_WAITING");
+                return CommandResult.LangError("ALREADY_WAITING");
             }
 
             var targetWarp = WarpModule.Instance.WarpManager.GetByName(args[0].ToString());
             var cooldown = UEssentials.Config.Warp.TeleportDelay;
 
             if (!targetWarp.CanBeUsedBy(src)) {
-                return CommandResult.Lang("WARP_NO_PERMISSION", args[0]);
+                return CommandResult.LangError("WARP_NO_PERMISSION", args[0]);
             }
 
             if (cooldown > 0 && !player.HasPermission("essentials.bypass.warpcooldown")) {

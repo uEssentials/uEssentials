@@ -55,7 +55,7 @@ namespace Essentials.Commands {
                         var poll = Polls[pollName];
 
                         if (poll.Voted.Contains(src.DisplayName)) {
-                            return CommandResult.Lang("POLL_ALREADY_VOTED");
+                            return CommandResult.LangError("POLL_ALREADY_VOTED");
                         }
 
                         poll.YesVotes += 1;
@@ -79,7 +79,7 @@ namespace Essentials.Commands {
                         var poll = Polls[pollName];
 
                         if (poll.Voted.Contains(src.DisplayName)) {
-                            return CommandResult.Lang("POLL_ALREADY_VOTED");
+                            return CommandResult.LangError("POLL_ALREADY_VOTED");
                         }
 
                         poll.NoVotes += 1;

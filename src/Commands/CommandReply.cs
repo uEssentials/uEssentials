@@ -44,7 +44,7 @@ namespace Essentials.Commands {
             var playerId = src.ToPlayer().CSteamId.m_SteamID;
 
             if (!Conversations.ContainsKey(playerId)) {
-                return CommandResult.Lang("NOBODY_TO_REPLY");
+                return CommandResult.LangError("NOBODY_TO_REPLY");
             }
 
             var target = (
@@ -55,7 +55,7 @@ namespace Essentials.Commands {
             ).FirstOrDefault();
 
             if (target == null) {
-                return CommandResult.Lang("NO_LONGER_ONLINE");
+                return CommandResult.LangError("NO_LONGER_ONLINE");
             }
 
             src.DispatchCommand($"tell \"{target.DisplayName}\" \"{args.Join(0)}\"");

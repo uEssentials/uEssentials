@@ -41,7 +41,7 @@ namespace Essentials.NativeModules.Warp.Commands {
             var warpName = args[0].ToString();
 
             if (!WarpModule.Instance.WarpManager.Contains(warpName)) {
-                return CommandResult.Lang("WARP_NOT_EXIST", warpName);
+                return CommandResult.LangError("WARP_NOT_EXIST", warpName);
             }
 
             WarpModule.Instance.WarpManager.Delete(warpName);

@@ -58,15 +58,15 @@ namespace Essentials.Commands {
 
             if (player.RocketPlayer.Stance == EPlayerStance.DRIVING ||
                 player.RocketPlayer.Stance == EPlayerStance.SITTING) {
-                return CommandResult.Lang("CANNOT_TELEPORT_DRIVING");
+                return CommandResult.LangError("CANNOT_TELEPORT_DRIVING");
             }
 
             if (!BarricadeManager.tryGetBed(player.CSteamId, out position, out angle)) {
-                return CommandResult.Lang("WITHOUT_BED");
+                return CommandResult.LangError("WITHOUT_BED");
             }
 
             if (Delay.ContainsKey(player.CSteamId.m_SteamID)) {
-                return CommandResult.Lang("ALREADY_WAITING");
+                return CommandResult.LangError("ALREADY_WAITING");
             }
 
             var homeCommand = UEssentials.Config.Home;

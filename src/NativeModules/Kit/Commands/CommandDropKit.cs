@@ -54,7 +54,7 @@ namespace Essentials.NativeModules.Kit.Commands {
 
                 case 2:
                     if (!src.HasPermission($"{Permission}.other")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.LangError("COMMAND_NO_PERMISSION");
                     }
 
                     var found = UPlayer.TryGet(args[1], player => {
@@ -63,7 +63,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                     });
 
                     if (!found) {
-                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
+                        return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                     }
                     break;
 
@@ -74,7 +74,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                         DropKit(src, args[0], pos.Value);
                         EssLang.Send(src, "DROPKIT_LOCATION", args[1], args[2], args[3]);
                     } else {
-                        return CommandResult.Lang("INVALID_COORDS", args[1], args[2], args[3]);
+                        return CommandResult.LangError("INVALID_COORDS", args[1], args[2], args[3]);
                     }
                     break;
 

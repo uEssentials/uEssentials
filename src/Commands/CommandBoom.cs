@@ -70,7 +70,7 @@ namespace Essentials.Commands {
                         var found = UPlayer.TryGet(args[0], player => Explode(player.Position));
 
                         if (!found) {
-                            return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                            return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                         }
                     }
                     break;
@@ -81,7 +81,7 @@ namespace Essentials.Commands {
                     if (pos.HasValue) {
                         Explode(pos.Value);
                     } else {
-                        return CommandResult.Lang("INVALID_COORDS", args[0], args[1], args[2]);
+                        return CommandResult.LangError("INVALID_COORDS", args[0], args[1], args[2]);
                     }
                     break;
 

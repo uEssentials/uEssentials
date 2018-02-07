@@ -42,7 +42,7 @@ namespace Essentials.Commands {
             var players = UServer.Players.ToList();
 
             if (players.Count == (src.IsConsole ? 0 : 1)) {
-                return CommandResult.Lang("NO_PLAYERS_FOR_TELEPORT");
+                return CommandResult.LangError("NO_PLAYERS_FOR_TELEPORT");
             }
 
             switch (args.Length) {
@@ -62,7 +62,7 @@ namespace Essentials.Commands {
                     });
 
                     if (!found) {
-                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                        return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                     }
                     break;
 
@@ -70,7 +70,7 @@ namespace Essentials.Commands {
                     var vec3 = args.GetVector3(0);
 
                     if (!vec3.HasValue) {
-                        return CommandResult.Lang("INVALID_COORDS", src, args[0], args[1], args[2]);
+                        return CommandResult.LangError("INVALID_COORDS", src, args[0], args[1], args[2]);
                     }
 
                     var pos = vec3.Value;

@@ -52,7 +52,7 @@ namespace Essentials.Commands {
                 var argPos = args.GetVector3(2);
 
                 if (!argPos.HasValue) {
-                    return CommandResult.Lang("INVALID_COORDS", args[2], args[3], args[4]);
+                    return CommandResult.LangError("INVALID_COORDS", args[2], args[3], args[4]);
                 }
 
                 pos = argPos.Value;
@@ -63,18 +63,18 @@ namespace Essentials.Commands {
             ushort amount;
 
             if (!ushort.TryParse(rawAmount, out amount)) {
-                return CommandResult.Lang("INVALID_NUMBER", rawAmount);
+                return CommandResult.LangError("INVALID_NUMBER", rawAmount);
             }
 
             var itemAsset = ItemUtil.GetItem(rawId);
 
             if (itemAsset.IsAbsent) {
-                return CommandResult.Lang("INVALID_ITEM_ID", rawId);
+                return CommandResult.LangError("INVALID_ITEM_ID", rawId);
             }
 
             if (UEssentials.Config.GiveItemBlacklist.Contains(itemAsset.Value.id) &&
                 !src.HasPermission("essentials.bypass.blacklist.item")) {
-                return CommandResult.Lang("BLACKLISTED_ITEM", $"{itemAsset.Value.itemName} ({itemAsset.Value.id})");
+                return CommandResult.LangError("BLACKLISTED_ITEM", $"{itemAsset.Value.itemName} ({itemAsset.Value.id})");
             }
 
             var item = new Item(itemAsset.Value.id, true);

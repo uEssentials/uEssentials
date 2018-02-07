@@ -55,7 +55,7 @@ namespace Essentials.Commands {
                 EssLang.Send(src, "INVENTORY_CLEARED_ALL");
             } else {
                 if (!args[0].IsValidPlayerIdentifier) { // specific player
-                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                    return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                 }
                 if (!src.HasPermission($"{Permission}.other")) {
                     return CommandResult.NoPermission($"{Permission}.other");

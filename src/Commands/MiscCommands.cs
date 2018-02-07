@@ -62,33 +62,29 @@ namespace Essentials.Commands {
                 Physics.Raycast(player.Position, Vector3.up, out var raycastHit, 1000, RayMasks.BLOCK_COLLISION & ~RayMasks.CLIP);
 
                 if (raycastHit.transform == null) {
-                    return CommandResult.Lang("ASCEND_NOTHING_ABOVE");
+                    return CommandResult.LangError("ASCEND_NOTHING_ABOVE");
                 }
 
                 var yDelta = raycastHit.point.y - player.Position.y;
 
                 player.Teleport(raycastHit.point + Vector3.up);
 
-                return CommandResult.Lang("ASCENDED", yDelta);
+                return CommandResult.LangSuccess("ASCENDED", yDelta);
             }
 
             if (!args[0].IsFloat) {
-                return CommandResult.Lang("INVALID_NUMBER", args[0]);
+                return CommandResult.LangError("INVALID_NUMBER", args[0]);
             }
 
             if (args[0].ToFloat <= 0) {
-                return CommandResult.Lang("MUST_POSITIVE", args[0]);
+                return CommandResult.LangError("MUST_POSITIVE", args[0]);
             }
 
-            var pos = new Vector3(player.Position.x, player.Position.y, player.Position.z);
-            var num = args[0].ToFloat;
+            var amount = args[0].ToFloat;
+            player.Teleport(new Vector3(player.Position.x, player.Position.y + amount, 
+                                        player.Position.z));
 
-            pos.y += num;
-
-            player.Teleport(pos);
-            EssLang.Send(src, "ASCENDED", num);
-
-            return CommandResult.Success();
+            return CommandResult.LangSuccess("ASCENDED", amount);
         }
 
 
@@ -105,11 +101,11 @@ namespace Essentials.Commands {
             }
 
             if (!args[0].IsFloat) {
-                return CommandResult.Lang("INVALID_NUMBER", args[0]);
+                return CommandResult.LangError("INVALID_NUMBER", args[0]);
             }
 
             if (args[0].ToFloat <= 0) {
-                return CommandResult.Lang("MUST_POSITIVE", args[0]);
+                return CommandResult.LangError("MUST_POSITIVE", args[0]);
             }
 
             var player = src.ToPlayer();
@@ -155,11 +151,11 @@ namespace Essentials.Commands {
                 }
 
                 if (!args[1].IsInt) {
-                    return CommandResult.Lang("INVALID_NUMBER", args[1]);
+                    return CommandResult.LangError("INVALID_NUMBER", args[1]);
                 }
 
                 if (args[1].ToInt < 1) {
-                    return CommandResult.Lang("NUMBER_BETWEEN", 1, int.MaxValue);
+                    return CommandResult.LangError("NUMBER_BETWEEN", 1, int.MaxValue);
                 }
 
                 distance = args[1].ToInt;
@@ -169,7 +165,7 @@ namespace Essentials.Commands {
                 case "ev":
                 case "emptyvehicles":
                     if (!src.HasPermission(cmd.Permission + ".emptyvehicles")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.LangError("COMMAND_NO_PERMISSION");
                     }
 
                     src.SendMessage("This command is unstable and can cause bugs.", Color.red);
@@ -196,7 +192,7 @@ namespace Essentials.Commands {
                     return CommandResult.Generic("This option is currently disabled.");
 
                     if (!src.HasPermission(cmd.Permission + ".vehicles")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.LangError("COMMAND_NO_PERMISSION");
                     }
 
                     UWorld.Vehicles.ForEach(v => {
@@ -219,7 +215,7 @@ namespace Essentials.Commands {
                 case "i":
                 case "items":
                     if (!src.HasPermission(cmd.Permission + ".items")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.LangError("COMMAND_NO_PERMISSION");
                     }
 
                     ItemManager.askClearAllItems();
@@ -266,7 +262,7 @@ namespace Essentials.Commands {
                     } else if (args[0].Equals("*")) {
                         GiveItem(src, null, args[1], One, true);
                     } else if (!args[0].IsValidPlayerIdentifier) {
-                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                        return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                     } else {
                         GiveItem(src, args[0].ToPlayer, args[1], One);
                     }
@@ -280,7 +276,7 @@ namespace Essentials.Commands {
                     if (args[0].Equals("*")) {
                         GiveItem(src, null, args[1], args[2], true);
                     } else if (!args[0].IsValidPlayerIdentifier) {
-                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                        return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                     } else {
                         GiveItem(src, args[0].ToPlayer, args[1], args[2]);
                     }
@@ -311,12 +307,12 @@ namespace Essentials.Commands {
                 var equipment = src.ToPlayer().Equipment;
 
                 if (equipment.itemID == 0) { // TODO: Check
-                    return CommandResult.Lang("EMPTY_HANDS");
+                    return CommandResult.LangError("EMPTY_HANDS");
                 }
 
                 asset = equipment.asset;
             } else if (!args[0].IsUShort || (asset = Assets.find(EAssetType.ITEM, args[0].ToUShort) as ItemAsset) == null) {
-                return CommandResult.Lang("INVALID_ITEM_ID", args[0]);
+                return CommandResult.LangError("INVALID_ITEM_ID", args[0]);
             }
 
             var name = WrapMessage(src, asset.itemName);
@@ -345,7 +341,7 @@ namespace Essentials.Commands {
             var toggleVal = GetToggleValue(args[1]);
 
             if (!toggleVal.HasValue) {
-                return CommandResult.Lang("INVALID_BOOLEAN", args[1]);
+                return CommandResult.LangError("INVALID_BOOLEAN", args[1]);
             }
 
             var player = src.ToPlayer();
@@ -416,7 +412,7 @@ namespace Essentials.Commands {
             var toggleVal = GetToggleValue(args[1]);
 
             if (!toggleVal.HasValue) {
-                return CommandResult.Lang("INVALID_BOOLEAN", args[1]);
+                return CommandResult.LangError("INVALID_BOOLEAN", args[1]);
             }
 
             var player = src.ToPlayer();
@@ -531,7 +527,7 @@ namespace Essentials.Commands {
                 });
 
                 if (!found) {
-                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                    return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                 }
             }
 
@@ -589,7 +585,7 @@ namespace Essentials.Commands {
 
             if (args.Length > 0) {
                 if (!args[0].IsUInt) {
-                    return CommandResult.Lang("INVALID_NUMBER", args[0]);
+                    return CommandResult.LangError("INVALID_NUMBER", args[0]);
                 }
                 max = args[0].ToUInt;
             }
@@ -621,7 +617,7 @@ namespace Essentials.Commands {
             int delay = 0;
             if (args.Length > 0) {
                 if (!args[0].IsInt) {
-                    return CommandResult.Lang("INVALID_NUMBER", args[0]);
+                    return CommandResult.LangError("INVALID_NUMBER", args[0]);
                 } else if ((delay = args[0].ToInt) < 0) {
                     delay = 0;
                 }
@@ -655,14 +651,14 @@ namespace Essentials.Commands {
                     var optAsset = VehicleUtil.GetVehicle(args[0].ToString());
 
                     if (optAsset.IsAbsent) {
-                        return CommandResult.Lang("INVALID_VEHICLE_ID", args[0]);
+                        return CommandResult.LangError("INVALID_VEHICLE_ID", args[0]);
                     }
 
                     var id = optAsset.Value.id;
 
                     if (UEssentials.Config.VehicleBlacklist.Contains(id) &&
                         !src.HasPermission("essentials.bypass.blacklist.vehicle")) {
-                        return CommandResult.Lang("BLACKLISTED_VEHICLE", $"{optAsset.Value.vehicleName} ({id})");
+                        return CommandResult.LangError("BLACKLISTED_VEHICLE", $"{optAsset.Value.vehicleName} ({id})");
                     }
 
                     VehicleTool.giveVehicle(src.ToPlayer().UnturnedPlayer, id);
@@ -672,13 +668,13 @@ namespace Essentials.Commands {
 
                 case 2:
                     if (!src.HasPermission($"{cmd.Permission}.other")) {
-                        return CommandResult.Lang("COMMAND_NO_PERMISSION");
+                        return CommandResult.LangError("COMMAND_NO_PERMISSION");
                     }
 
                     optAsset = VehicleUtil.GetVehicle(args[1].ToString());
 
                     if (optAsset.IsAbsent) {
-                        return CommandResult.Lang("INVALID_VEHICLE_ID", args[1]);
+                        return CommandResult.LangError("INVALID_VEHICLE_ID", args[1]);
                     }
 
                     var vehAsset = optAsset.Value;
@@ -690,7 +686,7 @@ namespace Essentials.Commands {
 
                         EssLang.Send(src, "GIVEN_VEHICLE_ALL", vehAsset.vehicleName, vehAsset.id);
                     } else if (!args[0].IsValidPlayerIdentifier) {
-                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                        return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                     } else {
                         var target = args[0].ToPlayer;
                         VehicleTool.giveVehicle(target.UnturnedPlayer, vehAsset.id);
@@ -750,7 +746,7 @@ namespace Essentials.Commands {
                     var optSkill = USkill.FromName(args[0].ToString());
 
                     if (optSkill.IsAbsent) {
-                        return CommandResult.Lang("INVALID_SKILL", args[0]);
+                        return CommandResult.LangError("INVALID_SKILL", args[0]);
                     }
 
                     var player = src.ToPlayer();
@@ -760,12 +756,12 @@ namespace Essentials.Commands {
                         value = player.GetSkill(optSkill.Value).max;
                     } else if (args[1].IsInt) {
                         if (args[1].ToInt < 0 || args[1].ToInt > byte.MaxValue) {
-                            return CommandResult.Lang("NEGATIVE_OR_LARGE");
+                            return CommandResult.LangError("NEGATIVE_OR_LARGE");
                         }
 
                         value = (byte) args[1].ToInt;
                     } else {
-                        return CommandResult.Lang("INVALID_NUMBER", args[1]);
+                        return CommandResult.LangError("INVALID_NUMBER", args[1]);
                     }
 
                     player.SetSkillLevel(optSkill.Value, value);
@@ -776,13 +772,13 @@ namespace Essentials.Commands {
                 case 3:
                     if (args[0].Equals("*")) {
                         if (!UServer.Players.Any()) {
-                            return CommandResult.Lang("ANYONE_ONLINE");
+                            return CommandResult.LangError("ANYONE_ONLINE");
                         }
 
                         player = UServer.Players.First();
                     } else {
                         if (!args[0].IsValidPlayerIdentifier) {
-                            return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                            return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                         }
 
                         player = args[0].ToPlayer;
@@ -791,19 +787,19 @@ namespace Essentials.Commands {
                     optSkill = USkill.FromName(args[1].ToString());
 
                     if (optSkill.IsAbsent) {
-                        return CommandResult.Lang("INVALID_SKILL", args[0]);
+                        return CommandResult.LangError("INVALID_SKILL", args[0]);
                     }
 
                     if (args[2].Equals("max")) {
                         value = player.GetSkill(optSkill.Value).max;
                     } else if (args[2].IsInt) {
                         if (args[2].ToInt < 0 || args[2].ToInt > byte.MaxValue) {
-                            return CommandResult.Lang("NEGATIVE_OR_LARGE");
+                            return CommandResult.LangError("NEGATIVE_OR_LARGE");
                         }
 
                         value = (byte) args[2].ToInt;
                     } else {
-                        return CommandResult.Lang("INVALID_NUMBER", args[2]);
+                        return CommandResult.LangError("INVALID_NUMBER", args[2]);
                     }
 
                     if (args[0].Equals("*")) {
@@ -840,18 +836,18 @@ namespace Essentials.Commands {
 
             if (args.Length > 0) {
                 if (!args[0].IsFloat) {
-                    return CommandResult.Lang("INVALID_NUMBER", args[0]);
+                    return CommandResult.LangError("INVALID_NUMBER", args[0]);
                 }
                 if ((radius = args[0].ToFloat) <= 0) {
-                     return CommandResult.Lang("MUST_POSITIVE");
+                     return CommandResult.LangError("MUST_POSITIVE");
                 }
             }
             if (args.Length > 1) {
                 if (!args[1].IsFloat) {
-                    return CommandResult.Lang("INVALID_NUMBER", args[1]);
+                    return CommandResult.LangError("INVALID_NUMBER", args[1]);
                 }
                 if (!args[1].IsInRange(0, 100)) {
-                     return CommandResult.Lang("NUMBER_BETWEEN", 0, 100);
+                     return CommandResult.LangError("NUMBER_BETWEEN", 0, 100);
                 }
                 percentage = args[1].ToFloat / 100;
             }
@@ -862,7 +858,7 @@ namespace Essentials.Commands {
                 var argPos = args.GetVector3(2);
 
                 if (!argPos.HasValue) {
-                    return CommandResult.Lang("INVALID_COORDS", args[2], args[3], args[4]);
+                    return CommandResult.LangError("INVALID_COORDS", args[2], args[3], args[4]);
                 }
 
                 position = argPos.Value;

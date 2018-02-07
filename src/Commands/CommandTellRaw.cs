@@ -44,7 +44,7 @@ namespace Essentials.Commands {
                 UEssentials.ConsoleSource.SendMessage(msg, color);
             } else {
                 if (!args[0].IsValidPlayerIdentifier) {
-                    return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                    return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                 }
                 args[0].ToPlayer.SendMessage(msg, color);
             }

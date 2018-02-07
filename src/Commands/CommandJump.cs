@@ -50,7 +50,7 @@ namespace Essentials.Commands {
             var eyePos = player.GetEyePosition(dist);
 
             if (!eyePos.HasValue) {
-                return CommandResult.Lang("JUMP_NO_POSITION");
+                return CommandResult.LangError("JUMP_NO_POSITION");
             }
 
             var point = eyePos.Value;

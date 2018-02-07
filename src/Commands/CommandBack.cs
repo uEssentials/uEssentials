@@ -48,14 +48,14 @@ namespace Essentials.Commands {
             var playerMeta = player.Metadata;
 
             if (!playerMeta.Has(META_KEY_POS) || !playerMeta.Has(META_KEY_DELAY)) {
-                return CommandResult.Lang("NOT_DIED_YET");
+                return CommandResult.LangError("NOT_DIED_YET");
             }
 
             var deathTime = playerMeta.Get<DateTime>(META_KEY_DELAY);
             var delta = UEssentials.Config.BackDelay - (DateTime.Now - deathTime).Seconds;
 
             if (delta > 0 && !player.HasPermission($"essentials.bypass.backdelay")) {
-                return CommandResult.Lang("BACK_DELAY", TimeUtil.FormatSeconds((uint) delta));
+                return CommandResult.LangError("BACK_DELAY", TimeUtil.FormatSeconds((uint) delta));
             }
 
             var backPosition = playerMeta.Get<Vector3>(META_KEY_POS);
@@ -70,7 +70,6 @@ namespace Essentials.Commands {
 
         protected override void OnUnregistered()
             => UEssentials.EventManager.Unregister<EssentialsEventHandler>("BackPlayerDeath");
-
     }
 
 }

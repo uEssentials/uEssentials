@@ -40,7 +40,7 @@ namespace Essentials.Commands {
             var players = new List<UPlayer>(UServer.Players);
 
             if (players.Count == 0) {
-                return CommandResult.Lang("NO_PLAYERS_FOR_KICK");
+                return CommandResult.LangError("NO_PLAYERS_FOR_KICK");
             }
 
             var reason = args.IsEmpty

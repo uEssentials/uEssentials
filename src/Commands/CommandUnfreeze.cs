@@ -51,14 +51,14 @@ namespace Essentials.Commands {
                 var target = args[0].ToPlayer;
 
                 if (!target.HasComponent<FrozenPlayer>()) {
-                    return CommandResult.Lang("NOT_FROZEN", target.DisplayName);
+                    return CommandResult.LangError("NOT_FROZEN", target.DisplayName);
                 }
                 target.RemoveComponent<FrozenPlayer>();
 
                 EssLang.Send(src, "UNFROZEN_SENDER", target.DisplayName);
                 EssLang.Send(target, "UNFROZEN_PLAYER", src.DisplayName);
             } else {
-                return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
             }
             return CommandResult.Success();
         }

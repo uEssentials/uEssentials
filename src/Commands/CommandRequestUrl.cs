@@ -53,7 +53,7 @@ namespace Essentials.Commands {
                 target.UnturnedPlayer.sendBrowserRequest(message, url);
                 EssLang.Send(src, "REQUEST_URL_SUCCESS", target.DisplayName, url);
             } else {
-                return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
             }
 
             return CommandResult.Success();

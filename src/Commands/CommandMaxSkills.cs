@@ -51,7 +51,7 @@ namespace Essentials.Commands {
                 }
 
                 if (!args[0].IsBool) {
-                    return CommandResult.Lang("INVALID_BOOLEAN", args[0]);
+                    return CommandResult.LangError("INVALID_BOOLEAN", args[0]);
                 }
 
                 bool overpower = args[0].ToBool;
@@ -73,7 +73,7 @@ namespace Essentials.Commands {
                             return CommandResult.NoPermission($"{Permission}.other");
                         }
                         if (!args[1].IsValidPlayerIdentifier) {
-                            return CommandResult.Lang("PLAYER_NOT_FOUND", args[1]);
+                            return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                         }
                         var targetPlayer = args[1].ToPlayer;
                         GiveMaxSkills(targetPlayer, overpower);

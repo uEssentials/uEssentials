@@ -42,7 +42,7 @@ namespace Essentials.NativeModules.Warp.Commands {
                     }
 
                     if (WarpModule.Instance.WarpManager.Contains(args[0].ToString())) {
-                        return CommandResult.Lang("WARP_ALREADY_EXISTS");
+                        return CommandResult.LangError("WARP_ALREADY_EXISTS");
                     }
 
                     var player = src.ToPlayer();
@@ -59,14 +59,14 @@ namespace Essentials.NativeModules.Warp.Commands {
                         warp = new Warp(args[0].ToString(), pos.Value, 0.0F);
 
                         if (WarpModule.Instance.WarpManager.Contains(args[0].ToString())) {
-                            return CommandResult.Lang("WARP_ALREADY_EXISTS");
+                            return CommandResult.LangError("WARP_ALREADY_EXISTS");
                         }
 
                         WarpModule.Instance.WarpManager.Add(warp);
 
                         EssLang.Send(src, "WARP_SET", args[0]);
                     } else {
-                        return CommandResult.Lang("INVALID_COORDS", args[1], args[2], args[3]);
+                        return CommandResult.LangError("INVALID_COORDS", args[1], args[2], args[3]);
                     }
                     break;
 

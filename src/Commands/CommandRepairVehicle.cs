@@ -51,7 +51,7 @@ namespace Essentials.Commands {
 
                     EssLang.Send(src, "VEHICLE_REPAIRED");
                 } else {
-                    return CommandResult.Lang("NOT_IN_VEHICLE");
+                    return CommandResult.LangError("NOT_IN_VEHICLE");
                 }
             } else if (args[0].Equals("all")) {
                 if (!src.HasPermission($"{Permission}.all")) {

@@ -50,7 +50,7 @@ namespace Essentials.Commands {
             var target = args[0].ToPlayer;
 
             if (target == null) {
-                return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
             }
 
             var pmSettings = UEssentials.Config.PrivateMessage;

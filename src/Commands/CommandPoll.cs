@@ -75,7 +75,7 @@ namespace Essentials.Commands {
 
                     lock (Polls) {
                         if (Polls.ContainsKey(pollName)) {
-                            return CommandResult.Lang("POLL_NAME_IN_USE");
+                            return CommandResult.LangError("POLL_NAME_IN_USE");
                         }
                     }
 
@@ -90,7 +90,7 @@ namespace Essentials.Commands {
 
                         poll.Start();
                     } else {
-                        return CommandResult.Lang("INVALID_NUMBER", args[2]);
+                        return CommandResult.LangError("INVALID_NUMBER", args[2]);
                     }
                     break;
                 }
@@ -115,7 +115,7 @@ namespace Essentials.Commands {
                 case "list": {
                     lock (Polls) {
                         if (!Polls.Any()) {
-                            return CommandResult.Lang("POLL_NONE");
+                            return CommandResult.LangError("POLL_NONE");
                         }
 
                         EssLang.Send(src, "POLL_LIST");
@@ -136,7 +136,7 @@ namespace Essentials.Commands {
                 case "info": {
                     lock (Polls) {
                         if (!Polls.Any()) {
-                            return CommandResult.Lang("POLL_NONE");
+                            return CommandResult.LangError("POLL_NONE");
                         }
 
                         if (args.Length < 2) {

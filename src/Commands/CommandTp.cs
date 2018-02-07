@@ -55,7 +55,7 @@ namespace Essentials.Commands {
                     FindPlaceOrPlayer(args[0].ToString(), out dataFound, out dataPosition, out dataName);
 
                     if (!dataFound) {
-                        return CommandResult.Lang("FAILED_FIND_PLACE_OR_PLAYER", args[0]);
+                        return CommandResult.LangError("FAILED_FIND_PLACE_OR_PLAYER", args[0]);
                     }
 
                     src.ToPlayer().Teleport(dataPosition);
@@ -69,7 +69,7 @@ namespace Essentials.Commands {
                 */
                 case 2: {
                     if (!args[0].IsValidPlayerIdentifier) {
-                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                        return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                     }
 
                     var target = args[0].ToPlayer;
@@ -80,7 +80,7 @@ namespace Essentials.Commands {
                     FindPlaceOrPlayer(args[1].ToString(), out dataFound, out dataPosition, out dataName);
 
                     if (!dataFound) {
-                        return CommandResult.Lang("FAILED_FIND_PLACE_OR_PLAYER", args[1]);
+                        return CommandResult.LangError("FAILED_FIND_PLACE_OR_PLAYER", args[1]);
                     }
 
                     target.Teleport(dataPosition);
@@ -99,7 +99,7 @@ namespace Essentials.Commands {
                         src.ToPlayer().Teleport(location.Value);
                         EssLang.Send(src, "TELEPORTED", location);
                     } else {
-                        return CommandResult.Lang("INVALID_COORDS", args[0], args[1], args[2]);
+                        return CommandResult.LangError("INVALID_COORDS", args[0], args[1], args[2]);
                     }
                     break;
                 }
@@ -109,7 +109,7 @@ namespace Essentials.Commands {
                 */
                 case 4: {
                     if (!args[0].IsValidPlayerIdentifier) {
-                        return CommandResult.Lang("PLAYER_NOT_FOUND", args[0]);
+                        return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                     }
 
                     var target = args[0].ToPlayer;
@@ -120,7 +120,7 @@ namespace Essentials.Commands {
                         EssLang.Send(target, "TELEPORTED", location);
                         EssLang.Send(src, "TELEPORTED_SENDER", target, location);
                     } else {
-                        return CommandResult.Lang("INVALID_COORDS", args[1], args[2], args[3]);
+                        return CommandResult.LangError("INVALID_COORDS", args[1], args[2], args[3]);
                     }
                     break;
                 }
