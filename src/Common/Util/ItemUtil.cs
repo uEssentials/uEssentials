@@ -42,9 +42,7 @@ namespace Essentials.Common.Util {
                 return Optional<ItemAsset>.Empty();
             }
 
-            ushort id;
-
-            if (ushort.TryParse(name, out id)) {
+            if (ushort.TryParse(name, out var id)) {
                 return GetItem(id);
             }
 

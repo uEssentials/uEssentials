@@ -67,22 +67,6 @@ namespace Essentials.Configuration {
                     UEssentials.Logger.LogError("Error: " + ex);
                     LoadDefaults();
                 }
-            } else {
-                // TODO: Remove
-                // Rename 'textcommands.json' to 'text_commands.json'
-                var dir = Path.GetDirectoryName(filePath);
-                if (dir == null) { // Resharper pls
-                    throw new InvalidOperationException("dir == null");
-                }
-                var legacyPath = Path.Combine(dir, "textcommands.json");
-                if (File.Exists(legacyPath)) {
-                    File.Copy(legacyPath, Path.Combine(dir, FileName));
-                    File.Delete(legacyPath);
-                    Load(filePath);
-                    return;
-                }
-                LoadDefaults();
-                Save(filePath);
             }
         }
 

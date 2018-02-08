@@ -354,6 +354,7 @@ namespace Essentials.Core {
             }
 
             Console.WriteLine();
+            // TODO: update msg; rocket reload may cause issues, if so, try restarting the server.
             UEssentials.Logger.LogError("Rocket reload cause many issues, consider restarting the server");
             UEssentials.Logger.LogError("Or use '/essentials reload' to reload essentials correctly.");
             Console.WriteLine();
@@ -387,25 +388,25 @@ namespace Essentials.Core {
 
                 Logger.LogInfo($"New version avalaible: {lastResult.LatestVersion}");
 
-                if (!string.IsNullOrEmpty(lastResult.AdditionalData)) {
-                    JToken changes;
-                    if (JObject.Parse(lastResult.AdditionalData).TryGetValue("changes", out changes)) {
-                        Logger.LogInfo("====================== [ Update  Notes ] ======================");
+                if (
+                    !string.IsNullOrEmpty(lastResult.AdditionalData) &&
+                    JObject.Parse(lastResult.AdditionalData).TryGetValue("changes", out var changes)
+                ) {
+                    Logger.LogInfo("====================== [ Update  Notes ] ======================");
 
-                        changes.ToString().Split('\n').ForEach(msg => {
-                            Logger.Log("", ConsoleColor.Green, suffix: "");
-                            Logger.Log("  " + msg, ConsoleColor.White, "");
-                        });
-
-                        Logger.LogInfo("");
+                    changes.ToString().Split('\n').ForEach(msg => {
                         Logger.Log("", ConsoleColor.Green, suffix: "");
-                        Logger.Log(
-                            "  " +
-                            $"See more in: https://github.com/uEssentials/uEssentials/releases/tag/{lastResult.LatestVersion}",
-                            ConsoleColor.White, "");
+                        Logger.Log("  " + msg, ConsoleColor.White, "");
+                    });
 
-                        Logger.LogInfo("===============================================================");
-                    }
+                    Logger.LogInfo("");
+                    Logger.Log("", ConsoleColor.Green, suffix: "");
+                    Logger.Log(
+                        "  " +
+                        $"See more in: https://github.com/uEssentials/uEssentials/releases/tag/{lastResult.LatestVersion}",
+                        ConsoleColor.White, "");
+
+                    Logger.LogInfo("===============================================================");
                 }
 
                 if (Config.Updater.DownloadLatest) {
@@ -415,7 +416,7 @@ namespace Essentials.Core {
 
             worker.RunWorkerCompleted += (sender, args) => {
                 if (args.Error != null) {
-                    Logger.LogError($"Could not update, try again later. ({args.Error.Message})");
+                    Logger.LogError($"Could not update, try again later. Error: ({args.Error.Message})");
                     Logger.LogError("Or try to download it manually here: https://github.com/uEssentials/uEssentials/releases");
                 }
             };

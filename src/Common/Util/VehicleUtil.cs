@@ -40,9 +40,7 @@ namespace Essentials.Common.Util {
                 return Optional<VehicleAsset>.Empty();
             }
 
-            ushort id;
-
-            if (ushort.TryParse(name, out id)) {
+            if (ushort.TryParse(name, out var id)) {
                 return GetVehicle(id);
             }
 

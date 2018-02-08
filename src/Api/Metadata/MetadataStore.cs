@@ -47,8 +47,7 @@ namespace Essentials.Api.Metadata {
         }
 
         public T GetOrDefault<T>(string key, T defaultValue) where T : TValue {
-            TValue val;
-            if (_metadata.TryGetValue(key, out val)) {
+            if (_metadata.TryGetValue(key, out var val)) {
                 return (T) val;
             }
             return defaultValue;

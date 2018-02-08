@@ -91,7 +91,6 @@ namespace Essentials.Common.Util {
 
         private static Color? ColorFromHex(string rawColor) {
             var len = rawColor.Length;
-            int hex;
 
             if (len == 0) {
                 return null;
@@ -113,7 +112,7 @@ namespace Essentials.Common.Util {
                 rawColor = new string(chars);
             }
 
-            if (!int.TryParse(rawColor, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out hex)) {
+            if (!int.TryParse(rawColor, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out var hex)) {
                 System.Diagnostics.Debug.Print("Failed to parse hex color '{0}'.", rawColor);
                 return null;
             }

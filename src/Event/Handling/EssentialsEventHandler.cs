@@ -55,30 +55,32 @@ namespace Essentials.Event.Handling {
         // player_id => [command_name, nextUse]
         internal static readonly Dictionary<ulong, Dictionary<string, DateTime>> CommandCooldowns = new Dictionary<ulong, Dictionary<string, DateTime>>();
 
-
         [SubscribeEvent(EventType.PLAYER_CHATTED)]
         private void OnPlayerChatted(UnturnedPlayer player, ref Color color, string message,
                                      EChatMode mode, ref bool cancel) {
-            if (!UEssentials.Config.AntiSpam.Enabled || message.StartsWith("/") ||
-                player.HasPermission("essentials.bypass.antispam")) return;
+            if (
+                !UEssentials.Config.AntiSpam.Enabled ||
+                message.StartsWith("/") ||
+                player.HasPermission("essentials.bypass.antispam")
+            ) return;
 
-            const string kMetadatKey = "last_chatted";
+            const string METADATA_KEY = "last_chatted";
             var uplayer = UPlayer.From(player);
 
-            if (!uplayer.Metadata.Has(kMetadatKey)) {
-                uplayer.Metadata[kMetadatKey] = DateTime.Now;
+            if (!uplayer.Metadata.Has(METADATA_KEY)) {
+                uplayer.Metadata[METADATA_KEY] = DateTime.Now;
                 return;
             }
 
             var interval = UEssentials.Config.AntiSpam.Interval;
 
-            if ((DateTime.Now - uplayer.Metadata.Get<DateTime>(kMetadatKey)).TotalSeconds < interval) {
+            if ((DateTime.Now - uplayer.Metadata.Get<DateTime>(METADATA_KEY)).TotalSeconds < interval) {
                 EssLang.Send(uplayer, "CHAT_ANTI_SPAM");
                 cancel = true;
                 return;
             }
 
-            uplayer.Metadata[kMetadatKey] = DateTime.Now;
+            uplayer.Metadata[METADATA_KEY] = DateTime.Now;
         }
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
@@ -108,7 +110,7 @@ namespace Essentials.Event.Handling {
             var player = UPlayer.From(rocketPlayer);
             var allPercentage = -1; // essentials.keepskill.all.<percentage>
 
-            // Save skills in metadata, that will be restored when player respawn.
+            // Save skills in metadata, it will be restored when player respawn.
             // Format: Skill -> NewValue
             // Get or instantiate new Dictionary
             Dictionary<USkill, byte> skillsToRestore;
@@ -120,9 +122,11 @@ namespace Essentials.Event.Handling {
             }
 
             // Parse keepskill permissions
+            // TODO: We should cache this. We need to find a way to detect when permissions change
+            // and then re-compute this.
             foreach (var perm in player.Permissions.Where(perm => perm.StartsWith(KEEP_SKILL_PERM))) {
                 var kind = perm.Substring(KEEP_SKILL_PERM.Length);
-                var keepPercentage = 100;
+                var percentageToKeep = 100;
 
                 if (string.IsNullOrEmpty(kind)) {
                     continue;
@@ -133,21 +137,21 @@ namespace Essentials.Event.Handling {
                 if (kind.IndexOf('.') >= 0) {
                     // Split 'skill.percentage'
                     var parts = kind.Split('.');
-                    if (!int.TryParse(parts[1], out keepPercentage)) {
+                    if (!int.TryParse(parts[1], out percentageToKeep)) {
                         continue;
                     }
                     // Percentage must be between 0-100
-                    if (keepPercentage < 0) {
-                        keepPercentage = 0;
+                    if (percentageToKeep < 0) {
+                        percentageToKeep = 0;
                     }
-                    if (keepPercentage > 100) {
-                        keepPercentage = 100;
+                    if (percentageToKeep > 100) {
+                        percentageToKeep = 100;
                     }
                     kind = parts[0]; // let only skill name
                 }
 
                 if (kind.EqualsIgnoreCase("all")) {
-                    allPercentage = keepPercentage;
+                    allPercentage = percentageToKeep;
                     continue;
                 }
 
@@ -156,26 +160,17 @@ namespace Essentials.Event.Handling {
                 if (fromName.IsAbsent) {
                     continue;
                 }
-                skillsToRestore[fromName.Value] = (byte) Math.Ceiling(player.GetSkillLevel(fromName.Value) * (keepPercentage / 100.0));
+                skillsToRestore[fromName.Value] = (byte) Math.Ceiling(player.GetSkillLevel(fromName.Value) * (percentageToKeep / 100.0));
             }
 
             // All Skills
             if (allPercentage != -1) {
-                foreach (var skill in USkill.Skills) {
-                    // We wanna not change previously added skills.
-                    // This will allow to set a separated percentage while using modifier 'all' (essentials.keepskill.all)
-                    // e.g
-                    // essentials.keepskill.all.50
-                    // essentials.keepskill.cardio.100
-                    // this will keep 50% of all skills and 100% of cardio skill
-                    if (skillsToRestore.ContainsKey(skill)) {
-                        continue;
-                    }
-                    var newValue = Math.Ceiling(player.GetSkillLevel(skill) * (allPercentage / 100.0));
-                    skillsToRestore[skill] = (byte) newValue;
-                }
+                skillsToRestore.Keys
+                    .ToList()   // We need this because we can't change the dictionary while looping thru its KeyCollection
+                    .ForEach(skill => {
+                        skillsToRestore[skill] = (byte) Math.Ceiling(player.GetSkillLevel(skill) * (allPercentage / 100.0));
+                    });
             }
-
         }
 
         [SubscribeEvent(EventType.PLAYER_REVIVE)]
@@ -187,7 +182,7 @@ namespace Essentials.Event.Handling {
                 foreach (var pair in skillsToRestore) {
                     player.SetSkillLevel(pair.Key, pair.Value);
                 }
-                player.Metadata.Remove("KEEP_SKILL");
+                skillsToRestore.Clear();
             }
         }
 
@@ -228,20 +223,19 @@ namespace Essentials.Event.Handling {
         [SubscribeEvent(EventType.ESSENTIALS_COMMAND_PRE_EXECUTED)]
         private void OnCommandPreExecuted(CommandPreExecuteEvent e) {
             var commandName = e.Command.Name.ToLowerInvariant();
-            CommandOptions.CommandEntry commandOptions;
 
-            if (e.Source.IsConsole || !EssCore.Instance.CommandOptions.Commands.TryGetValue(commandName, out commandOptions)) {
-                return;
-            }
+            if (
+                e.Source.IsConsole ||
+                !EssCore.Instance.CommandOptions.Commands.TryGetValue(commandName, out var commandOptions)
+            ) return;
 
             // Check cooldown
             if (!e.Source.HasPermission("essentials.bypass.commandcooldown")) {
                 var playerId = e.Source.ToPlayer().CSteamId.m_SteamID;
-                DateTime nextUse;
 
                 if (
                     CommandCooldowns.ContainsKey(playerId) &&
-                    CommandCooldowns[playerId].TryGetValue(commandName, out nextUse) &&
+                    CommandCooldowns[playerId].TryGetValue(commandName, out var nextUse) &&
                     nextUse > DateTime.Now
                 ) {
                     var diffSec = (uint) (nextUse - DateTime.Now).TotalSeconds;
@@ -280,13 +274,13 @@ namespace Essentials.Event.Handling {
         [SubscribeEvent(EventType.ESSENTIALS_COMMAND_POS_EXECUTED)]
         private void OnCommandPosExecuted(CommandPosExecuteEvent e) {
             var commandName = e.Command.Name.ToLowerInvariant();
-            CommandOptions.CommandEntry commandOptions;
 
             // It will only apply cooldown/cost if the command was sucessfully executed.
-            if (e.Source.IsConsole || e.Result.Type != CommandResult.ResultType.SUCCESS ||
-                !EssCore.Instance.CommandOptions.Commands.TryGetValue(commandName, out commandOptions)) {
-                return;
-            }
+            if (
+                e.Source.IsConsole ||
+                e.Result.Type != CommandResult.ResultType.SUCCESS ||
+                !EssCore.Instance.CommandOptions.Commands.TryGetValue(commandName, out var commandOptions)
+            ) return;
 
             // Handle cooldown
             if (!e.Source.HasPermission("essentials.bypass.commandcooldown") && commandOptions.PerGroupCooldown != null) {
@@ -411,9 +405,11 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
         private void TpaPlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            Task task;
-            if (UEssentials.Config.Tpa.TeleportDelay > 0 && UEssentials.Config.Tpa.CancelTeleportWhenMove &&
-                CommandTpa.WaitingToTeleport.TryGetValue(player.CSteamID.m_SteamID, out task)) {
+            if (
+                UEssentials.Config.Tpa.TeleportDelay > 0 &&
+                UEssentials.Config.Tpa.CancelTeleportWhenMove &&
+                CommandTpa.WaitingToTeleport.TryGetValue(player.CSteamID.m_SteamID, out var task)
+            ) {
                 task.Cancel();
                 CommandTpa.WaitingToTeleport.Remove(player.CSteamID.m_SteamID);
                 UPlayer.TryGet(player, p => EssLang.Send(p, "TELEPORT_CANCELLED_MOVED"));

@@ -60,9 +60,7 @@ namespace Essentials.Commands {
                 pos = src.ToPlayer().Position;
             }
 
-            ushort amount;
-
-            if (!ushort.TryParse(rawAmount, out amount)) {
+            if (!ushort.TryParse(rawAmount, out var amount)) {
                 return CommandResult.LangError("INVALID_NUMBER", rawAmount);
             }
 

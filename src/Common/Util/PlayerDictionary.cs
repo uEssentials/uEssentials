@@ -65,8 +65,7 @@ namespace Essentials.Common.Util {
         }
 
         public new bool Remove(ulong key) {
-            TValue val;
-            if (_removalCallback != null && TryGetValue(key, out val))
+            if (_removalCallback != null && TryGetValue(key, out var val))
                 _removalCallback(val);
             return base.Remove(key);
         }

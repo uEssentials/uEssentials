@@ -77,8 +77,7 @@ namespace Essentials.Commands {
         }
 
         private static void SpawnVehicle(Vector3 pos, ushort id) {
-            RaycastHit raycastHit;
-            Physics.Raycast(pos + Vector3.up*16f, Vector3.down, out raycastHit, 32f, RayMasks.BLOCK_VEHICLE);
+            Physics.Raycast(pos + Vector3.up*16f, Vector3.down, out var raycastHit, 32f, RayMasks.BLOCK_VEHICLE);
 
             if (raycastHit.collider != null) {
                 pos.y = raycastHit.point.y + 16f;

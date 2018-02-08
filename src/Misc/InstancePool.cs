@@ -31,8 +31,7 @@ namespace Essentials.Misc {
         private readonly Dictionary<Type, object> _instances = new Dictionary<Type, object>();
 
         public object GetOrCreate(Type type, params object[] constructorArgs) {
-            object inst;
-            if (_instances.TryGetValue(type, out inst)) {
+            if (_instances.TryGetValue(type, out var inst)) {
                 return inst;
             }
             inst = Activator.CreateInstance(type, constructorArgs);

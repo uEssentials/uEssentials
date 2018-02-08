@@ -53,15 +53,12 @@ namespace Essentials.Commands {
             var player = src.ToPlayer();
             var playerId = player.CSteamId;
 
-            Vector3 position;
-            byte angle;
-
             if (player.RocketPlayer.Stance == EPlayerStance.DRIVING ||
                 player.RocketPlayer.Stance == EPlayerStance.SITTING) {
                 return CommandResult.LangError("CANNOT_TELEPORT_DRIVING");
             }
 
-            if (!BarricadeManager.tryGetBed(player.CSteamId, out position, out angle)) {
+            if (!BarricadeManager.tryGetBed(player.CSteamId, out var bedPosition, out var bedAngle)) {
                 return CommandResult.LangError("WITHOUT_BED");
             }
 
@@ -84,7 +81,7 @@ namespace Essentials.Commands {
                    .Delay(TimeSpan.FromSeconds(delay))
                    .Action(t => {
                        Delay.Remove(playerId.m_SteamID);
-                       player.Teleport(position, angle);
+                       player.Teleport(bedPosition, bedAngle);
                        EssLang.Send(src, "TELEPORTED_BED");
                    })
                    .Submit();

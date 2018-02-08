@@ -56,8 +56,7 @@ namespace Essentials.Core.Command {
         }
 
         public ICommand GetByName([NotNull] string name, bool includeAliases = true) {
-            ICommand command;
-            if (CommandMap.TryGetValue(name.ToLowerInvariant(), out command)) {
+            if (CommandMap.TryGetValue(name.ToLowerInvariant(), out var command)) {
                 return command;
             }
             return GetWhere(cmd => cmd.Name.EqualsIgnoreCase(name));

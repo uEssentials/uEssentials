@@ -153,8 +153,7 @@ namespace Essentials.Core.Command {
 
         public UPlayer ToPlayer {
             get {
-                ulong id;
-                if (ulong.TryParse(RawValue, out id)) {
+                if (ulong.TryParse(RawValue, out var id)) {
                     var player = UPlayer.From(id);
                     if (player != null) {
                         return player;
@@ -166,8 +165,7 @@ namespace Essentials.Core.Command {
 
         public bool IsBool {
             get {
-                bool unused;
-                return bool.TryParse(RawValue, out unused);
+                return bool.TryParse(RawValue, out _);
             }
         }
 
@@ -181,8 +179,7 @@ namespace Essentials.Core.Command {
         public bool IsValidPlayerIdentifier {
             get {
                 // Steam 64 id
-                ulong id;
-                if (ulong.TryParse(RawValue, out id)) {
+                if (ulong.TryParse(RawValue, out var id)) {
                     return UPlayer.From(id) != null;
                 }
                 // Player name
@@ -192,57 +189,49 @@ namespace Essentials.Core.Command {
 
         public bool IsLong {
             get {
-                long unused;
-                return long.TryParse(RawValue, out unused);
+                return long.TryParse(RawValue, out _);
             }
         }
 
         public bool IsULong {
             get {
-                ulong unused;
-                return ulong.TryParse(RawValue, out unused);
+                return ulong.TryParse(RawValue, out _);
             }
         }
 
         public bool IsInt {
             get {
-                int unused;
-                return int.TryParse(RawValue, out unused);
+                return int.TryParse(RawValue, out _);
             }
         }
 
         public bool IsDouble {
             get {
-                double unused;
-                return double.TryParse(RawValue, out unused);
+                return double.TryParse(RawValue, out _);
             }
         }
 
         public bool IsFloat {
             get {
-                float unused;
-                return float.TryParse(RawValue, out unused);
+                return float.TryParse(RawValue, out _);
             }
         }
 
         public bool IsUInt {
             get {
-                uint unused;
-                return uint.TryParse(RawValue, out unused);
+                return uint.TryParse(RawValue, out _);
             }
         }
 
         public bool IsShort {
             get {
-                short unused;
-                return short.TryParse(RawValue, out unused);
+                return short.TryParse(RawValue, out _);
             }
         }
 
         public bool IsUShort {
             get {
-                ushort unused;
-                return ushort.TryParse(RawValue, out unused);
+                return ushort.TryParse(RawValue, out _);
             }
         }
 

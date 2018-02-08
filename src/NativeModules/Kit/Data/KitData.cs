@@ -153,7 +153,7 @@ namespace Essentials.NativeModules.Kit.Data {
                     var kitItemAmount = tokKitItemAmount?.Value<byte>() ?? 1;
                     var kitItemDurability = tokKitItemDurability?.Value<byte>() ?? 100;
 
-                    if (itemAsset is ItemGunAsset) { // TODO: check
+                    if (itemAsset is ItemGunAsset) {
                         goto parseWeaponItem;
                     }
 

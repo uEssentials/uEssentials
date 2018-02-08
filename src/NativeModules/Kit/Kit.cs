@@ -90,15 +90,15 @@ namespace Essentials.NativeModules.Kit {
         /// Give this kit to player
         /// </summary>
         public void GiveTo(UPlayer player) {
-            var onetime = false;
+            var sentInventoryFullMessage = false;
 
             foreach (var kitItem in Items) {
                 var added = kitItem.GiveTo(player);
 
-                if (added || onetime) continue;
+                if (added || sentInventoryFullMessage) continue;
 
-                EssLang.Send(player, "INVENTORY_FULL"); // TODO: Remove msgs
-                onetime = true;
+                EssLang.Send(player, "INVENTORY_FULL");
+                sentInventoryFullMessage = true;
             }
 
             EssLang.Send(player, "KIT_GIVEN_RECEIVER", Name);

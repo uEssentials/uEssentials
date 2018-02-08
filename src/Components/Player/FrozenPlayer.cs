@@ -44,10 +44,8 @@ namespace Essentials.Components.Player {
                 var pos = Player.Position;
                 var seat = (byte) i;
 
-                Vector3 point;
-                byte angle;
-                veh.getExit(seat, out point, out angle);
-                VehicleManager.sendExitVehicle(veh, seat, (point + (point - pos)), angle, false);
+                veh.getExit(seat, out var exitPoint, out var exitAngle);
+                VehicleManager.sendExitVehicle(veh, seat, (exitPoint + (exitPoint - pos)), exitAngle, false);
             }
         }
 

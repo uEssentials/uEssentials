@@ -101,8 +101,7 @@ namespace Essentials.I18n {
 
                 if (defaultJson.Count != json.Count) {
                     foreach (var key in  defaultJson) {
-                        JToken outVal;
-                        if (json.TryGetValue(key.Key, out outVal)) {
+                        if (json.TryGetValue(key.Key, out var outVal)) {
                             defaultJson[key.Key] = outVal;
                         }
                     }
@@ -149,8 +148,7 @@ namespace Essentials.I18n {
         }
 
         public static object GetEntry(string key) {
-            object val;
-            return _translations.TryGetValue(key, out val) ? val : null;
+            return _translations.TryGetValue(key, out var val) ? val : null;
         }
 
         public static void Send(ICommandSource target, string key, params object[] args) {

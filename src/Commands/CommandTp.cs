@@ -49,10 +49,7 @@ namespace Essentials.Commands {
                     /tp place   -> teleport sender to place
                 */
                 case 1: {
-                    bool dataFound;
-                    Vector3 dataPosition;
-                    string dataName;
-                    FindPlaceOrPlayer(args[0].ToString(), out dataFound, out dataPosition, out dataName);
+                    FindPlaceOrPlayer(args[0].ToString(), out var dataFound, out var dataPosition, out var dataName);
 
                     if (!dataFound) {
                         return CommandResult.LangError("FAILED_FIND_PLACE_OR_PLAYER", args[0]);
@@ -74,10 +71,7 @@ namespace Essentials.Commands {
 
                     var target = args[0].ToPlayer;
 
-                    bool dataFound;
-                    Vector3 dataPosition;
-                    string dataName;
-                    FindPlaceOrPlayer(args[1].ToString(), out dataFound, out dataPosition, out dataName);
+                    FindPlaceOrPlayer(args[1].ToString(), out var dataFound, out var dataPosition, out var dataName);
 
                     if (!dataFound) {
                         return CommandResult.LangError("FAILED_FIND_PLACE_OR_PLAYER", args[1]);
@@ -143,8 +137,7 @@ namespace Essentials.Commands {
                 position = player.Position;
                 placeOrPlayer = player.DisplayName;
             } else {
-                LocationNode node;
-                found = TryFindPlace(arg, out node);
+                found = TryFindPlace(arg, out var node);
 
                 if (found) {
                     placeOrPlayer = node.name;

@@ -235,13 +235,12 @@ namespace Essentials.Api.Unturned {
         }
 
         public Vector3? GetEyePosition(float distance, int masks) {
-            RaycastHit raycast;
-            Physics.Raycast(Look.aim.position, Look.aim.forward, out raycast, distance, masks);
+            Physics.Raycast(Look.aim.position, Look.aim.forward, out var raycastHit, distance, masks);
 
-            if (raycast.transform == null)
+            if (raycastHit.transform == null)
                 return null;
 
-            return raycast.point;
+            return raycastHit.point;
         }
 
         public Vector3? GetEyePosition(float distance) {
@@ -344,8 +343,7 @@ namespace Essentials.Api.Unturned {
         }
 
         public static UPlayer From(ulong rawCSteamId) {
-            UPlayer ret;
-            return EssCore.Instance.ConnectedPlayers.TryGetValue(rawCSteamId, out ret)
+            return EssCore.Instance.ConnectedPlayers.TryGetValue(rawCSteamId, out var ret)
                    ? ret : null;
         }
 

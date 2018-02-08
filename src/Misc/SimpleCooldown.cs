@@ -52,8 +52,7 @@ namespace Essentials.Misc {
         }
 
         public double GetRemainingTime(CSteamID playerId) {
-            DateTime val;
-            return Cooldowns.TryGetValue(playerId.m_SteamID, out val)
+            return Cooldowns.TryGetValue(playerId.m_SteamID, out var val)
                    ? (val - DateTime.Now).TotalSeconds : 0;
         }
 
