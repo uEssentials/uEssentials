@@ -31,31 +31,24 @@ namespace Essentials.Components.Player {
         public bool AutoRefuel { get; set; }
         public bool AutoRepair { get; set; }
 
-        private InteractableVehicle _lastVehicle;
-        private int _needRefuelPercentage;
-        private int _needRepairPercentage;
-
         protected override void SafeFixedUpdate() {
             var currentVeh = Player.CurrentVehicle;
+
             if (currentVeh == null) {
                 return;
             }
 
-            if (_lastVehicle != currentVeh) {
-                var vehFeatures = UEssentials.Config.VehicleFeatures;
-                _lastVehicle = currentVeh;
-                _needRefuelPercentage = (_lastVehicle.asset.fuel * vehFeatures.RefuelPercentage) / 100;
-                _needRepairPercentage = (_lastVehicle.asset.health * vehFeatures.RepairPercentage) / 100;
+            var needRepairPercentage = (currentVeh.asset.health * UEssentials.Config.VehicleFeatures.RepairPercentage) / 100;
+            var needRefuelPercentage = (currentVeh.asset.fuel * UEssentials.Config.VehicleFeatures.RefuelPercentage) / 100;
+
+            if (AutoRefuel && currentVeh.fuel <= needRefuelPercentage) {
+                VehicleManager.sendVehicleFuel(currentVeh, currentVeh.asset.fuel);
+                currentVeh.fuel = currentVeh.asset.fuel;
             }
 
-            if (AutoRefuel && _lastVehicle.fuel <= _needRefuelPercentage) {
-                VehicleManager.sendVehicleFuel(_lastVehicle, _lastVehicle.asset.fuel);
-                _lastVehicle.fuel = _lastVehicle.asset.fuel;
-            }
-
-            if (AutoRepair && _lastVehicle.health <= _needRepairPercentage) {
-                VehicleManager.sendVehicleHealth(_lastVehicle, _lastVehicle.asset.health);
-                _lastVehicle.health = _lastVehicle.asset.health;
+            if (AutoRepair && currentVeh.health <= needRepairPercentage) {
+                VehicleManager.sendVehicleHealth(currentVeh, currentVeh.asset.health);
+                currentVeh.health = currentVeh.asset.health;
             }
         }
 
