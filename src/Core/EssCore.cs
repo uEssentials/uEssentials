@@ -228,18 +228,16 @@ namespace Essentials.Core {
                     UnityEngine.Application.targetFrameRate = frameRate;
                 }
 
-                if (Config.DisabledCommands.Count != 0) {
-                    Config.DisabledCommands.ForEach(cmdName => {
-                        var command = CommandManager.GetByName(cmdName);
+                Config.DisabledCommands.ForEach(cmdName => {
+                    var command = CommandManager.GetByName(cmdName);
 
-                        if (command == null || command is CommandEssentials) {
-                            Logger.LogWarning($"There is no command named '{cmdName}' to disable.");
-                        } else {
-                            CommandManager.Unregister(command);
-                            Logger.LogInfo($"Disabled command: '{command.Name}'");
-                        }
-                    });
-                }
+                    if (command == null || command is CommandEssentials) {
+                        Logger.LogWarning($"There is no command named '{cmdName}' to disable.");
+                    } else {
+                        CommandManager.Unregister(command);
+                        Logger.LogInfo($"Disabled command: '{command.Name}'");
+                    }
+                });
 
                 if (Config.EnableTextCommands) {
                     TextCommands = new TextCommands();
@@ -274,7 +272,7 @@ namespace Essentials.Core {
                     .Submit();
 
                 // If _wasLoadedBefore, then it means that uEssentials is
-                // being reloaded, and it also means that R.Plugins.OnPluginsLoaded will not be called, 
+                // being reloaded, and it also means that R.Plugins.OnPluginsLoaded will not be called,
                 // consequently OverrideCommands will not be called too
                 // so we need to call it here.
                 if (_wasLoadedBefore) {
@@ -343,7 +341,7 @@ namespace Essentials.Core {
                 .Where(t => !t.IsAbstract)
                 .Where(t => {
                     var moduleInfo = (ModuleInfo)t.GetCustomAttributes(typeof(ModuleInfo), false)[0];
-                    return Instance.Config.EnabledSystems.Any(s => s.Equals(moduleInfo.Name, StringComparison.OrdinalIgnoreCase));
+                    return Instance.Config.EnabledSystems.Contains(moduleInfo.Name);
                 })
                 .ForEach(t => {
                     Instance.ModuleManager.LoadModule((NativeModule)Activator.CreateInstance(t));
@@ -454,7 +452,7 @@ namespace Essentials.Core {
                     return true;
                 }
 
-                // It will override a command from another plugin only if specified in the config.json
+                // It will override a command from another plugin only if it's specified in the config.json
                 if (Config.CommandsToOverride.Contains(name) && !(command.Command is CommandAdapter)) {
                     var pluginName = command.Command.GetType().Assembly.GetName().Name;
                     Logger.LogInfo($"Overriding command \"{command.Name.ToLowerInvariant()}\" from plugin: {pluginName}");
@@ -468,7 +466,7 @@ namespace Essentials.Core {
                 return false;
             });
 
-            // Check commands that are not "owned" by uEssentials.
+            // Get commands that are not registered by uEssentials.
             var commandsNotOwnedByEss = CommandManager.Commands
                 .Select(command => {
                     var rocketCommand = mappedRocketCommands[command.Name.ToLowerInvariant()];
@@ -491,7 +489,7 @@ namespace Essentials.Core {
                 Logger.LogWarning("If you want to use a command from uEssentials instead of from other plugin, you must add its name in \"CommandsToOverride\" in the config.json");
             }
         }
-        
+
         private static List<RocketCommandManager.RegisteredRocketCommand> GetRocketCommands() {
             var commandsField = ReflectUtil.GetField(R.Commands.GetType(), "commands");
             var rocketCommands = (List<RocketCommandManager.RegisteredRocketCommand>) commandsField.GetValue(R.Commands);

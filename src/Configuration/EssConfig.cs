@@ -70,8 +70,8 @@ namespace Essentials.Configuration {
         public HashSet<ushort> GiveItemBlacklist;
         public HashSet<ushort> VehicleBlacklist;
         public HashSet<string> EnabledSystems;
-        public HashSet<string> DisabledCommands;
         public HashSet<string> CommandsToOverride;
+        public List<string> DisabledCommands;
 
         internal EssConfig() {}
 
@@ -155,9 +155,11 @@ namespace Essentials.Configuration {
 
             GiveItemBlacklist = new HashSet<ushort>();
             VehicleBlacklist = new HashSet<ushort>();
-            DisabledCommands = new HashSet<string>();
+            DisabledCommands = new List<string>();
             CommandsToOverride = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
-            EnabledSystems = new HashSet<string> { "kits", "warps" };
+            EnabledSystems = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase) {
+                "kits", "warps"
+            };
 
             ItemSpawnLimit = 10;
         }
@@ -207,27 +209,24 @@ namespace Essentials.Configuration {
                     Save(filePath);
                 }
 
-                if (CommandsToOverride == null) {
-                    CommandsToOverride = new HashSet<string>();
-                }
+                Func<HashSet<string>, HashSet<string>> assureEqualityComparer = (set) => {
+                    if (set == null) {
+                        return new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+                    }
+                    return new HashSet<string>(set, StringComparer.InvariantCultureIgnoreCase);
+                };
 
-                // Make sure that CommandsToOverride use StringComparer.InvariantCultureIgnoreCase to compare the values
-                if (CommandsToOverride.Comparer != StringComparer.InvariantCultureIgnoreCase) {
-                    CommandsToOverride = new HashSet<string>(CommandsToOverride, StringComparer.InvariantCultureIgnoreCase);
-                }
+                // Make sure that these HashSets use StringComparer.InvariantCultureIgnoreCase as the Comparer.
+                CommandsToOverride = assureEqualityComparer(CommandsToOverride);
+                EnabledSystems = assureEqualityComparer(EnabledSystems);
 
-                /*
-                   Validation
-                */
-                if (VehicleFeatures.RefuelPercentage <= 0) {
-                    UEssentials.Logger.LogError("Invalid config: VehicleFeatures.RefuelPercentage " +
-                                                $"must be positive. (Got {VehicleFeatures.RefuelPercentage})");
-                }
+                // Make sure that num < max && num > min
+                //  It will return the max value if num > max or
+                //  the min value if num < min
+                Func<int, int, int, int> assureRange = (num, min, max) => Math.Min(Math.Max(num, min), max);
 
-                if (VehicleFeatures.RepairPercentage <= 0) {
-                    UEssentials.Logger.LogError("Invalid config: VehicleFeatures.RepairPercentage " +
-                                                $"must be positive. (Got {VehicleFeatures.RepairPercentage})");
-                }
+                VehicleFeatures.RefuelPercentage = assureRange(VehicleFeatures.RefuelPercentage, 0, 100);
+                VehicleFeatures.RepairPercentage = assureRange(VehicleFeatures.RepairPercentage, 0, 100);
             } catch (Exception ex) {
                 UEssentials.Logger.LogError("Failed to load 'config.json'.");
                 UEssentials.Logger.LogError($"Error: {ex}");
