@@ -52,9 +52,6 @@ namespace Essentials.Event.Handling {
 
     class EssentialsEventHandler {
 
-        //TODO: change to metadata
-        internal static readonly Dictionary<ulong, Dictionary<USkill, byte>> CachedSkills = new Dictionary<ulong, Dictionary<USkill, byte>>();
-
         // player_id => [command_name, nextUse]
         internal static readonly Dictionary<ulong, Dictionary<string, DateTime>> CommandCooldowns = new Dictionary<ulong, Dictionary<string, DateTime>>();
 
@@ -101,7 +98,6 @@ namespace Essentials.Event.Handling {
 
             MiscCommands.Spies.Remove(playerId);
             CommandTell.Conversations.Remove(playerId);
-            CachedSkills.Remove(playerId);
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
