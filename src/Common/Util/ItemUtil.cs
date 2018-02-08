@@ -141,7 +141,7 @@ namespace Essentials.Common.Util {
                 return Optional<EFiremode>.Empty();
             }
 
-            return Optional<EFiremode>.OfNullable((EFiremode) metadata[0xB]);
+            return Optional<EFiremode>.OfNullable((EFiremode) metadata[11]);
         }
 
         public static Optional<byte> GetWeaponAmmo(byte[] metadata) {
@@ -149,7 +149,7 @@ namespace Essentials.Common.Util {
                 return Optional<byte>.Empty();
             }
 
-            return Optional<byte>.Of(metadata[0xA]);
+            return Optional<byte>.Of(metadata[10]);
         }
 
 
