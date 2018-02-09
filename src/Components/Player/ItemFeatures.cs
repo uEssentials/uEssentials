@@ -22,6 +22,7 @@
 #endregion
 
 using SDG.Unturned;
+using Essentials.Api;
 
 namespace Essentials.Components.Player {
 
@@ -34,70 +35,82 @@ namespace Essentials.Components.Player {
 
         protected override void SafeFixedUpdate() {
             var equip = Player.Equipment;
-            var holdId = equip.itemID;
+            var itemInHandId = equip.itemID;
 
-            if (holdId == 0) return;
-
-            // Weapon feature (Auto reload)
-            if (AutoReload && equip.state.Length >= 18) {
-                // Save last arrow id
-                if (equip.state[10] == 1 && (holdId == 346 || holdId == 353 || holdId == 355 ||
-                                              holdId == 356 || holdId == 357)) {
-                    _lastArrowId = (ushort) (equip.state[8] | equip.state[9] << 8);
-                }
-
-                if (equip.state[10] == 0) {
-                    switch (holdId) {
-                        case 3517: // Lancer
-                        case 519: // Rocket Laucher
-                            equip.state[8] = 8;
-                            equip.state[9] = 2;
-                            equip.state[10] = 1;
-                            break;
-
-                        case 300: // Shadowstalker
-                            equip.state[8] = 45;
-                            equip.state[9] = 1;
-                            equip.state[10] = 1;
-                            break;
-
-                        case 346: // Crossbow
-                        case 353: // Maple bow
-                        case 355: // Birch bow
-                        case 356: // Pine Bow
-                        case 357: // Compound bow
-                            equip.state[8] = (byte) (_lastArrowId == 0 ? 91 : _lastArrowId);
-                            equip.state[9] = (byte) (_lastArrowId == 0 ? 1 : _lastArrowId >> 8);
-                            equip.state[10] = 1;
-                            equip.state[17] = 100; // Durability (for arrows)
-                            break;
-
-                        default:
-                            var magazineId = (ushort) (equip.state[8] | equip.state[9] << 8);
-                            var magazine = Assets.find(EAssetType.ITEM, magazineId) as ItemMagazineAsset;
-                            if (magazine != null) {
-                                equip.state[10] = magazine.amount;
-                            }
-                            break;
-                    }
-                    equip.sendUpdateState();
-                }
+            if (itemInHandId == 0) {
+                return; // Is not holding anything.
             }
 
-            // Item feature (Auto repair)
-            if (AutoRepair) {
-                if (equip.quality < 90) {
-                    equip.quality = 100;
-                    equip.sendUpdateQuality();
-                }
+            if (AutoReload && equip.state.Length >= 18) {
+                DoAutoReload(equip, itemInHandId);
+            }
 
-                if (equip.state.Length > 16 && equip.state[16] < 10) {
-                    equip.state[16] = 100;
-                    equip.sendUpdateState();
-                }
+            if (AutoRepair) {
+                DoAutoRepair(equip);
             }
         }
 
+        private void DoAutoRepair(PlayerEquipment equip) {
+            if (equip.quality < UEssentials.Config.ItemFeatures.RepairPercentage) {
+                equip.quality = 100;
+                equip.sendUpdateQuality();
+            }
+
+            // This is for Barrel.
+            if (equip.state.Length > 16 && equip.state[16] < UEssentials.Config.ItemFeatures.RepairPercentage) {
+                equip.state[16] = 100;
+                equip.sendUpdateState();
+            }
+        }
+        
+        private void DoAutoReload(PlayerEquipment equip, ushort itemId) {
+            // NOTE:
+            //  equip.state[8]  = magazine ID low bytes
+            //  equip.state[9]  = magazine ID high bytes
+            //  equip.state[10] = ammo
+            var ammo = equip.state[10];
+            var ammoId = (ushort) (equip.state[8] | equip.state[9] << 8);
+
+            // Save the last arrow id used by this bow, so we can
+            // use the same arrow later.
+            if (ammo == 1 && IsBow(itemId)) {
+                _lastArrowId = ammoId;
+            }
+            
+            if (HasSingleBullet(itemId)) {
+                if (ammo == 1) {
+                    return;
+                }
+                if (IsBow(itemId)) {
+                    ammoId = _lastArrowId == 0 ? (ushort) 347 : _lastArrowId;
+                    equip.state[17] = 100; // Arrow durability
+                } else if (itemId == 519 || itemId == 3517) { // Lancer & Rocket Launcher
+                    ammoId = 520;
+                } else if (itemId == 300) { // Shadowstalker
+                    ammoId = 301;
+                }
+
+                equip.state[8] = (byte) (ammoId);
+                equip.state[9] = (byte) (ammoId >> 8);
+                equip.state[10] = 1;
+                equip.sendUpdateState();
+                return;
+            }
+
+            var magazine = Assets.find(EAssetType.ITEM, ammoId) as ItemMagazineAsset;
+
+            if (magazine == null) {
+                return;
+            }
+
+            if (((float) ammo / magazine.amount) * 100 <= UEssentials.Config.ItemFeatures.ReloadPercentage) {
+                equip.state[10] = magazine.amount;
+                equip.sendUpdateState();
+            }
+        }
+
+        private bool IsBow(ushort itemId) => (itemId == 346 || itemId == 353 || itemId == 355 || itemId == 356 || itemId == 357);
+        private bool HasSingleBullet(ushort itemId) => IsBow(itemId) || itemId == 519 || itemId == 3517 || itemId == 300;
     }
 
 }

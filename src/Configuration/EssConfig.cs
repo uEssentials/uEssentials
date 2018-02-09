@@ -60,6 +60,7 @@ namespace Essentials.Configuration {
         public HomeCommandSettings Home;
         public WarpCommandSettings Warp;
         public VehicleFeaturesSettings VehicleFeatures;
+        public ItemFeaturesSettings ItemFeatures;
         public KitSettings Kit;
         public TpaSettings Tpa;
         public EconomySettings Economy;
@@ -153,6 +154,11 @@ namespace Essentials.Configuration {
                 RepairPercentage = 70
             };
 
+            ItemFeatures = new ItemFeaturesSettings {
+                ReloadPercentage = 80,
+                RepairPercentage = 80
+            };
+
             GiveItemBlacklist = new HashSet<ushort>();
             VehicleBlacklist = new HashSet<ushort>();
             DisabledCommands = new List<string>();
@@ -227,6 +233,8 @@ namespace Essentials.Configuration {
 
                 VehicleFeatures.RefuelPercentage = assureRange(VehicleFeatures.RefuelPercentage, 0, 100);
                 VehicleFeatures.RepairPercentage = assureRange(VehicleFeatures.RepairPercentage, 0, 100);
+                ItemFeatures.ReloadPercentage = assureRange(ItemFeatures.ReloadPercentage, 0, 100);
+                ItemFeatures.RepairPercentage = assureRange(ItemFeatures.RepairPercentage, 0, 100);
             } catch (Exception ex) {
                 UEssentials.Logger.LogError("Failed to load 'config.json'.");
                 UEssentials.Logger.LogError($"Error: {ex}");
@@ -286,6 +294,11 @@ namespace Essentials.Configuration {
 
         public struct VehicleFeaturesSettings {
             public int RefuelPercentage;
+            public int RepairPercentage;
+        }
+
+        public struct ItemFeaturesSettings {
+            public int ReloadPercentage;
             public int RepairPercentage;
         }
 
