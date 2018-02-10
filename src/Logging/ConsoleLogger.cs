@@ -35,29 +35,21 @@ namespace Essentials.Logging {
             Prefix = prefix;
         }
 
-        public void LogError(string message, bool parseColors) {
+        public void LogError(string message, bool parseColors = false) {
             Log(message, ConsoleColor.Red, Prefix + "[ERROR] ", parseColors: parseColors);
         }
 
-        public void LogWarning(string message, bool parseColors) {
+        public void LogWarning(string message, bool parseColors = false) {
             Log(message, ConsoleColor.Yellow, Prefix + "[WARN] ", parseColors: parseColors);
         }
 
-        public void LogInfo(string message, bool parseColors) {
+        public void LogInfo(string message, bool parseColors = false) {
             Log(message, ConsoleColor.Green, Prefix + "[INFO] ", parseColors: parseColors);
         }
 
-        public void LogDebug(string message, bool parseColors) {
+        public void LogDebug(string message, bool parseColors = false) {
             Log(message, ConsoleColor.DarkGray, Prefix + "[DEBUG] ", parseColors: parseColors);
         }
-
-        public void LogError(string message) => LogError(message, false);
-
-        public void LogWarning(string message) => LogWarning(message, false);
-
-        public void LogInfo(string message) => LogInfo(message, false);
-
-        public void LogDebug(string message) => LogDebug(message, false);
 
         public void Log(string message, ConsoleColor color, string prefix = "default",
                         string suffix = "default", bool parseColors = false) {

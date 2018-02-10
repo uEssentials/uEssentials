@@ -283,7 +283,7 @@ namespace Essentials.Core {
                 CommandWindow.input.onInputText += ReloadCallback;
                 Logger.LogInfo($"Enabled ({stopwatch.ElapsedMilliseconds} ms)");
             } catch (Exception e) {
-                var msg = new List<string>() {
+                string[] messages = {
                     "An error occurred while enabling uEssentials.",
                     "If this error is not related with wrong configuration, please report",
                     "it here https://github.com/uEssentials/uEssentials/issues",
@@ -292,10 +292,10 @@ namespace Essentials.Core {
 
                 if (Logger == null) {
                     Console.BackgroundColor = ConsoleColor.Red;
-                    msg.ForEach(Console.WriteLine);
+                    messages.ForEach(Console.WriteLine);
                     Console.BackgroundColor = ConsoleColor.White;
                 } else {
-                    msg.ForEach(Logger.LogError);
+                    messages.ForEach(m => Logger.LogError(m));
                 }
             }
 
