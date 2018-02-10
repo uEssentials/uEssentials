@@ -224,7 +224,6 @@
     <Compile Include="src\Logging\ConsoleLogger.cs" />
     <Compile Include="src\NativeModules\Kit\Item\KitItem.cs" />
     <Compile Include="src\NativeModules\Kit\Kit.cs" />
-    <Compile Include="src\Misc\SimpleCooldown.cs" />
     <Compile Include="src\Updater\GithubUpdater.cs" />
     <Compile Include="src\Updater\IUpdater.cs" />
     <Compile Include="src\Updater\UpdateResult.cs" />
