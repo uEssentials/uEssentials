@@ -8,9 +8,7 @@ experimental.bat
 release.bat
 analize.bat
 uEssentials.sln.DotSettings.user
-trigger_experimental_release.bat
 
-src/Commands/CommandTest.cs
-Repl.cs
-
+node_modules/
+package-lock.json
 .idea/
