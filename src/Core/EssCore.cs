@@ -129,6 +129,14 @@ namespace Essentials.Core {
 
                 Logger.LogInfo("Enabling uEssentials...");
 
+                new [] {
+                    "Plugin version: ~white~" + PLUGIN_VERSION + BUILD_INFO,
+                    "Recommended Rocket version: ~white~" + ROCKET_VERSION,
+                    "Recommended Unturned version: ~white~" + UNTURNED_VERSION,
+                    "Author: ~white~leonardosnt",
+                    "Wiki: ~white~uessentials.github.io",
+                }.ForEach(text => Logger.LogInfo(text, true));
+
                 if (Provider.clients.Count > 0) {
                     Provider.clients.ForEach(p => {
                         ConnectedPlayers.Add(p.playerID.steamID.m_SteamID,
@@ -140,6 +148,13 @@ namespace Essentials.Core {
                 _translationFolder = Folder + "translations/";
                 _dataFolder = Folder + "data/";
                 _modulesFolder = Folder + "modules/";
+
+                CommandOptions = new CommandOptions();
+                Updater = new GithubUpdater();
+                EventManager = new EventManager();
+                CommandManager = new CommandManager();
+                ModuleManager = new ModuleManager();
+                HookManager = new HookManager();
 
                 WebResources = new WebResources();
                 Config = new EssConfig();
@@ -155,32 +170,10 @@ namespace Essentials.Core {
                 }
 
                 Config.Load(configPath);
-
-                CommandOptions = new CommandOptions();
                 CommandOptions.Load(Path.Combine(Folder, CommandOptions.FileName));
-
-                Updater = new GithubUpdater();
-                EventManager = new EventManager();
-                CommandManager = new CommandManager();
-                ModuleManager = new ModuleManager();
-                HookManager = new HookManager();
-
                 EssLang.Load();
 
-                new [] {
-                    "Plugin version: ~white~" + PLUGIN_VERSION + BUILD_INFO,
-                    "Recommended Rocket version: ~white~" + ROCKET_VERSION,
-                    "Recommended Unturned version: ~white~" + UNTURNED_VERSION,
-                    "Author: ~white~leonardosnt",
-                    "Wiki: ~white~uessentials.github.io",
-                }.ForEach(text => Logger.LogInfo(text, true));
-
                 EventManager.RegisterAll(GetType().Assembly);
-
-                if (!Config.EnableJoinLeaveMessage) {
-                    EventManager.Unregister<EssentialsEventHandler>("JoinMessage");
-                    EventManager.Unregister<EssentialsEventHandler>("LeaveMessage");
-                }
 
                 // Register all commands from namespace Essentials.Commands
                 CommandManager.RegisterAll("Essentials.Commands");
@@ -188,72 +181,18 @@ namespace Essentials.Core {
                 HookManager.RegisterAll();
                 HookManager.LoadAll();
 
-                if (Config.Economy.UseXp) {
-                    EconomyProvider = Optional<IEconomyProvider>.Of(new ExpEconomyProvider());
-                } else if (HookManager.GetActiveByType<AviEconomyHook>().IsPresent) {
-                    EconomyProvider = Optional<IEconomyProvider>.Of(HookManager.GetActiveByType<AviEconomyHook>().Value);
-                } else if (HookManager.GetActiveByType<UconomyHook>().IsPresent) {
-                    EconomyProvider = Optional<IEconomyProvider>.Of(HookManager.GetActiveByType<UconomyHook>().Value);
-                } else {
-                    EconomyProvider = Optional<IEconomyProvider>.Empty();
-                }
+                // Load after EventManager because we relies on it inside this routine.
+                ConfigPostLoad();
 
                 LoadNativeModules();
-
-                Logger.LogInfo($"Loaded {CommandManager.Commands.Count()} commands");
 
                 Logger.LogInfo("Loading modules...");
                 ModuleManager.LoadAll(ModulesFolder);
                 Logger.LogInfo($"Loaded {ModuleManager.RunningModules.Count(t => !(t is NativeModule))} modules");
 
-                if (Config.AutoAnnouncer.Enabled) {
-                    Config.AutoAnnouncer.Start();
-                }
-
-                if (Config.AutoCommands.Enabled) {
-                    Config.AutoCommands.Start();
-                }
-
-                if (!Config.Updater.AlertOnJoin) {
-                    EventManager.Unregister<EssentialsEventHandler>("UpdateAlert");
-                }
-
-                if (Config.ServerFrameRate != -1) {
-                    var frameRate = Config.ServerFrameRate;
-
-                    if (Config.ServerFrameRate < -1) {
-                        frameRate = -1; // Set to default
-                    }
-
-                    UnityEngine.Application.targetFrameRate = frameRate;
-                }
-
-                Config.DisabledCommands.ForEach(cmdName => {
-                    var command = CommandManager.GetByName(cmdName);
-
-                    if (command == null || command is CommandEssentials) {
-                        Logger.LogWarning($"There is no command named '{cmdName}' to disable.");
-                    } else {
-                        CommandManager.Unregister(command);
-                        Logger.LogInfo($"Disabled command: '{command.Name}'");
-                    }
-                });
-
-                if (Config.EnableTextCommands) {
-                    TextCommands = new TextCommands();
-
-                    var textCommandsFile = Path.Combine(Folder, TextCommands.FileName);
-
-                    TextCommands.Load(textCommandsFile);
-
-                    TextCommands.Commands.ForEach(txtCommand => {
-                        CommandManager.Register(new TextCommand(txtCommand));
-                    });
-                }
-
-                if (!Config.EnableDeathMessages) {
-                    EventManager.Unregister<EssentialsEventHandler>("DeathMessages");
-                }
+                // We log it here because the modules being loaded above can
+                // register commands.
+                Logger.LogInfo($"Loaded {CommandManager.Commands.Count()} commands");
 
 #if EXPERIMENTAL
                 Logger.LogWarning("THIS IS AN EXPERIMENTAL BUILD, IT CAN BE BUGGY.");
@@ -334,6 +273,75 @@ namespace Essentials.Core {
             }
         }
 
+        // Load other things based in the Config.
+        private void ConfigPostLoad() {
+            if (Config.Economy.UseXp) {
+                EconomyProvider = Optional<IEconomyProvider>.Of(new ExpEconomyProvider());
+            } else if (HookManager.GetActiveByType<AviEconomyHook>().IsPresent) {
+                EconomyProvider = Optional<IEconomyProvider>.Of(HookManager.GetActiveByType<AviEconomyHook>().Value);
+            } else if (HookManager.GetActiveByType<UconomyHook>().IsPresent) {
+                EconomyProvider = Optional<IEconomyProvider>.Of(HookManager.GetActiveByType<UconomyHook>().Value);
+            } else {
+                EconomyProvider = Optional<IEconomyProvider>.Empty();
+            }
+
+            if (Config.AutoAnnouncer.Enabled) {
+                Config.AutoAnnouncer.Start();
+            }
+
+            if (Config.AutoCommands.Enabled) {
+                Config.AutoCommands.Start();
+            }
+
+            if (Config.ServerFrameRate != -1) {
+                var frameRate = Config.ServerFrameRate;
+
+                if (Config.ServerFrameRate < -1) {
+                    frameRate = -1; // Set to default
+                }
+
+                UnityEngine.Application.targetFrameRate = frameRate;
+            }
+
+            Config.DisabledCommands.ForEach(cmdName => {
+                var command = CommandManager.GetByName(cmdName);
+
+                if (command == null || command is CommandEssentials) {
+                    Logger.LogWarning($"There is no command named '{cmdName}' to disable.");
+                } else {
+                    CommandManager.Unregister(command);
+                    Logger.LogInfo($"Disabled command: '{command.Name}'");
+                }
+            });
+
+            if (Config.EnableTextCommands) {
+                TextCommands = new TextCommands();
+
+                var textCommandsFile = Path.Combine(Folder, TextCommands.FileName);
+
+                TextCommands.Load(textCommandsFile);
+
+                TextCommands.Commands.ForEach(txtCommand => {
+                    CommandManager.Register(new TextCommand(txtCommand));
+                });
+            }
+
+            // TODO: FEATURE: Maybe we could have some kind of conditional
+            // event register -- directly in EventManager?
+            if (!Config.EnableJoinLeaveMessage) {
+                EventManager.Unregister<EssentialsEventHandler>("JoinMessage");
+                EventManager.Unregister<EssentialsEventHandler>("LeaveMessage");
+            }
+
+            if (!Config.Updater.AlertOnJoin) {
+                EventManager.Unregister<EssentialsEventHandler>("UpdateAlert");
+            }
+
+            if (!Config.EnableDeathMessages) {
+                EventManager.Unregister<EssentialsEventHandler>("DeathMessages");
+            }
+        }
+
         private static void LoadNativeModules() {
             // Load native modules
             Instance.Assembly.GetTypes()
@@ -354,9 +362,8 @@ namespace Essentials.Core {
             }
 
             Console.WriteLine();
-            // TODO: update msg; rocket reload may cause issues, if so, try restarting the server.
-            UEssentials.Logger.LogError("Rocket reload cause many issues, consider restarting the server");
-            UEssentials.Logger.LogError("Or use '/essentials reload' to reload essentials correctly.");
+            UEssentials.Logger.LogWarning("/rocket reload can cause issues. If you experience any problems after running");
+            UEssentials.Logger.LogWarning("this command, try restarting the server.");
             Console.WriteLine();
         }
 

@@ -59,12 +59,16 @@ namespace Essentials.Logging {
             if (suffix == "default") {
                 suffix = System.Environment.NewLine;
             }
+            
             var lastColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
+            
             lock (Console.Out) {
                 Write(prefix + message + suffix, parseColors);
             }
+            
             Console.ForegroundColor = lastColor;
+            
             try {
                 if (R.Settings.Instance.RCON.Enabled) {
                     RCONServer.Broadcast(message);

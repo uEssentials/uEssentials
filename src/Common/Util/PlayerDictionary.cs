@@ -31,6 +31,8 @@ using Steamworks;
 
 namespace Essentials.Common.Util {
 
+    // A wrapper for Dictionary that stores players (id) and can
+    // automatically remove when the player disconnects/die (based on Options)
     public class PlayerDictionary<TValue> : Dictionary<ulong, TValue> {
 
         public PlayerDictionaryOptions Options { get; }
@@ -100,7 +102,7 @@ namespace Essentials.Common.Util {
         /// Remove when player disconnects
         REMOVE_ON_DISCONNECT = 1 << 1,
 
-        /// Event handlers will only be registered when something is added.
+        /// Event handlers will only be registered when something is added to the dictionary.
         LAZY_REGISTER_HANDLERS = 1 << 2
 
     }
