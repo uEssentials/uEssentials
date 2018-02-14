@@ -142,6 +142,7 @@
     "KIT_NO_MONEY": "Você precisa ter pelo menos ({0}{1}) para usar esse kit.",
     "KIT_NO_PERMISSION": "Você não tem acesso a este kit.",
     "KIT_NONE": "<yellow>Você não tem acesso a nenhum kit.",
+    "KIT_NONE_DEFINED": "<yellow>Nenhum kit foi definido.",
     "KIT_NOT_EXIST": "<yellow>O kit '{0}' não existe, Use /kits para ver os kits disponíveis.",
     "KIT_PAID": "Você pagou ({0}{1}) para usar esse kit.",
     "LIMB_SKULL": "cabeça",

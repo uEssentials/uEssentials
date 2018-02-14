@@ -90,7 +90,7 @@
     "DEATH_BURNER": "{0} has burned to a crisp!",
     "DEATH_SPIT": "{0} was killed by a spitter!",
     "DEATH_SPARK": "{0} has died in a bolt of lightning!",
-    
+
     "DELETED_KIT": "<magenta>You deleted the '{0}' kit.",
     "DESCENDED": "You descended {0} 'meters'",
     "DROPKIT_LOCATION": "Dropped kit '{0}' at (x: {1:0.00}, y: {2:0.00}, z: {3:0.00})",
@@ -145,6 +145,7 @@
     "KIT_NO_MONEY": "You must have at least ({0}{1}) to use this kit.",
     "KIT_NO_PERMISSION": "<yellow>You don't have access to this kit.",
     "KIT_NONE": "<yellow>You don't have access to any kit.",
+    "KIT_NONE_DEFINED": "<yellow>There are not kits defined.",
     "KIT_NOT_EXIST": "<yellow>Kit '{0}' does not exist. Use /kits to see available kits.",
     "KIT_PAID": "You have paid ({0}{1}) for using this kit.",
     "LIMB_SKULL": "skull",

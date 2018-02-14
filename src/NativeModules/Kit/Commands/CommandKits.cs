@@ -49,6 +49,10 @@ namespace Essentials.NativeModules.Kit.Commands {
 
 
             if (kits.Count == 0) {
+                // Prevent confusion when there are no kits defined
+                if (KitModule.Instance.KitManager.Count == 0) {
+                    return CommandResult.LangError("KIT_NONE_DEFINED");
+                }
                 EssLang.Send(source, "KIT_NONE");
             } else {
                 EssLang.Send(source, "KIT_LIST", string.Join(", ", kits.ToArray()));
