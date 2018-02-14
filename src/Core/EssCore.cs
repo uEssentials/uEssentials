@@ -63,7 +63,17 @@ namespace Essentials.Core {
 
         internal const string ROCKET_VERSION = "4.9.3.0";
         internal const string UNTURNED_VERSION = "3.21.5.0";
+
+#if DEV
+        // Dev build version -- patched in compile-time (see uEssentials.csproj)
+        // This needs to be different every time because
+        // of Assembly loading -- I (leonardosnt) use a custom version of Rocket for
+        // development that allows to reload plugins without restaring the server.
+        internal const string PLUGIN_VERSION = "999.0.0.0";
+#else
+        // Real plugin version -- manually updated.
         internal const string PLUGIN_VERSION = "1.3.5.0";
+#endif
 
 #if EXPERIMENTAL
         internal const string BUILD_INFO = " experimental (commit: COMMIT_HASH)";

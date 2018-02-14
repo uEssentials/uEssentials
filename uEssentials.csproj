@@ -253,11 +253,35 @@
     <EmbeddedResource Include="default\docs\pt-BR\Docs for config.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
+  <UsingTask TaskName="ReplaceDevPluginVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <Phase ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System.Core" />
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+              var random = new Random();
+              var matchPattern = "PLUGIN_VERSION = \"999\\.\\d+\\.\\d+\\.\\d+\";";
+              var replacementVersion = Phase == "before"
+                ? string.Format("999.{0}.{1}.{2}", random.Next(100), random.Next(100), random.Next(100))
+                : "999.0.0.0";
+              var replacement = string.Format("PLUGIN_VERSION = \"{0}\";", replacementVersion);
+
+              File.WriteAllText(
+                "src/Core/EssCore.cs",
+                Regex.Replace(File.ReadAllText("src/Core/EssCore.cs"), matchPattern, replacement));
+            ]]>
+      </Code>
+    </Task>
+  </UsingTask>
   <Target Name="BeforeBuild">
+    <ReplaceDevPluginVersion Phase="before" />
   </Target>
   <Target Name="AfterBuild">
+    <ReplaceDevPluginVersion Phase="after" />
   </Target>
-  -->
 </Project>
