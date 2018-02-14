@@ -199,7 +199,7 @@ namespace Essentials.Commands {
                         var command = UEssentials.CommandManager.GetByName(args[1].ToString());
 
                         if (command == null) {
-                            src.SendMessage($"Command {args[1]} does not exists", Color.red);
+                            src.SendMessage($"Command {args[1]} does not exist", Color.red);
                         } else {
                             src.SendMessage("Command: " + command.Name, Color.cyan);
                             src.SendMessage("  Usage Syntax: ", Color.cyan);
@@ -208,8 +208,10 @@ namespace Essentials.Commands {
                             src.SendMessage("    - | or / = means 'Or'.", Color.cyan);
                             src.SendMessage("  Description: " + command.Description, Color.cyan);
                             src.SendMessage("  Usage: /" + command.Name + " " + command.Usage, Color.cyan);
-                            if (command.Aliases.Any())
+                            if (command.Aliases.Any()) {
                                 src.SendMessage("  Aliases: " + string.Join(", ", command.Aliases), Color.cyan);
+                            }
+                            src.SendMessage("  Wiki Page: https://github.com/uEssentials/uEssentials/wiki/Command-Reference#" + command.Name.ToLower(), Color.cyan);
                         }
                     }
                     break;
