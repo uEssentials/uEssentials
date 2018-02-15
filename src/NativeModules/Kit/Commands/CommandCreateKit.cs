@@ -37,19 +37,17 @@ namespace Essentials.NativeModules.Kit.Commands {
         Aliases = new[] { "ckit" },
         Description = "Create a kit using your inventory items.",
         Usage = "[name] <cooldown> <resetCooldownWhenDie> <cost>",
-        AllowedSource = AllowedSource.PLAYER
+        AllowedSource = AllowedSource.BOTH
     )]
     public class CommandCreateKit : EssCommand {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            var player = src.ToPlayer();
-
             if (args.Length < 1) {
                 return CommandResult.ShowUsage();
             }
 
             var name = args[0].ToString();
-            uint cooldown = 0;
+            var cooldown = 0u;
             var resetCooldownWhenDie = false;
             var cost = 0d;
 
@@ -89,130 +87,118 @@ namespace Essentials.NativeModules.Kit.Commands {
                 cost = args[3].ToDouble;
             }
 
-            var inventory = player.Inventory;
-            var clothing = player.Clothing;
             var items = new List<AbstractKitItem>();
 
-            Action<byte> addItemsFromPage = page => {
-                var count = inventory.getItemCount(page);
+            // If the source is a player we copy the items from its inventory.
+            if (!src.IsConsole) {
+                var player = src.ToPlayer();
+                var inventory = player.Inventory;
+                var clothing = player.Clothing;
 
-                for (byte index = 0; index < count; index++) {
-                    var item = inventory.getItem(page, index).item;
+                // Add items from an inventory page to the items list.
+                void addItemsFromPage(byte page) {
+                    var count = inventory.getItemCount(page);
 
-                    if (item == null) {
-                        continue;
+                    for (byte index = 0; index < count; index++) {
+                        var item = inventory.getItem(page, index).item;
+
+                        if (item == null) {
+                            continue;
+                        }
+
+                        var asset = GetItem(item.id).Value;
+                        KitItem kitItem;
+
+                        if (asset is ItemWeaponAsset) {
+                            var ammo = GetWeaponAmmo(item);
+                            var firemode = GetWeaponFiremode(item).OrElse(EFiremode.SAFETY);
+
+                            var kItem = new KitItemWeapon(item.id, item.durability, 1, ammo.OrElse(0), firemode) {
+                                Magazine = GetWeaponAttachment(item, AttachmentType.MAGAZINE).OrElse(null),
+                                Barrel = GetWeaponAttachment(item, AttachmentType.BARREL).OrElse(null),
+                                Sight = GetWeaponAttachment(item, AttachmentType.SIGHT).OrElse(null),
+                                Grip = GetWeaponAttachment(item, AttachmentType.GRIP).OrElse(null),
+                                Tactical = GetWeaponAttachment(item, AttachmentType.TACTICAL).OrElse(null)
+                            };
+
+                            kitItem = kItem;
+                        } else if (asset is ItemMagazineAsset || asset is ItemSupplyAsset) {
+                            kitItem = new KitItemMagazine(item.id, item.durability, 1, item.amount);
+                        } else {
+                            kitItem = new KitItem(item.id, item.durability, 1);
+                        }
+
+                        kitItem.Metadata = item.metadata;
+
+                        items.Add(kitItem);
                     }
+                };
 
-                    var asset = GetItem(item.id).Value;
-                    KitItem kitItem;
+                addItemsFromPage(0); // Primary slot
+                addItemsFromPage(1); // Secondary slot
+                addItemsFromPage(2); // Hands
 
-                    if (asset is ItemWeaponAsset) {
-                        var ammo = GetWeaponAmmo(item);
-                        var firemode = GetWeaponFiremode(item).OrElse(EFiremode.SAFETY);
-
-                        var kItem = new KitItemWeapon(item.id, item.durability, 1, ammo.OrElse(0), firemode) {
-                            Magazine = GetWeaponAttachment(item, AttachmentType.MAGAZINE).OrElse(null),
-                            Barrel = GetWeaponAttachment(item, AttachmentType.BARREL).OrElse(null),
-                            Sight = GetWeaponAttachment(item, AttachmentType.SIGHT).OrElse(null),
-                            Grip = GetWeaponAttachment(item, AttachmentType.GRIP).OrElse(null),
-                            Tactical = GetWeaponAttachment(item, AttachmentType.TACTICAL).OrElse(null)
-                        };
-
-                        kitItem = kItem;
-                    } else if (asset is ItemMagazineAsset || asset is ItemSupplyAsset) {
-                        kitItem = new KitItemMagazine(item.id, item.durability, 1, item.amount);
-                    } else {
-                        kitItem = new KitItem(item.id, item.durability, 1);
-                    }
-
-                    kitItem.Metadata = item.metadata;
-
-                    items.Add(kitItem);
+                // Backpack
+                if (clothing.backpack != 0) {
+                    items.Add(new KitItem(clothing.backpack, clothing.backpackQuality, 1) {
+                        Metadata = clothing.backpackState
+                    });
                 }
-            };
 
-            addItemsFromPage(0); // Primary slot
-            addItemsFromPage(1); // Secondary slot
-            addItemsFromPage(2); // Hands
+                addItemsFromPage(3);
 
-            // Backpack
+                // Shirt
 
-            if (clothing.backpack != 0) {
-                items.Add(new KitItem(clothing.backpack, clothing.backpackQuality, 1) {
-                    Metadata = clothing.backpackState
-                });
+                if (clothing.shirt != 0) {
+                    items.Add(new KitItem(clothing.shirt, clothing.shirtQuality, 1) {
+                        Metadata = clothing.shirtState
+                    });
+                }
+                addItemsFromPage(5);
+
+                // Vest
+                if (clothing.vest != 0) {
+                    items.Add(new KitItem(clothing.vest, clothing.vestQuality, 1) {
+                        Metadata = clothing.vestState
+                    });
+                }
+                addItemsFromPage(4);
+
+                // Pants
+                if (clothing.pants != 0) {
+                    items.Add(new KitItem(clothing.pants, clothing.pantsQuality, 1) {
+                        Metadata = clothing.pantsState
+                    });
+                }
+                addItemsFromPage(6);
+
+                // Mask, Glasses & Hat
+                if (clothing.mask != 0) {
+                    items.Add(new KitItem(clothing.mask, clothing.maskQuality, 1) {
+                        Metadata = clothing.maskState
+                    });
+                }
+
+                if (clothing.hat != 0) {
+                    items.Add(new KitItem(clothing.hat, clothing.hatQuality, 1) {
+                        Metadata = clothing.hatState
+                    });
+                }
+
+                if (clothing.glasses != 0) {
+                    items.Add(new KitItem(clothing.glasses, clothing.glassesQuality, 1) {
+                        Metadata = clothing.glassesState
+                    });
+                }
             }
-
-            addItemsFromPage(3);
-
-            // End Backpack
-
-            // Shirt
-
-            if (clothing.shirt != 0) {
-                items.Add(new KitItem(clothing.shirt, clothing.shirtQuality, 1) {
-                    Metadata = clothing.shirtState
-                });
-            }
-
-            addItemsFromPage(5);
-
-            // End Shirt
-
-            // Vest
-
-            if (clothing.vest != 0) {
-                items.Add(new KitItem(clothing.vest, clothing.vestQuality, 1) {
-                    Metadata = clothing.vestState
-                });
-            }
-
-            addItemsFromPage(4);
-
-            // End Vest
-
-            // Pants
-
-            if (clothing.pants != 0) {
-                items.Add(new KitItem(clothing.pants, clothing.pantsQuality, 1) {
-                    Metadata = clothing.pantsState
-                });
-            }
-
-            addItemsFromPage(6);
-
-            // End Pants
-
-            // Mask, Glasses & Hat
-
-            if (clothing.mask != 0) {
-                items.Add(new KitItem(clothing.mask, clothing.maskQuality, 1) {
-                    Metadata = clothing.maskState
-                });
-            }
-
-            if (clothing.hat != 0) {
-                items.Add(new KitItem(clothing.hat, clothing.hatQuality, 1) {
-                    Metadata = clothing.hatState
-                });
-            }
-
-            if (clothing.glasses != 0) {
-                items.Add(new KitItem(clothing.glasses, clothing.glassesQuality, 1) {
-                    Metadata = clothing.glassesState
-                });
-            }
-
-            // End Mask, Glasses & Hat
 
             var kit = new Kit(name, cooldown, (decimal) cost, resetCooldownWhenDie) {
                 Items = items
             };
 
             KitModule.Instance.KitManager.Add(kit);
-            EssLang.Send(src, "CREATED_KIT", name);
 
-            return CommandResult.Success();
+            return CommandResult.LangSuccess("CREATED_KIT", name);
         }
 
     }
