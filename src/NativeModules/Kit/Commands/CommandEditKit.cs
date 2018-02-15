@@ -41,7 +41,21 @@ namespace Essentials.NativeModules.Kit.Commands {
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             if (args.Length < 2) {
-                return CommandResult.ShowUsage();
+                src.SendMessage(UsageMessage);
+                src.SendMessage("SubCommands' Usage:");
+                src.SendMessage(" - additem [type(normal|vehicle|xp)] ...");
+                src.SendMessage("  * To add a vehicle: additem vehicle [id]");
+                src.SendMessage("  * To add a item: additem normal [id] [amount] [durability]");
+                src.SendMessage("  * To add a xp: additem xp [amount]");
+                src.SendMessage(" - delitem [itemIndex]");
+                src.SendMessage("  * Use '/ekit [kit] view' to list valid indexes.");
+                src.SendMessage(" - set [option] [value]");
+                src.SendMessage("  * Valid options:");
+                src.SendMessage("   - nm = Name | Accepts a string");
+                src.SendMessage("   - cst = Cost | Accepts a Number");
+                src.SendMessage("   - cd  = Cooldown | Accepts a Number");
+                src.SendMessage("   - rwd = ResetCooldownWhenDie | Accepts a Boolean (true or false)");
+                return CommandResult.InvalidArgs();
             }
 
             var kitManager = KitModule.Instance.KitManager;
@@ -60,13 +74,15 @@ namespace Essentials.NativeModules.Kit.Commands {
                     src.SendMessage($"Cost: {kit.Cost}");
                     src.SendMessage($"ResetCooldownWhenDie: {kit.ResetCooldownWhenDie}");
                     src.SendMessage(string.Empty);
-                    src.SendMessage("Items:");
 
-                    var index = 0;
+                    if (kit.Items.Count > 0) {
+                        src.SendMessage("Items:");
 
-                    kit.Items.ForEach(i => {
-                        src.SendMessage(i.ToString().Insert(0, $" [{(index++) + 1}] "));
-                    });
+                        var index = 0;
+                        kit.Items.ForEach(item => src.SendMessage(item.ToString().Insert(0, $" [{(++index)}] ")));
+                    } else {
+                        src.SendMessage("This kit has no items.");
+                    }
                     break;
 
                 /* ekit name additem normal id amount durability */
@@ -109,8 +125,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                     switch (args[2].ToLowerString) {
                         case "normal":
                             if (args.Length < 4) {
-                                return CommandResult.InvalidArgs("Use /ekit [kit] additem " +
-                                                                 "[type] [id] [amount] [durability]");
+                                return CommandResult.InvalidArgs("Use /ekit [kit] additem normal [id] [amount] [durability]");
                             }
 
                             var optAsset = ItemUtil.GetItem(args[3].ToString());
@@ -162,8 +177,10 @@ namespace Essentials.NativeModules.Kit.Commands {
                                 return CommandResult.LangError("MUST_POSITIVE");
                             }
 
-                            kit.Items.Add(new KitItemExperience(args[3].ToUInt));
-                            src.SendMessage($"Added Xp item. Amount: {amount}");
+                            var expAmount = args[3].ToUInt;
+
+                            kit.Items.Add(new KitItemExperience(expAmount));
+                            src.SendMessage($"Added Xp item. Experience Amount: {expAmount}");
                             break;
 
                         default:
