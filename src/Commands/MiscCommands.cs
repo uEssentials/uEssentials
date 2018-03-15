@@ -164,49 +164,26 @@ namespace Essentials.Commands {
                         return CommandResult.LangError("COMMAND_NO_PERMISSION");
                     }
 
-                    src.SendMessage("This command is unstable and can cause bugs.", Color.red);
+                    src.SendMessage("This command is unstable and can cause bugs.", Color.yellow);
 
-                    var toRemove = new List<uint>();
+                    var numRemoved = 0;
                     UWorld.Vehicles
-                        .Where(v => v.passengers.All(p => p?.player == null))
+                        .Where(v => v.passengers.All(p => p?.player == null)) // Check if it's has no passengers
                         .Where(v => {
+                            if (v.id == 186 || v.id == 187) return false; // Ignore trains; TODO: config blacklist for this?
                             if (distance == -1) return true;
+
                             return Vector3.Distance(v.transform.position, src.ToPlayer().Position) <= distance;
                         })
                         .Select(v => v.instanceID)
-                        .ForEach(toRemove.Add);
+                        .ToList()
+                        .ForEach(id => {
+                          VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id);
+                          numRemoved++;
+                        });
 
-                    toRemove.ForEach(id => {
-                        VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id);
-                    });
-
-                    EssLang.Send(src, "CLEAR_EMPTY_VEHICLES", toRemove.Count);
+                    EssLang.Send(src, "CLEAR_EMPTY_VEHICLES", numRemoved);
                     break;
-
-                /*case "v":
-                case "vehicle":
-                    return CommandResult.Generic("This option is currently disabled.");
-
-                    if (!src.HasPermission(cmd.Permission + ".vehicles")) {
-                        return CommandResult.LangError("COMMAND_NO_PERMISSION");
-                    }
-
-                    UWorld.Vehicles.ForEach(v => {
-                        for (byte i = 0; i < v.passengers.Length; i++) {
-                            if (v.passengers[i] == null ||
-                                v.passengers[i].player == null) continue;
-
-                            Vector3 point;
-                            byte angle;
-
-                            v.getExit(i, out point, out angle);
-                            VehicleManager.sendExitVehicle(v, i, point, angle, true);
-                        }
-                    });
-
-                    VehicleManager.askVehicleDestroyAll();
-                    EssLang.Send(src, "CLEAR_VEHICLES");
-                    break;*/
 
                 case "i":
                 case "items":
