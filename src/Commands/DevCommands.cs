@@ -83,8 +83,8 @@ namespace Essentials.Commands {
 
                             if (lastWrite > _evalFileLastChanged) {
                                 UEssentials.Logger.LogInfo("EvalFile changed...");
-                                EvalFile(evalFile);
                                 _evalFileLastChanged = lastWrite;
+                                EvalFile(evalFile);
                             }
                         })
                         .Submit();
@@ -158,7 +158,11 @@ namespace Essentials.Commands {
             }
 
             UEssentials.Logger.LogInfo("Calling 'Load' method");
-            loadMethod.Invoke(null, null);
+            try {
+                loadMethod.Invoke(null, null);
+            } catch(Exception ex) {
+                UEssentials.Logger.LogError(ex.ToString());
+            }
             UEssentials.Logger.LogInfo("'Load' method called");
 
             return CommandResult.Success();
