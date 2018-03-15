@@ -180,18 +180,6 @@ namespace Essentials.Configuration {
             try {
                 var json = JObject.Parse(File.ReadAllText(filePath));
 
-                if (json["AutoAnnouncer"]["Interval"] == null) {
-                    var old = json["AutoAnnouncer"]
-                        .Children<JProperty>()
-                        .FirstOrDefault(n => n.Name.Equals("MessageInterval"));
-
-                    if (old != null) {
-                        json["AutoAnnouncer"]["Interval"] = old.Value;
-                        old.Remove();
-                    }
-                    File.WriteAllText(filePath, json.ToString());
-                }
-
                 base.Load(filePath);
 
                 /*
