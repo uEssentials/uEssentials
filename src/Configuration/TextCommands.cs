@@ -67,7 +67,10 @@ namespace Essentials.Configuration {
                     UEssentials.Logger.LogError("Error: " + ex);
                     LoadDefaults();
                 }
-            }
+            } else {
+                LoadDefaults();
+                Save(filePath);
+           }
         }
 
         public struct TextCommandData {
