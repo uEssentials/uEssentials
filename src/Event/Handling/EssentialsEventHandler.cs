@@ -165,11 +165,18 @@ namespace Essentials.Event.Handling {
 
             // All Skills
             if (allPercentage != -1) {
-                skillsToRestore.Keys
-                    .ToList()   // We need this because we can't change the dictionary while looping thru its KeyCollection
-                    .ForEach(skill => {
-                        skillsToRestore[skill] = (byte) Math.Ceiling(player.GetSkillLevel(skill) * (allPercentage / 100.0));
-                    });
+                foreach (var skill in USkill.Skills) {
+                    // We don't want change previously added (skillsToRestore) skills.
+                    // This will allow to set a separated percentage while using modifier 'all' (essentials.keepskill.all)
+                    // e.g
+                    // essentials.keepskill.all.50
+                    // essentials.keepskill.cardio.100
+                    // this will keep 50% of all skills and 100% of cardio skill
+                    if (skillsToRestore.ContainsKey(skill)) {
+                        continue;
+                    }
+                    skillsToRestore[skill] = (byte) Math.Ceiling(player.GetSkillLevel(skill) * (allPercentage / 100.0));
+                }
             }
         }
 
