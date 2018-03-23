@@ -248,8 +248,7 @@ namespace Essentials.Event.Handling {
             // Check if player has money enough to run this command
             if (
                 UEssentials.EconomyProvider.IsPresent &&
-                !e.Source.HasPermission("essentials.bypass.commandcost") &&
-                commandOptions.PerGroupCost != null
+                !e.Source.HasPermission("essentials.bypass.commandcost")
             ) {
                 var cost = GetCommandCost(commandOptions, e.Source.ToPlayer());
                 var ecoProvider = UEssentials.EconomyProvider.Value;
@@ -264,9 +263,11 @@ namespace Essentials.Event.Handling {
         private static decimal GetCommandCost(CommandOptions.CommandEntry commandOptions, UPlayer player) {
             var cost = commandOptions.Cost;
 
-            R.Permissions.GetGroups(player.RocketPlayer, false)
-                .OrderBy(g => -g.Priority)
-                .FirstOrDefault(g => commandOptions.PerGroupCost.TryGetValue(g.Id, out cost));
+            if (commandOptions.PerGroupCost != null) {
+                R.Permissions.GetGroups(player.RocketPlayer, false)
+                    .OrderBy(g => -g.Priority)
+                    .FirstOrDefault(g => commandOptions.PerGroupCost.TryGetValue(g.Id, out cost));
+            }
 
             return cost;
         }
@@ -283,13 +284,15 @@ namespace Essentials.Event.Handling {
             ) return;
 
             // Handle cooldown
-            if (!e.Source.HasPermission("essentials.bypass.commandcooldown") && commandOptions.PerGroupCooldown != null) {
+            if (!e.Source.HasPermission("essentials.bypass.commandcooldown")) {
                 var playerId = e.Source.ToPlayer().CSteamId.m_SteamID;
                 var cooldownValue = commandOptions.Cooldown;
 
-                R.Permissions.GetGroups(e.Source.ToPlayer().RocketPlayer, false)
-                    .OrderBy(g => -g.Priority)
-                    .FirstOrDefault(g => commandOptions.PerGroupCooldown.TryGetValue(g.Id, out cooldownValue));
+                if (commandOptions.PerGroupCooldown != null) {
+                    R.Permissions.GetGroups(e.Source.ToPlayer().RocketPlayer, false)
+                        .OrderBy(g => -g.Priority)
+                        .FirstOrDefault(g => commandOptions.PerGroupCooldown.TryGetValue(g.Id, out cooldownValue));
+                }
 
                 if (cooldownValue <= 0) {
                     return;
@@ -305,8 +308,7 @@ namespace Essentials.Event.Handling {
             // Handle cost
             if (
                 UEssentials.EconomyProvider.IsPresent &&
-                !e.Source.HasPermission("essentials.bypass.commandcost") &&
-                commandOptions.PerGroupCost != null
+                !e.Source.HasPermission("essentials.bypass.commandcost")
             ) {
                 var commandCost = GetCommandCost(commandOptions, e.Source.ToPlayer());
                 UEssentials.EconomyProvider.Value.Withdraw(e.Source.ToPlayer(), commandCost);
