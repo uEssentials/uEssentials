@@ -225,7 +225,7 @@ namespace Essentials.Configuration {
                 ItemFeatures.RepairPercentage = assureRange(ItemFeatures.RepairPercentage, 0, 100);
             } catch (Exception ex) {
                 UEssentials.Logger.LogError("Failed to load 'config.json'.");
-                UEssentials.Logger.LogError($"Error: {ex}");
+                UEssentials.Logger.LogException(ex);
                 UEssentials.Logger.LogError("Using default...");
                 LoadDefaults();
             }

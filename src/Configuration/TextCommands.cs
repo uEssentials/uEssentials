@@ -64,7 +64,8 @@ namespace Essentials.Configuration {
                     JsonConvert.PopulateObject(File.ReadAllText(filePath), Commands);
                 } catch (Exception ex) {
                     UEssentials.Logger.LogError("Failed to load TextCommands.");
-                    UEssentials.Logger.LogError("Error: " + ex);
+                    UEssentials.Logger.LogException(ex);
+                    UEssentials.Logger.LogError("Using default...");
                     LoadDefaults();
                 }
             } else {

@@ -34,6 +34,13 @@ namespace Essentials.Logging {
         public ConsoleLogger(string prefix) {
             Prefix = prefix;
         }
+        
+        public void LogException(Exception exception, bool parseColors = false, bool fullException = false) {
+#if DEV
+          fullException = true; // Always print full exception in dev mode
+#endif
+          LogError(fullException ? exception.ToString() : exception.Message);
+        }
 
         public void LogError(string message, bool parseColors = false) {
             Log(message, ConsoleColor.Red, Prefix + "[ERROR] ", parseColors: parseColors);

@@ -76,7 +76,7 @@ namespace Essentials.NativeModules.Kit.Data {
                 kitArr = JArray.Parse(File.ReadAllText(DataFilePath));
             } catch (JsonReaderException ex) {
                 UEssentials.Logger.LogError($"Invalid kit configuration ({DataFilePath})");
-                UEssentials.Logger.LogError(ex.ToString());
+                UEssentials.Logger.LogException(ex);
                 kitArr = new JArray();
             }
 

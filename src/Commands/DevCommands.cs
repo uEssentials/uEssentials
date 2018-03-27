@@ -161,7 +161,7 @@ namespace Essentials.Commands {
             try {
                 loadMethod.Invoke(null, null);
             } catch(Exception ex) {
-                UEssentials.Logger.LogError(ex.ToString());
+                UEssentials.Logger.LogException(ex);
             }
             UEssentials.Logger.LogInfo("'Load' method called");
 

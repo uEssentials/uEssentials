@@ -56,7 +56,7 @@ namespace Essentials.Configuration {
                 }
             }  catch (Exception ex) {
                 UEssentials.Logger.LogError("Failed to load 'command_options.json'.");
-                UEssentials.Logger.LogError($"Error: {ex}");
+                UEssentials.Logger.LogException(ex);
                 UEssentials.Logger.LogError("Using default...");
                 LoadDefaults();
             }

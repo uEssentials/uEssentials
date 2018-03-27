@@ -46,7 +46,7 @@ namespace Essentials.Compatibility {
                 OnLoad();
             } catch (Exception ex) {
                 UEssentials.Logger.LogError($"Failed to load '{Name}' hook.");
-                UEssentials.Logger.LogError(ex.Message);
+                UEssentials.Logger.LogException(ex);
             }
         }
 
@@ -57,7 +57,7 @@ namespace Essentials.Compatibility {
                 OnUnload();
             } catch (Exception ex) {
                 UEssentials.Logger.LogError($"Failed to unload '{Name}' hook.");
-                UEssentials.Logger.LogError(ex.Message);
+                UEssentials.Logger.LogException(ex);
             }
         }
 

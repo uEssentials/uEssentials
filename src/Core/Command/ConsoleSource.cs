@@ -73,7 +73,8 @@ namespace Essentials.Core.Command {
                     RCONServer.Broadcast(sMessage);
                 }
             } catch (Exception ex) {
-                UEssentials.Logger.LogError(ex.ToString());
+                UEssentials.Logger.LogError("Failed to broadcast a message to RCON.");
+                UEssentials.Logger.LogException(ex);
             }
 
             var oldColor = Console.ForegroundColor;

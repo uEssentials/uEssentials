@@ -77,7 +77,7 @@ namespace Essentials.Api.Task {
                         }
                     } catch (Exception ex) {
                         UEssentials.Logger.LogError($"An error ocurred while executing task '{task.Id ?? "unknown_id"}'");
-                        UEssentials.Logger.LogError(ex.ToString());
+                        UEssentials.Logger.LogException(ex);
                         goto end;
                     }
 

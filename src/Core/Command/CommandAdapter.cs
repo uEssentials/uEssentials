@@ -111,7 +111,7 @@ namespace Essentials.Core.Command {
                 }
                 UEssentials.Logger.LogError($"An error ocurred while executing command: '{Name} " +
                                              $"{MiscUtil.ValuesToString(args, " ", "", "")}'");
-                UEssentials.Logger.LogError(e.ToString());
+                UEssentials.Logger.LogException(e);
             }
 
             if ((EssCore.DebugFlags & EssCore.kDebugCommands) != 0 && sw != null) {

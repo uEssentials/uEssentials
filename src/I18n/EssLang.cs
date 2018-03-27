@@ -112,7 +112,7 @@ namespace Essentials.I18n {
                 }
             } catch (JsonReaderException ex) {
                 UEssentials.Logger.LogError($"Invalid translation ({translationPath})");
-                UEssentials.Logger.LogError(ex.Message);
+                UEssentials.Logger.LogException(ex);
 
                 // Load default
                 json = JObject.Load(new JsonTextReader(new StreamReader(

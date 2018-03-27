@@ -69,7 +69,7 @@ namespace Essentials.Configuration {
                 }
             } catch (Exception ex) {
                 UEssentials.Logger.LogError("Failed to load WebResources.");
-                UEssentials.Logger.LogError(ex.ToString());
+                UEssentials.Logger.LogException(ex);
             }
         }
 

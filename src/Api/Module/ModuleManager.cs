@@ -145,8 +145,8 @@ namespace Essentials.Api.Module {
                 LoadModule(moduleAssembly);
             } catch (Exception ex) {
                 var fileName = (assemblyPath.Substring(assemblyPath.LastIndexOf("/", StringComparison.Ordinal) + 1));
-                UEssentials.Logger.LogError("An error occurred attempting to load " + fileName + ", ignoring...");
-                UEssentials.Logger.LogError(ex.ToString());
+                UEssentials.Logger.LogError($"An error occurred attempting to load {fileName}, ignoring...");
+                UEssentials.Logger.LogException(ex);
             }
         }
 

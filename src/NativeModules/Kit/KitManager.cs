@@ -87,7 +87,7 @@ namespace Essentials.NativeModules.Kit {
                 CooldownData.Load();
             } catch (Exception ex) {
                 UEssentials.Logger.LogError("An error ocurred while loading kits...");
-                UEssentials.Logger.LogError(ex.ToString());
+                UEssentials.Logger.LogException(ex);
             }
         }
 
@@ -97,7 +97,7 @@ namespace Essentials.NativeModules.Kit {
                 CooldownData.Save();
             } catch (Exception ex) {
                 UEssentials.Logger.LogError("An error ocurred while saving kits...");
-                UEssentials.Logger.LogError(ex.ToString());
+                UEssentials.Logger.LogException(ex);
             }
         }
 

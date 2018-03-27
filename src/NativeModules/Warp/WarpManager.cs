@@ -55,7 +55,7 @@ namespace Essentials.NativeModules.Warp {
                 WarpMap = WarpData.Load();
             } catch (Exception ex) {
                 UEssentials.Logger.LogError("An error ocurred while loading warps...");
-                UEssentials.Logger.LogError(ex.ToString());
+                UEssentials.Logger.LogException(ex);
             }
         }
 
@@ -64,7 +64,7 @@ namespace Essentials.NativeModules.Warp {
                 WarpData.Save(WarpMap);
             } catch (Exception ex) {
                 UEssentials.Logger.LogError("An error ocurred while saving warps...");
-                UEssentials.Logger.LogError(ex.ToString());
+                UEssentials.Logger.LogException(ex);
             }
         }
 
