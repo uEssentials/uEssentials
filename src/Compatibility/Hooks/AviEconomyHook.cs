@@ -43,7 +43,7 @@ namespace Essentials.Compatibility.Hooks {
 
         private Type _bankType;
         private MethodInfo _getBalanceMethod;
-        private MethodInfo _performPaymentMethod;
+        private MethodInfo _payAsServerMethod;
 
         public AviEconomyHook() : base("avi_economy") { }
 
@@ -66,11 +66,11 @@ namespace Essentials.Compatibility.Hooks {
             if (this._getBalanceMethod == null)
                 throw new Exception("AviEconomy GetBalance method couldn't be loaded...");
 
-            this._performPaymentMethod = ReflectUtil.GetMethod(this._bankType, "PayAsServer", BindingFlags.Static | BindingFlags.Public,
+            this._payAsServerMethod = ReflectUtil.GetMethod(this._bankType, "PayAsServer", BindingFlags.Static | BindingFlags.Public,
                 new[] {typeof(IRocketPlayer), typeof(decimal), typeof(bool), typeof(decimal).MakeByRefType(), typeof(string)});
 
-            if (this._performPaymentMethod == null)
-                throw new Exception("AviEconomy PerformPayment method couldn't be loaded...");
+            if (this._payAsServerMethod == null)
+                throw new Exception("AviEconomy PayAsServer method couldn't be loaded...");
 
             UEssentials.Logger.LogInfo("AviEconomy hook loaded.");
         }
@@ -82,14 +82,14 @@ namespace Essentials.Compatibility.Hooks {
         public decimal Withdraw(UPlayer player, decimal amount) {
             // args[3] = out decimal pFinalBalance
             var args = new object[] { player.RocketPlayer, -amount, false, null, null };
-            this._performPaymentMethod.Invoke(this._bankType, args);
+            this._payAsServerMethod.Invoke(this._bankType, args);
             return (decimal) args[3];
         }
 
         public decimal Deposit(UPlayer player, decimal amount) {
             // args[3] = out decimal pFinalBalance
             var args = new object[] { player.RocketPlayer, amount, false, null, null };
-            this._performPaymentMethod.Invoke(this._bankType, args);
+            this._payAsServerMethod.Invoke(this._bankType, args);
             return (decimal) args[3];
         }
 
