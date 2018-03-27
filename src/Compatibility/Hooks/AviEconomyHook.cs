@@ -80,10 +80,7 @@ namespace Essentials.Compatibility.Hooks {
         public override bool CanBeLoaded() => R.Plugins.GetPlugins().Any(c => c.Name.EqualsIgnoreCase("AviEconomy"));
 
         public decimal Withdraw(UPlayer player, decimal amount) {
-            // args[3] = out decimal pFinalBalance
-            var args = new object[] { player.RocketPlayer, -amount, false, null, null };
-            this._payAsServerMethod.Invoke(this._bankType, args);
-            return (decimal) args[3];
+            return Deposit(player, -amount);
         }
 
         public decimal Deposit(UPlayer player, decimal amount) {
