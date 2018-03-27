@@ -108,14 +108,16 @@ namespace Essentials.Core {
         private string _dataFolder;
         private string _modulesFolder;
         private bool _wasLoadedBefore;
-        private List<RocketCommandManager.RegisteredRocketCommand> _overriddenCommands = new List<RocketCommandManager.RegisteredRocketCommand>();
+        private EssentialsConsoleTraceListener _consoleTraceListener;
+        private readonly List<RocketCommandManager.RegisteredRocketCommand> _overriddenCommands =
+          new List<RocketCommandManager.RegisteredRocketCommand>();
 
         internal string Folder => MkDirIfNotExists(_folder);
         internal string TranslationFolder => MkDirIfNotExists(_translationFolder);
         internal string DataFolder => MkDirIfNotExists(_dataFolder);
         internal string ModulesFolder => MkDirIfNotExists(_modulesFolder);
 
-        internal Dictionary<ulong, UPlayer> ConnectedPlayers { get; set; }
+        internal Dictionary<ulong, UPlayer> ConnectedPlayers { get; } = new Dictionary<ulong, UPlayer>();
         internal InstancePool CommonInstancePool { get; } = new InstancePool();
 
         protected override void Load() {
@@ -131,8 +133,9 @@ namespace Essentials.Core {
                 SteamGameServer.SetKeyValue("essversion", PLUGIN_VERSION);
 
                 Logger = new ConsoleLogger("[uEssentials] ");
-                ConnectedPlayers = new Dictionary<ulong, UPlayer>();
-                Debug.Listeners.Add(new EssentialsConsoleTraceListener());
+
+                _consoleTraceListener = new EssentialsConsoleTraceListener();
+                Debug.Listeners.Add(_consoleTraceListener);
 
                 Provider.onServerDisconnected += PlayerDisconnectCallback;
                 Provider.onServerConnected += PlayerConnectCallback;
@@ -274,6 +277,8 @@ namespace Essentials.Core {
             ModuleManager.UnloadAll();
 
             TaskExecutor.Stop();
+
+            Debug.Listeners.Remove(_consoleTraceListener);
 
             // Restore overridden commands
             var rocketCommands = GetRocketCommands();
@@ -535,16 +540,16 @@ namespace Essentials.Core {
             WriteLine($"[{category}] {message}");
         }
 
-        public override void WriteLine(object obj, string category) {
-            WriteLine(ObjectToString(obj), category);
+        public override void WriteLine(object o, string category) {
+            WriteLine(ObjectToString(o), category);
         }
 
         public override void WriteLine(string message) {
             UEssentials.Logger.LogDebug(message);
         }
 
-        public override void WriteLine(object obj) {
-            WriteLine(ObjectToString(obj));
+        public override void WriteLine(object o) {
+            WriteLine(ObjectToString(o));
         }
 
         private static string ObjectToString(object obj) => obj == null ? "null" : obj.ToString();
