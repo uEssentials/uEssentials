@@ -253,10 +253,7 @@ namespace Essentials.Event.Handling {
             }
 
             // Check if player has money enough to run this command
-            if (
-                UEssentials.EconomyProvider.IsPresent &&
-                !e.Source.HasPermission("essentials.bypass.commandcost")
-            ) {
+            if (UEssentials.EconomyProvider.IsPresent && !e.Source.HasPermission("essentials.bypass.commandcost")) {
                 var cost = GetCommandCost(commandOptions, e.Source.ToPlayer());
                 var ecoProvider = UEssentials.EconomyProvider.Value;
 
@@ -313,13 +310,12 @@ namespace Essentials.Event.Handling {
             }
 
             // Handle cost
-            if (
-                UEssentials.EconomyProvider.IsPresent &&
-                !e.Source.HasPermission("essentials.bypass.commandcost")
-            ) {
+            if (UEssentials.EconomyProvider.IsPresent && !e.Source.HasPermission("essentials.bypass.commandcost")) {
                 var commandCost = GetCommandCost(commandOptions, e.Source.ToPlayer());
-                UEssentials.EconomyProvider.Value.Withdraw(e.Source.ToPlayer(), commandCost);
-                EssLang.Send(e.Source, "COMMAND_PAID", commandCost, UEssentials.EconomyProvider.Value.CurrencySymbol);
+                if (commandCost > 0) {
+                  UEssentials.EconomyProvider.Value.Withdraw(e.Source.ToPlayer(), commandCost);
+                  EssLang.Send(e.Source, "COMMAND_PAID", commandCost, UEssentials.EconomyProvider.Value.CurrencySymbol);
+                }
             }
         }
 
