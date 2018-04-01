@@ -99,7 +99,7 @@ namespace Essentials.Event.Handling {
             var playerId = player.CSteamID.m_SteamID;
 
             MiscCommands.Spies.Remove(playerId);
-            CommandTell.Conversations.Remove(playerId);
+            CommandTell.ReplyTo.Remove(playerId);
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]

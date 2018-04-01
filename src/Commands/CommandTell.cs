@@ -36,17 +36,14 @@ namespace Essentials.Commands {
         Name = "tell",
         Aliases = new[] { "msg", "pm" },
         Description = "Send private message to a player",
-        Usage = "[player] [message]"
+        Usage = "[player] [message]",
+        MinArgs = 2
     )]
     public class CommandTell : EssCommand {
 
-        internal static readonly Dictionary<ulong, ulong> Conversations = new Dictionary<ulong, ulong>();
+        internal static readonly Dictionary<ulong, ulong> ReplyTo = new Dictionary<ulong, ulong>();
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (args.Length < 2) {
-                return CommandResult.ShowUsage();
-            }
-
             var target = args[0].ToPlayer;
 
             if (target == null) {
@@ -62,7 +59,7 @@ namespace Essentials.Commands {
             var formatToColor = ColorUtil.GetColorFromString(ref formatTo);
             var formatSpyColor = ColorUtil.GetColorFromString(ref formatSpy);
 
-            var targetName = src.IsConsole ? pmSettings.ConsoleDisplayName : target.DisplayName;
+            var targetName = target.DisplayName;
             var srcName = src.IsConsole ? pmSettings.ConsoleDisplayName : src.DisplayName;
 
             formatFrom = string.Format(formatFrom, srcName, args.Join(1));
@@ -76,25 +73,14 @@ namespace Essentials.Commands {
                 UPlayer.From(p).SendMessage(formatSpy, formatSpyColor);
             });
 
-            if (src.IsConsole) {
-                return CommandResult.Success();
-            }
-
-            var srcPlayer = src.ToPlayer();
-            var srcId = srcPlayer.CSteamId.m_SteamID;
-
-            if (Conversations.ContainsKey(srcId)) {
-                if (!Conversations[srcId].Equals(target.CSteamId.m_SteamID)) {
-                    Conversations[srcId] = target.CSteamId.m_SteamID;
-                }
-            } else {
-                Conversations.Add(srcId, target.CSteamId.m_SteamID);
+            if (!src.IsConsole) {
+                ReplyTo[target.CSteamId.m_SteamID] = src.ToPlayer().CSteamId.m_SteamID;
             }
 
             return CommandResult.Success();
         }
 
-        protected override void OnUnregistered() => Conversations.Clear();
+        protected override void OnUnregistered() => ReplyTo.Clear();
 
     }
 

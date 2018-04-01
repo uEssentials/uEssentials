@@ -43,16 +43,11 @@ namespace Essentials.Commands {
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var playerId = src.ToPlayer().CSteamId.m_SteamID;
 
-            if (!Conversations.ContainsKey(playerId)) {
+            if (!ReplyTo.TryGetValue(playerId, out var targetId)) {
                 return CommandResult.LangError("NOBODY_TO_REPLY");
             }
 
-            var target = (
-                from conversation
-                in Conversations
-                where conversation.Value.Equals(playerId)
-                select UPlayer.From(conversation.Key)
-            ).FirstOrDefault();
+            var target = UPlayer.From(targetId);
 
             if (target == null) {
                 return CommandResult.LangError("NO_LONGER_ONLINE");
