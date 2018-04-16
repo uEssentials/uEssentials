@@ -47,6 +47,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                 src.SendMessage("  * To add a vehicle: additem vehicle [id]");
                 src.SendMessage("  * To add a item: additem normal [id] [amount] [durability]");
                 src.SendMessage("  * To add a xp: additem xp [amount]");
+                src.SendMessage("  * To add a money: additem money [amount]");
                 src.SendMessage(" - delitem [itemIndex]");
                 src.SendMessage("  * Use '/ekit [kit] view' to list valid indexes.");
                 src.SendMessage(" - set [option] [value]");
@@ -164,6 +165,24 @@ namespace Essentials.NativeModules.Kit.Commands {
                             src.SendMessage($"Added Vehicle item. Id: {argAsInt}");
                             break;
 
+                        case "money":
+                            if (args.Length != 4) {
+                                return CommandResult.InvalidArgs("Use /ekit [kit] additem money [amount]");
+                            }
+                            
+                            if (!args[3].IsInt) {
+                                return CommandResult.LangError("INVALID_NUMBER", args[3]);
+                            }
+
+                            if (args[3].ToInt < 0) {
+                                return CommandResult.LangError("MUST_POSITIVE");
+                            }
+
+                            var moneyAmount = args[3].ToUInt;
+                            kit.Items.Add(new KitItemMoney(moneyAmount));
+                            src.SendMessage($"Added money item. Amount: {moneyAmount}");
+                            break;
+
                         case "xp":
                             if (args.Length != 4) {
                                 return CommandResult.InvalidArgs("Use /ekit [kit] additem xp [amount]");
@@ -184,7 +203,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                             break;
 
                         default:
-                            return CommandResult.Error($"Invalid type '{args[2]}'. Valid types are: 'normal', 'vehicle' and 'xp'");
+                            return CommandResult.Error($"Invalid type '{args[2]}'. Valid types are: 'normal', 'money', 'vehicle' and 'xp'");
                     }
                     break;
 
