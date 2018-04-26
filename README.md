@@ -4,7 +4,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/pxm15136lg6mcd2n?svg=true)](https://ci.appveyor.com/project/leonardosnt/uessentials)
 [![Releases download count](https://www.dropbox.com/s/iqy5xhax6tg8slh/total.svg?raw=1)](https://goo.gl/uql6bm)
 [![Download latest release here](https://img.shields.io/badge/download-latest_release-brightgreen.svg?maxAge=2592000)](https://goo.gl/638UlM)
-[![Donate https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY](https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_cc_147x47.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY)
+[![Donate at https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY)
 
 ---
 
@@ -32,12 +32,6 @@ Versão em Português (Brasil) do README.md [AQUI](https://github.com/uEssential
 - Wiki: [https://github.com/uEssentials/uEssentials/wiki](https://goo.gl/MPe1AW)
 - Releases: [https://github.com/uEssentials/uEssentials/releases](https://goo.gl/uql6bm)
 - Experimental Releases [https://github.com/uEssentials/Builds/releases](https://goo.gl/aI71Bs)
-
----
-
-**Do you love my work?**
-
-  _[Consider donating! :heart:](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY)_
 
 ---
 
