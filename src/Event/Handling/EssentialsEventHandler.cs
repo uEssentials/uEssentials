@@ -270,7 +270,13 @@ namespace Essentials.Event.Handling {
             if (commandOptions.PerGroupCost != null) {
                 R.Permissions.GetGroups(player.RocketPlayer, false)
                     .OrderBy(g => -g.Priority)
-                    .FirstOrDefault(g => commandOptions.PerGroupCost.TryGetValue(g.Id, out cost));
+                    .FirstOrDefault(g => {
+                        // Check if there is a cost specified to the player's group.
+                        var result = commandOptions.PerGroupCost.TryGetValue(g.Id, out var groupCost);
+                        // If there is, use that cost
+                        if (result) cost = groupCost;
+                        return result;
+                    });
             }
 
             return cost;
@@ -295,26 +301,30 @@ namespace Essentials.Event.Handling {
                 if (commandOptions.PerGroupCooldown != null) {
                     R.Permissions.GetGroups(e.Source.ToPlayer().RocketPlayer, false)
                         .OrderBy(g => -g.Priority)
-                        .FirstOrDefault(g => commandOptions.PerGroupCooldown.TryGetValue(g.Id, out cooldownValue));
+                        .FirstOrDefault(g => {
+                            // Check if there is a cooldown specified to the player's group.
+                            var result = commandOptions.PerGroupCooldown.TryGetValue(g.Id, out var groupCooldown);
+                            // If there is, use that cooldown.
+                            if (result) cooldownValue = groupCooldown;
+                            return result;
+                        });
                 }
 
-                if (cooldownValue <= 0) {
-                    return;
-                }
+                if (cooldownValue > 0) {
+                    if (!CommandCooldowns.ContainsKey(playerId)) {
+                        CommandCooldowns.Add(playerId, new Dictionary<string, DateTime>());
+                    }
 
-                if (!CommandCooldowns.ContainsKey(playerId)) {
-                    CommandCooldowns.Add(playerId, new Dictionary<string, DateTime>());
+                    CommandCooldowns[playerId][commandName] = DateTime.Now.AddSeconds(cooldownValue);
                 }
-
-                CommandCooldowns[playerId][commandName] = DateTime.Now.AddSeconds(cooldownValue);
             }
 
             // Handle cost
             if (UEssentials.EconomyProvider.IsPresent && !e.Source.HasPermission("essentials.bypass.commandcost")) {
                 var commandCost = GetCommandCost(commandOptions, e.Source.ToPlayer());
                 if (commandCost > 0) {
-                  UEssentials.EconomyProvider.Value.Withdraw(e.Source.ToPlayer(), commandCost);
-                  EssLang.Send(e.Source, "COMMAND_PAID", commandCost, UEssentials.EconomyProvider.Value.CurrencySymbol);
+                    UEssentials.EconomyProvider.Value.Withdraw(e.Source.ToPlayer(), commandCost);
+                    EssLang.Send(e.Source, "COMMAND_PAID", commandCost, UEssentials.EconomyProvider.Value.CurrencySymbol);
                 }
             }
         }
