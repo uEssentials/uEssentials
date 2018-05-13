@@ -38,55 +38,6 @@ namespace Essentials.Core.Command {
         public bool IsEmpty => Length == 0;
 
         public CommandArgs(string[] rawArgs) {
-            /*RawArguments = new string[0];
-
-            if ( rawArgs.Length < 0 )
-                return;
-
-            var args = new List<string>();
-            var argBuilder = new StringBuilder();
-            var inQuot = false;
-
-            var chars = rawArgs.ToCharArray();
-            var charLen = chars.Length;
-
-            for ( var i = 0; i < charLen; i++ )
-            {
-                var ch = chars[i];
-
-                if ( (ch == '\'' || ch == '"') )
-                {
-                    if ( i != 0 && chars[i - 1] == '\\' )
-                    {
-                        argBuilder.Length = argBuilder.Length - 1;
-                        goto append;
-                    }
-
-                    inQuot = !inQuot;
-                    goto appendAll;
-                }
-
-                if ( ch == ' ' )
-                {
-                    if ( inQuot )
-                        goto append;
-                    goto appendAll;
-                }
-
-                append:
-                argBuilder.Append( ch );
-                if ( i == (charLen - 1) )
-                    goto appendAll;
-                continue;
-
-                appendAll:
-                if ( argBuilder.Length > 0 )
-                {
-                    args.Add( argBuilder.ToString() );
-                    argBuilder.Length = 0;
-                }
-            }*/
-
             RawArguments = rawArgs;
             var arguments = new ICommandArgument[Length];
 
