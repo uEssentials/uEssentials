@@ -80,47 +80,38 @@ namespace Essentials.NativeModules.Kit.Commands {
                     }
                 }
 
+                var globalCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
+                var kitCooldown = requestedKit.Cooldown;
+
                 if (!src.HasPermission("essentials.bypass.kitcooldown")) {
-                    var globalCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
+                    // Check if is on global cooldown
+                    if (globalCooldown > 0 && GlobalCooldown.ContainsKey(steamPlayerId)) {
+                        var remainingTime = DateTime.Now - GlobalCooldown[steamPlayerId];
 
-                    if (globalCooldown > 0) {
-                        if (GlobalCooldown.ContainsKey(steamPlayerId)) {
-                            var remainingTime = DateTime.Now - GlobalCooldown[steamPlayerId];
-
-                            if ((remainingTime.TotalSeconds + 1) > globalCooldown) {
-                                GlobalCooldown[steamPlayerId] = DateTime.Now;
-                            } else {
-                                return CommandResult.LangError("KIT_GLOBAL_COOLDOWN",
-                                    TimeUtil.FormatSeconds((uint) (globalCooldown - remainingTime.TotalSeconds)));
-                            }
-                        } else {
-                            GlobalCooldown.Add(steamPlayerId, DateTime.Now);
+                        if ((remainingTime.TotalSeconds + 1) < globalCooldown) {
+                            return CommandResult.LangError("KIT_GLOBAL_COOLDOWN",
+                                TimeUtil.FormatSeconds((uint) (globalCooldown - remainingTime.TotalSeconds)));
                         }
-                    } else {
-                        var kitCooldown = requestedKit.Cooldown;
+                    }
 
-                        if (!Cooldowns.ContainsKey(steamPlayerId)) {
-                            Cooldowns.Add(steamPlayerId, new Dictionary<string, DateTime>());
-                        } else if (Cooldowns[steamPlayerId] == null) {
-                            Cooldowns[steamPlayerId] = new Dictionary<string, DateTime>();
+                    // Check if is on cooldown for this specific kit
+                    if (kitCooldown > 0) {
+                        if (!Cooldowns.TryGetValue(steamPlayerId, out var playerCooldowns) || playerCooldowns == null) {
+                            Cooldowns[steamPlayerId] = playerCooldowns = new Dictionary<string, DateTime>();
                         }
 
-                        if (Cooldowns[steamPlayerId].ContainsKey(kitName)) {
-                            var remainingTime = DateTime.Now - Cooldowns[steamPlayerId][kitName];
+                        if (playerCooldowns.TryGetValue(kitName, out var lastTimeUsedThisKit)) {
+                            var remainingTime = DateTime.Now - lastTimeUsedThisKit;
 
-                            if ((remainingTime.TotalSeconds + 1) > kitCooldown) {
-                                Cooldowns[steamPlayerId][kitName] = DateTime.Now;
-                            } else {
+                            if ((remainingTime.TotalSeconds + 1) < kitCooldown) {
                                 return CommandResult.LangError("KIT_COOLDOWN", TimeUtil.FormatSeconds(
                                     (uint) (kitCooldown - remainingTime.TotalSeconds)));
                             }
-                        } else {
-                            Cooldowns[steamPlayerId].Add(kitName, DateTime.Now);
                         }
                     }
                 }
 
-                if (kitCost > 0) {
+                if (kitCost > 0) { // TODO: add bypass kitcost permission?
                     UEssentials.EconomyProvider.IfPresent(ec => {
                         ec.Withdraw(player, kitCost);
                         EssLang.Send(player, "KIT_PAID", kitCost, ec.CurrencySymbol);
@@ -128,6 +119,13 @@ namespace Essentials.NativeModules.Kit.Commands {
                 }
 
                 requestedKit.GiveTo(player);
+
+                // Only apply the cooldowns if the player received the kit
+                // and does not have the bypass permission.
+                if (!src.HasPermission("essentials.bypass.kitcooldown")) {
+                    if (globalCooldown > 0) GlobalCooldown[steamPlayerId] = DateTime.Now;
+                    if (kitCooldown > 0)    Cooldowns[steamPlayerId][kitName] = DateTime.Now;
+                }
             } else if (args.Length == 2) {
                 var kitName = args[0].ToLowerString;
 
