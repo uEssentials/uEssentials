@@ -91,12 +91,15 @@ namespace Essentials.NativeModules.Kit.Commands {
 
             if (!kitManager.Contains(kitName)) {
                 EssLang.Send(src, "KIT_NOT_EXIST", kitName);
-            } else {
-                var kitItems = kitManager.GetByName(kitName).Items;
+                return;
+            }
 
-                kitItems.Where(i => i is KitItem).Cast<KitItem>().ForEach(i =>
-                    ItemManager.dropItem(i.UnturnedItem, pos, true, true, true)
-                    );
+            foreach (var item in kitManager.GetByName(kitName).Items) {
+                var kitItem = item as KitItem;
+                if (kitItem != null) ItemManager.dropItem(kitItem.UnturnedItem, pos, true, true, true);
+
+                var vehicleItem = item as KitItemVehicle;
+                if (vehicleItem != null) VehicleManager.spawnVehicle(vehicleItem.Id, pos + (Vector3.up * 16), Quaternion.identity);
             }
         }
 
