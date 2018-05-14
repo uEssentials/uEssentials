@@ -32,7 +32,7 @@
 
     "ALL_REPAIRED": "<cyan>All of your items have been repaired.",
     "ALREADY_FROZEN": "<yellow>This player is already frozen.",
-    "ANYONE_ONLINE": "There is no players online.",
+    "ANYONE_ONLINE": "There are no players online.",
     "ASCENDED": "You ascended {0} 'meters'",
     "ASCEND_NOTHING_ABOVE": "<yellow>There is nothing above you to teleport to. Use /ascend <amount> to specify a bigger height.",
     "AUTO_REFUEL_DISABLED": "<magenta>Auto-Refuel disabled!",
