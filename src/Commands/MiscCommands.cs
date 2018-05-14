@@ -487,21 +487,20 @@ namespace Essentials.Commands {
                 if (src.IsConsole) {
                     return CommandResult.ShowUsage();
                 }
-                var player = src.ToPlayer();
 
-                EssLang.Send(player,
-                    "POSITION",
-                    player.Position.x,
-                    player.Position.y,
-                    player.Position.z);
+                var p = src.ToPlayer();
+                EssLang.Send(src, "POSITION", p.Position.x, p.Position.y, p.Position.z);
             } else {
-                var found = UPlayer.TryGet(args[0], p => {
-                    EssLang.Send(src, "POSITION_OTHER", p.DisplayName, p.Position.x, p.Position.y, p.Position.z);
-                });
+                if (!src.HasPermission($"{cmd.Permission}.other")) {
+                    return CommandResult.NoPermission($"{cmd.Permission}.other");
+                }
 
-                if (!found) {
+                if (!args[0].IsValidPlayerIdentifier) {
                     return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                 }
+
+                var p = args[0].ToPlayer;
+                EssLang.Send(src, "POSITION_OTHER", p.DisplayName, p.Position.x, p.Position.y, p.Position.z);
             }
 
             return CommandResult.Success();
