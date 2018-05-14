@@ -72,7 +72,11 @@ namespace Essentials.NativeModules.Kit.Commands {
                 var steamPlayerId = player.CSteamId.m_SteamID;
                 var kitCost = requestedKit.Cost;
 
-                if (kitCost > 0 && UEssentials.EconomyProvider.IsPresent) {
+                if (
+                    kitCost > 0 &&
+                    UEssentials.EconomyProvider.IsPresent &&
+                    !src.HasPermission("essentials.bypass.kitcost")
+                ) {
                     var ecoProvider = UEssentials.EconomyProvider.Value;
 
                     if (!ecoProvider.Has(player, kitCost)) {
@@ -111,7 +115,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                     }
                 }
 
-                if (kitCost > 0) { // TODO: add bypass kitcost permission?
+                if (kitCost > 0 && !src.HasPermission("essentials.bypass.kitcost")) {
                     UEssentials.EconomyProvider.IfPresent(ec => {
                         ec.Withdraw(player, kitCost);
                         EssLang.Send(player, "KIT_PAID", kitCost, ec.CurrencySymbol);
