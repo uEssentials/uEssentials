@@ -49,7 +49,7 @@ namespace Essentials.Core.Command {
         }
 
         public ICommandArgument this[int argumentIndex] {
-            get { return Arguments[argumentIndex]; }
+            get => Arguments[argumentIndex];
         }
 
         public string Join(int initialIndex) {

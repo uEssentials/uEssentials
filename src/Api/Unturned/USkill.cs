@@ -21,6 +21,7 @@
 */
 #endregion
 
+using System;
 using System.Linq;
 using Essentials.Common;
 
@@ -90,19 +91,23 @@ namespace Essentials.Api.Unturned {
         /// <summary>
         ///   Get skill from name.
         /// </summary>
-        /// <param name="input">Skill name</param>
+        /// <param name="name">Skill name</param>
         /// <returns>
         ///   <see cref="Optional{USkill}.Empty"/> if not found,
         ///   otherwise return a <see cref="Optional{USkill}"/> containing the skill.
         /// </returns>
-        public static Optional<USkill> FromName(string input) {
-            var skill = Skills
-                .FirstOrDefault(sk => sk.Name.EqualsIgnoreCase(input))
-                        ?? Skills.FirstOrDefault(sk => sk.Name.ContainsIgnoreCase(input));
-
+        [Obsolete("Use FromName(string name, out USkill skill) instead.")]
+        public static Optional<USkill> FromName(string name) {
+            var skill = Skills.FirstOrDefault(sk => sk.Name.EqualsIgnoreCase(name)) ??
+                        Skills.FirstOrDefault(sk => sk.Name.ContainsIgnoreCase(name));
             return Optional<USkill>.OfNullable(skill);
         }
 
-    };
+        public static bool FromName(string name, out USkill skill) {
+            skill = Skills.FirstOrDefault(sk => sk.Name.EqualsIgnoreCase(name)) ??
+                    Skills.FirstOrDefault(sk => sk.Name.ContainsIgnoreCase(name));
+            return skill != null;
+        }
+    }
 
 }

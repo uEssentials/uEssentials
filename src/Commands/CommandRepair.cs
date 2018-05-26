@@ -33,7 +33,6 @@ using System.Reflection;
 
 namespace Essentials.Commands {
 
-    //TODO: /repair [all/hand] <player> ?
     [CommandInfo(
         Name = "repair",
         Aliases = new[] { "fix" },

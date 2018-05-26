@@ -109,7 +109,6 @@ namespace Essentials.Api.Task {
                 return this;
             }
 
-            // TODO: Better naming?
             public Builder UseIntervalAsDelay() {
                 _task.Delay = _task.Interval;
                 return this;

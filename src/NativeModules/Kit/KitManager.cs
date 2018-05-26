@@ -92,6 +92,7 @@ namespace Essentials.NativeModules.Kit {
         }
 
         public void Save() {
+            Console.WriteLine("kits saved");
             try {
                 SaveKits();
                 CooldownData.Save();

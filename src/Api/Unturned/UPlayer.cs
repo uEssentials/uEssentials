@@ -428,6 +428,7 @@ namespace Essentials.Api.Unturned {
         /// </summary>
         /// <param name="cmdArg"></param>
         /// <param name="callback"></param>
+        [Obsolete("Use TryGet(string name, out UPlayer player) instead.")]
         public static bool TryGet(ICommandArgument cmdArg, Action<UPlayer> callback) {
             var player = From(cmdArg.ToString());
 
@@ -437,6 +438,11 @@ namespace Essentials.Api.Unturned {
             }
 
             return false;
+        }
+
+        public static bool TryGet(string name, out UPlayer player) {
+            player = From(name);
+            return player != null;
         }
 
         public override string ToString() {

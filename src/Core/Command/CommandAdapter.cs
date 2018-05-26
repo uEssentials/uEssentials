@@ -110,7 +110,7 @@ namespace Essentials.Core.Command {
                     });
                 }
                 UEssentials.Logger.LogError($"An error ocurred while executing command: '{Name} " +
-                                             $"{MiscUtil.ValuesToString(args, " ", "", "")}'");
+                                             $"{string.Join(" ", args)}'");
                 UEssentials.Logger.LogException(e);
             }
 

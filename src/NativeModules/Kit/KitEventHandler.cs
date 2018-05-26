@@ -38,13 +38,13 @@ namespace Essentials.NativeModules.Kit {
         [SubscribeEvent(EventType.PLAYER_DEATH)]
         void OnPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
             var playerId = player.CSteamID.m_SteamID;
-            var gCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
 
-            if (CommandKit.GlobalCooldown.ContainsKey(playerId) && EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie) {
-                CommandKit.GlobalCooldown[playerId] = DateTime.Now.AddSeconds(-gCooldown);
+            if (EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie && CommandKit.GlobalCooldown.ContainsKey(playerId)) {
+                CommandKit.GlobalCooldown[playerId] = DateTime.Now.AddSeconds(-EssCore.Instance.Config.Kit.GlobalCooldown);
             }
 
-            if (!CommandKit.Cooldowns.ContainsKey(playerId)) return;
+            if (!CommandKit.Cooldowns.ContainsKey(playerId))
+                return;
 
             if (CommandKit.Cooldowns[playerId] == null) {
                 CommandKit.Cooldowns.Remove(playerId);
@@ -53,11 +53,11 @@ namespace Essentials.NativeModules.Kit {
 
             var playerCooldowns = CommandKit.Cooldowns[playerId];
             var keys = new List<string>(playerCooldowns.Keys);
-            var km = KitModule.Instance.KitManager;
 
             foreach (var kitName in keys) {
-                var kit = km.GetByName(kitName);
+                var kit = KitModule.Instance.KitManager.GetByName(kitName);
 
+                // The kit may not exist anymore. If it is the case, we remove it from the cooldown list.
                 if (kit == null) {
                     playerCooldowns.Remove(kitName);
                     continue;
@@ -73,8 +73,7 @@ namespace Essentials.NativeModules.Kit {
         void OnPlayerDisconnected(UnturnedPlayer player) {
             var playerId = player.CSteamID.m_SteamID;
 
-            if (CommandKit.Cooldowns.Count == 0 ||
-                !CommandKit.Cooldowns.ContainsKey(playerId)) {
+            if (CommandKit.Cooldowns.Count == 0 || !CommandKit.Cooldowns.ContainsKey(playerId)) {
                 return;
             }
 
@@ -83,25 +82,20 @@ namespace Essentials.NativeModules.Kit {
                 return;
             }
 
-            var playerCooldowns = CommandKit.Cooldowns[playerId];
-            var keys = new List<string>(playerCooldowns.Keys);
-
-            /*
-                Remove from list if cooldown has expired.
-
-                Global and per kit
-            */
-            var gCooldown = UEssentials.Config.Kit.GlobalCooldown;
-
-            if (CommandKit.GlobalCooldown.ContainsKey(playerId) &&
-                CommandKit.GlobalCooldown[playerId].AddSeconds(gCooldown) < DateTime.Now) {
+            if (
+                CommandKit.GlobalCooldown.TryGetValue(playerId, out var playerGlobalCooldown) &&
+                playerGlobalCooldown.AddSeconds(UEssentials.Config.Kit.GlobalCooldown) < DateTime.Now
+            ) {
                 CommandKit.GlobalCooldown.Remove(playerId);
             }
 
-            var kitManager = KitModule.Instance.KitManager;
-            foreach (var kitName in keys) {
-                var kit = kitManager.GetByName(kitName);
+            var playerCooldowns = CommandKit.Cooldowns[playerId];
+            var keys = new List<string>(playerCooldowns.Keys);
 
+            foreach (var kitName in keys) {
+                var kit = KitModule.Instance.KitManager.GetByName(kitName);
+
+                // Remove from the list only if the cooldown expired.
                 if (kit == null || playerCooldowns[kitName].AddSeconds(kit.Cooldown) < DateTime.Now) {
                     playerCooldowns.Remove(kitName);
                 }

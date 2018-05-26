@@ -56,14 +56,12 @@ namespace Essentials.Commands {
                     break;
 
                 case 1:
-                    var found = UPlayer.TryGet(args[0], player => {
-                        TeleportAll(player.Position, players);
-                        EssLang.Send(src, "TELEPORTED_ALL_PLAYER", player.DisplayName);
-                    });
-
-                    if (!found) {
+                    if (!UPlayer.TryGet(args[0].ToString(), out var player)) {
                         return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                     }
+
+                    TeleportAll(player.Position, players);
+                    EssLang.Send(src, "TELEPORTED_ALL_PLAYER", player.DisplayName);
                     break;
 
                 case 3:
@@ -87,7 +85,7 @@ namespace Essentials.Commands {
         }
 
         private void TeleportAll(Vector3 pos, List<UPlayer> players) {
-             players.ForEach(player => player.UnturnedPlayer.sendTeleport(pos, 0));
+            players.ForEach(player => player.UnturnedPlayer.sendTeleport(pos, 0));
         }
 
     }

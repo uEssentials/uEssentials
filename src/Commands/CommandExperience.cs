@@ -101,7 +101,10 @@ namespace Essentials.Commands {
                 else
                     playerExp += (uint) amount;
             } else {
-                playerExp += (uint) amount;
+                if ((playerExp + amount) > int.MaxValue)
+                    playerExp = int.MaxValue;
+                else
+                    playerExp += (uint) amount;
             }
 
             if (amount >= 0) {

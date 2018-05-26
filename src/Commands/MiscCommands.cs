@@ -77,7 +77,7 @@ namespace Essentials.Commands {
             }
 
             var amount = args[0].ToFloat;
-            player.Teleport(new Vector3(player.Position.x, player.Position.y + amount, 
+            player.Teleport(new Vector3(player.Position.x, player.Position.y + amount,
                                         player.Position.z));
 
             return CommandResult.LangSuccess("ASCENDED", amount);
@@ -704,90 +704,79 @@ namespace Essentials.Commands {
 
         [CommandInfo(
             Name = "skill",
-            Description = "Edit skill of a player|you",
+            Description = "Set the skill level of a player",
             Usage = "[skill] [value|max] or [player|*] [skill] [value|max]"
         )]
         private CommandResult SkillCommand(ICommandSource src, ICommandArgs args) {
-            switch (args.Length) {
-                // /skill [skill] [value]
-                case 2:
-                    if (src.IsConsole) {
-                        return CommandResult.ShowUsage();
+            // skill [skill] [value]
+            if (args.Length == 2) {
+                if (src.IsConsole) {
+                    return CommandResult.ShowUsage();
+                }
+
+                if (!USkill.FromName(args[0].ToString(), out var skill)) {
+                    return CommandResult.LangError("INVALID_SKILL", args[0]);
+                }
+
+                var player = src.ToPlayer();
+                byte value;
+
+                if (args[1].ToLowerString == "max") {
+                    value = player.GetSkill(skill).max;
+                } else if (!args[1].TryConvertToByte(out value, out var error)) {
+                    return error;
+                }
+
+                player.SetSkillLevel(skill, value);
+                EssLang.Send(src, "SKILL_SET", skill.Name.Capitalize(), args[1]);
+                return CommandResult.Success();
+            }
+
+            // skill [player|*] [skill] [value]
+            if (args.Length == 3) {
+                if (!USkill.FromName(args[1].ToString(), out var skill)) {
+                    return CommandResult.LangError("INVALID_SKILL", args[1]);
+                }
+
+                if (args[0].ToLowerString == "*") { // All players
+                    if (!UServer.Players.Any()) {
+                        return CommandResult.LangError("ANYONE_ONLINE");
                     }
 
-                    var optSkill = USkill.FromName(args[0].ToString());
+                    bool isMax = args[2].ToLowerString == "max";
+                    byte value = 0;
 
-                    if (optSkill.IsAbsent) {
-                        return CommandResult.LangError("INVALID_SKILL", args[0]);
+                    // If it's not 'max', we convert to to byte once.
+                    // Otherwise the value will be get inside the loop above
+                    if (!isMax && !args[2].TryConvertToByte(out value, out var error)) {
+                        return error;
                     }
 
-                    var player = src.ToPlayer();
+                    UServer.Players.ForEach(p => p.SetSkillLevel(skill, isMax ? p.GetSkill(skill).max : value));
+
+                    EssLang.Send(src, "SKILL_SET_ALL", skill.Name.Capitalize(), args[2]);
+                    return CommandResult.Success();
+                }
+                else { // Specific player
+                    if (!args[0].IsValidPlayerIdentifier) {
+                        return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
+                    }
+
+                    var player = args[0].ToPlayer;
                     byte value;
 
-                    if (args[1].Equals("max")) {
-                        value = player.GetSkill(optSkill.Value).max;
-                    } else if (args[1].IsInt) {
-                        if (args[1].ToInt < 0 || args[1].ToInt > byte.MaxValue) {
-                            return CommandResult.LangError("NEGATIVE_OR_LARGE");
-                        }
-
-                        value = (byte) args[1].ToInt;
-                    } else {
-                        return CommandResult.LangError("INVALID_NUMBER", args[1]);
+                    if (args[2].ToLowerString == "max") {
+                        value = player.GetSkill(skill).max;
+                    } else if (!args[2].TryConvertToByte(out value, out var error)) {
+                        return error;
                     }
 
-                    player.SetSkillLevel(optSkill.Value, value);
-                    EssLang.Send(src, "SKILL_SET", optSkill.Value.Name.Capitalize(), args[1]);
-                    break;
-
-                // /skill [player|*] [skill] [value]
-                case 3:
-                    if (args[0].Equals("*")) {
-                        if (!UServer.Players.Any()) {
-                            return CommandResult.LangError("ANYONE_ONLINE");
-                        }
-
-                        player = UServer.Players.First();
-                    } else {
-                        if (!args[0].IsValidPlayerIdentifier) {
-                            return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
-                        }
-
-                        player = args[0].ToPlayer;
-                    }
-
-                    optSkill = USkill.FromName(args[1].ToString());
-
-                    if (optSkill.IsAbsent) {
-                        return CommandResult.LangError("INVALID_SKILL", args[0]);
-                    }
-
-                    if (args[2].Equals("max")) {
-                        value = player.GetSkill(optSkill.Value).max;
-                    } else if (args[2].IsInt) {
-                        if (args[2].ToInt < 0 || args[2].ToInt > byte.MaxValue) {
-                            return CommandResult.LangError("NEGATIVE_OR_LARGE");
-                        }
-
-                        value = (byte) args[2].ToInt;
-                    } else {
-                        return CommandResult.LangError("INVALID_NUMBER", args[2]);
-                    }
-
-                    if (args[0].Equals("*")) {
-                        UServer.Players.ForEach(p => p.SetSkillLevel(optSkill.Value, value));
-                        EssLang.Send(src, "SKILL_SET_ALL", optSkill.Value.Name.Capitalize(), args[2]);
-                    } else {
-                        player.SetSkillLevel(optSkill.Value, value);
-                        EssLang.Send(src, "SKILL_SET_PLAYER", optSkill.Value.Name.Capitalize(),
-                            player.CharacterName, args[2]);
-                    }
-                    break;
-
-                default:
-                    return CommandResult.ShowUsage();
+                    player.SetSkillLevel(skill, value);
+                    EssLang.Send(src, "SKILL_SET_PLAYER", skill.Name.Capitalize(), player.CharacterName, args[2]);
+                    return CommandResult.Success();
+                }
             }
-            return CommandResult.Success();
+            return CommandResult.ShowUsage();
         }
 
         [CommandInfo(

@@ -31,7 +31,7 @@ namespace Essentials.Api.Command.Source {
         CONSOLE,
 
         /// <summary>
-        /// Represents an Unturned player
+        /// Represents a player
         /// </summary>
         PLAYER,
 

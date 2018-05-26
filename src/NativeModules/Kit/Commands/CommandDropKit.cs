@@ -57,14 +57,12 @@ namespace Essentials.NativeModules.Kit.Commands {
                         return CommandResult.LangError("COMMAND_NO_PERMISSION");
                     }
 
-                    var found = UPlayer.TryGet(args[1], player => {
-                        DropKit(src, args[0], player.Position);
-                        EssLang.Send(src, "DROPKIT_PLAYER", args[0], player.DisplayName);
-                    });
-
-                    if (!found) {
+                    if (!UPlayer.TryGet(args[1].ToString(), out var player)) {
                         return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                     }
+
+                    DropKit(src, args[0], player.Position);
+                    EssLang.Send(src, "DROPKIT_PLAYER", args[0], player.DisplayName);
                     break;
 
                 case 4:
@@ -95,11 +93,8 @@ namespace Essentials.NativeModules.Kit.Commands {
             }
 
             foreach (var item in kitManager.GetByName(kitName).Items) {
-                var kitItem = item as KitItem;
-                if (kitItem != null) ItemManager.dropItem(kitItem.UnturnedItem, pos, true, true, true);
-
-                var vehicleItem = item as KitItemVehicle;
-                if (vehicleItem != null) VehicleManager.spawnVehicle(vehicleItem.Id, pos + (Vector3.up * 16), Quaternion.identity);
+                if (item is KitItem kitItem) ItemManager.dropItem(kitItem.UnturnedItem, pos, true, true, true);
+                if (item is KitItemVehicle vehicleItem) VehicleManager.spawnVehicle(vehicleItem.Id, pos + (Vector3.up * 16), Quaternion.identity);
             }
         }
 

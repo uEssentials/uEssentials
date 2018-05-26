@@ -24,7 +24,7 @@
 using Essentials.Api.Unturned;
 using Essentials.Common.Util;
 using Newtonsoft.Json;
-
+using SDG.Unturned;
 
 namespace Essentials.NativeModules.Kit.Item {
 
@@ -71,18 +71,19 @@ namespace Essentials.NativeModules.Kit.Item {
         }
 
         /// <summary>
-        /// Give this item to a specified player
+        /// Give this item to a specific player
         /// </summary>
-        /// <param name="player"> player that you should give this item </param>
-        /// <param name="dropIfInventoryFull"> determine if this item should be dropped
-        /// on ground if inventory is full </param>
-        /// <returns> False if could not be added(full inventory) otherwise true </returns>
+        /// <param name="player"> player that will receive this item </param>
+        /// <param name="dropIfInventoryFull"> determines whether this item should be dropped
+        /// on ground if the player's inventory is full </param>
+        /// <returns> true if item was sucessfully added to the player's inventory, otherwise false </returns>
         public override bool GiveTo(UPlayer player, bool dropIfInventoryFull = true) {
             return player.GiveItem(UnturnedItem, dropIfInventoryFull);
         }
 
         public override string ToString() {
-            return $"Id: {Id}, Durability: {Durability}, Amount: {Amount}";
+            var itemName = ((ItemAsset) Assets.find(EAssetType.ITEM, Id))?.itemName;
+            return $"Id: {Id}{(itemName == null ? "" : $" ({itemName})")}, Durability: {Durability}, Amount: {Amount}";
         }
 
     }

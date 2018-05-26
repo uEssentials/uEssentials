@@ -84,7 +84,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                     } else {
                         src.SendMessage("This kit has no items.");
                     }
-                    break;
+                    return CommandResult.Success();
 
                 /* ekit name additem normal id amount durability */
                 case "additem":
@@ -92,35 +92,17 @@ namespace Essentials.NativeModules.Kit.Commands {
                         return CommandResult.InvalidArgs("Use /ekit [kit] additem [type] [id] [amount] [durability]");
                     }
 
-                    byte durability = 100;
-                    byte amount = 1;
+                    byte? durability = null;
+                    byte? amount = null;
 
-                    if (args.Length >= 5) {
-                        if (!args[4].IsInt) {
-                            return CommandResult.LangError("INVALID_NUMBER", args[4]);
-                        }
-
-                        var argAsInt = args[4].ToInt;
-
-                        if (argAsInt < 0 || argAsInt > 255) {
-                            return CommandResult.LangError("NEGATIVE_OR_LARGE");
-                        }
-
-                        amount = (byte) args[4].ToInt;
+                    // Try to convert 'amount'
+                    if (args.Length >= 5 && args[4].TryConvertToByte(out amount, out var error)) {
+                        return error;
                     }
 
-                    if (args.Length >= 6) {
-                        if (!args[5].IsInt) {
-                            return CommandResult.LangError("INVALID_NUMBER", args[5]);
-                        }
-
-                        var argAsInt = args[5].ToInt;
-
-                        if (argAsInt < 0 || argAsInt > 255) {
-                            return CommandResult.LangError("NEGATIVE_OR_LARGE");
-                        }
-
-                        durability = (byte) args[5].ToInt;
+                    // Try to convert 'durability'
+                    if (args.Length >= 6 && args[5].TryConvertToByte(out durability, out error)) {
+                        return error;
                     }
 
                     switch (args[2].ToLowerString) {
@@ -135,7 +117,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                                 return CommandResult.LangError("INVALID_ITEM_ID_NAME", args[3]);
                             }
 
-                            kit.Items.Add(new KitItem(optAsset.Value.id, durability, amount));
+                            kit.Items.Add(new KitItem(optAsset.Value.id, durability ?? 100, amount ?? 1));
                             src.SendMessage($"Added Id: {optAsset.Value.id}, Amount: {amount}, " +
                                             $"Durability: {durability}");
                             break;
@@ -169,7 +151,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                             if (args.Length != 4) {
                                 return CommandResult.InvalidArgs("Use /ekit [kit] additem money [amount]");
                             }
-                            
+
                             if (!args[3].IsInt) {
                                 return CommandResult.LangError("INVALID_NUMBER", args[3]);
                             }

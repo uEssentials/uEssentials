@@ -67,11 +67,10 @@ namespace Essentials.Commands {
 
                         UServer.Players.Where(p => p != caller).ForEach(p => Explode(p.Position));
                     } else {
-                        var found = UPlayer.TryGet(args[0], player => Explode(player.Position));
-
-                        if (!found) {
+                        if (!UPlayer.TryGet(args[0].ToString(), out var player)) {
                             return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                         }
+                        Explode(player.Position);
                     }
                     break;
 

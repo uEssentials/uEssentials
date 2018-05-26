@@ -53,7 +53,7 @@ namespace Essentials.Api {
         public static string ROCKET_VERSION => EssCore.ROCKET_VERSION;
 
         /// <summary>
-        /// Instance of CommandManager
+        /// Instance of EventManager
         /// </summary>
         public static IEventManager EventManager => Core.EventManager;
 
@@ -107,7 +107,7 @@ namespace Essentials.Api {
         public static string TranslationFolder => Core.TranslationFolder;
 
         /// <summary>
-        /// Translation folder path
+        /// Modules folder path
         /// </summary>
         public static string ModulesFolder => Core.ModulesFolder;
 

@@ -53,19 +53,17 @@ namespace Essentials.Commands {
 
                 EssLang.Send(src, "FROZEN_ALL");
             } else {
-                var found = UPlayer.TryGet(args[0], player => {
-                    if (player.HasComponent<FrozenPlayer>()) {
-                        EssLang.Send(src, "ALREADY_FROZEN", player.DisplayName);
-                    } else {
-                        player.AddComponent<FrozenPlayer>();
-
-                        EssLang.Send(src, "FROZEN_SENDER", player.DisplayName);
-                        EssLang.Send(player, "FROZEN_PLAYER", src.DisplayName);
-                    }
-                });
-
-                if (!found) {
+                if (!UPlayer.TryGet(args[0].ToString(), out var player)) {
                     return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
+                }
+
+                if (player.HasComponent<FrozenPlayer>()) {
+                    EssLang.Send(src, "ALREADY_FROZEN", player.DisplayName);
+                } else {
+                    player.AddComponent<FrozenPlayer>();
+
+                    EssLang.Send(src, "FROZEN_SENDER", player.DisplayName);
+                    EssLang.Send(player, "FROZEN_PLAYER", src.DisplayName);
                 }
             }
 

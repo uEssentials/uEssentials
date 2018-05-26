@@ -61,7 +61,7 @@ namespace Essentials.Api.Command.Source {
         /// <summary>
         /// Dispatch a command
         /// </summary>
-        /// <param name="command"> Command that you want to dispatch </param>
+        /// <param name="command"> the command you want to dispatch </param>
         void DispatchCommand(string command);
 
     }

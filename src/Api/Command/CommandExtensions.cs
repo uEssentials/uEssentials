@@ -21,6 +21,7 @@
 */
 #endregion
 
+using System;
 using UnityEngine;
 
 namespace Essentials.Api.Command {
@@ -28,7 +29,7 @@ namespace Essentials.Api.Command {
     public static class CommandExtensions {
 
         /// <summary>
-        /// Try get a vector3 from 3 arguments, starting in <paramref name="initialIndex"/>
+        /// Try to parse a Vector3 from 3 arguments, starting in <paramref name="initialIndex"/>
         /// </summary>
         /// <param name="src">Source</param>
         /// <param name="initialIndex"> Initial index </param>
@@ -60,6 +61,38 @@ namespace Essentials.Api.Command {
             return val >= minInclusive && val <= maxInclusive;
         }
 
+        /// <summary>
+        ///  Try to convert the argument to byte.
+        /// </summary>
+        /// <param name="value">the converted value</param>
+        /// <param name="error">
+        ///  CommandResult.LangError("NUMBER_BETWEEN", byte.MinValue, byte.MaxValue) if out of range;
+        //   CommandResult.LangError("INVALID_NUMBER", src.ToString()) if invalid.
+        /// </param>
+        /// <returns>true if sucessfull, otherwise false</returns>
+        public static bool TryConvertToByte(this ICommandArgument src, out byte value, out CommandResult error) {
+            value = 0;
+            error = null;
+            try {
+                value = byte.Parse(src.ToString());
+                return true;
+            } catch (OverflowException) {
+                error = CommandResult.LangError("NUMBER_BETWEEN", byte.MinValue, byte.MaxValue);
+            } catch (FormatException) {
+                error = CommandResult.LangError("INVALID_NUMBER", src.ToString());
+            }
+            return false;
+        }
+
+        public static bool TryConvertToByte(this ICommandArgument src, out byte? value, out CommandResult error) {
+            byte result;
+            if (src.TryConvertToByte(out result, out error)) {
+                value = result;
+                return true;
+            }
+            value = null;
+            return false;
+        }
     }
 
 }

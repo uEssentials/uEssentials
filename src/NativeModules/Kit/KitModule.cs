@@ -31,7 +31,7 @@ namespace Essentials.NativeModules.Kit {
     [ModuleInfo(Name = "Kits")]
     public class KitModule : NativeModule {
 
-        private const string kCommandsNamespace = "Essentials.NativeModules.Kit.Commands";
+        private const string CommandsNamespace = "Essentials.NativeModules.Kit.Commands";
         public KitManager KitManager { get; internal set; }
         public static KitModule Instance { get; internal set; }
 
@@ -40,15 +40,15 @@ namespace Essentials.NativeModules.Kit {
 
             KitManager = new KitManager();
             KitManager.Load();
-            
+
             Logger.LogInfo($"Loaded {KitManager.Count} kits");
 
-            CommandManager.RegisterAll(kCommandsNamespace);
+            CommandManager.RegisterAll(CommandsNamespace);
             EventManager.RegisterAll<KitEventHandler>();
         }
 
         public override void OnUnload() {
-            CommandManager.UnregisterAll(kCommandsNamespace);
+            CommandManager.UnregisterAll(CommandsNamespace);
             EventManager.UnregisterAll<KitEventHandler>();
             KitManager.Save();
         }

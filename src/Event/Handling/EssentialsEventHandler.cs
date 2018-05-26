@@ -156,11 +156,10 @@ namespace Essentials.Event.Handling {
                 }
 
                 // Parse skill from name
-                var fromName = USkill.FromName(kind);
-                if (fromName.IsAbsent) {
+                if (!USkill.FromName(kind, out var skill)) {
                     continue;
                 }
-                skillsToRestore[fromName.Value] = (byte) Math.Ceiling(player.GetSkillLevel(fromName.Value) * (percentageToKeep / 100.0));
+                skillsToRestore[skill] = (byte) Math.Ceiling(player.GetSkillLevel(skill) * (percentageToKeep / 100.0));
             }
 
             // All Skills
@@ -412,35 +411,6 @@ namespace Essentials.Event.Handling {
             if (!UEssentials.Config.UnfreezeOnQuit && DisconnectedFrozen.Contains(player.CSteamID.m_SteamID)) {
                 UPlayer.From(player).AddComponent<FrozenPlayer>();
                 DisconnectedFrozen.Remove(player.CSteamID.m_SteamID);
-            }
-        }
-
-        [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
-        private void TpaPlayerDisconnect(UnturnedPlayer player) {
-            var playerId = player.CSteamID.m_SteamID;
-            var requests = CommandTpa.Requests;
-
-            if (requests.ContainsKey(playerId)) {
-                requests.Remove(playerId);
-            } else if (requests.ContainsValue(playerId)) {
-                var val = requests.Keys.FirstOrDefault(k => requests[k] == playerId);
-
-                if (val != default(ulong)) {
-                    requests.Remove(val);
-                }
-            }
-        }
-
-        [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
-        private void TpaPlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            if (
-                UEssentials.Config.Tpa.TeleportDelay > 0 &&
-                UEssentials.Config.Tpa.CancelTeleportWhenMove &&
-                CommandTpa.WaitingToTeleport.TryGetValue(player.CSteamID.m_SteamID, out var task)
-            ) {
-                task.Cancel();
-                CommandTpa.WaitingToTeleport.Remove(player.CSteamID.m_SteamID);
-                UPlayer.TryGet(player, p => EssLang.Send(p, "TELEPORT_CANCELLED_MOVED"));
             }
         }
 

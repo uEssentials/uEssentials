@@ -28,6 +28,7 @@ using System.Linq;
 using System.Reflection;
 using Essentials.Api.Event;
 using Essentials.Common;
+using Essentials.Common.Util;
 
 namespace Essentials.Core.Event {
 
@@ -39,9 +40,9 @@ namespace Essentials.Core.Event {
         public void RegisterAll(object instance) {
             var type = instance.GetType();
 
-            foreach (var listenerMethod in type.GetMethods((BindingFlags) 0x3C)) {
+            foreach (var listenerMethod in type.GetMethods(ReflectUtil.STATIC_INSTANCE_FLAGS)) {
                 var eventHandlerAttrs = listenerMethod.GetCustomAttributes(typeof(SubscribeEvent), false);
-                if (eventHandlerAttrs.Length < 1)
+                if (eventHandlerAttrs.Length == 0)
                     continue;
 
                 var eventHandlerAttr = (SubscribeEvent) eventHandlerAttrs[0];
@@ -91,7 +92,7 @@ namespace Essentials.Core.Event {
         }
 
         public void RegisterAll(Type type) {
-            if (type.GetMethods((BindingFlags) 0x3C)
+            if (type.GetMethods(ReflectUtil.STATIC_INSTANCE_FLAGS)
                 .Any(md => md.GetCustomAttributes(typeof(SubscribeEvent), false).Length > 0)) {
                 RegisterAll(EssCore.Instance.CommonInstancePool.GetOrCreate(type));
             }

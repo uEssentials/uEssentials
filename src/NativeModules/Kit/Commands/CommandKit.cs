@@ -57,12 +57,12 @@ namespace Essentials.NativeModules.Kit.Commands {
 
             if (args.Length == 1) {
                 var player = src.ToPlayer();
+                var kitName = args[0].ToLowerString;
 
-                if (!KitModule.Instance.KitManager.Contains(args[0].ToString())) {
-                    return CommandResult.LangError("KIT_NOT_EXIST", args[0]);
+                if (!KitModule.Instance.KitManager.Contains(kitName)) {
+                    return CommandResult.LangError("KIT_NOT_EXIST", kitName);
                 }
 
-                var kitName = args[0].ToLowerString;
                 var requestedKit = KitModule.Instance.KitManager.GetByName(kitName);
 
                 if (!requestedKit.CanUse(player)) {
@@ -134,7 +134,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                 var kitName = args[0].ToLowerString;
 
                 if (!src.HasPermission($"essentials.kit.{kitName}.other")) {
-                    return CommandResult.Empty();
+                    return CommandResult.NoPermission($"essentials.kit.{kitName}.other");
                 }
 
                 if (!KitModule.Instance.KitManager.Contains(kitName)) {
@@ -147,9 +147,7 @@ namespace Essentials.NativeModules.Kit.Commands {
                     UServer.Players.ForEach(kit.GiveTo);
                     EssLang.Send(src, "KIT_GIVEN_SENDER_ALL", kitName);
                 } else {
-                    var target = args[1].ToPlayer;
-
-                    if (target == null) {
+                    if (!UPlayer.TryGet(args[1].ToString(), out var target)) {
                         return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                     }
 

@@ -102,7 +102,7 @@ namespace Essentials.Core.Command {
 
         public override string ToString() {
             var text = MiscUtil.ValuesToString(_texts.Select(t => t.Text).ToArray());
-            return $"TextCommand {{Name: {Name}, Text:{text}}}";
+            return $"TextCommand {{Name: {Name}, Text: {text}}}";
         }
 
     }
