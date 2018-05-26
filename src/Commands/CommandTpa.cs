@@ -180,8 +180,6 @@ namespace Essentials.Commands {
                             .Action(() => Requests.Remove(senderId))
                             .Delay(TimeSpan.FromSeconds(tpaSettings.ExpireDelay))
                             .Submit();
-                    } else {
-                        Requests.Remove(senderId);
                     }
                     break;
                 }
