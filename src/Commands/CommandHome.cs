@@ -53,8 +53,8 @@ namespace Essentials.Commands {
             var player = src.ToPlayer();
             var playerId = player.CSteamId;
 
-            if (player.RocketPlayer.Stance == EPlayerStance.DRIVING ||
-                player.RocketPlayer.Stance == EPlayerStance.SITTING) {
+            if (player.Stance == EPlayerStance.DRIVING ||
+                player.Stance == EPlayerStance.SITTING) {
                 return CommandResult.LangError("CANNOT_TELEPORT_DRIVING");
             }
 

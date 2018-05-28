@@ -85,7 +85,7 @@ namespace Essentials.Commands {
         }
 
         private static void GiveRep(UPlayer player, int amount) {
-            player.RocketPlayer.Player.skills.askRep(amount);
+            player.UnturnedPlayer.skills.askRep(amount);
 
             if (amount >= 0) {
                 EssLang.Send(player, "REPUTATION_RECEIVED", amount);

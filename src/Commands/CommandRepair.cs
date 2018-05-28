@@ -46,7 +46,7 @@ namespace Essentials.Commands {
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             var player = src.ToPlayer();
 
-            player.RocketPlayer.Inventory.items.ForEach(item => Repair(player, item));
+            player.Inventory.items.ForEach(item => Repair(player, item));
             EssLang.Send(src, "ALL_REPAIRED");
 
             return CommandResult.Success();

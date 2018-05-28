@@ -51,7 +51,7 @@ namespace Essentials.Commands {
                         return CommandResult.ShowUsage();
                     }
 
-                    TeleportAll(src.ToPlayer().RocketPlayer.Position, players);
+                    TeleportAll(src.ToPlayer().Position, players);
                     EssLang.Send(src, "TELEPORTED_ALL_YOU");
                     break;
 

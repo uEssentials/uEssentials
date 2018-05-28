@@ -59,8 +59,8 @@ namespace Essentials.NativeModules.Warp.Commands {
                 return CommandResult.LangError("WARP_NOT_EXIST", args[0]);
             }
 
-            if (player.RocketPlayer.Stance == EPlayerStance.DRIVING ||
-                player.RocketPlayer.Stance == EPlayerStance.SITTING) {
+            if (player.Stance == EPlayerStance.DRIVING ||
+                player.Stance == EPlayerStance.SITTING) {
                 return CommandResult.LangError("CANNOT_TELEPORT_DRIVING");
             }
 
