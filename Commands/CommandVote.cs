@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Linq;
@@ -27,34 +29,40 @@ using Essentials.Api.Command.Source;
 using Essentials.I18n;
 using static Essentials.Commands.CommandPoll;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "vote",
         Description = "Vote in a poll",
         Usage = "[yes/no] [poll_name]",
         AllowedSource = AllowedSource.PLAYER
     )]
-    public class CommandVote : EssCommand {
-
-        public override void Execute(ICommandContext context) {
-            if ((args.Length != 2 && Polls.Count != 1) || args.Length < 1) {
+    public class CommandVote : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
+            if ((args.Length != 2 && Polls.Count != 1) || args.Length < 1)
+            {
                 return CommandResult.ShowUsage();
             }
 
-            switch (args[0].ToString().ToLower()) {
+            switch (args[0].ToString().ToLower())
+            {
                 case "yes":
                 case "y":
                     var pollName = args.Length == 1 ? Polls.Keys.First() : args[1].ToString();
 
-                    if (!PollExists(pollName, src)) {
+                    if (!PollExists(pollName, src))
+                    {
                         return CommandResult.Empty();
                     }
 
-                    lock (Polls) {
+                    lock (Polls)
+                    {
                         var poll = Polls[pollName];
 
-                        if (poll.Voted.Contains(src.DisplayName)) {
+                        if (poll.Voted.Contains(src.DisplayName))
+                        {
                             return CommandResult.LangError("POLL_ALREADY_VOTED");
                         }
 
@@ -63,22 +71,26 @@ namespace Essentials.Commands {
 
                         Polls[pollName] = poll;
 
-                        EssLang.Send(src, "POLL_VOTED_YES", pollName);
+                        context.User.SendLocalizedMessage(Translations, "POLL_VOTED_YES", pollName);
                     }
+
                     break;
 
                 case "no":
                 case "n":
                     pollName = args.Length == 1 ? Polls.Keys.First() : args[1].ToString();
 
-                    if (!PollExists(pollName, src)) {
+                    if (!PollExists(pollName, src))
+                    {
                         return CommandResult.Empty();
                     }
 
-                    lock (Polls) {
+                    lock (Polls)
+                    {
                         var poll = Polls[pollName];
 
-                        if (poll.Voted.Contains(src.DisplayName)) {
+                        if (poll.Voted.Contains(src.DisplayName))
+                        {
                             return CommandResult.LangError("POLL_ALREADY_VOTED");
                         }
 
@@ -87,8 +99,9 @@ namespace Essentials.Commands {
 
                         Polls[pollName] = poll;
 
-                        EssLang.Send(src, "POLL_VOTED_NO", pollName);
+                        context.User.SendLocalizedMessage(Translations, "POLL_VOTED_NO", pollName);
                     }
+
                     break;
 
                 default:
@@ -97,7 +110,5 @@ namespace Essentials.Commands {
 
             return CommandResult.Success();
         }
-
     }
-
 }

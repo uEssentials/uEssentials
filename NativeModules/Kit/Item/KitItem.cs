@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Unturned;
@@ -26,11 +28,11 @@ using Essentials.Common.Util;
 using Newtonsoft.Json;
 using SDG.Unturned;
 
-namespace Essentials.NativeModules.Kit.Item {
-
+namespace Essentials.NativeModules.Kit.Item
+{
     [JsonObject(Id = "Item")]
-    public class KitItem : AbstractKitItem {
-
+    public class KitItem : AbstractKitItem
+    {
         /// <summary>
         /// Id of item
         /// </summary>
@@ -62,7 +64,8 @@ namespace Essentials.NativeModules.Kit.Item {
         [JsonIgnore]
         public virtual SDG.Unturned.Item UnturnedItem => new SDG.Unturned.Item(Id, Amount, Durability, Metadata);
 
-        public KitItem(ushort id, byte durability, byte amount) {
+        public KitItem(ushort id, byte durability, byte amount)
+        {
             Id = id;
             Durability = durability;
             Amount = amount;
@@ -77,15 +80,15 @@ namespace Essentials.NativeModules.Kit.Item {
         /// <param name="dropIfInventoryFull"> determines whether this item should be dropped
         /// on ground if the player's inventory is full </param>
         /// <returns> true if item was sucessfully added to the player's inventory, otherwise false </returns>
-        public override bool GiveTo(UPlayer player, bool dropIfInventoryFull = true) {
+        public override bool GiveTo(UPlayer player, bool dropIfInventoryFull = true)
+        {
             return player.GiveItem(UnturnedItem, dropIfInventoryFull);
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             var itemName = ((ItemAsset) Assets.find(EAssetType.ITEM, Id))?.itemName;
             return $"Id: {Id}{(itemName == null ? "" : $" ({itemName})")}, Durability: {Durability}, Amount: {Amount}";
         }
-
     }
-
 }

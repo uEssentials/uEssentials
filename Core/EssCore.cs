@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -57,18 +59,18 @@ using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 
-namespace Essentials.Core {
-
-    public sealed class EssCore : Plugin<EssConfig> {
-
+namespace Essentials.Core
+{
+    public sealed class EssCore : Plugin<EssConfig>
+    {
         internal const string ROCKET_VERSION = "4.9.3.0";
         internal const string UNTURNED_VERSION = "3.23.8.0";
 
 #if DEV
-        // Dev build version -- patched in compile-time (see uEssentials.csproj)
-        // This needs to be different every time because
-        // of Assembly loading -- I (leonardosnt) use a custom version of Rocket for
-        // development that allows to reload plugins without restaring the server.
+// Dev build version -- patched in compile-time (see uEssentials.csproj)
+// This needs to be different every time because
+// of Assembly loading -- I (leonardosnt) use a custom version of Rocket for
+// development that allows to reload plugins without restaring the server.
         internal const string PLUGIN_VERSION = "999.0.0.0";
 #else
         // Real plugin version -- manually updated.
@@ -109,8 +111,9 @@ namespace Essentials.Core {
         private string _modulesFolder;
         private bool _wasLoadedBefore;
         private EssentialsConsoleTraceListener _consoleTraceListener;
+
         private readonly List<RocketCommandManager.RegisteredRocketCommand> _overriddenCommands =
-          new List<RocketCommandManager.RegisteredRocketCommand>();
+            new List<RocketCommandManager.RegisteredRocketCommand>();
 
         internal string Folder => MkDirIfNotExists(_folder);
         internal string TranslationFolder => MkDirIfNotExists(_translationFolder);
@@ -120,8 +123,10 @@ namespace Essentials.Core {
         internal Dictionary<ulong, UPlayer> ConnectedPlayers { get; } = new Dictionary<ulong, UPlayer>();
         internal InstancePool CommonInstancePool { get; } = new InstancePool();
 
-        protected override void Load() {
-            try {
+        protected override void Load()
+        {
+            try
+            {
                 var stopwatch = Stopwatch.StartNew();
 
                 Instance = this;
@@ -142,7 +147,8 @@ namespace Essentials.Core {
 
                 Logger.LogInfo("Enabling uEssentials...");
 
-                new [] {
+                new[]
+                {
                     "Plugin version: ~white~" + PLUGIN_VERSION + BUILD_INFO,
                     "Recommended Rocket version: ~white~" + ROCKET_VERSION,
                     "Recommended Unturned version: ~white~" + UNTURNED_VERSION,
@@ -150,8 +156,10 @@ namespace Essentials.Core {
                     "Wiki: ~white~uessentials.github.io",
                 }.ForEach(text => Logger.LogInfo(text, true));
 
-                if (Provider.clients.Count > 0) {
-                    Provider.clients.ForEach(p => {
+                if (Provider.clients.Count > 0)
+                {
+                    Provider.clients.ForEach(p =>
+                    {
                         ConnectedPlayers.Add(p.playerID.steamID.m_SteamID,
                             new UPlayer(UnturnedPlayer.FromSteamPlayer(p)));
                     });
@@ -177,8 +185,9 @@ namespace Essentials.Core {
 
                 WebResources.Load(webResourcesPath);
 
-                 // Sync web config with local config.json
-                if (WebResources.Loaded.ContainsKey("Config")) {
+                // Sync web config with local config.json
+                if (WebResources.Loaded.ContainsKey("Config"))
+                {
                     File.WriteAllText(configPath, WebResources.Loaded["Config"]);
                 }
 
@@ -217,7 +226,8 @@ namespace Essentials.Core {
                     .Id("Delete Xml Files")
                     .Delay(TimeSpan.FromSeconds(1))
                     .Async()
-                    .Action(() => {
+                    .Action(() =>
+                    {
                         File.Delete($"{Folder}uEssentials.en.translation.xml");
                         File.Delete($"{Folder}uEssentials.configuration.xml");
                     })
@@ -227,26 +237,33 @@ namespace Essentials.Core {
                 // being reloaded, and it also means that R.Plugins.OnPluginsLoaded will not be called,
                 // consequently OverrideCommands will not be called too
                 // so we need to call it here.
-                if (_wasLoadedBefore) {
+                if (_wasLoadedBefore)
+                {
                     OverrideCommands();
                 }
 
                 _wasLoadedBefore = true;
                 CommandWindow.input.onInputText += ReloadCallback;
                 Logger.LogInfo($"Enabled ({stopwatch.ElapsedMilliseconds} ms)");
-            } catch (Exception e) {
-                string[] messages = {
+            }
+            catch (Exception e)
+            {
+                string[] messages =
+                {
                     "An error occurred while enabling uEssentials.",
                     "If this error is not related with wrong configuration, please report",
                     "it here https://github.com/uEssentials/uEssentials/issues",
                     "Error: " + e
                 };
 
-                if (Logger == null) {
+                if (Logger == null)
+                {
                     Console.BackgroundColor = ConsoleColor.Red;
                     messages.ForEach(Console.WriteLine);
                     Console.BackgroundColor = ConsoleColor.White;
-                } else {
+                }
+                else
+                {
                     messages.ForEach(m => Logger.LogError(m));
                 }
             }
@@ -262,7 +279,8 @@ namespace Essentials.Core {
 #endif
         }
 
-        protected override void Unload() {
+        protected override void Unload()
+        {
             R.Plugins.OnPluginsLoaded -= OverrideCommands;
             CommandWindow.input.onInputText -= ReloadCallback;
             Provider.onServerDisconnected -= PlayerDisconnectCallback;
@@ -282,128 +300,156 @@ namespace Essentials.Core {
 
             // Restore overridden commands
             var rocketCommands = GetRocketCommands();
-            if (rocketCommands != null) {
+            if (rocketCommands != null)
+            {
                 rocketCommands.AddRange(_overriddenCommands);
                 _overriddenCommands.Clear();
             }
         }
 
         // Load other things based in the Config.
-        private void ConfigPostLoad() {
-            if (Config.Economy.UseXp) {
+        private void ConfigPostLoad()
+        {
+            if (Config.Economy.UseXp)
+            {
                 EconomyProvider = Optional<IEconomyProvider>.Of(new ExpEconomyProvider());
-            } else if (HookManager.GetActiveByType<AviEconomyHook>().IsPresent) {
+            }
+            else if (HookManager.GetActiveByType<AviEconomyHook>().IsPresent)
+            {
                 EconomyProvider = Optional<IEconomyProvider>.Of(HookManager.GetActiveByType<AviEconomyHook>().Value);
-            } else if (HookManager.GetActiveByType<UconomyHook>().IsPresent) {
+            }
+            else if (HookManager.GetActiveByType<UconomyHook>().IsPresent)
+            {
                 EconomyProvider = Optional<IEconomyProvider>.Of(HookManager.GetActiveByType<UconomyHook>().Value);
-            } else {
+            }
+            else
+            {
                 EconomyProvider = Optional<IEconomyProvider>.Empty();
             }
 
-            if (Config.AutoAnnouncer.Enabled) {
+            if (Config.AutoAnnouncer.Enabled)
+            {
                 Config.AutoAnnouncer.Start();
             }
 
-            if (Config.AutoCommands.Enabled) {
+            if (Config.AutoCommands.Enabled)
+            {
                 Config.AutoCommands.Start();
             }
 
-            if (Config.ServerFrameRate != -1) {
+            if (Config.ServerFrameRate != -1)
+            {
                 var frameRate = Config.ServerFrameRate;
 
-                if (Config.ServerFrameRate < -1) {
+                if (Config.ServerFrameRate < -1)
+                {
                     frameRate = -1; // Set to default
                 }
 
                 UnityEngine.Application.targetFrameRate = frameRate;
             }
 
-            Config.DisabledCommands.ForEach(cmdName => {
+            Config.DisabledCommands.ForEach(cmdName =>
+            {
                 var command = CommandManager.GetByName(cmdName);
 
-                if (command == null || command is CommandEssentials) {
+                if (command == null || command is CommandEssentials)
+                {
                     Logger.LogWarning($"There is no command named '{cmdName}' to disable.");
-                } else {
+                }
+                else
+                {
                     CommandManager.Unregister(command);
                     Logger.LogInfo($"Disabled command: '{command.Name}'");
                 }
             });
 
-            if (Config.EnableTextCommands) {
+            if (Config.EnableTextCommands)
+            {
                 TextCommands = new TextCommands();
 
                 var textCommandsFile = Path.Combine(Folder, TextCommands.FileName);
 
                 TextCommands.Load(textCommandsFile);
 
-                TextCommands.Commands.ForEach(txtCommand => {
-                    CommandManager.Register(new TextCommand(txtCommand));
-                });
+                TextCommands.Commands.ForEach(txtCommand => { CommandManager.Register(new TextCommand(txtCommand)); });
             }
 
             // TODO: FEATURE: Maybe we could have some kind of conditional
             // event register -- directly in EventManager?
-            if (!Config.EnableJoinLeaveMessage) {
+            if (!Config.EnableJoinLeaveMessage)
+            {
                 EventManager.Unregister<EssentialsEventHandler>("JoinMessage");
                 EventManager.Unregister<EssentialsEventHandler>("LeaveMessage");
             }
 
-            if (!Config.Updater.AlertOnJoin) {
+            if (!Config.Updater.AlertOnJoin)
+            {
                 EventManager.Unregister<EssentialsEventHandler>("UpdateAlert");
             }
 
-            if (!Config.EnableDeathMessages) {
+            if (!Config.EnableDeathMessages)
+            {
                 EventManager.Unregister<EssentialsEventHandler>("DeathMessages");
             }
         }
 
-        private static void LoadNativeModules() {
+        private static void LoadNativeModules()
+        {
             // Load native modules
             Instance.Assembly.GetTypes()
                 .Where(t => typeof(NativeModule).IsAssignableFrom(t))
                 .Where(t => !t.IsAbstract)
-                .Where(t => {
-                    var moduleInfo = (ModuleInfo)t.GetCustomAttributes(typeof(ModuleInfo), false)[0];
+                .Where(t =>
+                {
+                    var moduleInfo = (ModuleInfo) t.GetCustomAttributes(typeof(ModuleInfo), false)[0];
                     return Instance.Config.EnabledSystems.Contains(moduleInfo.Name);
                 })
-                .ForEach(t => {
-                    Instance.ModuleManager.LoadModule((NativeModule)Activator.CreateInstance(t));
-                });
+                .ForEach(t => { Instance.ModuleManager.LoadModule((NativeModule) Activator.CreateInstance(t)); });
         }
 
-        private static void ReloadCallback(string command) {
-            if (!command.StartsWith("rocket reload", true, CultureInfo.InvariantCulture)) {
+        private static void ReloadCallback(string command)
+        {
+            if (!command.StartsWith("rocket reload", true, CultureInfo.InvariantCulture))
+            {
                 return;
             }
 
             Console.WriteLine();
-            UEssentials.Logger.LogWarning("/rocket reload can cause issues. If you experience any problems after running");
+            UEssentials.Logger.LogWarning(
+                "/rocket reload can cause issues. If you experience any problems after running");
             UEssentials.Logger.LogWarning("this command, try restarting the server.");
             Console.WriteLine();
         }
 
-        private void PlayerConnectCallback(CSteamID id) {
+        private void PlayerConnectCallback(CSteamID id)
+        {
             ConnectedPlayers.Add(id.m_SteamID, new UPlayer(UnturnedPlayer.FromCSteamID(id)));
         }
 
-        private void PlayerDisconnectCallback(CSteamID id) {
+        private void PlayerDisconnectCallback(CSteamID id)
+        {
             ConnectedPlayers.Remove(id.m_SteamID);
         }
 
-        private void CheckUpdates() {
-            if (!Config.Updater.CheckUpdates) {
+        private void CheckUpdates()
+        {
+            if (!Config.Updater.CheckUpdates)
+            {
                 return;
             }
 
             var worker = new BackgroundWorker();
 
-            worker.DoWork += (sender, args) => {
+            worker.DoWork += (sender, args) =>
+            {
                 Logger.LogInfo("Checking updates.");
 
                 var isUpdated = Updater.IsUpdated();
                 var lastResult = Updater.LastResult;
 
-                if (isUpdated) {
+                if (isUpdated)
+                {
                     Logger.LogInfo("Plugin is up-to-date!");
                     return;
                 }
@@ -413,10 +459,12 @@ namespace Essentials.Core {
                 if (
                     !string.IsNullOrEmpty(lastResult.AdditionalData) &&
                     JObject.Parse(lastResult.AdditionalData).TryGetValue("changes", out var changes)
-                ) {
+                )
+                {
                     Logger.LogInfo("====================== [ Update  Notes ] ======================");
 
-                    changes.ToString().Split('\n').ForEach(msg => {
+                    changes.ToString().Split('\n').ForEach(msg =>
+                    {
                         Logger.Log("", ConsoleColor.Green, suffix: "");
                         Logger.Log("  " + msg, ConsoleColor.White, "");
                     });
@@ -431,67 +479,80 @@ namespace Essentials.Core {
                     Logger.LogInfo("===============================================================");
                 }
 
-                if (Config.Updater.DownloadLatest) {
+                if (Config.Updater.DownloadLatest)
+                {
                     Updater.DownloadLatestRelease($"{Folder}/updates/");
                 }
             };
 
-            worker.RunWorkerCompleted += (sender, args) => {
-                if (args.Error != null) {
+            worker.RunWorkerCompleted += (sender, args) =>
+            {
+                if (args.Error != null)
+                {
                     Logger.LogError($"Could not update, try again later. Error: ({args.Error.Message})");
-                    Logger.LogError("Or try to download it manually here: https://github.com/uEssentials/uEssentials/releases");
+                    Logger.LogError(
+                        "Or try to download it manually here: https://github.com/uEssentials/uEssentials/releases");
                 }
             };
 
             worker.RunWorkerAsync();
         }
 
-        private void OverrideCommands() {
+        private void OverrideCommands()
+        {
             R.Plugins.OnPluginsLoaded -= OverrideCommands;
 
             var rocketCommands = GetRocketCommands();
 
-            if (rocketCommands == null) {
+            if (rocketCommands == null)
+            {
                 Logger.LogError("Could not override commands, rocketCommands == null.");
                 return;
             }
 
             var essCommands = new HashSet<string>(
-              CommandManager.Commands.Select(c => c.Name.ToLowerInvariant()).Concat(
-              CommandManager.Commands.SelectMany(c => c.Aliases).Select(c => c.ToLowerInvariant())));
+                CommandManager.Commands.Select(c => c.Name.ToLowerInvariant()).Concat(
+                    CommandManager.Commands.SelectMany(c => c.Aliases).Select(c => c.ToLowerInvariant())));
 
             // Used to check which commands are not "owned' by uEssentials
             var mappedRocketCommands = new Dictionary<string, RocketCommandManager.RegisteredRocketCommand>();
 
-            rocketCommands.RemoveAll(command => {
+            rocketCommands.RemoveAll(command =>
+            {
                 var name = command.Name.ToLowerInvariant();
                 var wrapper = command.Command;
 
                 // Override commands from Rocket and Unturned by default,
                 // since uEssentials commands are an improved version of them.
-                if (wrapper.GetType().FullName.StartsWith("Rocket.Unturned.Commands") && essCommands.Contains(name)) {
+                if (wrapper.GetType().FullName.StartsWith("Rocket.Unturned.Commands") && essCommands.Contains(name))
+                {
                     Logger.LogInfo($"Overriding Unturned/Rocket command ({command.Name.ToLowerInvariant()})");
                     _overriddenCommands.Add(command);
                     return true;
                 }
 
                 // It will override a command from another plugin only if it's specified in the config.json
-                if (Config.CommandsToOverride.Contains(name) && !(command.Command is CommandAdapter)) {
+                if (Config.CommandsToOverride.Contains(name) && !(command.Command is CommandAdapter))
+                {
                     var pluginName = command.Command.GetType().Assembly.GetName().Name;
-                    Logger.LogInfo($"Overriding command \"{command.Name.ToLowerInvariant()}\" from plugin: {pluginName}");
-                     _overriddenCommands.Add(command);
+                    Logger.LogInfo(
+                        $"Overriding command \"{command.Name.ToLowerInvariant()}\" from plugin: {pluginName}");
+                    _overriddenCommands.Add(command);
                     return true;
                 }
 
-                if (!mappedRocketCommands.ContainsKey(name)) {
+                if (!mappedRocketCommands.ContainsKey(name))
+                {
                     mappedRocketCommands.Add(name, command);
                 }
+
                 return false;
             });
 
             // Get commands that are not registered by uEssentials.
             var commandsNotOwnedByEss = CommandManager.Commands
-                .Select(command => {
+                .Select(command =>
+                {
                     var rocketCommand = mappedRocketCommands[command.Name.ToLowerInvariant()];
                     if (rocketCommand.Command is CommandAdapter) return null;
                     return rocketCommand;
@@ -499,37 +560,45 @@ namespace Essentials.Core {
                 .Where(command => command != null)
                 .ToList();
 
-            if (commandsNotOwnedByEss.Count == 0) {
+            if (commandsNotOwnedByEss.Count == 0)
+            {
                 return;
             }
 
-            lock (Console.Out) {
-                Logger.LogWarning("The following commands couldn't be used by uEssentials because they already exists in another plugin:");
-                commandsNotOwnedByEss.ForEach(command => {
+            lock (Console.Out)
+            {
+                Logger.LogWarning(
+                    "The following commands couldn't be used by uEssentials because they already exists in another plugin:");
+                commandsNotOwnedByEss.ForEach(command =>
+                {
                     var pluginName = command.Command.GetType().Assembly.GetName().Name;
                     Logger.LogWarning($" The command \"{command.Name}\" is owned by the plugin: {pluginName}");
                 });
-                Logger.LogWarning("If you want to use a command from uEssentials instead of from other plugin, you must add its name in \"CommandsToOverride\" in the config.json");
+                Logger.LogWarning(
+                    "If you want to use a command from uEssentials instead of from other plugin, you must add its name in \"CommandsToOverride\" in the config.json");
             }
         }
 
-        private static List<RocketCommandManager.RegisteredRocketCommand> GetRocketCommands() {
+        private static List<RocketCommandManager.RegisteredRocketCommand> GetRocketCommands()
+        {
             var commandsField = ReflectUtil.GetField(R.Commands.GetType(), "commands");
-            var rocketCommands = (List<RocketCommandManager.RegisteredRocketCommand>) commandsField.GetValue(R.Commands);
+            var rocketCommands =
+                (List<RocketCommandManager.RegisteredRocketCommand>) commandsField.GetValue(R.Commands);
             return rocketCommands;
         }
 
-        private static string MkDirIfNotExists(string dir) {
+        private static string MkDirIfNotExists(string dir)
+        {
             if (!System.IO.Directory.Exists(dir))
                 System.IO.Directory.CreateDirectory(dir);
             return dir;
         }
-
     }
 
-    internal class EssentialsConsoleTraceListener : ConsoleTraceListener {
-
-        public override void WriteLine(string message, string category) {
+    internal class EssentialsConsoleTraceListener : ConsoleTraceListener
+    {
+        public override void WriteLine(string message, string category)
+        {
 #if !EVENT_MANAGER_DEBUG
             if (category == "EventManager") return;
 #endif
@@ -540,20 +609,21 @@ namespace Essentials.Core {
             WriteLine($"[{category}] {message}");
         }
 
-        public override void WriteLine(object o, string category) {
+        public override void WriteLine(object o, string category)
+        {
             WriteLine(ObjectToString(o), category);
         }
 
-        public override void WriteLine(string message) {
+        public override void WriteLine(string message)
+        {
             UEssentials.Logger.LogDebug(message);
         }
 
-        public override void WriteLine(object o) {
+        public override void WriteLine(object o)
+        {
             WriteLine(ObjectToString(o));
         }
 
         private static string ObjectToString(object obj) => obj == null ? "null" : obj.ToString();
-
     }
-
 }

@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,32 +20,33 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api;
 using Essentials.Api.Unturned;
 using Newtonsoft.Json;
 
-namespace Essentials.NativeModules.Kit.Item {
+namespace Essentials.NativeModules.Kit.Item
+{
+    public class KitItemMoney : AbstractKitItem
+    {
+        [JsonProperty("Money")] public decimal Amount { get; set; }
 
-    public class KitItemMoney : AbstractKitItem {
-
-        [JsonProperty("Money")]
-        public decimal Amount { get; set; }
-
-        public KitItemMoney(decimal amount) {
+        public KitItemMoney(decimal amount)
+        {
             Amount = amount;
         }
 
-        public override bool GiveTo(UPlayer player, bool dropIfInventoryFull = true) {
+        public override bool GiveTo(UPlayer player, bool dropIfInventoryFull = true)
+        {
             UEssentials.EconomyProvider.IfPresent(h => h.Deposit(player, Amount));
             return true;
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return $"Money: {Amount}";
         }
-
     }
-
 }

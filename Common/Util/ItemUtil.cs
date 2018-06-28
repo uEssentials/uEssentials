@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -27,26 +29,31 @@ using System.Linq;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
 
-namespace Essentials.Common.Util {
-
-    public static class ItemUtil {
-
+namespace Essentials.Common.Util
+{
+    public static class ItemUtil
+    {
         private static IOrderedEnumerable<ItemAsset> _cachedAssets;
 
-        public static Optional<ItemAsset> GetItem(ushort id) {
+        public static Optional<ItemAsset> GetItem(ushort id)
+        {
             return Optional<ItemAsset>.OfNullable((ItemAsset) Assets.find(EAssetType.ITEM, id));
         }
 
-        public static Optional<ItemAsset> GetItem(string name) {
-            if (name == null) {
+        public static Optional<ItemAsset> GetItem(string name)
+        {
+            if (name == null)
+            {
                 return Optional<ItemAsset>.Empty();
             }
 
-            if (ushort.TryParse(name, out var id)) {
+            if (ushort.TryParse(name, out var id))
+            {
                 return GetItem(id);
             }
 
-            if (_cachedAssets == null) {
+            if (_cachedAssets == null)
+            {
                 _cachedAssets = Assets.find(EAssetType.ITEM)
                     .Cast<ItemAsset>()
                     .Where(i => i.itemName != null)
@@ -56,24 +63,32 @@ namespace Essentials.Common.Util {
             var lastAsset = null as ItemAsset;
             var lastPriority = 0;
 
-            foreach (var asset in _cachedAssets) {
+            foreach (var asset in _cachedAssets)
+            {
                 var itemPriority = 0;
                 var itemName = asset.itemName;
 
-                if (itemName.EqualsIgnoreCase(name)) {
+                if (itemName.EqualsIgnoreCase(name))
+                {
                     lastAsset = asset;
                     break;
                 }
 
-                if (itemName.StartsWith(name, true, CultureInfo.InvariantCulture)) {
+                if (itemName.StartsWith(name, true, CultureInfo.InvariantCulture))
+                {
                     itemPriority = 3;
-                } else if (itemName.ContainsIgnoreCase(name)) {
+                }
+                else if (itemName.ContainsIgnoreCase(name))
+                {
                     itemPriority = 2;
-                } else if (name.IndexOf(' ') > 0 && name.Split(' ').All(p => itemName.ContainsIgnoreCase(p))) {
+                }
+                else if (name.IndexOf(' ') > 0 && name.Split(' ').All(p => itemName.ContainsIgnoreCase(p)))
+                {
                     itemPriority = 1;
                 }
 
-                if (itemPriority > lastPriority) {
+                if (itemPriority > lastPriority)
+                {
                     lastAsset = asset;
                     lastPriority = itemPriority;
                 }
@@ -82,13 +97,15 @@ namespace Essentials.Common.Util {
             return Optional<ItemAsset>.OfNullable(lastAsset);
         }
 
-        public static Optional<T> GetItemAs<T>(string name) where T : ItemAsset {
+        public static Optional<T> GetItemAs<T>(string name) where T : ItemAsset
+        {
             var optItem = GetItem(name);
 
             return optItem.IsPresent ? Optional<T>.Of(optItem.Value as T) : Optional<T>.Empty();
         }
 
-        public static Optional<T> GetItemAs<T>(ushort id) where T : ItemAsset {
+        public static Optional<T> GetItemAs<T>(ushort id) where T : ItemAsset
+        {
             var optItem = GetItem(id);
 
             return optItem.IsPresent ? Optional<T>.Of(optItem.Value as T) : Optional<T>.Empty();
@@ -123,8 +140,10 @@ namespace Essentials.Common.Util {
             metadata[16] = barrel durability
             metadata[17] = magazine durability
         */
-        public static Optional<Attachment> GetWeaponAttachment(byte[] metadata, AttachmentType type) {
-            if (metadata.Length < 18) {
+        public static Optional<Attachment> GetWeaponAttachment(byte[] metadata, AttachmentType type)
+        {
+            if (metadata.Length < 18)
+            {
                 return Optional<Attachment>.Empty();
             }
 
@@ -136,16 +155,20 @@ namespace Essentials.Common.Util {
             return Optional<Attachment>.Of(new Attachment(attachId, attachDurability));
         }
 
-        public static Optional<EFiremode> GetWeaponFiremode(byte[] metadata) {
-            if (metadata.Length < 18) {
+        public static Optional<EFiremode> GetWeaponFiremode(byte[] metadata)
+        {
+            if (metadata.Length < 18)
+            {
                 return Optional<EFiremode>.Empty();
             }
 
             return Optional<EFiremode>.OfNullable((EFiremode) metadata[11]);
         }
 
-        public static Optional<byte> GetWeaponAmmo(byte[] metadata) {
-            if (metadata.Length < 18) {
+        public static Optional<byte> GetWeaponAmmo(byte[] metadata)
+        {
+            if (metadata.Length < 18)
+            {
                 return Optional<byte>.Empty();
             }
 
@@ -153,57 +176,72 @@ namespace Essentials.Common.Util {
         }
 
 
-        public static Optional<Attachment> GetWeaponAttachment(Item weaponItem, AttachmentType type) {
+        public static Optional<Attachment> GetWeaponAttachment(Item weaponItem, AttachmentType type)
+        {
             return GetWeaponAttachment(weaponItem.metadata, type);
         }
 
-        public static Optional<EFiremode> GetWeaponFiremode(Item weaponItem) {
+        public static Optional<EFiremode> GetWeaponFiremode(Item weaponItem)
+        {
             return GetWeaponFiremode(weaponItem.metadata);
         }
 
-        public static Optional<byte> GetWeaponAmmo(Item weaponItem) {
+        public static Optional<byte> GetWeaponAmmo(Item weaponItem)
+        {
             return GetWeaponAmmo(weaponItem.metadata);
         }
 
 
-        public static void SetWeaponAttachment(Item weaponItem, AttachmentType type, Attachment attach) {
-            if (weaponItem.metadata.Length < 18) {
+        public static void SetWeaponAttachment(Item weaponItem, AttachmentType type, Attachment attach)
+        {
+            if (weaponItem.metadata.Length < 18)
+            {
                 return;
             }
 
             AssembleAttach(weaponItem, GetAttachIndexes(type), attach);
         }
 
-        public static void SetWeaponFiremode(Item weaponItem, EFiremode firemode) {
-            if (weaponItem.metadata.Length < 18) {
+        public static void SetWeaponFiremode(Item weaponItem, EFiremode firemode)
+        {
+            if (weaponItem.metadata.Length < 18)
+            {
                 return;
             }
 
             weaponItem.metadata[11] = (byte) firemode;
         }
 
-        public static void SetWeaponAmmo(Item weaponItem, byte ammo) {
-            if (weaponItem.metadata.Length < 18) {
+        public static void SetWeaponAmmo(Item weaponItem, byte ammo)
+        {
+            if (weaponItem.metadata.Length < 18)
+            {
                 return;
             }
 
             weaponItem.metadata[10] = ammo;
         }
 
-        public static void Refuel(Item item, float percentage = 100) {
+        public static void Refuel(Item item, float percentage = 100)
+        {
             Refuel(item.metadata, item.id, percentage);
         }
 
-        public static void Refuel(byte[] metadata, ushort itemId, float percentage = 100) {
+        public static void Refuel(byte[] metadata, ushort itemId, float percentage = 100)
+        {
             Asset asset = Assets.find(EAssetType.ITEM, itemId);
-            if (asset is ItemFuelAsset) {
+            if (asset is ItemFuelAsset)
+            {
                 Refuel(metadata, (ItemFuelAsset) asset, percentage);
-            } else {
+            }
+            else
+            {
                 throw new ArgumentException("itemId does not refer to a ItemFuelAsset");
             }
         }
 
-        public static void Refuel(byte[] metadata, ItemFuelAsset fuelAsset, float percentage) {
+        public static void Refuel(byte[] metadata, ItemFuelAsset fuelAsset, float percentage)
+        {
             if (percentage > 100) percentage = 100;
             if (percentage < 0) percentage = 0;
 
@@ -213,7 +251,8 @@ namespace Essentials.Common.Util {
             metadata[1] = (byte) (fuel >> 8);
         }
 
-        private static void AssembleAttach(Item item, int[] idxs, Attachment attach) {
+        private static void AssembleAttach(Item item, int[] idxs, Attachment attach)
+        {
             if (attach == null || attach.AttachmentId == 0) return;
 
             var attachIdBytes = BitConverter.GetBytes(attach.AttachmentId);
@@ -233,27 +272,28 @@ namespace Essentials.Common.Util {
             1 = id byte 2
             2 = durability
         */
-        private static int[] GetAttachIndexes(AttachmentType attachType) {
-            switch (attachType) {
-                case AttachmentType.SIGHT:    return new [] { 0, 1, 13 };
-                case AttachmentType.TACTICAL: return new [] { 2, 3, 14 };
-                case AttachmentType.GRIP:     return new [] { 4, 5, 15 };
-                case AttachmentType.BARREL:   return new [] { 6, 7, 16 };
-                case AttachmentType.MAGAZINE: return new [] { 8, 9, 17 };
+        private static int[] GetAttachIndexes(AttachmentType attachType)
+        {
+            switch (attachType)
+            {
+                case AttachmentType.SIGHT: return new[] {0, 1, 13};
+                case AttachmentType.TACTICAL: return new[] {2, 3, 14};
+                case AttachmentType.GRIP: return new[] {4, 5, 15};
+                case AttachmentType.BARREL: return new[] {6, 7, 16};
+                case AttachmentType.MAGAZINE: return new[] {8, 9, 17};
                 default:
                     throw new ArgumentOutOfRangeException(nameof(attachType), attachType, null);
             }
         }
 
 
-        public enum AttachmentType {
+        public enum AttachmentType
+        {
             SIGHT,
             BARREL,
             GRIP,
             TACTICAL,
             MAGAZINE
         }
-
     }
-
 }

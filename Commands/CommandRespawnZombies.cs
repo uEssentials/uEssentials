@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 
@@ -30,18 +32,20 @@ using Essentials.Common;
 using SDG.Unturned;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "respawnzombies",
         Description = "Respawn all zombies"
     )]
-    public class CommandRespawnZombies : EssCommand {
-
-        public override void Execute(ICommandContext context) {
+    public class CommandRespawnZombies : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
             var count = 0;
 
-            UWorld.Zombies.Where(z => z.isDead).ForEach(zombie => {
+            UWorld.Zombies.Where(z => z.isDead).ForEach(zombie =>
+            {
                 ZombieManager.sendZombieAlive(
                     zombie,
                     zombie.type,
@@ -56,11 +60,9 @@ namespace Essentials.Commands {
                 count++;
             });
 
-            EssLang.Send(src, "RESPAWNED_ZOMBIES", count);
+            context.User.SendLocalizedMessage(Translations, "RESPAWNED_ZOMBIES", count);
 
             return CommandResult.Success();
         }
-
     }
-
 }

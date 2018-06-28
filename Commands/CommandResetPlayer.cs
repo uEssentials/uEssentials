@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.IO;
@@ -30,8 +32,8 @@ using Essentials.Api.Command.Source;
 using Essentials.Common;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "resetplayer",
         Description = "Reset all player data.",
@@ -39,39 +41,47 @@ namespace Essentials.Commands {
         MinArgs = 1,
         MaxArgs = 1
     )]
-    public class CommandResetPlayer : EssCommand {
-
-        public override void Execute(ICommandContext context) {
-            if (args.IsEmpty || args.Length > 1) {
+    public class CommandResetPlayer : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
+            if (args.IsEmpty || args.Length > 1)
+            {
                 return CommandResult.ShowUsage();
             }
 
-            try {
+            try
+            {
                 var steamId = new CSteamID(ulong.Parse(args[0].ToString()));
 
-                if (!steamId.IsValid()) {
+                if (!steamId.IsValid())
+                {
                     return CommandResult.LangError("INVALID_STEAMID", steamId.m_SteamID);
                 }
 
                 ResetPlayer(steamId.m_SteamID);
-                EssLang.Send(src, "PLAYER_RESET");
-            } catch (FormatException) {
+                context.User.SendLocalizedMessage(Translations, "PLAYER_RESET");
+            }
+            catch (FormatException)
+            {
                 var target = args[0].ToPlayer;
 
-                if (target == null) {
+                if (target == null)
+                {
                     return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                 }
 
                 target.Kick(EssLang.Translate("PLAYER_RESET_KICK"));
                 ResetPlayer(target.CSteamId.m_SteamID);
 
-                EssLang.Send(src, "PLAYER_RESET");
+                context.User.SendLocalizedMessage(Translations, "PLAYER_RESET");
             }
 
             return CommandResult.Success();
         }
 
-        private void ResetPlayer(ulong steamId) {
+        private void ResetPlayer(ulong steamId)
+        {
             var sep = Path.DirectorySeparatorChar.ToString();
             var idStr = steamId.ToString();
             var parentDir = Directory.GetParent(Directory.GetCurrentDirectory());
@@ -80,7 +90,5 @@ namespace Essentials.Commands {
                 .Where(dic => dic.Substring(dic.LastIndexOf(sep, StringComparison.Ordinal) + 1).StartsWith(idStr))
                 .ForEach(dic => Directory.Delete(dic, true));
         }
-
     }
-
 }

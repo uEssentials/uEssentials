@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,103 +20,125 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
+using System;
+using System.Linq;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
 using Essentials.Common;
-using Essentials.I18n;
+using Rocket.API.Commands;
+using Rocket.API.Permissions;
+using Rocket.API.Player;
+using Rocket.API.Plugins;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Core.Migration.LegacyPermissions;
+using Rocket.Core.Permissions;
+using Rocket.Core.User;
+using Rocket.Unturned.Player;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
-        Name = "experience",
+        "experience",
+        "Give experience to you/player",
         Aliases = new[] { "exp" },
-        Description = "Give experience to you/player",
-        Usage = "[amount] <target/*>"
+        Syntax = "[amount] <target/*>"
     )]
-    public class CommandExperience : EssCommand {
+    public class CommandExperience : EssCommand
+    {
+        public CommandExperience(IPlugin plugin) : base(plugin)
+        {
+        }
 
         private const int MAX_INPUT_VALUE = 10000000;
 
-        public override void Execute(ICommandContext context) {
-            if (args.Length == 0 || (args.Length == 1 && src.IsConsole)) {
-                return CommandResult.ShowUsage();
-            }
-
-            if (!args[0].IsInt) {
-                return CommandResult.LangError("INVALID_NUMBER", args[0]);
-            }
-
-            var amount = args[0].ToInt;
-
-            if (amount > MAX_INPUT_VALUE || amount < -MAX_INPUT_VALUE) {
-                return CommandResult.LangError("NUMBER_BETWEEN", -MAX_INPUT_VALUE, MAX_INPUT_VALUE);
-            }
-
-            if (args.Length == 2) {
-                // Everyone
-                if (args[1].Equals("*")) {
-                    if (!src.HasPermission($"{Permission}.all")) {
-                        return CommandResult.NoPermission($"{Permission}.all");
-                    }
-
-                    UServer.Players.ForEach(p => GiveExp(p, amount));
-
-                    if (amount >= 0) {
-                        EssLang.Send(src, "EXPERIENCE_GIVEN", amount, EssLang.Translate("EVERYONE"));
-                    } else {
-                        EssLang.Send(src, "EXPERIENCE_TAKE", -amount, EssLang.Translate("EVERYONE"));
-                    }
-                } else if (!args[1].IsValidPlayerIdentifier) {
-                    return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
-                } else { // Other player
-                    if (!src.HasPermission($"{Permission}.other")) {
-                        return CommandResult.NoPermission($"{Permission}.other");
-                    }
-
-                    var player = args[1].ToPlayer;
-
-                    if (amount >= 0) {
-                        EssLang.Send(src, "EXPERIENCE_GIVEN", amount, player.DisplayName);
-                    } else {
-                        EssLang.Send(src, "EXPERIENCE_TAKE", -amount, player.DisplayName);
-                    }
-
-                    GiveExp(player, amount);
-                }
-            } else {
-                GiveExp(src.ToPlayer(), amount);
-            }
-
-            return CommandResult.Success();
+        public override bool SupportsUser(Type user)
+        {
+            return true;
         }
 
-        private void GiveExp(UPlayer player, int amount) {
-            var playerExp = player.UnturnedPlayer.skills.experience;
+        public override void Execute(ICommandContext context)
+        {
+            if ((context.Parameters.Length < 2 && !(context.User is UnturnedUser)))
+                throw new CommandWrongUsageException();
 
-            if (amount < 0) {
-                if ((playerExp - amount) < 0)
+            var amount = context.Parameters.Get<int>(0);
+
+            if (amount > MAX_INPUT_VALUE || amount < -MAX_INPUT_VALUE)
+            {
+                context.User.SendLocalizedMessage(Translations, "NUMBER_BETWEEN", -MAX_INPUT_VALUE, MAX_INPUT_VALUE);
+                return;
+            }
+
+            if (context.Parameters.Length < 2)
+            {
+                GiveExp(((UnturnedUser) context.User).Player, amount);
+                return;
+            }
+
+            if (context.Parameters[0].Equals("*"))
+            {
+                if (context.User.CheckPermission("Experience.all") != PermissionResult.Grant)
+                    throw new NotEnoughPermissionsException(context.User, "Experience.all");
+
+                var playerManager = context.Container.Resolve<IPlayerManager>();
+
+                playerManager.OnlinePlayers
+                    .Select(c => c as UnturnedPlayer)
+                    .Where(c => c != null)
+                    .ForEach(p => GiveExp(p, amount));
+
+                if (amount >= 0)
+                    context.User.SendLocalizedMessage(Translations, "EXPERIENCE_GIVEN", amount,
+                        Translations.Get("EVERYONE"));
+                else
+                    context.User.SendLocalizedMessage(Translations, "EXPERIENCE_TAKE", -amount,
+                        Translations.Get("EVERYONE"));
+                return;
+            }
+
+            // Other player
+            if (context.User.CheckPermission("Experience.other") != PermissionResult.Grant)
+                throw new NotEnoughPermissionsException(context.User, "Experience.other");
+
+            if (!(context.Parameters.Get<IPlayer>(1) is UnturnedPlayer player))
+                throw new PlayerNameNotFoundException(context.Parameters[1]);
+
+            if (amount >= 0)
+                context.User.SendLocalizedMessage(Translations, "EXPERIENCE_GIVEN", amount, player.DisplayName);
+            else
+                context.User.SendLocalizedMessage(Translations, "EXPERIENCE_TAKE", -amount, player.DisplayName);
+
+            GiveExp(player, amount);
+        }
+
+        private void GiveExp(UnturnedPlayer player, int amount)
+        {
+            var playerExp = player.NativePlayer.skills.experience;
+
+            if (amount < 0)
+            {
+                if (playerExp - amount < 0)
                     playerExp = 0;
                 else
-                    playerExp += (uint) amount;
-            } else {
-                if ((playerExp + amount) > int.MaxValue)
+                    playerExp += (uint)amount;
+            }
+            else
+            {
+                if (playerExp + amount > int.MaxValue)
                     playerExp = int.MaxValue;
                 else
-                    playerExp += (uint) amount;
+                    playerExp += (uint)amount;
             }
 
-            if (amount >= 0) {
-                EssLang.Send(player, "EXPERIENCE_RECEIVED", amount);
-            } else {
-                EssLang.Send(player, "EXPERIENCE_LOST", -amount);
-            }
+            if (amount >= 0)
+                player.User?.SendLocalizedMessage(Translations, "EXPERIENCE_RECEIVED", amount);
+            else
+                player.User?.SendLocalizedMessage(Translations, "EXPERIENCE_LOST", -amount);
 
-            player.Experience = playerExp;
+            player.Entity.Experience = playerExp;
         }
-
     }
-
 }

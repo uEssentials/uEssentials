@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,28 +20,32 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "jump",
         Description = "Teleport to a position that you are looking towards.",
         Usage = "<max_distance>",
         AllowedSource = AllowedSource.PLAYER
     )]
-    public class CommandJump : EssCommand {
-
-        public override void Execute(ICommandContext context) {
+    public class CommandJump : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
             var player = src.ToPlayer();
             var dist = 1000f;
 
-            if (args.Length == 1) {
-                if (!args[0].IsDouble) {
+            if (args.Length == 1)
+            {
+                if (!args[0].IsDouble)
+                {
                     return CommandResult.ShowUsage();
                 }
 
@@ -49,7 +54,8 @@ namespace Essentials.Commands {
 
             var eyePos = player.GetEyePosition(dist);
 
-            if (!eyePos.HasValue) {
+            if (!eyePos.HasValue)
+            {
                 return CommandResult.LangError("JUMP_NO_POSITION");
             }
 
@@ -57,11 +63,9 @@ namespace Essentials.Commands {
             point.y += 6;
 
             player.Teleport(point);
-            EssLang.Send(src, "JUMPED", point.x, point.y, point.z);
+            context.User.SendLocalizedMessage(Translations, "JUMPED", point.x, point.y, point.z);
 
             return CommandResult.Success();
         }
-
     }
-
 }

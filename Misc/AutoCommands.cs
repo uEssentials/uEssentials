@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -27,31 +29,37 @@ using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 
-namespace Essentials.Misc {
-
-    public class AutoCommands {
-
+namespace Essentials.Misc
+{
+    public class AutoCommands
+    {
         public List<AutoCommand> Commands { get; set; }
 
         public bool Enabled { get; set; }
 
-        public void LoadDefaults() {
+        public void LoadDefaults()
+        {
             Enabled = false;
 
-            Commands = new List<AutoCommand> {
-                new AutoCommand {
+            Commands = new List<AutoCommand>
+            {
+                new AutoCommand
+                {
                     Timer = 120,
-                    Commands = new[] { "say \"Be sure to drink your Ovaltine!\" 0 255 255", "item * glue" }
+                    Commands = new[] {"say \"Be sure to drink your Ovaltine!\" 0 255 255", "item * glue"}
                 },
-                new AutoCommand {
+                new AutoCommand
+                {
                     Timer = 900,
-                    Commands = new[] { "clear v", "respawnvehicles" }
+                    Commands = new[] {"clear v", "respawnvehicles"}
                 }
             };
         }
 
-        public void Start() {
-            Commands.ForEach(cmd => {
+        public void Start()
+        {
+            Commands.ForEach(cmd =>
+            {
                 Task.Create()
                     .Id("AutoCommand Executor")
                     .Delay(TimeSpan.FromSeconds(cmd.Timer))
@@ -61,14 +69,11 @@ namespace Essentials.Misc {
             });
         }
 
-        public struct AutoCommand {
-
+        public struct AutoCommand
+        {
             public bool RunOnce;
             public int Timer;
             public string[] Commands;
-
         }
-
     }
-
 }

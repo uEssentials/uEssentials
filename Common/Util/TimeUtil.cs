@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,20 +20,23 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Text;
 using Essentials.I18n;
 
-namespace Essentials.Common.Util {
-
-    public static class TimeUtil {
-
-        public static string FormatSeconds(uint seconds) {
+namespace Essentials.Common.Util
+{
+    public static class TimeUtil
+    {
+        public static string FormatSeconds(uint seconds)
+        {
             var msgSecond = EssLang.Translate("SECOND");
             var msgSeconds = EssLang.Translate("SECONDS");
 
-            if (seconds < 60) {
+            if (seconds < 60)
+            {
                 return $"{seconds} {(seconds == 1 ? msgSecond : msgSeconds)}";
             }
 
@@ -51,7 +55,8 @@ namespace Essentials.Common.Util {
 
             var sb = new StringBuilder();
 
-            if (days > 0) {
+            if (days > 0)
+            {
                 var msgDay = EssLang.Translate("DAY");
                 var msgDays = EssLang.Translate("DAYS");
 
@@ -61,7 +66,8 @@ namespace Essentials.Common.Util {
                     .Append(", ");
             }
 
-            if (hours > 0) {
+            if (hours > 0)
+            {
                 var msgHour = EssLang.Translate("HOUR");
                 var msgHours = EssLang.Translate("HOURS");
 
@@ -71,7 +77,8 @@ namespace Essentials.Common.Util {
                     .Append(", ");
             }
 
-            if (minutes > 0) {
+            if (minutes > 0)
+            {
                 var msgMinute = EssLang.Translate("MINUTE");
                 var msgMinutes = EssLang.Translate("MINUTES");
 
@@ -88,7 +95,5 @@ namespace Essentials.Common.Util {
 
             return sb.ToString().Substring(0, sb.Length - 2);
         }
-
     }
-
 }

@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,23 +20,23 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.IO;
 using Essentials.Api;
 using Essentials.Api.Module;
 
-namespace Essentials.NativeModules {
-
-    public abstract class NativeModule : EssModule {
-
-        protected NativeModule() {
+namespace Essentials.NativeModules
+{
+    public abstract class NativeModule : EssModule
+    {
+        protected NativeModule()
+        {
             Assembly = GetType().Assembly;
             Logger = UEssentials.Logger;
 
             Directory.Delete(Folder, true);
         }
-
     }
-
 }

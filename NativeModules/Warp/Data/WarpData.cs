@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Collections.Generic;
@@ -30,12 +32,14 @@ using Essentials.Common.Util;
 using Essentials.Core.Storage;
 using Newtonsoft.Json;
 
-namespace Essentials.NativeModules.Warp.Data {
-
-    public class WarpData : IData<Dictionary<string, Warp>> {
-
-        private static string DataFilePath {
-            get {
+namespace Essentials.NativeModules.Warp.Data
+{
+    public class WarpData : IData<Dictionary<string, Warp>>
+    {
+        private static string DataFilePath
+        {
+            get
+            {
                 var dataFolder = UEssentials.DataFolder;
                 var filePath = $"{dataFolder}warps.json";
 
@@ -49,20 +53,18 @@ namespace Essentials.NativeModules.Warp.Data {
             }
         }
 
-        public void Save(Dictionary<string, Warp> warps) {
+        public void Save(Dictionary<string, Warp> warps)
+        {
             JsonUtil.Serialize(DataFilePath, warps.Values.ToArray());
         }
 
-        public Dictionary<string, Warp> Load() {
+        public Dictionary<string, Warp> Load()
+        {
             var loadedWarps = new Dictionary<string, Warp>();
             var deserializedWarpArray = JsonConvert.DeserializeObject<Warp[]>(File.ReadAllText(DataFilePath));
 
-            deserializedWarpArray?.ForEach(warp => {
-                loadedWarps.Add(warp.Name.ToLowerInvariant(), warp);
-            });
+            deserializedWarpArray?.ForEach(warp => { loadedWarps.Add(warp.Name.ToLowerInvariant(), warp); });
             return loadedWarps;
         }
-
     }
-
 }

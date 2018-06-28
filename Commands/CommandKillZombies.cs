@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Linq;
@@ -30,28 +32,28 @@ using UnityEngine;
 using Essentials.I18n;
 using Essentials.Common;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "killzombies",
-        Aliases = new[] { "clearzombies" },
+        Aliases = new[] {"clearzombies"},
         Description = "Kill all zombies"
     )]
-    public class CommandKillZombies : EssCommand {
-
-        public override void Execute(ICommandContext context) {
+    public class CommandKillZombies : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
             var killedCount = 0;
 
-            UWorld.Zombies.Where(zombie => !zombie.isDead).ForEach(zombie => {
+            UWorld.Zombies.Where(zombie => !zombie.isDead).ForEach(zombie =>
+            {
                 ZombieManager.sendZombieDead(zombie, Vector3.zero);
                 killedCount++;
             });
 
-            EssLang.Send(src, "KILLED_ZOMBIES", killedCount);
+            context.User.SendLocalizedMessage(Translations, "KILLED_ZOMBIES", killedCount);
 
             return CommandResult.Success();
         }
-
     }
-
 }

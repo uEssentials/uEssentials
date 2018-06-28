@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,32 +20,38 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Globalization;
 using System.Linq;
 using SDG.Unturned;
 
-namespace Essentials.Common.Util {
-
-    public static class VehicleUtil {
-
+namespace Essentials.Common.Util
+{
+    public static class VehicleUtil
+    {
         private static IOrderedEnumerable<VehicleAsset> _cachedAssets;
 
-        public static Optional<VehicleAsset> GetVehicle(ushort id) {
+        public static Optional<VehicleAsset> GetVehicle(ushort id)
+        {
             return Optional<VehicleAsset>.OfNullable((VehicleAsset) Assets.find(EAssetType.VEHICLE, id));
         }
 
-        public static Optional<VehicleAsset> GetVehicle(string name) {
-            if (name == null) {
+        public static Optional<VehicleAsset> GetVehicle(string name)
+        {
+            if (name == null)
+            {
                 return Optional<VehicleAsset>.Empty();
             }
 
-            if (ushort.TryParse(name, out var id)) {
+            if (ushort.TryParse(name, out var id))
+            {
                 return GetVehicle(id);
             }
 
-            if (_cachedAssets == null) {
+            if (_cachedAssets == null)
+            {
                 _cachedAssets = Assets.find(EAssetType.VEHICLE)
                     .Cast<VehicleAsset>()
                     .Where(i => i.vehicleName != null)
@@ -54,24 +61,32 @@ namespace Essentials.Common.Util {
             var lastAsset = null as VehicleAsset;
             var lastPriority = 0;
 
-            foreach (var asset in _cachedAssets) {
+            foreach (var asset in _cachedAssets)
+            {
                 var itemPriority = 0;
                 var vehName = asset.vehicleName;
 
-                if (vehName.EqualsIgnoreCase(name)) {
+                if (vehName.EqualsIgnoreCase(name))
+                {
                     lastAsset = asset;
                     break;
                 }
 
-                if (vehName.StartsWith(name, true, CultureInfo.InvariantCulture)) {
+                if (vehName.StartsWith(name, true, CultureInfo.InvariantCulture))
+                {
                     itemPriority = 3;
-                } else if (vehName.ContainsIgnoreCase(name)) {
+                }
+                else if (vehName.ContainsIgnoreCase(name))
+                {
                     itemPriority = 2;
-                } else if (name.IndexOf(' ') > 0 && name.Split(' ').All(p => vehName.ContainsIgnoreCase(p))) {
+                }
+                else if (name.IndexOf(' ') > 0 && name.Split(' ').All(p => vehName.ContainsIgnoreCase(p)))
+                {
                     itemPriority = 1;
                 }
 
-                if (itemPriority > lastPriority) {
+                if (itemPriority > lastPriority)
+                {
                     lastAsset = asset;
                     lastPriority = itemPriority;
                 }
@@ -79,7 +94,5 @@ namespace Essentials.Common.Util {
 
             return Optional<VehicleAsset>.OfNullable(lastAsset);
         }
-
     }
-
 }

@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Misc;
@@ -26,10 +28,8 @@ using Rocket.Core.Configuration;
 
 namespace Essentials.Configuration
 {
-
     public class EssConfig
     {
-
         public virtual string Locale { get; set; } = "en";
 
         public virtual PrivateMessageSettings PrivateMessage { get; set; } = new PrivateMessageSettings
@@ -113,13 +113,13 @@ namespace Essentials.Configuration
         public virtual AutoAnnouncer AutoAnnouncer { get; set; } = new AutoAnnouncer();
         public virtual AutoCommands AutoCommands { get; set; } = new AutoCommands();
 
-        [ConfigArray(ElementName = "ItemId")]
-        public virtual ushort[] GiveItemBlacklist { get; set; } = new ushort[0];
+        [ConfigArray(ElementName = "ItemId")] public virtual ushort[] GiveItemBlacklist { get; set; } = new ushort[0];
+
         [ConfigArray(ElementName = "VehicleId")]
         public virtual ushort[] VehicleBlacklist { get; set; } = new ushort[0];
 
-        [ConfigArray(ElementName = "System")]
-        public virtual string[] EnabledSystems { get; set; } = { "kits", "warps" };
+        [ConfigArray(ElementName = "System")] public virtual string[] EnabledSystems { get; set; } = {"kits", "warps"};
+
         public class PrivateMessageSettings
         {
             public virtual string FormatFrom { get; set; }
@@ -181,7 +181,5 @@ namespace Essentials.Configuration
             public virtual int ReloadPercentage { get; set; }
             public virtual int RepairPercentage { get; set; }
         }
-
     }
-
 }

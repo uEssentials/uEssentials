@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,51 +20,60 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using SDG.Unturned;
 using Essentials.Api;
 
-namespace Essentials.Components.Player {
-
-    public class ItemFeatures : PlayerComponent {
-
+namespace Essentials.Components.Player
+{
+    public class ItemFeatures : PlayerComponent
+    {
         public bool AutoRepair { get; set; }
         public bool AutoReload { get; set; }
 
         private ushort _lastArrowId;
 
-        protected override void SafeFixedUpdate() {
+        protected override void SafeFixedUpdate()
+        {
             var equip = Player.Equipment;
             var itemInHandId = equip.itemID;
 
-            if (itemInHandId == 0) {
+            if (itemInHandId == 0)
+            {
                 return; // Is not holding anything.
             }
 
-            if (AutoReload && equip.state.Length >= 18) {
+            if (AutoReload && equip.state.Length >= 18)
+            {
                 DoAutoReload(equip, itemInHandId);
             }
 
-            if (AutoRepair) {
+            if (AutoRepair)
+            {
                 DoAutoRepair(equip);
             }
         }
 
-        private void DoAutoRepair(PlayerEquipment equip) {
-            if (equip.quality < UEssentials.Config.ItemFeatures.RepairPercentage) {
+        private void DoAutoRepair(PlayerEquipment equip)
+        {
+            if (equip.quality < UEssentials.Config.ItemFeatures.RepairPercentage)
+            {
                 equip.quality = 100;
                 equip.sendUpdateQuality();
             }
 
             // This is for Barrel.
-            if (equip.state.Length > 16 && equip.state[16] < UEssentials.Config.ItemFeatures.RepairPercentage) {
+            if (equip.state.Length > 16 && equip.state[16] < UEssentials.Config.ItemFeatures.RepairPercentage)
+            {
                 equip.state[16] = 100;
                 equip.sendUpdateState();
             }
         }
-        
-        private void DoAutoReload(PlayerEquipment equip, ushort itemId) {
+
+        private void DoAutoReload(PlayerEquipment equip, ushort itemId)
+        {
             // NOTE:
             //  equip.state[8]  = magazine ID low bytes
             //  equip.state[9]  = magazine ID high bytes
@@ -73,20 +83,31 @@ namespace Essentials.Components.Player {
 
             // Save the last arrow id used by this bow, so we can
             // use the same arrow later.
-            if (ammo == 1 && IsBow(itemId)) {
+            if (ammo == 1 && IsBow(itemId))
+            {
                 _lastArrowId = ammoId;
             }
-            
-            if (HasSingleBullet(itemId)) {
-                if (ammo == 1) {
+
+            if (HasSingleBullet(itemId))
+            {
+                if (ammo == 1)
+                {
                     return;
                 }
-                if (IsBow(itemId)) {
+
+                if (IsBow(itemId))
+                {
                     ammoId = _lastArrowId == 0 ? (ushort) 347 : _lastArrowId;
                     equip.state[17] = 100; // Arrow durability
-                } else if (itemId == 519 || itemId == 3517) { // Lancer & Rocket Launcher
+                }
+                else if (itemId == 519 || itemId == 3517)
+                {
+                    // Lancer & Rocket Launcher
                     ammoId = 520;
-                } else if (itemId == 300) { // Shadowstalker
+                }
+                else if (itemId == 300)
+                {
+                    // Shadowstalker
                     ammoId = 301;
                 }
 
@@ -99,18 +120,22 @@ namespace Essentials.Components.Player {
 
             var magazine = Assets.find(EAssetType.ITEM, ammoId) as ItemMagazineAsset;
 
-            if (magazine == null) {
+            if (magazine == null)
+            {
                 return;
             }
 
-            if (((float) ammo / magazine.amount) * 100 <= UEssentials.Config.ItemFeatures.ReloadPercentage) {
+            if (((float) ammo / magazine.amount) * 100 <= UEssentials.Config.ItemFeatures.ReloadPercentage)
+            {
                 equip.state[10] = magazine.amount;
                 equip.sendUpdateState();
             }
         }
 
-        private bool IsBow(ushort itemId) => (itemId == 346 || itemId == 353 || itemId == 355 || itemId == 356 || itemId == 357);
-        private bool HasSingleBullet(ushort itemId) => IsBow(itemId) || itemId == 519 || itemId == 3517 || itemId == 300;
-    }
+        private bool IsBow(ushort itemId) =>
+            (itemId == 346 || itemId == 353 || itemId == 355 || itemId == 356 || itemId == 357);
 
+        private bool HasSingleBullet(ushort itemId) =>
+            IsBow(itemId) || itemId == 519 || itemId == 3517 || itemId == 300;
+    }
 }

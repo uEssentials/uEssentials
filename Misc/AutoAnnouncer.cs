@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,16 +20,17 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
 using System.Collections.Generic;
 using Essentials.Common.Util;
 
-namespace Essentials.Misc {
-
-    public class AutoAnnouncer {
-
+namespace Essentials.Misc
+{
+    public class AutoAnnouncer
+    {
         public int Interval { get; set; }
 
         public bool RandomMessages { get; set; }
@@ -37,12 +39,14 @@ namespace Essentials.Misc {
 
         public List<string> Messages { get; set; }
 
-        public void LoadDefaults() {
+        public void LoadDefaults()
+        {
             Interval = 30;
             RandomMessages = false;
             Enabled = false;
 
-            Messages = new List<string> {
+            Messages = new List<string>
+            {
                 "<red>Automatic message 1",
                 "<green>Automatic message 2",
                 "<blue>Automatic message 3",
@@ -54,7 +58,8 @@ namespace Essentials.Misc {
         /// <summary>
         /// Start broadcasting
         /// </summary>
-        public void Start() {
+        public void Start()
+        {
             var messageIndex = 0;
             var rand = RandomMessages ? new Random() : null;
 
@@ -62,7 +67,8 @@ namespace Essentials.Misc {
                 .Id("AutoMessage Executor")
                 .Interval(TimeSpan.FromSeconds(Interval))
                 .UseIntervalAsDelay()
-                .Action(() => {
+                .Action(() =>
+                {
                     messageIndex = RandomMessages
                         ? rand.Next(Messages.Count)
                         : (++messageIndex == Messages.Count ? 0 : messageIndex);
@@ -74,7 +80,5 @@ namespace Essentials.Misc {
                 })
                 .Submit();
         }
-
     }
-
 }

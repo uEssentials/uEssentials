@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Collections.Generic;
@@ -30,23 +32,25 @@ using Essentials.Common;
 using Essentials.Common.Util;
 using static Essentials.Commands.MiscCommands;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "tell",
-        Aliases = new[] { "msg", "pm" },
+        Aliases = new[] {"msg", "pm"},
         Description = "Send private message to a player",
         Usage = "[player] [message]",
         MinArgs = 2
     )]
-    public class CommandTell : EssCommand {
-
+    public class CommandTell : EssCommand
+    {
         internal static readonly Dictionary<ulong, ulong> ReplyTo = new Dictionary<ulong, ulong>();
 
-        public override void Execute(ICommandContext context) {
+        public override void Execute(ICommandContext context)
+        {
             var target = args[0].ToPlayer;
 
-            if (target == null) {
+            if (target == null)
+            {
                 return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
             }
 
@@ -69,11 +73,10 @@ namespace Essentials.Commands {
             target.SendMessage(formatFrom, formatFromColor);
             src.SendMessage(formatTo, formatToColor);
 
-            Spies.ForEach(p => {
-                UPlayer.From(p).SendMessage(formatSpy, formatSpyColor);
-            });
+            Spies.ForEach(p => { UPlayer.From(p).SendMessage(formatSpy, formatSpyColor); });
 
-            if (!src.IsConsole) {
+            if (!src.IsConsole)
+            {
                 ReplyTo[target.CSteamId.m_SteamID] = src.ToPlayer().CSteamId.m_SteamID;
             }
 
@@ -81,7 +84,5 @@ namespace Essentials.Commands {
         }
 
         protected override void OnUnregistered() => ReplyTo.Clear();
-
     }
-
 }

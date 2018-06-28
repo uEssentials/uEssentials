@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,39 +20,41 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.NativeModules.Kit.Commands {
-
+namespace Essentials.NativeModules.Kit.Commands
+{
     [CommandInfo(
         Name = "deletekit",
-        Aliases = new[] { "dkit" },
+        Aliases = new[] {"dkit"},
         Description = "Delete a kit.",
         Usage = "[name]"
     )]
-    public class CommandDeleteKit : EssCommand {
-
-        public override void Execute(ICommandContext context) {
-            if (args.IsEmpty) {
+    public class CommandDeleteKit : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
+            if (args.IsEmpty)
+            {
                 return CommandResult.ShowUsage();
             }
 
             var km = KitModule.Instance.KitManager;
 
-            if (!km.Contains(args[0].ToString())) {
+            if (!km.Contains(args[0].ToString()))
+            {
                 return CommandResult.LangError("KIT_NOT_EXIST", args[0]);
             }
 
             km.Remove(km.GetByName(args[0].ToString()));
-            EssLang.Send(src, "DELETED_KIT", args[0]);
+            context.User.SendLocalizedMessage(Translations, "DELETED_KIT", args[0]);
 
             return CommandResult.Success();
         }
-
     }
-
 }

@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,41 +20,46 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "ping",
         Description = "View your/player ping",
         Usage = "<player>"
     )]
-    public class CommandPing : EssCommand {
-
-        public override void Execute(ICommandContext context) {
-            if (args.IsEmpty || args.Length > 1) {
-                if (src.IsConsole) {
+    public class CommandPing : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
+            if (args.IsEmpty || args.Length > 1)
+            {
+                if (src.IsConsole)
+                {
                     return CommandResult.ShowUsage();
                 }
 
-                EssLang.Send(src, "PING", src.ToPlayer().Ping);
-            } else {
+                context.User.SendLocalizedMessage(Translations, "PING", src.ToPlayer().Ping);
+            }
+            else
+            {
                 var target = args[0].ToPlayer;
 
-                if (target == null) {
+                if (target == null)
+                {
                     return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                 }
 
-                EssLang.Send(src, "PING_OTHER", target.DisplayName, target.Ping);
+                context.User.SendLocalizedMessage(Translations, "PING_OTHER", target.DisplayName, target.Ping);
             }
 
             return CommandResult.Success();
         }
-
     }
-
 }

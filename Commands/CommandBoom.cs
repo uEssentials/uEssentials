@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -40,7 +42,7 @@ using Rocket.Unturned.Player;
 
 namespace Essentials.Commands
 {
-    [CommandInfo("boom", 
+    [CommandInfo("boom",
         "Create an explosion on player's/given position",
         Aliases = new[] { "explode" },
         Syntax = "[player | * | x, y, z]")]
@@ -63,11 +65,8 @@ namespace Essentials.Commands
             switch (context.Parameters.Length)
             {
                 case 0:
-                    if (context.User is IConsole)
-                    {
-                        context.SendCommandUsage();
-                        return;
-                    }
+                    if (!(context.User is UnturnedUser))
+                        throw new CommandWrongUsageException();
 
                     var eyePos = player.GetEyePosition(3000);
 
@@ -75,17 +74,20 @@ namespace Essentials.Commands
                     {
                         Explode(eyePos.Value);
                     }
+
                     break;
 
                 case 1:
                     if (context.Parameters[0].Equals("*"))
                     {
-                        playerMgr.OnlinePlayers.Where(p => p != context.User).ForEach(p => Explode(p.GetEntity().Position));
+                        playerMgr.OnlinePlayers.Where(p => p != context.User)
+                            .ForEach(p => Explode(p.GetEntity().Position));
                     }
                     else
                     {
                         Explode(context.Parameters.Get<IPlayer>(0).GetEntity().Position);
                     }
+
                     break;
 
                 case 3:
@@ -105,8 +107,10 @@ namespace Essentials.Commands
             const float DAMAGE = 200;
 
             EffectManager.sendEffect(20, EffectManager.INSANE, pos.ToUnityVector());
-            DamageTool.explode(pos.ToUnityVector(), 10f, EDeathCause.GRENADE, CSteamID.Nil, DAMAGE, DAMAGE, DAMAGE, DAMAGE, DAMAGE,
-                DAMAGE, DAMAGE, DAMAGE, out List<EPlayerKill> unused, EExplosionDamageType.CONVENTIONAL, 32, true, false);
+            DamageTool.explode(pos.ToUnityVector(), 10f, EDeathCause.GRENADE, CSteamID.Nil, DAMAGE, DAMAGE, DAMAGE,
+                DAMAGE, DAMAGE,
+                DAMAGE, DAMAGE, DAMAGE, out List<EPlayerKill> unused, EExplosionDamageType.CONVENTIONAL, 32, true,
+                false);
         }
     }
 }

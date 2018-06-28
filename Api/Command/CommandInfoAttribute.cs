@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -33,6 +35,7 @@ namespace Essentials.Api.Command
             Name = name;
             Summary = summary;
         }
+
         public string Name { get; }
         public string Summary { get; }
         public string[] Aliases { get; set; }

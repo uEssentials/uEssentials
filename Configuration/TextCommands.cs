@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -29,58 +31,68 @@ using Essentials.Api.Configuration;
 using Essentials.Common.Util;
 using Newtonsoft.Json;
 
-namespace Essentials.Configuration {
-
-    public class TextCommands : JsonConfig {
-
+namespace Essentials.Configuration
+{
+    public class TextCommands : JsonConfig
+    {
         public override string FileName => "text_commands.json";
 
         public List<TextCommandData> Commands { get; } = new List<TextCommandData>();
 
-        public override void LoadDefaults() {
-            Commands.Add(new TextCommandData {
+        public override void LoadDefaults()
+        {
+            Commands.Add(new TextCommandData
+            {
                 Name = "rules",
-                Text = new [] {
+                Text = new[]
+                {
                     "<cyan>Be Respectful.",
                     "<cyan>Don't use cheats.",
                     "<cyan>Have fun :D"
                 }
             });
-            Commands.Add(new TextCommandData {
+            Commands.Add(new TextCommandData
+            {
                 Name = "website",
-                Text = new [] {
+                Text = new[]
+                {
                     "<cyan>Our website: github.com/uEssentials"
                 }
             });
         }
 
-        public override void Save(string filePath) {
+        public override void Save(string filePath)
+        {
             JsonUtil.Serialize(filePath, Commands);
         }
 
-        public override void Load(string filePath) {
-            if (File.Exists(filePath)) {
-                try {
+        public override void Load(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                try
+                {
                     JsonConvert.PopulateObject(File.ReadAllText(filePath), Commands);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     UEssentials.Logger.LogError("Failed to load TextCommands.");
                     UEssentials.Logger.LogException(ex);
                     UEssentials.Logger.LogError("Using default...");
                     LoadDefaults();
                 }
-            } else {
+            }
+            else
+            {
                 LoadDefaults();
                 Save(filePath);
-           }
+            }
         }
 
-        public struct TextCommandData {
-
+        public struct TextCommandData
+        {
             public string Name;
             public string[] Text;
-
         }
-
     }
-
 }

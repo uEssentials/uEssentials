@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Linq;
@@ -26,30 +28,32 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.NativeModules.Warp.Commands {
-
+namespace Essentials.NativeModules.Warp.Commands
+{
     [CommandInfo(
         Name = "warps",
         Description = "View available warps"
     )]
-    public class CommandWarps : EssCommand {
-
-        public override void Execute(ICommandContext context) {
+    public class CommandWarps : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
             var warps = (
                 from warp in WarpModule.Instance.WarpManager.Warps
                 where warp.CanBeUsedBy(src)
                 select warp.Name
             ).ToArray();
 
-            if (warps.Length == 0) {
-                EssLang.Send(src, "WARP_NONE");
-            } else {
-                EssLang.Send(src, "WARP_LIST", string.Join(", ", warps));
+            if (warps.Length == 0)
+            {
+                context.User.SendLocalizedMessage(Translations, "WARP_NONE");
+            }
+            else
+            {
+                context.User.SendLocalizedMessage(Translations, "WARP_LIST", string.Join(", ", warps));
             }
 
             return CommandResult.Success();
         }
-
     }
-
 }

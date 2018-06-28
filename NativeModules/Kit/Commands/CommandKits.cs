@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Linq;
@@ -28,39 +30,47 @@ using Essentials.Api.Command.Source;
 using Essentials.Core;
 using Essentials.I18n;
 
-namespace Essentials.NativeModules.Kit.Commands {
-
+namespace Essentials.NativeModules.Kit.Commands
+{
     [CommandInfo(
         Name = "kits",
         Description = "View available kits"
     )]
-    public class CommandKits : EssCommand {
-
-        public override CommandResult OnExecute(ICommandSource source, ICommandArgs parameters) {
+    public class CommandKits : EssCommand
+    {
+        public override CommandResult OnExecute(ICommandSource source, ICommandArgs parameters)
+        {
             var kitConfig = EssCore.Instance.Config.Kit;
             var hasEconomyProvider = UEssentials.EconomyProvider.IsPresent;
 
-            var kits = KitModule.Instance.KitManager.Kits.Where(k => k.CanUse(source)).Select(k => {
-                if (!hasEconomyProvider || !kitConfig.ShowCost || (k.Cost <= 0 && !kitConfig.ShowCostIfZero)) {
+            var kits = KitModule.Instance.KitManager.Kits.Where(k => k.CanUse(source)).Select(k =>
+            {
+                if (!hasEconomyProvider || !kitConfig.ShowCost || (k.Cost <= 0 && !kitConfig.ShowCostIfZero))
+                {
                     return k.Name;
                 }
-                return string.Format(kitConfig.CostFormat, k.Name, k.Cost, UEssentials.EconomyProvider.Value.CurrencySymbol);
+
+                return string.Format(kitConfig.CostFormat, k.Name, k.Cost,
+                    UEssentials.EconomyProvider.Value.CurrencySymbol);
             }).ToList();
 
 
-            if (kits.Count == 0) {
+            if (kits.Count == 0)
+            {
                 // Prevent confusion when there are no kits defined
-                if (KitModule.Instance.KitManager.Count == 0) {
+                if (KitModule.Instance.KitManager.Count == 0)
+                {
                     return CommandResult.LangError("KIT_NONE_DEFINED");
                 }
+
                 EssLang.Send(source, "KIT_NONE");
-            } else {
+            }
+            else
+            {
                 EssLang.Send(source, "KIT_LIST", string.Join(", ", kits.ToArray()));
             }
 
             return CommandResult.Success();
         }
-
     }
-
 }

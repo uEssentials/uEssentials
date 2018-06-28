@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Collections.Generic;
@@ -28,13 +30,13 @@ using Essentials.CodeAnalysis;
 using Essentials.I18n;
 using Essentials.NativeModules.Kit.Item;
 
-namespace Essentials.NativeModules.Kit {
-
+namespace Essentials.NativeModules.Kit
+{
     /// <summary>
     /// Author: leonardosnt
     /// </summary>
-    public class Kit {
-
+    public class Kit
+    {
         /// <summary>
         /// Name of kit (obviously)
         /// </summary>
@@ -67,7 +69,8 @@ namespace Essentials.NativeModules.Kit {
         ///     Flag that determines if cooldown will be reseted when player die
         /// </param>
         /// </summary>
-        public Kit([NotNull] string name, uint cooldown, bool resetCooldownWhenDie) {
+        public Kit([NotNull] string name, uint cooldown, bool resetCooldownWhenDie)
+        {
             Name = name;
             Cooldown = cooldown;
             ResetCooldownWhenDie = resetCooldownWhenDie;
@@ -75,24 +78,28 @@ namespace Essentials.NativeModules.Kit {
         }
 
         public Kit(string name, uint cooldown, decimal cost, bool resetCooldownWhenDie)
-            : this(name, cooldown, resetCooldownWhenDie) {
+            : this(name, cooldown, resetCooldownWhenDie)
+        {
             Cost = cost;
         }
 
         /// <summary>
         /// <returns> Check if <paramref name="src"/>> has permission for this kit. </returns>
         /// </summary>
-        public bool CanUse(ICommandSource src) {
+        public bool CanUse(ICommandSource src)
+        {
             return src.HasPermission($"essentials.kit.{Name.ToLowerInvariant()}");
         }
 
         /// <summary>
         /// Give this kit to player
         /// </summary>
-        public void GiveTo(UPlayer player) {
+        public void GiveTo(UPlayer player)
+        {
             var sentInventoryFullMessage = false;
 
-            foreach (var kitItem in Items) {
+            foreach (var kitItem in Items)
+            {
                 var added = kitItem.GiveTo(player);
 
                 if (added || sentInventoryFullMessage) continue;
@@ -103,7 +110,5 @@ namespace Essentials.NativeModules.Kit {
 
             EssLang.Send(player, "KIT_GIVEN_RECEIVER", Name);
         }
-
     }
-
 }

@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Linq;
@@ -30,28 +32,28 @@ using SDG.Unturned;
 using UnityEngine;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "killanimals",
-        Aliases = new[] { "clearanimals" },
+        Aliases = new[] {"clearanimals"},
         Description = "Kill all animals"
     )]
-    public class CommandKillAnimals : EssCommand {
-
-        public override void Execute(ICommandContext context) {
+    public class CommandKillAnimals : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
             var killedCount = 0;
 
-            UWorld.Animals.Where(animal => !animal.isDead).ForEach(animal => {
+            UWorld.Animals.Where(animal => !animal.isDead).ForEach(animal =>
+            {
                 AnimalManager.sendAnimalDead(animal, Vector3.zero);
                 killedCount++;
             });
 
-            EssLang.Send(src, "KILLED_ANIMALS", killedCount);
+            context.User.SendLocalizedMessage(Translations, "KILLED_ANIMALS", killedCount);
 
             return CommandResult.Success();
         }
-
     }
-
 }

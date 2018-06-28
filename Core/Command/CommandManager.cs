@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -37,10 +39,10 @@ using Rocket.Core;
 using Rocket.Core.Commands;
 using SDG.Unturned;
 
-namespace Essentials.Core.Command {
-
-    internal class CommandManager : ICommandManager {
-
+namespace Essentials.Core.Command
+{
+    internal class CommandManager : ICommandManager
+    {
         private Dictionary<string, ICommand> CommandMap { get; }
 
         private readonly List<RocketCommandManager.RegisteredRocketCommand> _rocketCommands;
@@ -49,33 +51,41 @@ namespace Essentials.Core.Command {
 
         public IEnumerable<ICommand> Commands => CommandMap.Values;
 
-        internal CommandManager() {
+        internal CommandManager()
+        {
             CommandMap = new Dictionary<string, ICommand>();
             var commandsField = ReflectUtil.GetField(R.Commands.GetType(), "commands");
             _rocketCommands = (List<RocketCommandManager.RegisteredRocketCommand>) commandsField.GetValue(R.Commands);
         }
 
-        public ICommand GetByName([NotNull] string name, bool includeAliases = true) {
-            if (CommandMap.TryGetValue(name.ToLowerInvariant(), out var command)) {
+        public ICommand GetByName([NotNull] string name, bool includeAliases = true)
+        {
+            if (CommandMap.TryGetValue(name.ToLowerInvariant(), out var command))
+            {
                 return command;
             }
+
             return GetWhere(cmd => cmd.Name.EqualsIgnoreCase(name));
         }
 
-        public ICommand GetByType(Type commandType) {
+        public ICommand GetByType(Type commandType)
+        {
             return GetWhere(command => command.Command.GetType() == commandType);
         }
 
-        public TCommandType GetByType<TCommandType>() where TCommandType : ICommand {
+        public TCommandType GetByType<TCommandType>() where TCommandType : ICommand
+        {
             return (TCommandType) GetByType(typeof(TCommandType));
         }
 
-        public void Register([NotNull] ICommand command) {
+        public void Register([NotNull] ICommand command)
+        {
             Preconditions.NotNull(command.Name, "Command name cannot be null");
 
             var name = command.Name.ToLowerInvariant();
 
-            if (CommandMap.ContainsKey(name)) {
+            if (CommandMap.ContainsKey(name))
+            {
                 UEssentials.Logger.LogError(
                     $"Could not register '{command.GetType().Name}' because there is already a command called '{name}'");
                 return;
@@ -88,7 +98,8 @@ namespace Essentials.Core.Command {
 
             Debug.WriteLine($"Registered '{command}'", "CommandManager");
 
-            if (command is EssCommand) {
+            if (command is EssCommand)
+            {
                 _onRegisteredMethod?.Invoke(command, ReflectUtil.EMPTY_ARGS);
             }
 
@@ -96,69 +107,84 @@ namespace Essentials.Core.Command {
             if (command.Aliases == null || command.Aliases.Length == 0)
                 return;
 
-            foreach (var alias in command.Aliases) {
+            foreach (var alias in command.Aliases)
+            {
                 _rocketCommands.Add(new RocketCommandManager.RegisteredRocketCommand(
                     alias.ToLowerInvariant(), new CommandAdapter.CommandAliasAdapter(command, alias)));
             }
         }
 
-        public void Register<TCommandType>() where TCommandType : ICommand {
+        public void Register<TCommandType>() where TCommandType : ICommand
+        {
             Register((ICommand) EssCore.Instance.CommonInstancePool.GetOrCreate(typeof(TCommandType)));
         }
 
-        public void Register([NotNull] Func<ICommandSource, ICommandArgs, CommandResult> method) {
+        public void Register([NotNull] Func<ICommandSource, ICommandArgs, CommandResult> method)
+        {
             Register(new MethodCommand(method));
         }
 
-        public void Register([NotNull] Func<ICommandSource, ICommandArgs, ICommand, CommandResult> method) {
+        public void Register([NotNull] Func<ICommandSource, ICommandArgs, ICommand, CommandResult> method)
+        {
             Register(new MethodCommand(method));
         }
 
-        public void RegisterAll([NotNull] Assembly assembly) {
+        public void RegisterAll([NotNull] Assembly assembly)
+        {
             RegisterAllWhere(assembly, type => true);
         }
 
-        public void RegisterAll(string targetNamespace) {
+        public void RegisterAll(string targetNamespace)
+        {
             RegisterAllWhere(
                 GetType().Assembly,
                 type => type.Namespace.EqualsIgnoreCase(targetNamespace)
             );
         }
 
-        public void Unregister(Type commandType) {
+        public void Unregister(Type commandType)
+        {
             UnregisterWhere(command => command.Command.GetType() == commandType);
         }
 
-        public void UnregisterAll([NotNull] Assembly assembly) {
+        public void UnregisterAll([NotNull] Assembly assembly)
+        {
             UnregisterWhere(command => Equals(command.GetType().Assembly, assembly));
         }
 
-        public void UnregisterAll(string targetNamespace) {
+        public void UnregisterAll(string targetNamespace)
+        {
             UnregisterWhere(command =>
                 command.GetType().Namespace.EqualsIgnoreCase(targetNamespace));
         }
 
-        public void Unregister<TCommandType>() where TCommandType : ICommand {
+        public void Unregister<TCommandType>() where TCommandType : ICommand
+        {
             UnregisterWhere(command => command.Command is TCommandType);
         }
 
-        public void Unregister(ICommand targetCommand) {
+        public void Unregister(ICommand targetCommand)
+        {
             UnregisterWhere(command => command.Command == targetCommand);
         }
 
-        public bool HasWithName([NotNull] string commandName) {
-            return HasWith(command => {
+        public bool HasWithName([NotNull] string commandName)
+        {
+            return HasWith(command =>
+            {
                 var rocketCommand = command as IRocketCommand;
 
                 // Search in Rocket commands
-                if (rocketCommand != null) {
+                if (rocketCommand != null)
+                {
                     return rocketCommand.Name.EqualsIgnoreCase(commandName);
                 }
 
                 var unturnedCommand = command as SDG.Unturned.Command;
 
                 // If not found, then search in Unturned & Essentials commands
-                if (unturnedCommand != null) {
+                if (unturnedCommand != null)
+                {
                     return unturnedCommand.command.EqualsIgnoreCase(commandName);
                 }
 
@@ -166,52 +192,66 @@ namespace Essentials.Core.Command {
             });
         }
 
-        public bool HasWithType<TCommandType>() where TCommandType : ICommand {
+        public bool HasWithType<TCommandType>() where TCommandType : ICommand
+        {
             return HasWith(command => (command as CommandAdapter)?.Command is TCommandType);
         }
 
-        private void ApplyCommandOptions(ICommand command) {
+        private void ApplyCommandOptions(ICommand command)
+        {
             var name = command.Name.ToLowerInvariant();
 
-            if (!EssCore.Instance.CommandOptions.Commands.TryGetValue(name, out var cmdEntry)) {
+            if (!EssCore.Instance.CommandOptions.Commands.TryGetValue(name, out var cmdEntry))
+            {
                 return;
             }
 
-            if (cmdEntry.OverridedAliases != null) {
+            if (cmdEntry.OverridedAliases != null)
+            {
                 command.Aliases = cmdEntry.OverridedAliases;
-            } else if (cmdEntry.CustomAliases != null) {
+            }
+            else if (cmdEntry.CustomAliases != null)
+            {
                 command.Aliases = command.Aliases.Concat(cmdEntry.CustomAliases).ToArray();
             }
 
-            if (cmdEntry.Description != null) {
+            if (cmdEntry.Description != null)
+            {
                 command.Description = cmdEntry.Description;
             }
 
-            if (cmdEntry.Usage != null) {
+            if (cmdEntry.Usage != null)
+            {
                 command.Usage = cmdEntry.Usage;
             }
         }
 
-        private static bool HasWith(Func<object, bool> predicate) {
+        private static bool HasWith(Func<object, bool> predicate)
+        {
             return R.Commands.Commands.Any(command => predicate(command)) ||
                    Commander.commands.Any(command => predicate(command));
         }
 
-        private void UnregisterWhere(Func<CommandAdapter, bool> predicate) {
-            _rocketCommands.RemoveAll(cmd => {
+        private void UnregisterWhere(Func<CommandAdapter, bool> predicate)
+        {
+            _rocketCommands.RemoveAll(cmd =>
+            {
                 var cmdAdapter = cmd.Command as CommandAdapter;
                 if (cmdAdapter == null || !predicate(cmdAdapter)) return false;
 
                 var command = cmdAdapter.Command;
-                if (command is EssCommand) {
+                if (command is EssCommand)
+                {
                     _onUnregisteredMethod?.Invoke(command, ReflectUtil.EMPTY_ARGS);
                 }
+
                 CommandMap.Remove(command.Name.ToLowerInvariant());
                 return true;
             });
         }
 
-        private void RegisterAllWhere(Assembly asm, Predicate<Type> filter) {
+        private void RegisterAllWhere(Assembly asm, Predicate<Type> filter)
+        {
             // Register classes that represents commands
             (
                 from type in asm.GetTypes()
@@ -221,11 +261,14 @@ namespace Essentials.Core.Command {
             ).ForEach(Register);
 
             // Register methods that represents commands
-            T createDelegate<T>(object obj, MethodInfo method) where T : class {
+            T createDelegate<T>(object obj, MethodInfo method) where T : class
+            {
                 return obj == null
                     ? Delegate.CreateDelegate(typeof(T), method) as T
                     : Delegate.CreateDelegate(typeof(T), obj, method.Name) as T;
-            };
+            }
+
+            ;
 
             (
                 from type in asm.GetTypes()
@@ -233,11 +276,15 @@ namespace Essentials.Core.Command {
                 from method in type.GetMethods(ReflectUtil.STATIC_INSTANCE_FLAGS)
                 where ReflectUtil.GetAttributeFrom<CommandInfoAttribute>(method) != null
                 select method
-            ).ForEach(method => {
-                var inst = method.IsStatic ? null : EssCore.Instance.CommonInstancePool.GetOrCreate(method.DeclaringType);
+            ).ForEach(method =>
+            {
+                var inst = method.IsStatic
+                    ? null
+                    : EssCore.Instance.CommonInstancePool.GetOrCreate(method.DeclaringType);
                 var methodParams = method.GetParameters();
 
-                if (method.ReturnType != typeof(CommandResult)) {
+                if (method.ReturnType != typeof(CommandResult))
+                {
                     UEssentials.Logger.LogError($"Invalid method signature in '{method}'. " +
                                                 "Expected CommandResult as return type");
                     return;
@@ -248,7 +295,8 @@ namespace Essentials.Core.Command {
                     methodParams.Length == 2 &&
                     methodParams[0].ParameterType == typeof(ICommandSource) &&
                     methodParams[1].ParameterType == typeof(ICommandArgs)
-                ) {
+                )
+                {
                     Register(createDelegate<Func<ICommandSource, ICommandArgs, CommandResult>>(inst, method));
                     return;
                 }
@@ -259,7 +307,8 @@ namespace Essentials.Core.Command {
                     methodParams[0].ParameterType == typeof(ICommandSource) &&
                     methodParams[1].ParameterType == typeof(ICommandArgs) &&
                     methodParams[2].ParameterType == typeof(ICommand)
-                ) {
+                )
+                {
                     Register(createDelegate<Func<ICommandSource, ICommandArgs, ICommand, CommandResult>>(inst, method));
                     return;
                 }
@@ -269,7 +318,8 @@ namespace Essentials.Core.Command {
             });
         }
 
-        private ICommand GetWhere(Func<CommandAdapter, bool> predicate) {
+        private ICommand GetWhere(Func<CommandAdapter, bool> predicate)
+        {
             return (
                 from command in _rocketCommands
                 where command.Command is CommandAdapter
@@ -278,7 +328,5 @@ namespace Essentials.Core.Command {
                 select cmdAdapter.Command
             ).FirstOrDefault();
         }
-
     }
-
 }

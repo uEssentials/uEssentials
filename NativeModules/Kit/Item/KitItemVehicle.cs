@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,32 +20,33 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Unturned;
 using Newtonsoft.Json;
 using SDG.Unturned;
 
-namespace Essentials.NativeModules.Kit.Item {
+namespace Essentials.NativeModules.Kit.Item
+{
+    public class KitItemVehicle : AbstractKitItem
+    {
+        [JsonProperty("Vehicle")] public ushort Id { get; set; }
 
-    public class KitItemVehicle : AbstractKitItem {
-
-        [JsonProperty("Vehicle")]
-        public ushort Id { get; set; }
-
-        public KitItemVehicle(ushort id) {
+        public KitItemVehicle(ushort id)
+        {
             Id = id;
         }
 
-        public override bool GiveTo(UPlayer player, bool dropIfInventoryFull = true) {
+        public override bool GiveTo(UPlayer player, bool dropIfInventoryFull = true)
+        {
             VehicleTool.giveVehicle(player.UnturnedPlayer, Id);
             return true;
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return $"Vehicle: {Id}";
         }
-
     }
-
 }

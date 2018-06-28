@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -35,30 +37,34 @@ using Rocket.Core.Player;
 using Rocket.UnityEngine.Extensions;
 using Rocket.Unturned.Player;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo("back",
         "Return to position of your death.",
-        Aliases = new[] { "ret" }
+        Aliases = new[] {"ret"}
     )]
-    public class CommandBack : EssCommand {
-
+    public class CommandBack : EssCommand
+    {
         internal const string META_KEY_DELAY = "back_delay";
         internal const string META_KEY_POS = "back_pos";
 
-        public override void Execute(ICommandContext context) {
-            var player = ((UnturnedUser)context.User).Player;
+        public override void Execute(ICommandContext context)
+        {
+            var player = ((UnturnedUser) context.User).Player;
             var playerMeta = player.Container.Resolve<IMetadataStore>();
 
-            if (!playerMeta.Has(META_KEY_POS) || !playerMeta.Has(META_KEY_DELAY)) {
+            if (!playerMeta.Has(META_KEY_POS) || !playerMeta.Has(META_KEY_DELAY))
+            {
                 throw new CommandWrongUsageException(Translations.Get("NOT_DIED_YET"));
             }
 
             var deathTime = playerMeta.Get<DateTime>(META_KEY_DELAY);
             var delta = UEssentials.ConfigurationInstance.BackDelay - (DateTime.Now - deathTime).Seconds;
 
-            if (delta > 0 && player.CheckPermission("essentials.bypass.backdelay") != PermissionResult.Grant) {
-                throw new CommandWrongUsageException(Translations.Get("BACK_DELAY", TimeUtil.FormatSeconds((uint)delta)));
+            if (delta > 0 && player.CheckPermission("essentials.bypass.backdelay") != PermissionResult.Grant)
+            {
+                throw new CommandWrongUsageException(Translations.Get("BACK_DELAY",
+                    TimeUtil.FormatSeconds((uint) delta)));
             }
 
             var backPosition = playerMeta.Get<Vector3>(META_KEY_POS);

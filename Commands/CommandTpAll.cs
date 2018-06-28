@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Collections.Generic;
@@ -29,52 +31,58 @@ using Essentials.Api.Unturned;
 using UnityEngine;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "tpall",
         Description = "Teleport all players to a player/position",
         Usage = "[player/x y z]"
     )]
-    public class CommandTpAll : EssCommand {
-
-        public override void Execute(ICommandContext context) {
+    public class CommandTpAll : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
             var players = UServer.Players.ToList();
 
-            if (players.Count == (src.IsConsole ? 0 : 1)) {
+            if (players.Count == (src.IsConsole ? 0 : 1))
+            {
                 return CommandResult.LangError("NO_PLAYERS_FOR_TELEPORT");
             }
 
-            switch (args.Length) {
+            switch (args.Length)
+            {
                 case 0:
-                    if (src.IsConsole) {
+                    if (src.IsConsole)
+                    {
                         return CommandResult.ShowUsage();
                     }
 
                     TeleportAll(src.ToPlayer().Position, players);
-                    EssLang.Send(src, "TELEPORTED_ALL_YOU");
+                    context.User.SendLocalizedMessage(Translations, "TELEPORTED_ALL_YOU");
                     break;
 
                 case 1:
-                    if (!UPlayer.TryGet(args[0].ToString(), out var player)) {
+                    if (!UPlayer.TryGet(args[0].ToString(), out var player))
+                    {
                         return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                     }
 
                     TeleportAll(player.Position, players);
-                    EssLang.Send(src, "TELEPORTED_ALL_PLAYER", player.DisplayName);
+                    context.User.SendLocalizedMessage(Translations, "TELEPORTED_ALL_PLAYER", player.DisplayName);
                     break;
 
                 case 3:
                     var vec3 = args.GetVector3(0);
 
-                    if (!vec3.HasValue) {
+                    if (!vec3.HasValue)
+                    {
                         return CommandResult.LangError("INVALID_COORDS", src, args[0], args[1], args[2]);
                     }
 
                     var pos = vec3.Value;
 
                     TeleportAll(pos, players);
-                    EssLang.Send(src, "TELEPORTED_ALL_COORDS", pos.x);
+                    context.User.SendLocalizedMessage(Translations, "TELEPORTED_ALL_COORDS", pos.x);
                     break;
 
                 default:
@@ -84,10 +92,9 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
-        private void TeleportAll(Vector3 pos, List<UPlayer> players) {
+        private void TeleportAll(Vector3 pos, List<UPlayer> players)
+        {
             players.ForEach(player => player.UnturnedPlayer.sendTeleport(pos, 0));
         }
-
     }
-
 }

@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Linq;
@@ -28,8 +30,8 @@ using Essentials.Api.Unturned;
 using Essentials.Components.Player;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "unfreeze",
         Usage = "[player/*]",
@@ -37,32 +39,40 @@ namespace Essentials.Commands {
         MinArgs = 1,
         MaxArgs = 1
     )]
-    public class CommandUnfreeze : EssCommand {
-
-        public override void Execute(ICommandContext context) {
-            if (args[0].Equals("*")) {
-                foreach (var player in UServer.Players.Where(player => player.HasComponent<FrozenPlayer>())) {
+    public class CommandUnfreeze : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
+            if (args[0].Equals("*"))
+            {
+                foreach (var player in UServer.Players.Where(player => player.HasComponent<FrozenPlayer>()))
+                {
                     player.RemoveComponent<FrozenPlayer>();
                     EssLang.Send(player, "UNFROZEN_PLAYER", src.DisplayName);
                 }
 
-                EssLang.Send(src, "UNFROZEN_ALL");
-            } else if (args[0].IsValidPlayerIdentifier) {
+                context.User.SendLocalizedMessage(Translations, "UNFROZEN_ALL");
+            }
+            else if (args[0].IsValidPlayerIdentifier)
+            {
                 var target = args[0].ToPlayer;
 
-                if (!target.HasComponent<FrozenPlayer>()) {
+                if (!target.HasComponent<FrozenPlayer>())
+                {
                     return CommandResult.LangError("NOT_FROZEN", target.DisplayName);
                 }
+
                 target.RemoveComponent<FrozenPlayer>();
 
-                EssLang.Send(src, "UNFROZEN_SENDER", target.DisplayName);
+                context.User.SendLocalizedMessage(Translations, "UNFROZEN_SENDER", target.DisplayName);
                 EssLang.Send(target, "UNFROZEN_PLAYER", src.DisplayName);
-            } else {
+            }
+            else
+            {
                 return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
             }
+
             return CommandResult.Success();
         }
-
     }
-
 }

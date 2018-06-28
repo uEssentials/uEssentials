@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Linq;
@@ -29,53 +31,62 @@ using Essentials.Common;
 using Essentials.I18n;
 using SDG.Unturned;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "refuelvehicle",
-        Aliases = new[] { "refuel" },
+        Aliases = new[] {"refuel"},
         Description = "Refuel current/all vehicles",
         Usage = "<all>",
         MaxArgs = 1
     )]
-    public class CommandRefuelVehicle : EssCommand {
-
-        public override void Execute(ICommandContext context) {
-            if (args.IsEmpty) {
-                if (src.IsConsole) {
+    public class CommandRefuelVehicle : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
+            if (args.IsEmpty)
+            {
+                if (src.IsConsole)
+                {
                     return CommandResult.ShowUsage();
                 }
 
                 var currentVeh = src.ToPlayer().CurrentVehicle;
 
-                if (currentVeh != null) {
+                if (currentVeh != null)
+                {
                     RefuelVehicle(currentVeh);
-                    EssLang.Send(src, "VEHICLE_REFUELED");
-                } else {
+                    context.User.SendLocalizedMessage(Translations, "VEHICLE_REFUELED");
+                }
+                else
+                {
                     return CommandResult.LangError("NOT_IN_VEHICLE");
                 }
-            } else if (args[0].Equals("all")) {
-                if (!src.HasPermission($"{Permission}.all")) {
+            }
+            else if (args[0].Equals("all"))
+            {
+                if (!src.HasPermission($"{Permission}.all"))
+                {
                     return CommandResult.NoPermission($"{Permission}.all");
                 }
 
-                lock (UWorld.Vehicles) {
+                lock (UWorld.Vehicles)
+                {
                     UWorld.Vehicles
                         .Where(veh => !veh.isExploded && !veh.isUnderwater)
                         .ForEach(RefuelVehicle);
 
-                    EssLang.Send(src, "VEHICLE_REFUELED_ALL");
+                    context.User.SendLocalizedMessage(Translations, "VEHICLE_REFUELED_ALL");
                 }
             }
 
             return CommandResult.Success();
         }
 
-        private void RefuelVehicle(InteractableVehicle veh) {
+        private void RefuelVehicle(InteractableVehicle veh)
+        {
             VehicleManager.instance.channel.send("tellVehicleFuel", ESteamCall.ALL,
                 ESteamPacket.UPDATE_UNRELIABLE_BUFFER, veh.instanceID, veh.asset.fuel);
         }
-
     }
-
 }

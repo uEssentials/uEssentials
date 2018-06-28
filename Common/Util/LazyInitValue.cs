@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,24 +20,29 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
-namespace Essentials.Common.Util {
-
-    public abstract class LazyInitValue<TValue> {
-
+namespace Essentials.Common.Util
+{
+    public abstract class LazyInitValue<TValue>
+    {
         private TValue _backingValue;
         private bool _initialized;
 
         /// <summary>
         /// Get or initalize the value.
         /// </summary>
-        public TValue Value {
-            get {
-                if (!_initialized) {
+        public TValue Value
+        {
+            get
+            {
+                if (!_initialized)
+                {
                     _backingValue = Init();
                     _initialized = true;
                 }
+
                 return _backingValue;
             }
         }

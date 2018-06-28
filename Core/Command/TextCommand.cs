@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Collections.Generic;
@@ -31,10 +33,10 @@ using Essentials.Common.Util;
 using Essentials.Configuration;
 using UnityEngine;
 
-namespace Essentials.Core.Command {
-
-    internal class TextCommand : ICommand {
-
+namespace Essentials.Core.Command
+{
+    internal class TextCommand : ICommand
+    {
         public string Name { get; internal set; }
         public string Usage { get; set; }
         public string[] Aliases { get; set; }
@@ -45,7 +47,8 @@ namespace Essentials.Core.Command {
         private readonly List<CommandEntry> _commands;
         private readonly List<TextEntry> _texts;
 
-        public TextCommand(TextCommands.TextCommandData data) {
+        public TextCommand(TextCommands.TextCommandData data)
+        {
             _texts = new List<TextEntry>();
             _commands = new List<CommandEntry>();
             Name = data.Name;
@@ -55,56 +58,70 @@ namespace Essentials.Core.Command {
             AllowedSource = AllowedSource.BOTH;
             Permission = $"essentials.textcommand.{Name}";
 
-            data.Text.ForEach(txt => {
-                if (txt.StartsWith("console_execute:")) {
-                    _commands.Add(new CommandEntry {
+            data.Text.ForEach(txt =>
+            {
+                if (txt.StartsWith("console_execute:"))
+                {
+                    _commands.Add(new CommandEntry
+                    {
                         IsConsoleExecutor = true,
                         Command = txt.Substring(16)
                     });
                     return;
                 }
-                if (txt.StartsWith("execute:")) {
-                    _commands.Add(new CommandEntry {
+
+                if (txt.StartsWith("execute:"))
+                {
+                    _commands.Add(new CommandEntry
+                    {
                         IsConsoleExecutor = false,
                         Command = txt.Substring(8)
                     });
                     return;
                 }
+
                 var color = ColorUtil.GetColorFromString(ref txt);
-                _texts.Add(new TextEntry { Text = txt, Color = color });
+                _texts.Add(new TextEntry {Text = txt, Color = color});
             });
         }
 
-        public CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            foreach (var entry in _texts) {
+        public CommandResult OnExecute(ICommandSource src, ICommandArgs args)
+        {
+            foreach (var entry in _texts)
+            {
                 src.SendMessage(ReplaceVariables(entry.Text, src, args), entry.Color);
             }
-            foreach (var entry in _commands) {
+
+            foreach (var entry in _commands)
+            {
                 var source = entry.IsConsoleExecutor ? UEssentials.ConsoleSource : src;
                 source.DispatchCommand(ReplaceVariables(entry.Command, src, args));
             }
+
             return CommandResult.Success();
         }
 
-        private string ReplaceVariables(string text, ICommandSource src, ICommandArgs args) {
+        private string ReplaceVariables(string text, ICommandSource src, ICommandArgs args)
+        {
             return text.Replace("%sender%", src.DisplayName);
         }
 
-        private struct TextEntry {
+        private struct TextEntry
+        {
             public string Text;
             public Color Color;
         }
 
-        private struct CommandEntry {
+        private struct CommandEntry
+        {
             public bool IsConsoleExecutor;
             public string Command;
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             var text = MiscUtil.ValuesToString(_texts.Select(t => t.Text).ToArray());
             return $"TextCommand {{Name: {Name}, Text: {text}}}";
         }
-
     }
-
 }

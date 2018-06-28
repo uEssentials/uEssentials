@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,32 +20,39 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
 using Essentials.Api.Unturned;
 using UnityEngine;
 
-namespace Essentials.Components.Player {
-
-    public abstract class PlayerComponent : MonoBehaviour {
-
+namespace Essentials.Components.Player
+{
+    public abstract class PlayerComponent : MonoBehaviour
+    {
         public UPlayer Player;
 
-        protected PlayerComponent() {
+        protected PlayerComponent()
+        {
             Player = UPlayer.From(GetComponent<SDG.Unturned.Player>());
         }
 
-        protected virtual void FixedUpdate() {
-            try {
+        protected virtual void FixedUpdate()
+        {
+            try
+            {
                 SafeFixedUpdate();
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 Player.RemoveComponent(GetType());
                 throw;
             }
         }
 
-        protected virtual void SafeFixedUpdate() {}
+        protected virtual void SafeFixedUpdate()
+        {
+        }
     }
-
 }

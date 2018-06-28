@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Collections.Generic;
@@ -27,19 +29,21 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "kickall",
         Description = "Kick all players",
         Usage = "<reason>"
     )]
-    public class CommandKickAll : EssCommand {
-
-        public override void Execute(ICommandContext context) {
+    public class CommandKickAll : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
             var players = new List<UPlayer>(UServer.Players);
 
-            if (players.Count == 0) {
+            if (players.Count == 0)
+            {
                 return CommandResult.LangError("NO_PLAYERS_FOR_KICK");
             }
 
@@ -47,15 +51,11 @@ namespace Essentials.Commands {
                 ? EssLang.Translate("KICK_NO_SPECIFIED_REASON")
                 : args.Join(0);
 
-            players.ForEach(player => {
-                player.Kick(reason);
-            });
+            players.ForEach(player => { player.Kick(reason); });
 
-            EssLang.Send(src, "KICKED_ALL", players.Count);
+            context.User.SendLocalizedMessage(Translations, "KICKED_ALL", players.Count);
 
             return CommandResult.Success();
         }
-
     }
-
 }

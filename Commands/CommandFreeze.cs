@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Linq;
@@ -31,8 +33,8 @@ using Essentials.Components.Player;
 using Essentials.Event.Handling;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "freeze",
         Usage = "[player/*]",
@@ -40,29 +42,38 @@ namespace Essentials.Commands {
         MinArgs = 1,
         MaxArgs = 1
     )]
-    public class CommandFreeze : EssCommand {
-
-        public override void Execute(ICommandContext context) {
-            if (args[0].Equals("*")) {
+    public class CommandFreeze : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
+            if (args[0].Equals("*"))
+            {
                 UServer.Players
                     .Where(player => !player.HasComponent<FrozenPlayer>())
-                    .ForEach(player => {
+                    .ForEach(player =>
+                    {
                         player.AddComponent<FrozenPlayer>();
                         EssLang.Send(player, "FROZEN_PLAYER", src.DisplayName);
                     });
 
-                EssLang.Send(src, "FROZEN_ALL");
-            } else {
-                if (!UPlayer.TryGet(args[0].ToString(), out var player)) {
+                context.User.SendLocalizedMessage(Translations, "FROZEN_ALL");
+            }
+            else
+            {
+                if (!UPlayer.TryGet(args[0].ToString(), out var player))
+                {
                     return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                 }
 
-                if (player.HasComponent<FrozenPlayer>()) {
-                    EssLang.Send(src, "ALREADY_FROZEN", player.DisplayName);
-                } else {
+                if (player.HasComponent<FrozenPlayer>())
+                {
+                    context.User.SendLocalizedMessage(Translations, "ALREADY_FROZEN", player.DisplayName);
+                }
+                else
+                {
                     player.AddComponent<FrozenPlayer>();
 
-                    EssLang.Send(src, "FROZEN_SENDER", player.DisplayName);
+                    context.User.SendLocalizedMessage(Translations, "FROZEN_SENDER", player.DisplayName);
                     EssLang.Send(player, "FROZEN_PLAYER", src.DisplayName);
                 }
             }
@@ -70,12 +81,11 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
-        protected override void OnUnregistered() {
+        protected override void OnUnregistered()
+        {
             UEssentials.EventManager.Unregister<EssentialsEventHandler>("FreezePlayerDisconnect");
             UEssentials.EventManager.Unregister<EssentialsEventHandler>("FreezePlayerConnected");
             UEssentials.EventManager.Unregister<EssentialsEventHandler>("FreezePlayerDeath");
         }
-
     }
-
 }

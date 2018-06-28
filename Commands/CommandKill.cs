@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Command;
@@ -27,8 +29,8 @@ using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "kill",
         Description = "Kill a player",
@@ -36,27 +38,28 @@ namespace Essentials.Commands {
         MinArgs = 1,
         MaxArgs = 1
     )]
-    public class CommandKill : EssCommand {
-
-        public override void Execute(ICommandContext context) {
-            if (args[0].Equals("*")) {
+    public class CommandKill : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
+            if (args[0].Equals("*"))
+            {
                 UServer.Players.ForEach(p => p.Kill());
 
-                EssLang.Send(src, "KILL_ALL");
+                context.User.SendLocalizedMessage(Translations, "KILL_ALL");
                 return CommandResult.Success();
             }
 
-            if (!args[0].IsValidPlayerIdentifier) {
+            if (!args[0].IsValidPlayerIdentifier)
+            {
                 return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
             }
 
             var target = args[0].ToPlayer;
             target.Kill();
 
-            EssLang.Send(src, "KILL_PLAYER", target.DisplayName);
+            context.User.SendLocalizedMessage(Translations, "KILL_PLAYER", target.DisplayName);
             return CommandResult.Success();
         }
-
     }
-
 }

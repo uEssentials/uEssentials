@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Module;
@@ -26,16 +28,17 @@ using Essentials.Api.Task;
 using SDG.Unturned;
 using static Essentials.Api.UEssentials;
 
-namespace Essentials.NativeModules.Kit {
-
+namespace Essentials.NativeModules.Kit
+{
     [ModuleInfo(Name = "Kits")]
-    public class KitModule : NativeModule {
-
+    public class KitModule : NativeModule
+    {
         private const string CommandsNamespace = "Essentials.NativeModules.Kit.Commands";
         public KitManager KitManager { get; internal set; }
         public static KitModule Instance { get; internal set; }
 
-        public override void OnLoad() {
+        public override void OnLoad()
+        {
             Instance = this;
 
             KitManager = new KitManager();
@@ -47,12 +50,11 @@ namespace Essentials.NativeModules.Kit {
             EventManager.RegisterAll<KitEventHandler>();
         }
 
-        public override void OnUnload() {
+        public override void OnUnload()
+        {
             CommandManager.UnregisterAll(CommandsNamespace);
             EventManager.UnregisterAll<KitEventHandler>();
             KitManager.Save();
         }
-
     }
-
 }

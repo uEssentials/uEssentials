@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,39 +20,44 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api;
 using SDG.Unturned;
 
-namespace Essentials.Components.Player {
-
-    public class VehicleFeatures : PlayerComponent {
-
+namespace Essentials.Components.Player
+{
+    public class VehicleFeatures : PlayerComponent
+    {
         public bool AutoRefuel { get; set; }
         public bool AutoRepair { get; set; }
 
-        protected override void SafeFixedUpdate() {
+        protected override void SafeFixedUpdate()
+        {
             var currentVeh = Player.CurrentVehicle;
 
-            if (currentVeh == null) {
+            if (currentVeh == null)
+            {
                 return;
             }
 
-            var needRepairPercentage = (currentVeh.asset.health * UEssentials.Config.VehicleFeatures.RepairPercentage) / 100;
-            var needRefuelPercentage = (currentVeh.asset.fuel * UEssentials.Config.VehicleFeatures.RefuelPercentage) / 100;
+            var needRepairPercentage =
+                (currentVeh.asset.health * UEssentials.Config.VehicleFeatures.RepairPercentage) / 100;
+            var needRefuelPercentage =
+                (currentVeh.asset.fuel * UEssentials.Config.VehicleFeatures.RefuelPercentage) / 100;
 
-            if (AutoRefuel && currentVeh.fuel <= needRefuelPercentage) {
+            if (AutoRefuel && currentVeh.fuel <= needRefuelPercentage)
+            {
                 VehicleManager.sendVehicleFuel(currentVeh, currentVeh.asset.fuel);
                 currentVeh.fuel = currentVeh.asset.fuel;
             }
 
-            if (AutoRepair && currentVeh.health <= needRepairPercentage) {
+            if (AutoRepair && currentVeh.health <= needRepairPercentage)
+            {
                 VehicleManager.sendVehicleHealth(currentVeh, currentVeh.asset.health);
                 currentVeh.health = currentVeh.asset.health;
             }
         }
-
     }
-
 }

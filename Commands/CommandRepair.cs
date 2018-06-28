@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Collections.Generic;
@@ -31,52 +33,56 @@ using Essentials.I18n;
 using Essentials.Common;
 using System.Reflection;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "repair",
-        Aliases = new[] { "fix" },
+        Aliases = new[] {"fix"},
         Description = "Repair all items in your inventory.",
         AllowedSource = AllowedSource.PLAYER
     )]
-    public class CommandRepair : EssCommand {
-
+    public class CommandRepair : EssCommand
+    {
         private readonly FieldInfo _itemsField = ReflectUtil.GetField<Items>("items");
 
-        public override void Execute(ICommandContext context) {
+        public override void Execute(ICommandContext context)
+        {
             var player = src.ToPlayer();
 
             player.Inventory.items.ForEach(item => Repair(player, item));
-            EssLang.Send(src, "ALL_REPAIRED");
+            context.User.SendLocalizedMessage(Translations, "ALL_REPAIRED");
 
             return CommandResult.Success();
         }
 
-        private void Repair(UPlayer player, Items item) {
+        private void Repair(UPlayer player, Items item)
+        {
             if (item == null) return;
 
             var playerInv = player.UnturnedPlayer.inventory;
             var items = (List<ItemJar>) _itemsField.GetValue(item);
             byte index = 0;
 
-            items.ForEach(itemJar => {
+            items.ForEach(itemJar =>
+            {
                 item.updateQuality(index, 100);
 
-                playerInv.channel.send("tellUpdateQuality", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[] {
-                    item.page,
-                    playerInv.getIndex(item.page, itemJar.x, itemJar.y),
-                    100
-                });
+                playerInv.channel.send("tellUpdateQuality", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER,
+                    new object[]
+                    {
+                        item.page,
+                        playerInv.getIndex(item.page, itemJar.x, itemJar.y),
+                        100
+                    });
 
                 var barrel = ItemUtil.GetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL);
-                barrel.IfPresent(attach => {
+                barrel.IfPresent(attach =>
+                {
                     attach.Durability = 100;
                     ItemUtil.SetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL, attach);
                 });
                 index++;
             });
         }
-
     }
-
 }

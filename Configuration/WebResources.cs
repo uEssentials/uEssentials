@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -28,10 +30,10 @@ using Essentials.Api;
 using Essentials.Api.Configuration;
 using Newtonsoft.Json;
 
-namespace Essentials.Configuration {
-
-    public class WebResources : JsonConfig {
-
+namespace Essentials.Configuration
+{
+    public class WebResources : JsonConfig
+    {
         public override string FileName => "web_resources.json";
 
         public bool Enabled { get; set; }
@@ -45,42 +47,51 @@ namespace Essentials.Configuration {
         [JsonIgnore]
         public Dictionary<string, string> Loaded { get; } = new Dictionary<string, string>();
 
-        public override void Load(string filePath) {
-            try {
+        public override void Load(string filePath)
+        {
+            try
+            {
                 base.Load(filePath);
 
-                if (!Enabled) {
+                if (!Enabled)
+                {
                     return;
                 }
 
-                using (var webClient = new WebClient()) {
+                using (var webClient = new WebClient())
+                {
                     var logger = UEssentials.Logger;
-                    foreach (var urL in URLs) {
+                    foreach (var urL in URLs)
+                    {
                         logger.LogInfo($"WebResources: Loading '{urL.Key}' from '{urL.Value}'...");
                         var fileContents = webClient.DownloadString(urL.Value);
-                        if (string.IsNullOrEmpty(fileContents)) {
+                        if (string.IsNullOrEmpty(fileContents))
+                        {
                             logger.LogWarning($"WebResources: The fileContents of '{urL.Key}' " +
-                                               "is null or empty. skipping...");
+                                              "is null or empty. skipping...");
                             continue;
                         }
+
                         Loaded.Add(urL.Key, fileContents);
                         logger.LogInfo($"WebResources: Successfully loaded '{urL.Key}' from '{urL.Value}'.");
                     }
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 UEssentials.Logger.LogError("Failed to load WebResources.");
                 UEssentials.Logger.LogException(ex);
             }
         }
 
-        public override void LoadDefaults() {
+        public override void LoadDefaults()
+        {
             Enabled = false;
-            URLs = new Dictionary<string, string> {
-                { "Config", "http://example.com/config.json" },
-                { "Kits", "http://example.com/kits.json" }
+            URLs = new Dictionary<string, string>
+            {
+                {"Config", "http://example.com/config.json"},
+                {"Kits", "http://example.com/kits.json"}
             };
         }
-
     }
-
 }

@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,29 +20,34 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.NativeModules.Warp.Commands {
-
+namespace Essentials.NativeModules.Warp.Commands
+{
     [CommandInfo(
         Name = "setwarp",
         Description = "Set a warp.",
         Usage = "[warp_name] <x> <y> <z>"
     )]
-    public class CommandSetWarp : EssCommand {
-
-        public override void Execute(ICommandContext context) {
-            switch (args.Length) {
+    public class CommandSetWarp : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
+            switch (args.Length)
+            {
                 case 1:
-                    if (src.IsConsole) {
+                    if (src.IsConsole)
+                    {
                         return CommandResult.ShowUsage();
                     }
 
-                    if (WarpModule.Instance.WarpManager.Contains(args[0].ToString())) {
+                    if (WarpModule.Instance.WarpManager.Contains(args[0].ToString()))
+                    {
                         return CommandResult.LangError("WARP_ALREADY_EXISTS");
                     }
 
@@ -49,25 +55,30 @@ namespace Essentials.NativeModules.Warp.Commands {
                     var warp = new Warp(args[0].ToString(), player.Position, player.Rotation);
 
                     WarpModule.Instance.WarpManager.Add(warp);
-                    EssLang.Send(src, "WARP_SET", args[0]);
+                    context.User.SendLocalizedMessage(Translations, "WARP_SET", args[0]);
                     break;
 
                 case 4:
                     var pos = args.GetVector3(1);
 
-                    if (pos.HasValue) {
+                    if (pos.HasValue)
+                    {
                         warp = new Warp(args[0].ToString(), pos.Value, 0.0F);
 
-                        if (WarpModule.Instance.WarpManager.Contains(args[0].ToString())) {
+                        if (WarpModule.Instance.WarpManager.Contains(args[0].ToString()))
+                        {
                             return CommandResult.LangError("WARP_ALREADY_EXISTS");
                         }
 
                         WarpModule.Instance.WarpManager.Add(warp);
 
-                        EssLang.Send(src, "WARP_SET", args[0]);
-                    } else {
+                        context.User.SendLocalizedMessage(Translations, "WARP_SET", args[0]);
+                    }
+                    else
+                    {
                         return CommandResult.LangError("INVALID_COORDS", args[1], args[2], args[3]);
                     }
+
                     break;
 
                 default:
@@ -76,7 +87,5 @@ namespace Essentials.NativeModules.Warp.Commands {
 
             return CommandResult.Success();
         }
-
     }
-
 }

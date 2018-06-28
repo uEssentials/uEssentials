@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Command.Source;
@@ -28,13 +30,13 @@ using Essentials.Api;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace Essentials.NativeModules.Warp {
-
+namespace Essentials.NativeModules.Warp
+{
     /// <summary>
     /// Author: leonardosnt
     /// </summary>
-    public sealed class Warp {
-
+    public sealed class Warp
+    {
         /// <summary>
         /// Name of warp
         /// </summary>
@@ -57,7 +59,8 @@ namespace Essentials.NativeModules.Warp {
         /// <param name="name">Name of warp</param>
         /// <param name="location">Location of warp</param>
         /// <param name="rotation">Rotation of warp</param>
-        public Warp([NotNull] string name, Vector3 location, float rotation) {
+        public Warp([NotNull] string name, Vector3 location, float rotation)
+        {
             Name = name;
             Rotation = rotation;
             Location = location;
@@ -68,16 +71,17 @@ namespace Essentials.NativeModules.Warp {
         /// </summary>
         /// <param name="source">Source that you want to check if is authorized</param>
         /// <returns>If source has permission to use this warp</returns>
-        public bool CanBeUsedBy(ICommandSource source) {
-            return source.HasPermission($"essentials.warp.{Name.ToLowerInvariant()}") || !UEssentials.Config.Warp.PerWarpPermission;
+        public bool CanBeUsedBy(ICommandSource source)
+        {
+            return source.HasPermission($"essentials.warp.{Name.ToLowerInvariant()}") ||
+                   !UEssentials.Config.Warp.PerWarpPermission;
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return "Warp{Name= " + Name + ", " +
                    "Location= " + Location + ", " +
                    "Rotation= " + Rotation + "}";
         }
-
     }
-
 }

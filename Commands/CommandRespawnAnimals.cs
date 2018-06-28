@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 
@@ -30,27 +32,27 @@ using Essentials.Common;
 using SDG.Unturned;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "respawnanimals",
         Description = "Respawn all animals"
     )]
-    public class CommandRespawnAnimal : EssCommand {
-
-        public override void Execute(ICommandContext context) {
+    public class CommandRespawnAnimal : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
             var respawnedCount = 0;
 
-            UWorld.Animals.Where(z => z.isDead).ForEach(animal => {
+            UWorld.Animals.Where(z => z.isDead).ForEach(animal =>
+            {
                 AnimalManager.sendAnimalAlive(animal, animal.transform.position, 0);
                 respawnedCount++;
             });
 
-            EssLang.Send(src, "RESPAWNED_ANIMALS", respawnedCount);
+            context.User.SendLocalizedMessage(Translations, "RESPAWNED_ANIMALS", respawnedCount);
 
             return CommandResult.Success();
         }
-
     }
-
 }

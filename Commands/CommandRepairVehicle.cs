@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Linq;
@@ -28,51 +30,57 @@ using SDG.Unturned;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "repairvehicle",
-        Aliases = new[] { "repairveh", "repv" },
+        Aliases = new[] {"repairveh", "repv"},
         Description = "Repair current/all vehicle",
         Usage = "<all>"
     )]
-    public class CommandRepairVehicle : EssCommand {
-
-        public override void Execute(ICommandContext context) {
-            if (args.IsEmpty) {
-                if (src.IsConsole) {
+    public class CommandRepairVehicle : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
+            if (args.IsEmpty)
+            {
+                if (src.IsConsole)
+                {
                     return CommandResult.ShowUsage();
                 }
 
                 var currentVeh = src.ToPlayer().CurrentVehicle;
 
-                if (currentVeh != null) {
+                if (currentVeh != null)
+                {
                     VehicleManager.sendVehicleHealth(currentVeh, currentVeh.asset.health);
 
-                    EssLang.Send(src, "VEHICLE_REPAIRED");
-                } else {
+                    context.User.SendLocalizedMessage(Translations, "VEHICLE_REPAIRED");
+                }
+                else
+                {
                     return CommandResult.LangError("NOT_IN_VEHICLE");
                 }
-            } else if (args[0].Equals("all")) {
-                if (!src.HasPermission($"{Permission}.all")) {
+            }
+            else if (args[0].Equals("all"))
+            {
+                if (!src.HasPermission($"{Permission}.all"))
+                {
                     return CommandResult.NoPermission($"{Permission}.all");
                 }
 
-                lock (UWorld.Vehicles) {
+                lock (UWorld.Vehicles)
+                {
                     UWorld.Vehicles
                         .Where(veh => !veh.isExploded && !veh.isUnderwater)
                         .ToList()
-                        .ForEach(vehicle => {
-                            VehicleManager.sendVehicleHealth(vehicle, vehicle.asset.health);
-                        });
+                        .ForEach(vehicle => { VehicleManager.sendVehicleHealth(vehicle, vehicle.asset.health); });
 
-                    EssLang.Send(src, "VEHICLE_REPAIRED_ALL");
+                    context.User.SendLocalizedMessage(Translations, "VEHICLE_REPAIRED_ALL");
                 }
             }
 
             return CommandResult.Success();
         }
-
     }
-
 }

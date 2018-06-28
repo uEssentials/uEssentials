@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,28 +20,30 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.IO;
 using Newtonsoft.Json;
 
-namespace Essentials.Common.Util {
-
-    public static class JsonUtil {
-
-        public static void Serialize(string filePath, object obj) {
-            var text = JsonConvert.SerializeObject(obj, new JsonSerializerSettings {
+namespace Essentials.Common.Util
+{
+    public static class JsonUtil
+    {
+        public static void Serialize(string filePath, object obj)
+        {
+            var text = JsonConvert.SerializeObject(obj, new JsonSerializerSettings
+            {
                 Formatting = Formatting.Indented,
                 NullValueHandling = NullValueHandling.Ignore
             });
             File.WriteAllText(filePath, text);
         }
 
-        public static T DeserializeFile<T>(string filePath) {
+        public static T DeserializeFile<T>(string filePath)
+        {
             var allText = File.ReadAllText(filePath);
             return JsonConvert.DeserializeObject<T>(allText);
         }
-
     }
-
 }

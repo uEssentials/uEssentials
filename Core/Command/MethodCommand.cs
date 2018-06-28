@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -28,10 +30,10 @@ using Essentials.Api.Command.Source;
 using Essentials.Common;
 using Essentials.Common.Util;
 
-namespace Essentials.Core.Command {
-
-    internal class MethodCommand : EssCommand {
-
+namespace Essentials.Core.Command
+{
+    internal class MethodCommand : EssCommand
+    {
         private readonly Func<ICommandSource, ICommandArgs, CommandResult> _methodFunc;
         private readonly Func<ICommandSource, ICommandArgs, ICommand, CommandResult> _methodFuncWithCommand;
 
@@ -39,35 +41,38 @@ namespace Essentials.Core.Command {
 
         internal MethodCommand(Func<ICommandSource, ICommandArgs, CommandResult> methodFunc) :
             base(Preconditions.NotNull(ReflectUtil.GetAttributeFrom<CommandInfoAttribute>(methodFunc.Method),
-                 "methodFunc must have 'CommandInfo' attribute.")) {
+                "methodFunc must have 'CommandInfo' attribute."))
+        {
             _methodFunc = methodFunc;
             Init(false, methodFunc.Method);
         }
 
         internal MethodCommand(Func<ICommandSource, ICommandArgs, ICommand, CommandResult> methodFunc) :
             base(Preconditions.NotNull(ReflectUtil.GetAttributeFrom<CommandInfoAttribute>(methodFunc.Method),
-                 "methodFunc must have 'CommandInfo' attribute.")) {
+                "methodFunc must have 'CommandInfo' attribute."))
+        {
             _methodFuncWithCommand = methodFunc;
             Init(true, methodFunc.Method);
         }
 
-        private void Init(bool hasCmdParam, MethodInfo method) {
+        private void Init(bool hasCmdParam, MethodInfo method)
+        {
             Owner = hasCmdParam
                 ? _methodFuncWithCommand.Method.DeclaringType
                 : _methodFunc.Method.DeclaringType;
         }
 
-        public override CommandResult OnExecute(ICommandSource source, ICommandArgs args) {
+        public override CommandResult OnExecute(ICommandSource source, ICommandArgs args)
+        {
             return _methodFuncWithCommand != null
                 ? _methodFuncWithCommand(source, args, this)
                 : _methodFunc(source, args);
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             var method = _methodFunc == null ? _methodFuncWithCommand.Method : _methodFunc.Method;
             return $"{method.DeclaringType}::{method}";
         }
-
     }
-
 }

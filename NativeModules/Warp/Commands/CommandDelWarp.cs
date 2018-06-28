@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,37 +20,38 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
 
-namespace Essentials.NativeModules.Warp.Commands {
-
+namespace Essentials.NativeModules.Warp.Commands
+{
     [CommandInfo(
         Name = "delwarp",
-        Aliases = new[] { "deletewarp" },
+        Aliases = new[] {"deletewarp"},
         Usage = "[warp_name]",
         Description = "Delete an existing warp",
         MinArgs = 1,
         MaxArgs = 1
     )]
-    public class CommandDelWarp : EssCommand {
-
-        public override void Execute(ICommandContext context) {
+    public class CommandDelWarp : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
             var warpName = args[0].ToString();
 
-            if (!WarpModule.Instance.WarpManager.Contains(warpName)) {
+            if (!WarpModule.Instance.WarpManager.Contains(warpName))
+            {
                 return CommandResult.LangError("WARP_NOT_EXIST", warpName);
             }
 
             WarpModule.Instance.WarpManager.Delete(warpName);
-            EssLang.Send(src, "WARP_REMOVED", warpName);
+            context.User.SendLocalizedMessage(Translations, "WARP_REMOVED", warpName);
 
             return CommandResult.Success();
         }
-
     }
-
 }

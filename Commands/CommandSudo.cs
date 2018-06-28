@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Command;
@@ -28,32 +30,41 @@ using Essentials.Common;
 using SDG.Unturned;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "sudo",
         Description = "Make player or console execute a command",
         Usage = "[player | * | *console*] [command]"
     )]
-    public class CommandSudo : EssCommand {
-
-        public override void Execute(ICommandContext context) {
-            if (args.Length < 2) {
+    public class CommandSudo : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
+            if (args.Length < 2)
+            {
                 return CommandResult.ShowUsage();
             }
 
             string name;
 
-            if (args[0].Equals(name = "*console*")) {
+            if (args[0].Equals(name = "*console*"))
+            {
                 CommandWindow.input.onInputText(args.Join(1));
-            } else if (args[0].Equals("*")) {
-                UServer.Players.ForEach(p => {
+            }
+            else if (args[0].Equals("*"))
+            {
+                UServer.Players.ForEach(p =>
+                {
                     ChatManager.instance.askChat(p.CSteamId, (byte) EChatMode.GLOBAL, args.Join(1));
                 });
 
                 name = "Everyone";
-            } else {
-                if (!args[0].IsValidPlayerIdentifier) {
+            }
+            else
+            {
+                if (!args[0].IsValidPlayerIdentifier)
+                {
                     return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                 }
 
@@ -64,11 +75,9 @@ namespace Essentials.Commands {
                 name = targetPlayer.CharacterName;
             }
 
-            EssLang.Send(src, "SUDO_EXECUTED", name, args.Join(1));
+            context.User.SendLocalizedMessage(Translations, "SUDO_EXECUTED", name, args.Join(1));
 
             return CommandResult.Success();
         }
-
     }
-
 }

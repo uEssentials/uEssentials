@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -29,19 +31,22 @@ using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
 
-namespace Essentials.Common.Util {
-
+namespace Essentials.Common.Util
+{
     // A wrapper for Dictionary that stores players (id) and can
     // automatically remove when the player disconnects/die (based on Options)
-    public class PlayerDictionary<TValue> : Dictionary<ulong, TValue> {
-
+    public class PlayerDictionary<TValue> : Dictionary<ulong, TValue>
+    {
         public PlayerDictionaryOptions Options { get; }
         private bool _registeredEventHandlers;
         private readonly Action<TValue> _removalCallback;
 
-        public PlayerDictionary() : this(PlayerDictionaryOptions.REMOVE_ON_DISCONNECT, null) {}
+        public PlayerDictionary() : this(PlayerDictionaryOptions.REMOVE_ON_DISCONNECT, null)
+        {
+        }
 
-        public PlayerDictionary(PlayerDictionaryOptions options, Action<TValue> removalCallback) {
+        public PlayerDictionary(PlayerDictionaryOptions options, Action<TValue> removalCallback)
+        {
             Options = options;
             _removalCallback = removalCallback;
 
@@ -50,29 +55,34 @@ namespace Essentials.Common.Util {
                 RegisterEventHandlers();
         }
 
-        public TValue this[UnturnedPlayer player] {
+        public TValue this[UnturnedPlayer player]
+        {
             get { return this[player.CSteamID.m_SteamID]; }
             set { this[player.CSteamID.m_SteamID] = value; }
         }
 
-        public TValue this[UPlayer player] {
+        public TValue this[UPlayer player]
+        {
             get { return this[player.CSteamId.m_SteamID]; }
             set { this[player.CSteamId.m_SteamID] = value; }
         }
 
-        public new void Add(ulong key, TValue value) {
+        public new void Add(ulong key, TValue value)
+        {
             if ((Options & PlayerDictionaryOptions.LAZY_REGISTER_HANDLERS) != 0 && !_registeredEventHandlers)
                 RegisterEventHandlers();
             base.Add(key, value);
         }
 
-        public new bool Remove(ulong key) {
+        public new bool Remove(ulong key)
+        {
             if (_removalCallback != null && TryGetValue(key, out var val))
                 _removalCallback(val);
             return base.Remove(key);
         }
 
-        private void RegisterEventHandlers() {
+        private void RegisterEventHandlers()
+        {
             _registeredEventHandlers = true;
 
             if ((Options & PlayerDictionaryOptions.REMOVE_ON_DISCONNECT) != 0)
@@ -82,20 +92,21 @@ namespace Essentials.Common.Util {
                 UnturnedPlayerEvents.OnPlayerDeath += OnPlayerDeath;
         }
 
-        private void OnPlayerDisconnected(CSteamID steamId) {
+        private void OnPlayerDisconnected(CSteamID steamId)
+        {
             Remove(steamId.m_SteamID);
         }
 
 
-        private void OnPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+        private void OnPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer)
+        {
             Remove(player.CSteamID.m_SteamID);
         }
-
     }
 
     [Flags]
-    public enum PlayerDictionaryOptions {
-
+    public enum PlayerDictionaryOptions
+    {
         /// Remove when player dies.
         REMOVE_ON_DEATH = 1,
 
@@ -104,7 +115,5 @@ namespace Essentials.Common.Util {
 
         /// Event handlers will only be registered when something is added to the dictionary.
         LAZY_REGISTER_HANDLERS = 1 << 2
-
     }
-
 }

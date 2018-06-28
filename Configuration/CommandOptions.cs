@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -29,10 +31,10 @@ using Essentials.Api.Configuration;
 using Essentials.Common.Util;
 using Newtonsoft.Json.Linq;
 
-namespace Essentials.Configuration {
-
-    public class CommandOptions : JsonConfig {
-
+namespace Essentials.Configuration
+{
+    public class CommandOptions : JsonConfig
+    {
         public override string FileName => "command_options.json";
 
         /// <summary>
@@ -40,21 +42,30 @@ namespace Essentials.Configuration {
         /// </summary>
         public IDictionary<string, CommandEntry> Commands { get; } = new Dictionary<string, CommandEntry>();
 
-        public override void Save(string filePath) {
+        public override void Save(string filePath)
+        {
             JsonUtil.Serialize(filePath, Commands);
         }
 
-        public override void Load(string filePath) {
-            try {
-                if (File.Exists(filePath)) {
+        public override void Load(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
                     var json = File.ReadAllText(filePath);
-                    foreach (var entry in JObject.Parse(json)) {
+                    foreach (var entry in JObject.Parse(json))
+                    {
                         Commands.Add(entry.Key.ToLowerInvariant(), entry.Value.ToObject<CommandEntry>());
                     }
-                } else {
+                }
+                else
+                {
                     base.Load(filePath);
                 }
-            }  catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 UEssentials.Logger.LogError("Failed to load 'command_options.json'.");
                 UEssentials.Logger.LogException(ex);
                 UEssentials.Logger.LogError("Using default...");
@@ -62,17 +73,21 @@ namespace Essentials.Configuration {
             }
         }
 
-        public override void LoadDefaults() {
-            Commands.Add("example_1", new CommandEntry {
+        public override void LoadDefaults()
+        {
+            Commands.Add("example_1", new CommandEntry
+            {
                 Cost = 0m,
-                CustomAliases = new [] {
+                CustomAliases = new[]
+                {
                     "these aliases",
                     "will be",
                     "concatenated",
                     "with the default",
                     "aliases"
                 },
-                OverridedAliases = new [] {
+                OverridedAliases = new[]
+                {
                     "these alises",
                     "will override",
                     "default aliases"
@@ -80,20 +95,24 @@ namespace Essentials.Configuration {
                 Usage = "Usage",
                 Description = "Description"
             });
-            Commands.Add("example_2", new CommandEntry {
+            Commands.Add("example_2", new CommandEntry
+            {
                 Cost = 1110m,
                 Usage = "Usage",
                 Description = "Description"
             });
-            Commands.Add("home", new CommandEntry {
+            Commands.Add("home", new CommandEntry
+            {
                 Cooldown = 30,
-                PerGroupCooldown = new Dictionary<string, uint> {
-                    { "vip", 10 }
+                PerGroupCooldown = new Dictionary<string, uint>
+                {
+                    {"vip", 10}
                 }
             });
         }
 
-        public struct CommandEntry {
+        public struct CommandEntry
+        {
             public string[] CustomAliases;
             public string[] OverridedAliases;
             public string Usage;
@@ -103,7 +122,5 @@ namespace Essentials.Configuration {
             public Dictionary<string, uint> PerGroupCooldown;
             public Dictionary<string, decimal> PerGroupCost;
         }
-
     }
-
 }

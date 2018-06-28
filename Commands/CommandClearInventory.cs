@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,71 +20,102 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
+using System;
+using System.Linq;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
 using Essentials.Common;
-using Essentials.I18n;
+using Rocket.API.Commands;
+using Rocket.API.Permissions;
+using Rocket.API.Player;
+using Rocket.API.Plugins;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Core.Permissions;
+using Rocket.Core.User;
+using Rocket.Unturned.Player;
 using SDG.Unturned;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
-        Name = "clearinventory",
-        Description = "Clear your/player's inventory",
+        "clearinventory",
+        "Clear your/player's inventory",
         Aliases = new[] { "ci" },
-        Usage = "<player | *>"
+        Syntax = "<player | *>"
     )]
-    public class CommandClearInventory : EssCommand {
-
+    public class CommandClearInventory : EssCommand
+    {
         public readonly byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
-        public override void Execute(ICommandContext context) {
-            if (args.IsEmpty && src.IsConsole) {
-                return CommandResult.ShowUsage();
-            }
-
-            if (args.IsEmpty) { // self
-                ClearInventory(src.ToPlayer());
-            } else if (args[0].Equals("*")) { // all
-                if (!src.HasPermission($"{Permission}.all")) {
-                    return CommandResult.NoPermission($"{Permission}.all");
-                }
-                UServer.Players.ForEach(ClearInventory);
-                EssLang.Send(src, "INVENTORY_CLEARED_ALL");
-            } else {
-                if (!args[0].IsValidPlayerIdentifier) { // specific player
-                    return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
-                }
-                if (!src.HasPermission($"{Permission}.other")) {
-                    return CommandResult.NoPermission($"{Permission}.other");
-                }
-                ClearInventory(args[0].ToPlayer);
-                EssLang.Send(src, "INVENTORY_CLEARED_PLAYER", args[0].ToPlayer.DisplayName);
-            }
-
-            return CommandResult.Success();
+        public override bool SupportsUser(Type user)
+        {
+            return true;
         }
 
-        private void ClearInventory(UPlayer player) {
+        public override void Execute(ICommandContext context)
+        {
+            if (context.Parameters.Length == 0 && !(context.User is UnturnedUser))
+                throw new CommandWrongUsageException();
+
+            var playerManager = context.Container.Resolve<IPlayerManager>();
+
+            if (context.Parameters.Length == 0)
+            {
+                // self
+                ClearInventory(((UnturnedUser)context.User).Player);
+                return;
+            }
+
+            if (context.Parameters[0].Equals("*"))
+            {
+                // all
+                if (context.User.CheckPermission($"ClearInventory.all") != PermissionResult.Grant)
+                {
+                    throw new NotEnoughPermissionsException(context.User, "ClearInventory.all");
+                }
+
+                playerManager.OnlinePlayers
+                    .Select(c => c as UnturnedPlayer)
+                    .Where(c => c != null)
+                    .ForEach(ClearInventory);
+
+                context.User.SendLocalizedMessage(Translations, "INVENTORY_CLEARED_ALL");
+                return;
+            }
+
+            if (!(context.Parameters.Get<IPlayer>(0) is UnturnedPlayer targetPlayer))
+                throw new PlayerNameNotFoundException(context.Parameters[0]);
+
+            if (context.User.CheckPermission($"ClearInventory.other") != PermissionResult.Grant)
+                throw new NotEnoughPermissionsException(context.User, "ClearInventory.other");
+
+            ClearInventory(targetPlayer);
+            context.User.SendLocalizedMessage(Translations, "INVENTORY_CLEARED_PLAYER", targetPlayer.DisplayName);
+        }
+
+        private void ClearInventory(UnturnedPlayer player)
+        {
             var playerInv = player.Inventory;
 
             // "Remove "models" of items from player "body""
-            player.Channel.send("tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER,
-                (byte) 0, (byte) 0, EMPTY_BYTE_ARRAY);
-            player.Channel.send("tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER,
-                (byte) 1, (byte) 0, EMPTY_BYTE_ARRAY);
+            player.NativePlayer.channel.send("tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER,
+                (byte)0, (byte)0, EMPTY_BYTE_ARRAY);
+            player.NativePlayer.channel.send("tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER,
+                (byte)1, (byte)0, EMPTY_BYTE_ARRAY);
 
             // Remove items
-            for (byte page = 0; page < PlayerInventory.PAGES; page++) {
-                if(page == PlayerInventory.AREA)
+            for (byte page = 0; page < PlayerInventory.PAGES; page++)
+            {
+                if (page == PlayerInventory.AREA)
                     continue;
 
                 var count = playerInv.getItemCount(page);
 
-                for (byte index = 0; index < count; index++) {
+                for (byte index = 0; index < count; index++)
+                {
                     playerInv.removeItem(page, 0);
                 }
             }
@@ -91,37 +123,41 @@ namespace Essentials.Commands {
             // Remove clothes
 
             // Remove unequipped cloths
-            System.Action removeUnequipped = () => {
-                for (byte i = 0; i < playerInv.getItemCount(2); i++) {
+            System.Action removeUnequipped = () =>
+            {
+                for (byte i = 0; i < playerInv.getItemCount(2); i++)
+                {
                     playerInv.removeItem(2, 0);
                 }
             };
 
             // Unequip & remove from inventory
-            player.UnturnedPlayer.clothing.askWearBackpack(0, 0, EMPTY_BYTE_ARRAY, true);
+            player.NativePlayer.clothing.askWearBackpack(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            player.UnturnedPlayer.clothing.askWearGlasses(0, 0, EMPTY_BYTE_ARRAY, true);
+            player.NativePlayer.clothing.askWearGlasses(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            player.UnturnedPlayer.clothing.askWearHat(0, 0, EMPTY_BYTE_ARRAY, true);
+            player.NativePlayer.clothing.askWearHat(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            player.UnturnedPlayer.clothing.askWearPants(0, 0, EMPTY_BYTE_ARRAY, true);
+            player.NativePlayer.clothing.askWearPants(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            player.UnturnedPlayer.clothing.askWearMask(0, 0, EMPTY_BYTE_ARRAY, true);
+            player.NativePlayer.clothing.askWearMask(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            player.UnturnedPlayer.clothing.askWearShirt(0, 0, EMPTY_BYTE_ARRAY, true);
+            player.NativePlayer.clothing.askWearShirt(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            player.UnturnedPlayer.clothing.askWearVest(0, 0, EMPTY_BYTE_ARRAY, true);
+            player.NativePlayer.clothing.askWearVest(0, 0, EMPTY_BYTE_ARRAY, true);
             removeUnequipped();
 
-            EssLang.Send(player, "INVENTORY_CLEARED");
+            player.User?.SendLocalizedMessage(Translations, "INVENTORY_CLEARED");
         }
 
+        public CommandClearInventory(IPlugin plugin) : base(plugin)
+        {
+        }
     }
-
 }

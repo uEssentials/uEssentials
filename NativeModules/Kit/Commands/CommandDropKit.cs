@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Linq;
@@ -31,49 +33,58 @@ using Essentials.Common;
 using Essentials.NativeModules.Kit.Item;
 using SDG.Unturned;
 
-namespace Essentials.NativeModules.Kit.Commands {
-
+namespace Essentials.NativeModules.Kit.Commands
+{
     [CommandInfo(
         Name = "dropkit",
-        Aliases = new[] { "dk" },
+        Aliases = new[] {"dk"},
         Description = "Drop a kit at given player/position",
         Usage = "[kit] <player | x y z>"
     )]
-    public class CommandDropKit : EssCommand {
-
-        public override void Execute(ICommandContext context) {
-            switch (args.Length) {
+    public class CommandDropKit : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
+            switch (args.Length)
+            {
                 case 1:
-                    if (src.IsConsole) {
+                    if (src.IsConsole)
+                    {
                         return CommandResult.ShowUsage();
                     }
 
                     DropKit(src, args[0], src.ToPlayer().Position);
-                    EssLang.Send(src, "DROPKIT_SENDER", args[0]);
+                    context.User.SendLocalizedMessage(Translations, "DROPKIT_SENDER", args[0]);
                     break;
 
                 case 2:
-                    if (!src.HasPermission($"{Permission}.other")) {
+                    if (!src.HasPermission($"{Permission}.other"))
+                    {
                         return CommandResult.LangError("COMMAND_NO_PERMISSION");
                     }
 
-                    if (!UPlayer.TryGet(args[1].ToString(), out var player)) {
+                    if (!UPlayer.TryGet(args[1].ToString(), out var player))
+                    {
                         return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                     }
 
                     DropKit(src, args[0], player.Position);
-                    EssLang.Send(src, "DROPKIT_PLAYER", args[0], player.DisplayName);
+                    context.User.SendLocalizedMessage(Translations, "DROPKIT_PLAYER", args[0], player.DisplayName);
                     break;
 
                 case 4:
                     var pos = args.GetVector3(1);
 
-                    if (pos.HasValue) {
+                    if (pos.HasValue)
+                    {
                         DropKit(src, args[0], pos.Value);
-                        EssLang.Send(src, "DROPKIT_LOCATION", args[1], args[2], args[3]);
-                    } else {
+                        context.User.SendLocalizedMessage(Translations, "DROPKIT_LOCATION", args[1], args[2], args[3]);
+                    }
+                    else
+                    {
                         return CommandResult.LangError("INVALID_COORDS", args[1], args[2], args[3]);
                     }
+
                     break;
 
                 default:
@@ -83,21 +94,23 @@ namespace Essentials.NativeModules.Kit.Commands {
             return CommandResult.Success();
         }
 
-        public static void DropKit(ICommandSource src, ICommandArgument kitArg, Vector3 pos) {
+        public static void DropKit(ICommandSource src, ICommandArgument kitArg, Vector3 pos)
+        {
             var kitManager = KitModule.Instance.KitManager;
             var kitName = kitArg.ToString();
 
-            if (!kitManager.Contains(kitName)) {
-                EssLang.Send(src, "KIT_NOT_EXIST", kitName);
+            if (!kitManager.Contains(kitName))
+            {
+                context.User.SendLocalizedMessage(Translations, "KIT_NOT_EXIST", kitName);
                 return;
             }
 
-            foreach (var item in kitManager.GetByName(kitName).Items) {
+            foreach (var item in kitManager.GetByName(kitName).Items)
+            {
                 if (item is KitItem kitItem) ItemManager.dropItem(kitItem.UnturnedItem, pos, true, true, true);
-                if (item is KitItemVehicle vehicleItem) VehicleManager.spawnVehicle(vehicleItem.Id, pos + (Vector3.up * 16), Quaternion.identity);
+                if (item is KitItemVehicle vehicleItem)
+                    VehicleManager.spawnVehicle(vehicleItem.Id, pos + (Vector3.up * 16), Quaternion.identity);
             }
         }
-
     }
-
 }

@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Command;
@@ -27,73 +29,92 @@ using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.I18n;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "reputation",
         Aliases = new[] {"rep"},
         Description = "Give reputation to you/player",
         Usage = "[amount] <target/*>"
     )]
-    public class CommandReputation : EssCommand {
-
+    public class CommandReputation : EssCommand
+    {
         private const int MAX_INPUT_VALUE = 10000000;
 
-        public override void Execute(ICommandContext context) {
-
-            if (args.Length == 0 || (args.Length == 1 && src.IsConsole)) {
+        public override void Execute(ICommandContext context)
+        {
+            if (args.Length == 0 || (args.Length == 1 && src.IsConsole))
+            {
                 return CommandResult.ShowUsage();
             }
 
-            if (!args[0].IsInt) {
+            if (!args[0].IsInt)
+            {
                 return CommandResult.LangError("INVALID_NUMBER", args[0]);
             }
 
             int amount = args[0].ToInt;
 
-            if (amount > MAX_INPUT_VALUE || amount < -MAX_INPUT_VALUE) {
+            if (amount > MAX_INPUT_VALUE || amount < -MAX_INPUT_VALUE)
+            {
                 return CommandResult.LangError("NUMBER_BETWEEN", -MAX_INPUT_VALUE, MAX_INPUT_VALUE);
             }
 
-            if (args.Length == 2) {
-                if (args[1].RawValue == "*") {
+            if (args.Length == 2)
+            {
+                if (args[1].RawValue == "*")
+                {
                     UServer.Players.ForEach(p => GiveRep(p, amount));
 
-                    if (amount >= 0) {
-                        EssLang.Send(src, "REPUTATION_GIVEN", amount, EssLang.Translate("EVERYONE"));
-                    } else {
-                        EssLang.Send(src, "REPUTATION_TAKE", -amount, EssLang.Translate("EVERYONE"));
+                    if (amount >= 0)
+                    {
+                        context.User.SendLocalizedMessage(Translations, "REPUTATION_GIVEN", amount, EssLang.Translate("EVERYONE"));
                     }
-                } else if (!args[1].IsValidPlayerIdentifier) {
+                    else
+                    {
+                        context.User.SendLocalizedMessage(Translations, "REPUTATION_TAKE", -amount, EssLang.Translate("EVERYONE"));
+                    }
+                }
+                else if (!args[1].IsValidPlayerIdentifier)
+                {
                     return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
-                } else {
+                }
+                else
+                {
                     UPlayer player = args[1].ToPlayer;
 
-                    if (amount >= 0) {
-                        EssLang.Send(src, "REPUTATION_GIVEN", amount, player.DisplayName);
-                    } else {
-                        EssLang.Send(src, "REPUTATION_TAKE", -amount, player.DisplayName);
+                    if (amount >= 0)
+                    {
+                        context.User.SendLocalizedMessage(Translations, "REPUTATION_GIVEN", amount, player.DisplayName);
+                    }
+                    else
+                    {
+                        context.User.SendLocalizedMessage(Translations, "REPUTATION_TAKE", -amount, player.DisplayName);
                     }
 
                     GiveRep(player, amount);
                 }
-            } else {
+            }
+            else
+            {
                 GiveRep(src.ToPlayer(), amount);
             }
 
             return CommandResult.Success();
         }
 
-        private static void GiveRep(UPlayer player, int amount) {
+        private static void GiveRep(UPlayer player, int amount)
+        {
             player.UnturnedPlayer.skills.askRep(amount);
 
-            if (amount >= 0) {
+            if (amount >= 0)
+            {
                 EssLang.Send(player, "REPUTATION_RECEIVED", amount);
-            } else {
+            }
+            else
+            {
                 EssLang.Send(player, "REPUTATION_LOST", -amount);
             }
         }
-
     }
-
 }

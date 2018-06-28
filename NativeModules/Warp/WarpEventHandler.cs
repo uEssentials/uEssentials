@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api;
@@ -30,24 +32,23 @@ using Rocket.Unturned.Player;
 using UnityEngine;
 using EventType = Essentials.Api.Event.EventType;
 
-namespace Essentials.NativeModules.Warp {
-
-    class WarpEventHandler {
-
+namespace Essentials.NativeModules.Warp
+{
+    class WarpEventHandler
+    {
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
-        void OnPlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            if (!UEssentials.Config.Warp.CancelTeleportWhenMove || !CommandWarp.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
+        void OnPlayerMove(UnturnedPlayer player, Vector3 newPosition)
+        {
+            if (!UEssentials.Config.Warp.CancelTeleportWhenMove ||
+                !CommandWarp.Delay.ContainsKey(player.CSteamID.m_SteamID))
+            {
                 return;
             }
 
             CommandWarp.Delay[player.CSteamID.m_SteamID].Cancel();
             CommandWarp.Delay.Remove(player.CSteamID.m_SteamID);
 
-            UPlayer.TryGet(player, p => {
-                EssLang.Send(p, "TELEPORT_CANCELLED_MOVED");
-            });
+            UPlayer.TryGet(player, p => { EssLang.Send(p, "TELEPORT_CANCELLED_MOVED"); });
         }
-
     }
-
 }

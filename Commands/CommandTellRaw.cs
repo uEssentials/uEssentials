@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api;
@@ -26,32 +28,36 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common.Util;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "tellraw",
         Description = "Send raw message to a player.",
         Usage = "[player/*console*] [message]",
         MinArgs = 2
     )]
-    public class CommandTellRaw : EssCommand {
-
-        public override void Execute(ICommandContext context) {
+    public class CommandTellRaw : EssCommand
+    {
+        public override void Execute(ICommandContext context)
+        {
             var msg = args.Length == 2 ? args[1].ToString() : args.Join(1);
             var color = ColorUtil.GetColorFromString(ref msg);
 
-            if (args[0].Equals("*console*")) {
+            if (args[0].Equals("*console*"))
+            {
                 UEssentials.ConsoleSource.SendMessage(msg, color);
-            } else {
-                if (!args[0].IsValidPlayerIdentifier) {
+            }
+            else
+            {
+                if (!args[0].IsValidPlayerIdentifier)
+                {
                     return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                 }
+
                 args[0].ToPlayer.SendMessage(msg, color);
             }
 
             return CommandResult.Success();
         }
-
     }
-
 }

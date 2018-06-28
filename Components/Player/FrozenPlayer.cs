@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,26 +20,29 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using SDG.Unturned;
 using UnityEngine;
 
-namespace Essentials.Components.Player {
-
-    public class FrozenPlayer : PlayerComponent {
-
+namespace Essentials.Components.Player
+{
+    public class FrozenPlayer : PlayerComponent
+    {
         private readonly Vector3 _frozenPos;
         private Vector3 _lastPos;
 
-        private FrozenPlayer() {
+        private FrozenPlayer()
+        {
             _frozenPos = _lastPos = Player.Position;
 
             if (!Player.IsInVehicle) return;
             var veh = Player.CurrentVehicle;
             var passagers = veh.passengers;
 
-            for (var i = 0; i < passagers.Length; i++) {
+            for (var i = 0; i < passagers.Length; i++)
+            {
                 if (passagers[i].player != Player.SteamPlayer) continue;
 
                 var pos = Player.Position;
@@ -49,12 +53,11 @@ namespace Essentials.Components.Player {
             }
         }
 
-        protected override void SafeFixedUpdate() {
+        protected override void SafeFixedUpdate()
+        {
             if (Player.Position == _lastPos) return;
             Player.Teleport(_frozenPos);
             _lastPos = Player.Position;
         }
-
     }
-
 }

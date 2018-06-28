@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,21 +20,24 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
 
-namespace Essentials.Common.Util {
-
-    public class LazyInitVar<TValue> : LazyInitValue<TValue> {
-
+namespace Essentials.Common.Util
+{
+    public class LazyInitVar<TValue> : LazyInitValue<TValue>
+    {
         private readonly Func<TValue> _initializer;
 
-        public static LazyInitVar<TValue> Of(Func<TValue> initializer) {
+        public static LazyInitVar<TValue> Of(Func<TValue> initializer)
+        {
             return new LazyInitVar<TValue>(initializer);
         }
 
-        private LazyInitVar(Func<TValue> initializer) {
+        private LazyInitVar(Func<TValue> initializer)
+        {
             _initializer = initializer;
         }
 

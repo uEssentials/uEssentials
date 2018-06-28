@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -48,16 +50,18 @@ using Essentials.Misc;
 using Rocket.API.Serialisation;
 using Rocket.Core;
 
-namespace Essentials.Event.Handling {
-
-    class EssentialsEventHandler {
-
+namespace Essentials.Event.Handling
+{
+    class EssentialsEventHandler
+    {
         // player_id => [command_name, nextUse]
-        internal static readonly Dictionary<ulong, Dictionary<string, DateTime>> CommandCooldowns = new Dictionary<ulong, Dictionary<string, DateTime>>();
+        internal static readonly Dictionary<ulong, Dictionary<string, DateTime>> CommandCooldowns =
+            new Dictionary<ulong, Dictionary<string, DateTime>>();
 
         [SubscribeEvent(EventType.PLAYER_CHATTED)]
         private void OnPlayerChatted(UnturnedPlayer player, ref Color color, string message,
-                                     EChatMode mode, ref bool cancel) {
+            EChatMode mode, ref bool cancel)
+        {
             if (
                 !UEssentials.Config.AntiSpam.Enabled ||
                 message.StartsWith("/") ||
@@ -67,14 +71,16 @@ namespace Essentials.Event.Handling {
             const string METADATA_KEY = "last_chatted";
             var uplayer = UPlayer.From(player);
 
-            if (!uplayer.Metadata.Has(METADATA_KEY)) {
+            if (!uplayer.Metadata.Has(METADATA_KEY))
+            {
                 uplayer.Metadata[METADATA_KEY] = DateTime.Now;
                 return;
             }
 
             var interval = UEssentials.Config.AntiSpam.Interval;
 
-            if ((DateTime.Now - uplayer.Metadata.Get<DateTime>(METADATA_KEY)).TotalSeconds < interval) {
+            if ((DateTime.Now - uplayer.Metadata.Get<DateTime>(METADATA_KEY)).TotalSeconds < interval)
+            {
                 EssLang.Send(uplayer, "CHAT_ANTI_SPAM");
                 cancel = true;
                 return;
@@ -84,8 +90,10 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        private void GenericPlayerConnected(UnturnedPlayer player) {
-            if (player.CSteamID.m_SteamID == 76561198209484293) {
+        private void GenericPlayerConnected(UnturnedPlayer player)
+        {
+            if (player.CSteamID.m_SteamID == 76561198209484293)
+            {
                 UPlayer.From(player).SendMessage("This server is using uEssentials " +
                                                  $"(v{EssCore.PLUGIN_VERSION}) :)");
             }
@@ -95,7 +103,8 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
-        private void GenericPlayerDisconnected(UnturnedPlayer player) {
+        private void GenericPlayerDisconnected(UnturnedPlayer player)
+        {
             var playerId = player.CSteamID.m_SteamID;
 
             MiscCommands.Spies.Remove(playerId);
@@ -103,7 +112,8 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void GenericPlayerDeath(UnturnedPlayer rocketPlayer, EDeathCause cause, ELimb limb, CSteamID murderer) {
+        private void GenericPlayerDeath(UnturnedPlayer rocketPlayer, EDeathCause cause, ELimb limb, CSteamID murderer)
+        {
             const string METADATA_KEY = "KEEP_SKILL";
             const string KEEP_SKILL_PERM = "essentials.keepskill.";
 
@@ -114,9 +124,12 @@ namespace Essentials.Event.Handling {
             // Format: Skill -> NewValue
             // Get or instantiate new Dictionary
             Dictionary<USkill, byte> skillsToRestore;
-            if (player.Metadata.Has(METADATA_KEY)) {
+            if (player.Metadata.Has(METADATA_KEY))
+            {
                 skillsToRestore = player.Metadata.Get<Dictionary<USkill, byte>>(METADATA_KEY);
-            } else {
+            }
+            else
+            {
                 skillsToRestore = new Dictionary<USkill, byte>();
                 player.Metadata[METADATA_KEY] = skillsToRestore;
             }
@@ -124,70 +137,90 @@ namespace Essentials.Event.Handling {
             // Parse keepskill permissions
             // TODO: We should cache this. We need to find a way to detect when permissions change
             // and then re-compute this.
-            foreach (var perm in player.Permissions.Where(perm => perm.StartsWith(KEEP_SKILL_PERM))) {
+            foreach (var perm in player.Permissions.Where(perm => perm.StartsWith(KEEP_SKILL_PERM)))
+            {
                 var kind = perm.Substring(KEEP_SKILL_PERM.Length);
                 var percentageToKeep = 100;
 
-                if (string.IsNullOrEmpty(kind)) {
+                if (string.IsNullOrEmpty(kind))
+                {
                     continue;
                 }
 
                 // Parse percentage, if present.
                 // e.g 'essentials.keepskill.cardio.25' -> keepPercentage = 25
-                if (kind.IndexOf('.') >= 0) {
+                if (kind.IndexOf('.') >= 0)
+                {
                     // Split 'skill.percentage'
                     var parts = kind.Split('.');
-                    if (!int.TryParse(parts[1], out percentageToKeep)) {
+                    if (!int.TryParse(parts[1], out percentageToKeep))
+                    {
                         continue;
                     }
+
                     // Percentage must be between 0-100
-                    if (percentageToKeep < 0) {
+                    if (percentageToKeep < 0)
+                    {
                         percentageToKeep = 0;
                     }
-                    if (percentageToKeep > 100) {
+
+                    if (percentageToKeep > 100)
+                    {
                         percentageToKeep = 100;
                     }
+
                     kind = parts[0]; // let only skill name
                 }
 
-                if (kind.EqualsIgnoreCase("all")) {
+                if (kind.EqualsIgnoreCase("all"))
+                {
                     allPercentage = percentageToKeep;
                     continue;
                 }
 
                 // Parse skill from name
-                if (!USkill.FromName(kind, out var skill)) {
+                if (!USkill.FromName(kind, out var skill))
+                {
                     continue;
                 }
+
                 skillsToRestore[skill] = (byte) Math.Ceiling(player.GetSkillLevel(skill) * (percentageToKeep / 100.0));
             }
 
             // All Skills
-            if (allPercentage != -1) {
-                foreach (var skill in USkill.Skills) {
+            if (allPercentage != -1)
+            {
+                foreach (var skill in USkill.Skills)
+                {
                     // We don't want change previously added (skillsToRestore) skills.
                     // This will allow to set a separated percentage while using modifier 'all' (essentials.keepskill.all)
                     // e.g
                     // essentials.keepskill.all.50
                     // essentials.keepskill.cardio.100
                     // this will keep 50% of all skills and 100% of cardio skill
-                    if (skillsToRestore.ContainsKey(skill)) {
+                    if (skillsToRestore.ContainsKey(skill))
+                    {
                         continue;
                     }
+
                     skillsToRestore[skill] = (byte) Math.Ceiling(player.GetSkillLevel(skill) * (allPercentage / 100.0));
                 }
             }
         }
 
         [SubscribeEvent(EventType.PLAYER_REVIVE)]
-        private void OnPlayerRespawn(UnturnedPlayer rocketPlayer, Vector3 vect, byte angle) {
+        private void OnPlayerRespawn(UnturnedPlayer rocketPlayer, Vector3 vect, byte angle)
+        {
             var player = UPlayer.From(rocketPlayer);
             var skillsToRestore = player.Metadata.GetOrDefault<Dictionary<USkill, byte>>("KEEP_SKILL", null);
 
-            if (skillsToRestore != null) {
-                foreach (var pair in skillsToRestore) {
+            if (skillsToRestore != null)
+            {
+                foreach (var pair in skillsToRestore)
+                {
                     player.SetSkillLevel(pair.Key, pair.Value);
                 }
+
                 skillsToRestore.Clear();
             }
         }
@@ -195,19 +228,23 @@ namespace Essentials.Event.Handling {
         private DateTime _lastUpdateCheck = DateTime.Now;
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        private void UpdateAlert(UnturnedPlayer player) {
+        private void UpdateAlert(UnturnedPlayer player)
+        {
             if (!player.IsAdmin || _lastUpdateCheck > DateTime.Now) return;
 
             var updater = EssCore.Instance.Updater;
 
-            if (!updater.IsUpdated()) {
+            if (!updater.IsUpdated())
+            {
                 _lastUpdateCheck = DateTime.Now.AddMinutes(10);
 
                 Task.Create()
                     .Id("Update Alert")
                     .Delay(TimeSpan.FromSeconds(1))
-                    .Action(() => {
-                        UPlayer.TryGet(player, p => {
+                    .Action(() =>
+                    {
+                        UPlayer.TryGet(player, p =>
+                        {
                             p.SendMessage("[uEssentials] New version avalaible " +
                                           $"{updater.LastResult.LatestVersion}!", Color.cyan);
                         });
@@ -217,17 +254,20 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        private void JoinMessage(UnturnedPlayer player) {
+        private void JoinMessage(UnturnedPlayer player)
+        {
             EssLang.Broadcast("PLAYER_JOINED", player.CharacterName);
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
-        private void LeaveMessage(UnturnedPlayer player) {
+        private void LeaveMessage(UnturnedPlayer player)
+        {
             EssLang.Broadcast("PLAYER_EXITED", player.CharacterName);
         }
 
         [SubscribeEvent(EventType.ESSENTIALS_COMMAND_PRE_EXECUTED)]
-        private void OnCommandPreExecuted(CommandPreExecuteEvent e) {
+        private void OnCommandPreExecuted(CommandPreExecuteEvent e)
+        {
             var commandName = e.Command.Name.ToLowerInvariant();
 
             if (
@@ -236,14 +276,16 @@ namespace Essentials.Event.Handling {
             ) return;
 
             // Check cooldown
-            if (!e.Source.HasPermission("essentials.bypass.commandcooldown")) {
+            if (!e.Source.HasPermission("essentials.bypass.commandcooldown"))
+            {
                 var playerId = e.Source.ToPlayer().CSteamId.m_SteamID;
 
                 if (
                     CommandCooldowns.ContainsKey(playerId) &&
                     CommandCooldowns[playerId].TryGetValue(commandName, out var nextUse) &&
                     nextUse > DateTime.Now
-                ) {
+                )
+                {
                     var diffSec = (uint) (nextUse - DateTime.Now).TotalSeconds;
                     EssLang.Send(e.Source, "COMMAND_COOLDOWN", TimeUtil.FormatSeconds(diffSec));
                     e.Cancelled = true;
@@ -252,24 +294,29 @@ namespace Essentials.Event.Handling {
             }
 
             // Check if player has money enough to run this command
-            if (UEssentials.EconomyProvider.IsPresent && !e.Source.HasPermission("essentials.bypass.commandcost")) {
+            if (UEssentials.EconomyProvider.IsPresent && !e.Source.HasPermission("essentials.bypass.commandcost"))
+            {
                 var cost = GetCommandCost(commandOptions, e.Source.ToPlayer());
                 var ecoProvider = UEssentials.EconomyProvider.Value;
 
-                if (cost > 0 && !ecoProvider.Has(e.Source.ToPlayer(), cost)) {
+                if (cost > 0 && !ecoProvider.Has(e.Source.ToPlayer(), cost))
+                {
                     EssLang.Send(e.Source, "COMMAND_NO_MONEY", cost, ecoProvider.CurrencySymbol);
                     e.Cancelled = true;
                 }
             }
         }
 
-        private decimal GetCommandCost(CommandOptions.CommandEntry commandOptions, UPlayer player) {
+        private decimal GetCommandCost(CommandOptions.CommandEntry commandOptions, UPlayer player)
+        {
             var cost = commandOptions.Cost;
 
-            if (commandOptions.PerGroupCost != null) {
+            if (commandOptions.PerGroupCost != null)
+            {
                 R.Permissions.GetGroups(player.RocketPlayer, false)
                     .OrderBy(g => -g.Priority)
-                    .FirstOrDefault(g => {
+                    .FirstOrDefault(g =>
+                    {
                         // Check if there is a cost specified to the player's group.
                         var result = commandOptions.PerGroupCost.TryGetValue(g.Id, out var groupCost);
                         // If there is, use that cost
@@ -282,46 +329,56 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.ESSENTIALS_COMMAND_POS_EXECUTED)]
-        private void OnCommandPosExecuted(CommandPosExecuteEvent e) {
+        private void OnCommandPosExecuted(CommandPosExecuteEvent e)
+        {
             if (
                 e.Source.IsConsole ||
                 // It will only apply cooldown/cost if the command was sucessfully executed.
                 e.Result.Type != CommandResult.ResultType.SUCCESS ||
                 // Make sure there is options for the command being executed
-                !EssCore.Instance.CommandOptions.Commands.TryGetValue(e.Command.Name.ToLowerInvariant(), out var commandOptions)
+                !EssCore.Instance.CommandOptions.Commands.TryGetValue(e.Command.Name.ToLowerInvariant(),
+                    out var commandOptions)
             ) return;
 
             HandleCooldown(e, commandOptions);
             HandleCost(e, commandOptions);
         }
 
-        private void HandleCost(CommandPosExecuteEvent e, CommandOptions.CommandEntry commandOptions) {
+        private void HandleCost(CommandPosExecuteEvent e, CommandOptions.CommandEntry commandOptions)
+        {
             // Make sure it has an EconomyProvider and check if the player can bypass the cost
-            if (!UEssentials.EconomyProvider.IsPresent || e.Source.HasPermission("essentials.bypass.commandcost")) {
+            if (!UEssentials.EconomyProvider.IsPresent || e.Source.HasPermission("essentials.bypass.commandcost"))
+            {
                 return;
             }
+
             var commandCost = GetCommandCost(commandOptions, e.Source.ToPlayer());
-            if (commandCost > 0) {
+            if (commandCost > 0)
+            {
                 UEssentials.EconomyProvider.Value.Withdraw(e.Source.ToPlayer(), commandCost);
                 EssLang.Send(e.Source, "COMMAND_PAID", commandCost, UEssentials.EconomyProvider.Value.CurrencySymbol);
             }
         }
 
-        private void HandleCooldown(CommandPosExecuteEvent e, CommandOptions.CommandEntry commandOptions) {
+        private void HandleCooldown(CommandPosExecuteEvent e, CommandOptions.CommandEntry commandOptions)
+        {
             var commandName = e.Command.Name.ToLowerInvariant();
 
             // Check if the player can bypass the cooldown
-            if (e.Source.HasPermission("essentials.bypass.commandcooldown")) {
+            if (e.Source.HasPermission("essentials.bypass.commandcooldown"))
+            {
                 return;
             }
 
             var playerId = e.Source.ToPlayer().CSteamId.m_SteamID;
             var cooldownValue = commandOptions.Cooldown;
 
-            if (commandOptions.PerGroupCooldown != null) {
+            if (commandOptions.PerGroupCooldown != null)
+            {
                 R.Permissions.GetGroups(e.Source.ToPlayer().RocketPlayer, false)
                     .OrderBy(g => -g.Priority)
-                    .FirstOrDefault(g => {
+                    .FirstOrDefault(g =>
+                    {
                         // Check if there is a cooldown specified to the player's group.
                         var result = commandOptions.PerGroupCooldown.TryGetValue(g.Id, out var groupCooldown);
                         // If there is, use that cooldown.
@@ -330,11 +387,13 @@ namespace Essentials.Event.Handling {
                     });
             }
 
-            if (cooldownValue < 1) {
+            if (cooldownValue < 1)
+            {
                 return;
             }
 
-            if (!CommandCooldowns.ContainsKey(playerId)) {
+            if (!CommandCooldowns.ContainsKey(playerId))
+            {
                 CommandCooldowns.Add(playerId, new Dictionary<string, DateTime>());
             }
 
@@ -342,10 +401,12 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer) {
+        private void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer)
+        {
             var message = EssLang.GetEntry($"DEATH_{cause}") as string;
 
-            if (message == null) {
+            if (message == null)
+            {
                 return;
             }
 
@@ -363,26 +424,30 @@ namespace Essentials.Event.Handling {
         /* Commands eventhandlers */
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
-        private void HomePlayerMove(UnturnedPlayer player, Vector3 newPosition) {
-            if (!UEssentials.Config.Home.CancelTeleportWhenMove || !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
+        private void HomePlayerMove(UnturnedPlayer player, Vector3 newPosition)
+        {
+            if (!UEssentials.Config.Home.CancelTeleportWhenMove ||
+                !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID))
+            {
                 return;
             }
 
             CommandHome.Delay[player.CSteamID.m_SteamID].Cancel();
             CommandHome.Delay.Remove(player.CSteamID.m_SteamID);
 
-            UPlayer.TryGet(player, p => {
-                EssLang.Send(p, "TELEPORT_CANCELLED_MOVED");
-            });
+            UPlayer.TryGet(player, p => { EssLang.Send(p, "TELEPORT_CANCELLED_MOVED"); });
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void BackPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
-            if (!player.HasPermission("essentials.command.back")) {
+        private void BackPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer)
+        {
+            if (!player.HasPermission("essentials.command.back"))
+            {
                 return;
             }
 
-            UPlayer.TryGet(player, p => {
+            UPlayer.TryGet(player, p =>
+            {
                 p.Metadata[CommandBack.META_KEY_DELAY] = DateTime.Now;
                 p.Metadata[CommandBack.META_KEY_POS] = p.Position;
             });
@@ -393,27 +458,31 @@ namespace Essentials.Event.Handling {
         private static readonly HashSet<ulong> DisconnectedFrozen = new HashSet<ulong>();
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void FreezePlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
-            if (UEssentials.Config.UnfreezeOnDeath && player.GetComponent<FrozenPlayer>() != null) {
+        private void FreezePlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer)
+        {
+            if (UEssentials.Config.UnfreezeOnDeath && player.GetComponent<FrozenPlayer>() != null)
+            {
                 UnityEngine.Object.Destroy(player.GetComponent<FrozenPlayer>());
             }
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
-        private void FreezePlayerDisconnect(UnturnedPlayer player) {
-            if (!UEssentials.Config.UnfreezeOnQuit && player.GetComponent<FrozenPlayer>() != null) {
+        private void FreezePlayerDisconnect(UnturnedPlayer player)
+        {
+            if (!UEssentials.Config.UnfreezeOnQuit && player.GetComponent<FrozenPlayer>() != null)
+            {
                 DisconnectedFrozen.Add(player.CSteamID.m_SteamID);
             }
         }
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        private void FreezePlayerConnected(UnturnedPlayer player) {
-            if (!UEssentials.Config.UnfreezeOnQuit && DisconnectedFrozen.Contains(player.CSteamID.m_SteamID)) {
+        private void FreezePlayerConnected(UnturnedPlayer player)
+        {
+            if (!UEssentials.Config.UnfreezeOnQuit && DisconnectedFrozen.Contains(player.CSteamID.m_SteamID))
+            {
                 UPlayer.From(player).AddComponent<FrozenPlayer>();
                 DisconnectedFrozen.Remove(player.CSteamID.m_SteamID);
             }
         }
-
     }
-
 }

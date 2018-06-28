@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -32,15 +34,15 @@ using Essentials.Core;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 
-namespace Essentials.NativeModules.Kit.Commands {
-
+namespace Essentials.NativeModules.Kit.Commands
+{
     [CommandInfo(
         Name = "kit",
         Description = "Get a kit",
         Usage = "[kit_name] <player | *>"
     )]
-    public class CommandKit : EssCommand {
-
+    public class CommandKit : EssCommand
+    {
         /*
             player_id -> [kit_name, last_use]
         */
@@ -50,22 +52,27 @@ namespace Essentials.NativeModules.Kit.Commands {
         internal static Dictionary<ulong, DateTime> GlobalCooldown =
             new Dictionary<ulong, DateTime>();
 
-        public override void Execute(ICommandContext context) {
-            if (args.Length == 0 || (args.Length == 1 && src.IsConsole)) {
+        public override void Execute(ICommandContext context)
+        {
+            if (args.Length == 0 || (args.Length == 1 && src.IsConsole))
+            {
                 return CommandResult.ShowUsage();
             }
 
-            if (args.Length == 1) {
+            if (args.Length == 1)
+            {
                 var player = src.ToPlayer();
                 var kitName = args[0].ToLowerString;
 
-                if (!KitModule.Instance.KitManager.Contains(kitName)) {
+                if (!KitModule.Instance.KitManager.Contains(kitName))
+                {
                     return CommandResult.LangError("KIT_NOT_EXIST", kitName);
                 }
 
                 var requestedKit = KitModule.Instance.KitManager.GetByName(kitName);
 
-                if (!requestedKit.CanUse(player)) {
+                if (!requestedKit.CanUse(player))
+                {
                     return CommandResult.LangError("KIT_NO_PERMISSION");
                 }
 
@@ -76,10 +83,12 @@ namespace Essentials.NativeModules.Kit.Commands {
                     kitCost > 0 &&
                     UEssentials.EconomyProvider.IsPresent &&
                     !src.HasPermission("essentials.bypass.kitcost")
-                ) {
+                )
+                {
                     var ecoProvider = UEssentials.EconomyProvider.Value;
 
-                    if (!ecoProvider.Has(player, kitCost)) {
+                    if (!ecoProvider.Has(player, kitCost))
+                    {
                         return CommandResult.LangError("KIT_NO_MONEY", kitCost, ecoProvider.CurrencySymbol);
                     }
                 }
@@ -87,27 +96,34 @@ namespace Essentials.NativeModules.Kit.Commands {
                 var globalCooldown = EssCore.Instance.Config.Kit.GlobalCooldown;
                 var kitCooldown = requestedKit.Cooldown;
 
-                if (!src.HasPermission("essentials.bypass.kitcooldown")) {
+                if (!src.HasPermission("essentials.bypass.kitcooldown"))
+                {
                     // Check if is on global cooldown
-                    if (globalCooldown > 0 && GlobalCooldown.ContainsKey(steamPlayerId)) {
+                    if (globalCooldown > 0 && GlobalCooldown.ContainsKey(steamPlayerId))
+                    {
                         var remainingTime = DateTime.Now - GlobalCooldown[steamPlayerId];
 
-                        if ((remainingTime.TotalSeconds + 1) < globalCooldown) {
+                        if ((remainingTime.TotalSeconds + 1) < globalCooldown)
+                        {
                             return CommandResult.LangError("KIT_GLOBAL_COOLDOWN",
                                 TimeUtil.FormatSeconds((uint) (globalCooldown - remainingTime.TotalSeconds)));
                         }
                     }
 
                     // Check if is on cooldown for this specific kit
-                    if (kitCooldown > 0) {
-                        if (!Cooldowns.TryGetValue(steamPlayerId, out var playerCooldowns) || playerCooldowns == null) {
+                    if (kitCooldown > 0)
+                    {
+                        if (!Cooldowns.TryGetValue(steamPlayerId, out var playerCooldowns) || playerCooldowns == null)
+                        {
                             Cooldowns[steamPlayerId] = playerCooldowns = new Dictionary<string, DateTime>();
                         }
 
-                        if (playerCooldowns.TryGetValue(kitName, out var lastTimeUsedThisKit)) {
+                        if (playerCooldowns.TryGetValue(kitName, out var lastTimeUsedThisKit))
+                        {
                             var remainingTime = DateTime.Now - lastTimeUsedThisKit;
 
-                            if ((remainingTime.TotalSeconds + 1) < kitCooldown) {
+                            if ((remainingTime.TotalSeconds + 1) < kitCooldown)
+                            {
                                 return CommandResult.LangError("KIT_COOLDOWN", TimeUtil.FormatSeconds(
                                     (uint) (kitCooldown - remainingTime.TotalSeconds)));
                             }
@@ -115,8 +131,10 @@ namespace Essentials.NativeModules.Kit.Commands {
                     }
                 }
 
-                if (kitCost > 0 && !src.HasPermission("essentials.bypass.kitcost")) {
-                    UEssentials.EconomyProvider.IfPresent(ec => {
+                if (kitCost > 0 && !src.HasPermission("essentials.bypass.kitcost"))
+                {
+                    UEssentials.EconomyProvider.IfPresent(ec =>
+                    {
                         ec.Withdraw(player, kitCost);
                         EssLang.Send(player, "KIT_PAID", kitCost, ec.CurrencySymbol);
                     });
@@ -126,39 +144,46 @@ namespace Essentials.NativeModules.Kit.Commands {
 
                 // Only apply the cooldowns if the player received the kit
                 // and does not have the bypass permission.
-                if (!src.HasPermission("essentials.bypass.kitcooldown")) {
+                if (!src.HasPermission("essentials.bypass.kitcooldown"))
+                {
                     if (globalCooldown > 0) GlobalCooldown[steamPlayerId] = DateTime.Now;
-                    if (kitCooldown > 0)    Cooldowns[steamPlayerId][kitName] = DateTime.Now;
+                    if (kitCooldown > 0) Cooldowns[steamPlayerId][kitName] = DateTime.Now;
                 }
-            } else if (args.Length == 2) {
+            }
+            else if (args.Length == 2)
+            {
                 var kitName = args[0].ToLowerString;
 
-                if (!src.HasPermission($"essentials.kit.{kitName}.other")) {
+                if (!src.HasPermission($"essentials.kit.{kitName}.other"))
+                {
                     return CommandResult.NoPermission($"essentials.kit.{kitName}.other");
                 }
 
-                if (!KitModule.Instance.KitManager.Contains(kitName)) {
+                if (!KitModule.Instance.KitManager.Contains(kitName))
+                {
                     return CommandResult.LangError("KIT_NOT_EXIST", kitName);
                 }
 
                 var kit = KitModule.Instance.KitManager.GetByName(kitName);
 
-                if (args[1].Equals("*")) {
+                if (args[1].Equals("*"))
+                {
                     UServer.Players.ForEach(kit.GiveTo);
-                    EssLang.Send(src, "KIT_GIVEN_SENDER_ALL", kitName);
-                } else {
-                    if (!UPlayer.TryGet(args[1].ToString(), out var target)) {
+                    context.User.SendLocalizedMessage(Translations, "KIT_GIVEN_SENDER_ALL", kitName);
+                }
+                else
+                {
+                    if (!UPlayer.TryGet(args[1].ToString(), out var target))
+                    {
                         return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                     }
 
                     kit.GiveTo(target);
-                    EssLang.Send(src, "KIT_GIVEN_SENDER", kitName, target);
+                    context.User.SendLocalizedMessage(Translations, "KIT_GIVEN_SENDER", kitName, target);
                 }
             }
 
             return CommandResult.Success();
         }
-
     }
-
 }

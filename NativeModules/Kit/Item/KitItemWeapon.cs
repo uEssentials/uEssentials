@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System;
@@ -27,39 +29,35 @@ using Newtonsoft.Json.Converters;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
 
-namespace Essentials.NativeModules.Kit.Item {
-
-    public class KitItemWeapon : KitItem {
-
+namespace Essentials.NativeModules.Kit.Item
+{
+    public class KitItemWeapon : KitItem
+    {
         [JsonProperty]
         [JsonConverter(typeof(StringEnumConverter))]
         public EFiremode? FireMode { get; set; }
 
-        [JsonProperty]
-        public byte? Ammo { get; set; }
+        [JsonProperty] public byte? Ammo { get; set; }
 
-        [JsonProperty]
-        public Attachment Barrel { get; set; }
+        [JsonProperty] public Attachment Barrel { get; set; }
 
-        [JsonProperty]
-        public Attachment Sight { get; set; }
+        [JsonProperty] public Attachment Sight { get; set; }
 
-        [JsonProperty]
-        public Attachment Grip { get; set; }
+        [JsonProperty] public Attachment Grip { get; set; }
 
-        [JsonProperty]
-        public Attachment Tactical { get; set; }
+        [JsonProperty] public Attachment Tactical { get; set; }
 
-        [JsonProperty]
-        public Attachment Magazine { get; set; }
+        [JsonProperty] public Attachment Magazine { get; set; }
 
         /// <summary>
         /// Instance of SDG.Unturned.Item of this item
         /// </summary>
         /// <returns> Instance of SDG.Unturned.Item of this item </returns>>
         [JsonIgnore]
-        public override SDG.Unturned.Item UnturnedItem {
-            get {
+        public override SDG.Unturned.Item UnturnedItem
+        {
+            get
+            {
                 var item = base.UnturnedItem;
 
                 if (item.metadata.Length != 18)
@@ -67,7 +65,8 @@ namespace Essentials.NativeModules.Kit.Item {
 
                 var metadata = item.metadata;
 
-                Action<int[], Attachment> assembleAttach = (indexes, attach) => {
+                Action<int[], Attachment> assembleAttach = (indexes, attach) =>
+                {
                     if (attach == null || attach.AttachmentId == 0) return;
 
                     var attachIdBytes = BitConverter.GetBytes(attach.AttachmentId);
@@ -77,17 +76,19 @@ namespace Essentials.NativeModules.Kit.Item {
                     metadata[indexes[2]] = attach.Durability;
                 };
 
-                assembleAttach(new[] { 0x0, 0x1, 0xD }, Sight);
-                assembleAttach(new[] { 0x2, 0x3, 0xE }, Tactical);
-                assembleAttach(new[] { 0x4, 0x5, 0xF }, Grip);
-                assembleAttach(new[] { 0x6, 0x7, 0x10 }, Barrel);
-                assembleAttach(new[] { 0x8, 0x9, 0x11 }, Magazine);
+                assembleAttach(new[] {0x0, 0x1, 0xD}, Sight);
+                assembleAttach(new[] {0x2, 0x3, 0xE}, Tactical);
+                assembleAttach(new[] {0x4, 0x5, 0xF}, Grip);
+                assembleAttach(new[] {0x6, 0x7, 0x10}, Barrel);
+                assembleAttach(new[] {0x8, 0x9, 0x11}, Magazine);
 
-                if (Ammo.HasValue) {
+                if (Ammo.HasValue)
+                {
                     metadata[0xA] = Ammo.Value;
                 }
 
-                if (FireMode.HasValue) {
+                if (FireMode.HasValue)
+                {
                     metadata[0xB] = (byte) FireMode;
                 }
 
@@ -98,17 +99,17 @@ namespace Essentials.NativeModules.Kit.Item {
         }
 
         public KitItemWeapon(ushort id, byte durability, byte amount, byte? ammo,
-            EFiremode? fireMode = EFiremode.SAFETY) : base(id, durability, amount) {
+            EFiremode? fireMode = EFiremode.SAFETY) : base(id, durability, amount)
+        {
             FireMode = fireMode;
             Ammo = ammo;
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return $"{base.ToString()}, Barrel: {Barrel?.AttachmentId ?? 0}, Sight: {Sight?.AttachmentId ?? 0}, " +
                    $"Grip: {Grip?.AttachmentId ?? 0}, Tactical: {Tactical?.AttachmentId ?? 0}, Magazine: {Magazine?.AttachmentId ?? 0}, " +
                    $"FireMode: {FireMode?.ToString() ?? "None"}, Ammo: {Ammo?.ToString() ?? "None"}";
         }
-
     }
-
 }
