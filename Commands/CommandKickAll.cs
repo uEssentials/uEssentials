@@ -23,39 +23,57 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
-using Essentials.I18n;
+using Essentials.Common;
+using Rocket.API.Commands;
+using Rocket.API.Player;
+using Rocket.API.Plugins;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Core.Player;
+using Rocket.Unturned.Player;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "kickall",
-        Description = "Kick all players",
-        Usage = "<reason>"
+        "kickall",
+        "Kick all players",
+        Syntax= "<reason>"
     )]
     public class CommandKickAll : EssCommand
     {
+        public CommandKickAll(IPlugin plugin) : base(plugin)
+        {
+        }
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
         public override void Execute(ICommandContext context)
         {
-            var players = new List<UPlayer>(UServer.Players);
+            var playerManager = context.Container.Resolve<IPlayerManager>();
+            var players = playerManager.OnlinePlayers
+                .Select(c => c as UnturnedPlayer)
+                .Where(c => c != null)
+                .ToList();
 
             if (players.Count == 0)
             {
-                return CommandResult.LangError("NO_PLAYERS_FOR_KICK");
+                throw new CommandWrongUsageException(Translations.Get("NO_PLAYERS_FOR_KICK"));
             }
 
-            var reason = args.IsEmpty
-                ? EssLang.Translate("KICK_NO_SPECIFIED_REASON")
-                : args.Join(0);
+            var reason = context.Parameters.Length == 0
+                ? Translations.Get("KICK_NO_SPECIFIED_REASON")
+                : context.Parameters.GetArgumentLine(0);
 
-            players.ForEach(player => { player.Kick(reason); });
+            players.ForEach(player => { player.Kick(context.User, reason); });
 
             context.User.SendLocalizedMessage(Translations, "KICKED_ALL", players.Count);
-
-            return CommandResult.Success();
         }
     }
 }

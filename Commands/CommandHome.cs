@@ -24,58 +24,67 @@
 #endregion
 
 using System;
-using Essentials.Api;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Task;
 using Essentials.Common.Util;
-using Essentials.I18n;
-using UnityEngine;
 using SDG.Unturned;
-using Essentials.Event.Handling;
+using Rocket.API.Commands;
+using Rocket.API.Permissions;
+using Rocket.API.Plugins;
+using Rocket.API.Scheduler;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Core.Player;
+using Rocket.Core.Scheduler;
+using Rocket.UnityEngine.Extensions;
+using Rocket.Unturned.Player;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "home",
-        Aliases = new[] {"h"},
-        Description = "Teleport to your bed.",
-        AllowedSource = AllowedSource.PLAYER
+        "home",
+        "Teleport to your bed.",
+        Aliases = new[] {"h"}
     )]
     public class CommandHome : EssCommand
     {
-        internal static PlayerDictionary<Task> Delay = new PlayerDictionary<Task>(
+        internal static PlayerDictionary<ITask> Delay = new PlayerDictionary<ITask>(
             PlayerDictionaryOptions.LAZY_REGISTER_HANDLERS |
             PlayerDictionaryOptions.REMOVE_ON_DEATH |
             PlayerDictionaryOptions.REMOVE_ON_DISCONNECT,
             task => task.Cancel()
         );
 
+        public override bool SupportsUser(Type user)
+        {
+            return typeof(UnturnedUser).IsAssignableFrom(user);
+        }
+
         public override void Execute(ICommandContext context)
         {
-            var player = src.ToPlayer();
-            var playerId = player.CSteamId;
+            var player = ((UnturnedUser)context.User).Player;
+            var playerId = player.CSteamID;
+            var scheduler = context.Container.Resolve<ITaskScheduler>();
 
-            if (player.Stance == EPlayerStance.DRIVING ||
-                player.Stance == EPlayerStance.SITTING)
+            if (player.Entity.Stance == EPlayerStance.DRIVING ||
+                player.Entity.Stance == EPlayerStance.SITTING)
             {
-                return CommandResult.LangError("CANNOT_TELEPORT_DRIVING");
+                throw new CommandWrongUsageException(Translations.Get("CANNOT_TELEPORT_DRIVING"));
             }
 
-            if (!BarricadeManager.tryGetBed(player.CSteamId, out var bedPosition, out var bedAngle))
+            if (!BarricadeManager.tryGetBed(player.CSteamID, out var bedPosition, out var bedAngle))
             {
-                return CommandResult.LangError("WITHOUT_BED");
+                throw new CommandWrongUsageException(Translations.Get("WITHOUT_BED"));
             }
 
-            if (Delay.ContainsKey(player.CSteamId.m_SteamID))
+            if (Delay.ContainsKey(player.CSteamID.m_SteamID))
             {
-                return CommandResult.LangError("ALREADY_WAITING");
+                throw new CommandWrongUsageException(Translations.Get("ALREADY_WAITING"));
             }
 
             var homeCommand = UEssentials.Config.Home;
             var delay = homeCommand.TeleportDelay;
 
-            if (player.HasPermission("essentials.bypass.homecooldown"))
+            if (player.CheckPermission("essentials.bypass.homecooldown") == PermissionResult.Grant)
             {
                 delay = 0;
             }
@@ -85,25 +94,18 @@ namespace Essentials.Commands
                 context.User.SendLocalizedMessage(Translations, "TELEPORT_DELAY", TimeUtil.FormatSeconds((uint) delay));
             }
 
-            var task = Task.Create()
-                .Delay(TimeSpan.FromSeconds(delay))
-                .Action(t =>
-                {
-                    Delay.Remove(playerId.m_SteamID);
-                    player.Teleport(bedPosition, bedAngle);
-                    context.User.SendLocalizedMessage(Translations, "TELEPORTED_BED");
-                })
-                .Submit();
+            var task = scheduler.ScheduleDelayed(UEssentials, () =>
+            {
+                Delay.Remove(playerId.m_SteamID);
+                player.Entity.Teleport(bedPosition.ToSystemVector(), bedAngle);
+                context.User.SendLocalizedMessage(Translations, "TELEPORTED_BED");
+            }, "EssentialsHomeTeleport", TimeSpan.FromSeconds(delay));
 
             Delay.Add(playerId.m_SteamID, task);
-
-            return CommandResult.Success();
         }
 
-        protected override void OnUnregistered()
+        public CommandHome(IPlugin plugin) : base(plugin)
         {
-            Delay.Clear();
-            UEssentials.EventManager.Unregister<EssentialsEventHandler>("HomePlayerMove");
         }
     }
 }

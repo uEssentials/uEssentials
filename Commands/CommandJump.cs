@@ -23,49 +23,53 @@
 
 #endregion
 
+using System;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.I18n;
+using Rocket.API.Commands;
+using Rocket.API.Plugins;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Unturned.Player;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "jump",
-        Description = "Teleport to a position that you are looking towards.",
-        Usage = "<max_distance>",
-        AllowedSource = AllowedSource.PLAYER
+        "jump",
+        "Teleport to a position that you are looking towards.",
+        Syntax = "<max_distance>"
     )]
     public class CommandJump : EssCommand
     {
+        public CommandJump(IPlugin plugin) : base(plugin)
+        {
+        }
+        public override bool SupportsUser(Type user)
+        {
+            return typeof(UnturnedUser).IsAssignableFrom(user);
+        }
+
         public override void Execute(ICommandContext context)
         {
-            var player = src.ToPlayer();
+            var player = ((UnturnedUser)context.User).Player;
             var dist = 1000f;
 
-            if (args.Length == 1)
+            if (context.Parameters.Length == 1)
             {
-                if (!args[0].IsDouble)
-                {
-                    return CommandResult.ShowUsage();
-                }
-
-                dist = (float) args[0].ToDouble;
+                dist = context.Parameters.Get<float>(0);
             }
 
             var eyePos = player.GetEyePosition(dist);
 
             if (!eyePos.HasValue)
             {
-                return CommandResult.LangError("JUMP_NO_POSITION");
+                throw new CommandWrongUsageException(Translations.Get("JUMP_NO_POSITION"));
             }
 
             var point = eyePos.Value;
             point.y += 6;
 
-            player.Teleport(point);
-            context.User.SendLocalizedMessage(Translations, "JUMPED", point.x, point.y, point.z);
-
-            return CommandResult.Success();
+            player.Entity.Teleport(point);
+            context.User.SendLocalizedMessage(Translations, "JUMPED", new object[] { point.x, point.y, point.z });
         }
     }
 }

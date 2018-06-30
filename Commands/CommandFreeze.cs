@@ -23,47 +23,62 @@
 
 #endregion
 
+using System;
 using System.Linq;
-using Essentials.Api;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Components.Player;
-using Essentials.Event.Handling;
-using Essentials.I18n;
+using Rocket.API.Commands;
+using Rocket.API.Player;
+using Rocket.API.Plugins;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Unturned.Player;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "freeze",
-        Usage = "[player/*]",
-        Description = "Freeze a player/everyone",
-        MinArgs = 1,
-        MaxArgs = 1
+        "freeze",
+        "Freeze a player/everyone",
+        Syntax= "[player/*]"
     )]
     public class CommandFreeze : EssCommand
     {
+        public CommandFreeze(IPlugin plugin) : base(plugin)
+        {
+        }
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
         public override void Execute(ICommandContext context)
         {
-            if (args[0].Equals("*"))
+            if(context.Parameters.Length < 1)
+                throw new CommandWrongUsageException();
+
+            if (context.Parameters[0].Equals("*"))
             {
-                UServer.Players
+                var playerManager = context.Container.Resolve<IPlayerManager>();
+
+                playerManager.OnlinePlayers
+                    .Select(c => c as UnturnedPlayer)
+                    .Where(c => c != null)
                     .Where(player => !player.HasComponent<FrozenPlayer>())
                     .ForEach(player =>
                     {
                         player.AddComponent<FrozenPlayer>();
-                        EssLang.Send(player, "FROZEN_PLAYER", src.DisplayName);
+                        player.User.SendLocalizedMessage(Translations, "FROZEN_PLAYER", context.User.Name);
                     });
 
                 context.User.SendLocalizedMessage(Translations, "FROZEN_ALL");
             }
             else
             {
-                if (!UPlayer.TryGet(args[0].ToString(), out var player))
-                {
-                    return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
-                }
+                var player = context.Parameters.Get<IPlayer>(0) as UnturnedPlayer;
+                if(player == null)
+                    throw new PlayerNotFoundException(context.Parameters[0]);
 
                 if (player.HasComponent<FrozenPlayer>())
                 {
@@ -74,18 +89,9 @@ namespace Essentials.Commands
                     player.AddComponent<FrozenPlayer>();
 
                     context.User.SendLocalizedMessage(Translations, "FROZEN_SENDER", player.DisplayName);
-                    EssLang.Send(player, "FROZEN_PLAYER", src.DisplayName);
+                    player.User.SendLocalizedMessage(Translations, "FROZEN_PLAYER", context.User.Name);
                 }
             }
-
-            return CommandResult.Success();
-        }
-
-        protected override void OnUnregistered()
-        {
-            UEssentials.EventManager.Unregister<EssentialsEventHandler>("FreezePlayerDisconnect");
-            UEssentials.EventManager.Unregister<EssentialsEventHandler>("FreezePlayerConnected");
-            UEssentials.EventManager.Unregister<EssentialsEventHandler>("FreezePlayerDeath");
         }
     }
 }
