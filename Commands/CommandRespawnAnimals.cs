@@ -23,36 +23,45 @@
 
 #endregion
 
-
+using System;
 using System.Linq;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
 using Essentials.Common;
 using SDG.Unturned;
-using Essentials.I18n;
+using Rocket.API.Commands;
+using Rocket.API.Plugins;
+using Rocket.Core.I18N;
+using Object = UnityEngine.Object;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "respawnanimals",
-        Description = "Respawn all animals"
+        "respawnanimals",
+        "Respawn all animals"
     )]
     public class CommandRespawnAnimal : EssCommand
     {
+        public CommandRespawnAnimal(IPlugin plugin) : base(plugin)
+        {
+        }
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
         public override void Execute(ICommandContext context)
         {
             var respawnedCount = 0;
 
-            UWorld.Animals.Where(z => z.isDead).ForEach(animal =>
+            var animals = Object.FindObjectsOfType<Animal>();
+            animals.Where(z => z.isDead).ForEach(animal =>
             {
                 AnimalManager.sendAnimalAlive(animal, animal.transform.position, 0);
                 respawnedCount++;
             });
 
             context.User.SendLocalizedMessage(Translations, "RESPAWNED_ANIMALS", respawnedCount);
-
-            return CommandResult.Success();
         }
     }
 }

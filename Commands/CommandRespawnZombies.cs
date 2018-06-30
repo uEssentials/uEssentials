@@ -24,27 +24,40 @@
 #endregion
 
 
+using System;
 using System.Linq;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
 using Essentials.Common;
 using SDG.Unturned;
-using Essentials.I18n;
+using Rocket.API.Commands;
+using Rocket.API.Plugins;
+using Rocket.Core.I18N;
+using Object = UnityEngine.Object;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "respawnzombies",
-        Description = "Respawn all zombies"
+        "respawnzombies",
+        "Respawn all zombies"
     )]
     public class CommandRespawnZombies : EssCommand
     {
+        public CommandRespawnZombies(IPlugin plugin) : base(plugin)
+        {
+        }
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
         public override void Execute(ICommandContext context)
         {
             var count = 0;
 
-            UWorld.Zombies.Where(z => z.isDead).ForEach(zombie =>
+            var zombies = Object.FindObjectsOfType<Zombie>();
+
+            zombies.Where(z => z.isDead).ForEach(zombie =>
             {
                 ZombieManager.sendZombieAlive(
                     zombie,
@@ -61,8 +74,6 @@ namespace Essentials.Commands
             });
 
             context.User.SendLocalizedMessage(Translations, "RESPAWNED_ZOMBIES", count);
-
-            return CommandResult.Success();
         }
     }
 }

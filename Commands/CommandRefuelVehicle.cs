@@ -32,7 +32,6 @@ using Rocket.API.Permissions;
 using Rocket.API.Plugins;
 using Rocket.Core.Commands;
 using Rocket.Core.I18N;
-using Rocket.Core.Migration.LegacyPermissions;
 using Rocket.Core.Permissions;
 using Rocket.Core.User;
 using Rocket.Unturned.Player;

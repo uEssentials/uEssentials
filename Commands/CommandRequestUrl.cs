@@ -23,46 +23,60 @@
 
 #endregion
 
+using System;
+using System.Linq;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
 using Essentials.Common;
-using Essentials.I18n;
+using Essentials.NativeModules.Warp.Commands;
+using Rocket.API.Commands;
+using Rocket.API.Player;
+using Rocket.API.Plugins;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Unturned.Player;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "requesturl",
+        "requesturl",
+        "Request player to open an URL.",
         Aliases = new[] {"requrl"},
-        Description = "Request player to open an URL.",
-        Usage = "[player/*] [message] [url]",
-        MinArgs = 3,
-        MaxArgs = 3
+        Syntax= "[player/*] [message] [url]"
     )]
     public class CommandRequestUrl : EssCommand
     {
+        public CommandRequestUrl(IPlugin plugin) : base(plugin)
+        {
+        }
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
         public override void Execute(ICommandContext context)
         {
-            var message = args[1].ToString();
-            var url = args[2].ToString();
+            if(context.Parameters.Length != 3)
+                throw new CommandWrongUsageException();
 
-            if (args[0].Equals("*"))
+            var message = context.Parameters[1];
+            var url = context.Parameters[2];
+
+            if (context.Parameters[0].Equals("*"))
             {
-                UServer.Players.ForEach(p => { p.UnturnedPlayer.sendBrowserRequest(message, url); });
-                context.User.SendLocalizedMessage(Translations, "REQUEST_URL_SUCCESS", EssLang.Translate("EVERYONE"), url);
-            }
-            else if (args[0].IsValidPlayerIdentifier)
-            {
-                var target = args[0].ToPlayer;
-                target.UnturnedPlayer.sendBrowserRequest(message, url);
-                context.User.SendLocalizedMessage(Translations, "REQUEST_URL_SUCCESS", target.DisplayName, url);
-            }
-            else
-            {
-                return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
+                var playerManager = context.Container.Resolve<IPlayerManager>();
+                playerManager.OnlinePlayers.Select(c => c as UnturnedPlayer)
+                    .Where(c => c != null)
+                    .ForEach(p => p.NativePlayer.sendBrowserRequest(message, url));
+
+                context.User.SendLocalizedMessage(Translations, "REQUEST_URL_SUCCESS", Translations.Get("EVERYONE"), url);
+                return;
             }
 
-            return CommandResult.Success();
+            if(!(context.Parameters.Get<IPlayer>(0) is UnturnedPlayer target))
+                throw new PlayerNameNotFoundException(context.Parameters[0]);
+
+            target.NativePlayer.sendBrowserRequest(message, url);
+            context.User.SendLocalizedMessage(Translations, "REQUEST_URL_SUCCESS", target.DisplayName, url);
         }
     }
 }

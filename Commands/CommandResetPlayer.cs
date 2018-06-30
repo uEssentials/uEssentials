@@ -24,70 +24,59 @@
 #endregion
 
 using System.IO;
-using Steamworks;
 using System;
 using System.Linq;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
 using Essentials.Common;
-using Essentials.I18n;
+using Rocket.API.Commands;
+using Rocket.API.Plugins;
+using Rocket.API.User;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Core.User;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "resetplayer",
-        Description = "Reset all player data.",
-        Usage = "[player/playerid]",
-        MinArgs = 1,
-        MaxArgs = 1
+        "resetplayer",
+        "Reset all player data.",
+        Syntax = "[player/playerid]"
     )]
     public class CommandResetPlayer : EssCommand
     {
-        public override void Execute(ICommandContext context)
+        public CommandResetPlayer(IPlugin plugin) : base(plugin)
         {
-            if (args.IsEmpty || args.Length > 1)
-            {
-                return CommandResult.ShowUsage();
-            }
-
-            try
-            {
-                var steamId = new CSteamID(ulong.Parse(args[0].ToString()));
-
-                if (!steamId.IsValid())
-                {
-                    return CommandResult.LangError("INVALID_STEAMID", steamId.m_SteamID);
-                }
-
-                ResetPlayer(steamId.m_SteamID);
-                context.User.SendLocalizedMessage(Translations, "PLAYER_RESET");
-            }
-            catch (FormatException)
-            {
-                var target = args[0].ToPlayer;
-
-                if (target == null)
-                {
-                    return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
-                }
-
-                target.Kick(EssLang.Translate("PLAYER_RESET_KICK"));
-                ResetPlayer(target.CSteamId.m_SteamID);
-
-                context.User.SendLocalizedMessage(Translations, "PLAYER_RESET");
-            }
-
-            return CommandResult.Success();
         }
 
-        private void ResetPlayer(ulong steamId)
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
+        public override void Execute(ICommandContext context)
+        {
+            if (context.Parameters.Length == 0)
+            {
+                throw new CommandWrongUsageException();
+            }
+
+            var id = context.Parameters[0];
+            var userManager = context.Container.Resolve<IUserManager>();
+
+            foreach (var user in userManager.OnlineUsers.Where(c => c.Id == id))
+                user.Kick(context.User, Translations.Get("PLAYER_RESET_KICK"));
+
+            ResetPlayer(id);
+            context.User.SendLocalizedMessage(Translations, "PLAYER_RESET");
+        }
+
+        private void ResetPlayer(string userId)
         {
             var sep = Path.DirectorySeparatorChar.ToString();
-            var idStr = steamId.ToString();
             var parentDir = Directory.GetParent(Directory.GetCurrentDirectory());
 
             Directory.GetDirectories(parentDir + $"{sep}Players{sep}")
-                .Where(dic => dic.Substring(dic.LastIndexOf(sep, StringComparison.Ordinal) + 1).StartsWith(idStr))
+                .Where(dic => dic.Substring(dic.LastIndexOf(sep, StringComparison.Ordinal) + 1).StartsWith(userId))
                 .ForEach(dic => Directory.Delete(dic, true));
         }
     }
