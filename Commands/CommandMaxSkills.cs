@@ -23,78 +23,91 @@
 
 #endregion
 
+using System;
 using System.Linq;
-using Essentials.I18n;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
 using Essentials.Common;
+using Rocket.API.Commands;
+using Rocket.API.Permissions;
+using Rocket.API.Player;
+using Rocket.API.Plugins;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Core.Migration.LegacyPermissions;
+using Rocket.Core.Permissions;
+using Rocket.Core.User;
+using Rocket.Unturned.Player;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "maxskills",
-        Description = "Set to max level all of your/player skills",
-        Usage = "<overpower[true|false]> <player | *>"
+        "maxskills",
+        "Set to max level all of your/player skills",
+        Syntax = "<overpower[true|false]> <player | *>"
     )]
     public class CommandMaxSkills : EssCommand
     {
+        public CommandMaxSkills(IPlugin plugin) : base(plugin)
+        {
+        }
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
         public override void Execute(ICommandContext context)
         {
-            if (args.IsEmpty)
+            if (context.Parameters.Length == 0)
             {
-                if (src.IsConsole)
+                if (!(context.User is UnturnedUser))
                 {
-                    return CommandResult.ShowUsage();
+                    throw new CommandWrongUsageException();
                 }
 
-                GiveMaxSkills(src.ToPlayer(), false);
+                GiveMaxSkills(((UnturnedUser)context.User).Player, false);
             }
             else
             {
-                if (args.Length < 2 && src.IsConsole)
+                if (context.Parameters.Length < 2 && !(context.User is UnturnedUser))
                 {
-                    return CommandResult.ShowUsage();
+                    throw new CommandWrongUsageException();
                 }
 
-                if (!args[0].IsBool)
-                {
-                    return CommandResult.LangError("INVALID_BOOLEAN", args[0]);
-                }
+                bool overpower = context.Parameters.Get<bool>(0);
 
-                bool overpower = args[0].ToBool;
-
-                if (overpower && !src.HasPermission($"{Permission}.overpower"))
+                if (overpower && context.User.CheckPermission($"MaxSkills.overpower") != PermissionResult.Grant)
                 {
-                    return CommandResult.NoPermission($"{Permission}.overpower");
+                    throw new NotEnoughPermissionsException(context.User, "MaxSkills.overpower");
                 }
 
                 // player or all
-                if (args.Length > 1)
+                if (context.Parameters.Length > 1)
                 {
-                    if (args[1].Equals("*"))
+                    if (context.Parameters[0].Equals("*"))
                     {
-                        if (!src.HasPermission($"{Permission}.all"))
+                        if (context.User.CheckPermission($"MaxSkills.all") != PermissionResult.Grant)
                         {
-                            return CommandResult.NoPermission($"{Permission}.all");
+                            throw new NotEnoughPermissionsException(context.User, "MaxSkills.all");
                         }
 
-                        UServer.Players.ForEach(p => GiveMaxSkills(p, overpower));
+                        var playerManager = context.Container.Resolve<IPlayerManager>();
+                        playerManager.OnlinePlayers.Select(c => c as UnturnedPlayer)
+                            .Where(c => c != null)
+                            .ForEach(p => GiveMaxSkills(p, overpower));
+
                         context.User.SendLocalizedMessage(Translations, "MAX_SKILLS_ALL");
                     }
                     else
                     {
-                        if (!src.HasPermission($"{Permission}.other"))
+                        if (context.User.CheckPermission($"MaxSkills.other") != PermissionResult.Grant)
                         {
-                            return CommandResult.NoPermission($"{Permission}.other");
+                            throw new NotEnoughPermissionsException(context.User, "MaxSkills.other");
                         }
 
-                        if (!args[1].IsValidPlayerIdentifier)
-                        {
-                            return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
-                        }
+                        if(!(context.Parameters.Get<IPlayer>(1) is UnturnedPlayer targetPlayer))
+                            throw new PlayerNotOnlineException(context.Parameters[1]);
 
-                        var targetPlayer = args[1].ToPlayer;
                         GiveMaxSkills(targetPlayer, overpower);
                         context.User.SendLocalizedMessage(Translations, "MAX_SKILLS_TARGET", targetPlayer.DisplayName);
                     }
@@ -102,24 +115,22 @@ namespace Essentials.Commands
                 else
                 {
                     // self (with overpower)
-                    GiveMaxSkills(src.ToPlayer(), overpower);
+                    GiveMaxSkills(((UnturnedUser)context.User).Player, overpower);
                 }
             }
-
-            return CommandResult.Success();
         }
 
-        private void GiveMaxSkills(UPlayer player, bool overpower)
+        private void GiveMaxSkills(UnturnedPlayer player, bool overpower)
         {
-            var pSkills = player.UnturnedPlayer.skills;
+            var pSkills = player.NativePlayer.skills;
 
             foreach (var skill in pSkills.skills.SelectMany(skArr => skArr))
             {
                 skill.level = overpower ? byte.MaxValue : skill.max;
             }
 
-            pSkills.askSkills(player.CSteamId);
-            EssLang.Send(player, "MAX_SKILLS");
+            pSkills.askSkills(player.CSteamID);
+            player.User.SendLocalizedMessage(Translations, "MAX_SKILLS");
         }
     }
 }

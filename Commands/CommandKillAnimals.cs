@@ -23,6 +23,7 @@
 
 #endregion
 
+using System;
 using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -31,29 +32,42 @@ using Essentials.Common;
 using SDG.Unturned;
 using UnityEngine;
 using Essentials.I18n;
+using Rocket.API.Commands;
+using Rocket.API.Plugins;
+using Rocket.Core.I18N;
+using Object = UnityEngine.Object;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "killanimals",
-        Aliases = new[] {"clearanimals"},
-        Description = "Kill all animals"
+        "killanimals",
+        "Kill all animals",
+        Aliases = new[] {"clearanimals"}
     )]
     public class CommandKillAnimals : EssCommand
     {
+        public CommandKillAnimals(IPlugin plugin) : base(plugin)
+        {
+        }
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
         public override void Execute(ICommandContext context)
         {
             var killedCount = 0;
 
-            UWorld.Animals.Where(animal => !animal.isDead).ForEach(animal =>
+            var animals = Object.FindObjectsOfType<Animal>();
+
+            animals.Where(animal => !animal.isDead).ForEach(animal =>
             {
                 AnimalManager.sendAnimalDead(animal, Vector3.zero);
                 killedCount++;
             });
 
             context.User.SendLocalizedMessage(Translations, "KILLED_ANIMALS", killedCount);
-
-            return CommandResult.Success();
         }
     }
 }

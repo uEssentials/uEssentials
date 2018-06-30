@@ -23,43 +23,49 @@
 
 #endregion
 
+using System;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.I18n;
+using Rocket.API.Commands;
+using Rocket.API.Player;
+using Rocket.API.Plugins;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Unturned.Player;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "ping",
-        Description = "View your/player ping",
-        Usage = "<player>"
+        "ping",
+        "View your/player ping",
+        Syntax = "[player]"
     )]
     public class CommandPing : EssCommand
     {
+        public CommandPing(IPlugin plugin) : base(plugin)
+        {
+        }
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
         public override void Execute(ICommandContext context)
         {
-            if (args.IsEmpty || args.Length > 1)
+            if (context.Parameters.Length < 1)
             {
-                if (src.IsConsole)
-                {
-                    return CommandResult.ShowUsage();
-                }
+                if (!(context.User is UnturnedUser))
+                    throw new CommandWrongUsageException();
 
-                context.User.SendLocalizedMessage(Translations, "PING", src.ToPlayer().Ping);
+                context.User.SendLocalizedMessage(Translations, "PING", ((UnturnedUser)context.User).Player.Ping);
             }
             else
             {
-                var target = args[0].ToPlayer;
+                if (!(context.Parameters.Get<IPlayer>(0) is UnturnedPlayer targetPlayer))
+                    throw new PlayerNotOnlineException(context.Parameters[0]);
 
-                if (target == null)
-                {
-                    return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
-                }
-
-                context.User.SendLocalizedMessage(Translations, "PING_OTHER", target.DisplayName, target.Ping);
+                context.User.SendLocalizedMessage(Translations, "PING_OTHER", targetPlayer.DisplayName, targetPlayer.Ping);
             }
-
-            return CommandResult.Success();
         }
     }
 }

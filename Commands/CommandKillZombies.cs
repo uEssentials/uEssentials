@@ -23,37 +23,48 @@
 
 #endregion
 
+using System;
 using System.Linq;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
+using Essentials.Common;
 using SDG.Unturned;
 using UnityEngine;
-using Essentials.I18n;
-using Essentials.Common;
+using Rocket.API.Commands;
+using Rocket.API.Plugins;
+using Rocket.Core.I18N;
+using Object = UnityEngine.Object;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "killzombies",
-        Aliases = new[] {"clearzombies"},
-        Description = "Kill all zombies"
+        "killzombies",
+        "Kill all zombies",
+        Aliases = new[] {"clearzombies"}
     )]
     public class CommandKillZombies : EssCommand
     {
+        public CommandKillZombies(IPlugin plugin) : base(plugin)
+        {
+        }
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
         public override void Execute(ICommandContext context)
         {
             var killedCount = 0;
 
-            UWorld.Zombies.Where(zombie => !zombie.isDead).ForEach(zombie =>
+            var zombies = Object.FindObjectsOfType<Zombie>();
+
+            zombies.Where(zombie => !zombie.isDead).ForEach(zombie =>
             {
                 ZombieManager.sendZombieDead(zombie, Vector3.zero);
                 killedCount++;
             });
 
             context.User.SendLocalizedMessage(Translations, "KILLED_ZOMBIES", killedCount);
-
-            return CommandResult.Success();
         }
     }
 }

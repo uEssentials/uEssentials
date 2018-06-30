@@ -23,43 +23,66 @@
 
 #endregion
 
+using System;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
 using Essentials.Common;
-using Essentials.I18n;
+using Rocket.API.Commands;
+using Rocket.API.Entities;
+using Rocket.API.Player;
+using Rocket.API.Plugins;
+using Rocket.API.User;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Core.Player;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "kill",
-        Description = "Kill a player",
-        Usage = "[player/*]",
-        MinArgs = 1,
-        MaxArgs = 1
+        "kill",
+        "Kill a player",
+        Syntax= "[player/*]"
     )]
     public class CommandKill : EssCommand
     {
+        public CommandKill(IPlugin plugin) : base(plugin)
+        {
+        }
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
         public override void Execute(ICommandContext context)
         {
-            if (args[0].Equals("*"))
+            if(context.Parameters.Length == 0)
+                throw new CommandWrongUsageException();
+
+            if (context.Parameters[0].Equals("*"))
             {
-                UServer.Players.ForEach(p => p.Kill());
+                context.Container.Resolve<IPlayerManager>().OnlinePlayers.ForEach(p => KillPlayer(p, context.User));
 
                 context.User.SendLocalizedMessage(Translations, "KILL_ALL");
-                return CommandResult.Success();
+                return;
             }
 
-            if (!args[0].IsValidPlayerIdentifier)
+            var player = context.Parameters.Get<IPlayer>(0);
+            if(!KillPlayer(player, context.User))
+                throw new PlayerNameNotFoundException(context.Parameters[0]);
+
+            context.User.SendLocalizedMessage(Translations, "KILL_PLAYER", player.Name);
+        }
+
+        public bool KillPlayer(IPlayer player, IUser killedBy)
+        {
+            var ent = player?.GetEntity();
+            if (!(ent is ILivingEntity livingEntity))
             {
-                return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
+                return false;
             }
 
-            var target = args[0].ToPlayer;
-            target.Kill();
-
-            context.User.SendLocalizedMessage(Translations, "KILL_PLAYER", target.DisplayName);
-            return CommandResult.Success();
+            livingEntity.Kill(killedBy);
+            return true;
         }
     }
 }
