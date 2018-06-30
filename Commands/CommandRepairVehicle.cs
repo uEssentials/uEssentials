@@ -23,64 +23,86 @@
 
 #endregion
 
+using System;
 using System.Linq;
 using Essentials.Api.Command;
-using Essentials.I18n;
 using SDG.Unturned;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
+using Essentials.Common;
+using Rocket.API.Commands;
+using Rocket.API.Permissions;
+using Rocket.API.Plugins;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Core.Permissions;
+using Rocket.Core.User;
+using Rocket.Unturned.Player;
+using Object = UnityEngine.Object;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "repairvehicle",
-        Aliases = new[] {"repairveh", "repv"},
-        Description = "Repair current/all vehicle",
-        Usage = "<all>"
+        "repairvehicle",
+        "Repair current/all vehicle",
+        Aliases = new[] { "repairveh", "repv" },
+        Syntax = "<all>"
     )]
     public class CommandRepairVehicle : EssCommand
     {
+        public CommandRepairVehicle(IPlugin plugin) : base(plugin)
+        {
+        }
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
         public override void Execute(ICommandContext context)
         {
-            if (args.IsEmpty)
+            if (context.Parameters.Length == 0)
             {
-                if (src.IsConsole)
+                if (!(context.User is UnturnedUser))
                 {
-                    return CommandResult.ShowUsage();
+                    throw new CommandWrongUsageException();
                 }
 
-                var currentVeh = src.ToPlayer().CurrentVehicle;
+                var currentVeh = ((UnturnedUser)context.User).Player.CurrentVehicle;
 
                 if (currentVeh != null)
                 {
-                    VehicleManager.sendVehicleHealth(currentVeh, currentVeh.asset.health);
-
+                    RepairVehicle(currentVeh);
                     context.User.SendLocalizedMessage(Translations, "VEHICLE_REPAIRED");
                 }
                 else
                 {
-                    return CommandResult.LangError("NOT_IN_VEHICLE");
-                }
-            }
-            else if (args[0].Equals("all"))
-            {
-                if (!src.HasPermission($"{Permission}.all"))
-                {
-                    return CommandResult.NoPermission($"{Permission}.all");
+                    throw new CommandWrongUsageException(Translations.Get("NOT_IN_VEHICLE"));
                 }
 
-                lock (UWorld.Vehicles)
+                return;
+            }
+
+            if (context.Parameters[0].Equals("all"))
+            {
+                if (context.User.CheckPermission($"RepairVehicle.all") != PermissionResult.Grant)
                 {
-                    UWorld.Vehicles
+                    throw new NotEnoughPermissionsException(context.User, "RepairVehicle.all");
+                }
+
+                var vehicles = Object.FindObjectsOfType<InteractableVehicle>();
+                lock (vehicles)
+                {
+                    vehicles
                         .Where(veh => !veh.isExploded && !veh.isUnderwater)
-                        .ToList()
-                        .ForEach(vehicle => { VehicleManager.sendVehicleHealth(vehicle, vehicle.asset.health); });
+                        .ForEach(RepairVehicle);
 
                     context.User.SendLocalizedMessage(Translations, "VEHICLE_REPAIRED_ALL");
                 }
             }
+        }
 
-            return CommandResult.Success();
+        public void RepairVehicle(InteractableVehicle vehicle)
+        {
+            VehicleManager.sendVehicleHealth(vehicle, vehicle.asset.health);
         }
     }
 }

@@ -23,43 +23,51 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
 using Essentials.Common.Util;
 using SDG.Unturned;
-using Essentials.I18n;
 using Essentials.Common;
 using System.Reflection;
+using Rocket.API.Commands;
+using Rocket.API.Plugins;
+using Rocket.Core.I18N;
+using Rocket.Unturned.Player;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "repair",
-        Aliases = new[] {"fix"},
-        Description = "Repair all items in your inventory.",
-        AllowedSource = AllowedSource.PLAYER
+        "repair",
+        "Repair all items in your inventory.",
+        Aliases = new[] {"fix"}
     )]
     public class CommandRepair : EssCommand
     {
+        public CommandRepair(IPlugin plugin) : base(plugin)
+        {
+        }
+
         private readonly FieldInfo _itemsField = ReflectUtil.GetField<Items>("items");
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
 
         public override void Execute(ICommandContext context)
         {
-            var player = src.ToPlayer();
+            var player = ((UnturnedUser)context.User).Player;
 
             player.Inventory.items.ForEach(item => Repair(player, item));
             context.User.SendLocalizedMessage(Translations, "ALL_REPAIRED");
-
-            return CommandResult.Success();
         }
 
-        private void Repair(UPlayer player, Items item)
+        private void Repair(UnturnedPlayer player, Items item)
         {
             if (item == null) return;
 
-            var playerInv = player.UnturnedPlayer.inventory;
+            var playerInv = player.NativePlayer.inventory;
             var items = (List<ItemJar>) _itemsField.GetValue(item);
             byte index = 0;
 

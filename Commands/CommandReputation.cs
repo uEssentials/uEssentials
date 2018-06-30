@@ -23,97 +23,106 @@
 
 #endregion
 
+using System;
+using System.Linq;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
 using Essentials.Common;
-using Essentials.I18n;
+using Rocket.API.Commands;
+using Rocket.API.Player;
+using Rocket.API.Plugins;
+using Rocket.Core.Commands;
+using Rocket.Core.I18N;
+using Rocket.Unturned.Player;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "reputation",
+        "reputation",
+        "Give reputation to you/player",
         Aliases = new[] {"rep"},
-        Description = "Give reputation to you/player",
-        Usage = "[amount] <target/*>"
+        Syntax = "[amount] <target/*>"
     )]
     public class CommandReputation : EssCommand
     {
         private const int MAX_INPUT_VALUE = 10000000;
+        public CommandReputation(IPlugin plugin) : base(plugin)
+        {
+        }
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
 
         public override void Execute(ICommandContext context)
         {
-            if (args.Length == 0 || (args.Length == 1 && src.IsConsole))
+            if (context.Parameters.Length == 0 || (context.Parameters.Length == 1 && !(context.User is UnturnedUser)))
             {
-                return CommandResult.ShowUsage();
+                throw new CommandWrongUsageException();
             }
 
-            if (!args[0].IsInt)
-            {
-                return CommandResult.LangError("INVALID_NUMBER", args[0]);
-            }
-
-            int amount = args[0].ToInt;
+            int amount = context.Parameters.Get<int>(0);
 
             if (amount > MAX_INPUT_VALUE || amount < -MAX_INPUT_VALUE)
             {
-                return CommandResult.LangError("NUMBER_BETWEEN", -MAX_INPUT_VALUE, MAX_INPUT_VALUE);
+                throw new CommandWrongUsageException(Translations.Get("NUMBER_BETWEEN", -MAX_INPUT_VALUE, MAX_INPUT_VALUE));
             }
 
-            if (args.Length == 2)
+            if (context.Parameters.Length == 1)
             {
-                if (args[1].RawValue == "*")
-                {
-                    UServer.Players.ForEach(p => GiveRep(p, amount));
+                GiveRep(((UnturnedUser)context.User).Player, amount);
+                return;
+            }
 
-                    if (amount >= 0)
-                    {
-                        context.User.SendLocalizedMessage(Translations, "REPUTATION_GIVEN", amount, EssLang.Translate("EVERYONE"));
-                    }
-                    else
-                    {
-                        context.User.SendLocalizedMessage(Translations, "REPUTATION_TAKE", -amount, EssLang.Translate("EVERYONE"));
-                    }
-                }
-                else if (!args[1].IsValidPlayerIdentifier)
+            if (context.Parameters[0] == "*")
+            {
+                var playerManager = context.Container.Resolve<IPlayerManager>();
+
+                playerManager.OnlinePlayers
+                    .Select(c => c as UnturnedPlayer)
+                    .Where(c => c != null)
+                    .ForEach(p => GiveRep(p, amount));
+
+                if (amount >= 0)
                 {
-                    return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
+                    context.User.SendLocalizedMessage(Translations, "REPUTATION_GIVEN", amount,
+                        Translations.Get("EVERYONE"));
                 }
                 else
                 {
-                    UPlayer player = args[1].ToPlayer;
-
-                    if (amount >= 0)
-                    {
-                        context.User.SendLocalizedMessage(Translations, "REPUTATION_GIVEN", amount, player.DisplayName);
-                    }
-                    else
-                    {
-                        context.User.SendLocalizedMessage(Translations, "REPUTATION_TAKE", -amount, player.DisplayName);
-                    }
-
-                    GiveRep(player, amount);
+                    context.User.SendLocalizedMessage(Translations, "REPUTATION_TAKE", -amount,
+                        Translations.Get("EVERYONE"));
                 }
-            }
-            else
-            {
-                GiveRep(src.ToPlayer(), amount);
+
+                return;
             }
 
-            return CommandResult.Success();
-        }
-
-        private static void GiveRep(UPlayer player, int amount)
-        {
-            player.UnturnedPlayer.skills.askRep(amount);
+            if(!(context.Parameters.Get<IPlayer>(1) is UnturnedPlayer player))
+                throw new PlayerNameNotFoundException(context.Parameters[1]);
 
             if (amount >= 0)
             {
-                EssLang.Send(player, "REPUTATION_RECEIVED", amount);
+                context.User.SendLocalizedMessage(Translations, "REPUTATION_GIVEN", amount, player.DisplayName);
             }
             else
             {
-                EssLang.Send(player, "REPUTATION_LOST", -amount);
+                context.User.SendLocalizedMessage(Translations, "REPUTATION_TAKE", -amount, player.DisplayName);
+            }
+
+            GiveRep(player, amount);
+        }
+
+        public void GiveRep(UnturnedPlayer player, int amount)
+        {
+            player.NativePlayer.skills.askRep(amount);
+
+            if (amount >= 0)
+            {
+                player.User.SendLocalizedMessage(Translations, "REPUTATION_RECEIVED", amount);
+            }
+            else
+            {
+                player.User.SendLocalizedMessage(Translations, "REPUTATION_LOST", -amount);
             }
         }
     }

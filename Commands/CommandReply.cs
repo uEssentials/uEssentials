@@ -24,43 +24,54 @@
 #endregion
 
 
+using System;
 using System.Linq;
 using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
+using Rocket.API.Commands;
+using Rocket.API.Player;
+using Rocket.API.Plugins;
+using Rocket.Core.Commands;
 using static Essentials.Commands.CommandTell;
 
 namespace Essentials.Commands
 {
     [CommandInfo(
-        Name = "reply",
-        Aliases = new[] {"r"},
-        Description = "Reply to the most recent private message",
-        Usage = "[message]",
-        AllowedSource = AllowedSource.PLAYER,
-        MinArgs = 1
+        "reply",
+        "Reply to the most recent private message",
+        Aliases = new[] { "r" },
+        Syntax = "[message]"
     )]
     public class CommandReply : EssCommand
     {
+        public CommandReply(IPlugin plugin) : base(plugin)
+        {
+        }
+
+        public override bool SupportsUser(Type user)
+        {
+            return true;
+        }
+
         public override void Execute(ICommandContext context)
         {
-            var playerId = src.ToPlayer().CSteamId.m_SteamID;
+            var playerId = context.User.Id;
 
             if (!ReplyTo.TryGetValue(playerId, out var targetId))
             {
-                return CommandResult.LangError("NOBODY_TO_REPLY");
+                throw new CommandWrongUsageException(Translations.Get("NOBODY_TO_REPLY"));
             }
 
-            var target = UPlayer.From(targetId);
+            var playerManager = context.Container.Resolve<IPlayerManager>();
+            var commandHandler = context.Container.Resolve<ICommandHandler>();
+
+            var target = playerManager.GetOnlinePlayerById(targetId);
 
             if (target == null)
             {
-                return CommandResult.LangError("NO_LONGER_ONLINE");
+                throw new CommandWrongUsageException("NO_LONGER_ONLINE");
             }
 
-            src.DispatchCommand($"tell \"{target.DisplayName}\" \"{args.Join(0)}\"");
-
-            return CommandResult.Success();
+            commandHandler.HandleCommand(context.User, $"tell \"{target.Id}\" \"{context.Parameters.GetArgumentLine(0)}\"", context.CommandPrefix);
         }
     }
 }

@@ -30,6 +30,7 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Common.Util;
+using Rocket.API.Commands;
 using static Essentials.Commands.MiscCommands;
 
 namespace Essentials.Commands
@@ -43,7 +44,7 @@ namespace Essentials.Commands
     )]
     public class CommandTell : EssCommand
     {
-        internal static readonly Dictionary<ulong, ulong> ReplyTo = new Dictionary<ulong, ulong>();
+        internal static readonly Dictionary<string, string> ReplyTo = new Dictionary<string, string>();
 
         public override void Execute(ICommandContext context)
         {
