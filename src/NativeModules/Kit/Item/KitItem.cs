@@ -67,7 +67,7 @@ namespace Essentials.NativeModules.Kit.Item {
             Durability = durability;
             Amount = amount;
 
-            ItemUtil.GetItem(id).IfPresent(ass => Metadata = ass.getState());
+            ItemUtil.GetItem(id).IfPresent(asset => Metadata = asset.getState());
         }
 
         /// <summary>
