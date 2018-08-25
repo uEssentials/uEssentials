@@ -82,8 +82,8 @@ namespace Essentials.NativeModules.Kit.Item {
         }
 
         public override string ToString() {
-            var itemName = ((ItemAsset) Assets.find(EAssetType.ITEM, Id))?.itemName;
-            return $"Id: {Id}{(itemName == null ? "" : $" ({itemName})")}, Durability: {Durability}, Amount: {Amount}";
+            var itemName = (Assets.find(EAssetType.ITEM, Id) as ItemAsset)?.itemName ?? "Unknown Name";
+            return $"Id: {Id} ({itemName}), Durability: {Durability}, Amount: {Amount}";
         }
 
     }
