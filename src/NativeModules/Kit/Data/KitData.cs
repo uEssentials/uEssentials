@@ -134,11 +134,6 @@ namespace Essentials.NativeModules.Kit.Data {
             var itemId = itemIdToken.Value<ushort>();
             var itemAsset = (ItemAsset) Assets.find(EAssetType.ITEM, itemId);
 
-            if (itemAsset == null) {
-                UEssentials.Logger.LogWarning($"Invalid item id '{itemIdToken}' in the item at {itemObj.Path} in the kit '{kit.Name}'");
-                return null;
-            }
-
             var tokKitItemDurability = itemObj.GetValue("Durability", strCmp);
             var tokKitItemAmount = itemObj.GetValue("Amount", strCmp);
             var tokAmmo = itemObj.GetValue("Ammo", strCmp);
