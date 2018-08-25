@@ -199,7 +199,7 @@ namespace Essentials.Common.Util {
             if (asset is ItemFuelAsset) {
                 Refuel(metadata, (ItemFuelAsset) asset, percentage);
             } else {
-                throw new ArgumentException("itemId does not refer to a ItemFuelAsset");
+                throw new ArgumentException("itemId does not refer to an ItemFuelAsset");
             }
         }
 
