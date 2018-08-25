@@ -89,26 +89,26 @@ namespace Essentials.NativeModules.Kit.Commands {
                 /* ekit name additem normal id amount durability */
                 case "additem":
                     if (args.Length < 3) {
-                        return CommandResult.InvalidArgs("Use /ekit [kit] additem [type] [id] [amount] [durability]");
-                    }
-
-                    byte? durability = null;
-                    byte? amount = null;
-
-                    // Try to convert 'amount'
-                    if (args.Length >= 5 && args[4].TryConvertToByte(out amount, out var error)) {
-                        return error;
-                    }
-
-                    // Try to convert 'durability'
-                    if (args.Length >= 6 && args[5].TryConvertToByte(out durability, out error)) {
-                        return error;
+                        return CommandResult.InvalidArgs("Use /ekit [kit] additem [type]");
                     }
 
                     switch (args[2].ToLowerString) {
                         case "normal":
                             if (args.Length < 4) {
                                 return CommandResult.InvalidArgs("Use /ekit [kit] additem normal [id] [amount] [durability]");
+                            }
+
+                            byte? durability = 100;
+                            byte? amount = 1;
+
+                            // Try to convert 'amount'
+                            if (args.Length >= 5 && !args[4].TryConvertToByte(out amount, out var error)) {
+                                return error;
+                            }
+
+                            // Try to convert 'durability'
+                            if (args.Length >= 6 && !args[5].TryConvertToByte(out durability, out error)) {
+                                return error;
                             }
 
                             var optAsset = ItemUtil.GetItem(args[3].ToString());
