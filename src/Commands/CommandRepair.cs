@@ -71,7 +71,6 @@ namespace Essentials.Commands
                     for (byte index = 0; index < itemsCount; index++)
                     {
                         player.Inventory.sendUpdateQuality(page, player.Inventory.getItem(page, index).x, player.Inventory.getItem(page, index).y, 100);
-                        player.Inventory.sendUpdateInvState(page, player.Inventory.getItem(page, index).x, player.Inventory.getItem(page, index).y, new byte[] { 100 });
                     }
                 }
             }
