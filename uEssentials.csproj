@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Essentials</RootNamespace>
     <AssemblyName>uEssentials</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -55,11 +55,9 @@
     </Reference>
     <Reference Include="Rocket.API">
       <HintPath>lib\Rocket.API.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Rocket.Core">
       <HintPath>lib\Rocket.Core.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Rocket.Unturned">
       <HintPath>lib\Rocket.Unturned.dll</HintPath>
@@ -80,9 +78,11 @@
     <Reference Include="System.Xml">
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>lib\UnityEngine.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>lib\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>lib\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -262,8 +262,7 @@
       <Using Namespace="System" />
       <Using Namespace="System.IO" />
       <Using Namespace="System.Text.RegularExpressions" />
-      <Code Type="Fragment" Language="cs">
-        <![CDATA[
+      <Code Type="Fragment" Language="cs"><![CDATA[
               var random = new Random();
               var matchPattern = "PLUGIN_VERSION = \"999\\.\\d+\\.\\d+\\.\\d+\";";
               var replacementVersion = Phase == "before"
@@ -274,8 +273,7 @@
               File.WriteAllText(
                 "src/Core/EssCore.cs",
                 Regex.Replace(File.ReadAllText("src/Core/EssCore.cs"), matchPattern, replacement));
-            ]]>
-      </Code>
+            ]]></Code>
     </Task>
   </UsingTask>
   <Target Name="BeforeBuild">

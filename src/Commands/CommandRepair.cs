@@ -24,59 +24,80 @@
 using System.Collections.Generic;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
-using Essentials.Common.Util;
 using SDG.Unturned;
-using Essentials.I18n;
-using Essentials.Common;
-using System.Reflection;
+using Rocket.API;
+using Rocket.Unturned.Player;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "repair",
         Aliases = new[] { "fix" },
         Description = "Repair all items in your inventory.",
-        AllowedSource = AllowedSource.PLAYER
+        AllowedSource = AllowedSource.BOTH
     )]
-    public class CommandRepair : EssCommand {
+    public class CommandRepair : IRocketCommand
+    {
+        public AllowedCaller AllowedCaller => AllowedCaller.Both;
+        public string Name => "repair";
+        public string Help => "Repair all items in your inventory.";
+        public string Syntax => "/repair";
+        public List<string> Aliases => new List<string>() { "fix" };
+        public List<string> Permissions => new List<string>() { "repair", "fix" };
 
-        private readonly FieldInfo _itemsField = ReflectUtil.GetField<Items>("items");
+        public void Execute(IRocketPlayer caller, string[] command)
+        {
+            switch (command.Length)
+            {
+                case (0):
+                    if (caller is ConsolePlayer)
+                        Rocket.Core.Logging.Logger.LogException(new System.InvalidOperationException($"Console does not have an iventory to repair! You must be a player to execute /repair or /fix"));
+                    else
+                        Repair((UnturnedPlayer)caller);
+                    break;
+                case (1):
+                    CheckCommand();
+                    break;
+                default:
+                    Rocket.Core.Logging.Logger.LogException(new System.InvalidOperationException($"Command can contain only 2 parameters!"));
+                    break;
+            }
 
-        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            var player = src.ToPlayer();
-
-            player.Inventory.items.ForEach(item => Repair(player, item));
-            EssLang.Send(src, "ALL_REPAIRED");
-
-            return CommandResult.Success();
+            void Repair(UnturnedPlayer player)
+            {
+                for (byte page = 0; page < 7; page++)//7, becuase there are currently 7 types of wear where player possibly can store items: EItemType.HAT/PANTS/SHIRT/MASK/BACKPACK/VEST/GLASSES
+                {
+                    var itemsCount = player.Inventory.getItemCount(page);
+                    for (byte index = 0; index < itemsCount; index++)
+                    {
+                        player.Inventory.sendUpdateQuality(page, player.Inventory.getItem(page, index).x, player.Inventory.getItem(page, index).y, 100);
+                        player.Inventory.sendUpdateInvState(page, player.Inventory.getItem(page, index).x, player.Inventory.getItem(page, index).y, new byte[] { 100 });
+                    }
+                }
+            }
+            void CheckCommand()
+            {
+                if (command[0].ToLower() == "all")
+                {
+                    if (Provider.clients.Count != 0)
+                    {
+                        foreach (var steamplayer in Provider.clients)
+                        {
+                            Repair(UnturnedPlayer.FromSteamPlayer(steamplayer));
+                        }
+                    }
+                    else
+                        Rocket.Core.Logging.Logger.LogError("players not found!");
+                }
+                else
+                {
+                    UnturnedPlayer player = UnturnedPlayer.FromName(command[0]);
+                    if (player != null)
+                        Repair(player);
+                    else
+                        Rocket.Core.Logging.Logger.LogError("player not found!");
+                }
+            }
         }
-
-        private void Repair(UPlayer player, Items item) {
-            if (item == null) return;
-
-            var playerInv = player.UnturnedPlayer.inventory;
-            var items = (List<ItemJar>) _itemsField.GetValue(item);
-            byte index = 0;
-
-            items.ForEach(itemJar => {
-                item.updateQuality(index, 100);
-
-                playerInv.channel.send("tellUpdateQuality", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[] {
-                    item.page,
-                    playerInv.getIndex(item.page, itemJar.x, itemJar.y),
-                    100
-                });
-
-                var barrel = ItemUtil.GetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL);
-                barrel.IfPresent(attach => {
-                    attach.Durability = 100;
-                    ItemUtil.SetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL, attach);
-                });
-                index++;
-            });
-        }
-
     }
-
 }
