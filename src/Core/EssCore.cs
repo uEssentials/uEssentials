@@ -257,7 +257,7 @@ namespace Essentials.Core {
 
 #if DEV
             Console.Title = "Unturned Server";
-#else
+//#else
             //CheckUpdates();
 #endif
         }
