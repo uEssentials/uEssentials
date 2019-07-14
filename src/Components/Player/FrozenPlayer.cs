@@ -38,7 +38,7 @@ namespace Essentials.Components.Player {
 
             if (!Player.IsInVehicle)
             {
-                Rocket.Core.Logging.Logger.LogError("Player is not in vehicle!");
+                //Rocket.Core.Logging.Logger.LogError("Player is not in vehicle!");
                 return;
             }               
             var veh = Player.CurrentVehicle;
