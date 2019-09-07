@@ -130,7 +130,7 @@ namespace Essentials.Core {
 
                 TaskExecutor = new EssentialsTaskExecutor();
 
-                SteamGameServer.SetKeyValue("essversion", PLUGIN_VERSION);
+                //SteamGameServer.SetKeyValue("essversion", PLUGIN_VERSION);
 
                 Logger = new ConsoleLogger("[uEssentials] ");
 
@@ -256,7 +256,7 @@ namespace Essentials.Core {
 #endif
 
 #if DEV
-            Console.Title = "Unturned Server";
+            //Console.Title = "Unturned Server";
 //#else
             //CheckUpdates();
 #endif
