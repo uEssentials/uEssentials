@@ -65,14 +65,47 @@ namespace Essentials.Commands
 
             void Repair(UnturnedPlayer player)
             {
-                for (byte page = 0; page < 7; page++)//7, becuase there are currently 7 types of wear where player possibly can store items: EItemType.HAT/PANTS/SHIRT/MASK/BACKPACK/VEST/GLASSES
+                for (byte page = 0; page < player.Inventory.items.Length; page++)//7, becuase there are currently 7 types of wear where player possibly can store items: EItemType.HAT/PANTS/SHIRT/MASK/BACKPACK/VEST/GLASSES
                 {
-                    var itemsCount = player.Inventory.getItemCount(page);
-                    for (byte index = 0; index < itemsCount; index++)
+                    if (player.Inventory.items[page] == null)
+                        continue;
+                    for (byte index = 0; index < player.Inventory.getItemCount(page); index++)
                     {
-                        player.Inventory.sendUpdateQuality(page, player.Inventory.getItem(page, index).x, player.Inventory.getItem(page, index).y, 100);
+                        try
+                        {
+                            if (player.Inventory.items[page].items[index].item.quality == 100)
+                                continue;
+                            player.Inventory.sendUpdateQuality(page, player.Inventory.items[page].items[index].x, player.Inventory.items[page].items[index].y, 100);
+                        }
+                        catch (System.Exception)
+                        {
+                            continue;
+                        }
                     }
                 }
+                //byte counter = 0;
+                //foreach (Items page in player.Inventory.items) //Collection was modified exception risk
+                //{
+                //    if (page == null)
+                //    {
+                //        counter++;
+                //        continue;
+                //    }
+                        
+                //    foreach (ItemJar item in page.items)
+                //    {
+                //        if (item.item.quality == 100)
+                //            continue;
+                //        try
+                //        {
+                //            player.Inventory.sendUpdateQuality(counter, item.x, item.y, 100);
+                //        }
+                //        catch (System.Exception)
+                //        {
+                //            continue;
+                //        }
+                //    }
+                //}
             }
             void CheckCommand()
             {
