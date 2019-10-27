@@ -167,20 +167,85 @@ namespace Essentials.Commands {
                     src.SendMessage("This command is unstable and can cause bugs.", Color.yellow);
 
                     var numRemoved = 0;
-                    UWorld.Vehicles
-                        .Where(v => v.passengers.All(p => p?.player == null)) // Check if it's has no passengers
-                        .Where(v => {
-                            if (v.id == 186 || v.id == 187) return false; // Ignore trains; TODO: config blacklist for this?
-                            if (distance == -1) return true;
+                    //VehicleManager.vehicles
+                    //    .Where(v => v.passengers.All(p => p?.player == null)) // Check if it's has no passengers
+                    //    .Where(v =>
+                    //    {
+                    //        if (v.id == 186 || v.id == 187) return false; // Ignore trains; TODO: config blacklist for this?
+                    //        if (distance == -1) return true;
 
-                            return Vector3.Distance(v.transform.position, src.ToPlayer().Position) <= distance;
-                        })
-                        .Select(v => v.instanceID)
-                        .ToList()
-                        .ForEach(id => {
-                          VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id);
-                          numRemoved++;
-                        });
+                    //        return Vector3.Distance(v.transform.position, src.ToPlayer().Position) <= distance;
+                    //    })
+                    //    .Select(v => v.instanceID)
+                    //    .ToList()
+                    //    .ForEach(id =>
+                    //    {
+                    //        VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id);
+                    //        numRemoved++;
+                    //    });
+                    //VehicleManager.vehicles
+                    //   .Where(v => v.passengers.All(p => p?.player == null)) // Check if it's has no passengers
+                    //   .Where(v =>
+                    //   {
+                    //       if (v.id == 186 || v.id == 187) return false; // Ignore trains; TODO: config blacklist for this?
+                    //        if (distance == -1) return true;
+
+                    //       return Vector3.Distance(v.transform.position, src.ToPlayer().Position) <= distance;
+                    //   })
+                    //   .Select(v => v.instanceID)
+                    //   .ToList()
+                    //   .ForEach(id =>
+                    //   {
+                    //       VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id);
+                    //       numRemoved++;
+                    //   });
+                    for (byte i = 0; i < VehicleManager.vehicles.Count; i++)
+                    {
+                        VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, VehicleManager.vehicles[i].instanceID);
+                        numRemoved++;
+                    }
+                    for (byte i = 0; i < VehicleManager.vehicles.Count; i++)
+                    {
+                        VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, VehicleManager.vehicles[i].instanceID);
+                        numRemoved++;
+                    }
+                    //while (VehicleManager.vehicles.Count != 0)
+                    //{
+                    //    for (byte i = 0; i < VehicleManager.vehicles.Count; i++)
+                    //    {
+                    //        VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, VehicleManager.vehicles[i].instanceID);
+                    //        numRemoved++;
+                    //    }
+                    //}
+                    //for (byte i = (byte)(VehicleManager.vehicles.Count - 1); i >= 0 ; i--)
+                    //{
+                    //    VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, VehicleManager.vehicles[i].instanceID);
+                    //    numRemoved++;
+                    //}
+
+                    //InteractableVehicle[] vehicles = new InteractableVehicle[VehicleManager.vehicles.Count];
+                    //for (byte i = 0; i < VehicleManager.vehicles.Count; i++)
+                    //{
+                    //    vehicles[i] = VehicleManager.vehicles[i];
+                    //}
+                    //Console.WriteLine($"VehicleManager.vehicles.Count: {VehicleManager.vehicles.Count}");
+                    //int len = (VehicleManager.vehicles.Count - 1);
+                    //for (int index1 = len; index1 >= 0; index1--)
+                    //{
+                    //    Console.WriteLine($"index1: {index1}");
+                    //    //VehicleManager.vehicles.Remove(VehicleManager.vehicles[index1]);
+                    //    UnityEngine.Object.Destroy((UnityEngine.Object)VehicleManager.vehicles[index1].gameObject);
+                    //}
+                    //Console.WriteLine($"VehicleManager.vehicles.Count: {VehicleManager.vehicles.Count}");
+                    //VehicleManager.respawnVehicleIndex = (ushort)0;
+                    //VehicleManager.vehicles.Clear();
+
+                    //for (byte i = 1; i < vehicles.Length - 1; i++)
+                    //{
+                    //    if (vehicles[i].passengers != null || vehicles[i].passengers.Length != 0 || vehicles[i].id == 186 || vehicles[i].id == 187)
+                    //        continue;
+                    //    VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, vehicles[i].instanceID);
+                    //}
 
                     EssLang.Send(src, "CLEAR_EMPTY_VEHICLES", numRemoved);
                     break;

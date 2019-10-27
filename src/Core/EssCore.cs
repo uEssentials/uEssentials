@@ -44,7 +44,7 @@ using Essentials.I18n;
 using Essentials.Compatibility;
 using Essentials.Event.Handling;
 using Essentials.NativeModules;
-using Essentials.Updater;
+//using Essentials.Updater;
 using Essentials.Compatibility.Hooks;
 using Essentials.Economy;
 using Essentials.Logging;
@@ -94,7 +94,7 @@ namespace Essentials.Core {
         internal ICommandManager CommandManager { get; set; }
         internal IEventManager EventManager { get; set; }
         internal HookManager HookManager { get; set; }
-        internal IUpdater Updater { get; set; }
+        //internal IUpdater Updater { get; set; }
 
         internal CommandOptions CommandOptions { get; set; }
         internal TextCommands TextCommands { get; set; }
@@ -130,7 +130,7 @@ namespace Essentials.Core {
 
                 TaskExecutor = new EssentialsTaskExecutor();
 
-                SteamGameServer.SetKeyValue("essversion", PLUGIN_VERSION);
+                //SteamGameServer.SetKeyValue("essversion", PLUGIN_VERSION);
 
                 Logger = new ConsoleLogger("[uEssentials] ");
 
@@ -163,7 +163,7 @@ namespace Essentials.Core {
                 _modulesFolder = Folder + "modules/";
 
                 CommandOptions = new CommandOptions();
-                Updater = new GithubUpdater();
+                //Updater = new GithubUpdater();
                 EventManager = new EventManager();
                 CommandManager = new CommandManager();
                 ModuleManager = new ModuleManager();
@@ -256,9 +256,9 @@ namespace Essentials.Core {
 #endif
 
 #if DEV
-            Console.Title = "Unturned Server";
-#else
-            CheckUpdates();
+            //Console.Title = "Unturned Server";
+//#else
+            //CheckUpdates();
 #endif
         }
 
@@ -390,61 +390,61 @@ namespace Essentials.Core {
             ConnectedPlayers.Remove(id.m_SteamID);
         }
 
-        private void CheckUpdates() {
-            if (!Config.Updater.CheckUpdates) {
-                return;
-            }
+        //private void CheckUpdates() {
+        //    if (!Config.Updater.CheckUpdates) {
+        //        return;
+        //    }
 
-            var worker = new BackgroundWorker();
+        //    var worker = new BackgroundWorker();
 
-            worker.DoWork += (sender, args) => {
-                Logger.LogInfo("Checking updates.");
+        //    worker.DoWork += (sender, args) => {
+        //        Logger.LogInfo("Checking updates.");
 
-                var isUpdated = Updater.IsUpdated();
-                var lastResult = Updater.LastResult;
+        //        var isUpdated = Updater.IsUpdated();
+        //        var lastResult = Updater.LastResult;
 
-                if (isUpdated) {
-                    Logger.LogInfo("Plugin is up-to-date!");
-                    return;
-                }
+        //        if (isUpdated) {
+        //            Logger.LogInfo("Plugin is up-to-date!");
+        //            return;
+        //        }
 
-                Logger.LogInfo($"New version avalaible: {lastResult.LatestVersion}");
+        //        Logger.LogInfo($"New version avalaible: {lastResult.LatestVersion}");
 
-                if (
-                    !string.IsNullOrEmpty(lastResult.AdditionalData) &&
-                    JObject.Parse(lastResult.AdditionalData).TryGetValue("changes", out var changes)
-                ) {
-                    Logger.LogInfo("====================== [ Update  Notes ] ======================");
+        //        if (
+        //            !string.IsNullOrEmpty(lastResult.AdditionalData) &&
+        //            JObject.Parse(lastResult.AdditionalData).TryGetValue("changes", out var changes)
+        //        ) {
+        //            Logger.LogInfo("====================== [ Update  Notes ] ======================");
 
-                    changes.ToString().Split('\n').ForEach(msg => {
-                        Logger.Log("", ConsoleColor.Green, suffix: "");
-                        Logger.Log("  " + msg, ConsoleColor.White, "");
-                    });
+        //            changes.ToString().Split('\n').ForEach(msg => {
+        //                Logger.Log("", ConsoleColor.Green, suffix: "");
+        //                Logger.Log("  " + msg, ConsoleColor.White, "");
+        //            });
 
-                    Logger.LogInfo("");
-                    Logger.Log("", ConsoleColor.Green, suffix: "");
-                    Logger.Log(
-                        "  " +
-                        $"See more in: https://github.com/uEssentials/uEssentials/releases/tag/{lastResult.LatestVersion}",
-                        ConsoleColor.White, "");
+        //            Logger.LogInfo("");
+        //            Logger.Log("", ConsoleColor.Green, suffix: "");
+        //            Logger.Log(
+        //                "  " +
+        //                $"See more in: https://github.com/uEssentials/uEssentials/releases/tag/{lastResult.LatestVersion}",
+        //                ConsoleColor.White, "");
 
-                    Logger.LogInfo("===============================================================");
-                }
+        //            Logger.LogInfo("===============================================================");
+        //        }
 
-                if (Config.Updater.DownloadLatest) {
-                    Updater.DownloadLatestRelease($"{Folder}/updates/");
-                }
-            };
+        //        if (Config.Updater.DownloadLatest) {
+        //            Updater.DownloadLatestRelease($"{Folder}/updates/");
+        //        }
+        //    };
 
-            worker.RunWorkerCompleted += (sender, args) => {
-                if (args.Error != null) {
-                    Logger.LogError($"Could not update, try again later. Error: ({args.Error.Message})");
-                    Logger.LogError("Or try to download it manually here: https://github.com/uEssentials/uEssentials/releases");
-                }
-            };
+        //    worker.RunWorkerCompleted += (sender, args) => {
+        //        if (args.Error != null) {
+        //            Logger.LogError($"Could not update, try again later. Error: ({args.Error.Message})");
+        //            Logger.LogError("Or try to download it manually here: https://github.com/uEssentials/uEssentials/releases");
+        //        }
+        //    };
 
-            worker.RunWorkerAsync();
-        }
+        //    worker.RunWorkerAsync();
+        //}
 
         private void OverrideCommands() {
             R.Plugins.OnPluginsLoaded -= OverrideCommands;

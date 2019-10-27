@@ -23,6 +23,7 @@
 
 using SDG.Unturned;
 using UnityEngine;
+using Steamworks;
 
 namespace Essentials.Components.Player {
 
@@ -30,11 +31,16 @@ namespace Essentials.Components.Player {
 
         private readonly Vector3 _frozenPos;
         private Vector3 _lastPos;
+        private CSteamID _player;
 
         private FrozenPlayer() {
             _frozenPos = _lastPos = Player.Position;
 
-            if (!Player.IsInVehicle) return;
+            if (!Player.IsInVehicle)
+            {
+                //Rocket.Core.Logging.Logger.LogError("Player is not in vehicle!");
+                return;
+            }               
             var veh = Player.CurrentVehicle;
             var passagers = veh.passengers;
 
@@ -42,10 +48,12 @@ namespace Essentials.Components.Player {
                 if (passagers[i].player != Player.SteamPlayer) continue;
 
                 var pos = Player.Position;
-                var seat = (byte) i;
+                _player = passagers[i].player.lobbyID;
 
-                veh.getExit(seat, out var exitPoint, out var exitAngle);
-                VehicleManager.sendExitVehicle(veh, seat, (exitPoint + (exitPoint - pos)), exitAngle, false);
+                if (veh.tryRemovePlayer(out var seat, _player, out var point, out var angle))
+                {
+                    VehicleManager.sendExitVehicle(veh, seat, (point + (point - pos)), angle, false);
+                }      
             }
         }
 

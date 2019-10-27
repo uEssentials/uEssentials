@@ -192,29 +192,29 @@ namespace Essentials.Event.Handling {
             }
         }
 
-        private DateTime _lastUpdateCheck = DateTime.Now;
+        //private DateTime _lastUpdateCheck = DateTime.Now;
 
-        [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        private void UpdateAlert(UnturnedPlayer player) {
-            if (!player.IsAdmin || _lastUpdateCheck > DateTime.Now) return;
+        //[SubscribeEvent(EventType.PLAYER_CONNECTED)]
+        //private void UpdateAlert(UnturnedPlayer player) {
+        //    if (!player.IsAdmin || _lastUpdateCheck > DateTime.Now) return;
 
-            var updater = EssCore.Instance.Updater;
+        //    var updater = EssCore.Instance.Updater;
 
-            if (!updater.IsUpdated()) {
-                _lastUpdateCheck = DateTime.Now.AddMinutes(10);
+        //    if (!updater.IsUpdated()) {
+        //        _lastUpdateCheck = DateTime.Now.AddMinutes(10);
 
-                Task.Create()
-                    .Id("Update Alert")
-                    .Delay(TimeSpan.FromSeconds(1))
-                    .Action(() => {
-                        UPlayer.TryGet(player, p => {
-                            p.SendMessage("[uEssentials] New version avalaible " +
-                                          $"{updater.LastResult.LatestVersion}!", Color.cyan);
-                        });
-                    })
-                    .Submit();
-            }
-        }
+        //        Task.Create()
+        //            .Id("Update Alert")
+        //            .Delay(TimeSpan.FromSeconds(1))
+        //            .Action(() => {
+        //                UPlayer.TryGet(player, p => {
+        //                    p.SendMessage("[uEssentials] New version avalaible " +
+        //                                  $"{updater.LastResult.LatestVersion}!", Color.cyan);
+        //                });
+        //            })
+        //            .Submit();
+        //    }
+        //}
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
         private void JoinMessage(UnturnedPlayer player) {
