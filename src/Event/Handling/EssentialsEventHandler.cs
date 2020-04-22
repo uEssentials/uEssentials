@@ -159,7 +159,7 @@ namespace Essentials.Event.Handling {
                 if (!USkill.FromName(kind, out var skill)) {
                     continue;
                 }
-                skillsToRestore[skill] = (byte) Math.Ceiling(player.GetSkillLevel(skill) * (percentageToKeep / 100.0));
+                skillsToRestore[skill] = (byte) System.Math.Ceiling(player.GetSkillLevel(skill) * (percentageToKeep / 100.0));
             }
 
             // All Skills
@@ -174,7 +174,7 @@ namespace Essentials.Event.Handling {
                     if (skillsToRestore.ContainsKey(skill)) {
                         continue;
                     }
-                    skillsToRestore[skill] = (byte) Math.Ceiling(player.GetSkillLevel(skill) * (allPercentage / 100.0));
+                    skillsToRestore[skill] = (byte) System.Math.Ceiling(player.GetSkillLevel(skill) * (allPercentage / 100.0));
                 }
             }
         }
