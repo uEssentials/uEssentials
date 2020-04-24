@@ -36,15 +36,15 @@ namespace Essentials.Components.Player {
 
             if (!Player.IsInVehicle) return;
             var veh = Player.CurrentVehicle;
-            var passagers = veh.passengers;
+            var passengers = veh.passengers;
 
-            for (var i = 0; i < passagers.Length; i++) {
-                if (passagers[i].player != Player.SteamPlayer) continue;
+            for (var i = 0; i < passengers.Length; i++) {
+                if (passengers[i].player != Player.SteamPlayer) continue;
 
                 var pos = Player.Position;
                 var seat = (byte) i;
 
-                veh.getExit(seat, out var exitPoint, out var exitAngle);
+                veh.forceRemovePlayer(out seat, passengers[i].player.playerID.steamID, out var exitPoint, out var exitAngle);
                 VehicleManager.sendExitVehicle(veh, seat, (exitPoint + (exitPoint - pos)), exitAngle, false);
             }
         }

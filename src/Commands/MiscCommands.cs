@@ -828,13 +828,13 @@ namespace Essentials.Commands {
             }
 
             var count = 0;
-            var rayResult = Physics.SphereCastAll(position, radius, Vector3.forward, RayMasks.BARRICADE);
+            var rayResult = Physics.SphereCastAll(position, radius, Vector3.forward, RayMasks.BARRICADE_INTERACT);
 
             rayResult
                 .Select(r => r.transform.GetComponent<InteractableGenerator>())
                 .Where(r => r != null)
                 .ForEach(r => {
-                    BarricadeManager.sendFuel(r.transform, (ushort) Math.Floor(r.capacity * percentage));
+                    BarricadeManager.sendFuel(r.transform, (ushort) System.Math.Floor(r.capacity * percentage));
                     count++;
                 });
 

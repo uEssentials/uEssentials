@@ -207,7 +207,7 @@ namespace Essentials.Common.Util {
             if (percentage > 100) percentage = 100;
             if (percentage < 0) percentage = 0;
 
-            var fuel = (int) Math.Floor((fuelAsset.fuel * (percentage / 100)));
+            var fuel = (int) System.Math.Floor((fuelAsset.fuel * (percentage / 100)));
 
             metadata[0] = (byte) fuel;
             metadata[1] = (byte) (fuel >> 8);
