@@ -60,13 +60,11 @@ namespace Essentials.Commands {
                 playerInv.sendUpdateQuality(item.page, itemJar.x, itemJar.y, 100);
 
                 var barrel = ItemUtil.GetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL);
-                var jar = itemJar;
-                barrel.IfPresent(attach =>
-                {
+                barrel.IfPresent(attach => {
                     if (attach.Durability == 100) return;
                     
                     attach.Durability = 100;
-                    ItemUtil.SetWeaponAttachment(jar.item, ItemUtil.AttachmentType.BARREL, attach);
+                    ItemUtil.SetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL, attach);
                 });
             }
         }
