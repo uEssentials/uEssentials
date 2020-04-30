@@ -21,9 +21,6 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -39,14 +36,15 @@ using Essentials.Configuration;
 using Essentials.Core;
 using Essentials.I18n;
 using Rocket.API;
+using Rocket.Core;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using EventType = Essentials.Api.Event.EventType;
-using Essentials.Misc;
-using Rocket.API.Serialisation;
-using Rocket.Core;
 
 namespace Essentials.Event.Handling {
 
@@ -56,8 +54,8 @@ namespace Essentials.Event.Handling {
         internal static readonly Dictionary<ulong, Dictionary<string, DateTime>> CommandCooldowns = new Dictionary<ulong, Dictionary<string, DateTime>>();
 
         [SubscribeEvent(EventType.PLAYER_CHATTED)]
-        private void OnPlayerChatted(UnturnedPlayer player, ref Color color, string message,
-                                     EChatMode mode, ref bool cancel) {
+        private void OnPlayerChatted(UnturnedPlayer player, ref Color c, string message,
+                                     EChatMode m, ref bool cancel) {
             if (
                 !UEssentials.Config.AntiSpam.Enabled ||
                 message.StartsWith("/") ||
@@ -103,7 +101,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void GenericPlayerDeath(UnturnedPlayer rocketPlayer, EDeathCause cause, ELimb limb, CSteamID murderer) {
+        private void GenericPlayerDeath(UnturnedPlayer rocketPlayer, EDeathCause c, ELimb l, CSteamID k) {
             const string METADATA_KEY = "KEEP_SKILL";
             const string KEEP_SKILL_PERM = "essentials.keepskill.";
 
@@ -180,7 +178,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_REVIVE)]
-        private void OnPlayerRespawn(UnturnedPlayer rocketPlayer, Vector3 vect, byte angle) {
+        private void OnPlayerRespawn(UnturnedPlayer rocketPlayer, Vector3 l, byte s) {
             var player = UPlayer.From(rocketPlayer);
             var skillsToRestore = player.Metadata.GetOrDefault<Dictionary<USkill, byte>>("KEEP_SKILL", null);
 
@@ -343,9 +341,8 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
         private void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer) {
-            var message = EssLang.GetEntry($"DEATH_{cause}") as string;
-
-            if (message == null) {
+            if (!(EssLang.GetEntry($"DEATH_{cause}") is string message))
+            {
                 return;
             }
 
@@ -363,7 +360,7 @@ namespace Essentials.Event.Handling {
         /* Commands eventhandlers */
 
         [SubscribeEvent(EventType.PLAYER_UPDATE_POSITION)]
-        private void HomePlayerMove(UnturnedPlayer player, Vector3 newPosition) {
+        private void HomePlayerMove(UnturnedPlayer player, Vector3 _) {
             if (!UEssentials.Config.Home.CancelTeleportWhenMove || !CommandHome.Delay.ContainsKey(player.CSteamID.m_SteamID)) {
                 return;
             }
@@ -377,7 +374,7 @@ namespace Essentials.Event.Handling {
         }
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void BackPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+        private void BackPlayerDeath(UnturnedPlayer player, EDeathCause c, ELimb l, CSteamID k) {
             if (!player.HasPermission("essentials.command.back")) {
                 return;
             }
@@ -393,7 +390,7 @@ namespace Essentials.Event.Handling {
         private static readonly HashSet<ulong> DisconnectedFrozen = new HashSet<ulong>();
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        private void FreezePlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+        private void FreezePlayerDeath(UnturnedPlayer player, EDeathCause c, ELimb l, CSteamID k) {
             if (UEssentials.Config.UnfreezeOnDeath && player.GetComponent<FrozenPlayer>() != null) {
                 UnityEngine.Object.Destroy(player.GetComponent<FrozenPlayer>());
             }

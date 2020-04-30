@@ -21,9 +21,9 @@
 */
 #endregion
 
+using SDG.Unturned;
 using System.Globalization;
 using System.Linq;
-using SDG.Unturned;
 
 namespace Essentials.Common.Util {
 

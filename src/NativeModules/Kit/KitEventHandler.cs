@@ -21,8 +21,6 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
 using Essentials.Api;
 using Essentials.Api.Event;
 using Essentials.Core;
@@ -30,13 +28,16 @@ using Essentials.NativeModules.Kit.Commands;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
+using System;
+using System.Collections.Generic;
 
 namespace Essentials.NativeModules.Kit {
 
     internal class KitEventHandler {
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
-        void OnPlayerDeath(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID murderer) {
+        void OnPlayerDeath(UnturnedPlayer player, EDeathCause c, ELimb l, CSteamID k)
+        {
             var playerId = player.CSteamID.m_SteamID;
 
             if (EssCore.Instance.Config.Kit.ResetGlobalCooldownWhenDie && CommandKit.GlobalCooldown.ContainsKey(playerId)) {

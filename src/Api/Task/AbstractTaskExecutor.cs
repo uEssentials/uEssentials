@@ -21,10 +21,10 @@
 */
 #endregion
 
+using Essentials.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Essentials.Core;
 
 namespace Essentials.Api.Task {
 

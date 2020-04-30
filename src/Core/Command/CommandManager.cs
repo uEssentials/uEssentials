@@ -21,11 +21,6 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -36,6 +31,11 @@ using Rocket.API;
 using Rocket.Core;
 using Rocket.Core.Commands;
 using SDG.Unturned;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 
 namespace Essentials.Core.Command {
 
@@ -148,17 +148,16 @@ namespace Essentials.Core.Command {
 
         public bool HasWithName([NotNull] string commandName) {
             return HasWith(command => {
-                var rocketCommand = command as IRocketCommand;
-
                 // Search in Rocket commands
-                if (rocketCommand != null) {
+                if (command is IRocketCommand rocketCommand)
+                {
                     return rocketCommand.Name.EqualsIgnoreCase(commandName);
                 }
 
-                var unturnedCommand = command as SDG.Unturned.Command;
 
                 // If not found, then search in Unturned & Essentials commands
-                if (unturnedCommand != null) {
+                if (command is SDG.Unturned.Command unturnedCommand)
+                {
                     return unturnedCommand.command.EqualsIgnoreCase(commandName);
                 }
 
@@ -199,10 +198,9 @@ namespace Essentials.Core.Command {
 
         private void UnregisterWhere(Func<CommandAdapter, bool> predicate) {
             _rocketCommands.RemoveAll(cmd => {
-                var cmdAdapter = cmd.Command as CommandAdapter;
-                if (cmdAdapter == null || !predicate(cmdAdapter)) return false;
+                if (cmd.Command as CommandAdapter == null || !predicate(cmd.Command as CommandAdapter)) return false;
 
-                var command = cmdAdapter.Command;
+                var command = (cmd.Command as CommandAdapter).Command;
                 if (command is EssCommand) {
                     _onUnregisteredMethod?.Invoke(command, ReflectUtil.EMPTY_ARGS);
                 }

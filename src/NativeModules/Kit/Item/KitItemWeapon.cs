@@ -21,11 +21,11 @@
 */
 #endregion
 
-using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
+using System;
 
 namespace Essentials.NativeModules.Kit.Item {
 
@@ -67,7 +67,8 @@ namespace Essentials.NativeModules.Kit.Item {
 
                 var metadata = item.metadata;
 
-                Action<int[], Attachment> assembleAttach = (indexes, attach) => {
+                void assembleAttach(int[] indexes, Attachment attach)
+                {
                     if (attach == null || attach.AttachmentId == 0) return;
 
                     var attachIdBytes = BitConverter.GetBytes(attach.AttachmentId);
@@ -75,7 +76,7 @@ namespace Essentials.NativeModules.Kit.Item {
                     metadata[indexes[0]] = attachIdBytes[0];
                     metadata[indexes[1]] = attachIdBytes[1];
                     metadata[indexes[2]] = attach.Durability;
-                };
+                }
 
                 assembleAttach(new[] { 0x0, 0x1, 0xD }, Sight);
                 assembleAttach(new[] { 0x2, 0x3, 0xE }, Tactical);

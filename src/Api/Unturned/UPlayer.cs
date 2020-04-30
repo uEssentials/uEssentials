@@ -21,10 +21,6 @@
 */
 #endregion
 
-using System.Reflection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Metadata;
@@ -37,6 +33,10 @@ using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace Essentials.Api.Unturned {
@@ -196,15 +196,13 @@ namespace Essentials.Api.Unturned {
         }
 
         public void Kill() {
-            EPlayerKill outKill;
-
             UnturnedPlayer.life.askDamage(
                 100,
                 Position.normalized,
                 EDeathCause.KILL,
                 ELimb.SKULL,
                 CSteamID.Nil,
-                out outKill
+                out _
                 );
         }
 
@@ -465,7 +463,7 @@ namespace Essentials.Api.Unturned {
         }
 
         public override bool Equals(object obj) {
-            if (ReferenceEquals(null, obj)) return false;
+            if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
 

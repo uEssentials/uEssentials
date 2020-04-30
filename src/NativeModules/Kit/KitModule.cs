@@ -22,35 +22,50 @@
 #endregion
 
 using Essentials.Api.Module;
-using Essentials.Api.Task;
-using SDG.Unturned;
 using static Essentials.Api.UEssentials;
+using SDG.Unturned;
 
-namespace Essentials.NativeModules.Kit {
+namespace Essentials.NativeModules.Kit
+{
 
     [ModuleInfo(Name = "Kits")]
-    public class KitModule : NativeModule {
+    public class KitModule : NativeModule
+    {
 
         private const string CommandsNamespace = "Essentials.NativeModules.Kit.Commands";
         public KitManager KitManager { get; internal set; }
         public static KitModule Instance { get; internal set; }
 
-        public override void OnLoad() {
+        public override void OnLoad()
+        {
             Instance = this;
 
             KitManager = new KitManager();
-            KitManager.Load();
 
-            Logger.LogInfo($"Loaded {KitManager.Count} kits");
+            Level.onPostLevelLoaded += Instance.OnPostLevelLoaded;
+            if (Level.isLoaded)
+            {
+                OnPostLevelLoaded(420);
+            }
 
             CommandManager.RegisterAll(CommandsNamespace);
             EventManager.RegisterAll<KitEventHandler>();
         }
 
-        public override void OnUnload() {
+        public override void OnUnload()
+        {
+            Level.onPostLevelLoaded -= OnPostLevelLoaded;
+
             CommandManager.UnregisterAll(CommandsNamespace);
             EventManager.UnregisterAll<KitEventHandler>();
             KitManager.Save();
+        }
+
+        public void OnPostLevelLoaded(int level)
+        {
+            KitManager.Load();
+
+            Logger.LogInfo($"Loaded {KitManager.Count} kits");
         }
 
     }

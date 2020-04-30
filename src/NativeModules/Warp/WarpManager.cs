@@ -21,11 +21,11 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
 using Essentials.Api;
 using Essentials.Core.Storage;
 using Essentials.NativeModules.Warp.Data;
+using System;
+using System.Collections.Generic;
 
 namespace Essentials.NativeModules.Warp {
 

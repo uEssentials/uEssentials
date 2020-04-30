@@ -21,12 +21,12 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Net;
 using Essentials.Api;
 using Essentials.Api.Configuration;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Net;
 
 namespace Essentials.Configuration {
 

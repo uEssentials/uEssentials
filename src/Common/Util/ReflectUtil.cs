@@ -40,14 +40,14 @@ namespace Essentials.Common.Util {
         public static TAttribute GetAttributeFrom<TAttribute>(object instance) where TAttribute : Attribute {
             object[] attrs;
 
-            if (instance is MethodInfo) {
-                var methodInfo = (MethodInfo) instance;
+            if (instance is MethodInfo methodInfo)
+            {
                 attrs = methodInfo.GetCustomAttributes(typeof(TAttribute), false);
-                return attrs.Length == 0 ? default(TAttribute) : (TAttribute) attrs.GetValue(0);
+                return attrs.Length == 0 ? default : (TAttribute)attrs.GetValue(0);
             }
 
             attrs = instance.GetType().GetCustomAttributes(typeof(TAttribute), true);
-            return attrs.Length == 0 ? default(TAttribute) : (TAttribute) attrs.GetValue(0);
+            return attrs.Length == 0 ? default : (TAttribute) attrs.GetValue(0);
         }
 
         public static MethodInfo GetMethod(Type type, string name, BindingFlags flags, Type[] argTypes) {

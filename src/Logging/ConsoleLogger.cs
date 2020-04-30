@@ -21,9 +21,9 @@
 */
 #endregion
 
-using System;
 using Rocket.Core;
 using Rocket.Core.RCON;
+using System;
 
 namespace Essentials.Logging {
 

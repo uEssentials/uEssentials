@@ -21,14 +21,14 @@
 */
 #endregion
 
+using Essentials.Api.Event;
+using Essentials.Common;
+using Essentials.Common.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Essentials.Api.Event;
-using Essentials.Common;
-using Essentials.Common.Util;
 
 namespace Essentials.Core.Event {
 

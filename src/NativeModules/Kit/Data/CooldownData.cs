@@ -21,13 +21,13 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Essentials.Api;
 using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.NativeModules.Kit.Commands;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Essentials.NativeModules.Kit.Data {
 
@@ -49,7 +49,7 @@ namespace Essentials.NativeModules.Kit.Data {
                 if (kv.Value.Kits != null) {
                     CommandKit.Cooldowns.Add(kv.Key, kv.Value.Kits);
                 }
-                if (!kv.Value.Global.Equals(default(DateTime))) {
+                if (!kv.Value.Global.Equals(default)) {
                     CommandKit.GlobalCooldown.Add(kv.Key, kv.Value.Global);
                 }
                 ClearCooldowns(kv.Key);

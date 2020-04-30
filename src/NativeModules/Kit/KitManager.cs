@@ -21,12 +21,12 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Essentials.Api;
 using Essentials.Core.Storage;
 using Essentials.NativeModules.Kit.Data;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Essentials.NativeModules.Kit {
 

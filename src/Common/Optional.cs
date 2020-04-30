@@ -21,8 +21,8 @@
 */
 #endregion
 
-using System;
 using Essentials.CodeAnalysis;
+using System;
 
 namespace Essentials.Common {
 
@@ -33,7 +33,7 @@ namespace Essentials.Common {
     /// </summary>
     public class Optional<T> {
 
-        private static readonly Optional<T> EMPTY = new Optional<T>(default(T));
+        private static readonly Optional<T> EMPTY = new Optional<T>(default);
         private readonly T _value;
 
         public bool IsPresent => _value != null;

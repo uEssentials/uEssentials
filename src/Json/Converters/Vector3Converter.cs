@@ -21,8 +21,8 @@
 */
 #endregion
 
-using System;
 using Newtonsoft.Json;
+using System;
 using UnityEngine;
 
 namespace Essentials.Json.Converters {

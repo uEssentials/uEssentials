@@ -21,7 +21,6 @@
 */
 #endregion
 
-using System;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -30,10 +29,11 @@ using Essentials.Common.Util;
 using Essentials.Event;
 using Essentials.I18n;
 using Rocket.API;
+using Rocket.Unturned.Player;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Rocket.Unturned.Player;
 
 namespace Essentials.Core.Command {
 

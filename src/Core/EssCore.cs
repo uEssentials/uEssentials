@@ -21,13 +21,6 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Linq;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Event;
@@ -40,22 +33,29 @@ using Essentials.Common.Util;
 using Essentials.Configuration;
 using Essentials.Core.Command;
 using Essentials.Core.Event;
-using Essentials.I18n;
 using Essentials.Compatibility;
+using Essentials.Compatibility.Hooks;
 using Essentials.Event.Handling;
+using Essentials.Economy;
+using Essentials.I18n;
+using Essentials.Logging;
 using Essentials.NativeModules;
 using Essentials.Updater;
-using Essentials.Compatibility.Hooks;
-using Essentials.Economy;
-using Essentials.Logging;
 using Essentials.Misc;
 using Newtonsoft.Json.Linq;
 using Rocket.Core;
-using Rocket.Core.Plugins;
 using Rocket.Core.Commands;
+using Rocket.Core.Plugins;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 
 namespace Essentials.Core {
 
@@ -69,7 +69,7 @@ namespace Essentials.Core {
         // This needs to be different every time because
         // of Assembly loading -- I (leonardosnt) use a custom version of Rocket for
         // development that allows to reload plugins without restaring the server.
-        internal const string PLUGIN_VERSION = "999.0.0.0";
+        internal const string PLUGIN_VERSION = "999.54.65.79";
 #else
         // Real plugin version -- manually updated.
         internal const string PLUGIN_VERSION = "1.3.5.2";

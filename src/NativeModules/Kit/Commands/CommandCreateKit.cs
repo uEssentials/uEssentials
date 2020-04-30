@@ -21,14 +21,13 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
+
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
-using Essentials.I18n;
-using Essentials.NativeModules.Kit.Item;
 using static Essentials.Common.Util.ItemUtil;
+using Essentials.NativeModules.Kit.Item;
 using SDG.Unturned;
+using System.Collections.Generic;
 
 namespace Essentials.NativeModules.Kit.Commands {
 

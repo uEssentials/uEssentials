@@ -21,10 +21,10 @@
 */
 #endregion
 
-using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.I18n;
+using System.Linq;
 
 namespace Essentials.NativeModules.Warp.Commands {
 

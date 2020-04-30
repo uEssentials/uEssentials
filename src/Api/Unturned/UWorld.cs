@@ -21,9 +21,9 @@
 */
 #endregion
 
+using SDG.Unturned;
 using System.Collections.Generic;
 using System.Linq;
-using SDG.Unturned;
 using Object = UnityEngine.Object;
 
 namespace Essentials.Api.Unturned {

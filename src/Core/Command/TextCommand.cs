@@ -21,14 +21,14 @@
 */
 #endregion
 
-using System.Collections.Generic;
-using System.Linq;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.Configuration;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Essentials.Core.Command {
@@ -86,7 +86,7 @@ namespace Essentials.Core.Command {
             return CommandResult.Success();
         }
 
-        private string ReplaceVariables(string text, ICommandSource src, ICommandArgs args) {
+        private string ReplaceVariables(string text, ICommandSource src, ICommandArgs _) {
             return text.Replace("%sender%", src.DisplayName);
         }
 

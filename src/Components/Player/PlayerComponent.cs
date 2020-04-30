@@ -21,8 +21,8 @@
 */
 #endregion
 
-using System;
 using Essentials.Api.Unturned;
+using System;
 using UnityEngine;
 
 namespace Essentials.Components.Player {

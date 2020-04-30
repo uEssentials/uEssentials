@@ -21,15 +21,15 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Essentials.Api;
 using Essentials.Api.Configuration;
 using Essentials.Common;
 using Essentials.Misc;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Essentials.Configuration {
 
@@ -203,12 +203,14 @@ namespace Essentials.Configuration {
                     Save(filePath);
                 }
 
-                Func<HashSet<string>, HashSet<string>> assureEqualityComparer = (set) => {
-                    if (set == null) {
+                HashSet<string> assureEqualityComparer(HashSet<string> set)
+                {
+                    if (set == null)
+                    {
                         return new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
                     }
                     return new HashSet<string>(set, StringComparer.InvariantCultureIgnoreCase);
-                };
+                }
 
                 // Make sure that these HashSets use StringComparer.InvariantCultureIgnoreCase as the Comparer.
                 CommandsToOverride = assureEqualityComparer(CommandsToOverride);
@@ -217,7 +219,7 @@ namespace Essentials.Configuration {
                 // Make sure that num < max && num > min
                 //  It will return the max value if num > max or
                 //  the min value if num < min
-                Func<int, int, int, int> assureRange = (num, min, max) => Math.Min(Math.Max(num, min), max);
+                int assureRange(int num, int min, int max) => Math.Min(Math.Max(num, min), max);
 
                 VehicleFeatures.RefuelPercentage = assureRange(VehicleFeatures.RefuelPercentage, 0, 100);
                 VehicleFeatures.RepairPercentage = assureRange(VehicleFeatures.RepairPercentage, 0, 100);

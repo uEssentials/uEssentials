@@ -21,12 +21,12 @@
 */
 #endregion
 
-using System.IO;
-using System.Reflection;
 using Essentials.Api.Configuration;
 using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.Logging;
+using System.IO;
+using System.Reflection;
 
 namespace Essentials.Api.Module {
 

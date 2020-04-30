@@ -22,6 +22,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
@@ -29,9 +30,9 @@ using Essentials.Common.Util;
 using SDG.Unturned;
 using Essentials.I18n;
 using Essentials.Common;
-using System.Reflection;
 
-namespace Essentials.Commands {
+namespace Essentials.Commands
+{
 
     [CommandInfo(
         Name = "repair",
@@ -39,11 +40,10 @@ namespace Essentials.Commands {
         Description = "Repair all items in your inventory.",
         AllowedSource = AllowedSource.PLAYER
     )]
-    public class CommandRepair : EssCommand {
-
-        private readonly FieldInfo _itemsField = ReflectUtil.GetField<Items>("items");
-
-        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+    public class CommandRepair : EssCommand
+    {
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args)
+        {
             var player = src.ToPlayer();
 
             player.Inventory.items.ForEach(item => Repair(player, item));
@@ -52,29 +52,25 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
-        private void Repair(UPlayer player, Items item) {
+        private void Repair(UPlayer player, Items item)
+        {
             if (item == null) return;
 
             var playerInv = player.UnturnedPlayer.inventory;
-            var items = (List<ItemJar>) _itemsField.GetValue(item);
-            byte index = 0;
+            var items = item.items;
 
-            items.ForEach(itemJar => {
-                item.updateQuality(index, 100);
-
-                playerInv.channel.send("tellUpdateQuality", ESteamCall.OWNER, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[] {
-                    item.page,
-                    playerInv.getIndex(item.page, itemJar.x, itemJar.y),
-                    100
-                });
+            foreach (var itemJar in items.Where(itemJar => itemJar.item.quality != 100))
+            {
+                playerInv.sendUpdateQuality(item.page, itemJar.x, itemJar.y, 100);
 
                 var barrel = ItemUtil.GetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL);
                 barrel.IfPresent(attach => {
+                    if (attach.Durability == 100) return;
+
                     attach.Durability = 100;
                     ItemUtil.SetWeaponAttachment(itemJar.item, ItemUtil.AttachmentType.BARREL, attach);
                 });
-                index++;
-            });
+            }
         }
 
     }

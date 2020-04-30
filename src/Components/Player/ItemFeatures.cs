@@ -97,9 +97,9 @@ namespace Essentials.Components.Player {
                 return;
             }
 
-            var magazine = Assets.find(EAssetType.ITEM, ammoId) as ItemMagazineAsset;
 
-            if (magazine == null) {
+            if (!(Assets.find(EAssetType.ITEM, ammoId) is ItemMagazineAsset magazine))
+            {
                 return;
             }
 

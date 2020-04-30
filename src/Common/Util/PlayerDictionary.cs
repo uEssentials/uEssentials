@@ -21,13 +21,13 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
 using Essentials.Api.Unturned;
 using Rocket.Unturned.Events;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
+using System;
+using System.Collections.Generic;
 
 namespace Essentials.Common.Util {
 

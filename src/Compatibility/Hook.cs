@@ -21,8 +21,8 @@
 */
 #endregion
 
-using System;
 using Essentials.Api;
+using System;
 
 namespace Essentials.Compatibility {
 

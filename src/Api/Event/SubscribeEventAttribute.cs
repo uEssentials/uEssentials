@@ -21,10 +21,10 @@
 */
 #endregion
 
-using System;
 using Essentials.Event;
 using Rocket.Unturned;
 using Rocket.Unturned.Events;
+using System;
 
 namespace Essentials.Api.Event {
 

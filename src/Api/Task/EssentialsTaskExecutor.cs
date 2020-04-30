@@ -21,8 +21,8 @@
 */
 #endregion
 
-using System.Diagnostics;
 using Essentials.Core;
+using System.Diagnostics;
 
 namespace Essentials.Api.Task {
 

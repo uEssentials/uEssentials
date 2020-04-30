@@ -21,14 +21,14 @@
 */
 #endregion
 
+using Essentials.Api;
+using Essentials.Api.Unturned;
 using Essentials.Common;
+using Essentials.Common.Util;
+using Essentials.Economy;
 using Rocket.Core;
 using System.Linq;
 using System.Reflection;
-using Essentials.Api;
-using Essentials.Api.Unturned;
-using Essentials.Common.Util;
-using Essentials.Economy;
 
 namespace Essentials.Compatibility.Hooks {
 

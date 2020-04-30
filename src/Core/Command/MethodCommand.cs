@@ -21,12 +21,12 @@
 */
 #endregion
 
-using System;
-using System.Reflection;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Common;
 using Essentials.Common.Util;
+using System;
+using System.Reflection;
 
 namespace Essentials.Core.Command {
 
@@ -51,7 +51,7 @@ namespace Essentials.Core.Command {
             Init(true, methodFunc.Method);
         }
 
-        private void Init(bool hasCmdParam, MethodInfo method) {
+        private void Init(bool hasCmdParam, MethodInfo _) {
             Owner = hasCmdParam
                 ? _methodFuncWithCommand.Method.DeclaringType
                 : _methodFunc.Method.DeclaringType;

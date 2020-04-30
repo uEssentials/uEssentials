@@ -21,9 +21,9 @@
 */
 #endregion
 
-using System.Linq;
 using Essentials.Api.Command;
 using Essentials.Api.Unturned;
+using System.Linq;
 
 namespace Essentials.Core.Command {
 

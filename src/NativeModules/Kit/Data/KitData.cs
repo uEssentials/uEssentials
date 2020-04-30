@@ -21,17 +21,18 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.IO;
+
 using Essentials.Api;
 using Essentials.Common.Util;
 using Essentials.Core.Storage;
+using Essentials.NativeModules.Kit.Item;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rocket.Unturned.Items;
 using SDG.Unturned;
-using Essentials.NativeModules.Kit.Item;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Essentials.NativeModules.Kit.Data {
 
@@ -161,13 +162,14 @@ namespace Essentials.NativeModules.Kit.Data {
                     kitItemAmount,
                     tokAmmo?.Value<byte>() ?? null,
                     fireMode
-                );
-
-                weaponItem.Barrel   = itemObj.GetValue("Barrel", strCmp)?.ToObject<Attachment>();
-                weaponItem.Sight    = itemObj.GetValue("Sight", strCmp)?.ToObject<Attachment>();
-                weaponItem.Tactical = itemObj.GetValue("Tactical", strCmp)?.ToObject<Attachment>();
-                weaponItem.Grip     = itemObj.GetValue("Grip", strCmp)?.ToObject<Attachment>();
-                weaponItem.Magazine = itemObj.GetValue("Magazine", strCmp)?.ToObject<Attachment>();
+                )
+                {
+                    Barrel = itemObj.GetValue("Barrel", strCmp)?.ToObject<Attachment>(),
+                    Sight = itemObj.GetValue("Sight", strCmp)?.ToObject<Attachment>(),
+                    Tactical = itemObj.GetValue("Tactical", strCmp)?.ToObject<Attachment>(),
+                    Grip = itemObj.GetValue("Grip", strCmp)?.ToObject<Attachment>(),
+                    Magazine = itemObj.GetValue("Magazine", strCmp)?.ToObject<Attachment>()
+                };
                 return weaponItem;
             }
 

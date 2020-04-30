@@ -21,19 +21,19 @@
 */
 #endregion
 
-using System;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using Essentials.Api;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Common.Util;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 using UnityEngine;
 
 namespace Essentials.I18n {
@@ -130,8 +130,8 @@ namespace Essentials.I18n {
         }
 
         public static string Translate(string key, params object[] args) {
-            var raw = GetEntry(key) as string;
-            if (raw == null) {
+            if (!(GetEntry(key) is string raw))
+            {
                 return null;
             }
             try {

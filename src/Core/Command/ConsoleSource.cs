@@ -21,8 +21,6 @@
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
 using Essentials.Api;
 using Essentials.Api.Command.Source;
 using Essentials.Common.Util;
@@ -30,6 +28,8 @@ using Rocket.Core;
 using Rocket.Core.RCON;
 using SDG.Unturned;
 using Steamworks;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Essentials.Core.Command {

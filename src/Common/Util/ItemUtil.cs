@@ -21,11 +21,11 @@
 */
 #endregion
 
+using Rocket.Unturned.Items;
+using SDG.Unturned;
 using System;
 using System.Globalization;
 using System.Linq;
-using Rocket.Unturned.Items;
-using SDG.Unturned;
 
 namespace Essentials.Common.Util {
 

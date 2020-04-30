@@ -21,12 +21,12 @@
 */
 #endregion
 
-using System.Linq;
 using Essentials.Api;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Core;
 using Essentials.I18n;
+using System.Linq;
 
 namespace Essentials.NativeModules.Kit.Commands {
 

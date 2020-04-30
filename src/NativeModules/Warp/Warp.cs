@@ -21,10 +21,10 @@
 */
 #endregion
 
+using Essentials.Api;
 using Essentials.Api.Command.Source;
 using Essentials.CodeAnalysis;
 using Essentials.Json.Converters;
-using Essentials.Api;
 using Newtonsoft.Json;
 using UnityEngine;
 

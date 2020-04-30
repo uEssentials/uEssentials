@@ -21,12 +21,12 @@
 */
 #endregion
 
-using System.Collections.Generic;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.CodeAnalysis;
 using Essentials.I18n;
 using Essentials.NativeModules.Kit.Item;
+using System.Collections.Generic;
 
 namespace Essentials.NativeModules.Kit {
 

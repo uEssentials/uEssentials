@@ -21,14 +21,14 @@
 */
 #endregion
 
+using Essentials.CodeAnalysis;
+using Essentials.Common;
+using Essentials.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Essentials.CodeAnalysis;
-using Essentials.Common;
-using Essentials.Core;
 
 namespace Essentials.Api.Module {
 
