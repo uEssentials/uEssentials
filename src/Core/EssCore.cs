@@ -69,7 +69,7 @@ namespace Essentials.Core {
         // This needs to be different every time because
         // of Assembly loading -- I (leonardosnt) use a custom version of Rocket for
         // development that allows to reload plugins without restaring the server.
-        internal const string PLUGIN_VERSION = "999.54.65.79";
+        internal const string PLUGIN_VERSION = "999.0.0.0";
 #else
         // Real plugin version -- manually updated.
         internal const string PLUGIN_VERSION = "1.3.5.2";
