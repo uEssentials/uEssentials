@@ -35,7 +35,7 @@ namespace Essentials.Updater {
 
     internal class GithubUpdater : IUpdater {
 
-        private const string ReleasesUrl = @"https://api.github.com/repos/uEssentials/uEssentials/releases/latest";
+        private const string ReleasesUrl = @"https://api.github.com/repos/TH3AL3X/uEssentials/releases/latest";
         private static readonly ConsoleLogger Logger = UEssentials.Logger;
 
         public UpdateResult LastResult { get; private set; }
@@ -93,7 +93,7 @@ namespace Essentials.Updater {
                 } catch (Exception ex) {
                     Logger.LogWarning("Failed to check for updates!");
                     Logger.LogWarning($"Error: {ex.Message}");
-                    Logger.LogWarning("Try downloading manually here https://github.com/uEssentials/uEssentials/releases");
+                    Logger.LogWarning("Try downloading manually here https://github.com/TH3AL3X/uEssentials/releases");
                 }
 
                 return LastResult = result;
