@@ -94,14 +94,14 @@ namespace Essentials.Commands {
                             .Action(() => {
                                 _waitingToTeleport.Remove(player.CSteamId.m_SteamID);
                                 if (whoSent.IsOnline && player.IsOnline) {
-                                    whoSent.Teleport(player.Position);
+                                    whoSent.Teleport(player.Position + new Vector3(0f, 0.5f, 0f));
                                 }
                             })
                             .Delay(TimeSpan.FromSeconds(tpaSettings.TeleportDelay))
                             .Submit();
                         _waitingToTeleport[player.CSteamId.m_SteamID] = task;
                     } else {
-                        whoSent.Teleport(player.Position);
+                        whoSent.Teleport(player.Position + new Vector3(0f, 0.5f, 0f));
                     }
                     break;
                 }
