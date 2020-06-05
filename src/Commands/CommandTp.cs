@@ -90,7 +90,7 @@ namespace Essentials.Commands {
                     var location = args.GetVector3(0);
 
                     if (location.HasValue) {
-                        src.ToPlayer().Teleport(location.Value);
+                        src.ToPlayer().Teleport(location.Value + new Vector3(0f, 0.5f, 0f));
                         EssLang.Send(src, "TELEPORTED", location);
                     } else {
                         return CommandResult.LangError("INVALID_COORDS", args[0], args[1], args[2]);
@@ -110,7 +110,7 @@ namespace Essentials.Commands {
                     var location = args.GetVector3(1);
 
                     if (location.HasValue) {
-                        target.Teleport(location.Value);
+                        target.Teleport(location.Value + new Vector3(0f, 0.5f, 0f));
                         EssLang.Send(target, "TELEPORTED", location);
                         EssLang.Send(src, "TELEPORTED_SENDER", target, location);
                     } else {
