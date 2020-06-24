@@ -39,18 +39,28 @@ namespace Essentials.NativeModules.Kit {
             Instance = this;
 
             KitManager = new KitManager();
-            KitManager.Load();
 
-            Logger.LogInfo($"Loaded {KitManager.Count} kits");
+            Level.onPostLevelLoaded += Instance.onPostLevelLoaded;
+            if (Level.isLoaded) {
+                onPostLevelLoaded(420);
+            }
 
             CommandManager.RegisterAll(CommandsNamespace);
             EventManager.RegisterAll<KitEventHandler>();
         }
 
         public override void OnUnload() {
+            Level.onPostLevelLoaded -= onPostLevelLoaded;
+
             CommandManager.UnregisterAll(CommandsNamespace);
             EventManager.UnregisterAll<KitEventHandler>();
             KitManager.Save();
+        }
+
+        public void onPostLevelLoaded(int level) {
+            KitManager.Load();
+
+            Logger.LogInfo($"Loaded {KitManager.Count} kits");
         }
 
     }

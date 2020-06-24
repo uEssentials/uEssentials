@@ -81,7 +81,8 @@ namespace Essentials.Commands {
                    .Delay(TimeSpan.FromSeconds(delay))
                    .Action(t => {
                        Delay.Remove(playerId.m_SteamID);
-                       player.Teleport(bedPosition, bedAngle);
+                       bedPosition.y += .5f;
+                       player.UnturnedPlayer.teleportToLocation(bedPosition, MeasurementTool.byteToAngle(bedAngle));
                        EssLang.Send(src, "TELEPORTED_BED");
                    })
                    .Submit();
