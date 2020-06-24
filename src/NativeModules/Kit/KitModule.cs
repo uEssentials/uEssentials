@@ -41,8 +41,9 @@ namespace Essentials.NativeModules.Kit {
             KitManager = new KitManager();
 
             Level.onPostLevelLoaded += Instance.onPostLevelLoaded;
+
             if (Level.isLoaded) {
-                onPostLevelLoaded(420);
+                onPostLevelLoaded(0);
             }
 
             CommandManager.RegisterAll(CommandsNamespace);
