@@ -83,7 +83,7 @@ namespace Essentials.Commands {
                 pos.y = raycastHit.point.y + 16f;
             }
 
-            VehicleManager.spawnVehicle(id, pos, Quaternion.identity);
+            VehicleManager.spawnVehicleV2(id, pos, Quaternion.identity);
         }
 
         private static bool IsValidVehicleId(ushort id) => Assets.find(EAssetType.VEHICLE, id) is VehicleAsset;

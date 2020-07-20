@@ -570,7 +570,7 @@ namespace Essentials.Commands {
 
                 var point = vehicleSpawnpoint.point;
                 point.y += 1f;
-                VehicleManager.spawnVehicle(vehicleId, point, Quaternion.Euler(0f, vehicleSpawnpoint.angle, 0f));
+                VehicleManager.spawnVehicleV2(vehicleId, point, Quaternion.Euler(0f, vehicleSpawnpoint.angle, 0f));
             }
 
             EssLang.Send(src, "RESPAWNED_VEHICLES");
