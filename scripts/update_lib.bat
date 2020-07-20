@@ -1,50 +1,29 @@
 @ECHO OFF
 
-:: Copy from Unturned Directory. Don't need to download it again...
-SET "UNTURNED_ASM_FOLDER=C:\Program Files (x86)\Steam\steamapps\common\Unturned\Unturned_Data\Managed"
+SET "UNTURNED_DIR=C:\Program Files (x86)\Steam\steamapps\common\Unturned"
+SET "ROCKET_DIR=%UNTURNED_DIR%\Extras\Rocket.Unturned"
+SET "LIB_DIR=..\lib"
 
-:: Download latest rocket
-echo Downloading Rocket...
-bash -c "wget \"https://ci.rocketmod.net/job/Rocket.Unturned/lastSuccessfulBuild/artifact/Rocket.Unturned/bin/Release/Rocket.zip\""
-
-:: Create Temp dir
-IF NOT EXIST "TmpRocket" (
-  mkdir TmpRocket
-)
-
-IF NOT EXIST "C:\Program Files (x86)\7-Zip\7z.exe" (
-  echo 7z.exe not found.
-  goto EOF
-)
-
-:: Unzip Rocket
-"C:\Program Files (x86)\7-Zip\7z.exe" -y x Rocket.zip -oTmpRocket/
-
-
-:: Copy Rocket dll's to lib\
-xcopy /y TmpRocket\Modules\Rocket.Unturned\*.dll ..\lib /s /i
-
-:: Copy Unturned dll's
 echo Copying unturned assemblies
-copy /Y "%UNTURNED_ASM_FOLDER%\Assembly-CSharp.dll" ..\lib
-copy /Y "%UNTURNED_ASM_FOLDER%\Assembly-CSharp-firstpass.dll" ..\lib
-copy /Y "%UNTURNED_ASM_FOLDER%\UnityEngine.dll" ..\lib
-copy /Y "%UNTURNED_ASM_FOLDER%\Newtonsoft.Json.dll" ..\lib
+xcopy /Y "%UNTURNED_DIR%\Unturned_Data\Managed\Assembly-CSharp.dll" %LIB_DIR%
+xcopy /Y "%UNTURNED_DIR%\Unturned_Data\Managed\Assembly-CSharp-firstpass.dll" %LIB_DIR%
+xcopy /Y "%UNTURNED_DIR%\Unturned_Data\Managed\UnityEngine.dll" %LIB_DIR%
+xcopy /Y "%UNTURNED_DIR%\Unturned_Data\Managed\Newtonsoft.Json.dll" %LIB_DIR%
 echo Done!
 
-:: Clean Temp stuffs
-rmdir /s /q TmpRocket
-del Rocket.zip
+echo Copying Rocket.Unturned
+xcopy /Y "%ROCKET_DIR%\Rocket.Unturned.dll" %LIB_DIR%
+xcopy /Y "%ROCKET_DIR%\Rocket.Core.dll" %LIB_DIR%
+xcopy /Y "%ROCKET_DIR%\Rocket.API.dll" %LIB_DIR%
+echo Done!
 
-git diff --name-only ..\lib
+git diff --name-only %LIB_DIR%
 
 :: Commit changes
-set /P commit=Commit changes ? [Y/N]
+set /P commit="Commit changes ? [Y/N] "
 
 IF /I "%commit%" EQU "Y" (
-  git add ..\lib
+  git add %LIB_DIR%
   git commit -m "Update lib"
   git push -u origin master
 )
-
-rem pause
