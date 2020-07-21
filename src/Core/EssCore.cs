@@ -3,7 +3,7 @@
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
  *
- *  Copyright (C) 2015-2018  leonardosnt
+ *  Copyright (C) 2015-2020  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,8 +61,8 @@ namespace Essentials.Core {
 
     public sealed class EssCore : RocketPlugin {
 
-        internal const string ROCKET_VERSION = "4.9.3.0";
-        internal const string UNTURNED_VERSION = "3.23.8.0";
+        internal const string ROCKET_VERSION = "4.9.3.3";
+        internal const string UNTURNED_VERSION = "3.20.7.0";
 
 #if DEV
         // Dev build version -- patched in compile-time (see uEssentials.csproj)
@@ -72,7 +72,7 @@ namespace Essentials.Core {
         internal const string PLUGIN_VERSION = "999.0.0.0";
 #else
         // Real plugin version -- manually updated.
-        internal const string PLUGIN_VERSION = "1.3.5.2";
+        internal const string PLUGIN_VERSION = "1.3.6.0";
 #endif
 
 #if EXPERIMENTAL
