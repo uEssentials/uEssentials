@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2016-2018  leonardosnt
+ *  Copyright (C) 2016-2020  leonardosnt
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,10 +21,6 @@
  */
 
 'use strict';
-
-if (process.env['APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL'] != 'devleeo@outlook.com') {
-    process.exit(0);
-}
 
 const fs = require('fs');
 const request = require('sync-request');
