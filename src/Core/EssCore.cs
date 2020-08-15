@@ -150,10 +150,13 @@ namespace Essentials.Core {
                     "Wiki: ~white~uessentials.github.io",
                 }.ForEach(text => Logger.LogInfo(text, true));
 
+                // This is true when the plugin is reloaded.
                 if (Provider.clients.Count > 0) {
                     Provider.clients.ForEach(p => {
-                        ConnectedPlayers.Add(p.playerID.steamID.m_SteamID,
-                            new UPlayer(UnturnedPlayer.FromSteamPlayer(p)));
+                        var steamID = p.playerID.steamID.m_SteamID;
+                        if (!ConnectedPlayers.ContainsKey(steamID)) {
+                            ConnectedPlayers.Add(steamID, new UPlayer(UnturnedPlayer.FromSteamPlayer(p)));
+                        }
                     });
                 }
 
