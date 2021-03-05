@@ -264,7 +264,8 @@ namespace Essentials.Core {
 
         protected override void Unload() {
             R.Plugins.OnPluginsLoaded -= OverrideCommands;
-            CommandWindow.input.onInputText -= ReloadCallback;
+            // Fast fix, i don't want to get headache
+            //CommandWindow.input.onInputText -= ReloadCallback;
             Provider.onServerDisconnected -= PlayerDisconnectCallback;
             Provider.onServerConnected -= PlayerConnectCallback;
 
