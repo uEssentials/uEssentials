@@ -28,7 +28,8 @@ using Essentials.Common.Util;
 
 namespace Essentials.Commands {
 
-    [CommandInfo(
+    // So easy to fix this, changing some stuff
+    /*[CommandInfo(
         Name = "tellraw",
         Description = "Send raw message to a player.",
         Usage = "[player/*console*] [message]",
@@ -52,6 +53,6 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
-    }
+    }*/
 
 }

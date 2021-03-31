@@ -34,7 +34,9 @@ using UnityEngine;
 
 namespace Essentials.Core.Command {
 
-    internal class ConsoleSource : ICommandSource {
+
+    internal class ConsoleSource : ICommandSource
+    {
 
         private static ConsoleSource _instance;
         private static readonly object LockObj = new object();
@@ -83,13 +85,6 @@ namespace Essentials.Core.Command {
             Console.ForegroundColor = oldColor;
         }
 
-        public void DispatchCommand(string command) {
-            if (command.StartsWith("/")) {
-                command = command.Remove(0);
-            }
-
-            CommandWindow.input.onInputText?.Invoke(command);
-        }
 
         public override string ToString() {
             return DisplayName;
@@ -119,6 +114,11 @@ namespace Essentials.Core.Command {
             }
 
             return new string(chars);
+        }
+
+        public void DispatchCommand(string command)
+        {
+            ((ICommandSource)Instance).DispatchCommand(command);
         }
     }
 

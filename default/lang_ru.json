@@ -183,6 +183,8 @@
     "PLAYER_CANNOT_EXECUTE": "<yellow>Эта команда не может быть выполнена в игре.",
     "PLAYER_EXITED": "{0} вышел из игры.",
     "PLAYER_JOINED": "{0} вошел в игру.",
+    "PLAYER_EXITEDICON": "https://www.darknesscommunity.club/images/iconservericon.png",
+    "PLAYER_JOINEDICON": "https://www.darknesscommunity.club/images/iconservericon.png",
     "PLAYER_NOT_FOUND": "<yellow>Игрок '{0}' не найден!",
     "PLAYER_RESET": "Игрок был очищен.",
     "PLAYER_RESET_KICK": "Вы были очищены.",

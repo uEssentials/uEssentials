@@ -113,8 +113,6 @@ namespace Essentials.Configuration {
             };
 
             Updater = new UpdaterSettings {
-                CheckUpdates = true,
-                DownloadLatest = true,
                 AlertOnJoin = true
             };
 
@@ -247,7 +245,6 @@ namespace Essentials.Configuration {
 
         public struct UpdaterSettings {
             public bool CheckUpdates;
-            public bool DownloadLatest;
             public bool AlertOnJoin;
         }
 

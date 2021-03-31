@@ -28,6 +28,7 @@ using Essentials.Common;
 using Essentials.Common.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SDG.Unturned;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -165,6 +166,13 @@ namespace Essentials.I18n {
             }
 
             target.SendMessage(message, color);
+        }
+        
+        public static void BetterBroadcast(string keyicon, string key, params object[] args)
+        {
+            var message = Translate(key, args);
+
+            ChatManager.serverSendMessage(message, Color.white, null, null, EChatMode.GLOBAL, Translate(keyicon), false);
         }
 
         public static void Broadcast(string key, params object[] args) {

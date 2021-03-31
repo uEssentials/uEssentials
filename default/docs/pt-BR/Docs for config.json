@@ -118,16 +118,6 @@
   */
   "Updater": {
     /*
-      Determina se o plugin deverá procurar por atualizações.
-    */
-    "CheckUpdates": true,
-
-    /*
-      Determina se o plugin deverá baixar a atualização, caso disponível.
-    */
-    "DownloadLatest": true,
-
-    /*
       Determina se o plugin deverá aletar um administrador quando ele entrar
       caso haja uma atualização disponível.
     */
