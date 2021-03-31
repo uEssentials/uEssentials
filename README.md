@@ -23,7 +23,7 @@ Versão em Português (Brasil) do README.md [AQUI](https://github.com/uEssential
 **Features:**
 - Kits
 - Warps
-- [Over 60 commands](https://goo.gl/VpucUK)
+- [Over 60 commands](https://goo.gl/VpucUK) (Removed sudo command)
 - Intuitive and easy module system
 
 ---
