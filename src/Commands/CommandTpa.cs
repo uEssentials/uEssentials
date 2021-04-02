@@ -55,6 +55,8 @@ namespace Essentials.Commands {
         private static Dictionary<ulong, Task> _waitingToTeleport = new Dictionary<ulong, Task>();
 
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
+            bool lol;
+            
             var player = src.ToPlayer();
             var senderId = player.CSteamId.m_SteamID;
 

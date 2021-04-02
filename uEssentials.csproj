@@ -52,13 +52,13 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Rocket.API">
-      <HintPath>..\Rocket.API.dll</HintPath>
+      <HintPath>C:\Users\funes\Desktop\Rocket.API.dll</HintPath>
     </Reference>
     <Reference Include="Rocket.Core">
-      <HintPath>..\Rocket.Core.dll</HintPath>
+      <HintPath>C:\Users\funes\Desktop\Rocket.Core.dll</HintPath>
     </Reference>
     <Reference Include="Rocket.Unturned">
-      <HintPath>..\Rocket.Unturned.dll</HintPath>
+      <HintPath>C:\Users\funes\Desktop\Rocket.Unturned.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Private>False</Private>
@@ -125,6 +125,7 @@
     <Compile Include="src\Commands\CommandBoom.cs" />
     <Compile Include="src\Commands\CommandSpeed.cs" />
     <Compile Include="src\Commands\CommandOpenStorage.cs" />
+    <Compile Include="src\Commands\CommandSudo.cs" />
     <Compile Include="src\Commands\CommandTellRaw.cs" />
     <Compile Include="src\Commands\CommandTp.cs" />
     <Compile Include="src\Commands\CommandUnlock.cs" />
