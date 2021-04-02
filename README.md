@@ -2,7 +2,7 @@
 
 [![Join in our discord](https://discordapp.com/api/guilds/325080396868091906/widget.png)](https://discord.gg/JtHwhNq)
 [![Build status](https://ci.appveyor.com/api/projects/status/pxm15136lg6mcd2n?svg=true)](https://ci.appveyor.com/project/leonardosnt/uessentials)
-[![Download latest release here](https://img.shields.io/badge/download-latest_release-brightgreen.svg?maxAge=2592000)](https://goo.gl/638UlM)
+[![Download latest release here](https://img.shields.io/badge/download-latest_release-brightgreen.svg?maxAge=2592000)](https://github.com/TH3AL3X/uEssentials/releases/)
 [![Donate at https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MK993GQQ7A4QY)
 
 ---
@@ -10,7 +10,7 @@
 Versão em Português (Brasil) do README.md [AQUI](https://github.com/uEssentials/uEssentials/blob/master/README_PT-BR.md)
 
 ---
-**Latest builds:** https://github.com/uEssentials/Builds/releases
+**Latest builds:** https://github.com/TH3AL3X/uEssentials/releases/
 
 **How to Install:**
 
@@ -23,15 +23,14 @@ Versão em Português (Brasil) do README.md [AQUI](https://github.com/uEssential
 **Features:**
 - Kits
 - Warps
-- [Over 60 commands](https://goo.gl/VpucUK) (Removed sudo command)
+- [Over 60 commands](https://goo.gl/VpucUK)
 - Intuitive and easy module system
 
 ---
 
 **Resources:**
 - Wiki: [https://github.com/uEssentials/uEssentials/wiki](https://goo.gl/MPe1AW)
-- Releases: [https://github.com/uEssentials/uEssentials/releases](https://goo.gl/uql6bm)
-- Experimental Releases [https://github.com/uEssentials/Builds/releases](https://goo.gl/aI71Bs)
+- Releases: [https://github.com/TH3AL3X/uEssentials/releases/](https://github.com/TH3AL3X/uEssentials/releases/)
 
 ---
 
