@@ -32,7 +32,6 @@ using Essentials.I18n;
 
 namespace Essentials.Commands
 {
-
     [CommandInfo(
         Name = "respawnvehicles",
         Description = "Respawn all vehicles"
