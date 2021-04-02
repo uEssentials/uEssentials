@@ -53,6 +53,8 @@ namespace Essentials.Commands {
                 if (!target.HasComponent<FrozenPlayer>()) {
                     return CommandResult.LangError("NOT_FROZEN", target.DisplayName);
                 }
+                // Add movement again
+                target.Movement.sendPluginSpeedMultiplier(1);
                 target.RemoveComponent<FrozenPlayer>();
 
                 EssLang.Send(src, "UNFROZEN_SENDER", target.DisplayName);

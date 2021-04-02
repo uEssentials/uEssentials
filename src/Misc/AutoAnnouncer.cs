@@ -45,11 +45,11 @@ namespace Essentials.Misc {
             Enabled = false;
 
             Messages = new List<string> {
-                "<red>Automatic message 1",
-                "<green>Automatic message 2",
-                "<blue>Automatic message 3",
-                "<yellow>Automatic message 4",
-                "<magenta>Automatic message 5"
+                "Automatic message 1",
+                "Automatic message 2",
+                "Automatic message 3",
+                "Automatic message 4",
+                "Automatic message 5"
             };
         }
 

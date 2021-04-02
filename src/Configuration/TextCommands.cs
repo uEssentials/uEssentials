@@ -41,15 +41,15 @@ namespace Essentials.Configuration {
             Commands.Add(new TextCommandData {
                 Name = "rules",
                 Text = new [] {
-                    "<cyan>Be Respectful.",
-                    "<cyan>Don't use cheats.",
-                    "<cyan>Have fun :D"
+                    "Be Respectful.",
+                    "Don't use cheats.",
+                    "Have fun :D"
                 }
             });
             Commands.Add(new TextCommandData {
                 Name = "website",
                 Text = new [] {
-                    "<cyan>Our website: github.com/uEssentials"
+                    "Our website: github.com/uEssentials"
                 }
             });
         }

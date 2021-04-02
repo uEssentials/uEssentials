@@ -7,24 +7,24 @@
 
             Cores:
                 <black>
-                <blue>
+                
                 <clear>
-                <cyan>
+                
                 <gray>
-                <green>
+                
                 <grey>
-                <magenta>
-                <red>
+                
+                
                 <white>
-                <yellow>
+                
 
         O Chat do unturned suporta apenas uma cor, então não faz
         direrença a parte da mensagem que você irá colocar a cor.
 
         Por exemplo:
-            "<red>player joined the game"
-            "player <red>joined the game"
-            "player join<red>ed the game"
+            "player joined the game"
+            "player joined the game"
+            "player joined the game"
 
         Todos esses vão resultar na mesma mensagem.
 
@@ -35,7 +35,7 @@
   "ALREADY_FROZEN": "Este jogador já esta congelado.",
   "ANYONE_ONLINE": "Não há nenhum jogador online.",
   "ASCENDED": "You ascended {0} 'meters'",
-  "ASCEND_NOTHING_ABOVE": "<yellow>Não há nada acima de você. Use /ascend <amount> para especificar uma altura maior.",
+  "ASCEND_NOTHING_ABOVE": "Não há nada acima de você. Use /ascend <amount> para especificar uma altura maior.",
   "AUTO_REFUEL_DISABLED": "Auto-Refuel desativado!",
   "AUTO_REFUEL_ENABLED": "Auto-Refuel ativado!",
   "AUTO_RELOAD_DISABLED": "Auto-Reload desativado!",
@@ -45,19 +45,19 @@
   "BLACKLISTED_ITEM": "Você não pode spawnar '{0}' pois este item está bloqueado.",
   "BLACKLISTED_VEHICLE": "Você não pode spawnar '{0}' pois este veículo está bloqueado.",
   "CANNOT_TELEPORT_DRIVING": "Você não pode se teleportar enquanto estiver dentro de um veículo.",
-  "CHAT_ANTI_SPAM": "<yellow>Espere para falar novamente.",
+  "CHAT_ANTI_SPAM": "Espere para falar novamente.",
   "CLEAR_EMPTY_VEHICLES": "Removido {0} veículos.",
   "CLEAR_ITEMS": "Todos os items foram removidos.",
   "CLEAR_VEHICLES": "Todos os veículos foram removidos.",
-  "COMMAND_ERROR_OCURRED": "<red>Ocorreu um erro ao executar este comando, por favor contate um administrador.",
-  "COMMAND_ERROR_OCURRED_ADMIN": "<red>Ocorreu um erro ao executar este comando. Verifique o console!",
+  "COMMAND_ERROR_OCURRED": "Ocorreu um erro ao executar este comando, por favor contate um administrador.",
+  "COMMAND_ERROR_OCURRED_ADMIN": "Ocorreu um erro ao executar este comando. Verifique o console!",
   "COMMAND_NO_MONEY": "Você precisa ter pelo menos ({0}{1}) para usar esse comando.",
-  "COMMAND_NO_PERMISSION": "<red>Você não tem acesso a este comando.",
-  "COMMAND_NO_PERMISSION_WITH_PERM": "<red>Você não tem acesso a este comando (Permissão: {0}).",
+  "COMMAND_NO_PERMISSION": "Você não tem acesso a este comando.",
+  "COMMAND_NO_PERMISSION_WITH_PERM": "Você não tem acesso a este comando (Permissão: {0}).",
   "COMMAND_PAID": "Você pagou ({0}{1}) para usar esse comando.",
-  "CONSOLE_CANNOT_EXECUTE": "<red>Este comando não pode ser executado no console.",
+  "CONSOLE_CANNOT_EXECUTE": "Este comando não pode ser executado no console.",
   "CREATED_KIT": "Você criou um novo kit chamado '{0}'.",
-  "COMMAND_COOLDOWN": "<yellow>Você precisa esperar {0} para usar esse comando novamente.",
+  "COMMAND_COOLDOWN": "Você precisa esperar {0} para usar esse comando novamente.",
   "DAY": "dia",
   "DAYS": "dias",
   "DEATH_ANIMAL": "{0} for morto por um animal!",
@@ -89,7 +89,7 @@
   "DEATH_BURNER": "{0} has killed by a burner zombie!",
   "DEATH_SPIT": "{0} has killed by a spit!",
   "DEATH_SPARK": "{0} has killed by a spark!",
-  "DELETED_KIT": "<yellow>Você deletou o kit '{0}'.",
+  "DELETED_KIT": "Você deletou o kit '{0}'.",
   "DESCENDED": "Você desceu {0} 'metros'",
   "DROPKIT_LOCATION": "Você dropou o kit '{0}' em (x: {1:0.00}, y: {2:0.00}, z: {3:0.00})",
   "DROPKIT_PLAYER": "Você dropou o kit '{0}' na localização de '{1}' .",
@@ -114,16 +114,16 @@
   "GIVEN_VEHICLE_ALL": "Você deu um {0} ({1}) para todos os jogadores.",
   "HOUR": "hora",
   "HOURS": "horas",
-  "INVALID_BOOLEAN": "<red>Valor inválido: '{0}'. Esperado 'true' ou 'false'",
-  "INVALID_COORDS": "<red>Coordenadas inválidas ({0}, {1}, {2})",
-  "INVALID_ITEM_ID": "<red>'{0}' não é um id de item válido.",
-  "INVALID_NUMBER": "<red>Número inválido '{0}'",
-  "INVALID_SKILL": "<yellow>Skill inválida: {0}",
+  "INVALID_BOOLEAN": "Valor inválido: '{0}'. Esperado 'true' ou 'false'",
+  "INVALID_COORDS": "Coordenadas inválidas ({0}, {1}, {2})",
+  "INVALID_ITEM_ID": "'{0}' não é um id de item válido.",
+  "INVALID_NUMBER": "Número inválido '{0}'",
+  "INVALID_SKILL": "Skill inválida: {0}",
   "INVALID_STEAMID": "SteamID '{0}' inválida.",
-  "INVALID_VEHICLE_ID": "<red>'{0}' não é um id de veículo válido.",
+  "INVALID_VEHICLE_ID": "'{0}' não é um id de veículo válido.",
   "INVENTORY_CLEAN": "Seu inventário foi limpo.",
-  "INVENTORY_FULL": "<yellow>Seu inventário está cheio. Dropando os items no chão.",
-  "ITEM_LIMIT": "<red>Você não pode spawnar mais de {0} items por vez.",
+  "INVENTORY_FULL": "Seu inventário está cheio. Dropando os items no chão.",
+  "ITEM_LIMIT": "Você não pode spawnar mais de {0} items por vez.",
   "JUMP_NO_POSITION": "Nenhum local encontrado, tente aumentar a distância.",
   "JUMPED": "Você pulou até (x: {0:0.00}, y: {1:0.00}, z: {2:0.00})",
   "KICK_NO_SPECIFIED_REASON": "Não especificada.",
@@ -132,18 +132,18 @@
   "KILL_PLAYER": "Você matou '{0}'",
   "KILLED_ANIMALS": "Você matou {0} animais.",
   "KILLED_ZOMBIES": "Você matou '{0}' zumbis.",
-  "KIT_ALREADY_EXIST": "<yellow>Já existe um kit chamado '{0}'.",
+  "KIT_ALREADY_EXIST": "Já existe um kit chamado '{0}'.",
   "KIT_COOLDOWN": "Você precisa esperar {0} para usar este kit novamente.",
   "KIT_GIVEN_RECEIVER": "Você recebeu o kit '{0}'",
   "KIT_GIVEN_SENDER": "Você deu o kit '{0}' para '{1}'",
-  "KIT_GIVEN_SENDER_ALL": "<cyan>Você deu o kit '{0}' para todos os jogadores!",
-  "KIT_GLOBAL_COOLDOWN": "<yellow>Você precisa esperar {0} para usar outro kit.",
+  "KIT_GIVEN_SENDER_ALL": "Você deu o kit '{0}' para todos os jogadores!",
+  "KIT_GLOBAL_COOLDOWN": "Você precisa esperar {0} para usar outro kit.",
   "KIT_LIST": "Kits disponíveis: {0}",
   "KIT_NO_MONEY": "Você precisa ter pelo menos ({0}{1}) para usar esse kit.",
   "KIT_NO_PERMISSION": "Você não tem acesso a este kit.",
-  "KIT_NONE": "<yellow>Você não tem acesso a nenhum kit.",
-  "KIT_NONE_DEFINED": "<yellow>Nenhum kit foi definido.",
-  "KIT_NOT_EXIST": "<yellow>O kit '{0}' não existe, Use /kits para ver os kits disponíveis.",
+  "KIT_NONE": "Você não tem acesso a nenhum kit.",
+  "KIT_NONE_DEFINED": "Nenhum kit foi definido.",
+  "KIT_NOT_EXIST": "O kit '{0}' não existe, Use /kits para ver os kits disponíveis.",
   "KIT_PAID": "Você pagou ({0}{1}) para usar esse kit.",
   "LIMB_SKULL": "cabeça",
   "LIMB_LEFT_HAND": "mão esquerda",
@@ -172,13 +172,13 @@
   "NONE_FOR_REPLY": "Não há ninguém para responder.",
   "NOT_DIED_YET": "Você ainda não morreu.",
   "NOT_FROZEN": "Este jogador não esta congelado.",
-  "NOT_IN_VEHICLE": "<red>Você não está em um veículo.",
-  "NUMBER_BETWEEN": "<yellow>O número que você digitou precisa ser entre {0} e {1}",
+  "NOT_IN_VEHICLE": "Você não está em um veículo.",
+  "NUMBER_BETWEEN": "O número que você digitou precisa ser entre {0} e {1}",
   "ONLINE_PLAYERS": "Há {0} de {1} jogadores online agora.",
   "ONLY_NUMBERS": "Use apenas números.",
   "PING": "Seu ping: {0}",
   "PING_OTHER": "Ping de {0}: {1}",
-  "PLAYER_CANNOT_EXECUTE": "<red>Este comando não pode ser executado no jogo.",
+  "PLAYER_CANNOT_EXECUTE": "Este comando não pode ser executado no jogo.",
   "PLAYER_EXITED": "{0} saiu do servidor.",
   "PLAYER_EXITEDICON": "https://www.darknesscommunity.club/images/iconservericon.png",
   "PLAYER_JOINED": "{0} entrou no servidor.",
@@ -186,16 +186,16 @@
   "PLAYER_NOT_FOUND": "Jogador '{0}' não encontrado.",
   "PLAYER_RESET": "Jogador resetado com sucesso.",
   "PLAYER_RESET_KICK": "Seus dados foram resetados.",
-  "POLL_ALREADY_VOTED": "<red>Você já votou.",
-  "POLL_INFO": "<cyan>Informações sobre a votação '{0}':' ",
-  "POLL_LIST": "<cyan>Votações em andamento: ",
-  "POLL_LIST_ENTRY": "<cyan>  Nome: {0}, Votos 'sim': {2}, Votos 'não': {3}",
-  "POLL_NAME_IN_USE": "<red>Já existe uma votação com este nome.",
-  "POLL_NONE": "<red>Não há nenhuma votaçâo em andamento.",
-  "POLL_NOT_EXIST": "<red>Não existe uma votação com este nome.",
-  "POLL_RUNNING": "<yellow>A votação '{0}' está em andamento. Use /vote yes|no para votar.",
-  "POLL_STARTED": "<yellow>Uma votação para '{1}' foi iniciada. Use /vote yes|no para votar.",
-  "POLL_STOPPED": "<yellow>The poll '{0}' was ended, votes yes: {2}, votes no: {3}",
+  "POLL_ALREADY_VOTED": "Você já votou.",
+  "POLL_INFO": "Informações sobre a votação '{0}':' ",
+  "POLL_LIST": "Votações em andamento: ",
+  "POLL_LIST_ENTRY": "  Nome: {0}, Votos 'sim': {2}, Votos 'não': {3}",
+  "POLL_NAME_IN_USE": "Já existe uma votação com este nome.",
+  "POLL_NONE": "Não há nenhuma votaçâo em andamento.",
+  "POLL_NOT_EXIST": "Não existe uma votação com este nome.",
+  "POLL_RUNNING": "A votação '{0}' está em andamento. Use /vote yes|no para votar.",
+  "POLL_STARTED": "Uma votação para '{1}' foi iniciada. Use /vote yes|no para votar.",
+  "POLL_STOPPED": "The poll '{0}' was ended, votes yes: {2}, votes no: {3}",
   "POLL_VOTED_NO": "Você votou 'não' na votação '{0}'",
   "POLL_VOTED_YES": "Você votou 'sim' na votação '{0}'",
   "POSITION": "Sua posição atual (x: {0:0.00}, y: {1:0.00}, z: {2:0.00})",
@@ -218,10 +218,10 @@
   "SPAWNED_ITEM_AT": "Você spawnou {0}x {1} em (x: {2:0.00}, y: {3:0.00}, z: {4:0.00})",
   "SPAWNED_VEHICLE_AT_PLAYER": "Você spawnou um veículo na posição de '{0}'",
   "SPAWNED_VEHICLE_AT_POSITION": "Você spawnou um veículo em (x: {2:0.00}, y: {3:0.00}, z: {4:0.00})",
-  "SPY_MODE_OFF": "<yellow>Modo espião desligado.",
-  "SPY_MODE_ON": "<yellow>Modo espião ligado.",
+  "SPY_MODE_OFF": "Modo espião desligado.",
+  "SPY_MODE_ON": "Modo espião ligado.",
   "SUDO_EXECUTED": "'{0}' executou o comando '{1}'",
-  "TELEPORT_CANCELLED_MOVED": "<yellow>O teleporte foi cancelado pois você se moveu.",
+  "TELEPORT_CANCELLED_MOVED": "O teleporte foi cancelado pois você se moveu.",
   "TELEPORT_DELAY": "Você será teleportado em {0}.",
   "TELEPORTED": "Você foi teleportado para '{0}'",
   "TELEPORTED_ALL_COORDS": "Todos os jogadores foram teleportados para (x: {0:0.00}, y: {1:0.00}, z: {2:0.00})",
@@ -239,16 +239,16 @@
   "TPA_SENT": "{0} enviou um pedido de tpa para você, use '/tpa accept/deny'.",
   "TPA_SENT_SENDER": "Você enviou um pedido de tpa para {0}, use '/tpa cancel' para cancelar.",
   "TPA_YOURSELF": "Você não pode enviar um pedido de tpa para sí mesmo.",
-  "TPA_ALREADY_SENT": "<yellow>Você já enviou um pedido de tpa para {0}!",
+  "TPA_ALREADY_SENT": "Você já enviou um pedido de tpa para {0}!",
   "UNFROZEN_ALL": "Você descongelou todos os jogadores.",
   "UNFROZEN_PLAYER": "Você foi descongelado por '{0}'",
   "UNFROZEN_SENDER": "Jogador '{0}' descongelado.",
-  "USE_COOLDOWN": "<yellow>Espere {0} para usar isso novamente.",
+  "USE_COOLDOWN": "Espere {0} para usar isso novamente.",
   "VEHICLE_REFUELED": "Seu veículo foi reabastecido.",
   "VEHICLE_REFUELED_ALL": "Todos os veículos foram reabastecidos.",
   "VEHICLE_REPAIRED": "Seu veículo foi reparadod",
   "VEHICLE_REPAIRED_ALL": "Todos os veículos foram reparados.",
-  "WARP_ALREADY_EXISTS": "<yellow>Uma warp com este nome já existe.",
+  "WARP_ALREADY_EXISTS": "Uma warp com este nome já existe.",
   "WARP_COOLDOWN": "Você será teleportado em {0} segundos",
   "WARP_LIST": "Warps disponíveis: {0}",
   "WARP_NO_PERMISSION": "Você não tem acesso a esta warp.",
@@ -263,11 +263,11 @@
   "SHUTDOWN_DELAY_SENDER": "O servidor desligará em {0}",
   "BACK_DELAY": "Você precisa esperar {0} para retornar ao local da sua morte.",
   "REFUEL_GENERATOR_REFUELED": "{0} geradores reabastecidos.",
-  "INVENTORY_CLEARED": "<magenta>Você limbou seu inventário.",
-  "INVENTORY_CLEARED_ALL": "<magenta>Você limpou o inventário de todos os jogadores.",
-  "INVENTORY_CLEARED_PLAYER": "<magenta>Você limpou o inventário do jogador {0}.",
-  "MAX_SKILLS_ALL": "<cyan>Todas as skills de todos os jogadores foram atualizadas para o nível máximo.",
-  "COMMAND_USAGE_TEMPLATE": "<green>Use /{0} {1}",
+  "INVENTORY_CLEARED": "Você limbou seu inventário.",
+  "INVENTORY_CLEARED_ALL": "Você limpou o inventário de todos os jogadores.",
+  "INVENTORY_CLEARED_PLAYER": "Você limpou o inventário do jogador {0}.",
+  "MAX_SKILLS_ALL": "Todas as skills de todos os jogadores foram atualizadas para o nível máximo.",
+  "COMMAND_USAGE_TEMPLATE": "Use /{0} {1}",
   "ITEMINFO_NAME": "Nome: {0}",
   "ITEMINFO_DESCRIPTION": "Descrição: {0}",
   "ITEMINFO_ID": "Id: {0}",

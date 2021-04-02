@@ -49,7 +49,7 @@ namespace Essentials.Api.Unturned {
         }
 
         public static void Broadcast(object message, Color color) {
-            UnturnedChat.Say(message?.ToString() ?? "null", color);
+            ChatManager.serverSendMessage(message?.ToString() ?? "null", color);
         }
 
         public static void DispatchCommand(string command) {

@@ -164,8 +164,8 @@ namespace Essentials.I18n {
             } else {
                 return;  // Will not send if message is empty.
             }
-
-            target.SendMessage(message, color);
+            ChatManager.serverSendMessage(message, color, null, target.ToPlayer().SteamPlayer);
+            //target.SendMessage(message, color);
         }
         
         public static void BetterBroadcast(string keyicon, string key, params object[] args)

@@ -49,6 +49,8 @@ namespace Essentials.Commands {
                     .ForEach(player => {
                         player.AddComponent<FrozenPlayer>();
                         EssLang.Send(player, "FROZEN_PLAYER", src.DisplayName);
+                        // Better
+                        player.Movement.sendPluginSpeedMultiplier(0);
                     });
 
                 EssLang.Send(src, "FROZEN_ALL");
@@ -64,6 +66,8 @@ namespace Essentials.Commands {
 
                     EssLang.Send(src, "FROZEN_SENDER", player.DisplayName);
                     EssLang.Send(player, "FROZEN_PLAYER", src.DisplayName);
+                    // Better
+                    player.Movement.sendPluginSpeedMultiplier(0);
                 }
             }
 

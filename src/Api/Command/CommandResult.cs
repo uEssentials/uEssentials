@@ -50,7 +50,7 @@ namespace Essentials.Api.Command {
 
         public static CommandResult Error(string message, params object[] args) {
             if (!ColorUtil.HasColor(message)) {
-                message = $"<red>{message}";
+                message = $"{message}";
             }
             return new CommandResult(string.Format(message, args), ResultType.ERROR);
         }
