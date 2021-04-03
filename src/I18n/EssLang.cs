@@ -151,6 +151,27 @@ namespace Essentials.I18n {
         public static object GetEntry(string key) {
             return _translations.TryGetValue(key, out var val) ? val : null;
         }
+        public static void SendNoBuffer(ICommandSource target, string key, params object[] args)
+        {
+            var message = Translate(key, args);
+            Color color;
+
+            if (message == null)
+            {
+                color = Color.red;
+                message = string.Format(KEY_NOT_FOUND_MESSAGE, key);
+            }
+            else if (message.Length > 0)
+            {
+                color = Color.yellow;
+            }
+            else
+            {
+                return;  // Will not send if message is empty.
+            }
+            
+            target.SendMessage(message, color);
+        }
 
         public static void Send(ICommandSource target, string key, params object[] args) {
             var message = Translate(key, args);
@@ -160,19 +181,20 @@ namespace Essentials.I18n {
                 color = Color.red;
                 message = string.Format(KEY_NOT_FOUND_MESSAGE, key);
             } else if (message.Length > 0) {
-                color = ColorUtil.GetColorFromString(ref message);
+                color = Color.yellow;
             } else {
                 return;  // Will not send if message is empty.
             }
-            ChatManager.serverSendMessage(message, color, null, target.ToPlayer().SteamPlayer);
+            ChatManager.serverSendMessage(message.ToString(), color, null, target.ToPlayer().SteamPlayer);
             //target.SendMessage(message, color);
         }
         
         public static void BetterBroadcast(string keyicon, string key, params object[] args)
         {
             var message = Translate(key, args);
+            var icon = Translate(keyicon);
 
-            ChatManager.serverSendMessage(message, Color.white, null, null, EChatMode.GLOBAL, Translate(keyicon), false);
+            ChatManager.serverSendMessage(message.ToString(), Color.white, null, null, EChatMode.GLOBAL, icon, true);
         }
 
         public static void Broadcast(string key, params object[] args) {
@@ -183,7 +205,7 @@ namespace Essentials.I18n {
                 color = Color.red;
                 message = string.Format(KEY_NOT_FOUND_MESSAGE, key);
             } else {
-                color = ColorUtil.GetColorFromString(ref message);
+                color = Color.yellow;
             }
 
             UServer.Broadcast(message, color);

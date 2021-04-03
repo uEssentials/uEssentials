@@ -53,9 +53,9 @@ namespace Essentials.NativeModules.Kit.Commands {
                 if (KitModule.Instance.KitManager.Count == 0) {
                     return CommandResult.LangError("KIT_NONE_DEFINED");
                 }
-                EssLang.Send(source, "KIT_NONE");
+                EssLang.SendNoBuffer(source, "KIT_NONE");
             } else {
-                EssLang.Send(source, "KIT_LIST", string.Join(", ", kits.ToArray()));
+                EssLang.SendNoBuffer(source, "KIT_LIST", string.Join(", ", kits.ToArray()));
             }
 
             return CommandResult.Success();

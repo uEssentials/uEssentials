@@ -61,11 +61,10 @@ namespace Essentials.Commands
                     BarricadeManager manager = (BarricadeManager)typeof(BarricadeManager).GetField("manager", BindingFlags.NonPublic |
                          BindingFlags.Static).GetValue(null);
 
-                    manager.channel.send("tellTakeBarricade", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[]
+                    manager.channel.send("tellTakeBarricade", ESteamCall.ALL, x, y, StructureManager.STRUCTURE_REGIONS, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[]
                     {
                         x,
                         y,
-                        plant,
                         index
                     });
 

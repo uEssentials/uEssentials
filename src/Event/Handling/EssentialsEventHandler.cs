@@ -180,6 +180,7 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_REVIVE)]
         private void OnPlayerRespawn(UnturnedPlayer rocketPlayer, Vector3 l, byte s) {
+
             var player = UPlayer.From(rocketPlayer);
             var skillsToRestore = player.Metadata.GetOrDefault<Dictionary<USkill, byte>>("KEEP_SKILL", null);
 
