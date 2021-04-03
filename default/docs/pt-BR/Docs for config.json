@@ -22,6 +22,7 @@
   /*
     Determina se o jogador que foi anteriormente "congelado" será descongelado quando morrer.
   */
+  "OldFormatMessages": false,
   "UnfreezeOnDeath": true,
 
   /*

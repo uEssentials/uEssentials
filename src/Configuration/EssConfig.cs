@@ -39,6 +39,8 @@ namespace Essentials.Configuration {
 
         public PrivateMessageSettings PrivateMessage;
 
+        public bool OldFormatMessages;
+
         public bool UnfreezeOnDeath;
         public bool UnfreezeOnQuit;
 
@@ -80,7 +82,7 @@ namespace Essentials.Configuration {
             Locale = "en";
 
             BackDelay = 10;
-
+            OldFormatMessages = false;
             UnfreezeOnDeath = true;
             UnfreezeOnQuit = true;
 
@@ -110,10 +112,6 @@ namespace Essentials.Configuration {
             AntiSpam = new AntiSpamSettings {
                 Enabled = true,
                 Interval = 3
-            };
-
-            Updater = new UpdaterSettings {
-                AlertOnJoin = true
             };
 
             Home = new HomeCommandSettings {

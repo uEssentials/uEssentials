@@ -28,6 +28,7 @@ using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
+using System.Threading;
 
 namespace Essentials.Commands {
 
@@ -88,14 +89,20 @@ namespace Essentials.Commands {
         }
 
         private void GiveMaxSkills(UPlayer player, bool overpower) {
-            var pSkills = player.UnturnedPlayer.skills;
+            // Foreach is causing lag in the main thread, so we need to use ThreadPool
+            ThreadPool.QueueUserWorkItem(notmain => {
+                var pSkills = player.UnturnedPlayer.skills;
 
-            foreach (var skill in pSkills.skills.SelectMany(skArr => skArr)) {
-                skill.level = overpower ? byte.MaxValue : skill.max;
+                foreach (var skill in pSkills.skills.SelectMany(skArr => skArr))
+                {
+                    skill.level = overpower ? byte.MaxValue : skill.max;
+                }
+
+                pSkills.askSkills(player.CSteamId);
+                EssLang.Send(player, "MAX_SKILLS");
             }
-
-            pSkills.askSkills(player.CSteamId);
-            EssLang.Send(player, "MAX_SKILLS");
+            );
+            
         }
 
     }

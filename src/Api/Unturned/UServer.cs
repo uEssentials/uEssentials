@@ -44,6 +44,16 @@ namespace Essentials.Api.Unturned {
             set { Provider.serverName = value; }
         }
 
+        public static void BroadcastOld(object message)
+        {
+            Broadcast(message, Color.yellow);
+        }
+
+        public static void BroadcastOld(object message, Color color)
+        {
+            UnturnedChat.Say(message?.ToString() ?? "null", color);
+        }
+
         public static void Broadcast(object message) {
             Broadcast(message, Color.yellow);
         }
