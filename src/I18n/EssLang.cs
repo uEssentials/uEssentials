@@ -39,7 +39,7 @@ using System.Text;
 using UnityEngine;
 
 namespace Essentials.I18n {
-
+    
     public static class EssLang {
 
         internal const string KEY_NOT_FOUND_MESSAGE = "Lang: Key not found '{0}', report to an adminstrator.";
