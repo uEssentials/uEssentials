@@ -44,22 +44,17 @@ namespace Essentials.Api.Unturned {
             set { Provider.serverName = value; }
         }
 
-        public static void BroadcastOld(object message)
-        {
-            Broadcast(message, Color.yellow);
-        }
-
         public static void BroadcastOld(object message, Color color)
         {
             UnturnedChat.Say(message?.ToString() ?? "null", color);
         }
 
-        public static void Broadcast(object message) {
+        /*public static void Broadcast(object message, object icon) {
             Broadcast(message, Color.yellow);
-        }
+        }*/
 
-        public static void Broadcast(object message, Color color) {
-            ChatManager.serverSendMessage(message?.ToString() ?? "null", color);
+        public static void Broadcast(object message, object icon, Color color) {
+            ChatManager.serverSendMessage(message?.ToString() ?? "null", color, null, null, EChatMode.GLOBAL, icon.ToString() ?? null);
         }
 
         public static void DispatchCommand(string command) {

@@ -21,35 +21,54 @@
 */
 #endregion
 
+using Essentials.Api;
 using Essentials.Api.Task;
 using Essentials.Api.Unturned;
 using Essentials.Common.Util;
+using Essentials.I18n;
+using Rocket.Unturned.Chat;
+using SDG.Unturned;
 using System;
 using System.Collections.Generic;
 
 namespace Essentials.Misc {
+    public sealed class Message
+    {
 
+        public string Text;
+
+        public string Icon;
+
+        public Message(string text, string icon)
+        {
+            Text = text;
+            Icon = icon;
+        }
+        public Message()
+        {
+            Text = "";
+            Icon = "";
+        }
+    }
     public class AutoAnnouncer {
 
         public int Interval { get; set; }
 
-        public bool RandomMessages { get; set; }
-
         public bool Enabled { get; set; }
 
-        public List<string> Messages { get; set; }
+        // Don't need this
+        //public List<string> Messages { get; set; }
+
+        public List<string> Icons { get; set; }
+        public Message[] Messages;
 
         public void LoadDefaults() {
-            Interval = 30;
-            RandomMessages = false;
-            Enabled = false;
+            Interval = 10;
 
-            Messages = new List<string> {
-                "Automatic message 1",
-                "Automatic message 2",
-                "Automatic message 3",
-                "Automatic message 4",
-                "Automatic message 5"
+            Enabled = true;
+
+            Messages = new Message[]{
+                new Message("<color=red>[REMEMBER]</color> Mmmmm","https://avatars.githubusercontent.com/u/16111599?s=200&v=4.png"),
             };
         }
 
@@ -57,22 +76,31 @@ namespace Essentials.Misc {
         /// Start broadcasting
         /// </summary>
         public void Start() {
-            var messageIndex = 0;
-            var rand = RandomMessages ? new Random() : null;
+
+            int lastindex = 0;
 
             Task.Create()
                 .Id("AutoMessage Executor")
                 .Interval(TimeSpan.FromSeconds(Interval))
                 .UseIntervalAsDelay()
                 .Action(() => {
-                    messageIndex = RandomMessages
-                        ? rand.Next(Messages.Count)
-                        : (++messageIndex == Messages.Count ? 0 : messageIndex);
+                    if (lastindex > (Messages.Length - 1)) lastindex = 0;
 
-                    var message = (string) Messages[messageIndex].Clone();
-                    var messageColor = ColorUtil.GetColorFromString(ref message);
+                    Message message = Messages[lastindex];
 
-                    UServer.Broadcast(message, messageColor);
+                    //var icon = message.Icon;
+                    var messageColor = ColorUtil.GetColorFromString(ref message.Text);
+
+                    if (UEssentials.Config.OldFormatMessages)
+                    {
+                        UnturnedChat.Say(message.Text.ToString(), messageColor);
+                    }
+                    else
+                    {
+                        ChatManager.serverSendMessage(message.Text.ToString(), messageColor, null, null, EChatMode.GLOBAL, message.Icon.ToString(), true);
+                    }
+
+                    lastindex++;
                 })
                 .Submit();
         }

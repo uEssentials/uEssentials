@@ -334,7 +334,7 @@ namespace Essentials.Event.Handling {
             arguments[1] = EssLang.Translate($"LIMB_{limb}") ?? "?";
             if (hasKiller) arguments[2] = UPlayer.From(killer)?.CharacterName ?? "?";
 
-            UServer.Broadcast(string.Format(message, arguments), color);
+            UServer.Broadcast(string.Format(message, arguments), null, color);
         }
 
         /* Commands eventhandlers */

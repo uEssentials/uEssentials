@@ -29,6 +29,7 @@ using Essentials.Common.Util;
 using Essentials.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Rocket.Unturned.Chat;
 using SDG.Unturned;
 using System;
 using System.Collections.Generic;
@@ -232,7 +233,7 @@ namespace Essentials.I18n {
                 {
                     color = ColorUtil.GetColorFromString(ref message);
                 }
-                UServer.BroadcastOld(message, color);
+                UnturnedChat.Say(message?.ToString() ?? "null", color);
             }
             else
             {
@@ -268,7 +269,7 @@ namespace Essentials.I18n {
                     color = Color.yellow;
                 }
 
-                UServer.Broadcast(message, color);
+                UServer.Broadcast(message, null, color);
             }
         }
         #endregion

@@ -27,6 +27,7 @@ using Essentials.Api.Command.Source;
 using Essentials.Common;
 using Essentials.Common.Util;
 using Essentials.Configuration;
+using SDG.Unturned;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -77,7 +78,14 @@ namespace Essentials.Core.Command {
 
         public CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
             foreach (var entry in _texts) {
-                src.SendMessage(ReplaceVariables(entry.Text, src, args), entry.Color);
+                if (UEssentials.Config.OldFormatMessages)
+                {
+                    src.SendMessage(ReplaceVariables(entry.Text, src, args), entry.Color);
+                }
+                else
+                {
+                    ChatManager.serverSendMessage(ReplaceVariables(entry.Text, src, args), entry.Color, null, src.ToPlayer().SteamPlayer, EChatMode.SAY, "", true);
+                }
             }
             foreach (var entry in _commands) {
                 var source = entry.IsConsoleExecutor ? UEssentials.ConsoleSource : src;

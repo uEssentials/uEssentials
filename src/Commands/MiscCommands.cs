@@ -562,7 +562,7 @@ namespace Essentials.Commands {
             // Will only send the messages if delay > 0
             if (delay > 0) {
                 if (args.Length > 1) {
-                    UServer.Broadcast(args.Join(1)); // Broadcast <reason>
+                    UServer.Broadcast(args.Join(1), null, Color.green); // Broadcast <reason>
                 }
                 EssLang.Send(src, "SHUTDOWN_DELAY_SENDER", TimeUtil.FormatSeconds((uint) delay));
             }

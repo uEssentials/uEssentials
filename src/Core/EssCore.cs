@@ -60,8 +60,8 @@ namespace Essentials.Core {
 
     public sealed class EssCore : RocketPlugin {
 
-        internal const string ROCKET_VERSION = "4.9.3.0";
-        internal const string UNTURNED_VERSION = "3.23.8.0";
+        internal const string ROCKET_VERSION = "4.9.3.11";
+        internal const string UNTURNED_VERSION = "3.21.13.2";
 
 #if DEV
         // Dev build version -- patched in compile-time (see uEssentials.csproj)
@@ -71,7 +71,7 @@ namespace Essentials.Core {
         internal const string PLUGIN_VERSION = "999.0.0.0";
 #else
         // Real plugin version -- manually updated.
-        internal const string PLUGIN_VERSION = "1.3.5.2";
+        internal const string PLUGIN_VERSION = "1.3.5.9";
 #endif
 
 #if EXPERIMENTAL
@@ -172,7 +172,7 @@ namespace Essentials.Core {
 
                 var webResourcesPath = Path.Combine(Folder, WebResources.FileName);
                 var configPath = Path.Combine(Folder, Config.FileName);
-
+                
                 WebResources.Load(webResourcesPath);
 
                  // Sync web config with local config.json
@@ -261,8 +261,13 @@ namespace Essentials.Core {
 
         protected override void Unload() {
             R.Plugins.OnPluginsLoaded -= OverrideCommands;
+
+            // Fix for the rocket reload
+            ConnectedPlayers.Clear();
+
             // Fast fix, i don't want to get headache
             //CommandWindow.input.onInputText -= ReloadCallback;
+
             Provider.onServerDisconnected -= PlayerDisconnectCallback;
             Provider.onServerConnected -= PlayerConnectCallback;
 
@@ -369,7 +374,7 @@ namespace Essentials.Core {
                 });
         }
 
-        private static void ReloadCallback(string command) {
+        /*private static void ReloadCallback(string command) {
             if (!command.StartsWith("rocket reload", true, CultureInfo.InvariantCulture)) {
                 return;
             }
@@ -378,7 +383,7 @@ namespace Essentials.Core {
             UEssentials.Logger.LogWarning("/rocket reload can cause issues. If you experience any problems after running");
             UEssentials.Logger.LogWarning("this command, try restarting the server.");
             Console.WriteLine();
-        }
+        }*/
 
         private void PlayerConnectCallback(CSteamID id) {
             ConnectedPlayers.Add(id.m_SteamID, new UPlayer(UnturnedPlayer.FromCSteamID(id)));
