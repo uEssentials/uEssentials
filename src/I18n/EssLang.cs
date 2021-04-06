@@ -175,7 +175,46 @@ namespace Essentials.I18n {
             
             target.SendMessage(message, color);
         }
+        public static void SendGlobal(string key, params object[] args)
+        {
+            var message = Translate(key, args);
+            Color color;
 
+            if (UEssentials.Config.OldFormatMessages)
+            {
+                if (message == null)
+                {
+                    color = Color.red;
+                    message = string.Format(KEY_NOT_FOUND_MESSAGE, key);
+                }
+                else if (message.Length > 0)
+                {
+                    color = ColorUtil.GetColorFromString(ref message);
+                }
+                else
+                {
+                    return;  // Will not send if message is empty.
+                }
+                UnturnedChat.Say(message, color);
+            }
+            else
+            {
+                if (message == null)
+                {
+                    color = Color.red;
+                    message = string.Format(KEY_NOT_FOUND_MESSAGE, key);
+                }
+                else if (message.Length > 0)
+                {
+                    color = Color.yellow;
+                }
+                else
+                {
+                    return;
+                }
+                ChatManager.serverSendMessage(message.ToString(), color, null, null, EChatMode.GLOBAL, "", true);
+            }
+        }
         public static void Send(ICommandSource target, string key, params object[] args) {
             var message = Translate(key, args);
             Color color;
