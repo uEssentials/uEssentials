@@ -30,81 +30,98 @@ using Essentials.Api.Unturned;
 using Essentials.Common;
 using System.Threading;
 
-namespace Essentials.Commands {
+namespace Essentials.Commands
+{
 
     [CommandInfo(
         Name = "maxskills",
         Description = "Set to max level all of your/player skills",
         Usage = "<overpower[true|false]> <player | *>"
     )]
-    public class CommandMaxSkills : EssCommand {
+    public class CommandMaxSkills : EssCommand
+    {
 
-        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (args.IsEmpty) {
-                if (src.IsConsole) {
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args)
+        {
+            if (args.IsEmpty)
+            {
+                if (src.IsConsole)
+                {
+                    return CommandResult.ShowUsage();
+                }
+                ThreadPool.QueueUserWorkItem(notmain => GiveMaxSkills(src.ToPlayer(), false));
+
+            }
+            else
+            {
+                if (args.Length < 2 && src.IsConsole)
+                {
                     return CommandResult.ShowUsage();
                 }
 
-                GiveMaxSkills(src.ToPlayer(), false);
-            } else {
-                if (args.Length < 2 && src.IsConsole) {
-                    return CommandResult.ShowUsage();
-                }
-
-                if (!args[0].IsBool) {
+                if (!args[0].IsBool)
+                {
                     return CommandResult.LangError("INVALID_BOOLEAN", args[0]);
                 }
 
                 bool overpower = args[0].ToBool;
 
-                if (overpower && !src.HasPermission($"{Permission}.overpower")) {
+                if (overpower && !src.HasPermission($"{Permission}.overpower"))
+                {
                     return CommandResult.NoPermission($"{Permission}.overpower");
                 }
 
                 // player or all
-                if (args.Length > 1) {
-                    if (args[1].Equals("*")) {
-                        if (!src.HasPermission($"{Permission}.all")) {
+                if (args.Length > 1)
+                {
+                    if (args[1].Equals("*"))
+                    {
+                        if (!src.HasPermission($"{Permission}.all"))
+                        {
                             return CommandResult.NoPermission($"{Permission}.all");
                         }
-                        UServer.Players.ForEach(p => GiveMaxSkills(p, overpower));
-                        EssLang.Send(src, "MAX_SKILLS_ALL");
-                    } else {
-                        if (!src.HasPermission($"{Permission}.other")) {
+                        ThreadPool.QueueUserWorkItem(notmain => UServer.Players.ForEach(p => GiveMaxSkills(p, overpower)));
+                        //EssLang.Send(src, "MAX_SKILLS_ALL");
+                    }
+                    else
+                    {
+                        if (!src.HasPermission($"{Permission}.other"))
+                        {
                             return CommandResult.NoPermission($"{Permission}.other");
                         }
-                        if (!args[1].IsValidPlayerIdentifier) {
+                        if (!args[1].IsValidPlayerIdentifier)
+                        {
                             return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                         }
                         var targetPlayer = args[1].ToPlayer;
-                        GiveMaxSkills(targetPlayer, overpower);
-                        EssLang.Send(src, "MAX_SKILLS_TARGET", targetPlayer.DisplayName);
+                        
+                        ThreadPool.QueueUserWorkItem(notmain => GiveMaxSkills(targetPlayer, overpower));
+                        //EssLang.Send(src, "MAX_SKILLS_TARGET", targetPlayer.DisplayName);
                     }
-                } else { // self (with overpower)
-                    GiveMaxSkills(src.ToPlayer(), overpower);
+                }
+                else
+                { // self (with overpower)
+                    ThreadPool.QueueUserWorkItem(notmain => GiveMaxSkills(src.ToPlayer(), overpower));
                 }
             }
 
             return CommandResult.Success();
         }
 
-        private void GiveMaxSkills(UPlayer player, bool overpower) {
+        private void GiveMaxSkills(UPlayer player, bool overpower)
+        {
             // Foreach is causing lag in the main thread, so we need to use ThreadPool
-            ThreadPool.QueueUserWorkItem(notmain => {
-                var pSkills = player.UnturnedPlayer.skills;
 
-                foreach (var skill in pSkills.skills.SelectMany(skArr => skArr))
-                {
-                    skill.level = overpower ? byte.MaxValue : skill.max;
-                }
+            var pSkills = player.UnturnedPlayer.skills;
 
-                pSkills.askSkills(player.CSteamId);
-                EssLang.Send(player, "MAX_SKILLS");
+            foreach (var skill in pSkills.skills.SelectMany(skArr => skArr))
+            {
+                skill.level = overpower ? byte.MaxValue : skill.max;
             }
-            );
-            
-        }
 
+            pSkills.askSkills(player.CSteamId);
+            EssLang.Send(player, "MAX_SKILLS");
+        }
     }
 
 }
