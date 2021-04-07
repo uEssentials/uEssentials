@@ -29,6 +29,9 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.Common;
 using System.Threading;
+using SDG.Unturned;
+using Rocket.Unturned.Player;
+using Essentials.Api.Task;
 
 namespace Essentials.Commands
 {
@@ -36,7 +39,7 @@ namespace Essentials.Commands
     [CommandInfo(
         Name = "maxskills",
         Description = "Set to max level all of your/player skills",
-        Usage = "<overpower[true|false]> <player | *>"
+        Usage = "<[true|false]> <player | *>"
     )]
     public class CommandMaxSkills : EssCommand
     {
@@ -49,26 +52,14 @@ namespace Essentials.Commands
                 {
                     return CommandResult.ShowUsage();
                 }
-                ThreadPool.QueueUserWorkItem(notmain => GiveMaxSkills(src.ToPlayer(), false));
 
+                GiveMaxSkills(src.ToPlayer());
             }
             else
             {
                 if (args.Length < 2 && src.IsConsole)
                 {
                     return CommandResult.ShowUsage();
-                }
-
-                if (!args[0].IsBool)
-                {
-                    return CommandResult.LangError("INVALID_BOOLEAN", args[0]);
-                }
-
-                bool overpower = args[0].ToBool;
-
-                if (overpower && !src.HasPermission($"{Permission}.overpower"))
-                {
-                    return CommandResult.NoPermission($"{Permission}.overpower");
                 }
 
                 // player or all
@@ -80,8 +71,13 @@ namespace Essentials.Commands
                         {
                             return CommandResult.NoPermission($"{Permission}.all");
                         }
-                        ThreadPool.QueueUserWorkItem(notmain => UServer.Players.ForEach(p => GiveMaxSkills(p, overpower)));
-                        //EssLang.Send(src, "MAX_SKILLS_ALL");
+                        // idk why i changed this, anyways is working better i think
+                        foreach (SteamPlayer sPlayer in Provider.clients)
+                        {
+                            GiveMaxSkills(UPlayer.From(sPlayer));
+                        }
+
+                        EssLang.Send(src, "MAX_SKILLS_ALL");
                     }
                     else
                     {
@@ -94,34 +90,29 @@ namespace Essentials.Commands
                             return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                         }
                         var targetPlayer = args[1].ToPlayer;
-                        
-                        ThreadPool.QueueUserWorkItem(notmain => GiveMaxSkills(targetPlayer, overpower));
-                        //EssLang.Send(src, "MAX_SKILLS_TARGET", targetPlayer.DisplayName);
+                        GiveMaxSkills(targetPlayer);
+                        EssLang.Send(src, "MAX_SKILLS_TARGET", targetPlayer.DisplayName);
                     }
-                }
-                else
-                { // self (with overpower)
-                    ThreadPool.QueueUserWorkItem(notmain => GiveMaxSkills(src.ToPlayer(), overpower));
                 }
             }
 
             return CommandResult.Success();
         }
 
-        private void GiveMaxSkills(UPlayer player, bool overpower)
+        private void GiveMaxSkills(UPlayer player)
         {
-            // Foreach is causing lag in the main thread, so we need to use ThreadPool
 
             var pSkills = player.UnturnedPlayer.skills;
 
             foreach (var skill in pSkills.skills.SelectMany(skArr => skArr))
             {
-                skill.level = overpower ? byte.MaxValue : skill.max;
+                skill.level = skill.max;
             }
 
             pSkills.askSkills(player.CSteamId);
+
+
             EssLang.Send(player, "MAX_SKILLS");
         }
     }
-
 }
