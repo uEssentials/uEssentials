@@ -60,8 +60,8 @@ namespace Essentials.Core {
 
     public sealed class EssCore : RocketPlugin {
 
-        internal const string ROCKET_VERSION = "4.9.3.11";
-        internal const string UNTURNED_VERSION = "3.21.13.2";
+        internal const string ROCKET_VERSION = "4.X.X.X";
+        internal const string UNTURNED_VERSION = "3.X.X.X";
 
 #if DEV
         // Dev build version -- patched in compile-time (see uEssentials.csproj)
@@ -71,7 +71,7 @@ namespace Essentials.Core {
         internal const string PLUGIN_VERSION = "999.0.0.0";
 #else
         // Real plugin version -- manually updated.
-        internal const string PLUGIN_VERSION = "1.3.6.0";
+        internal const string PLUGIN_VERSION = "1.3.6.2";
 #endif
 
 #if EXPERIMENTAL

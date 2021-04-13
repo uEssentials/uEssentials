@@ -54,7 +54,15 @@ namespace Essentials.Api.Unturned {
         }*/
 
         public static void Broadcast(object message, object icon, Color color) {
-            ChatManager.serverSendMessage(message?.ToString() ?? "null", color, null, null, EChatMode.GLOBAL, icon.ToString() ?? null);
+            if (UEssentials.Config.OldFormatMessages)
+            {
+                UnturnedChat.Say(message?.ToString() ?? "null", color);
+            }
+            else
+            {
+                ChatManager.serverSendMessage(message?.ToString() ?? "null", color, null, null, EChatMode.GLOBAL, icon.ToString() ?? null, true);
+            }
+            
         }
 
         public static void DispatchCommand(string command) {

@@ -68,7 +68,7 @@ namespace Essentials.Misc {
             Enabled = true;
 
             Messages = new Message[]{
-                new Message("<color=red>[REMEMBER]</color> Mmmmm","https://avatars.githubusercontent.com/u/16111599?s=200&v=4.png"),
+                new Message("<color=blue>[uEssentials]</color> This is an announcement","https://avatars.githubusercontent.com/u/16111599?s=200&v=4.png"),
             };
         }
 
