@@ -55,8 +55,8 @@ namespace Essentials.Commands {
 
             var point = eyePos.Value;
             point.y += 6;
-
-            player.Teleport(point);
+            // fix
+            player.UnturnedPlayer.teleportToLocationUnsafe(point, player.Rotation);
             EssLang.Send(src, "JUMPED", point.x, point.y, point.z);
 
             return CommandResult.Success();

@@ -109,8 +109,9 @@ namespace Essentials.Commands {
             var num = args[0].ToFloat;
 
             pos.y -= num;
+            // fix
+            player.UnturnedPlayer.teleportToLocationUnsafe(pos, player.Rotation);
 
-            player.Teleport(pos);
             EssLang.Send(src, "DESCENDED", num);
 
             return CommandResult.Success();

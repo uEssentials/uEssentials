@@ -101,17 +101,8 @@ namespace Essentials.Commands
 
         private void GiveMaxSkills(UPlayer player)
         {
-
-            var pSkills = player.UnturnedPlayer.skills;
-
-            foreach (var skill in pSkills.skills.SelectMany(skArr => skArr))
-            {
-                skill.level = skill.max;
-            }
-
-            pSkills.askSkills(player.CSteamId);
-
-
+            // lets try with this
+            player.UnturnedPlayer.skills.ServerUnlockAllSkills();
             EssLang.Send(player, "MAX_SKILLS");
         }
     }
