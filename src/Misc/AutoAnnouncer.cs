@@ -53,7 +53,7 @@ namespace Essentials.Misc {
     public class AutoAnnouncer {
 
         public int Interval { get; set; }
-
+        public int lastindex = 0;
         public bool Enabled { get; set; }
 
         // Don't need this
@@ -68,7 +68,8 @@ namespace Essentials.Misc {
             Enabled = true;
 
             Messages = new Message[]{
-                new Message("<color=blue>[uEssentials]</color> This is an announcement","https://avatars.githubusercontent.com/u/16111599?s=200&v=4.png"),
+                new Message("<color=blue>[uEssentials]</color> This is an announcement", "https://avatars.githubusercontent.com/u/16111599?s=200&v=4.png"),
+                new Message("<color=blue>[uEssentials]</color> This is something", "https://avatars.githubusercontent.com/u/16111599?s=200&v=4.png")
             };
         }
 
@@ -76,14 +77,12 @@ namespace Essentials.Misc {
         /// Start broadcasting
         /// </summary>
         public void Start() {
-
-            int lastindex = 0;
-
             Task.Create()
                 .Id("AutoMessage Executor")
                 .Interval(TimeSpan.FromSeconds(Interval))
                 .UseIntervalAsDelay()
                 .Action(() => {
+
                     if (lastindex > (Messages.Length - 1)) lastindex = 0;
 
                     Message message = Messages[lastindex];
