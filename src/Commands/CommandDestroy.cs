@@ -54,17 +54,16 @@ namespace Essentials.Commands
 
                 if (barri != null)
                 {
+                    // changed
                     BarricadeManager.tryGetInfo(barri.root, out byte x, out byte y, out ushort plant, out ushort index, out BarricadeRegion region);
 
                     region.barricades.RemoveAt(index);
 
-                    BarricadeManager manager = (BarricadeManager)typeof(BarricadeManager).GetField("manager", BindingFlags.NonPublic |
-                         BindingFlags.Static).GetValue(null);
-
-                    manager.channel.send("tellTakeBarricade", ESteamCall.ALL, x, y, StructureManager.STRUCTURE_REGIONS, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[]
+                    BarricadeManager.instance.channel.send("tellTakeBarricade", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[]
                     {
                         x,
                         y,
+                        plant,
                         index
                     });
 
@@ -73,14 +72,12 @@ namespace Essentials.Commands
                 }
                 else if (struc != null)
                 {
+                    // changed
                     StructureManager.tryGetInfo(struc.transform, out byte x, out byte y, out ushort index, out StructureRegion region);
 
                     region.structures.RemoveAt(index);
 
-                    StructureManager manager = (StructureManager)typeof(StructureManager).GetField("manager", BindingFlags.NonPublic |
-                         BindingFlags.Static).GetValue(null);
-
-                    manager.channel.send("tellTakeStructure", ESteamCall.ALL, x, y, StructureManager.STRUCTURE_REGIONS, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[]
+                    StructureManager.instance.channel.send("tellTakeStructure", ESteamCall.ALL, x, y, StructureManager.STRUCTURE_REGIONS, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[]
                     {
                         x,
                         y,
