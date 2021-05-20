@@ -321,8 +321,9 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_DEATH)]
         private void DeathMessages(UnturnedPlayer player, EDeathCause cause, ELimb limb, CSteamID killer) {
-            if (!(EssLang.GetEntry($"DEATH_{cause}") is string message))
-            {
+            var message = EssLang.GetEntry($"DEATH_{cause}") as string;
+
+            if (message == null) {
                 return;
             }
 
@@ -334,7 +335,7 @@ namespace Essentials.Event.Handling {
             arguments[1] = EssLang.Translate($"LIMB_{limb}") ?? "?";
             if (hasKiller) arguments[2] = UPlayer.From(killer)?.CharacterName ?? "?";
 
-            UServer.Broadcast(string.Format(message, arguments), null, color);
+            UServer.Broadcast(string.Format(message, arguments), color);
         }
 
         /* Commands eventhandlers */

@@ -261,25 +261,40 @@ namespace Essentials.I18n {
             var message = Translate(key, args);
             var icon = Translate(keyicon);
             Color color;
+            if (message == null)
+            {
+                color = Color.red;
+                message = string.Format(KEY_NOT_FOUND_MESSAGE, key);
+            }
+            else
+            {
+                color = ColorUtil.GetColorFromString(ref message);
+            }
             if (UEssentials.Config.OldFormatMessages)
             {
-                if (message == null)
-                {
-                    color = Color.red;
-                    message = string.Format(KEY_NOT_FOUND_MESSAGE, key);
-                }
-                else
-                {
-                    color = ColorUtil.GetColorFromString(ref message);
-                }
                 UnturnedChat.Say(message?.ToString() ?? "null", color);
             }
             else
             {
-                ChatManager.serverSendMessage(message.ToString(), Color.white, null, null, EChatMode.GLOBAL, icon, true);
+                ChatManager.serverSendMessage(message.ToString(), color, null, null, EChatMode.GLOBAL, icon, true);
             }
         }
+        /*public static void BroadcastOld(object message, Color color)
+        {
+            UnturnedChat.Say(message?.ToString() ?? "null", color);
+        }*/
 
+        /*public static void BroadcastSecond(object message, object icon, Color color)
+        {
+            if (UEssentials.Config.OldFormatMessages)
+            {
+                UnturnedChat.Say(message?.ToString() ?? "null", color);
+            }
+            else
+            {
+                ChatManager.serverSendMessage(message?.ToString() ?? "null", color, null, null, EChatMode.GLOBAL, icon.ToString() ?? "", true);
+            }
+        }*/
         public static void Broadcast(string key, params object[] args) {
             var message = Translate(key, args);
             Color color;
@@ -294,7 +309,7 @@ namespace Essentials.I18n {
                 {
                     color = ColorUtil.GetColorFromString(ref message);
                 }
-                UServer.BroadcastOld(message, color);
+                BetterBroadcast(message, null, color);
             }
             else
             {
@@ -308,7 +323,7 @@ namespace Essentials.I18n {
                     color = Color.yellow;
                 }
 
-                UServer.Broadcast(message, null, color);
+                BetterBroadcast(message, null, color);
             }
         }
         #endregion

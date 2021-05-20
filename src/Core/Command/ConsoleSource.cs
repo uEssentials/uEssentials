@@ -118,7 +118,12 @@ namespace Essentials.Core.Command {
 
         public void DispatchCommand(string command)
         {
-            ((ICommandSource)Instance).DispatchCommand(command);
+            if (string.IsNullOrEmpty(command)) return;
+
+            if (command.StartsWith("/"))
+                command = command.Substring(1);
+
+            R.Commands.Execute(null, command);
         }
     }
 
