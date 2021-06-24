@@ -37,5 +37,5 @@ Versão em Português (Brasil) do README.md [AQUI](https://github.com/uEssential
 If you have any questions or suggestions, feel free to send them to us [here](https://goo.gl/amgH8v).
 
 ## License
-Copyright (C) 2015-2018 leonardosnt <leonrdsnt@gmail.com> and contributors.
+Copyright (C) 2015-2021 leonardosnt <leonrdsnt@gmail.com> and contributors.
 Licensed under the GPL v2 License. See LICENSE file in the project root for full license information.
