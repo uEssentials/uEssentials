@@ -14,7 +14,7 @@ Versão em Português (Brasil) do README.md [AQUI](https://github.com/uEssential
 
 **How to Install:**
 
-- Download the latest [release](https://goo.gl/VKjqPg).
+- Download the latest [release](https://github.com/TH3AL3X/uEssentials/releases).
 - Extract contents to the server's Rocket folder. _(The Libraries and Plugins folders, to "../Servers/ServerName/Rocket".)_
 - Have fun!
 
