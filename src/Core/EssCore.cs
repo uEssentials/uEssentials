@@ -74,7 +74,8 @@ namespace Essentials.Core {
         internal const string PLUGIN_VERSION = "1.3.6.5";
 #endif
 
-#if EXPERIMENTAL
+#if E
+ERIMENTAL
         internal const string BUILD_INFO = " experimental (commit: COMMIT_HASH)";
 #elif DEV
         internal const string BUILD_INFO = " (development)";
