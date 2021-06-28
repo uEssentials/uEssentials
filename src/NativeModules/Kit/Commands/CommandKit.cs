@@ -185,7 +185,7 @@ namespace Essentials.NativeModules.Kit.Commands
                         return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                     }
 
-                    if (!src.HasPermission("essentials.bypass.kitcooldown"))
+                    if (!src.HasPermission("essentials.bypass.kitcooldown") && !src.IsConsole)
                     {
                         if (globalCooldown > 0) GlobalCooldown[steamPlayerId] = DateTime.Now;
                         if (kitCooldown > 0) Cooldowns[steamPlayerId][kitName] = DateTime.Now;
