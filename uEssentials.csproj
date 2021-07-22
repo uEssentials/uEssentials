@@ -120,6 +120,7 @@
     <Compile Include="src\Api\Task\EssentialsTaskExecutor.cs" />
     <Compile Include="src\CodeAnalysis\NotNullAttribute.cs" />
     <Compile Include="src\Commands\CommandDestroy.cs" />
+    <Compile Include="src\Commands\CommandFly.cs" />
     <Compile Include="src\Commands\CommandFreecam.cs" />
     <Compile Include="src\Commands\CommandGravity.cs" />
     <Compile Include="src\Commands\CommandJumpHeight.cs" />

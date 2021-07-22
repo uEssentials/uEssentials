@@ -93,19 +93,6 @@ namespace Essentials.Commands {
         }
 
         private void GiveExp(UPlayer player, int amount) {
-            var playerExp = player.UnturnedPlayer.skills.experience;
-
-            if (amount < 0) {
-                if ((playerExp - amount) < 0)
-                    playerExp = 0;
-                else
-                    playerExp += (uint) amount;
-            } else {
-                if ((playerExp + amount) > int.MaxValue)
-                    playerExp = int.MaxValue;
-                else
-                    playerExp += (uint) amount;
-            }
 
             if (amount >= 0) {
                 EssLang.Send(player, "EXPERIENCE_RECEIVED", amount);
@@ -113,7 +100,7 @@ namespace Essentials.Commands {
                 EssLang.Send(player, "EXPERIENCE_LOST", -amount);
             }
 
-            player.Experience = playerExp;
+            player.UnturnedPlayer.skills.askAward((uint)amount);
         }
 
     }
