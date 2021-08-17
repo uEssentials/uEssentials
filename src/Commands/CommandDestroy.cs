@@ -55,17 +55,12 @@ namespace Essentials.Commands
                 if (barri != null)
                 {
                     // changed
+                    
                     BarricadeManager.tryGetInfo(barri.root, out byte x, out byte y, out ushort plant, out ushort index, out BarricadeRegion region);
 
                     region.barricades.RemoveAt(index);
 
-                    BarricadeManager.instance.channel.send("tellTakeBarricade", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[]
-                    {
-                        x,
-                        y,
-                        plant,
-                        index
-                    });
+                    BarricadeManager.destroyBarricade(region.drops[index], x, y, plant);
 
                     EssLang.Send(src, "BARRICADE_REMOVED");
                     return CommandResult.Success();
@@ -76,14 +71,8 @@ namespace Essentials.Commands
                     StructureManager.tryGetInfo(struc.transform, out byte x, out byte y, out ushort index, out StructureRegion region);
 
                     region.structures.RemoveAt(index);
+                    StructureManager.destroyStructure(region, x, y, index, Vector3.zero);
 
-                    StructureManager.instance.channel.send("tellTakeStructure", ESteamCall.ALL, x, y, StructureManager.STRUCTURE_REGIONS, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[]
-                    {
-                        x,
-                        y,
-                        index,
-                        (region.drops[index].model.position - player.UnturnedPlayer.transform.position).normalized * 100f
-                    });
 
                     EssLang.Send(src, "STRUCTURE_REMOVED");
                     return CommandResult.Success();

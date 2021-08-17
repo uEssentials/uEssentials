@@ -57,21 +57,7 @@ namespace Essentials.Commands
                     InteractableDoor door = hinge.door;
                     bool open = !door.isOpen;
 
-                    BarricadeManager.tryGetInfo(door.transform, out byte x, out byte y, out ushort plant, out ushort index, out BarricadeRegion region);
-
-                    BarricadeManager manager = (BarricadeManager)typeof(BarricadeManager).GetField("manager", BindingFlags.NonPublic |
-                         BindingFlags.Static).GetValue(null);
-
-                    door.updateToggle(open);
-
-                    manager.channel.send("tellToggleDoor", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, new object[]
-                    {
-                        x,
-                        y,
-                        plant,
-                        index,
-                        open
-                    });
+                    BarricadeManager.ServerSetDoorOpen(door, open);
 
                     EssLang.Send(src, "DOOR_TOGGLED", open ? "opened" : "closed");
                     return CommandResult.Success();
