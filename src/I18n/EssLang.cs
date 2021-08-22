@@ -251,7 +251,16 @@ namespace Essentials.I18n {
                 {
                     return;
                 }
-                ChatManager.serverSendMessage(message.ToString(), color, null, target.ToPlayer().SteamPlayer);
+                if (target.IsConsole)
+                {
+                    //fixerini
+                    target.SendMessage(message, color);
+                }
+                else
+                {
+                    ChatManager.serverSendMessage(message.ToString(), color, null, target.ToPlayer().SteamPlayer);
+                }
+                
             }
 
         }

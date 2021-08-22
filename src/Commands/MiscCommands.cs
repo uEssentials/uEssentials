@@ -35,6 +35,7 @@ using SDG.Unturned;
 using UnityEngine;
 using Essentials.Common.Util;
 using Essentials.Components.Player;
+using Rocket.API;
 
 namespace Essentials.Commands {
 
@@ -211,6 +212,7 @@ namespace Essentials.Commands {
             Aliases = new[] { "i" }
         )]
         private CommandResult ItemCommand(ICommandSource src, ICommandArgs args, ICommand cmd) {
+
             switch (args.Length) {
                 /*
                     /i [item]
