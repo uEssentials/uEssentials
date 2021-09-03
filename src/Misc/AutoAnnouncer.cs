@@ -97,7 +97,9 @@ namespace Essentials.Misc {
                     else
                     {
                         ChatManager.serverSendMessage(message.Text.ToString(), messageColor, null, null, EChatMode.GLOBAL, message.Icon.ToString(), true);
+                        
                     }
+                    Rocket.Core.Logging.Logger.Log(message.Text.ToString());
 
                     lastindex++;
                 })
