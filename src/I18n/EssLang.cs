@@ -259,6 +259,7 @@ namespace Essentials.I18n {
                 else
                 {
                     ChatManager.serverSendMessage(message.ToString(), color, null, target.ToPlayer().SteamPlayer);
+                    Rocket.Core.Logging.Logger.Log(message.ToString());
                 }
                 
             }
