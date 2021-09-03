@@ -53,10 +53,11 @@ namespace Essentials.Commands
                     return CommandResult.ShowUsage();
                 }
 
-                GiveMaxSkills(src.ToPlayer());
+                GiveMaxSkills(src.ToPlayer(), false);
             }
             else
             {
+                bool overpower = args[0].ToBool;
                 if (args.Length < 2 && src.IsConsole)
                 {
                     return CommandResult.ShowUsage();
@@ -74,7 +75,7 @@ namespace Essentials.Commands
                         // idk why i changed this, anyways is working better i think
                         foreach (SteamPlayer sPlayer in Provider.clients)
                         {
-                            GiveMaxSkills(UPlayer.From(sPlayer));
+                            GiveMaxSkills(UPlayer.From(sPlayer), overpower);
                         }
 
                         EssLang.Send(src, "MAX_SKILLS_ALL");
@@ -90,7 +91,7 @@ namespace Essentials.Commands
                             return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                         }
                         var targetPlayer = args[1].ToPlayer;
-                        GiveMaxSkills(targetPlayer);
+                        GiveMaxSkills(targetPlayer, overpower);
                         EssLang.Send(src, "MAX_SKILLS_TARGET", targetPlayer.DisplayName);
                     }
                 }
@@ -99,11 +100,14 @@ namespace Essentials.Commands
             return CommandResult.Success();
         }
 
-        private void GiveMaxSkills(UPlayer player)
+        // nah i'm lazy to do the changes
+        private void GiveMaxSkills(UPlayer player, bool overpower)
         {
             // lets try with this
             player.UnturnedPlayer.skills.ServerUnlockAllSkills();
-            EssLang.Send(player, "MAX_SKILLS");
+
+
+           EssLang.Send(player, "MAX_SKILLS");
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Essentials.NativeModules.Kit.Item {
         }
 
         public override bool GiveTo(UPlayer player, bool dropIfInventoryFull = true) {
-            player.Experience += Amount;
+            player.UnturnedPlayer.skills.askAward(Amount);
             return true;
         }
 
