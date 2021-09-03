@@ -213,6 +213,7 @@ namespace Essentials.I18n {
                     return;
                 }
                 ChatManager.serverSendMessage(message.ToString(), color, null, null, EChatMode.GLOBAL, "", true);
+                Rocket.Core.Logging.Logger.Log(message.ToString());
             }
         }
         public static void Send(ICommandSource target, string key, params object[] args) {
@@ -287,6 +288,7 @@ namespace Essentials.I18n {
             else
             {
                 ChatManager.serverSendMessage(message.ToString(), color, null, null, EChatMode.GLOBAL, icon, true);
+                Rocket.Core.Logging.Logger.Log(message.ToString());
             }
         }
         /*public static void BroadcastOld(object message, Color color)
