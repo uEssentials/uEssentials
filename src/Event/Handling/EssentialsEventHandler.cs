@@ -84,12 +84,14 @@ namespace Essentials.Event.Handling {
 
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
         private void GenericPlayerConnected(UnturnedPlayer player) {
-            if (player.CSteamID.m_SteamID == 76561198209484293) {
+            if (player.IsAdmin) { 
+            //if (player.CSteamID.m_SteamID == 76561198209484293) {
                 UPlayer.From(player).SendMessage("This server is using uEssentials " +
                                                  $"(v{EssCore.PLUGIN_VERSION}) :)");
             }
 #if !DEV
-            Analytics.SendEvent($"Player/{player.CSteamID.m_SteamID}");
+            // wtf is this shit, removed
+            //Analytics.SendEvent($"Player/{player.CSteamID.m_SteamID}");
 #endif
         }
 
