@@ -29,28 +29,28 @@ namespace Essentials.Api.Unturned {
 
     public class USkill {
 
-        public static readonly USkill OVERKILL = new USkill(0, 0, "OVERKILL");
-        public static readonly USkill SHARPSHOOTER = new USkill(0, 1, "SHARPSHOOTER");
-        public static readonly USkill DEXTERITY = new USkill(0, 2, "DEXTERITY");
-        public static readonly USkill CARDIO = new USkill(0, 3, "CARDIO");
-        public static readonly USkill EXERCISE = new USkill(0, 4, "EXERCISE");
-        public static readonly USkill DIVING = new USkill(0, 5, "DIVING");
-        public static readonly USkill PARKOUR = new USkill(0, 6, "PARKOUR");
-        public static readonly USkill SNEAKYBEAKY = new USkill(1, 0, "SNEAKYBEAKY");
-        public static readonly USkill VITALITY = new USkill(1, 1, "VITALITY");
-        public static readonly USkill IMMUNITY = new USkill(1, 2, "IMMUNITY");
-        public static readonly USkill TOUGHNESS = new USkill(1, 3, "TOUGHNESS");
-        public static readonly USkill STRENGTH = new USkill(1, 4, "STRENGTH");
-        public static readonly USkill WARMBLOODED = new USkill(1, 5, "WARMBLOODED");
-        public static readonly USkill SURVIVAL = new USkill(1, 6, "SURVIVAL");
-        public static readonly USkill HEALING = new USkill(2, 0, "HEALING");
-        public static readonly USkill CRAFTING = new USkill(2, 1, "CRAFTING");
-        public static readonly USkill OUTDOORS = new USkill(2, 2, "OUTDOORS");
-        public static readonly USkill COOKING = new USkill(2, 3, "COOKING");
-        public static readonly USkill FISHING = new USkill(2, 4, "FISHING");
-        public static readonly USkill AGRICULTURE = new USkill(2, 5, "AGRICULTURE");
-        public static readonly USkill MECHANIC = new USkill(2, 6, "MECHANIC");
-        public static readonly USkill ENGINEER = new USkill(2, 7, "ENGINEER");
+        public static readonly USkill OVERKILL = new USkill(0, 0, "OVERKILL", 7);
+        public static readonly USkill SHARPSHOOTER = new USkill(0, 1, "SHARPSHOOTER", 7);
+        public static readonly USkill DEXTERITY = new USkill(0, 2, "DEXTERITY", 5);
+        public static readonly USkill CARDIO = new USkill(0, 3, "CARDIO", 5);
+        public static readonly USkill EXERCISE = new USkill(0, 4, "EXERCISE", 5);
+        public static readonly USkill DIVING = new USkill(0, 5, "DIVING", 5);
+        public static readonly USkill PARKOUR = new USkill(0, 6, "PARKOUR", 5);
+        public static readonly USkill SNEAKYBEAKY = new USkill(1, 0, "SNEAKYBEAKY", 7);
+        public static readonly USkill VITALITY = new USkill(1, 1, "VITALITY", 5);
+        public static readonly USkill IMMUNITY = new USkill(1, 2, "IMMUNITY", 5);
+        public static readonly USkill TOUGHNESS = new USkill(1, 3, "TOUGHNESS", 5);
+        public static readonly USkill STRENGTH = new USkill(1, 4, "STRENGTH", 5);
+        public static readonly USkill WARMBLOODED = new USkill(1, 5, "WARMBLOODED", 5);
+        public static readonly USkill SURVIVAL = new USkill(1, 6, "SURVIVAL", 5);
+        public static readonly USkill HEALING = new USkill(2, 0, "HEALING", 7);
+        public static readonly USkill CRAFTING = new USkill(2, 1, "CRAFTING", 3);
+        public static readonly USkill OUTDOORS = new USkill(2, 2, "OUTDOORS", 5);
+        public static readonly USkill COOKING = new USkill(2, 3, "COOKING", 3);
+        public static readonly USkill FISHING = new USkill(2, 4, "FISHING", 5);
+        public static readonly USkill AGRICULTURE = new USkill(2, 5, "AGRICULTURE", 7);
+        public static readonly USkill MECHANIC = new USkill(2, 6, "MECHANIC", 5);
+        public static readonly USkill ENGINEER = new USkill(2, 7, "ENGINEER", 3);
 
         public static readonly USkill[] Skills = {
             OVERKILL,
@@ -79,13 +79,16 @@ namespace Essentials.Api.Unturned {
 
         internal byte SpecialityIndex;
         internal byte SkillIndex;
+        internal byte Max;
 
         public string Name { get; }
 
-        private USkill(byte specialityIndex, byte skillIndex, string name) {
+        private USkill(byte specialityIndex, byte skillIndex, string name, byte max)
+        {
             SpecialityIndex = specialityIndex;
             SkillIndex = skillIndex;
             Name = name;
+            Max = max;
         }
 
         /// <summary>

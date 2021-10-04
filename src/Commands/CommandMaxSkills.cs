@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,10 +20,10 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using System.Linq;
-
 using Essentials.I18n;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
@@ -35,7 +36,6 @@ using Essentials.Api.Task;
 
 namespace Essentials.Commands
 {
-
     [CommandInfo(
         Name = "maxskills",
         Description = "Set to max level all of your/player skills",
@@ -43,7 +43,6 @@ namespace Essentials.Commands
     )]
     public class CommandMaxSkills : EssCommand
     {
-
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args)
         {
             if (args.IsEmpty)
@@ -63,6 +62,12 @@ namespace Essentials.Commands
                     return CommandResult.ShowUsage();
                 }
 
+                if (args.Length < 2 && !src.IsConsole)
+                {
+                    GiveMaxSkills(src.ToPlayer(), overpower);
+                    return CommandResult.Success();
+                }
+                
                 // player or all
                 if (args.Length > 1)
                 {
@@ -72,6 +77,7 @@ namespace Essentials.Commands
                         {
                             return CommandResult.NoPermission($"{Permission}.all");
                         }
+
                         // idk why i changed this, anyways is working better i think
                         foreach (SteamPlayer sPlayer in Provider.clients)
                         {
@@ -86,10 +92,12 @@ namespace Essentials.Commands
                         {
                             return CommandResult.NoPermission($"{Permission}.other");
                         }
+
                         if (!args[1].IsValidPlayerIdentifier)
                         {
                             return CommandResult.LangError("PLAYER_NOT_FOUND", args[1]);
                         }
+
                         var targetPlayer = args[1].ToPlayer;
                         GiveMaxSkills(targetPlayer, overpower);
                         EssLang.Send(src, "MAX_SKILLS_TARGET", targetPlayer.DisplayName);
@@ -100,14 +108,35 @@ namespace Essentials.Commands
             return CommandResult.Success();
         }
 
-        // nah i'm lazy to do the changes
         private void GiveMaxSkills(UPlayer player, bool overpower)
         {
-            // lets try with this
-            player.UnturnedPlayer.skills.ServerUnlockAllSkills();
+            switch (overpower)
+            {
+                case true:
+                    foreach (var skills in player.UnturnedPlayer.skills.skills)
+                    {
+                        foreach (var skill in skills)
+                        {
+                            skill.maxUnlockableLevel = byte.MaxValue;
+                            skill.max = byte.MaxValue;
+                        }
+                    }
+                    player.UnturnedPlayer.skills.ServerUnlockAllSkills();
+                    break;
+                case false:
+                    for (var i = 0; i < player.UnturnedPlayer.skills.skills.Length; i++)
+                    {
+                        for (var j = 0; j < player.UnturnedPlayer.skills.skills[i].Length; j++)
+                        {
+                            var uSkill = USkill.Skills.First(x => x.SpecialityIndex == i && x.SkillIndex == j);
+                            player.UnturnedPlayer.skills.skills[i][j].max = uSkill.Max;
+                        }
+                    }
+                    player.UnturnedPlayer.skills.ServerUnlockAllSkills();
+                    break;
+            }
 
-
-           EssLang.Send(player, "MAX_SKILLS");
+            EssLang.Send(player, "MAX_SKILLS");
         }
     }
 }
