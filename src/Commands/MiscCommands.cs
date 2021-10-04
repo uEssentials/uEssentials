@@ -177,10 +177,8 @@ namespace Essentials.Commands {
 
                             return Vector3.Distance(v.transform.position, src.ToPlayer().Position) <= distance;
                         })
-                        .Select(v => v.instanceID)
-                        .ToList()
-                        .ForEach(id => {
-                          VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id);
+                        .ForEach(v => {
+                            VehicleManager.askVehicleDestroy(v);
                           numRemoved++;
                         });
 

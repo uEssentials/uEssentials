@@ -1,4 +1,5 @@
 #region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Command;
@@ -28,38 +30,54 @@ using Essentials.Common;
 using Essentials.I18n;
 using SDG.Unturned;
 
-namespace Essentials.Commands {
-
+namespace Essentials.Commands
+{
     [CommandInfo(
         Name = "clearinventory",
         Description = "Clear your/player's inventory",
-        Aliases = new[] { "ci" },
+        Aliases = new[] {"ci"},
         Usage = "<player | *>"
     )]
-    public class CommandClearInventory : EssCommand {
-
+    public class CommandClearInventory : EssCommand
+    {
         public readonly byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
-        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args) {
-            if (args.IsEmpty && src.IsConsole) {
+        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args)
+        {
+            if (args.IsEmpty && src.IsConsole)
+            {
                 return CommandResult.ShowUsage();
             }
 
-            if (args.IsEmpty) { // self
+            if (args.IsEmpty)
+            {
+                // self
                 ClearInventory(src.ToPlayer());
-            } else if (args[0].Equals("*")) { // all
-                if (!src.HasPermission($"{Permission}.all")) {
+            }
+            else if (args[0].Equals("*"))
+            {
+                // all
+                if (!src.HasPermission($"{Permission}.all"))
+                {
                     return CommandResult.NoPermission($"{Permission}.all");
                 }
+
                 UServer.Players.ForEach(ClearInventory);
                 EssLang.Send(src, "INVENTORY_CLEARED_ALL");
-            } else {
-                if (!args[0].IsValidPlayerIdentifier) { // specific player
+            }
+            else
+            {
+                if (!args[0].IsValidPlayerIdentifier)
+                {
+                    // specific player
                     return CommandResult.LangError("PLAYER_NOT_FOUND", args[0]);
                 }
-                if (!src.HasPermission($"{Permission}.other")) {
+
+                if (!src.HasPermission($"{Permission}.other"))
+                {
                     return CommandResult.NoPermission($"{Permission}.other");
                 }
+
                 ClearInventory(args[0].ToPlayer);
                 EssLang.Send(src, "INVENTORY_CLEARED_PLAYER", args[0].ToPlayer.DisplayName);
             }
@@ -67,61 +85,72 @@ namespace Essentials.Commands {
             return CommandResult.Success();
         }
 
-        private void ClearInventory(UPlayer player) {
+        private void ClearInventory(UPlayer player)
+        {
             var playerInv = player.Inventory;
 
             // "Remove "models" of items from player "body""
-            player.Channel.send("tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER,
-                (byte) 0, (byte) 0, EMPTY_BYTE_ARRAY);
-            player.Channel.send("tellSlot", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER,
-                (byte) 1, (byte) 0, EMPTY_BYTE_ARRAY);
+            for (byte index = 0; index < player.Inventory.getItemCount(0); index++)
+            {
+                var item = player.Inventory.getItem(0, index);
+                if (item != null)
+                    player.Inventory.removeItem(0, index);
+            }
+
+            player.Equipment.sendSlot(0);
+            for (byte index = 0; index < player.Inventory.getItemCount(1); index++)
+            {
+                var item = player.Inventory.getItem(1, index);
+                if (item != null)
+                    player.Inventory.removeItem(1, index);
+            }
+
+            player.Equipment.sendSlot(1);
 
             // Remove items
-            for (byte page = 0; page < PlayerInventory.PAGES; page++) {
-                if(page == PlayerInventory.AREA)
+            for (byte page = 0; page < PlayerInventory.PAGES; page++)
+            {
+                if (page == PlayerInventory.AREA)
                     continue;
 
                 var count = playerInv.getItemCount(page);
 
-                for (byte index = 0; index < count; index++) {
+                for (byte index = 0; index < count; index++)
                     playerInv.removeItem(page, 0);
-                }
             }
 
             // Remove clothes
 
             // Remove unequipped cloths
-            System.Action removeUnequipped = () => {
-                for (byte i = 0; i < playerInv.getItemCount(2); i++) {
+            void RemoveUnequipped()
+            {
+                for (byte i = 0; i < playerInv.getItemCount(2); i++)
                     playerInv.removeItem(2, 0);
-                }
-            };
+            }
 
             // Unequip & remove from inventory
             player.UnturnedPlayer.clothing.askWearBackpack(0, 0, EMPTY_BYTE_ARRAY, true);
-            removeUnequipped();
+            RemoveUnequipped();
 
             player.UnturnedPlayer.clothing.askWearGlasses(0, 0, EMPTY_BYTE_ARRAY, true);
-            removeUnequipped();
+            RemoveUnequipped();
 
             player.UnturnedPlayer.clothing.askWearHat(0, 0, EMPTY_BYTE_ARRAY, true);
-            removeUnequipped();
+            RemoveUnequipped();
 
             player.UnturnedPlayer.clothing.askWearPants(0, 0, EMPTY_BYTE_ARRAY, true);
-            removeUnequipped();
+            RemoveUnequipped();
 
             player.UnturnedPlayer.clothing.askWearMask(0, 0, EMPTY_BYTE_ARRAY, true);
-            removeUnequipped();
+            RemoveUnequipped();
 
             player.UnturnedPlayer.clothing.askWearShirt(0, 0, EMPTY_BYTE_ARRAY, true);
-            removeUnequipped();
+            RemoveUnequipped();
 
             player.UnturnedPlayer.clothing.askWearVest(0, 0, EMPTY_BYTE_ARRAY, true);
-            removeUnequipped();
+            RemoveUnequipped();
 
             EssLang.Send(player, "INVENTORY_CLEARED");
         }
-
     }
-
 }

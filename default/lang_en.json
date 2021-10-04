@@ -32,6 +32,9 @@
 
   "ALL_REPAIRED": "All of your items have been repaired.",
   "ALREADY_FROZEN": "This player is already frozen.",
+  "AMMO_FAILED": "Failed to spawn a magazine for the gun you are holding!",
+  "AMMO_NOT_GUN": "You not holding a gun!",
+  "AMMO_SUCCESS": "Giving you {0} of \"{1}\" ID: {2}",
   "ANYONE_ONLINE": "There are no players online.",
   "ASCENDED": "You ascended {0} 'meters'",
   "ASCEND_NOTHING_ABOVE": "There is nothing above you to teleport to. Use /ascend <amount> to specify a bigger height.",
@@ -239,7 +242,7 @@
   "SPY_MODE_ON": "Spy mode on.",
   "STORAGE_OPEN": "Storage opened.",
   "STORAGE_INVALID": "The object that you are looking at is not a storage unit.!",
-  "STRUCTURE_REMOVED": "Barricade removed successfully.",
+  "STRUCTURE_REMOVED": "Structure removed successfully.",
   "SUDO_EXECUTED": "{0} ran the command '{1}'.",
   "TELEPORT_CANCELLED_MOVED": "Teleport cancelled because you moved.",
   "TELEPORT_DELAY": "You will be teleported in {0}.",

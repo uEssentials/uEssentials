@@ -45,7 +45,7 @@ namespace Essentials.NativeModules.Kit.Item {
                 added = player.Inventory.tryAddItem(item, true);
 
                 if (!added && dropIfInventoryFull) {
-                    ItemManager.dropItem(item, player.Position, true, Dedicator.isDedicated, true);
+                    ItemManager.dropItem(item, player.Position, true, true, true);
                 }
             }
 
