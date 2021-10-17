@@ -26,7 +26,6 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.I18n;
 using SDG.Unturned;
-using Steamworks;
 using UnityEngine;
 
 namespace Essentials.Commands

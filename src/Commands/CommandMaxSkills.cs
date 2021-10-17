@@ -28,11 +28,7 @@ using Essentials.I18n;
 using Essentials.Api.Command;
 using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
-using Essentials.Common;
-using System.Threading;
 using SDG.Unturned;
-using Rocket.Unturned.Player;
-using Essentials.Api.Task;
 
 namespace Essentials.Commands
 {

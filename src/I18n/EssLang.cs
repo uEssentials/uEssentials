@@ -23,10 +23,8 @@
 
 using Essentials.Api;
 using Essentials.Api.Command.Source;
-using Essentials.Api.Unturned;
 using Essentials.Common;
 using Essentials.Common.Util;
-using Essentials.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rocket.Unturned.Chat;

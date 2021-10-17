@@ -28,7 +28,6 @@ using Essentials.Api.Command.Source;
 using Essentials.I18n;
 using SDG.Framework.Utilities;
 using SDG.Unturned;
-using System.Reflection;
 using UnityEngine;
 
 namespace Essentials.Commands
@@ -50,8 +49,25 @@ namespace Essentials.Commands
             if (PhysicsUtility.raycast(new Ray(look.aim.position, look.aim.forward), out RaycastHit hit, Mathf.Infinity,
                 RayMasks.BARRICADE | RayMasks.STRUCTURE))
             {
+                var hinge = hit.transform.GetComponent<InteractableDoorHinge>();
                 var barri = hit.transform.GetComponent<Interactable2SalvageBarricade>();
                 var struc = hit.transform.GetComponent<Interactable2SalvageStructure>();
+                var veh = hit.transform.GetComponent<InteractableVehicle>();
+
+                if (hinge != null)
+                {
+                    if (BarricadeManager.tryGetRegion(hit.transform.root, out var x, out var y, out var num,
+                        out var barricadeRegion))
+                    {
+                        var barricadeDrop = barricadeRegion.FindBarricadeByRootTransform(hit.transform.root);
+                        BarricadeManager.destroyBarricade(barricadeDrop, x, y, num);
+
+                        EssLang.Send(src, "BARRICADE_REMOVED");
+                        return CommandResult.Success();
+                    }
+
+                    goto not_object;
+                }
 
                 if (barri != null)
                 {
@@ -78,6 +94,13 @@ namespace Essentials.Commands
                         EssLang.Send(src, "STRUCTURE_REMOVED");
                         return CommandResult.Success();
                     }
+                }
+
+                if (veh != null)
+                {
+                    VehicleManager.askVehicleDestroy(veh);
+                    EssLang.Send(src, "VEHICLE_REMOVED");
+                    return CommandResult.Success();
                 }
 
                 not_object:

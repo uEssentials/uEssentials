@@ -41,7 +41,6 @@ using Essentials.I18n;
 using Essentials.Logging;
 using Essentials.NativeModules;
 using Essentials.Misc;
-using Newtonsoft.Json.Linq;
 using Rocket.Core;
 using Rocket.Core.Commands;
 using Rocket.Core.Plugins;
@@ -52,7 +51,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -250,7 +248,7 @@ ERIMENTAL
             }
 
 #if !DEV
-            Analytics.SendEvent($"ServerInit");
+            // Analytics.SendEvent($"ServerInit");
 #endif
 
 #if DEV
@@ -279,6 +277,8 @@ ERIMENTAL
             CommandManager.UnregisterAll(executingAssembly);
             EventManager.UnregisterAll(executingAssembly);
             ModuleManager.UnloadAll();
+            Config.AutoAnnouncer.Stop();
+            Config.AutoCommands.Stop();
 
             TaskExecutor.Stop();
 

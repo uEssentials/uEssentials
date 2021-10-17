@@ -21,15 +21,6 @@
 */
 #endregion
 
-using System;
-using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using UnityEngine;
-using Essentials.I18n;
-using Essentials.Api;
-using Essentials.Common.Util;
-using Essentials.Event.Handling;
-
 namespace Essentials.Commands
 {
 

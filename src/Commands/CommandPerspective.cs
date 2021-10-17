@@ -21,10 +21,6 @@
 */
 #endregion
 
-using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.I18n;
-
 namespace Essentials.Commands
 {
     // Server is not able to run this function

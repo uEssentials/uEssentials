@@ -269,6 +269,7 @@
   "USE_COOLDOWN": "Wait {0} seconds to use it again.",
   "VEHICLE_REFUELED": "Your vehicle has been refueled!",
   "VEHICLE_REFUELED_ALL": "All vehicles were refueled!",
+  "VEHICLE_REMOVED": "Vehicle destroyed successfully.",
   "VEHICLE_REPAIRED": "Your vehicle has been repaired!",
   "VEHICLE_REPAIRED_ALL": "All vehicles were repaired!",
   "VEHICLE_UNLOCK": "Vehicle unlocked.",

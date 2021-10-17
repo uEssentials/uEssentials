@@ -119,6 +119,7 @@
     <Compile Include="src\Api\Task\Task.cs" />
     <Compile Include="src\Api\Task\EssentialsTaskExecutor.cs" />
     <Compile Include="src\CodeAnalysis\NotNullAttribute.cs" />
+    <Compile Include="src\Commands\CommandAmmo.cs" />
     <Compile Include="src\Commands\CommandDestroy.cs" />
     <Compile Include="src\Commands\CommandFly.cs" />
     <Compile Include="src\Commands\CommandFreecam.cs" />

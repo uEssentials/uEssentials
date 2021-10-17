@@ -23,7 +23,6 @@
 
 using Essentials.Api.Unturned;
 using Essentials.Common;
-using Rocket.API;
 
 namespace Essentials.Api.Command.Source {
 
