@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
  *  This file is part of uEssentials project.
  *      https://uessentials.github.io/
@@ -19,6 +20,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+
 #endregion
 
 using Essentials.Api.Command;
@@ -26,12 +28,10 @@ using Essentials.Api.Command.Source;
 using Essentials.I18n;
 using SDG.Framework.Utilities;
 using SDG.Unturned;
-using System.Reflection;
 using UnityEngine;
 
 namespace Essentials.Commands
 {
-
     [CommandInfo(
         Name = "destroy",
         Description = "Destroys the barricade or structure that you are looking at.",
@@ -41,53 +41,75 @@ namespace Essentials.Commands
     )]
     public class CommandDestroy : EssCommand
     {
-
         public override CommandResult OnExecute(ICommandSource src, ICommandArgs args)
         {
             var player = src.ToPlayer();
             var look = player.Look;
 
-            if (PhysicsUtility.raycast(new Ray(look.aim.position, look.aim.forward), out RaycastHit hit, Mathf.Infinity, RayMasks.BARRICADE | RayMasks.STRUCTURE))
+            if (PhysicsUtility.raycast(new Ray(look.aim.position, look.aim.forward), out RaycastHit hit, Mathf.Infinity,
+                RayMasks.BARRICADE | RayMasks.STRUCTURE))
             {
-                Interactable2SalvageBarricade barri = hit.transform.GetComponent<Interactable2SalvageBarricade>();
-                Interactable2SalvageStructure struc = hit.transform.GetComponent<Interactable2SalvageStructure>();
+                var hinge = hit.transform.GetComponent<InteractableDoorHinge>();
+                var barri = hit.transform.GetComponent<Interactable2SalvageBarricade>();
+                var struc = hit.transform.GetComponent<Interactable2SalvageStructure>();
+                var veh = hit.transform.GetComponent<InteractableVehicle>();
+
+                if (hinge != null)
+                {
+                    if (BarricadeManager.tryGetRegion(hit.transform.root, out var x, out var y, out var num,
+                        out var barricadeRegion))
+                    {
+                        var barricadeDrop = barricadeRegion.FindBarricadeByRootTransform(hit.transform.root);
+                        BarricadeManager.destroyBarricade(barricadeDrop, x, y, num);
+
+                        EssLang.Send(src, "BARRICADE_REMOVED");
+                        return CommandResult.Success();
+                    }
+
+                    goto not_object;
+                }
 
                 if (barri != null)
                 {
-                    // changed
-                    
-                    BarricadeManager.tryGetInfo(barri.root, out byte x, out byte y, out ushort plant, out ushort index, out BarricadeRegion region);
+                    if (BarricadeManager.tryGetRegion(hit.transform, out var x, out var y, out var num,
+                        out var barricadeRegion))
+                    {
+                        var barricadeDrop = barricadeRegion.FindBarricadeByRootTransform(hit.transform);
+                        BarricadeManager.destroyBarricade(barricadeDrop, x, y, num);
 
-                    region.barricades.RemoveAt(index);
+                        EssLang.Send(src, "BARRICADE_REMOVED");
+                        return CommandResult.Success();
+                    }
 
-                    BarricadeManager.destroyBarricade(region.drops[index], x, y, plant);
+                    goto not_object;
+                }
 
-                    EssLang.Send(src, "BARRICADE_REMOVED");
+                if (struc != null)
+                {
+                    if (StructureManager.tryGetRegion(hit.transform, out var x, out var y, out var structureRegion))
+                    {
+                        var structureDrop = structureRegion.FindStructureByRootTransform(hit.transform);
+                        StructureManager.destroyStructure(structureDrop, x, y, Vector3.zero);
+
+                        EssLang.Send(src, "STRUCTURE_REMOVED");
+                        return CommandResult.Success();
+                    }
+                }
+
+                if (veh != null)
+                {
+                    VehicleManager.askVehicleDestroy(veh);
+                    EssLang.Send(src, "VEHICLE_REMOVED");
                     return CommandResult.Success();
                 }
-                else if (struc != null)
-                {
-                    // changed
-                    StructureManager.tryGetInfo(struc.transform, out byte x, out byte y, out ushort index, out StructureRegion region);
 
-                    region.structures.RemoveAt(index);
-                    StructureManager.destroyStructure(region, x, y, index, Vector3.zero);
-
-
-                    EssLang.Send(src, "STRUCTURE_REMOVED");
-                    return CommandResult.Success();
-                }
-                else
-                {
-                    return CommandResult.LangError("DESTROY_INVALID");
-                }
+                not_object:
+                return CommandResult.LangError("DESTROY_INVALID");
             }
             else
             {
                 return CommandResult.LangError("NO_OBJECT");
             }
         }
-
     }
-
 }

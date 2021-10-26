@@ -23,9 +23,7 @@
 
 using Essentials.Api;
 using Essentials.Api.Task;
-using Essentials.Api.Unturned;
 using Essentials.Common.Util;
-using Essentials.I18n;
 using Rocket.Unturned.Chat;
 using SDG.Unturned;
 using System;
@@ -51,7 +49,7 @@ namespace Essentials.Misc {
         }
     }
     public class AutoAnnouncer {
-
+        public Task CurrentTask { get; set; }
         public int Interval { get; set; }
         public int lastindex = 0;
         public bool Enabled { get; set; }
@@ -77,7 +75,7 @@ namespace Essentials.Misc {
         /// Start broadcasting
         /// </summary>
         public void Start() {
-            Task.Create()
+            CurrentTask = Task.Create()
                 .Id("AutoMessage Executor")
                 .Interval(TimeSpan.FromSeconds(Interval))
                 .UseIntervalAsDelay()
@@ -104,6 +102,11 @@ namespace Essentials.Misc {
                     lastindex++;
                 })
                 .Submit();
+        }
+
+        public void Stop()
+        {
+            CurrentTask.Cancel();
         }
 
     }

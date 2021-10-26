@@ -35,7 +35,6 @@ using SDG.Unturned;
 using UnityEngine;
 using Essentials.Common.Util;
 using Essentials.Components.Player;
-using Rocket.API;
 
 namespace Essentials.Commands {
 
@@ -177,10 +176,8 @@ namespace Essentials.Commands {
 
                             return Vector3.Distance(v.transform.position, src.ToPlayer().Position) <= distance;
                         })
-                        .Select(v => v.instanceID)
-                        .ToList()
-                        .ForEach(id => {
-                          VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, id);
+                        .ForEach(v => {
+                            VehicleManager.askVehicleDestroy(v);
                           numRemoved++;
                         });
 

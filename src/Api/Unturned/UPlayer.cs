@@ -105,8 +105,7 @@ namespace Essentials.Api.Unturned {
         public uint Experience {
             get { return RocketPlayer.Experience; }
             set {
-                _experienceField.SetValue(UnturnedPlayer.skills, value);
-                UnturnedPlayer.skills.askSkills(CSteamId);
+                UnturnedPlayer.skills.ServerSetExperience(value);
             }
         }
 
@@ -175,7 +174,7 @@ namespace Essentials.Api.Unturned {
                 added = UnturnedPlayer.inventory.tryAddItem(clone, true);
 
                 if (!added && dropIfInventoryIsFull) {
-                    ItemManager.dropItem(clone, Position, true, Dedicator.isDedicated, true);
+                    ItemManager.dropItem(clone, Position, true, true, true);
                 }
             }
 
@@ -219,8 +218,7 @@ namespace Essentials.Api.Unturned {
         }
 
         public void SetSkillLevel(USkill uSkill, byte value) {
-            GetSkill(uSkill).level = value;
-            UnturnedPlayer.skills.askSkills(CSteamId);
+            UnturnedPlayer.skills.ServerSetSkillLevel(uSkill.SpecialityIndex, uSkill.SkillIndex, value);
         }
 
         public byte GetSkillLevel(USkill uSkill) {

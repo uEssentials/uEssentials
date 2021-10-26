@@ -29,8 +29,9 @@ using System.Collections.Generic;
 
 namespace Essentials.Misc {
 
-    public class AutoCommands {
-
+    public class AutoCommands
+    {
+        public List<Task> CurrentTasks { get; set; } = new List<Task>();
         public List<AutoCommand> Commands { get; set; }
 
         public bool Enabled { get; set; }
@@ -52,13 +53,19 @@ namespace Essentials.Misc {
 
         public void Start() {
             Commands.ForEach(cmd => {
-                Task.Create()
+                CurrentTasks.Add(Task.Create()
                     .Id("AutoCommand Executor")
                     .Delay(TimeSpan.FromSeconds(cmd.Timer))
                     .Interval(cmd.RunOnce ? 0 : cmd.Timer * 1000)
                     .Action(() => cmd.Commands.ForEach(UServer.DispatchCommand))
-                    .Submit();
+                    .Submit());
             });
+        }
+
+        public void Stop()
+        {
+            foreach (var currentTask in CurrentTasks)
+                currentTask.Cancel();
         }
 
         public struct AutoCommand {

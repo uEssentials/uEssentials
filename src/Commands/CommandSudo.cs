@@ -27,8 +27,6 @@ using Essentials.Api.Unturned;
 using Essentials.Common;
 using SDG.Unturned;
 using Essentials.I18n;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Rocket.Core;
 
 namespace Essentials.Commands

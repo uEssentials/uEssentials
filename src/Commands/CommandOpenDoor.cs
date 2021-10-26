@@ -26,7 +26,6 @@ using Essentials.Api.Command.Source;
 using Essentials.I18n;
 using SDG.Framework.Utilities;
 using SDG.Unturned;
-using System.Reflection;
 using UnityEngine;
 
 namespace Essentials.Commands

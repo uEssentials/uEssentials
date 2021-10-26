@@ -21,47 +21,44 @@
 */
 #endregion
 
-using Essentials.Api.Command;
-using Essentials.Api.Command.Source;
-using Essentials.I18n;
-
 namespace Essentials.Commands
 {
-
-    [CommandInfo(
-        Name = "perspective",
-        Description = "Force change your camera perspective.",
-        Usage = "<third | first>",
-        AllowedSource = AllowedSource.PLAYER,
-        MinArgs = 1,
-        MaxArgs = 1
-    )]
-    public class CommandPerspective : EssCommand
-    {
-
-        public override CommandResult OnExecute(ICommandSource src, ICommandArgs args)
-        {
-            var player = src.ToPlayer();
-            if (args[0].ToString() == "third")
-            {
-                player.Look.setPerspective(SDG.Unturned.EPlayerPerspective.THIRD);
-
-                EssLang.Send(src, "PERSPECTIVE_THIRD");
-                return CommandResult.Success();
-            }
-            else if (args[0].ToString() == "first")
-            {
-                player.Look.setPerspective(SDG.Unturned.EPlayerPerspective.FIRST);
-
-                EssLang.Send(src, "PERSPECTIVE_FIRST");
-                return CommandResult.Success();
-            }
-            else
-            {
-                return CommandResult.ShowUsage();
-            }
-        }
-
-    }
+    // Server is not able to run this function
+    
+    // [CommandInfo(
+    //     Name = "perspective",
+    //     Description = "Force change your camera perspective.",
+    //     Usage = "<third | first>",
+    //     AllowedSource = AllowedSource.PLAYER,
+    //     MinArgs = 1,
+    //     MaxArgs = 1
+    // )]
+    // public class CommandPerspective : EssCommand
+    // {
+    //
+    //     public override CommandResult OnExecute(ICommandSource src, ICommandArgs args)
+    //     {
+    //         var player = src.ToPlayer();
+    //         if (args[0].ToString() == "third")
+    //         {
+    //             player.Look.setPerspective(SDG.Unturned.EPlayerPerspective.THIRD);
+    //
+    //             EssLang.Send(src, "PERSPECTIVE_THIRD");
+    //             return CommandResult.Success();
+    //         }
+    //         else if (args[0].ToString() == "first")
+    //         {
+    //             player.Look.setPerspective(SDG.Unturned.EPlayerPerspective.FIRST);
+    //
+    //             EssLang.Send(src, "PERSPECTIVE_FIRST");
+    //             return CommandResult.Success();
+    //         }
+    //         else
+    //         {
+    //             return CommandResult.ShowUsage();
+    //         }
+    //     }
+    //
+    // }
 
 }

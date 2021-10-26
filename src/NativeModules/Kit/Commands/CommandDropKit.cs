@@ -92,7 +92,7 @@ namespace Essentials.NativeModules.Kit.Commands {
 
             foreach (var item in kitManager.GetByName(kitName).Items) {
                 if (item is KitItem kitItem) ItemManager.dropItem(kitItem.UnturnedItem, pos, true, true, true);
-                if (item is KitItemVehicle vehicleItem) VehicleManager.spawnVehicle(vehicleItem.Id, pos + (Vector3.up * 16), Quaternion.identity);
+                if (item is KitItemVehicle vehicleItem) VehicleManager.spawnVehicleV2(vehicleItem.Id, pos + (Vector3.up * 16), Quaternion.identity);
             }
         }
 

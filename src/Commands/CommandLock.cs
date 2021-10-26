@@ -26,7 +26,6 @@ using Essentials.Api.Command.Source;
 using Essentials.Api.Unturned;
 using Essentials.I18n;
 using SDG.Unturned;
-using Steamworks;
 using UnityEngine;
 
 namespace Essentials.Commands
@@ -54,7 +53,7 @@ namespace Essentials.Commands
             {
                 if (!veh.vehicle.isLocked)
                 {
-                    VehicleManager.instance.channel.send("tellVehicleLock", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, veh.vehicle.instanceID, player.CSteamId, player.UnturnedPlayer.channel.owner.playerID.group, player.CSteamId != CSteamID.Nil);
+                    VehicleManager.ServerSetVehicleLock(veh.vehicle, player.CSteamId, player.UnturnedPlayer.quests.groupID, true);
                     EssLang.Send(src, "VEHICLE_LOCK");
                     return CommandResult.Success();
                 }
