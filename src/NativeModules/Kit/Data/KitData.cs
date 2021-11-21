@@ -33,12 +33,30 @@ using SDG.Unturned;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Essentials.NativeModules.Kit.Data {
 
     internal class KitData : IData<Dictionary<string, Kit>> {
 
-        internal static string DataFilePath => Path.Combine(UEssentials.Folder, "kits.json");
+
+
+        public static string FixDeleteKits()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // windows
+                return Rocket.Core.Environment.PluginsDirectory + "//uEssentials";
+            }
+            else
+            {
+                // linux
+                return Rocket.Core.Environment.PluginsDirectory + "/uEssentials";
+            }
+        }
+
+
+        internal static string DataFilePath => Path.Combine(FixDeleteKits(), "kits.json");
 
         public virtual void Save(Dictionary<string, Kit> warps) {
             JsonUtil.Serialize(DataFilePath, warps.Values);
