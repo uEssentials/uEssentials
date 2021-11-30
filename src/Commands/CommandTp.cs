@@ -55,7 +55,7 @@ namespace Essentials.Commands {
                         return CommandResult.LangError("FAILED_FIND_PLACE_OR_PLAYER", args[0]);
                     }
 
-                    src.ToPlayer().Teleport(dataPosition);
+                    src.ToPlayer().UnturnedPlayer.teleportToLocationUnsafe(dataPosition, 0);
                     EssLang.Send(src, "TELEPORTED", dataName);
                     break;
                 }
@@ -77,7 +77,7 @@ namespace Essentials.Commands {
                         return CommandResult.LangError("FAILED_FIND_PLACE_OR_PLAYER", args[1]);
                     }
 
-                    target.Teleport(dataPosition);
+                    target.UnturnedPlayer.teleportToLocationUnsafe(dataPosition, 0);
                     EssLang.Send(target, "TELEPORTED", dataName);
                     EssLang.Send(src, "TELEPORTED_SENDER", target, dataName);
                     break;
@@ -89,8 +89,9 @@ namespace Essentials.Commands {
                 case 3: {
                     var location = args.GetVector3(0);
 
-                    if (location.HasValue) {
-                        src.ToPlayer().Teleport(location.Value + new Vector3(0f, 0.5f, 0f));
+                    if (location.HasValue)
+                    {
+                        src.ToPlayer().UnturnedPlayer.teleportToLocationUnsafe(location.Value + new Vector3(0f, 0.5f, 0f), 0);
                         EssLang.Send(src, "TELEPORTED", location);
                     } else {
                         return CommandResult.LangError("INVALID_COORDS", args[0], args[1], args[2]);
@@ -110,7 +111,7 @@ namespace Essentials.Commands {
                     var location = args.GetVector3(1);
 
                     if (location.HasValue) {
-                        target.Teleport(location.Value + new Vector3(0f, 0.5f, 0f));
+                        target.UnturnedPlayer.teleportToLocationUnsafe(location.Value + new Vector3(0f, 0.5f, 0f), 0);
                         EssLang.Send(target, "TELEPORTED", location);
                         EssLang.Send(src, "TELEPORTED_SENDER", target, location);
                     } else {

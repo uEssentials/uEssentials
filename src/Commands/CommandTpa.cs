@@ -78,10 +78,11 @@ namespace Essentials.Commands {
                         return CommandResult.LangError("TPA_NONE");
                     }
 
-                    if (whoSent.Stance == EPlayerStance.DRIVING ||
-                        whoSent.Stance == EPlayerStance.SITTING) {
-                        EssLang.Send(whoSent, "CANNOT_TELEPORT_DRIVING");
-                        return CommandResult.LangError("TPA_CANNOT_TELEPORT", whoSent.DisplayName);
+                    // Little fix, kick player if he wanted to teleport inside of a vehicle
+                    if (whoSent.Stance == EPlayerStance.DRIVING || whoSent.Stance == EPlayerStance.SITTING) {
+                        whoSent.CurrentVehicle.findPlayerSeat(whoSent.CSteamId, out byte seat);
+                        whoSent.CurrentVehicle.forceRemovePlayer(out seat, whoSent.CSteamId, out Vector3 point, out byte angle);
+
                     }
 
                     EssLang.Send(src, "TPA_ACCEPTED_SENDER", whoSent.DisplayName);
@@ -103,8 +104,11 @@ namespace Essentials.Commands {
                             .Submit();
                         _waitingToTeleport[player.CSteamId.m_SteamID] = task;
                     } else {
-                        whoSent.Teleport(player.Position + new Vector3(0f, 0.5f, 0f));
-                    }
+                            if(player.Stance == EPlayerStance.DRIVING || player.Stance == EPlayerStance.SITTING)
+                                whoSent.UnturnedPlayer.teleportToLocationUnsafe(player.Position + new Vector3(0f, 0.5f, 0f), 0);
+                            else
+                                whoSent.Teleport(player.Position + new Vector3(0f, 0.5f, 0f));
+                        }
                     break;
                 }
 

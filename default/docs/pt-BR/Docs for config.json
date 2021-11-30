@@ -220,7 +220,7 @@
   */
   "Tpa": {
     /*
-      Determina o delay que o pedido de Tpa expirará. (Em segundos)
+      Determina o delay que o pedido de Tpa expirará. (Em segundos)ExpireDelay
     */
     "ExpireDelay": 10,
 
