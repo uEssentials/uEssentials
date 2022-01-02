@@ -33,7 +33,7 @@ Versão em Português (Brasil) do README.md [AQUI](https://github.com/uEssential
 
 ---
 
-If you have any questions or suggestions, feel free to send them to us [here](https://goo.gl/amgH8v).
+If you have any questions or suggestions, feel free to send them to us [here](https://github.com/TH3AL3X/uEssentials/issues).
 
 ## License
 Copyright (C) 2015-2022 leonardosnt <leonrdsnt@gmail.com> and contributors.
