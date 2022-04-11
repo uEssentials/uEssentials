@@ -49,6 +49,9 @@ namespace Essentials.Configuration {
         public bool EnableJoinLeaveMessage;
         public bool ShowPermissionOnErrorMessage;
         public bool SaveCommandCooldowns;
+        public bool Allow_Structures_Buildings;
+        public bool Allow_Barricades_Buildings;
+
 
         public bool EnablePollRunningMessage;
         public int PollRunningMessageCooldown;
@@ -89,12 +92,16 @@ namespace Essentials.Configuration {
             EnableJoinLeaveMessage = true;
             EnableTextCommands = true;
             EnableDeathMessages = true;
+            
             ShowPermissionOnErrorMessage = true;
             SaveCommandCooldowns = false;
 
             EnablePollRunningMessage = true;
             PollRunningMessageCooldown = 20;
             ServerFrameRate = -1; // http://docs.unity3d.com/ScriptReference/Application-targetFrameRate.html
+            Allow_Structures_Buildings = true;
+            Allow_Barricades_Buildings = true;
+
 
             AutoAnnouncer = new AutoAnnouncer();
             AutoAnnouncer.LoadDefaults();

@@ -53,6 +53,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using UnityEngine;
 
 namespace Essentials.Core {
 
@@ -132,7 +133,7 @@ ERIMENTAL
                 Logger = new ConsoleLogger("[uEssentials] ");
 
                 _consoleTraceListener = new EssentialsConsoleTraceListener();
-                Debug.Listeners.Add(_consoleTraceListener);
+                System.Diagnostics.Debug.Listeners.Add(_consoleTraceListener);
 
                 Provider.onServerDisconnected += PlayerDisconnectCallback;
                 Provider.onServerConnected += PlayerConnectCallback;
@@ -182,6 +183,9 @@ ERIMENTAL
                 Config.Load(configPath);
                 CommandOptions.Load(Path.Combine(Folder, CommandOptions.FileName));
                 EssLang.Load();
+
+                BarricadeManager.onDeployBarricadeRequested += onBarricadeDeploy;
+                StructureManager.onDeployStructureRequested += onStructureDeploy;
 
                 EventManager.RegisterAll(GetType().Assembly);
 
@@ -270,6 +274,9 @@ ERIMENTAL
             Provider.onServerDisconnected -= PlayerDisconnectCallback;
             Provider.onServerConnected -= PlayerConnectCallback;
 
+            BarricadeManager.onDeployBarricadeRequested -= onBarricadeDeploy;
+            StructureManager.onDeployStructureRequested -= onStructureDeploy;
+
             var executingAssembly = GetType().Assembly;
 
             HookManager.UnloadAll();
@@ -282,7 +289,7 @@ ERIMENTAL
 
             TaskExecutor.Stop();
 
-            Debug.Listeners.Remove(_consoleTraceListener);
+            System.Diagnostics.Debug.Listeners.Remove(_consoleTraceListener);
 
             // Restore overridden commands
             var rocketCommands = GetRocketCommands();
@@ -291,6 +298,52 @@ ERIMENTAL
                 _overriddenCommands.Clear();
             }
         }
+
+
+        private void onStructureDeploy(Structure structure, ItemStructureAsset asset, ref Vector3 point, ref float angle_x, ref float angle_y, ref float angle_z, ref ulong owner, ref ulong group, ref bool shouldAllow)
+        {
+            if (!UEssentials.Config.Allow_Structures_Buildings)
+            {
+                UnturnedPlayer player = UnturnedPlayer.FromCSteamID(new CSteamID(owner));
+
+                RaycastHit hitRay;
+                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.LARGE))
+                {
+                    shouldAllow = false;
+                }
+                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.MEDIUM))
+                {
+                    shouldAllow = false;
+                }
+                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.SMALL))
+                {
+                    shouldAllow = false;
+                }
+            }
+        }
+
+        private void onBarricadeDeploy(Barricade barricade, ItemBarricadeAsset asset, Transform hit, ref Vector3 point, ref float angle_x, ref float angle_y, ref float angle_z, ref ulong owner, ref ulong group, ref bool shouldAllow)
+        {
+            if (!UEssentials.Config.Allow_Barricades_Buildings)
+            {
+                UnturnedPlayer player = UnturnedPlayer.FromCSteamID(new CSteamID(owner));
+
+                RaycastHit hitRay;
+                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.LARGE))
+                {
+                    shouldAllow = false;
+                }
+                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.MEDIUM))
+                {
+                    shouldAllow = false;
+                }
+                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.SMALL))
+                {
+                    shouldAllow = false;
+                }
+            }
+        }
+
 
         // Load other things based in the Config.
         private void ConfigPostLoad() {
