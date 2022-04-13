@@ -70,7 +70,7 @@ namespace Essentials.Core {
         internal const string PLUGIN_VERSION = "999.0.0.0";
 #else
         // Real plugin version -- manually updated.
-        internal const string PLUGIN_VERSION = "1.3.7.7";
+        internal const string PLUGIN_VERSION = "1.3.7.8";
 #endif
 
 #if E
@@ -141,6 +141,7 @@ ERIMENTAL
                 Logger.LogInfo("Enabling uEssentials...");
 
                 new [] {
+                    "This is a new version of uEssentials, maintained by Terror",
                     "Plugin version: ~white~" + PLUGIN_VERSION + BUILD_INFO,
                     "Recommended Rocket version: ~white~" + ROCKET_VERSION,
                     "Recommended Unturned version: ~white~" + UNTURNED_VERSION,
@@ -238,7 +239,7 @@ ERIMENTAL
                 string[] messages = {
                     "An error occurred while enabling uEssentials.",
                     "If this error is not related with wrong configuration, please report",
-                    "it here https://github.com/uEssentials/uEssentials/issues",
+                    "it here https://github.com/TH3AL3X/uEssentials/issues",
                     "Error: " + e
                 };
 
@@ -307,15 +308,7 @@ ERIMENTAL
                 UnturnedPlayer player = UnturnedPlayer.FromCSteamID(new CSteamID(owner));
 
                 RaycastHit hitRay;
-                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.LARGE))
-                {
-                    shouldAllow = false;
-                }
-                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.MEDIUM))
-                {
-                    shouldAllow = false;
-                }
-                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.SMALL))
+                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.LARGE | RayMasks.MEDIUM | RayMasks.SMALL))
                 {
                     shouldAllow = false;
                 }
@@ -329,15 +322,7 @@ ERIMENTAL
                 UnturnedPlayer player = UnturnedPlayer.FromCSteamID(new CSteamID(owner));
 
                 RaycastHit hitRay;
-                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.LARGE))
-                {
-                    shouldAllow = false;
-                }
-                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.MEDIUM))
-                {
-                    shouldAllow = false;
-                }
-                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.SMALL))
+                if (Physics.Raycast(player.Player.look.aim.position, player.Player.look.aim.forward, out hitRay, 6, RayMasks.LARGE | RayMasks.MEDIUM | RayMasks.SMALL))
                 {
                     shouldAllow = false;
                 }
