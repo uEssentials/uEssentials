@@ -68,7 +68,7 @@ namespace Essentials.Core {
         // This needs to be different every time because
         // of Assembly loading -- I (leonardosnt) use a custom version of Rocket for
         // development that allows to reload plugins without restaring the server.
-        internal const string PLUGIN_VERSION = "999.0.0.0";
+        internal const string PLUGIN_VERSION = "999.10.51.7";
 #else
         // Real plugin version -- manually updated.
         internal const string PLUGIN_VERSION = "1.3.8.0";
@@ -265,7 +265,6 @@ ERIMENTAL
 #if DEV
             Console.Title = "Unturned Server";
 #else
-            CheckUpdates();
 #endif
         }
 
