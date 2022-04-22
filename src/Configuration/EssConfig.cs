@@ -61,7 +61,6 @@ namespace Essentials.Configuration {
         public ushort ItemSpawnLimit;
 
         public AntiSpamSettings AntiSpam;
-        public UpdaterSettings Updater;
         public HomeCommandSettings Home;
         public WarpCommandSettings Warp;
         public VehicleFeaturesSettings VehicleFeatures;
@@ -246,11 +245,6 @@ namespace Essentials.Configuration {
         public struct AntiSpamSettings {
             public bool Enabled;
             public int Interval;
-        }
-
-        public struct UpdaterSettings {
-            public bool CheckUpdates;
-            public bool AlertOnJoin;
         }
 
         public struct HomeCommandSettings {

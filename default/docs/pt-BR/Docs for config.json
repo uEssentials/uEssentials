@@ -115,17 +115,6 @@
   },
 
   /*
-    Configurações do "Atualizador" do plugin.
-  */
-  "Updater": {
-    /*
-      Determina se o plugin deverá aletar um administrador quando ele entrar
-      caso haja uma atualização disponível.
-    */
-    "AlertOnJoin": true
-  },
-
-  /*
     Configurações do comando /home
   */
   "HomeCommand": {

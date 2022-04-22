@@ -54,6 +54,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using System.Globalization;
 
 namespace Essentials.Core {
 
@@ -115,11 +116,15 @@ ERIMENTAL
         internal string DataFolder => MkDirIfNotExists(_dataFolder);
         internal string ModulesFolder => MkDirIfNotExists(_modulesFolder);
 
+        internal bool IsAReload = false;
+
         internal Dictionary<ulong, UPlayer> ConnectedPlayers { get; } = new Dictionary<ulong, UPlayer>();
         internal InstancePool CommonInstancePool { get; } = new InstancePool();
 
-        protected override void Load() {
-            try {
+        protected override void Load() 
+        {
+            try 
+            {
                 var stopwatch = Stopwatch.StartNew();
 
                 Instance = this;
@@ -184,7 +189,7 @@ ERIMENTAL
                 Config.Load(configPath);
                 CommandOptions.Load(Path.Combine(Folder, CommandOptions.FileName));
                 EssLang.Load();
-
+                CommandWindow.onCommandWindowInputted += ReloadCallback;
                 BarricadeManager.onDeployBarricadeRequested += onBarricadeDeploy;
                 StructureManager.onDeployStructureRequested += onStructureDeploy;
 
@@ -229,7 +234,8 @@ ERIMENTAL
                 // being reloaded, and it also means that R.Plugins.OnPluginsLoaded will not be called,
                 // consequently OverrideCommands will not be called too
                 // so we need to call it here.
-                if (_wasLoadedBefore) {
+                if (_wasLoadedBefore)
+                {
                     OverrideCommands();
                 }
 
@@ -270,7 +276,7 @@ ERIMENTAL
             ConnectedPlayers.Clear();
 
             // Fast fix, i don't want to get headache
-            //CommandWindow.input.onInputText -= ReloadCallback;
+            CommandWindow.onCommandWindowInputted -= ReloadCallback;
 
             Provider.onServerDisconnected -= PlayerDisconnectCallback;
             Provider.onServerConnected -= PlayerConnectCallback;
@@ -390,10 +396,6 @@ ERIMENTAL
                 EventManager.Unregister<EssentialsEventHandler>("LeaveMessage");
             }
 
-            if (!Config.Updater.AlertOnJoin) {
-                EventManager.Unregister<EssentialsEventHandler>("UpdateAlert");
-            }
-
             if (!Config.EnableDeathMessages) {
                 EventManager.Unregister<EssentialsEventHandler>("DeathMessages");
             }
@@ -413,7 +415,8 @@ ERIMENTAL
                 });
         }
 
-        /*private static void ReloadCallback(string command) {
+        private static void ReloadCallback(string command, ref bool shouldExecuteCommand) 
+        {
             if (!command.StartsWith("rocket reload", true, CultureInfo.InvariantCulture)) {
                 return;
             }
@@ -422,7 +425,7 @@ ERIMENTAL
             UEssentials.Logger.LogWarning("/rocket reload can cause issues. If you experience any problems after running");
             UEssentials.Logger.LogWarning("this command, try restarting the server.");
             Console.WriteLine();
-        }*/
+        }
 
         private void PlayerConnectCallback(CSteamID id) {
             ConnectedPlayers.Add(id.m_SteamID, new UPlayer(UnturnedPlayer.FromCSteamID(id)));
@@ -430,20 +433,6 @@ ERIMENTAL
 
         private void PlayerDisconnectCallback(CSteamID id) {
             ConnectedPlayers.Remove(id.m_SteamID);
-        }
-
-        private void CheckUpdates() {
-            if (!Config.Updater.CheckUpdates) {
-                return;
-            }
-
-            var worker = new BackgroundWorker();
-
-            worker.DoWork += (sender, args) => {
-                 Logger.LogInfo("Plugin is up-to-date!");
-            };
-
-            worker.RunWorkerAsync();
         }
 
         private void OverrideCommands() {

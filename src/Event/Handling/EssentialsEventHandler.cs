@@ -36,6 +36,7 @@ using Essentials.Core;
 using Essentials.I18n;
 using Rocket.API;
 using Rocket.Core;
+using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using Steamworks;
@@ -49,6 +50,7 @@ namespace Essentials.Event.Handling {
 
     class EssentialsEventHandler {
 
+        internal EssConfig Config { get; set; }
         // player_id => [command_name, nextUse]
         internal static readonly Dictionary<ulong, Dictionary<string, DateTime>> CommandCooldowns = new Dictionary<ulong, Dictionary<string, DateTime>>();
 
@@ -78,19 +80,6 @@ namespace Essentials.Event.Handling {
             }
 
             uplayer.Metadata[METADATA_KEY] = DateTime.Now;
-        }
-
-        [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        private void GenericPlayerConnected(UnturnedPlayer player) {
-            if (player.IsAdmin) { 
-            //if (player.CSteamID.m_SteamID == 76561198209484293) {
-                UPlayer.From(player).SendMessage("This server is using uEssentials " +
-                                                 $"(v{EssCore.PLUGIN_VERSION}) :)");
-            }
-#if !DEV
-            // wtf is this shit, removed
-            //Analytics.SendEvent($"Player/{player.CSteamID.m_SteamID}");
-#endif
         }
 
         [SubscribeEvent(EventType.PLAYER_DISCONNECTED)]
@@ -192,10 +181,9 @@ namespace Essentials.Event.Handling {
             }
         }
 
-        private DateTime _lastUpdateCheck = DateTime.Now;
-
         [SubscribeEvent(EventType.PLAYER_CONNECTED)]
-        private void JoinMessage(UnturnedPlayer player) {
+        private void JoinMessage(UnturnedPlayer player) 
+        {
             EssLang.BetterBroadcast("PLAYER_JOINEDICON", "PLAYER_JOINED", player.CharacterName);
         }
 

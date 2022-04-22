@@ -51,7 +51,8 @@ namespace Essentials.Common {
     public static class EnumerableExtensions {
 
         public static void ForEach<T>(this IEnumerable<T> src, Action<T> action) {
-            foreach (var obj in src) {
+            foreach (var obj in src.ToList()) 
+            {
                 action(obj);
             }
         }

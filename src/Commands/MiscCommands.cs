@@ -123,8 +123,10 @@ namespace Essentials.Commands {
             Description = "Clear things",
             Usage = "[i = items, ev = empty vehicles] <distance>" //v = vehicles,
         )]
-        private CommandResult ClearCommand(ICommandSource src, ICommandArgs args, ICommand cmd) {
-            if (args.IsEmpty) {
+        private CommandResult ClearCommand(ICommandSource src, ICommandArgs args, ICommand cmd)
+        {
+            if (args.IsEmpty)
+            {
                 return CommandResult.ShowUsage();
             }
 
@@ -142,26 +144,32 @@ namespace Essentials.Commands {
 
             var distance = -1;
 
-            if (args.Length > 1) {
-                if (src.IsConsole) {
+            if (args.Length > 1)
+            {
+                if (src.IsConsole)
+                {
                     return CommandResult.ShowUsage();
                 }
 
-                if (!args[1].IsInt) {
+                if (!args[1].IsInt)
+                {
                     return CommandResult.LangError("INVALID_NUMBER", args[1]);
                 }
 
-                if (args[1].ToInt < 1) {
+                if (args[1].ToInt < 1)
+                {
                     return CommandResult.LangError("NUMBER_BETWEEN", 1, int.MaxValue);
                 }
 
                 distance = args[1].ToInt;
             }
 
-            switch (args[0].ToLowerString) {
+            switch (args[0].ToLowerString)
+            {
                 case "ev":
                 case "emptyvehicles":
-                    if (!src.HasPermission(cmd.Permission + ".emptyvehicles")) {
+                    if (!src.HasPermission(cmd.Permission + ".emptyvehicles"))
+                    {
                         return CommandResult.LangError("COMMAND_NO_PERMISSION");
                     }
 
@@ -169,24 +177,31 @@ namespace Essentials.Commands {
 
                     var numRemoved = 0;
                     UWorld.Vehicles
-                        .Where(v => v.passengers.All(p => p?.player == null)) // Check if it's has no passengers
-                        .Where(v => {
-                            if (v.id == 186 || v.id == 187) return false; // Ignore trains; TODO: config blacklist for this?
-                            if (distance == -1) return true;
+                    .Where(v => v.passengers.All(p => p?.player == null)) // Check if it's has no passengers
+                    .Where(v =>
+                    {
+                        if (v.id == 186 || v.id == 187) return false; // Ignore trains; TODO: config blacklist for this?
 
-                            return Vector3.Distance(v.transform.position, src.ToPlayer().Position) <= distance;
-                        })
-                        .ForEach(v => {
-                            VehicleManager.askVehicleDestroy(v);
-                          numRemoved++;
-                        });
+                        if (distance == -1) return true;
+
+                        return Vector3.Distance(v.transform.position, src.ToPlayer().Position) <= distance;
+                    })
+                    .ForEach(v =>
+                    {
+                        VehicleManager.askVehicleDestroy(v);
+                        numRemoved++;
+                    });
+
+
 
                     EssLang.Send(src, "CLEAR_EMPTY_VEHICLES", numRemoved);
+
                     break;
 
                 case "i":
                 case "items":
-                    if (!src.HasPermission(cmd.Permission + ".items")) {
+                    if (!src.HasPermission(cmd.Permission + ".items"))
+                    {
                         return CommandResult.LangError("COMMAND_NO_PERMISSION");
                     }
 
