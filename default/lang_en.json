@@ -212,7 +212,7 @@
   "POLL_NONE": "There are no polls running.",
   "POLL_NOT_EXIST": "A poll with this name does not exist.",
   "POLL_RUNNING": "The '{0}' poll is running, use /vote yes|no to vote.",
-  "POLL_STARTED": "A poll has been created, use /vote yes|no to vote: {0}",
+  "POLL_STARTED": "A poll has been created, use /vote yes|no to vote: {1}",
   "POLL_STOPPED": "The poll '{0}' has ended, votes yes: {2}, votes no: {3}",
   "POLL_VOTED_NO": "You voted NO in the '{0}' poll.",
   "POLL_VOTED_YES": "You voted YES in the '{0}' poll.",
