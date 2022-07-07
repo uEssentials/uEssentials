@@ -269,9 +269,8 @@ namespace Essentials.Commands {
                                 task.Cancel();
                                 return;
                             }
+                            EssLang.SendGlobal("POLL_STARTED", thiz.Name, thiz.Description, thiz.YesVotes, thiz.NoVotes);
 
-                            EssLang.Broadcast("POLL_RUNNING", thiz.Name, thiz.Description,
-                                thiz.YesVotes, thiz.NoVotes);
                         }
                     })
                     .Submit();
@@ -281,7 +280,7 @@ namespace Essentials.Commands {
             /// Stop the poll
             /// </summary>
             public void Stop() {
-                EssLang.Broadcast("POLL_STOPPED", Name, Description, YesVotes, NoVotes);
+                EssLang.SendGlobal("POLL_STOPPED", Name, Description, YesVotes, NoVotes);
 
                 lock (Polls) Polls.Remove(Name);
             }
