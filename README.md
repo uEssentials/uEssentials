@@ -31,5 +31,5 @@
 If you have any questions or suggestions, feel free to send them to us [here](https://github.com/TH3AL3X/uEssentials/issues).
 
 ## License
-Copyright (C) 2015-2022 leonardosnt <leonrdsnt@gmail.com> and contributors.
+Copyright (C) 2015-2023 leonardosnt <leonrdsnt@gmail.com> and contributors.
 Licensed under the GPL v2 License. See LICENSE file in the project root for full license information.
