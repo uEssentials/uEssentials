@@ -10,7 +10,7 @@ using Essentials.Core;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("uEssentials")]
-[assembly: AssemblyCopyright("2015-2018 Leonardosnt (leonardosnt@outlook.com)")]
+[assembly: AssemblyCopyright("2015-2018 Leonardosnt (leonardosnt@outlook.com), 2023 Fanya")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -87,8 +87,8 @@ namespace Essentials.Core.Command {
             if (command.StartsWith("/")) {
                 command = command.Remove(0);
             }
-
-            CommandWindow.input.onInputText?.Invoke(command);
+            bool b = true;
+            CommandWindow.onCommandWindowInputted?.Invoke(command, ref b);
         }
 
         public override string ToString() {

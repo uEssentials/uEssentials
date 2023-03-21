@@ -44,9 +44,7 @@ namespace Essentials.Commands {
 
             string name;
 
-            if (args[0].Equals(name = "*console*")) {
-                CommandWindow.input.onInputText(args.Join(1));
-            } else if (args[0].Equals("*")) {
+            if (args[0].Equals("*")) {
                 UServer.Players.ForEach(p => {
                     ChatManager.instance.askChat(p.CSteamId, (byte) EChatMode.GLOBAL, args.Join(1));
                 });

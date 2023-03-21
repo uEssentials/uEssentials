@@ -61,18 +61,18 @@ namespace Essentials.Core {
 
     public sealed class EssCore : RocketPlugin {
 
-        internal const string ROCKET_VERSION = "4.9.3.3";
-        internal const string UNTURNED_VERSION = "3.20.7.0";
+        internal const string ROCKET_VERSION = "4.9.3.14";
+        internal const string UNTURNED_VERSION = "3.23.3.1";
 
 #if DEV
         // Dev build version -- patched in compile-time (see uEssentials.csproj)
         // This needs to be different every time because
         // of Assembly loading -- I (leonardosnt) use a custom version of Rocket for
         // development that allows to reload plugins without restaring the server.
-        internal const string PLUGIN_VERSION = "999.0.0.0";
+        internal const string PLUGIN_VERSION = "1.3.6.1";
 #else
         // Real plugin version -- manually updated.
-        internal const string PLUGIN_VERSION = "1.3.6.0";
+        internal const string PLUGIN_VERSION = "1.3.6.1";
 #endif
 
 #if EXPERIMENTAL
@@ -148,6 +148,8 @@ namespace Essentials.Core {
                     "Recommended Unturned version: ~white~" + UNTURNED_VERSION,
                     "Author: ~white~leonardosnt",
                     "Wiki: ~white~uessentials.github.io",
+                    "Fixes: ~white~Fanya",
+                    "Site: ~white~https://plugins.fanyplay.ru",
                 }.ForEach(text => Logger.LogInfo(text, true));
 
                 // This is true when the plugin is reloaded.
@@ -235,7 +237,7 @@ namespace Essentials.Core {
                 }
 
                 _wasLoadedBefore = true;
-                CommandWindow.input.onInputText += ReloadCallback;
+                CommandWindow.onCommandWindowInputted += ReloadCallback;
                 Logger.LogInfo($"Enabled ({stopwatch.ElapsedMilliseconds} ms)");
             } catch (Exception e) {
                 string[] messages = {
@@ -267,7 +269,7 @@ namespace Essentials.Core {
 
         protected override void Unload() {
             R.Plugins.OnPluginsLoaded -= OverrideCommands;
-            CommandWindow.input.onInputText -= ReloadCallback;
+            CommandWindow.onCommandWindowInputted -= ReloadCallback;
             Provider.onServerDisconnected -= PlayerDisconnectCallback;
             Provider.onServerConnected -= PlayerConnectCallback;
 
@@ -374,8 +376,10 @@ namespace Essentials.Core {
                 });
         }
 
-        private static void ReloadCallback(string command) {
-            if (!command.StartsWith("rocket reload", true, CultureInfo.InvariantCulture)) {
+        private void ReloadCallback(string text, ref bool shouldExecuteCommand)
+        {
+            if (!text.StartsWith("rocket reload", true, CultureInfo.InvariantCulture))
+            {
                 return;
             }
 
